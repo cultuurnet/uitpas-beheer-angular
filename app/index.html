@@ -1,6 +1,7 @@
 <!doctype html>
 <html class="no-js">
   <head>
+    <base href="/">
     <meta charset="utf-8">
     <title></title>
     <meta name="description" content="">
@@ -14,7 +15,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="uitpasbeheerApp">
+  <body ng-app="uitpasbeheerApp" ng-controller="AppCtrl as app">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -46,6 +47,12 @@
     </div>
 
     <div class="container">
+      <div ng-show="app.user">
+        <h2>Welcome {{app.user.firstName}} {{app.user.lastName}}</h2>
+      </div>
+      <div ng-hide="app.user">
+        Please log in <a href="/?user=1">here</a>.
+      </div>
     <div ng-view=""></div>
     </div>
 
@@ -84,6 +91,7 @@
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/app.js"></script>
         <!-- endbuild -->
 </body>
 </html>
