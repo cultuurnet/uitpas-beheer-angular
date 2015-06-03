@@ -1,0 +1,6 @@
+// Main
+
+// Links
+a {
+  @include transitions((color, background, border));
+}

@@ -1,0 +1,18 @@
+// Layout
+
+.container {
+/*   padding-left: 15px;
+  padding-right: 15px;
+  @include breakpoint(map-get($breakpoints, xlr)){
+    padding-left: 0;
+    padding-right: 0;
+  } */
+}
+
+.main-content .container {
+  
+  > aside {
+    background-color: $gray-0;
+  }
+
+}
