@@ -20,6 +20,10 @@ $yellow-50: #beb333;
 
 $brand-primary: $blue-50;
 
+// Navbar
+$navbar-inverse-bg: $blue-75;
+$navbar-inverse-color: $gray-0;
+
 
 // Custom Grid
 // ----
@@ -29,7 +33,7 @@ $brand-primary: $blue-50;
 // container-*      - The total width of the container for large / medium / small
 $grid-gutter-width: 20px;
 $grid-columns: 12;
-$grid-container-width: 1200px;
+$grid-container-width: 100%;
 
 
 // Breakpoints

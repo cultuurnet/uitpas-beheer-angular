@@ -2,20 +2,8 @@
   @include cf;
   padding: $rh-med 0;
   background-color: $blue-75;
-  &__logo {
-    display: block;
-    // width: 120px;
-    img {
-      width: 100%;
-      height: auto;
-    }
-    @include breakpoint(map-get($breakpoints, xsm), 'max-width'){
-      clear: both;
-      margin: $rh-med auto;
-    };
-    @include breakpoint(map-get($breakpoints, xsm)){
-      float: left;
-      // width: 150px;
-    };
+  margin-bottom: $rh-med;
+  .logo {
+
   }
 }
