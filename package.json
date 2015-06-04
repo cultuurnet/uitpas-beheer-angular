@@ -4,6 +4,7 @@
   "dependencies": {},
   "repository": {},
   "devDependencies": {
+    "connect-modrewrite": "^0.8.1",
     "grunt": "^0.4.5",
     "grunt-autoprefixer": "^2.0.0",
     "autoprefixer-core": "^5.2.0",
