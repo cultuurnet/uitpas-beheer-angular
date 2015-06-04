@@ -1,13 +1,10 @@
 <!doctype html>
-<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie10" lang="nl"> <![endif]-->
-<!--[if IE 8]> <html class="no-js lt-ie9 lt-ie10" lang="nl"> <![endif]-->
 <!--[if IE 9]> <html class="no-js lt-ie10" lang="nl"> <![endif]-->
 <!--[if gt IE 9]><!--> <html class="no-js" lang="nl"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <!-- endbower -->
@@ -19,11 +16,6 @@
     <script type="text/javascript" src="./scripts/singles/modernizr.min.js"></script>
   </head>
   <body ng-app="uitpasbeheerApp">
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-
-    <!-- Add your site or application content here -->
     <header class="header" role="banner">
       <div class="container">
 
@@ -40,26 +32,6 @@
               <img class="logo" src="images/svg/logo-uitpas.svg" data-url="images/fallback/logo-uitpas.png" width="90" height="25" alt="">
             </a>
           </div>
-
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">CC De Werf <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="medewerkers.html">Medewerkers</a></li>
-                  <li><a href="zuilen.html">Zuilen</a></li>
-                  <li><a href="onkostennota.html">Onkostennota's</a></li>
-                  <li><a href="#">Statistieken &amp; inzichten</a></li>
-                </ul>
-              </li>
-              <li><a class="navbar-link" href="balie-selecteren.html">Balie wijzigen</a></li>
-            </ul>
-
-            <div class="nav navbar-nav navbar-right">
-              <p class="navbar-text">Aangemeld als rbossuyt <a class="navbar-btn btn-default btn-sm" href="index.html">Afmelden</a></p>
-            </div>
-          </div>
         </nav>
 
       </div>
@@ -67,38 +39,20 @@
 
     <div class="main-content">
       <div class="container">
+        <div class="grid">
 
-        <div class="grid">      
           <aside role="complementary" class="sidebar grid__12 grid--bp-sml__4 grid--bp-med__3">
-            ASIDE
-            <a href="#">test link</a>
           </aside> <!-- /aside -->
 
           <div ng-view="" class="main grid__12 grid--bp-sml__8 grid--bp-med__9" role="main">
-            MAIN
           </div> <!-- /main -->
           
           <footer class="footer grid__12 grid--bp-sml__8 grid--bp-med__9" role="contentinfo">
-            FOOTER
-            <p><span class="glyphicon glyphicon-heart"></span> from ::</p>
           </footer> <!-- /footer -->
 
         </div>
-
       </div>
-    </div> <!--/ .main-content -->    
-
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
-       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-       }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
-    </script>
+    </div> <!--/ .main-content -->
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
