@@ -1,0 +1,13 @@
+// Layout
+html,
+body {
+  height: 100%;
+}
+
+.main-content,
+.main-content > .container,
+.main-content > .container > .grid {
+  @include breakpoint(map-get($breakpoints, sml)) {
+    height: 100%;
+  }
+}

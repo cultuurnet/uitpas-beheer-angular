@@ -46,7 +46,7 @@ module.exports = function (grunt) {
       },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server', 'autoprefixer']
+        tasks: ['compass:server', 'postcss']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -153,6 +153,37 @@ module.exports = function (grunt) {
     autoprefixer: {
       options: {
         browsers: ['last 1 version']
+      },
+      server: {
+        options: {
+          map: true,
+        },
+        files: [{
+          expand: true,
+          cwd: '.tmp/styles/',
+          src: '{,*/}*.css',
+          dest: '.tmp/styles/'
+        }]
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '.tmp/styles/',
+          src: '{,*/}*.css',
+          dest: '.tmp/styles/'
+        }]
+      }
+    },
+
+    // Add vendor prefixed styles
+    postcss: {
+      options: {
+        map: true,
+        processors: [
+        require('autoprefixer-core')({
+          browsers: ['last 2 versions']
+        })
+        ]
       },
       server: {
         options: {
@@ -324,6 +355,16 @@ module.exports = function (grunt) {
       }
     },
 
+    svg2png: {
+      all: {
+        files: [{
+          cwd: '<%= yeoman.app %>/images/svg/',
+          src: ['**/*.svg'],
+          dest: '<%= yeoman.app %>/images/svg/fallback/'
+        }]
+      }
+    },
+
     htmlmin: {
       dist: {
         options: {
@@ -409,6 +450,7 @@ module.exports = function (grunt) {
       dist: [
         'compass:dist',
         'imagemin',
+        'svg2png',
         'svgmin'
       ]
     },
@@ -464,7 +506,7 @@ module.exports = function (grunt) {
       'wiredep',
       'concurrent:server',
       'ngconstant:dev',
-      'autoprefixer:server',
+      'postcss:server',
       'connect:livereload',
       'watch'
     ]);
@@ -480,7 +522,7 @@ module.exports = function (grunt) {
     'wiredep',
     'concurrent:test',
     'ngconstant:dev',
-    'autoprefixer',
+    'postcss',
     'connect:test',
     'karma'
   ]);
@@ -490,7 +532,7 @@ module.exports = function (grunt) {
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
-    'autoprefixer',
+    'postcss',
     'concat',
     'ngAnnotate',
     'ngconstant:dist',
