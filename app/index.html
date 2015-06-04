@@ -48,10 +48,11 @@
 
     <div class="container">
       <div ng-show="app.user">
-        <h2>Welcome {{app.user.firstName}} {{app.user.lastName}}</h2>
+        <h2>Welcome {{app.user.nick}}</h2>
+        <button ng-click="app.logout()">Log out</button>
       </div>
       <div ng-hide="app.user">
-        Please log in <a href="/?user=1">here</a>.
+        <button ng-click="app.login()">Log in</button>
       </div>
     <div ng-view=""></div>
     </div>
@@ -90,8 +91,10 @@
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
+        <script src="scripts/config.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/app.js"></script>
+        <script src="scripts/services/uitid.js"></script>
         <!-- endbuild -->
 </body>
 </html>

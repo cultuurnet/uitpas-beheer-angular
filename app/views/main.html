@@ -1,16 +1,1 @@
-<div ng-show="app.user">
-  <div ng-hide="app.user.selectedDesk">
-    <h3>Please select the desk you want to use</h3>
-    <ul>
-      <li ng-repeat="desk in app.user.desks">
-        <a href ng-click="app.user.selectedDesk = desk.id">{{desk.name}}</a>
-      </li>
-    </ul>
-  </div>
-  <div ng-show="app.user.selectedDesk">
-    You are now managing: {{app.user.desks[app.user.selectedDesk].name}}<br>
-    telephone: {{app.user.desks[app.user.selectedDesk].phone}}<br>
-    email: {{app.user.desks[app.user.selectedDesk].mail}}<br>
-  </div>
-  <a class="pull-right small" href="/">Log out</a>
-</div>
+

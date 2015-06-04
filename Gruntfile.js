@@ -452,6 +452,7 @@ module.exports = function (grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-ng-constant');
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -462,6 +463,7 @@ module.exports = function (grunt) {
       'clean:server',
       'wiredep',
       'concurrent:server',
+      'ngconstant:dev',
       'autoprefixer:server',
       'connect:livereload',
       'watch'
@@ -477,6 +479,7 @@ module.exports = function (grunt) {
     'clean:server',
     'wiredep',
     'concurrent:test',
+    'ngconstant:dev',
     'autoprefixer',
     'connect:test',
     'karma'
@@ -490,6 +493,7 @@ module.exports = function (grunt) {
     'autoprefixer',
     'concat',
     'ngAnnotate',
+    'ngconstant:dist',
     'copy:dist',
     'cdnify',
     'cssmin',
