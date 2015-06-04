@@ -1,0 +1,4 @@
+{
+  "baseUrl": "http://culpas-silex.dev/",
+  "authUrl": "http://culpas-silex.dev/culturefeed/oauth/connect"
+}

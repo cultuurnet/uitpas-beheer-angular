@@ -419,6 +419,36 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    // Custom configuration.
+    ngconstant: {
+      options: {
+        name: 'config',
+        dest: '<%= yeoman.app %>/scripts/config.js'
+      },
+      dev: {
+        constants: function() {
+          return {
+            appConfig: grunt.file.readJSON('config.json')
+          };
+        }
+      },
+      dist: {
+        constants: function() {
+          var config = {};
+
+          if (grunt.file.exists('config.json')) {
+            config = grunt.file.readJSON('config.json');
+          } else {
+            config = grunt.file.readJSON('config.dist.json');
+          }
+
+          return {
+            appConfig: config
+          };
+        }
+      }
     }
   });
 
