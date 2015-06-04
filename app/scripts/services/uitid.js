@@ -80,9 +80,10 @@ function uitidService($q, $window, $http, appConfig) {
       .get(apiUrl + '/logout', {
         withCredentials: true
       })
-      .then(function() {
+      .then(angular.bind(this, function() {
+        this.user = undefined;
         deferredLogout.resolve();
-      });
+      }));
 
     return deferredLogout.promise;
   };
