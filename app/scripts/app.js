@@ -22,7 +22,21 @@ angular
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        controller: 'MainCtrl',
+        resolve: {
+          redirect: ['redirect', function(redirect) {
+            return redirect.redirectIfAnonymous('/login');
+          }]
+        }
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl',
+        resolve: {
+          redirect: ['redirect', function (redirect) {
+            return redirect.redirectIfLoggedIn('/');
+          }]
+        }
       })
       .otherwise({
         redirectTo: '/'

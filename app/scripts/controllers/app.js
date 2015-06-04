@@ -22,9 +22,10 @@ function appCtrl($location, uitid) {
     uitid.logout().then(this.redirectToLogin, this.redirectToLogin);
   };
 
-  this.redirectToLogin = function() {
-    $location.path('/');
-  };
+  this.redirectToLogin = angular.bind(this, function() {
+    $location.path('/login');
+    this.user = undefined;
+  });
 
   uitid.getUser().then(angular.bind(this, function(user) {
     this.user = user;
