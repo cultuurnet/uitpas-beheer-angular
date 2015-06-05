@@ -13,7 +13,7 @@ angular
 
 /* @ngInject */
 function appCtrl($rootScope, $location, uitid) {
-  this.user = {};
+  this.user = undefined;
   $rootScope.appReady = false;
 
   uitid.getUser().then(
