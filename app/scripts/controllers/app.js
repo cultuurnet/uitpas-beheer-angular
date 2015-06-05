@@ -12,7 +12,20 @@ angular
   .controller('AppCtrl', appCtrl);
 
 /* @ngInject */
-function appCtrl($location, uitid) {
+function appCtrl($rootScope, $location, uitid) {
+  this.user = {};
+  $rootScope.appReady = false;
+
+  uitid.getUser().then(
+    angular.bind(this, function(user) {
+      this.user = user;
+      $rootScope.appReady = true;
+    }),
+    function() {
+      $rootScope.appReady = true;
+    }
+  );
+
   this.login = function() {
     var destination = $location.absUrl();
     uitid.login(destination);
@@ -26,8 +39,4 @@ function appCtrl($location, uitid) {
     $location.path('/login');
     this.user = undefined;
   });
-
-  uitid.getUser().then(angular.bind(this, function(user) {
-    this.user = user;
-  }));
 }
