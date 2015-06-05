@@ -18,6 +18,8 @@
 
   </head>
   <body ng-app="uitpasbeheerApp" ng-controller="AppCtrl as app">
+    <app-loading></app-loading>
+
     <header class="header" role="banner" ng-show="app.user">
       <div class="container">
 
@@ -51,7 +53,7 @@
 
           <div ng-view="" class="main grid__12 grid--bp-sml__8 grid--bp-med__9" role="main">
           </div> <!-- /main -->
-          
+
           <footer class="footer grid__12 grid--bp-sml__8 grid--bp-med__9" role="contentinfo" ng-show="app.user">
           </footer> <!-- /footer -->
 
