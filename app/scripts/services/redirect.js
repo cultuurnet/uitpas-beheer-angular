@@ -13,19 +13,19 @@ angular
 
 /* @ngInject */
 function redirectService($q, $location, uitid) {
-  this.redirectIfLoggedIn = function(path) {
-    return this.redirectOnStatus(true, path);
+  this.ifLoggedIn = function(path) {
+    return this.ifUserStatus(true, path);
   };
 
-  this.redirectIfAnonymous = function(path) {
-    return this.redirectOnStatus(false, path);
+  this.ifAnonymous = function(path) {
+    return this.ifUserStatus(false, path);
   };
 
-  this.redirectOnStatus = function(status, path) {
+  this.ifUserStatus = function(status, path) {
     var deferred = $q.defer();
 
     uitid.getLoginStatus().then(function(loggedIn) {
-      if (loggedIn == status) {
+      if (loggedIn === status) {
         deferred.reject();
         $location.path(path);
       } else {

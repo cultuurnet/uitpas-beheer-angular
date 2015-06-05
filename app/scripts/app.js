@@ -19,14 +19,15 @@ angular
     'config',
     'angular-spinkit'
   ])
-  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+  /* @ngInject */
+  .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
         resolve: {
           redirect: ['redirect', function(redirect) {
-            return redirect.redirectIfAnonymous('/login');
+            return redirect.ifAnonymous('/login')
           }]
         }
       })
@@ -34,8 +35,8 @@ angular
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl',
         resolve: {
-          redirect: ['redirect', function (redirect) {
-            return redirect.redirectIfLoggedIn('/');
+          redirect: ['redirect', function(redirect) {
+            return redirect.ifLoggedIn('/')
           }]
         }
       })
@@ -44,4 +45,4 @@ angular
       });
 
     $locationProvider.html5Mode(true);
-  }]);
+  });
