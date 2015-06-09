@@ -5,7 +5,7 @@
   text-align: center;
   @include breakpoint(map-get($breakpoints, sml)) {
     margin: 40px auto;
-    padding-top: 120px;
+    padding-top: 100px;
   }
   &__logo {
     padding-top: 40px;
