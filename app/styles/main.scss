@@ -1,15 +1,19 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 
 @import "_bootstrap-custom.scss";
 
-// Components
+// Regions
 @import "components/main";
 @import "components/layout";
 @import "components/header";
 @import "components/navbar";
 @import "components/sidebar";
 @import "components/footer";
+
+// Components
 @import "components/loading";
+@import "components/login";
 
 // Print
 @import "core/print";
