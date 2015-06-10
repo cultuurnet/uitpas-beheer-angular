@@ -15,6 +15,8 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  var modRewrite = require('connect-modrewrite');
+
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -76,6 +78,7 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             return [
+              modRewrite(['^[^\\.]*$ /index.html [L]']),
               connect.static('.tmp'),
               connect().use(
                 '/bower_components',
@@ -148,7 +151,6 @@ module.exports = function (grunt) {
       },
       server: '.tmp'
     },
-
 
     // Add vendor prefixed styles
     postcss: {
@@ -436,9 +438,40 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    // Custom configuration.
+    ngconstant: {
+      options: {
+        name: 'config',
+        dest: '<%= yeoman.app %>/scripts/config.js'
+      },
+      dev: {
+        constants: function() {
+          return {
+            appConfig: grunt.file.readJSON('config.json')
+          };
+        }
+      },
+      dist: {
+        constants: function() {
+          var config = {};
+
+          if (grunt.file.exists('config.json')) {
+            config = grunt.file.readJSON('config.json');
+          } else {
+            config = grunt.file.readJSON('config.dist.json');
+          }
+
+          return {
+            appConfig: config
+          };
+        }
+      }
     }
   });
 
+  grunt.loadNpmTasks('grunt-ng-constant');
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -449,6 +482,7 @@ module.exports = function (grunt) {
       'clean:server',
       'wiredep',
       'concurrent:server',
+      'ngconstant:dev',
       'postcss:server',
       'connect:livereload',
       'watch'
@@ -464,6 +498,7 @@ module.exports = function (grunt) {
     'clean:server',
     'wiredep',
     'concurrent:test',
+    'ngconstant:dev',
     'postcss',
     'connect:test',
     'karma'
@@ -477,6 +512,7 @@ module.exports = function (grunt) {
     'postcss',
     'concat',
     'ngAnnotate',
+    'ngconstant:dist',
     'copy:dist',
     'cdnify',
     'cssmin',

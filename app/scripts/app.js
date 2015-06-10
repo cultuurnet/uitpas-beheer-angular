@@ -15,15 +15,34 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'config',
+    'angular-spinkit'
   ])
-  .config(function ($routeProvider) {
+  /* @ngInject */
+  .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        controller: 'MainCtrl',
+        resolve: {
+          redirect: ['redirect', function(redirect) {
+            return redirect.ifAnonymous('/login');
+          }]
+        }
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl',
+        resolve: {
+          redirect: ['redirect', function(redirect) {
+            return redirect.ifLoggedIn('/');
+          }]
+        }
       })
       .otherwise({
         redirectTo: '/'
       });
+
+    $locationProvider.html5Mode(true);
   });
