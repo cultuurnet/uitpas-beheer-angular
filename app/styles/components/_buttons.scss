@@ -1,0 +1,13 @@
+.btn-ghost {
+  @include button-variant($btn-ghost-color, $btn-ghost-bg, $btn-ghost-border);
+  &:hover,
+  &:focus,
+  &.focus,
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    color: $blue-75;
+    background-color: $white;
+        border-color: darken($btn-ghost-border, 12%);
+  }
+}
