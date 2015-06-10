@@ -15,25 +15,27 @@ angular
 function uitidService($q, $window, $http, appConfig) {
   var apiUrl = appConfig.apiUrl + 'uitid';
   var authUrl = appConfig.apiUrl + 'culturefeed/oauth/connect';
+  /*jshint validthis: true */
+  var uitId = this;
 
-  this.user = undefined;
+  uitId.user = undefined;
 
   /**
    * @returns {Promise}
    *   A promise with the credentials of the currently logged in user.
    */
-  this.getUser = function() {
+  uitId.getUser = function() {
     var deferredUser = $q.defer();
 
-    if (this.user) {
-      deferredUser.resolve(this.user);
+    if (uitId.user) {
+      deferredUser.resolve(uitId.user);
     } else {
       $http
         .get(apiUrl + '/user', {
           withCredentials: true
         })
-        .success(angular.bind(this, function (userData) {
-          this.user = userData;
+        .success(angular.bind(uitId, function (userData) {
+          uitId.user = userData;
           deferredUser.resolve(userData);
         }))
         .error(function () {
@@ -48,10 +50,10 @@ function uitidService($q, $window, $http, appConfig) {
    * @returns {Promise}
    *   A promise with the login status (true or false).
    */
-  this.getLoginStatus = function() {
+  uitId.getLoginStatus = function() {
     var deferredStatus = $q.defer();
 
-    this
+    uitId
       .getUser()
       .then(
         function () {
@@ -65,23 +67,23 @@ function uitidService($q, $window, $http, appConfig) {
     return deferredStatus.promise;
   };
 
-  this.login = function(destination) {
-    $window.location.href = authUrl + "?destination=" + destination;
+  uitId.login = function(destination) {
+    $window.location.href = authUrl + '?destination=' + destination;
   };
 
   /**
    * @returns {Promise}
    *   A promise with no additional data.
    */
-  this.logout = function() {
+  uitId.logout = function() {
     var deferredLogout = $q.defer();
 
     $http
       .get(apiUrl + '/logout', {
         withCredentials: true
       })
-      .then(angular.bind(this, function() {
-        this.user = undefined;
+      .then(angular.bind(uitId, function() {
+        uitId.user = undefined;
         deferredLogout.resolve();
       }));
 

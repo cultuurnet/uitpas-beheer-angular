@@ -33,8 +33,8 @@ describe('Service: uitid', function () {
     // Assertion method.
     var assertUserData = function(user) {
       expect(user).toEqual({
-        id: "1",
-        nick: "foo"
+        id: '1',
+        nick: 'foo'
       });
     };
 
@@ -98,7 +98,7 @@ describe('Service: uitid', function () {
     // as the user data should have been cached.
     uitid.getLoginStatus().then(function(status) {
       expect(status).toBe(true);
-    })
+    });
   });
 
   it('logs the user out on the backend', function() {

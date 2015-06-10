@@ -27,7 +27,7 @@ angular
         controller: 'MainCtrl',
         resolve: {
           redirect: ['redirect', function(redirect) {
-            return redirect.ifAnonymous('/login')
+            return redirect.ifAnonymous('/login');
           }]
         }
       })
@@ -36,7 +36,7 @@ angular
         controller: 'LoginCtrl',
         resolve: {
           redirect: ['redirect', function(redirect) {
-            return redirect.ifLoggedIn('/')
+            return redirect.ifLoggedIn('/');
           }]
         }
       })
