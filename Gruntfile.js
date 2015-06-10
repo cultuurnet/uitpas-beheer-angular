@@ -436,9 +436,17 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    coveralls: {
+      options: {
+        coverageDir: 'coverage/',
+        recursive: true
+      }
     }
   });
 
+  grunt.loadNpmTasks('grunt-karma-coveralls');
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
