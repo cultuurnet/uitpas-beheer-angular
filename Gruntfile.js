@@ -23,6 +23,20 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
+  var loadConfig = function() {
+    var config = {};
+
+    if (grunt.file.exists('config.json')) {
+      config = grunt.file.readJSON('config.json');
+    } else {
+      config = grunt.file.readJSON('config.dist.json');
+    }
+
+    return {
+      appConfig: config
+    };
+  }
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -453,27 +467,11 @@ module.exports = function (grunt) {
         name: 'config',
         dest: '<%= yeoman.app %>/scripts/config.js'
       },
-      dev: {
-        constants: function() {
-          return {
-            appConfig: grunt.file.readJSON('config.json')
-          };
-        }
-      },
       dist: {
-        constants: function() {
-          var config = {};
-
-          if (grunt.file.exists('config.json')) {
-            config = grunt.file.readJSON('config.json');
-          } else {
-            config = grunt.file.readJSON('config.dist.json');
-          }
-
-          return {
-            appConfig: config
-          };
-        }
+        constants: loadConfig
+      },
+      dev: {
+        constants: loadConfig
       }
     }
   });
