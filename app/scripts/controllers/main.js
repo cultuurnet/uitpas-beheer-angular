@@ -7,7 +7,6 @@
  * # MainCtrl
  * Controller of the uitpasbeheerApp
  */
-angular.module('uitpasbeheerApp')
-  .controller('MainCtrl', function () {
-
-  });
+angular
+  .module('uitpasbeheerApp')
+  .controller('MainCtrl', function () {});

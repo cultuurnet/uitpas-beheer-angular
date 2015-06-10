@@ -3,17 +3,20 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 @import "_bootstrap-custom.scss";
 
-// Regions
+// Atoms
+@import "components/buttons";
+@import "components/loading";
+
+// Molecules
+@import "components/login";
+
+// Organisms
 @import "components/main";
 @import "components/layout";
 @import "components/header";
 @import "components/navbar";
 @import "components/sidebar";
 @import "components/footer";
-
-// Components
-@import "components/loading";
-@import "components/login";
 
 // Print
 @import "core/print";

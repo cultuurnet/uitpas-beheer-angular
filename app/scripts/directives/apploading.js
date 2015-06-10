@@ -12,7 +12,7 @@ angular
     return {
       templateUrl: 'views/loading.html',
       restrict: 'E',
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope) {
         scope.loading = !$rootScope.appReady;
 
         $rootScope.$watch('appReady', function() {

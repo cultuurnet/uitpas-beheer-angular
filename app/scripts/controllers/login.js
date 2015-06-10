@@ -9,4 +9,4 @@
  */
 angular
   .module('uitpasbeheerApp')
-  .controller('LoginCtrl', function ($scope) {});
+  .controller('LoginCtrl', function () {});

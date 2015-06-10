@@ -13,15 +13,18 @@ angular
 
 /* @ngInject */
 function redirectService($q, $location, uitid) {
-  this.ifLoggedIn = function(path) {
-    return this.ifUserStatus(true, path);
+  /*jshint validthis: true */
+  var redirect = this;
+
+  redirect.ifLoggedIn = function(path) {
+    return redirect.ifUserStatus(true, path);
   };
 
-  this.ifAnonymous = function(path) {
-    return this.ifUserStatus(false, path);
+  redirect.ifAnonymous = function(path) {
+    return redirect.ifUserStatus(false, path);
   };
 
-  this.ifUserStatus = function(status, path) {
+  redirect.ifUserStatus = function(status, path) {
     var deferred = $q.defer();
 
     uitid.getLoginStatus().then(function(loggedIn) {

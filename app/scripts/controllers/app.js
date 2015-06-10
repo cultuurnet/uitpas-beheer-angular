@@ -13,12 +13,15 @@ angular
 
 /* @ngInject */
 function appCtrl($rootScope, $location, uitid) {
-  this.user = undefined;
+  /*jshint validthis: true */
+  var app = this;
+
+  app.user = undefined;
   $rootScope.appReady = false;
 
   uitid.getUser().then(
-    angular.bind(this, function(user) {
-      this.user = user;
+    angular.bind(app, function(user) {
+      app.user = user;
       $rootScope.appReady = true;
     }),
     function() {
@@ -26,17 +29,17 @@ function appCtrl($rootScope, $location, uitid) {
     }
   );
 
-  this.login = function() {
+  app.login = function() {
     var destination = $location.absUrl();
     uitid.login(destination);
   };
 
-  this.logout = function() {
-    uitid.logout().then(this.redirectToLogin, this.redirectToLogin);
+  app.logout = function() {
+    uitid.logout().then(app.redirectToLogin, app.redirectToLogin);
   };
 
-  this.redirectToLogin = angular.bind(this, function() {
+  app.redirectToLogin = angular.bind(app, function() {
     $location.path('/login');
-    this.user = undefined;
+    app.user = undefined;
   });
 }
