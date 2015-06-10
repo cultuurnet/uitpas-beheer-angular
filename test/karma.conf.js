@@ -7,6 +7,13 @@ module.exports = function(config) {
   'use strict';
 
   config.set({
+    reporters: ['progress', 'coverage'],
+
+    coverageReporter: {
+      type: "lcov",
+      dir: "coverage/"
+    },
+
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
@@ -61,6 +68,7 @@ module.exports = function(config) {
 
     // Which plugins to enable
     plugins: [
+      "karma-coverage",
       "karma-phantomjs-launcher",
       "karma-jasmine",
       "karma-ng-html2js-preprocessor"
@@ -84,7 +92,8 @@ module.exports = function(config) {
     // urlRoot: '_karma_'
 
     preprocessors: {
-      'app/views/*.html': 'ng-html2js'
+      'app/views/*.html': 'ng-html2js',
+      'app/scripts/**/*.js': ['coverage']
     },
 
     ngHtml2JsPreprocessor: {

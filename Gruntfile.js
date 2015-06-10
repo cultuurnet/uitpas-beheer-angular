@@ -23,6 +23,20 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
+  var loadConfig = function() {
+    var config = {};
+
+    if (grunt.file.exists('config.json')) {
+      config = grunt.file.readJSON('config.json');
+    } else {
+      config = grunt.file.readJSON('config.dist.json');
+    }
+
+    return {
+      appConfig: config
+    };
+  }
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -164,7 +178,7 @@ module.exports = function (grunt) {
       },
       server: {
         options: {
-          map: true,
+          map: true
         },
         files: [{
           expand: true,
@@ -440,37 +454,29 @@ module.exports = function (grunt) {
       }
     },
 
+    coveralls: {
+      options: {
+        coverageDir: 'coverage/',
+        recursive: true
+      }
+    },
+
     // Custom configuration.
     ngconstant: {
       options: {
         name: 'config',
         dest: '<%= yeoman.app %>/scripts/config.js'
       },
-      dev: {
-        constants: function() {
-          return {
-            appConfig: grunt.file.readJSON('config.json')
-          };
-        }
-      },
       dist: {
-        constants: function() {
-          var config = {};
-
-          if (grunt.file.exists('config.json')) {
-            config = grunt.file.readJSON('config.json');
-          } else {
-            config = grunt.file.readJSON('config.dist.json');
-          }
-
-          return {
-            appConfig: config
-          };
-        }
+        constants: loadConfig
+      },
+      dev: {
+        constants: loadConfig
       }
     }
   });
 
+  grunt.loadNpmTasks('grunt-karma-coveralls');
   grunt.loadNpmTasks('grunt-ng-constant');
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
