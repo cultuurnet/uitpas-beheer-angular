@@ -1,4 +1,15 @@
 // Main
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: 1px 1px 1px rgba(0,0,0,.004);
+}
+
+// Type
+
+p {
+  margin: 0 0 $rh-sml;
+}
 
 // Links
 a {

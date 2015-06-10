@@ -9,11 +9,6 @@ module.exports = function(config) {
   config.set({
     reporters: ['progress', 'coverage'],
 
-    preprocessors: {
-      'src/**/!(*.spec).js': ['coverage'],
-      'src/**/*.html': 'ng-html2js'
-    },
-
     coverageReporter: {
       type: "lcov",
       dir: "coverage/"
@@ -43,10 +38,12 @@ module.exports = function(config) {
       'bower_components/angular-route/angular-route.js',
       'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-touch/angular-touch.js',
+      'bower_components/angular-spinkit/build/angular-spinkit.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",
-      "test/mock/**/*.js",
+      "app/views/*.html",
+      //"test/mock/**/*.js",
       "test/spec/**/*.js"
     ],
 
@@ -73,7 +70,8 @@ module.exports = function(config) {
     plugins: [
       "karma-coverage",
       "karma-phantomjs-launcher",
-      "karma-jasmine"
+      "karma-jasmine",
+      "karma-ng-html2js-preprocessor"
     ],
 
     // Continuous Integration mode
@@ -92,5 +90,23 @@ module.exports = function(config) {
     // },
     // URL root prevent conflicts with the site root
     // urlRoot: '_karma_'
+
+    preprocessors: {
+      'app/views/*.html': 'ng-html2js',
+      'app/scripts/**/*.js': ['coverage']
+    },
+
+    ngHtml2JsPreprocessor: {
+      // Views are moved to another path with a grunt task.
+      // The cacheId has to be calculated the same way.
+      cacheIdFromPath: function(filepath) {
+        var viewName = filepath.split('/').pop();
+        return 'views/' + viewName;
+      },
+
+      // All views are made available in one module.
+      // Include this module in your tests and it will load templates from cache without making http requests.
+      moduleName: 'uitpasbeheerAppViews'
+    }
   });
 };

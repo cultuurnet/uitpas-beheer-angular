@@ -541,3 +541,12 @@ FileETag None
 # <IfModule mod_headers.c>
 #    Header set Connection Keep-Alive
 # </IfModule>
+
+# ------------------------------------------------------------------------------
+# | Clean / SEO friendly URLs                                                  |
+# ------------------------------------------------------------------------------
+
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.html [QSA,L]
+</IfModule>
