@@ -1,0 +1,82 @@
+// Project Colors
+$black: #111 !default;
+$white: #fff !default;
+
+$blue-75: #2f3b4d;
+$blue-50: #004f94;
+$blue-25: #598ec5;
+$blue-15: #daedf8;
+
+$gray-100: #1a1a1a;
+$gray-75: #3b3b3b;
+$gray-50: #8a8a8d;
+$gray-25: #cccccc;
+$gray-0: #f3f3f3;
+
+$green-75: #3f7639;
+$green-50: #23a969;
+
+$yellow-50: #beb333;
+
+$brand-primary: $blue-50;
+
+// Navbar
+$navbar-inverse-bg: $blue-75;
+$navbar-inverse-color: $gray-0;
+
+
+// Custom Grid
+// ----
+//
+// columns          - The total amount of columns
+// gutter           - The amount of space between two columns
+// container-*      - The total width of the container for large / medium / small
+$grid-gutter-width: 20px;
+$grid-columns: 12;
+$grid-container-width: 100%;
+
+
+// Breakpoints
+// -----------
+$breakpoints: (
+  xxs: 320px,
+  xsm: 440px,
+  sml: 660px,
+  med: 820px,
+  lrg: 940px,
+  xlr: 1200px
+);
+
+
+// Vertical Rythm
+// -----------
+$rh-xxs: $line-height-base * .25;
+$rh-xsm: $line-height-base * .5;
+$rh-sml: $line-height-base;
+$rh-med: $line-height-base * 1.5;
+$rh-lrg: $line-height-base * 2;
+$rh-xlr: $line-height-base * 2.5;
+
+$rhythm: (
+  xxs: $rh-xxs,
+  xsm: $rh-xsm,
+  sml: $rh-sml,
+  med: $rh-med,
+  lrg: $rh-lrg,
+  xlr: $rh-xlr
+);
+
+
+// Transitions
+// -----------
+//
+$transition-duration-base: 150ms;
+$transition-easing-base: ease-in-out;
+
+
+// Border radius
+// -------------
+//
+$border-radius-sml: 2px;
+$border-radius-med: 3px;
+$border-radius-lrg: 5px;

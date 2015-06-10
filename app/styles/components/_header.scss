@@ -1,0 +1,9 @@
+.header {
+  @include cf;
+  padding: $rh-med 0;
+  background-color: $blue-75;
+  margin-bottom: $rh-med;
+  .logo {
+
+  }
+}
