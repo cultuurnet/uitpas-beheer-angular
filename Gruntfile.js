@@ -35,7 +35,7 @@ module.exports = function (grunt) {
     return {
       appConfig: config
     };
-  }
+  };
 
   // Define the configuration for all the tasks
   grunt.initConfig({
