@@ -12,7 +12,7 @@ angular
   .service('redirect', redirectService);
 
 /* @ngInject */
-function redirectService($q, $location, uitid) {
+function redirectService($q, $location, uitid, counter) {
   /*jshint validthis: true */
   var redirect = this;
 
@@ -35,6 +35,32 @@ function redirectService($q, $location, uitid) {
         deferred.resolve();
       }
     });
+
+    return deferred.promise;
+  };
+
+  redirect.ifActiveCounter = function(path) {
+    var deferred = $q.defer();
+
+    if (counter.active !== undefined) {
+      deferred.reject();
+      $location.path(path);
+    } else {
+      deferred.resolve();
+    }
+
+    return deferred.promise;
+  };
+
+  redirect.ifNoActiveCounter = function(path) {
+    var deferred = $q.defer();
+
+    if (counter.getActive() === undefined) {
+      deferred.reject();
+      $location.path(path);
+    } else {
+      deferred.resolve();
+    }
 
     return deferred.promise;
   };

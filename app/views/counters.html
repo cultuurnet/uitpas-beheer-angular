@@ -1,0 +1,32 @@
+<h1>Welkom {{ app.user.displayName }},</h1>
+<h2 ng-show="counters.total">Selecteer je balie</h2>
+
+<div ng-show="counters.lastActive">
+  <h3>Laatst gebruikt</h3>
+  <ul>
+    <li>
+      <a href="#" ng-click="counters.setActiveCounter(counters.lastActive)">{{ counters.lastActive.name }}</a>
+    </li>
+  </ul>
+</div>
+
+<div ng-show="counters.list">
+  <h3 ng-show="counters.lastActive">Andere balies</h3>
+  <ul ng-repeat="counter in counters.list">
+    <li>
+      <a href="#" ng-click="counters.setActiveCounter(counter)">{{ counter.name }}</a>
+    </li>
+  </ul>
+</div>
+
+<div ng-hide="counters.total">
+  <p>Je bent nog geen lid van een UiTPAS-balie. Om deze applicatie te kunnen gebruiken, moet je lid zijn van een UiTPAS-balie.</p>
+  <p>Stuur je e-mailadres en de naam van je organisatie naar de verantwoordelijke.</p>
+  <ul ng-repeat="contact in counters.contacts">
+    <li>
+      <em>{{ contact.name }}</em>
+      <span>{{ contact.telephone }}</span>
+      <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+    </li>
+  </ul>
+</div>

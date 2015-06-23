@@ -26,8 +26,11 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
         resolve: {
-          redirect: ['redirect', function(redirect) {
+          redirectIfAnonymous: ['redirect', function(redirect) {
             return redirect.ifAnonymous('/login');
+          }],
+          redirectIfNoActiveCounter: ['redirect', function(redirect) {
+            return redirect.ifNoActiveCounter('/counters');
           }]
         }
       })
@@ -35,8 +38,27 @@ angular
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl',
         resolve: {
-          redirect: ['redirect', function(redirect) {
+          redirectIfLoggedIn: ['redirect', function(redirect) {
             return redirect.ifLoggedIn('/');
+          }]
+        }
+      })
+      .when('/counters', {
+        templateUrl: 'views/counters.html',
+        controller: 'CountersCtrl',
+        controllerAs: 'counters',
+        resolve: {
+          redirectIfAnonymous: ['redirect', function(redirect) {
+            return redirect.ifAnonymous('/login');
+          }],
+          redirectIfActiveCounter: ['redirect', function(redirect) {
+            return redirect.ifActiveCounter('/');
+          }],
+          list: ['counter', function(counter) {
+            return counter.getList();
+          }],
+          lastActive: ['counter', function(counter) {
+            return counter.getLastActive();
           }]
         }
       })

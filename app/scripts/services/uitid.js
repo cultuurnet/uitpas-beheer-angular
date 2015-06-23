@@ -36,6 +36,12 @@ function uitidService($q, $window, $http, appConfig) {
         })
         .success(angular.bind(uitId, function (userData) {
           uitId.user = userData;
+
+          uitId.user.displayName = uitId.user.givenName;
+          if (uitId.user.displayName === null) {
+            uitId.user.displayName = uitId.user.nick;
+          }
+
           deferredUser.resolve(userData);
         }))
         .error(function () {

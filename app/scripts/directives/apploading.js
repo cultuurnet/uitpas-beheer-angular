@@ -13,10 +13,10 @@ angular
       templateUrl: 'views/loading.html',
       restrict: 'E',
       link: function postLink(scope) {
-        scope.loading = !$rootScope.appReady;
+        scope.loading = $rootScope.appBusy;
 
-        $rootScope.$watch('appReady', function() {
-          scope.loading = !$rootScope.appReady;
+        $rootScope.$watch('appBusy', function() {
+          scope.loading = $rootScope.appBusy;
         });
       }
     };

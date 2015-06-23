@@ -20,7 +20,7 @@
   <body ng-app="uitpasbeheerApp" ng-controller="AppCtrl as app">
     <app-loading></app-loading>
 
-    <header class="header" role="banner" ng-show="app.user">
+    <header class="header" role="banner" ng-show="app.user && app.counter">
       <div class="container">
 
         <nav class="navbar navbar-inverse">
@@ -40,12 +40,12 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">BALIE <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ app.counter.name }} <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="#">Home</a></li>
                 </ul>
               </li>
-              <li><a class="navbar-link" href="#">Balie wijzigen</a></li>
+              <li><a class="navbar-link" href="#" ng-click="app.switchCounter()">Balie wijzigen</a></li>
             </ul>
 
             <div class="nav navbar-nav navbar-right">
@@ -61,13 +61,13 @@
       <div class="container">
         <div class="grid">
 
-          <aside role="complementary" class="sidebar grid__12 grid--bp-sml__4 grid--bp-med__3" ng-show="app.user">
+          <aside role="complementary" class="sidebar grid__12 grid--bp-sml__4 grid--bp-med__3" ng-show="app.user && app.counter">
           </aside> <!-- /aside -->
 
-          <div ng-view="" class="main grid__12" ng-class="{'grid--bp-sml__8 grid--bp-med__9': app.user}" role="main">
+          <div ng-view="" class="main grid__12" ng-class="{'grid--bp-sml__8 grid--bp-med__9': app.user && app.counter}" role="main">
           </div> <!-- /main -->
 
-          <footer class="footer grid__12 grid--bp-sml__8 grid--bp-med__9" role="contentinfo" ng-show="app.user">
+          <footer class="footer grid__12 grid--bp-sml__8 grid--bp-med__9" role="contentinfo" ng-show="app.user && app.counter">
           </footer> <!-- /footer -->
 
         </div>
@@ -98,6 +98,8 @@
         <script src="scripts/controllers/login.js"></script>
         <script src="scripts/services/redirect.js"></script>
         <script src="scripts/directives/apploading.js"></script>
+        <script src="scripts/services/counter.js"></script>
+        <script src="scripts/controllers/counters.js"></script>
         <!-- endbuild -->
 </body>
 </html>
