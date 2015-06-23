@@ -30,6 +30,14 @@ function appCtrl($rootScope, $location, uitid, counter) {
     }
   );
 
+  counter.getActive().then(function(activeCounter) {
+    app.counter = activeCounter;
+  });
+
+  $rootScope.$on('activeCounterChanged', function(event, activeCounter) {
+    app.counter = activeCounter;
+  });
+
   $rootScope.$on('$routeChangeStart', function() {
     $rootScope.appBusy = true;
   });
@@ -38,10 +46,6 @@ function appCtrl($rootScope, $location, uitid, counter) {
   });
   $rootScope.$on('$routeChangeError', function() {
     $rootScope.appBusy = false;
-  });
-
-  $rootScope.$on('activeCounterChanged', function(event, activeCounter) {
-    app.counter = activeCounter;
   });
 
   app.login = function() {

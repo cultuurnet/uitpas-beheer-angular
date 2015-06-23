@@ -42,12 +42,14 @@ function redirectService($q, $location, uitid, counter) {
   redirect.ifActiveCounter = function(path) {
     var deferred = $q.defer();
 
-    if (counter.active !== undefined) {
-      deferred.reject();
-      $location.path(path);
-    } else {
-      deferred.resolve();
-    }
+    counter.getActive().then(function(activeCounter) {
+      if (activeCounter !== undefined) {
+        deferred.reject();
+        $location.path(path);
+      } else {
+        deferred.resolve();
+      }
+    });
 
     return deferred.promise;
   };
@@ -55,12 +57,14 @@ function redirectService($q, $location, uitid, counter) {
   redirect.ifNoActiveCounter = function(path) {
     var deferred = $q.defer();
 
-    if (counter.getActive() === undefined) {
-      deferred.reject();
-      $location.path(path);
-    } else {
-      deferred.resolve();
-    }
+    counter.getActive().then(function(activeCounter) {
+      if (activeCounter === undefined) {
+        deferred.reject();
+        $location.path(path);
+      } else {
+        deferred.resolve();
+      }
+    });
 
     return deferred.promise;
   };

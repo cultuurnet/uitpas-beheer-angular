@@ -109,8 +109,29 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
     return deferred.promise;
   };
 
+  /**
+   * @returns {Promise}
+   *   A promise with the active counter for the current user.
+   */
   counter.getActive = function() {
-    return counter.active;
+    var deferred = $q.defer();
+
+    if (counter.active !== undefined) {
+      deferred.resolve(counter.active);
+    } else {
+      counter.getList().then(function(list) {
+        var ids = Object.keys(list);
+        if (ids.length === 1) {
+          var id = ids[0];
+          counter.setActive(list[id]);
+          deferred.resolve(list[id]);
+        } else {
+          deferred.resolve(undefined);
+        }
+      });
+    }
+
+    return deferred.promise;
   };
 
   counter.setActive = function(activeCounter) {
