@@ -12,8 +12,18 @@ angular
   .controller('AppCtrl', appCtrl);
 
 /* @ngInject */
-function appCtrl($rootScope, $location, uitid, counter) {
+function appCtrl($rootScope, $location, uitid, counterService) {
   $rootScope.appBusy = true;
+
+  $rootScope.$on('$routeChangeStart', function() {
+    $rootScope.appBusy = true;
+  });
+  $rootScope.$on('$routeChangeSuccess', function() {
+    $rootScope.appBusy = false;
+  });
+  $rootScope.$on('$routeChangeError', function() {
+    $rootScope.appBusy = false;
+  });
 
   /*jshint validthis: true */
   var app = this;
@@ -30,22 +40,12 @@ function appCtrl($rootScope, $location, uitid, counter) {
     }
   );
 
-  counter.getActive().then(function(activeCounter) {
+  counterService.getActive().then(function(activeCounter) {
     app.counter = activeCounter;
   });
 
   $rootScope.$on('activeCounterChanged', function(event, activeCounter) {
     app.counter = activeCounter;
-  });
-
-  $rootScope.$on('$routeChangeStart', function() {
-    $rootScope.appBusy = true;
-  });
-  $rootScope.$on('$routeChangeSuccess', function() {
-    $rootScope.appBusy = false;
-  });
-  $rootScope.$on('$routeChangeError', function() {
-    $rootScope.appBusy = false;
   });
 
   app.login = function() {
@@ -54,16 +54,17 @@ function appCtrl($rootScope, $location, uitid, counter) {
   };
 
   app.logout = function() {
-    uitid.logout().then(app.redirectToLogin, app.redirectToLogin);
+    uitid.logout().finally(function() {
+      app.user = undefined;
+      app.redirectToLogin();
+    })
   };
 
-  app.redirectToLogin = angular.bind(app, function() {
+  app.redirectToLogin = function() {
     $location.path('/login');
-    app.user = undefined;
-  });
+  };
 
-  app.switchCounter = function() {
-    counter.setNoActive();
+  app.redirectToCounters = function() {
     $location.path('/counters');
   };
 }

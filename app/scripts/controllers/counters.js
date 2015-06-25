@@ -12,25 +12,31 @@ angular
   .controller('CountersCtrl', countersCtrl);
 
 /* @ngInject */
-function countersCtrl($location, counter, list, lastActive) {
+function countersCtrl($location, counterService, list, lastActiveId) {
   /*jshint validthis: true */
   var controller = this;
 
   controller.list = [];
-  controller.lastActive = lastActive;
+  controller.lastActive = undefined;
+  controller.lastActiveId = lastActiveId;
   controller.total = 0;
 
   var counterKey;
   for (counterKey in list) {
-    if (lastActive === undefined || lastActive.id !== counterKey) {
-      controller.list.push(list[counterKey]);
+    if (list.hasOwnProperty(counterKey)) {
+      if (lastActiveId === counterKey) {
+        controller.lastActive = list[counterKey];
+      } else {
+        controller.list.push(list[counterKey]);
+      }
+      controller.total++;
     }
-    controller.total++;
   }
 
   controller.setActiveCounter = function(activeCounter) {
-    counter.setActive(activeCounter);
-    $location.path('/');
+    counterService.setActive(activeCounter).then(function() {
+      $location.path('/');
+    });
   };
 
   controller.contacts = [

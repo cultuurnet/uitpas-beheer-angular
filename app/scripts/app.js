@@ -51,14 +51,14 @@ angular
           redirectIfAnonymous: ['redirect', function(redirect) {
             return redirect.ifAnonymous('/login');
           }],
-          redirectIfActiveCounter: ['redirect', function(redirect) {
-            return redirect.ifActiveCounter('/');
+          list: ['counterService', function(counterService) {
+            return counterService.getList();
           }],
-          list: ['counter', function(counter) {
-            return counter.getList();
-          }],
-          lastActive: ['counter', function(counter) {
-            return counter.getLastActive();
+          lastActiveId: ['counterService', 'resolveService', function(counterService, resolveService) {
+            return resolveService.resolveRejectedAs(
+              counterService.getLastActiveId(),
+              undefined
+            );
           }]
         }
       })
