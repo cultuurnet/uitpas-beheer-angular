@@ -32,9 +32,9 @@ function appCtrl($rootScope, $location, uitid, counterService) {
   app.counter = undefined;
 
   uitid.getUser().then(
-    angular.bind(app, function(user) {
+    function(user) {
       app.user = user;
-    }),
+    },
     function() {
       $rootScope.appBusy = false;
     }
