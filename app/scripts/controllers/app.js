@@ -57,7 +57,7 @@ function appCtrl($rootScope, $location, uitid, counterService) {
     uitid.logout().finally(function() {
       app.user = undefined;
       app.redirectToLogin();
-    })
+    });
   };
 
   app.redirectToLogin = function() {

@@ -39,7 +39,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
           deferredList.resolve(listData);
         })
         .error(function() {
-          deferredList.reject();
+          deferredList.reject('unable to retrieve counters for active user');
         });
     }
 
@@ -51,32 +51,36 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
    *   A promise with the active counter for the current user.
    */
   counterService.getActive = function() {
-    var deferred = $q.defer();
+    var deferredCounter = $q.defer();
+
+    var updateActiveCounter = function(activeCounter) {
+      counterService.active = activeCounter;
+      deferredCounter.resolve(activeCounter);
+    };
+
+    var suggestActiveCounter = function() {
+      counterService.getList().then(activateOnlyCounter);
+    };
+
+    var activateOnlyCounter = function (list) {
+      var ids = Object.keys(list);
+      if (ids.length === 1) {
+        var onlyCounterId = ids[0],
+            onlyCounter = list[onlyCounterId];
+        counterService.setActive(onlyCounter);
+        deferredCounter.resolve(onlyCounter);
+      } else {
+        deferredCounter.reject('can\'t activate only counter when there are none or multiple');
+      }
+    };
 
     if (counterService.active !== undefined) {
-      deferred.resolve(counterService.active);
+      deferredCounter.resolve(counterService.active);
     } else {
-      counterService.getActiveFromServer().then(
-        function(activeCounter) {
-          counterService.active = activeCounter;
-          deferred.resolve(activeCounter);
-        },
-        function() {
-          counterService.getList().then(function(list) {
-            var ids = Object.keys(list);
-            if (ids.length === 1) {
-              var id = ids[0];
-              counterService.setActive(list[id]);
-              deferred.resolve(list[id]);
-            } else {
-              deferred.reject();
-            }
-          });
-        }
-      );
+      counterService.getActiveFromServer().then(updateActiveCounter, suggestActiveCounter);
     }
 
-    return deferred.promise;
+    return deferredCounter.promise;
   };
 
   /**
@@ -101,6 +105,8 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
   };
 
   /**
+   * @param {object} activeCounter
+   *
    * @returns {Promise}
    *   A promise that the active counter has been set for the current user.
    */
@@ -110,16 +116,17 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
     var setActiveOnServer = counterService.setActiveOnServer(activeCounter.id);
     var setLastActiveId = counterService.setLastActiveId(activeCounter.id);
 
-    $q.all([setActiveOnServer, setLastActiveId]).then(
-      function() {
-        counterService.active = activeCounter;
-        $rootScope.$emit('activeCounterChanged', activeCounter);
-        deferred.resolve();
-      },
-      function() {
-        deferred.reject();
-      }
-    );
+    var failed = function () {
+      deferred.reject('something went wrong while activating the counter');
+    };
+
+    var updateActiveCounter = function() {
+      counterService.active = activeCounter;
+      $rootScope.$emit('activeCounterChanged', activeCounter);
+      deferred.resolve();
+    };
+
+    $q.all([setActiveOnServer, setLastActiveId]).then(updateActiveCounter, failed);
 
     return deferred.promise;
   };
@@ -175,20 +182,21 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
   counterService.getLastActiveId = function() {
     var deferred = $q.defer();
 
-    counterService.determineLastActiveCookieKey().then(
-      function(cookieKey) {
-        var lastActive = $cookies.get(cookieKey);
+    var foundCounterCookieKey = function (cookieKey) {
+      var counterId = $cookies.get(cookieKey);
 
-        if (lastActive === undefined) {
-          deferred.reject();
-        } else {
-          deferred.resolve(lastActive);
-        }
-      },
-      function() {
-        deferred.reject();
+      if (counterId === undefined) {
+        noPreviouslyActiveCounter();
+      } else {
+        deferred.resolve(counterId);
       }
-    );
+    };
+
+    var noPreviouslyActiveCounter = function () {
+      deferred.reject('there is no last active counter');
+    };
+
+    counterService.determineLastActiveCookieKey().then(foundCounterCookieKey, noPreviouslyActiveCounter);
 
     return deferred.promise;
   };
