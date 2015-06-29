@@ -43,13 +43,21 @@ function appCtrl($rootScope, $location, uitid) {
     app.user = undefined;
   });
 
-  $rootScope.$on('$locationChangeStart', function() {
-    var userLoggedIn = uitid.getLoginStatus();
-    var checkUserStatus = function (userStatus) {
-      if (!userStatus) {
+  // check for any unauthenticated requests and redirect to login
+  $rootScope.$on('event:auth-loginRequired', app.login);
+  // TODO: The API currently sends a 403 (authorization) when not authenticated
+  // also try to login on any unauthorized requests.
+  $rootScope.$on('event:auth-forbidden', app.login);
+
+  // make sure the user is still authenticated when navigating to a new route
+  // TODO: this is the ui-router (not yet installed) equivalent of the locationChangeStart event
+  $rootScope.$on('$stateChangeStart', function() {
+    var getLoginStatus = uitid.getLoginStatus();
+    var checkUserStatus = function (loggedIn) {
+      if (!loggedIn) {
         uitid.login($location.absUrl());
       }
     };
-    userLoggedIn.then(checkUserStatus);
+    getLoginStatus.then(checkUserStatus);
   });
 }
