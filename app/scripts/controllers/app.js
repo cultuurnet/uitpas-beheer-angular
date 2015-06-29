@@ -50,11 +50,11 @@ function appCtrl($rootScope, $location, uitid) {
   $rootScope.$on('event:auth-forbidden', app.login);
 
   // make sure the user is still authenticated when navigating to a new route
-  // TODO: this is the ui-router (not yet installed) equivalent of the locationChangeStart event
-  $rootScope.$on('$stateChangeStart', function() {
+  $rootScope.$on('$stateChangeStart', function(event) {
     var getLoginStatus = uitid.getLoginStatus();
     var checkUserStatus = function (loggedIn) {
       if (!loggedIn) {
+        event.preventDefault();
         uitid.login($location.absUrl());
       }
     };

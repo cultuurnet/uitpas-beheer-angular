@@ -17,31 +17,52 @@ angular
     'ngSanitize',
     'ngTouch',
     'config',
-    'angular-spinkit'
+    'angular-spinkit',
+    'ui.router'
   ])
   /* @ngInject */
-  .config(function ($routeProvider, $locationProvider) {
-    $routeProvider
-      .when('/', {
+  .config(function ($stateProvider, $locationProvider) {
+    $stateProvider
+      .state('main', {
+        url: '/',
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        resolve: {
-          redirect: ['redirect', function(redirect) {
-            return redirect.ifAnonymous('/login');
-          }]
+        controller: 'MainController',
+        controllerAs: 'mc'
+      })
+      .state('routeA', {
+        url: '/route-a',
+        views: {
+          content: {
+            templateUrl: 'views/main.html',
+            controller: 'MainController',
+            controllerAs: 'mc'
+          },
+          sidebar: {
+            templateUrl: 'views/sidebar-a.html',
+            controller: 'MainController',
+            controllerAs: 'mc'
+          }
         }
       })
-      .when('/login', {
+      .state('routeB', {
+        url: '/route-b',
+        views: {
+          content: {
+            templateUrl: 'views/main.html',
+            controller: 'MainController',
+            controllerAs: 'mc'
+          },
+          sidebar: {
+            templateUrl: 'views/sidebar-b.html',
+            controller: 'MainController',
+            controllerAs: 'mc'
+          }
+        }
+      })
+      .state('login', {
         templateUrl: 'views/login.html',
-        controller: 'LoginCtrl',
-        resolve: {
-          redirect: ['redirect', function(redirect) {
-            return redirect.ifLoggedIn('/');
-          }]
-        }
-      })
-      .otherwise({
-        redirectTo: '/'
+        controller: 'LoginController',
+        controllerAs: 'lc'
       });
 
     $locationProvider.html5Mode(true);

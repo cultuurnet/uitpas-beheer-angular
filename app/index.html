@@ -61,10 +61,10 @@
       <div class="container">
         <div class="grid">
 
-          <aside role="complementary" class="sidebar grid__12 grid--bp-sml__4 grid--bp-med__3" ng-show="app.user">
+          <aside  ui-view="sidebar" role="complementary" class="sidebar grid__12 grid--bp-sml__4 grid--bp-med__3" ng-show="app.user">
           </aside> <!-- /aside -->
 
-          <div ng-view="" class="main grid__12" ng-class="{'grid--bp-sml__8 grid--bp-med__9': app.user}" role="main">
+          <div ui-view="content" class="main grid__12" ng-class="{'grid--bp-sml__8 grid--bp-med__9': app.user}" role="main">
           </div> <!-- /main -->
 
           <footer class="footer grid__12 grid--bp-sml__8 grid--bp-med__9" role="contentinfo" ng-show="app.user">
