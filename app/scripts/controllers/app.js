@@ -42,4 +42,14 @@ function appCtrl($rootScope, $location, uitid) {
     $location.path('/login');
     app.user = undefined;
   });
+
+  $rootScope.$on('$locationChangeStart', function() {
+    var userLoggedIn = uitid.getLoginStatus();
+    var checkUserStatus = function (userStatus) {
+      if (!userStatus) {
+        uitid.login($location.absUrl());
+      }
+    };
+    userLoggedIn.then(checkUserStatus);
+  });
 }
