@@ -13,7 +13,6 @@ angular
     'ngAnimate',
     'ngCookies',
     'ngResource',
-    'ngRoute',
     'ngSanitize',
     'ngTouch',
     'config',
@@ -23,14 +22,9 @@ angular
   /* @ngInject */
   .config(function ($stateProvider, $locationProvider) {
     $stateProvider
+      // Default parent state.
       .state('main', {
         url: '/',
-        templateUrl: 'views/main.html',
-        controller: 'MainController',
-        controllerAs: 'mc'
-      })
-      .state('routeA', {
-        url: '/route-a',
         views: {
           content: {
             templateUrl: 'views/main.html',
@@ -38,24 +32,12 @@ angular
             controllerAs: 'mc'
           },
           sidebar: {
-            templateUrl: 'views/sidebar-a.html',
-            controller: 'MainController',
-            controllerAs: 'mc'
-          }
-        }
-      })
-      .state('routeB', {
-        url: '/route-b',
-        views: {
-          content: {
-            templateUrl: 'views/main.html',
+            templateUrl: 'views/sidebar-main.html',
             controller: 'MainController',
             controllerAs: 'mc'
           },
-          sidebar: {
-            templateUrl: 'views/sidebar-b.html',
-            controller: 'MainController',
-            controllerAs: 'mc'
+          header: {
+            templateUrl: 'views/header.html'
           }
         }
       })
