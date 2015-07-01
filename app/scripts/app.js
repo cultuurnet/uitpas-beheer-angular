@@ -13,6 +13,7 @@ angular
     'ngAnimate',
     'ngCookies',
     'ngResource',
+    'http-auth-interceptor',
     'ngSanitize',
     'ngTouch',
     'config',

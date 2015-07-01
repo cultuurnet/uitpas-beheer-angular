@@ -38,6 +38,18 @@ function appController($rootScope, $location, uitid) {
     uitid.logout().then(app.redirectToLogin, app.redirectToLogin);
   };
 
+  // This function has to be declared before $rootScope.$on('$stateChangeStart', app.authenticateStateChange).
+  app.authenticateStateChange = function (event) {
+    var getLoginStatus = uitid.getLoginStatus();
+    var checkUserStatus = function (loggedIn) {
+      if (!loggedIn) {
+        uitid.login($location.absUrl());
+        event.preventDefault();
+      }
+    };
+    getLoginStatus.then(checkUserStatus);
+  };
+
   app.redirectToLogin = angular.bind(app, function() {
     $location.path('/login');
     app.user = undefined;
@@ -51,15 +63,4 @@ function appController($rootScope, $location, uitid) {
 
   // make sure the user is still authenticated when navigating to a new route
   $rootScope.$on('$stateChangeStart', app.authenticateStateChange);
-
-  app.authenticateStateChange = function (event) {
-      var getLoginStatus = uitid.getLoginStatus();
-      var checkUserStatus = function (loggedIn) {
-        if (!loggedIn) {
-          event.preventDefault();
-          uitid.login($location.absUrl());
-        }
-      };
-      getLoginStatus.then(checkUserStatus);
-  }
 }
