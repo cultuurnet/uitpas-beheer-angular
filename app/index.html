@@ -17,54 +17,20 @@
     <!-- endbuild -->
 
   </head>
-  <body ng-app="uitpasbeheerApp" ng-controller="AppCtrl as app">
+  <body ng-app="uitpasbeheerApp" ng-controller="AppController as app">
     <app-loading></app-loading>
 
-    <header class="header" role="banner" ng-show="app.user">
-      <div class="container">
-
-        <nav class="navbar navbar-inverse">
-
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/"><img class="logo" src="images/svg/logo-uitpas.svg" data-url="images/fallback/logo-uitpas.png" width="90" height="25" alt=""></a>
-          </div> <!--/ .navbar-header -->
-
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">BALIE <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">Home</a></li>
-                </ul>
-              </li>
-              <li><a class="navbar-link" href="#">Balie wijzigen</a></li>
-            </ul>
-
-            <div class="nav navbar-nav navbar-right">
-              <p class="navbar-text">Aangemeld als {{ app.user.nick }} <a class="navbar-btn btn btn-ghost btn-sm" href="#" ng-click="app.logout()">Afmelden</a></p>
-            </div> 
-          </div> <!--/ .navbar-collapse -->
-
-        </nav>
-      </div>
+    <header ui-view="header" class="header" role="banner" ng-show="app.user">
     </header> <!--/ .header -->
 
     <div class="main-content">
       <div class="container">
         <div class="grid">
 
-          <aside role="complementary" class="sidebar grid__12 grid--bp-sml__4 grid--bp-med__3" ng-show="app.user">
+          <aside  ui-view="sidebar" role="complementary" class="sidebar grid__12 grid--bp-sml__4 grid--bp-med__3" ng-show="app.user">
           </aside> <!-- /aside -->
 
-          <div ng-view="" class="main grid__12" ng-class="{'grid--bp-sml__8 grid--bp-med__9': app.user}" role="main">
+          <div ui-view="content" class="main grid__12" ng-class="{'grid--bp-sml__8 grid--bp-med__9': app.user}" role="main">
           </div> <!-- /main -->
 
           <footer class="footer grid__12 grid--bp-sml__8 grid--bp-med__9" role="contentinfo" ng-show="app.user">
@@ -82,10 +48,11 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-spinkit/build/angular-spinkit.js"></script>
+    <script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

@@ -2,17 +2,17 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:AppCtrl
+ * @name uitpasbeheerApp.controller:AppController
  * @description
- * # AppCtrl
+ * # AppController
  * Controller of the uitpasbeheerApp
  */
 angular
   .module('uitpasbeheerApp')
-  .controller('AppCtrl', appCtrl);
+  .controller('AppController', appController);
 
 /* @ngInject */
-function appCtrl($rootScope, $location, uitid) {
+function appController($rootScope, $location, uitid) {
   /*jshint validthis: true */
   var app = this;
 
@@ -42,4 +42,24 @@ function appCtrl($rootScope, $location, uitid) {
     $location.path('/login');
     app.user = undefined;
   });
+
+  // check for any unauthenticated requests and redirect to login
+  $rootScope.$on('event:auth-loginRequired', app.login);
+  // TODO: The API currently sends a 403 (authorization) when not authenticated
+  // also try to login on any unauthorized requests.
+  $rootScope.$on('event:auth-forbidden', app.login);
+
+  // make sure the user is still authenticated when navigating to a new route
+  $rootScope.$on('$stateChangeStart', app.authenticateStateChange);
+
+  app.authenticateStateChange = function (event) {
+      var getLoginStatus = uitid.getLoginStatus();
+      var checkUserStatus = function (loggedIn) {
+        if (!loggedIn) {
+          event.preventDefault();
+          uitid.login($location.absUrl());
+        }
+      };
+      getLoginStatus.then(checkUserStatus);
+  }
 }
