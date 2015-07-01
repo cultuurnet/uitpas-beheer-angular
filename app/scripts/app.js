@@ -13,57 +13,43 @@ angular
     'ngAnimate',
     'ngCookies',
     'ngResource',
-    'ngRoute',
     'ngSanitize',
     'ngTouch',
     'config',
-    'angular-spinkit'
+    'angular-spinkit',
+    'ui.router'
   ])
   /* @ngInject */
-  .config(function ($routeProvider, $locationProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        resolve: {
-          redirectIfAnonymous: ['redirect', function(redirect) {
-            return redirect.ifAnonymous('/login');
-          }],
-          redirectIfNoActiveCounter: ['redirect', function(redirect) {
-            return redirect.ifNoActiveCounter('/counters');
-          }]
+  .config(function ($stateProvider, $locationProvider) {
+    $stateProvider
+      // Default parent state.
+      .state('main', {
+        url: '/',
+        views: {
+          content: {
+            templateUrl: 'views/main.html',
+            controller: 'MainController',
+            controllerAs: 'mc'
+          },
+          sidebar: {
+            templateUrl: 'views/sidebar-main.html',
+            controller: 'MainController',
+            controllerAs: 'mc'
+          },
+          header: {
+            templateUrl: 'views/header.html'
+          }
         }
       })
-      .when('/login', {
+      .state('login', {
         templateUrl: 'views/login.html',
-        controller: 'LoginCtrl',
-        resolve: {
-          redirectIfLoggedIn: ['redirect', function(redirect) {
-            return redirect.ifLoggedIn('/');
-          }]
-        }
+        controller: 'LoginController',
+        controllerAs: 'lc'
       })
-      .when('/counters', {
-        templateUrl: 'views/counters.html',
+      .state('counters', {
+        templateUrl:'views/counters.html',
         controller: 'CountersCtrl',
-        controllerAs: 'counters',
-        resolve: {
-          redirectIfAnonymous: ['redirect', function(redirect) {
-            return redirect.ifAnonymous('/login');
-          }],
-          list: ['counterService', function(counterService) {
-            return counterService.getList();
-          }],
-          lastActiveId: ['counterService', 'resolveService', function(counterService, resolveService) {
-            return resolveService.resolveRejectedAs(
-              counterService.getLastActiveId(),
-              undefined
-            );
-          }]
-        }
-      })
-      .otherwise({
-        redirectTo: '/'
+        controllerAs: 'counters'
       });
 
     $locationProvider.html5Mode(true);

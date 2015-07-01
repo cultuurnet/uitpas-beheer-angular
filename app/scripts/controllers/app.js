@@ -2,26 +2,26 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:AppCtrl
+ * @name uitpasbeheerApp.controller:AppController
  * @description
- * # AppCtrl
+ * # AppController
  * Controller of the uitpasbeheerApp
  */
 angular
   .module('uitpasbeheerApp')
-  .controller('AppCtrl', appCtrl);
+  .controller('AppController', appController);
 
 /* @ngInject */
-function appCtrl($rootScope, $location, uitid, counterService) {
+function appController($rootScope, $location, uitid, counterService) {
   $rootScope.appBusy = true;
 
-  $rootScope.$on('$routeChangeStart', function() {
+  $rootScope.$on('$stateChangeStart', function () {
     $rootScope.appBusy = true;
   });
-  $rootScope.$on('$routeChangeSuccess', function() {
+  $rootScope.$on('$stateChangeSuccess', function () {
     $rootScope.appBusy = false;
   });
-  $rootScope.$on('$routeChangeError', function() {
+  $rootScope.$on('$stateChangeError', function () {
     $rootScope.appBusy = false;
   });
 
@@ -32,39 +32,60 @@ function appCtrl($rootScope, $location, uitid, counterService) {
   app.counter = undefined;
 
   uitid.getUser().then(
-    function(user) {
+    function (user) {
       app.user = user;
     },
-    function() {
+    function () {
       $rootScope.appBusy = false;
     }
   );
 
-  counterService.getActive().then(function(activeCounter) {
+  counterService.getActive().then(function (activeCounter) {
     app.counter = activeCounter;
   });
 
-  $rootScope.$on('activeCounterChanged', function(event, activeCounter) {
+  $rootScope.$on('activeCounterChanged', function (event, activeCounter) {
     app.counter = activeCounter;
   });
 
-  app.login = function() {
+  app.login = function () {
     var destination = $location.absUrl();
     uitid.login(destination);
   };
 
-  app.logout = function() {
-    uitid.logout().finally(function() {
+  app.logout = function () {
+    uitid.logout().finally(function () {
       app.user = undefined;
       app.redirectToLogin();
     });
   };
 
-  app.redirectToLogin = function() {
+  app.redirectToLogin = function () {
     $location.path('/login');
   };
 
-  app.redirectToCounters = function() {
+  app.redirectToCounters = function () {
     $location.path('/counters');
   };
+
+  // check for any unauthenticated requests and redirect to login
+  $rootScope.$on('event:auth-loginRequired', app.login);
+  // TODO: The API currently sends a 403 (authorization) when not authenticated
+  // also try to login on any unauthorized requests.
+  $rootScope.$on('event:auth-forbidden', app.login);
+
+  // make sure the user is still authenticated when navigating to a new route
+  $rootScope.$on('$stateChangeStart', app.authenticateStateChange);
+
+  app.authenticateStateChange = function (event) {
+    var getLoginStatus = uitid.getLoginStatus();
+    var checkUserStatus = function (loggedIn) {
+      if (!loggedIn) {
+        event.preventDefault();
+        uitid.login($location.absUrl());
+      }
+    };
+    getLoginStatus.then(checkUserStatus);
+  }
 }
+  

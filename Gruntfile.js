@@ -512,13 +512,13 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'ngconstant:dist',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
     'postcss',
     'concat',
     'ngAnnotate',
-    'ngconstant:dist',
     'copy:dist',
     'cdnify',
     'cssmin',
