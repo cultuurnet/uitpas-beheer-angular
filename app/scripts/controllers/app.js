@@ -50,14 +50,16 @@ function appController($rootScope, $location, uitid) {
   $rootScope.$on('event:auth-forbidden', app.login);
 
   // make sure the user is still authenticated when navigating to a new route
-  $rootScope.$on('$stateChangeStart', function(event) {
-    var getLoginStatus = uitid.getLoginStatus();
-    var checkUserStatus = function (loggedIn) {
-      if (!loggedIn) {
-        event.preventDefault();
-        uitid.login($location.absUrl());
-      }
-    };
-    getLoginStatus.then(checkUserStatus);
-  });
+  $rootScope.$on('$stateChangeStart', app.authenticateStateChange);
+
+  app.authenticateStateChange = function (event) {
+      var getLoginStatus = uitid.getLoginStatus();
+      var checkUserStatus = function (loggedIn) {
+        if (!loggedIn) {
+          event.preventDefault();
+          uitid.login($location.absUrl());
+        }
+      };
+      getLoginStatus.then(checkUserStatus);
+  }
 }
