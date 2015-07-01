@@ -2,17 +2,17 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:AppCtrl
+ * @name uitpasbeheerApp.controller:AppController
  * @description
- * # AppCtrl
+ * # AppController
  * Controller of the uitpasbeheerApp
  */
 angular
   .module('uitpasbeheerApp')
-  .controller('AppCtrl', appCtrl);
+  .controller('AppController', appController);
 
 /* @ngInject */
-function appCtrl($rootScope, $location, uitid) {
+function appController($rootScope, $location, uitid) {
   /*jshint validthis: true */
   var app = this;
 
