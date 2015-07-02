@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: passHolderService', function () {
+describe('Service: passholderService', function () {
 
   var apiUrl = 'http://example.com/';
 
@@ -12,11 +12,11 @@ describe('Service: passHolderService', function () {
   }));
 
   // Instantiate service.
-  var passHolderService, $httpBackend, $q, $scope;
+  var passholderService, $httpBackend, $q, $scope;
 
   beforeEach(inject(function ($injector, $rootScope) {
     $httpBackend = $injector.get('$httpBackend');
-    passHolderService = $injector.get('passHolderService');
+    passholderService = $injector.get('passholderService');
     $q = $injector.get('$q');
     $scope = $rootScope;
   }));
@@ -26,9 +26,9 @@ describe('Service: passHolderService', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('returns a pass holder from the server and keeps it cached', function() {
+  it('returns a passholder from the server and keeps it cached', function() {
     var uitpasNumber = 'this-is-a-number';
-    var expectedPassHolder = {
+    var expectedPassholder = {
       name: 'Foo',
       points: 0,
       uitIdUser: {
@@ -38,26 +38,26 @@ describe('Service: passHolderService', function () {
 
     // Mock an HTTP response.
     $httpBackend
-      .expectPOST(apiUrl + 'passholder/find', {identification: uitpasNumber})
-      .respond(200, JSON.stringify(expectedPassHolder));
+      .expectGET(apiUrl + 'passholder?identification=' + uitpasNumber)
+      .respond(200, JSON.stringify(expectedPassholder));
 
     // Assertion method.
-    var assertPassHolder = function(passHolder) {
-      expect(passHolder).toEqual(expectedPassHolder);
+    var assertPassholder = function(passholder) {
+      expect(passholder).toEqual(expectedPassholder);
     };
 
     var failed = function(error) {
       expect(error).toBeUndefined();
     };
 
-    // Request the pass holder data and assert it when its returned.
-    passHolderService.find(uitpasNumber).then(assertPassHolder, failed);
+    // Request the passholder data and assert it when its returned.
+    passholderService.find(uitpasNumber).then(assertPassholder, failed);
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
 
-    // Request the pass holder data and assert it again, but this time without
-    // mocking an HTTP request as the pass holder object should have been cached.
-    passHolderService.find(uitpasNumber).then(assertPassHolder, failed);
+    // Request the passholder data and assert it again, but this time without
+    // mocking an HTTP request as the passholder object should have been cached.
+    passholderService.find(uitpasNumber).then(assertPassholder, failed);
   });
 });
