@@ -2,17 +2,17 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:CountersCtrl
+ * @name uitpasbeheerApp.controller:CountersController
  * @description
- * # CountersCtrl
+ * # CountersController
  * Controller of the uitpasbeheerApp
  */
 angular
   .module('uitpasbeheerApp')
-  .controller('CountersCtrl', countersCtrl);
+  .controller('CountersController', countersController);
 
 /* @ngInject */
-function countersCtrl($location, counterService, list, lastActiveId) {
+function countersController($location, counterService, list, lastActiveId) {
   /*jshint validthis: true */
   var controller = this;
 

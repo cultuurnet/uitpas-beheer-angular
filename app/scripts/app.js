@@ -48,7 +48,7 @@ angular
       .state('counters', {
         url: '/counters',
         templateUrl:'views/counters.html',
-        controller: 'CountersCtrl',
+        controller: 'CountersController',
         controllerAs: 'counters',
         resolve: {
           list: ['counterService', function(counterService) {
