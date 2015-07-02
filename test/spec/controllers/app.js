@@ -42,7 +42,7 @@ describe('Controller: AppController', function () {
   });
 
   it('makes sure the user is authenticated when changing state', function (done) {
-    var stateChangeEvent = jasmine.createSpyObj('stateChagenEvent', ['preventDefault']);
+    var stateChangeEvent = jasmine.createSpyObj('stateChangeEvent', ['preventDefault']);
     var deferredLoginStatus = $q.defer();
     var loginStatusPromise = deferredLoginStatus.promise;
     var finished = function () {
@@ -51,7 +51,7 @@ describe('Controller: AppController', function () {
     };
     spyOn(uitid, 'getLoginStatus').and.returnValue(loginStatusPromise);
     spyOn(uitid, 'login');
-    appController.authenticateStateChange(stateChangeEvent);
+    $scope.$emit('$stateChangeStart', stateChangeEvent);
     expect(uitid.getLoginStatus).toHaveBeenCalled();
 
     loginStatusPromise.finally(finished);
@@ -65,12 +65,12 @@ describe('Controller: AppController', function () {
     var loginStatusPromise = deferredLoginStatus.promise;
     var finished = function () {
       expect(uitid.login).toHaveBeenCalled();
-      expect(stateChangeEvent.preventDefault).toHaveBeenCalled();
+      expect(emitEvent.defaultPrevented).toBeTruthy();
       done();
     };
     spyOn(uitid, 'getLoginStatus').and.returnValue(loginStatusPromise);
     spyOn(uitid, 'login');
-    appController.authenticateStateChange(stateChangeEvent);
+    var emitEvent = $scope.$emit('$stateChangeStart', stateChangeEvent);
     expect(uitid.getLoginStatus).toHaveBeenCalled();
 
     loginStatusPromise.finally(finished);

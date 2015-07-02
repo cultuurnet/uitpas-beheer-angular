@@ -13,6 +13,7 @@ angular
     'ngAnimate',
     'ngCookies',
     'ngResource',
+    'http-auth-interceptor',
     'ngSanitize',
     'ngTouch',
     'config',
@@ -47,9 +48,8 @@ angular
         }
       })
       .state('login', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginController',
-        controllerAs: 'lc'
+        url: '/login',
+        templateUrl: 'views/login.html'
       })
       .state('counters', {
         url: '/counters',

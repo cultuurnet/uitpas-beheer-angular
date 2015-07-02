@@ -62,6 +62,18 @@ function appController($rootScope, $location, uitid, counterService) {
     });
   };
 
+  // This function has to be declared before $rootScope.$on('$stateChangeStart', app.authenticateStateChange).
+  app.authenticateStateChange = function (event) {
+    var getLoginStatus = uitid.getLoginStatus();
+    var checkUserStatus = function (loggedIn) {
+      if (!loggedIn) {
+        uitid.login($location.absUrl());
+        event.preventDefault();
+      }
+    };
+    getLoginStatus.then(checkUserStatus);
+  };
+  
   app.redirectToLogin = function () {
     $location.path('/login');
   };
@@ -78,15 +90,4 @@ function appController($rootScope, $location, uitid, counterService) {
 
   // make sure the user is still authenticated when navigating to a new route
   $rootScope.$on('$stateChangeStart', app.authenticateStateChange);
-
-  app.authenticateStateChange = function (event) {
-    var getLoginStatus = uitid.getLoginStatus();
-    var checkUserStatus = function (loggedIn) {
-      if (!loggedIn) {
-        event.preventDefault();
-        uitid.login($location.absUrl());
-      }
-    };
-    getLoginStatus.then(checkUserStatus);
-  };
 }
