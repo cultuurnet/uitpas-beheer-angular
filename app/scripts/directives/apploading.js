@@ -8,16 +8,24 @@
  */
 angular
   .module('uitpasbeheerApp')
-  .directive('appLoading', function ($rootScope) {
-    return {
-      templateUrl: 'views/loading.html',
-      restrict: 'E',
-      link: function postLink(scope) {
-        scope.loading = $rootScope.appBusy;
+  .directive('appLoading', appLoadingDirective);
 
-        $rootScope.$watch('appBusy', function() {
-          scope.loading = $rootScope.appBusy;
-        });
+/* @ngInject */
+function appLoadingDirective ($rootScope) {
+  return {
+    templateUrl: 'views/loading.html',
+    restrict: 'E',
+    link: function postLink(scope) {
+
+      if(typeof $rootScope.appBusy === 'undefined') {
+        scope.loading = true;
+      } else {
+        scope.loading = $rootScope.appBusy;
       }
-    };
-  });
+
+      $rootScope.$watch('appBusy', function() {
+        scope.loading = $rootScope.appBusy;
+      });
+    }
+  };
+}

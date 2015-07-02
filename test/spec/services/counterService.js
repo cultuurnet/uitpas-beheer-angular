@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('Service: counterService', function () {
+describe('Service: counterService', function () {
 
   // load the service's module
   beforeEach(module('uitpasbeheerApp'));
