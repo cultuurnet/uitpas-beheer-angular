@@ -12,7 +12,27 @@ angular
   .controller('MainController', mainController);
 
 /* @ngInject */
-function mainController () {
+function mainController ($rootScope, passholderService, sharedDataService) {
   /*jshint validthis: true */
-  this.hello = 'world';
+  var main = this;
+
+  main.shared = sharedDataService;
+  main.shared.data.passholderIdentification = '';
+
+  main.searchPassholder = function() {
+    $rootScope.appReady = false;
+
+    passholderService.find(main.shared.data.passholderIdentification).then(
+      angular.bind(main, function(passholder) {
+        main.shared.data.passholder = passholder;
+        main.shared.data.passholderNotFound = false;
+        $rootScope.appReady = true;
+      }),
+      angular.bind(main, function() {
+        main.shared.data.passholder = undefined;
+        main.shared.data.passholderNotFound = true;
+        $rootScope.appReady = true;
+      })
+    );
+  };
 }

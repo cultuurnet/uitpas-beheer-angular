@@ -33,7 +33,7 @@ angular
             controllerAs: 'mc'
           },
           sidebar: {
-            templateUrl: 'views/sidebar-main.html',
+            templateUrl: 'views/sidebar-passholder-search.html',
             controller: 'MainController',
             controllerAs: 'mc'
           },
