@@ -20,7 +20,7 @@ angular
     'ui.router'
   ])
   /* @ngInject */
-  .config(function ($stateProvider, $locationProvider) {
+  .config(function ($stateProvider, $locationProvider, $httpProvider) {
     $stateProvider
       // Default parent state.
       .state('main', {
@@ -69,4 +69,5 @@ angular
       });
 
     $locationProvider.html5Mode(true);
+    $httpProvider.defaults.withCredentials = true;
   });

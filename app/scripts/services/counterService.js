@@ -31,9 +31,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
       deferredList.resolve(service.list);
     } else {
       $http
-        .get(apiUrl + '/list', {
-          withCredentials: true
-        })
+        .get(apiUrl + '/list')
         .success(function(listData) {
           service.list = listData;
           deferredList.resolve(listData);
@@ -91,9 +89,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
     var deferred = $q.defer();
 
     $http
-      .get(apiUrl + '/active', {
-        withCredentials: true
-      })
+      .get(apiUrl + '/active')
       .success(function(counter) {
         deferred.resolve(counter);
       })
@@ -140,7 +136,6 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
 
     $http
       .post(apiUrl + '/active', {id: id}, {
-        withCredentials: true,
         headers: {
           'Content-Type': 'application/json'
         }

@@ -31,9 +31,7 @@ function uitidService($q, $window, $http, appConfig) {
       deferredUser.resolve(uitId.user);
     } else {
       $http
-        .get(apiUrl + '/user', {
-          withCredentials: true
-        })
+        .get(apiUrl + '/user')
         .success(angular.bind(uitId, function (userData) {
           uitId.user = userData;
 
@@ -85,9 +83,7 @@ function uitidService($q, $window, $http, appConfig) {
     var deferredLogout = $q.defer();
 
     $http
-      .get(apiUrl + '/logout', {
-        withCredentials: true
-      })
+      .get(apiUrl + '/logout')
       .then(angular.bind(uitId, function() {
         uitId.user = undefined;
         deferredLogout.resolve();
