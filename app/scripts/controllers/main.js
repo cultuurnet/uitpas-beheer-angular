@@ -2,11 +2,17 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:MainCtrl
+ * @name uitpasbeheerApp.controller:MainController
  * @description
- * # MainCtrl
+ * # MainController
  * Controller of the uitpasbeheerApp
  */
 angular
   .module('uitpasbeheerApp')
-  .controller('MainCtrl', function () {});
+  .controller('MainController', mainController);
+
+/* @ngInject */
+function mainController () {
+  /*jshint validthis: true */
+  this.hello = 'world';
+}

@@ -13,35 +13,39 @@ angular
     'ngAnimate',
     'ngCookies',
     'ngResource',
-    'ngRoute',
+    'http-auth-interceptor',
     'ngSanitize',
     'ngTouch',
     'config',
-    'angular-spinkit'
+    'angular-spinkit',
+    'ui.router'
   ])
   /* @ngInject */
-  .config(function ($routeProvider, $locationProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        resolve: {
-          redirect: ['redirect', function(redirect) {
-            return redirect.ifAnonymous('/login');
-          }]
+  .config(function ($stateProvider, $locationProvider) {
+    $stateProvider
+      // Default parent state.
+      .state('main', {
+        url: '/',
+        views: {
+          content: {
+            templateUrl: 'views/main.html',
+            controller: 'MainController',
+            controllerAs: 'mc'
+          },
+          sidebar: {
+            templateUrl: 'views/sidebar-main.html',
+            controller: 'MainController',
+            controllerAs: 'mc'
+          },
+          header: {
+            templateUrl: 'views/header.html'
+          }
         }
       })
-      .when('/login', {
+      .state('login', {
         templateUrl: 'views/login.html',
-        controller: 'LoginCtrl',
-        resolve: {
-          redirect: ['redirect', function(redirect) {
-            return redirect.ifLoggedIn('/');
-          }]
-        }
-      })
-      .otherwise({
-        redirectTo: '/'
+        controller: 'LoginController',
+        controllerAs: 'lc'
       });
 
     $locationProvider.html5Mode(true);
