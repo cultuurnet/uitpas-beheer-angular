@@ -40,9 +40,12 @@ function appController($rootScope, $location, uitid, counterService) {
     }
   );
 
-  counterService.getActive().then(function (activeCounter) {
-    app.counter = activeCounter;
-  });
+  app.activeCounter = function (counter) {
+    console.log(counter);
+    app.counter = counter;
+  };
+
+  counterService.getActive().then(app.activeCounter, app.redirectToCounters);
 
   $rootScope.$on('activeCounterChanged', function (event, activeCounter) {
     app.counter = activeCounter;
@@ -86,6 +89,5 @@ function appController($rootScope, $location, uitid, counterService) {
       }
     };
     getLoginStatus.then(checkUserStatus);
-  }
+  };
 }
-  

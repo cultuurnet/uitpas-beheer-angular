@@ -47,9 +47,25 @@ angular
         controllerAs: 'lc'
       })
       .state('counters', {
-        templateUrl:'views/counters.html',
-        controller: 'CountersCtrl',
-        controllerAs: 'counters'
+        url: '/counters',
+        views: {
+          content: {
+            templateUrl:'views/counters.html',
+            controller: 'CountersCtrl',
+            controllerAs: 'counters'
+          }
+        },
+        resolve: {
+          list: ['counterService', function(counterService) {
+            return counterService.getList();
+          }],
+          lastActiveId: ['counterService', 'resolveService', function(counterService, resolveService) {
+            return resolveService.resolveRejectedAs(
+              counterService.getLastActiveId(),
+              undefined
+            );
+          }]
+        }
       });
 
     $locationProvider.html5Mode(true);

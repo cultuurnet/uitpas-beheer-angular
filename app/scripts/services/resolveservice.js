@@ -14,9 +14,9 @@ angular
 /* @ngInject */
 function resolveService($q) {
   /*jshint validthis: true */
-  var resolveService = this;
+  var service = this;
 
-  resolveService.resolveRejectedAs = function(promise, rejectedAs) {
+  service.resolveRejectedAs = function(promise, rejectedAs) {
     var deferred = $q.defer();
 
     promise.then(

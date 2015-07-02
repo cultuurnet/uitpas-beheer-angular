@@ -15,27 +15,27 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
   var apiUrl = appConfig.apiUrl + 'counter';
 
   /*jshint validthis: true */
-  var counterService = this;
+  var service = this;
 
-  counterService.active = undefined;
-  counterService.list = undefined;
+  service.active = undefined;
+  service.list = undefined;
 
   /**
    * @returns {Promise}
    *   A promise with a list of available counters for the active user.
    */
-  counterService.getList = function() {
+  service.getList = function() {
     var deferredList = $q.defer();
 
-    if (counterService.list !== undefined) {
-      deferredList.resolve(counterService.list);
+    if (service.list !== undefined) {
+      deferredList.resolve(service.list);
     } else {
       $http
         .get(apiUrl + '/list', {
           withCredentials: true
         })
         .success(function(listData) {
-          counterService.list = listData;
+          service.list = listData;
           deferredList.resolve(listData);
         })
         .error(function() {
@@ -50,16 +50,16 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
    * @returns {Promise}
    *   A promise with the active counter for the current user.
    */
-  counterService.getActive = function() {
+  service.getActive = function() {
     var deferredCounter = $q.defer();
 
     var updateActiveCounter = function(activeCounter) {
-      counterService.active = activeCounter;
+      service.active = activeCounter;
       deferredCounter.resolve(activeCounter);
     };
 
     var suggestActiveCounter = function() {
-      counterService.getList().then(activateOnlyCounter);
+      service.getList().then(activateOnlyCounter);
     };
 
     var activateOnlyCounter = function (list) {
@@ -67,17 +67,17 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
       if (ids.length === 1) {
         var onlyCounterId = ids[0],
             onlyCounter = list[onlyCounterId];
-        counterService.setActive(onlyCounter);
+        service.setActive(onlyCounter);
         deferredCounter.resolve(onlyCounter);
       } else {
         deferredCounter.reject('can\'t activate only counter when there are none or multiple');
       }
     };
 
-    if (counterService.active !== undefined) {
-      deferredCounter.resolve(counterService.active);
+    if (service.active !== undefined) {
+      deferredCounter.resolve(service.active);
     } else {
-      counterService.getActiveFromServer().then(updateActiveCounter, suggestActiveCounter);
+      service.getActiveFromServer().then(updateActiveCounter, suggestActiveCounter);
     }
 
     return deferredCounter.promise;
@@ -87,7 +87,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
    * @returns {Promise}
    *   A promise with the active counter for the current user, from the server.
    */
-  counterService.getActiveFromServer = function() {
+  service.getActiveFromServer = function() {
     var deferred = $q.defer();
 
     $http
@@ -110,18 +110,18 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
    * @returns {Promise}
    *   A promise that the active counter has been set for the current user.
    */
-  counterService.setActive = function(activeCounter) {
+  service.setActive = function(activeCounter) {
     var deferred = $q.defer();
 
-    var setActiveOnServer = counterService.setActiveOnServer(activeCounter.id);
-    var setLastActiveId = counterService.setLastActiveId(activeCounter.id);
+    var setActiveOnServer = service.setActiveOnServer(activeCounter.id);
+    var setLastActiveId = service.setLastActiveId(activeCounter.id);
 
     var failed = function () {
       deferred.reject('something went wrong while activating the counter');
     };
 
     var updateActiveCounter = function() {
-      counterService.active = activeCounter;
+      service.active = activeCounter;
       $rootScope.$emit('activeCounterChanged', activeCounter);
       deferred.resolve();
     };
@@ -135,7 +135,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
    * @returns {Promise}
    *   A promise that the active counter has been set for the current user on the server.
    */
-  counterService.setActiveOnServer = function(id) {
+  service.setActiveOnServer = function(id) {
     var deferred = $q.defer();
 
     $http
@@ -159,10 +159,10 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
    * @returns {Promise}
    *   A promise that the last active counter id has been stored on the client.
    */
-  counterService.setLastActiveId = function(id) {
+  service.setLastActiveId = function(id) {
     var deferred = $q.defer();
 
-    counterService.determineLastActiveCookieKey().then(
+    service.determineLastActiveCookieKey().then(
       function(cookieKey) {
         $cookies.put(cookieKey, id);
         deferred.resolve(cookieKey);
@@ -179,7 +179,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
    * @returns {Promise}
    *   A promise with a the last active counter id for the active user.
    */
-  counterService.getLastActiveId = function() {
+  service.getLastActiveId = function() {
     var deferred = $q.defer();
 
     var foundCounterCookieKey = function (cookieKey) {
@@ -196,7 +196,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
       deferred.reject('there is no last active counter');
     };
 
-    counterService.determineLastActiveCookieKey().then(foundCounterCookieKey, noPreviouslyActiveCounter);
+    service.determineLastActiveCookieKey().then(foundCounterCookieKey, noPreviouslyActiveCounter);
 
     return deferred.promise;
   };
@@ -206,7 +206,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
    *   A promise with the cookie key for the last active counter for the current
    *   user.
    */
-  counterService.determineLastActiveCookieKey = function() {
+  service.determineLastActiveCookieKey = function() {
     var deferred = $q.defer();
 
     uitid.getUser().then(
