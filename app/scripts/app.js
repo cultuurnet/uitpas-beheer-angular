@@ -26,15 +26,11 @@ angular
       // Default parent state.
       .state('counter', {
         templateUrl: 'views/split-view.html',
-        resolve: {
-          /* @ngInject */
-          'activeCounter': function (counterService) {
-            return counterService.getActive();
-          }
-        }
+        requiresCounter: true
       })
       .state('counter.main', {
         url: '/',
+        requiresCounter: true,
         views: {
           content: {
             templateUrl: 'views/main.html'
