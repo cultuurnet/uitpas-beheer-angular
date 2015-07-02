@@ -41,7 +41,6 @@ function appController($rootScope, $location, uitid, counterService) {
   );
 
   app.activeCounter = function (counter) {
-    console.log(counter);
     app.counter = counter;
   };
 

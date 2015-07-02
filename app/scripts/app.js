@@ -23,18 +23,17 @@ angular
   .config(function ($stateProvider, $locationProvider, $httpProvider) {
     $stateProvider
       // Default parent state.
-      .state('main', {
+      .state('counter', {
+        templateUrl: 'views/split-view.html'
+      })
+      .state('counter.main', {
         url: '/',
         views: {
           content: {
-            templateUrl: 'views/main.html',
-            controller: 'MainController',
-            controllerAs: 'mc'
+            templateUrl: 'views/main.html'
           },
           sidebar: {
-            templateUrl: 'views/sidebar-main.html',
-            controller: 'MainController',
-            controllerAs: 'mc'
+            templateUrl: 'views/sidebar-main.html'
           },
           header: {
             templateUrl: 'views/header.html'
@@ -48,13 +47,9 @@ angular
       })
       .state('counters', {
         url: '/counters',
-        views: {
-          content: {
-            templateUrl:'views/counters.html',
-            controller: 'CountersCtrl',
-            controllerAs: 'counters'
-          }
-        },
+        templateUrl:'views/counters.html',
+        controller: 'CountersCtrl',
+        controllerAs: 'counters',
         resolve: {
           list: ['counterService', function(counterService) {
             return counterService.getList();
