@@ -12,7 +12,7 @@ angular
   .controller('MainController', mainController);
 
 /* @ngInject */
-function mainController ($rootScope, passholderService, sharedDataService) {
+function mainController ($rootScope, passholderService, sharedDataService, $state) {
   /*jshint validthis: true */
   var main = this;
 
@@ -24,6 +24,7 @@ function mainController ($rootScope, passholderService, sharedDataService) {
 
     passholderService.find(main.shared.data.passholderIdentification).then(
       angular.bind(main, function(passholder) {
+        $state.go('main.passholder', {identification: main.shared.data.passholderIdentification});
         main.shared.data.passholder = passholder;
         main.shared.data.passholderNotFound = false;
         $rootScope.appReady = true;

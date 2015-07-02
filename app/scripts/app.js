@@ -42,6 +42,16 @@ angular
           }
         }
       })
+      .state('main.passholder', {
+        url: 'passholder/:identification',
+        views: {
+          'sidebar@': {
+            templateUrl: 'views/sidebar-passholder-details.html',
+            controller: 'PassholderController',
+            controllerAs: 'pc'
+          }
+        }
+      })
       .state('login', {
         templateUrl: 'views/login.html',
         controller: 'LoginController',

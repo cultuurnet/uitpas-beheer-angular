@@ -1,18 +1,19 @@
 'use strict';
 
-describe('Service: sharedData', function () {
+describe('Service: sharedDataService', function () {
 
   // load the service's module
   beforeEach(module('uitpasbeheerApp'));
 
-  // instantiate service
-  var sharedData;
-  beforeEach(inject(function (_sharedData_) {
-    sharedData = _sharedData_;
+  // Instantiate service.
+  var sharedDataService;
+
+  beforeEach(inject(function ($injector) {
+    sharedDataService = $injector.get('sharedDataService');
   }));
 
-  it('should do something', function () {
-    expect(!!sharedData).toBe(true);
+  it('should should contain an empty object', function () {
+    expect(sharedDataService.data).toEqual({});
   });
 
 });
