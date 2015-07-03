@@ -45,6 +45,48 @@ describe('Controller: AppController', function () {
     expect(uitid.login).toHaveBeenCalledWith(redirectUrl);
   });
 
+  it('should redirect to the login page after logging out', function (done) {
+    var deferredLogout = $q.defer();
+    var logoutPromise = deferredLogout.promise;
+    spyOn(uitid, 'logout').and.returnValue(logoutPromise);
+    spyOn(appController, 'redirectToLogin');
+    var loggedOut = function () {
+      expect(appController.redirectToLogin).toHaveBeenCalled();
+      done();
+    };
+
+    appController.logout();
+    expect(uitid.logout).toHaveBeenCalled();
+
+    logoutPromise.finally(loggedOut);
+    deferredLogout.resolve();
+    $scope.$digest();
+  });
+
+  it('should should stop being busy after the app state has changed', function () {
+    $scope.appBusy = true;
+
+    $scope.$broadcast('$stateChangeSuccess');
+    expect($scope.appBusy).toBeFalsy();
+
+    $scope.appBusy = true;
+
+    $scope.$broadcast('$stateChangeError');
+    expect($scope.appBusy).toBeFalsy();
+  });
+
+  it('should set the right app state when redirecting to login', function () {
+    spyOn($state, 'go').and.stub();
+    appController.redirectToLogin();
+    expect($state.go).toHaveBeenCalledWith('login');
+  });
+
+  it('should set the right app state when redirecting to counters', function () {
+    spyOn($state, 'go').and.stub();
+    appController.redirectToCounters();
+    expect($state.go).toHaveBeenCalledWith('counters');
+  });
+
   it('makes sure the user is authenticated when changing state', function (done) {
     var stateChangeEvent = jasmine.createSpyObj('stateChangeEvent', ['preventDefault']);
     var deferredLoginStatus = $q.defer();

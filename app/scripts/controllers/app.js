@@ -93,7 +93,7 @@ function appController($rootScope, $location, uitid, counterService, $state) {
   };
   
   app.redirectToLogin = function () {
-    $location.path('/login');
+    $state.go('login');
   };
 
   app.redirectToCounters = function () {
