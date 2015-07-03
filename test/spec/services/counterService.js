@@ -191,4 +191,44 @@ describe('Service: counterService', function () {
     deferredRequest.reject();
     scope.$digest();
   });
+
+  it('can set an active counter', function (done) {
+    var counterToActivate = counters['1149'];
+
+    var deferredToServer = $q.defer(); var setOnServer = deferredToServer.promise;
+    spyOn(counterService, 'setActiveOnServer').and.returnValue(setOnServer);
+
+    var deferredToClient = $q.defer(); var setOnClient = deferredToClient.promise;
+    spyOn(counterService, 'setLastActiveId').and.returnValue(setOnClient);
+
+    spyOn(scope, '$emit');
+
+    var counterActivated = function () {
+      expect(counterService.setActiveOnServer).toHaveBeenCalledWith('1149');
+      expect(counterService.setLastActiveId).toHaveBeenCalledWith('1149');
+      expect(counterService.active).toEqual(counterToActivate);
+      expect(scope.$emit).toHaveBeenCalledWith('activeCounterChanged', counterToActivate);
+      done();
+    };
+
+    counterService.setActive(counterToActivate)
+      .then(counterActivated);
+    deferredToServer.resolve();
+    deferredToClient.resolve();
+    scope.$digest();
+  });
+
+  it('can persist the active counter', function (done) {
+    var activeCounterId = '1149';
+    $httpBackend
+      .expectPOST(apiUrl + 'counter/active', {id: activeCounterId})
+      .respond(200);
+
+    var activeCounterPersisted = function () {
+      done();
+    };
+
+    counterService.setActiveOnServer(activeCounterId).then(activeCounterPersisted);
+    $httpBackend.flush();
+  });
 });
