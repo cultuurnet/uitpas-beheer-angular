@@ -24,7 +24,7 @@ function countersController($location, counterService, list, lastActiveId) {
   var counterKey;
   for (counterKey in list) {
     if (list.hasOwnProperty(counterKey)) {
-      if (lastActiveId === counterKey) {
+      if (counterKey && lastActiveId === counterKey) {
         controller.lastActive = list[counterKey];
       } else {
         controller.list.push(list[counterKey]);

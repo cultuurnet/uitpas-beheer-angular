@@ -56,11 +56,8 @@ angular
           list: ['counterService', function(counterService) {
             return counterService.getList();
           }],
-          lastActiveId: ['counterService', 'resolveService', function(counterService, resolveService) {
-            return resolveService.resolveRejectedAs(
-              counterService.getLastActiveId(),
-              undefined
-            );
+          lastActiveId: ['counterService', function(counterService) {
+            return counterService.getLastActiveId()
           }]
         }
       });

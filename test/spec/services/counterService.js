@@ -231,4 +231,6 @@ describe('Service: counterService', function () {
     counterService.setActiveOnServer(activeCounterId).then(activeCounterPersisted);
     $httpBackend.flush();
   });
+
+
 });
