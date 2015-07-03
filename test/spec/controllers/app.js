@@ -5,7 +5,7 @@ describe('Controller: AppController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var $controller, appController, $scope, $location, uitid, $q;
+  var $controller, appController, $scope, $location, uitid, $q, counterService, $state;
 
   beforeEach(inject(function($injector, $rootScope) {
     $controller = $injector.get('$controller');
@@ -13,6 +13,8 @@ describe('Controller: AppController', function () {
     $location = $injector.get('$location');
     uitid = $injector.get('uitid');
     $q = $injector.get('$q');
+    counterService = $injector.get('counterService');
+    $state = $injector.get('$state');
   }));
 
   beforeEach(function () {
@@ -28,7 +30,9 @@ describe('Controller: AppController', function () {
       'AppController', {
         $scope: $scope,
         $location: $location,
-        uitid: uitid
+        uitid: uitid,
+        counterService: counterService,
+        $state: $state
       }
     );
   });
@@ -78,4 +82,22 @@ describe('Controller: AppController', function () {
     $scope.$digest();
   });
 
+  it('requires an active counter for the states that need one', function (done) {
+    var toState = { requiresCounter: true };
+    var deferredCounter = $q.defer();
+    var counterPromise = deferredCounter.promise;
+    var finished = function () {
+      expect(counterService.getActive).toHaveBeenCalled();
+      expect(stateChangeEvent.defaultPrevented).toBeTruthy();
+      expect(appController.redirectToCounters).toHaveBeenCalled();
+      done();
+    };
+    spyOn(counterService, 'getActive').and.returnValue(counterPromise);
+    spyOn(appController, 'redirectToCounters').and.stub();
+    var stateChangeEvent = $scope.$emit('$stateChangeStart', toState);
+
+    deferredCounter.reject();
+    counterPromise.finally(finished);
+    $scope.$digest();
+  });
 });

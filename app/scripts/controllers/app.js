@@ -73,7 +73,6 @@ function appController($rootScope, $location, uitid, counterService, $state) {
   };
 
   app.authenticateStateChange = function (event, toState) {
-    var getLoginStatus = uitid.getLoginStatus();
     var navigatingToLoginPage = (toState.name === 'login');
     var checkUserStatus = function (loggedIn) {
       if (!loggedIn && !navigatingToLoginPage) {
@@ -86,7 +85,7 @@ function appController($rootScope, $location, uitid, counterService, $state) {
       }
     };
 
-    getLoginStatus.then(checkUserStatus);
+    uitid.getLoginStatus().then(checkUserStatus);
   };
 
   app.setUser = function (user) {
