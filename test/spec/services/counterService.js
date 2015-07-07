@@ -118,7 +118,7 @@ describe('Service: counterService', function () {
     };
 
     $httpBackend
-      .expectGET(apiUrl + 'counter/list')
+      .expectGET(apiUrl + 'counters')
       .respond(200, JSON.stringify(counters));
 
     counterService.getList().then(checkRequestedList);
@@ -221,7 +221,7 @@ describe('Service: counterService', function () {
   it('can persist the active counter', function (done) {
     var activeCounterId = '1149';
     $httpBackend
-      .expectPOST(apiUrl + 'counter/active', {id: activeCounterId})
+      .expectPOST(apiUrl + 'counters/active', {id: activeCounterId})
       .respond(200);
 
     var activeCounterPersisted = function () {
