@@ -12,7 +12,7 @@ angular.module('uitpasbeheerApp')
 
 /* @ngInject */
 function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
-  var apiUrl = appConfig.apiUrl + 'counter';
+  var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
   var service = this;
@@ -31,7 +31,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
       deferredList.resolve(service.list);
     } else {
       $http
-        .get(apiUrl + '/list')
+        .get(apiUrl)
         .success(function(listData) {
           service.list = listData;
           deferredList.resolve(listData);

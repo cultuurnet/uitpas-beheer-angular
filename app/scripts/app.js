@@ -57,7 +57,7 @@ angular
             return counterService.getList();
           }],
           lastActiveId: ['counterService', function(counterService) {
-            return counterService.getLastActiveId()
+            return counterService.getLastActiveId();
           }]
         }
       });
