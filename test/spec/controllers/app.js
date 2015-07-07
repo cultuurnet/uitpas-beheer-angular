@@ -5,7 +5,7 @@ describe('Controller: AppController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var $controller, appController, $scope, $location, uitid, $q;
+  var $controller, appController, $scope, $location, uitid, $q, counterService, $state;
 
   beforeEach(inject(function($injector, $rootScope) {
     $controller = $injector.get('$controller');
@@ -13,6 +13,8 @@ describe('Controller: AppController', function () {
     $location = $injector.get('$location');
     uitid = $injector.get('uitid');
     $q = $injector.get('$q');
+    counterService = $injector.get('counterService');
+    $state = $injector.get('$state');
   }));
 
   beforeEach(function () {
@@ -28,7 +30,9 @@ describe('Controller: AppController', function () {
       'AppController', {
         $scope: $scope,
         $location: $location,
-        uitid: uitid
+        uitid: uitid,
+        counterService: counterService,
+        $state: $state
       }
     );
   });
@@ -39,6 +43,48 @@ describe('Controller: AppController', function () {
     spyOn(uitid, 'login');
     appController.login();
     expect(uitid.login).toHaveBeenCalledWith(redirectUrl);
+  });
+
+  it('should redirect to the login page after logging out', function (done) {
+    var deferredLogout = $q.defer();
+    var logoutPromise = deferredLogout.promise;
+    spyOn(uitid, 'logout').and.returnValue(logoutPromise);
+    spyOn(appController, 'redirectToLogin');
+    var loggedOut = function () {
+      expect(appController.redirectToLogin).toHaveBeenCalled();
+      done();
+    };
+
+    appController.logout();
+    expect(uitid.logout).toHaveBeenCalled();
+
+    logoutPromise.finally(loggedOut);
+    deferredLogout.resolve();
+    $scope.$digest();
+  });
+
+  it('should should stop being busy after the app state has changed', function () {
+    $scope.appBusy = true;
+
+    $scope.$broadcast('$stateChangeSuccess');
+    expect($scope.appBusy).toBeFalsy();
+
+    $scope.appBusy = true;
+
+    $scope.$broadcast('$stateChangeError');
+    expect($scope.appBusy).toBeFalsy();
+  });
+
+  it('should set the right app state when redirecting to login', function () {
+    spyOn($state, 'go').and.stub();
+    appController.redirectToLogin();
+    expect($state.go).toHaveBeenCalledWith('login');
+  });
+
+  it('should set the right app state when redirecting to counters', function () {
+    spyOn($state, 'go').and.stub();
+    appController.redirectToCounters();
+    expect($state.go).toHaveBeenCalledWith('counters');
   });
 
   it('makes sure the user is authenticated when changing state', function (done) {
@@ -78,4 +124,22 @@ describe('Controller: AppController', function () {
     $scope.$digest();
   });
 
+  it('requires an active counter for the states that need one', function (done) {
+    var toState = { requiresCounter: true };
+    var deferredCounter = $q.defer();
+    var counterPromise = deferredCounter.promise;
+    var finished = function () {
+      expect(counterService.getActive).toHaveBeenCalled();
+      expect(stateChangeEvent.defaultPrevented).toBeTruthy();
+      expect(appController.redirectToCounters).toHaveBeenCalled();
+      done();
+    };
+    spyOn(counterService, 'getActive').and.returnValue(counterPromise);
+    spyOn(appController, 'redirectToCounters').and.stub();
+    var stateChangeEvent = $scope.$emit('$stateChangeStart', toState);
+
+    deferredCounter.reject();
+    counterPromise.finally(finished);
+    $scope.$digest();
+  });
 });

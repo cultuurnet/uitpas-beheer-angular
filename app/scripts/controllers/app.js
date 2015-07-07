@@ -12,48 +12,93 @@ angular
   .controller('AppController', appController);
 
 /* @ngInject */
-function appController($rootScope, $location, uitid) {
+function appController($rootScope, $location, uitid, counterService, $state) {
+  $rootScope.appBusy = true;
+
+  $rootScope.$on('$stateChangeStart', function () {
+    $rootScope.appBusy = true;
+  });
+  $rootScope.$on('$stateChangeSuccess', function () {
+    $rootScope.appBusy = false;
+  });
+  $rootScope.$on('$stateChangeError', function () {
+    $rootScope.appBusy = false;
+  });
+
   /*jshint validthis: true */
   var app = this;
 
   app.user = undefined;
-  $rootScope.appReady = false;
+  app.counter = undefined;
 
-  uitid.getUser().then(
-    angular.bind(app, function(user) {
-      app.user = user;
-      $rootScope.appReady = true;
-    }),
-    function() {
-      $rootScope.appReady = true;
+  app.requireActiveCounter = function (event, toState, toParams) {
+    if (toState.requiresCounter && !app.counter) {
+      event.preventDefault();
+    } else {
+      return;
     }
-  );
 
-  app.login = function() {
+    var chooseCounter = function () {
+      app.redirectToCounters();
+    };
+
+    var activateCounter = function (activeCounter) {
+      app.counter = activeCounter;
+      $state.go(toState, toParams);
+    };
+
+    counterService.getActive().then(activateCounter, chooseCounter);
+  };
+
+  $rootScope.$on('activeCounterChanged', function (event, activeCounter) {
+    app.counter = activeCounter;
+  });
+
+  app.login = function () {
     var destination = $location.absUrl();
+
+    // send the user to somewhere that makes sense when navigating from the login page
+    if ($state.current.name === 'login') {
+      destination = $state.href('counter.main', {}, {absolute: true});
+    }
+
     uitid.login(destination);
   };
 
-  app.logout = function() {
-    uitid.logout().then(app.redirectToLogin, app.redirectToLogin);
+  app.logout = function () {
+    uitid.logout().finally(function () {
+      app.user = undefined;
+      app.redirectToLogin();
+    });
   };
 
-  // This function has to be declared before $rootScope.$on('$stateChangeStart', app.authenticateStateChange).
-  app.authenticateStateChange = function (event) {
-    var getLoginStatus = uitid.getLoginStatus();
+  app.authenticateStateChange = function (event, toState) {
+    var navigatingToLoginPage = (toState.name === 'login');
     var checkUserStatus = function (loggedIn) {
-      if (!loggedIn) {
-        uitid.login($location.absUrl());
+      if (!loggedIn && !navigatingToLoginPage) {
+        app.login();
         event.preventDefault();
       }
+
+      if (loggedIn) {
+        uitid.getUser().then(app.setUser);
+      }
     };
-    getLoginStatus.then(checkUserStatus);
+
+    uitid.getLoginStatus().then(checkUserStatus);
   };
 
-  app.redirectToLogin = angular.bind(app, function() {
-    $location.path('/login');
-    app.user = undefined;
-  });
+  app.setUser = function (user) {
+    app.user = user;
+  };
+  
+  app.redirectToLogin = function () {
+    $state.go('login');
+  };
+
+  app.redirectToCounters = function () {
+    $state.go('counters');
+  };
 
   // check for any unauthenticated requests and redirect to login
   $rootScope.$on('event:auth-loginRequired', app.login);
@@ -63,4 +108,6 @@ function appController($rootScope, $location, uitid) {
 
   // make sure the user is still authenticated when navigating to a new route
   $rootScope.$on('$stateChangeStart', app.authenticateStateChange);
+
+  $rootScope.$on('$stateChangeStart', app.requireActiveCounter);
 }
