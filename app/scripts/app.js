@@ -21,16 +21,19 @@ angular
     'ui.router'
   ])
   /* @ngInject */
-  .config(function ($stateProvider, $locationProvider) {
+  .config(function ($stateProvider, $locationProvider, $httpProvider) {
     $stateProvider
       // Default parent state.
-      .state('main', {
+      .state('counter', {
+        templateUrl: 'views/split-view.html',
+        requiresCounter: true
+      })
+      .state('counter.main', {
         url: '/',
+        requiresCounter: true,
         views: {
           content: {
-            templateUrl: 'views/main.html',
-            controller: 'MainController',
-            controllerAs: 'mc'
+            templateUrl: 'views/main.html'
           },
           sidebar: {
             templateUrl: 'views/sidebar-passholder-search.html',
@@ -42,7 +45,7 @@ angular
           }
         }
       })
-      .state('main.passholder', {
+      .state('counter.passholder', {
         url: 'passholder/:identification',
         views: {
           'sidebar@': {
@@ -53,10 +56,24 @@ angular
         }
       })
       .state('login', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginController',
-        controllerAs: 'lc'
+        url: '/login',
+        templateUrl: 'views/login.html'
+      })
+      .state('counters', {
+        url: '/counters',
+        templateUrl:'views/counters.html',
+        controller: 'CountersController',
+        controllerAs: 'counters',
+        resolve: {
+          list: ['counterService', function(counterService) {
+            return counterService.getList();
+          }],
+          lastActiveId: ['counterService', function(counterService) {
+            return counterService.getLastActiveId();
+          }]
+        }
       });
 
     $locationProvider.html5Mode(true);
+    $httpProvider.defaults.withCredentials = true;
   });

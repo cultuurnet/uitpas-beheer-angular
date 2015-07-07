@@ -19,26 +19,7 @@
   </head>
   <body ng-app="uitpasbeheerApp" ng-controller="AppController as app">
     <app-loading></app-loading>
-
-    <header ui-view="header" class="header" role="banner" ng-show="app.user">
-    </header> <!--/ .header -->
-
-    <div class="main-content">
-      <div class="container">
-        <div class="grid">
-
-          <aside  ui-view="sidebar" role="complementary" class="sidebar grid__12 grid--bp-sml__4 grid--bp-med__3" ng-show="app.user">
-          </aside> <!-- /aside -->
-
-          <div ui-view="content" class="main grid__12" ng-class="{'grid--bp-sml__8 grid--bp-med__9': app.user}" role="main">
-          </div> <!-- /main -->
-
-          <footer class="footer grid__12 grid--bp-sml__8 grid--bp-med__9" role="contentinfo" ng-show="app.user">
-          </footer> <!-- /footer -->
-
-        </div>
-      </div>
-    </div> <!--/ .main-content -->
+    <ui-view></ui-view>
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
@@ -59,15 +40,15 @@
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/config.js"></script>
-        <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/app.js"></script>
         <script src="scripts/services/uitid.js"></script>
         <script src="scripts/controllers/login.js"></script>
-        <script src="scripts/services/redirect.js"></script>
         <script src="scripts/directives/apploading.js"></script>
         <script src="scripts/services/passholder.js"></script>
         <script src="scripts/services/shareddata.js"></script>
         <script src="scripts/controllers/passholder.js"></script>
+        <script src="scripts/services/counterService.js"></script>
+        <script src="scripts/controllers/counters.js"></script>
         <!-- endbuild -->
 </body>
 </html>

@@ -18,14 +18,14 @@ describe('Directive: appLoading', function () {
 
     expect(scope.loading).toBeTruthy();
 
-    $rootScope.appReady = true;
+    $rootScope.appBusy = false;
     $rootScope.$digest();
 
     expect(scope.loading).toBeFalsy();
   }));
 
   it('should not show up if the app is already ready', inject(function($rootScope, $compile) {
-    $rootScope.appReady = true;
+    $rootScope.appBusy = false;
     $rootScope.$digest();
 
     element = $compile('<app-loading></app-loading>')(scope);

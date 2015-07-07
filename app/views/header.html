@@ -16,16 +16,18 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">BALIE <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+              <span ng-bind="app.counter.name"></span> <span class="caret"></span>
+          </a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="#">Home</a></li>
           </ul>
         </li>
-        <li><a class="navbar-link" href="#">Balie wijzigen</a></li>
+        <li><a class="navbar-link" ui-sref="counters" >Balie wijzigen</a></li>
       </ul>
 
       <div class="nav navbar-nav navbar-right">
-        <p class="navbar-text">Aangemeld als {{ app.user.nick }} <a class="navbar-btn btn btn-ghost btn-sm" href="#" ng-click="app.logout()">Afmelden</a></p>
+        <p class="navbar-text">Aangemeld als {{ app.user.displayName }} <a class="navbar-btn btn btn-ghost btn-sm" href="#" ng-click="app.logout()">Afmelden</a></p>
       </div>
     </div> <!--/ .navbar-collapse -->
 

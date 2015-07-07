@@ -28,13 +28,15 @@ describe('Service: uitid', function () {
     // Mock an HTTP response.
     $httpBackend
       .expectGET(apiUrl + 'uitid/user')
-      .respond(200, '{"id":"1","nick":"foo"}');
+      .respond(200, '{"id":"1","nick":"Foo", "givenName": "Dirk"}');
 
     // Assertion method.
     var assertUserData = function(user) {
       expect(user).toEqual({
         id: '1',
-        nick: 'foo'
+        nick: 'Foo',
+        givenName: 'Dirk',
+        displayName: 'Dirk'
       });
     };
 
