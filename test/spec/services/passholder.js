@@ -38,7 +38,7 @@ describe('Service: passholderService', function () {
 
     // Mock an HTTP response.
     $httpBackend
-      .expectGET(apiUrl + 'passholder?identification=' + uitpasNumber)
+      .expectGET(apiUrl + 'passholders?identification=' + uitpasNumber)
       .respond(200, JSON.stringify(expectedPassholder));
 
     // Assertion method.
