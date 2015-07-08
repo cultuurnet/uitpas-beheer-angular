@@ -12,7 +12,7 @@ angular
   .controller('CountersController', countersController);
 
 /* @ngInject */
-function countersController($rootScope, $location, counterService, list, lastActiveId, passholderService, sharedDataService, $state) {
+function countersController($location, counterService, list, lastActiveId) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -20,27 +20,6 @@ function countersController($rootScope, $location, counterService, list, lastAct
   controller.lastActive = undefined;
   controller.lastActiveId = lastActiveId;
   controller.total = 0;
-
-  controller.shared = sharedDataService;
-  controller.shared.data.passholderIdentification = '';
-
-  controller.searchPassholder = function() {
-    $rootScope.appBusy = true;
-
-    passholderService.find(controller.shared.data.passholderIdentification).then(
-      angular.bind(controller, function(passholder) {
-        $state.go('counter.passholder', {identification: controller.shared.data.passholderIdentification});
-        controller.shared.data.passholder = passholder;
-        controller.shared.data.passholderNotFound = false;
-        $rootScope.appReady = true;
-      }),
-      angular.bind(controller, function() {
-        controller.shared.data.passholder = undefined;
-        controller.shared.data.passholderNotFound = true;
-        $rootScope.appBusy = false;
-      })
-    );
-  };
 
   var counterKey;
   for (counterKey in list) {

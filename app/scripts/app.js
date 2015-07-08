@@ -18,7 +18,8 @@ angular
     'ngTouch',
     'config',
     'angular-spinkit',
-    'ui.router'
+    'ui.router',
+    'mp.autoFocus'
   ])
   /* @ngInject */
   .config(function ($stateProvider, $locationProvider, $httpProvider) {
@@ -29,16 +30,18 @@ angular
         requiresCounter: true
       })
       .state('counter.main', {
-        url: '/',
+        url: '/?passholdernotfound&identification',
         requiresCounter: true,
         views: {
           content: {
-            templateUrl: 'views/main.html'
+            templateUrl: 'views/content-passholder-search.html',
+            controller: 'PassholderController',
+            controllerAs: 'pc'
           },
           sidebar: {
             templateUrl: 'views/sidebar-passholder-search.html',
-            controller: 'MainController',
-            controllerAs: 'mc'
+            controller: 'PassholderController',
+            controllerAs: 'pc'
           },
           header: {
             templateUrl: 'views/header.html'
@@ -46,12 +49,18 @@ angular
         }
       })
       .state('counter.passholder', {
-        url: 'passholder/:identification',
+        url: '/passholder/:identification',
         views: {
-          'sidebar@': {
+          content: {
+            templateUrl: 'views/sidebar-passholder-details.html'
+          },
+          sidebar: {
             templateUrl: 'views/sidebar-passholder-details.html',
             controller: 'PassholderController',
             controllerAs: 'pc'
+          },
+          header: {
+            templateUrl: 'views/header.html'
           }
         }
       })

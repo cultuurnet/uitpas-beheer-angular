@@ -13,7 +13,7 @@ angular
 
 /* @ngInject */
 function passholderService($q, $http, $cacheFactory, appConfig) {
-  var apiUrl = appConfig.apiUrl + 'passholder';
+  var apiUrl = appConfig.apiUrl + 'passholders';
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
 
