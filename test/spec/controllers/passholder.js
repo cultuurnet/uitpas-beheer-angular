@@ -30,7 +30,6 @@ describe('Controller: PassholderController', function () {
   });
 
   it('should have a shared data variable', function () {
-    console.log(PassholderController);
     expect(PassholderController.shared.data.passholder).toEqual({});
   });
 });
