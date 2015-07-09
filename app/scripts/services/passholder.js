@@ -43,7 +43,7 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
           }
         });
 
-      var cacheAndResolePassHolder = function (passholderData) {
+      var cacheAndResolvePassHolder = function (passholderData) {
         try {
           passholderId = identifyPassHolder(passholderData);
         } catch (e) {
@@ -59,7 +59,7 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
         deferredPassholder.reject('passholder not found for identification number: ' + identification);
       };
 
-      passholderRequest.success(cacheAndResolePassHolder);
+      passholderRequest.success(cacheAndResolvePassHolder);
       passholderRequest.error(rejectPassHolder);
     }
 
