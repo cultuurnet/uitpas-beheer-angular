@@ -60,4 +60,52 @@ describe('Service: passholderService', function () {
     // mocking an HTTP request as the passholder object should have been cached.
     passholderService.find(uitpasNumber).then(assertPassholder, failed);
   });
+
+  it('throws an error when an invalid passholder is returned', function() {
+    var uitpasNumber = 'this-is-a-number';
+    var expectedPassholder = {
+      name: 'Foo',
+      points: 0
+    };
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectGET(apiUrl + 'passholders?identification=' + uitpasNumber)
+      .respond(200, JSON.stringify(expectedPassholder));
+
+    var failed = function(error) {
+      expect(error).toBe('can\'t identify passholder data returned from server');
+    };
+
+    // Request the passholder data and assert it when its returned.
+    passholderService.find(uitpasNumber).catch(failed);
+
+    // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+  });
+
+  it('throws an error when the request returns an error', function() {
+    var uitpasNumber = 'this-is-a-number';
+    var expectedError = {
+      type: 'error',
+      exception: 'CultuurNet\\UiTPASBeheer\\PassHolder\\PassHolderNotFoundException',
+      message: 'No passholder found with this identification.',
+      code: 'PASSHOLDER_NOT_FOUND'
+    };
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectGET(apiUrl + 'passholders?identification=' + uitpasNumber)
+      .respond(404, JSON.stringify(expectedError));
+
+    var failed = function(error) {
+      expect(error).toBe('passholder not found for identification number: this-is-a-number');
+    };
+
+    // Request the passholder data and assert it when its returned.
+    passholderService.find(uitpasNumber).catch(failed);
+
+    // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+  });
 });

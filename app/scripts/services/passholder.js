@@ -47,7 +47,7 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
         try {
           passholderId = identifyPassHolder(passholderData);
         } catch (e) {
-          deferredPassholder.reject(e.message);
+          deferredPassholder.reject(e);
         }
 
         passholderIdCache.put(identification, passholderId);
