@@ -22,10 +22,10 @@ function PassholderController ($rootScope, passholderService, sharedDataService,
   controller.shared.data.passholderIdentification = '';
   controller.shared.data.passholderNotFound = false;
 
-  controller.searchPassholder = function() {
+  controller.searchPassholder = function(identification) {
     $rootScope.appBusy = true;
 
-    passholderService.find(controller.shared.data.passholderIdentification).then(
+    passholderService.find(identification).then(
       // Go to the passholder detail page if a passholder is found.
       angular.bind(controller, function() {
         $state.go('counter.passholder', {identification: controller.shared.data.passholderIdentification});
