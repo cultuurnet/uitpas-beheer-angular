@@ -15,8 +15,6 @@ angular
 function ErrorController ($scope, $stateParams) {
   var controller = this;
 
-  console.log($stateParams);
-
   controller.title = $stateParams.title;
   controller.description = $stateParams.description;
 }
