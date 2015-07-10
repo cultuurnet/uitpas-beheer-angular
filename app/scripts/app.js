@@ -81,6 +81,15 @@ angular
             return counterService.getLastActiveId();
           }]
         }
+      })
+      .state('error', {
+        templateUrl: 'views/error.html',
+        controller: 'ErrorController',
+        controllerAs: 'error',
+        params: {
+          'title': null,
+          'description': null
+        }
       });
 
     $locationProvider.html5Mode(true);

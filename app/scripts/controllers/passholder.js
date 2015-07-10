@@ -27,15 +27,15 @@ function PassholderController ($rootScope, passholderService, sharedDataService,
 
     passholderService.find(identification).then(
       // Go to the passholder detail page if a passholder is found.
-      angular.bind(controller, function() {
+      function () {
         $state.go('counter.passholder', {identification: controller.shared.data.passholderIdentification});
-      }),
+      },
       // Show an error message if the passholder identification is invalid.
-      angular.bind(controller, function() {
+      function () {
         controller.shared.data.passholder = undefined;
         controller.shared.data.passholderNotFound = true;
         $rootScope.appBusy = false;
-      })
+      }
     );
   };
 
@@ -50,15 +50,21 @@ function PassholderController ($rootScope, passholderService, sharedDataService,
     $rootScope.appBusy = true;
     passholderService.find($state.params.identification).then(
       // Show the passholder info if a passholder is found.
-      angular.bind(controller, function (passholder) {
+      function (passholder) {
         controller.shared.data.passholder = passholder;
         controller.shared.data.passholderNotFound = false;
         $rootScope.appBusy = false;
-      }),
+      },
       // Redirect the user to the search page if no passholder is found.
-      angular.bind(controller, function () {
-        $state.go('counter.main', {passholdernotfound: true, identification: $state.params.identification});
-      })
+      function () {
+        $state.go(
+          'error',
+          {
+            title: 'Not found',
+            description: 'Passholder with id ' + $state.params.identification + ' could not be found'
+          }
+        );
+      }
     );
   }
 }
