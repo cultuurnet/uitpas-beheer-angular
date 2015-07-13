@@ -99,7 +99,7 @@ describe('Service: passholderService', function () {
       .respond(404, JSON.stringify(expectedError));
 
     var failed = function(error) {
-      expect(error).toBe('passholder not found for identification number: this-is-a-number');
+      expect(error).toEqual({ code: 'PASSHOLDER_NOT_FOUND', title: 'Not found', message: 'Passholder not found for identification number: this-is-a-number' });
     };
 
     // Request the passholder data and assert it when its returned.

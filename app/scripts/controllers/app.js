@@ -22,14 +22,18 @@ function appController($rootScope, $location, uitid, counterService, $state) {
     $rootScope.appBusy = false;
   });
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-    $state.go(
-      'counter.main.error',
-      {
-        title: error.title,
-        description: error.message
-      }
-    );
-    $rootScope.appBusy = false;
+    if (error && error.code && error.title && error.message) {
+      $state.go(
+        'counter.main.error',
+        {
+          title: error.title,
+          description: error.message
+        }
+      );
+    }
+    else {
+      $rootScope.appBusy = false;
+    }
   });
 
   /*jshint validthis: true */
