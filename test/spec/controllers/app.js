@@ -68,11 +68,6 @@ describe('Controller: AppController', function () {
 
     $scope.$broadcast('$stateChangeSuccess');
     expect($scope.appBusy).toBeFalsy();
-
-    $scope.appBusy = true;
-
-    $scope.$broadcast('$stateChangeError');
-    expect($scope.appBusy).toBeFalsy();
   });
 
   it('should set the right app state when redirecting to login', function () {
