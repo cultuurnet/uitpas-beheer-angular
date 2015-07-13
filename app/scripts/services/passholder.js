@@ -56,7 +56,13 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
       };
 
       var rejectPassHolder = function () {
-        deferredPassholder.reject('passholder not found for identification number: ' + identification);
+        deferredPassholder.reject(
+          {
+            code: 'PASSHOLDER_NOT_FOUND',
+            title: 'Not found',
+            message: 'Passholder not found for identification number: ' + identification
+          }
+        );
       };
 
       passholderRequest.success(cacheAndResolvePassHolder);

@@ -30,38 +30,64 @@ angular
         requiresCounter: true
       })
       .state('counter.main', {
-        url: '/?passholdernotfound&identification',
+        url: '/',
         requiresCounter: true,
         views: {
           content: {
             templateUrl: 'views/content-passholder-search.html',
-            controller: 'PassholderController',
-            controllerAs: 'pc'
+            controller: 'PassholderSearchController',
+            controllerAs: 'psc'
           },
           sidebar: {
             templateUrl: 'views/sidebar-passholder-search.html',
-            controller: 'PassholderController',
-            controllerAs: 'pc'
+            controller: 'PassholderSearchController',
+            controllerAs: 'psc'
           },
           header: {
             templateUrl: 'views/header.html'
           }
         }
       })
-      .state('counter.passholder', {
-        url: '/passholder/:identification',
+      .state('counter.main.error', {
         views: {
-          content: {
-            templateUrl: 'views/sidebar-passholder-details.html'
-          },
-          sidebar: {
-            templateUrl: 'views/sidebar-passholder-details.html',
-            controller: 'PassholderController',
-            controllerAs: 'pc'
-          },
-          header: {
-            templateUrl: 'views/header.html'
+          'content@counter': {
+            templateUrl: 'views/error.html',
+            controller: 'ErrorController',
+            controllerAs: 'error'
           }
+        },
+        params: {
+          'title': null,
+          'description': null
+        }
+      })
+      .state('counter.main.passholder', {
+        url: 'passholder/:identification',
+        views: {
+          'content@counter': {
+            templateUrl: 'views/sidebar-passholder-details.html',
+            controller: 'PassholderDetailController',
+            controllerAs: 'pdc'
+          },
+          'sidebar@counter': {
+            templateUrl: 'views/sidebar-passholder-details.html',
+            controller: 'PassholderDetailController',
+            controllerAs: 'pdc'
+          }
+        },
+        params: {
+          'identification': null,
+          'passholder': null
+        },
+        resolve: {
+          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+            if ($stateParams.passholder) {
+              return $stateParams.passholder;
+            }
+            else {
+              return passholderService.find($stateParams.identification);
+            }
+          }]
         }
       })
       .state('login', {
@@ -80,15 +106,6 @@ angular
           lastActiveId: ['counterService', function(counterService) {
             return counterService.getLastActiveId();
           }]
-        }
-      })
-      .state('error', {
-        templateUrl: 'views/error.html',
-        controller: 'ErrorController',
-        controllerAs: 'error',
-        params: {
-          'title': null,
-          'description': null
         }
       });
 

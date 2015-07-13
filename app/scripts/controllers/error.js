@@ -12,7 +12,7 @@ angular
   .controller('ErrorController', ErrorController);
 
 /* @ngInject */
-function ErrorController ($scope, $stateParams) {
+function ErrorController ($stateParams) {
   var controller = this;
 
   controller.title = $stateParams.title;
