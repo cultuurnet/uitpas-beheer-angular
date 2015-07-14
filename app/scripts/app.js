@@ -18,7 +18,8 @@ angular
     'ngTouch',
     'config',
     'angular-spinkit',
-    'ui.router'
+    'ui.router',
+    'mp.autoFocus'
   ])
   /* @ngInject */
   .config(function ($stateProvider, $locationProvider, $httpProvider) {
@@ -33,14 +34,60 @@ angular
         requiresCounter: true,
         views: {
           content: {
-            templateUrl: 'views/main.html'
+            templateUrl: 'views/content-passholder-search.html',
+            controller: 'PassholderSearchController',
+            controllerAs: 'psc'
           },
           sidebar: {
-            templateUrl: 'views/sidebar-main.html'
+            templateUrl: 'views/sidebar-passholder-search.html',
+            controller: 'PassholderSearchController',
+            controllerAs: 'psc'
           },
           header: {
             templateUrl: 'views/header.html'
           }
+        }
+      })
+      .state('counter.main.error', {
+        views: {
+          'content@counter': {
+            templateUrl: 'views/error.html',
+            controller: 'ErrorController',
+            controllerAs: 'error'
+          }
+        },
+        params: {
+          'title': null,
+          'description': null
+        }
+      })
+      .state('counter.main.passholder', {
+        url: 'passholder/:identification',
+        views: {
+          'content@counter': {
+            templateUrl: 'views/sidebar-passholder-details.html',
+            controller: 'PassholderDetailController',
+            controllerAs: 'pdc'
+          },
+          'sidebar@counter': {
+            templateUrl: 'views/sidebar-passholder-details.html',
+            controller: 'PassholderDetailController',
+            controllerAs: 'pdc'
+          }
+        },
+        params: {
+          'identification': null,
+          'passholder': null
+        },
+        resolve: {
+          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+            if ($stateParams.passholder) {
+              return $stateParams.passholder;
+            }
+            else {
+              return passholderService.find($stateParams.identification);
+            }
+          }]
         }
       })
       .state('login', {

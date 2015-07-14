@@ -75,6 +75,25 @@ describe('Controller: AppController', function () {
     expect($scope.appBusy).toBeFalsy();
   });
 
+  it ('goes to the counter.main.error state when a state change error occurs', function () {
+    spyOn($state, 'go');
+    $scope.$broadcast('$stateChangeError', 'toState', 'toParams', 'fromState', 'fromParams', {
+      code: 'PASSHOLDER_NOT_FOUND',
+      title: 'Not found',
+      message: 'Passholder not found for identification number: identification'
+    });
+    expect($state.go).toHaveBeenCalledWith(
+      'counter.main.error',
+      {
+        title: 'Not found',
+        description: 'Passholder not found for identification number: identification'
+      },
+      {
+        location: false
+      }
+    );
+  });
+
   it('should set the right app state when redirecting to login', function () {
     spyOn($state, 'go').and.stub();
     appController.redirectToLogin();

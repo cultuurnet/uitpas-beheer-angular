@@ -21,8 +21,22 @@ function appController($rootScope, $location, uitid, counterService, $state) {
   $rootScope.$on('$stateChangeSuccess', function () {
     $rootScope.appBusy = false;
   });
-  $rootScope.$on('$stateChangeError', function () {
-    $rootScope.appBusy = false;
+  $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+    if (error && error.code && error.title && error.message) {
+      $state.go(
+        'counter.main.error',
+        {
+          title: error.title,
+          description: error.message
+        },
+        {
+          location: false
+        }
+      );
+    }
+    else {
+      $rootScope.appBusy = false;
+    }
   });
 
   /*jshint validthis: true */
@@ -91,7 +105,7 @@ function appController($rootScope, $location, uitid, counterService, $state) {
   app.setUser = function (user) {
     app.user = user;
   };
-  
+
   app.redirectToLogin = function () {
     $state.go('login');
   };

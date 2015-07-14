@@ -1,0 +1,11 @@
+<form ng-submit="psc.searchPassholder(psc.passholderIdentification)">
+  <label for="passholder-identification">
+    <span>UiTPASnummer</span> <span class="or">of</span> <span>Rijksregisternummer</span>
+  </label>
+  <input type="text" id="passholder-identification" ng-required="true" ng-class="{ 'form-error': psc.passholderNotFound }" auto-focus ng-model="psc.passholderIdentification">
+  <input class="btn" type="submit" value="Bevestigen">
+</form>
+<div class="no-card">
+  <h6>Geen kaart?</h6>
+  <a ui-sref="counter.main.passholder.search">Zoek een pashouder</a>
+</div>
