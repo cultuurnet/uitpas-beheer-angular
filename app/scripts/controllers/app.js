@@ -28,6 +28,9 @@ function appController($rootScope, $location, uitid, counterService, $state) {
         {
           title: error.title,
           description: error.message
+        },
+        {
+          location: false
         }
       );
     }
