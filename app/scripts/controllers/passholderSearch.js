@@ -42,6 +42,9 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
           {
             title: error.title,
             description: error.message
+          },
+          {
+            reload: true
           }
         );
       }

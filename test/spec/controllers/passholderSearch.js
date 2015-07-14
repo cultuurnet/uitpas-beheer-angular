@@ -56,7 +56,9 @@ describe('Controller: PassholderSearchController', function () {
     var passholderDeferred = $q.defer();
     passholderDeferred.reject(
       {
-        passholder: 'object'
+        code: 'WHATEVER_CODE',
+        title: 'A useful title',
+        message: 'A useful description'
       }
     );
     spyOn(passholderService, 'find').and.returnValue(passholderDeferred.promise);
@@ -64,7 +66,16 @@ describe('Controller: PassholderSearchController', function () {
     PassholderSearchController.searchPassholder('invalid identification number');
 
     rootScope.$digest();
-    expect($state.go).toHaveBeenCalled();
+    expect($state.go).toHaveBeenCalledWith(
+      'counter.main.error',
+      {
+        title: 'A useful title',
+        description: 'A useful description'
+      },
+      {
+        reload: true
+      }
+    );
     expect(passholderService.find).toHaveBeenCalledWith('invalid identification number');
     expect(PassholderSearchController.passholder).toEqual(undefined);
     expect(PassholderSearchController.passholderNotFound).toEqual(true);
