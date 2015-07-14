@@ -5,7 +5,8 @@
   <label>NR.</label> {{cardSystem.currentCard.uitpasNumber}}
 </span>
 <div class="passholder-data">
-  <h3>Gegevens</h3>
+  <h3>Gegevens</h3><a ui-sref="counter.main.passholder.edit({passholder: pdc.passholder})" ui-sref-opts="{reload: true}">Aanpassen</a>
+  <img class="pull-right" src="data:image/jpeg;base64,{{pdc.passholder.picture}}" />
   <span class="name">{{pdc.passholder.firstName}} {{pdc.passholder.name}}</span>
   <span class="address">
     {{pdc.passholder.street}} {{pdc.passholder.number}} {{pdc.passholder.box}}<br />

@@ -19,6 +19,7 @@ angular
     'config',
     'angular-spinkit',
     'ui.router',
+    'ui.bootstrap',
     'mp.autoFocus'
   ])
   /* @ngInject */
@@ -89,6 +90,35 @@ angular
             }
           }]
         }
+      })
+      .state('counter.main.passholder.edit', {
+        onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+          $modal.open({
+            animation: false,
+            templateUrl: 'views/modal-passholder-edit.html',
+            params: {
+              'passholder': null
+            },
+            resolve: {
+              passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+                if ($stateParams.passholder) {
+                  return $stateParams.passholder;
+                }
+                else {
+                  return passholderService.find($stateParams.identification);
+                }
+              }]
+            },
+            controller: 'PassholderEditController',
+            controllerAs: 'pec'
+          }).result.then(function(message) {
+              console.log(message);
+              console.log('modal.then.yes');
+              $state.go('^');
+          }, function() {
+            console.log('modal.then.no');
+          });
+        }]
       })
       .state('login', {
         url: '/login',

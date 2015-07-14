@@ -1,0 +1,87 @@
+<form name="" ng-submit="pec.submitForm(pec.passholder)">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="pec.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Aanpassen</h4>
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-4 field-group">
+          <label for="insz-number">
+            Rijksregisternummer
+          </label>
+          <input type="text" id="insz-number" ng-required="true" ng-class="{ 'form-error': pec.formErrors.inszNumber }" ng-model="pec.passholder.inszNumber">
+        </div>
+        <div class="col-xs-4 field-group">
+          <label for="name">
+            Naam
+          </label>
+          <input type="text" id="name" ng-required="true" ng-class="{ 'form-error': pec.formErrors.name }" ng-model="pec.passholder.name">
+        </div>
+        <div class="col-xs-4 field-group">
+          <label for="firstName">
+            Voornaam
+          </label>
+          <input type="text" id="firstName" ng-required="true" ng-class="{ 'form-error': pec.formErrors.name }" ng-model="pec.passholder.firstName">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-xs-3 field-group">
+          <label for="date-of-birth">
+            Geboortedatum
+          </label>
+          <input type="date" id="date-of-birth" ng-required="true" ng-class="{ 'form-error': pec.formErrors.dateOfBirth }" ng-model="pec.passholder.dob">
+        </div>
+        <div class="col-xs-3 field-group">
+          <label for="place-of-birth">
+            Geboorteplaats
+          </label>
+          <input type="text" id="place-of-birth" ng-required="true" ng-class="{ 'form-error': pec.formErrors.placeOfBirth }" ng-model="pec.passholder.placeOfBirth">
+        </div>
+        <div class="col-xs-3 field-group">
+          <label>
+            Geslacht
+          </label>
+          <label>
+            <input type="radio" id="gender-male" value="MALE" ng-class="{ 'form-error': pec.formErrors.gender }" ng-model="pec.passholder.gender"> Man
+          </label>
+          <label>
+            <input type="radio" id="gender-female" value="FEMALE" ng-class="{ 'form-error': pec.formErrors.gender }" ng-model="pec.passholder.gender"> Vrouw
+          </label>
+        </div>
+        <div class="col-xs-3 field-group">
+          <label for="nationality">
+            Nationaliteit
+          </label>
+          <input type="text" id="nationality" ng-required="true" ng-class="{ 'form-error': pec.formErrors.nationality }" ng-model="pec.passholder.nationality">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-xs-4 field-group">
+          <label for="street">
+            Straat, nummer en bus
+          </label>
+          <input type="text" id="street" ng-required="true" ng-class="{ 'form-error': pec.formErrors.street }" ng-model="pec.passholder.street">
+        </div>
+        <div class="col-xs-4 field-group">
+          <label for="postal-code">
+            postcode
+          </label>
+          <input type="text" id="postal-code" ng-required="true" ng-class="{ 'form-error': pec.formErrors.postalCode}" ng-model="pec.passholder.postalCode">
+        </div>
+        <div class="col-xs-4 field-group">
+          <label for="city">
+            Gemeente
+          </label>
+          <input type="text" id="city" ng-required="true" ng-class="{ 'form-error': pec.formErrors.city }" ng-model="pec.passholder.city">
+        </div>
+      </div>
+    </div>
+  </div><!-- end modal-body -->
+  <div class="modal-footer">
+    <a ng-click="pec.cancelModal()">Annuleren</a>
+    <button type="button" class="btn btn-primary" ng-click="pec.submitForm()">Bewaren</button>
+  </div>
+</form>
