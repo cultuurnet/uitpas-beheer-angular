@@ -2,17 +2,15 @@
 .site-login {
   max-width: 500px;
   margin: 20px auto;
-  text-align: center;
   @include breakpoint(map-get($breakpoints, sml)) {
     margin: 40px auto;
     padding-top: 100px;
   }
   &__logo {
     padding-top: 40px;
-    background-image: url(../images/svg/logo-uitpas-full.svg);
-    background-repeat: no-repeat;
-    background-position: 50% top;
+    background: url(../images/svg/logo-uitpas-full.svg) no-repeat 50% top;
     background-size: auto 35px;
+    text-align: center;
     text-transform: uppercase;
     font-size: .9em;
     color: $blue-75;
@@ -24,6 +22,9 @@
       padding-top: 85px;
       background-size: 280px auto;
     }
+  }
+  &__title {
+    text-align: center;
   }
   &__intro {
     font-style: italic;
