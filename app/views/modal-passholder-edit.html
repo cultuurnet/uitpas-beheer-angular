@@ -1,4 +1,4 @@
-<form name="" ng-submit="pec.submitForm(pec.passholder)">
+<form name="passholderEdit" ng-submit="pec.submitForm(pec.passholder, passholderEdit)" novalidate>
   <div class="modal-header">
     <button type="button" class="close" ng-click="pec.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">Aanpassen</h4>
@@ -6,82 +6,118 @@
   <div class="modal-body">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-4 field-group">
-          <label for="insz-number">
+        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.inszNumber.$touched) && passholderEdit.inszNumber.$invalid }">
+          <label class="control-label" for="insz-number">
             Rijksregisternummer
           </label>
-          <input type="text" id="insz-number" ng-required="true" ng-class="{ 'form-error': pec.formErrors.inszNumber }" ng-model="pec.passholder.inszNumber">
+          <input type="text" class="form-control" id="insz-number" name="inszNumber" ng-pattern="/[\d]{6}[-\s]?[\d]{3}[-\s]?[\d]{2}/" ng-required="true" ng-model="pec.passholder.inszNumber">
+          <div ng-messages="passholderEdit.inszNumber.$error" ng-if="(passholderEdit.$submitted || passholderEdit.inszNumber.$touched) && passholderEdit.inszNumber.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.inszNumber.$error.required" ng-message="passholderEdit.inszNumber.$error.required">Het rijksregisternummer is verplicht.</div>
+            <div ng-if="passholderEdit.inszNumber.$error.pattern" ng-message="passholderEdit.inszNumber.$error.pattern">Het rijksregisternummer moet bestaan uit 11 cijfers.</div>
+          </div>
         </div>
-        <div class="col-xs-4 field-group">
-          <label for="name">
+        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.name.$touched) && passholderEdit.name.$invalid }">
+          <label class="control-label" for="name">
             Naam
           </label>
-          <input type="text" id="name" ng-required="true" ng-class="{ 'form-error': pec.formErrors.name }" ng-model="pec.passholder.name">
+          <input type="text" class="form-control" id="name" name="name" ng-required="true" ng-model="pec.passholder.name">
+          <div ng-messages="passholderEdit.inszNumber.$error" ng-if="(passholderEdit.$submitted || passholderEdit.name.$touched) && passholderEdit.name.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.name.$error.required" ng-message="passholderEdit.name.$error.required">De naam is verplicht.</div>
+          </div>
         </div>
-        <div class="col-xs-4 field-group">
-          <label for="firstName">
+        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.firstName.$touched) && passholderEdit.firstName.$invalid }">
+          <label class="control-label" for="firstName">
             Voornaam
           </label>
-          <input type="text" id="firstName" ng-required="true" ng-class="{ 'form-error': pec.formErrors.name }" ng-model="pec.passholder.firstName">
+          <input type="text" class="form-control" id="firstName" name="firstName" ng-required="true" ng-model="pec.passholder.firstName">
+          <div ng-messages="passholderEdit.inszNumber.$error" ng-if="(passholderEdit.$submitted || passholderEdit.firstName.$touched) && passholderEdit.firstName.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.firstName.$error.required" ng-message="passholderEdit.firstName.$error.required">De voornaam is verplicht.</div>
+          </div>
         </div>
       </div>
       <hr>
       <div class="row">
-        <div class="col-xs-3 field-group">
-          <label for="date-of-birth">
+        <div class="col-xs-3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.dateOfBirth.$touched) && passholderEdit.dateOfBirth.$invalid }">
+          <label class="control-label" for="date-of-birth">
             Geboortedatum
           </label>
-          <input type="date" id="date-of-birth" ng-required="true" ng-class="{ 'form-error': pec.formErrors.dateOfBirth }" ng-model="pec.passholder.dob">
+          <input type="date" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true" ng-model="pec.passholder.dob">
+          <div ng-messages="passholderEdit.dateOfBirth.$error" ng-if="(passholderEdit.$submitted || passholderEdit.dateOfBirth.$touched) && passholderEdit.dateOfBirth.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.dateOfBirth.$error.required" ng-message="passholderEdit.dateOfBirth.$error.required">De geboortedatum is verplicht.</div>
+            <div ng-if="passholderEdit.dateOfBirth.$error.date" ng-message="passholderEdit.dateOfBirth.$error.date">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
+          </div>
         </div>
-        <div class="col-xs-3 field-group">
-          <label for="place-of-birth">
+        <div class="col-xs-3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.placeOfBirth.$touched) && passholderEdit.placeOfBirth.$invalid }">
+          <label class="control-label" for="place-of-birth">
             Geboorteplaats
           </label>
-          <input type="text" id="place-of-birth" ng-required="true" ng-class="{ 'form-error': pec.formErrors.placeOfBirth }" ng-model="pec.passholder.placeOfBirth">
+          <input type="text" class="form-control" id="place-of-birth" name="placeOfBirth" ng-required="true" ng-model="pec.passholder.placeOfBirth">
+          <div ng-messages="passholderEdit.placeOfBirth.$error" ng-if="(passholderEdit.$submitted || passholderEdit.placeOfBirth.$touched) && passholderEdit.placeOfBirth.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.placeOfBirth.$error.required" ng-message="passholderEdit.placeOfBirth.$error.required">De geboorteplaats is verplicht.</div>
+          </div>
         </div>
-        <div class="col-xs-3 field-group">
-          <label>
+        <div class="col-xs-3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.gender.$touched) && passholderEdit.gender.$invalid }">
+          <label class="control-label">
             Geslacht
           </label>
-          <label>
-            <input type="radio" id="gender-male" value="MALE" ng-class="{ 'form-error': pec.formErrors.gender }" ng-model="pec.passholder.gender"> Man
-          </label>
-          <label>
-            <input type="radio" id="gender-female" value="FEMALE" ng-class="{ 'form-error': pec.formErrors.gender }" ng-model="pec.passholder.gender"> Vrouw
-          </label>
+          <div class="radio">
+            <label>
+              <input type="radio" id="gender-male" name="gender" value="MALE" required ng-model="pec.passholder.gender"> Man
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" id="gender-female" name="gender" value="FEMALE" required ng-model="pec.passholder.gender"> Vrouw
+            </label>
+          </div>
+          <div ng-messages="passholderEdit.gender.$error" ng-if="(passholderEdit.$submitted || passholderEdit.gender.$touched) && passholderEdit.gender.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.gender.$error.required" ng-message="passholderEdit.gender.$error.required">De geslacht is verplicht.</div>
+          </div>
         </div>
-        <div class="col-xs-3 field-group">
-          <label for="nationality">
+        <div class="col-xs-3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.nationality.$touched) && passholderEdit.nationality.$invalid }">
+          <label class="control-label" for="nationality">
             Nationaliteit
           </label>
-          <input type="text" id="nationality" ng-required="true" ng-class="{ 'form-error': pec.formErrors.nationality }" ng-model="pec.passholder.nationality">
+          <input type="text" class="form-control" id="nationality" name="nationality" ng-required="true" ng-class="{ 'form-error': pec.formErrors.nationality }" ng-model="pec.passholder.nationality">
+          <div ng-messages="passholderEdit.nationality.$error" ng-if="(passholderEdit.$submitted || passholderEdit.nationality.$touched) && passholderEdit.nationality.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.nationality.$error.required" ng-message="passholderEdit.nationality.$error.required">De nationaliteit is verplicht.</div>
+          </div>
         </div>
       </div>
       <hr>
       <div class="row">
-        <div class="col-xs-4 field-group">
-          <label for="street">
+        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.street.$touched) && passholderEdit.street.$invalid }">
+          <label class="control-label" for="street">
             Straat, nummer en bus
           </label>
-          <input type="text" id="street" ng-required="true" ng-class="{ 'form-error': pec.formErrors.street }" ng-model="pec.passholder.street">
+          <input type="text" class="form-control" id="street" name="street" ng-required="true" ng-model="pec.passholder.street">
+          <div ng-messages="passholderEdit.street.$error" ng-if="(passholderEdit.$submitted || passholderEdit.street.$touched) && passholderEdit.street.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.street.$error.required" ng-message="passholderEdit.street.$error.required">De straat en nummer zijn verplicht.</div>
+          </div>
         </div>
-        <div class="col-xs-4 field-group">
-          <label for="postal-code">
+        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.postalCode.$touched) && passholderEdit.postalCode.$invalid }">
+          <label class="control-label" for="postal-code">
             postcode
           </label>
-          <input type="text" id="postal-code" ng-required="true" ng-class="{ 'form-error': pec.formErrors.postalCode}" ng-model="pec.passholder.postalCode">
+          <input type="text" class="form-control" id="postal-code" name="postalCode" ng-required="true" ng-model="pec.passholder.postalCode">
+          <div ng-messages="passholderEdit.postalCode.$error" ng-if="(passholderEdit.$submitted || passholderEdit.postalCode.$touched) && passholderEdit.postalCode.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.postalCode.$error.required" ng-message="passholderEdit.postalCode.$error.required">De postcode is verplicht.</div>
+          </div>
         </div>
-        <div class="col-xs-4 field-group">
-          <label for="city">
+        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.city.$touched) && passholderEdit.city.$invalid }">
+          <label class="control-label" for="city">
             Gemeente
           </label>
-          <input type="text" id="city" ng-required="true" ng-class="{ 'form-error': pec.formErrors.city }" ng-model="pec.passholder.city">
+          <input type="text" class="form-control" id="city" name="city" ng-required="true" ng-model="pec.passholder.city">
+          <div ng-messages="passholderEdit.city.$error" ng-if="(passholderEdit.$submitted || passholderEdit.city.$touched) && passholderEdit.city.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.city.$error.required" ng-message="passholderEdit.city.$error.required">De stad is verplicht.</div>
+          </div>
         </div>
       </div>
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="pec.cancelModal()">Annuleren</a>
-    <button type="button" class="btn btn-primary" ng-click="pec.submitForm()">Bewaren</button>
+    <button type="submit" class="btn btn-primary" ng-click="pec.submitForm(pec.passholder, passholderEdit)">Bewaren</button>
   </div>
 </form>

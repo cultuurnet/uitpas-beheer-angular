@@ -18,22 +18,11 @@ function PassholderEditController (passholder, $modalInstance) {
   // Set default parameters.
   controller.passholder = passholder;
   controller.passholder.dob = new Date(passholder.dateOfBirth);
-  controller.formErrors = {
-    inzNumber: false,
-    name: false,
-    firstName: false,
-    dateOfBirth: false,
-    placeOfBirth: false,
-    gender: false,
-    nationality: false,
-    street: false,
-    postalCode: false,
-    city: false
-  };
 
-  controller.submitForm = function() {
-
-    $modalInstance.close('close this with yes');
+  controller.submitForm = function(passholder, editForm) {
+    if(editForm.$valid) {
+      $modalInstance.close('close this with yes');
+    }
   };
 
   controller.cancelModal = function() {

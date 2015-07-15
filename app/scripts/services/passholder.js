@@ -35,13 +35,7 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
     if (passholderId) {
       deferredPassholder.resolve(passholderCache.get(passholderId));
     } else {
-      var passholderRequest = $http.get(apiUrl,
-        {
-          withCredentials: true,
-          params: {
-            identification: identification
-          }
-        });
+      var passholderRequest = $http.get(apiUrl + '/' + identification);
 
       var cacheAndResolvePassHolder = function (passholderData) {
         try {
