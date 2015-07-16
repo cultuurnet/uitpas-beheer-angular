@@ -7,13 +7,28 @@
     padding-top: 100px;
   }
   &__logo {
+    position: relative;
     padding-top: 40px;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
     background: url(../images/svg/logo-uitpas-full.svg) no-repeat 50% top;
     background-size: auto 35px;
     text-align: center;
     text-transform: uppercase;
     font-size: .9em;
     color: $blue-75;
+    &:before {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 70%;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      margin-left: -35%;
+      border-top: 1px solid $gray-25;
+      border-bottom: 1px solid lighten($gray-0, 3%);
+    }
     @include breakpoint(map-get($breakpoints, xxs)) {
       background-size: auto 50px;
       padding-top: 65px;
@@ -24,14 +39,13 @@
     }
   }
   &__title {
-    text-align: center;
+    + h2 {
+      margin-top: -.5em;
+    }
   }
   &__intro {
     font-style: italic;
-    border-top: 1px solid $gray-25;
     color: $gray-50;
-    padding-top: 20px;
-    margin-top: 20px;
   }
   
 }

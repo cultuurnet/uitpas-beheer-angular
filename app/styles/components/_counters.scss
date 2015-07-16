@@ -12,3 +12,13 @@
     }
   }
 }
+
+.panel {
+  &__title {
+    border-bottom: 1px solid $gray-50;
+    padding-bottom: .5em;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: 600;
+  }
+}

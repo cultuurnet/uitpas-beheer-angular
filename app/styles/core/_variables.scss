@@ -71,22 +71,22 @@ $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
 $font-family-base:        $font-family-sans-serif !default;
 
-$font-size-base:          16px !default;
-$font-size-base-value:    16 !default;
-$font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
-$font-size-small:         ceil(($font-size-base * 0.81)) !default; // ~13px
+$font-size-base:          15px !default;
+$font-size-base-value:    15 !default;
+$font-size-large:         ceil(($font-size-base * 1.2)) !default; // ~18px
+$font-size-small:         ceil(($font-size-base * 0.86)) !default; // ~13px
 
-$font-size-h1:            floor(($font-size-base * 2.6)) !default; // ~36px
-$font-size-h2:            floor(($font-size-base * 2.15)) !default; // ~30px
-$font-size-h3:            ceil(($font-size-base * 1.7)) !default; // ~24px
-$font-size-h4:            ceil(($font-size-base * 1.25)) !default; // ~18px
+$font-size-h1:            floor(($font-size-base * 2)) !default; // ~30px
+$font-size-h2:            floor(($font-size-base * 1.33)) !default; // ~20px
+$font-size-h3:            ceil(($font-size-base * 1.2)) !default; // ~18px
+$font-size-h4:            ceil(($font-size-base * 1.06)) !default; // ~16px
 $font-size-h5:            $font-size-base !default;
-$font-size-h6:            ceil(($font-size-base * 0.85)) !default; // ~12px
+$font-size-h6:            ceil(($font-size-base * 0.86)) !default; // ~13px
 
 //** Unit-less `line-height` for use in components like buttons.
-$line-height-base:        1.5 !default; // 20/14
+$line-height-base:        1.6 !default; // 24/15
 //** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
-$line-height-computed:    floor(($font-size-base * $line-height-base)) !default; // ~20px
+$line-height-computed:    floor(($font-size-base * $line-height-base)) !default; // ~24px
 
 //** By default, this inherits from the `<body>`.
 $headings-font-family:    inherit !default;
@@ -130,8 +130,8 @@ $padding-xs-horizontal:     5px !default;
 $line-height-large:         1.3333333 !default; // extra decimals for Win 8.1 Chrome
 $line-height-small:         1.2 !default;
 
-$border-radius-base:        0 !default;
-$border-radius-large:       0 !default;
+$border-radius-base:        2px !default;
+$border-radius-large:       7px !default;
 $border-radius-small:       0 !default;
 
 //** Global color for active items (e.g., navs or dropdowns).
@@ -734,8 +734,8 @@ $list-group-link-heading-color: #333 !default;
 //##
 
 $panel-bg:                    #fff !default;
-$panel-body-padding:          15px !default;
-$panel-heading-padding:       10px 15px !default;
+$panel-body-padding:          20px !default;
+$panel-heading-padding:       15px 20px !default;
 $panel-footer-padding:        $panel-heading-padding !default;
 $panel-border-radius:         $border-radius-base !default;
 
@@ -773,7 +773,7 @@ $panel-danger-heading-bg:     $state-danger-bg !default;
 //##
 
 //** Padding around the thumbnail image
-$thumbnail-padding:           4px !default;
+$thumbnail-padding:           5px !default;
 //** Thumbnail background color
 $thumbnail-bg:                $body-bg !default;
 //** Thumbnail border color
@@ -784,7 +784,7 @@ $thumbnail-border-radius:     $border-radius-base !default;
 //** Custom text color for thumbnail captions
 $thumbnail-caption-color:     $text-color !default;
 //** Padding around the thumbnail caption
-$thumbnail-caption-padding:   9px !default;
+$thumbnail-caption-padding:   10px !default;
 
 
 //== Wells
@@ -818,8 +818,8 @@ $badge-border-radius:         10px !default;
 //
 //##
 
-$breadcrumb-padding-vertical:   8px !default;
-$breadcrumb-padding-horizontal: 15px !default;
+$breadcrumb-padding-vertical:   10px !default;
+$breadcrumb-padding-horizontal: 20px !default;
 //** Breadcrumb background color
 $breadcrumb-bg:                 #f5f5f5 !default;
 //** Breadcrumb text color
