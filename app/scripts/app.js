@@ -97,6 +97,7 @@ angular
             animation: false,
             templateUrl: 'views/modal-passholder-edit.html',
             params: {
+              'identification': null,
               'passholder': null
             },
             resolve: {
@@ -107,6 +108,9 @@ angular
                 else {
                   return passholderService.find($stateParams.identification);
                 }
+              }],
+              identification: ['$stateParams', function($stateParams) {
+                return $stateParams.identification;
               }]
             },
             controller: 'PassholderEditController',

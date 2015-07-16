@@ -10,10 +10,13 @@
           <label class="control-label" for="insz-number">
             Rijksregisternummer
           </label>
-          <input type="text" class="form-control" id="insz-number" name="inszNumber" ng-pattern="/[\d]{6}[-\s]?[\d]{3}[-\s]?[\d]{2}/" ng-required="true" ng-model="pec.passholder.inszNumber">
-          <div ng-messages="passholderEdit.inszNumber.$error" ng-if="(passholderEdit.$submitted || passholderEdit.inszNumber.$touched) && passholderEdit.inszNumber.$invalid" class="alert alert-danger">
+          <input type="text" class="form-control" id="insz-number" ng-disabled="pec.disableInszNumber" name="inszNumber" ng-pattern="pec.validateInszNumber" ng-required="true" ng-model="pec.passholder.inszNumber">
+          <div ng-messages="passholderEdit.inszNumber.$error" ng-if="(passholderEdit.$submitted || passholderEdit.inszNumber.$dirty) && passholderEdit.inszNumber.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.inszNumber.$error.required" ng-message="passholderEdit.inszNumber.$error.required">Het rijksregisternummer is verplicht.</div>
-            <div ng-if="passholderEdit.inszNumber.$error.pattern" ng-message="passholderEdit.inszNumber.$error.pattern">Het rijksregisternummer moet bestaan uit 11 cijfers.</div>
+            <div ng-if="passholderEdit.inszNumber.$error.pattern" ng-message="passholderEdit.inszNumber.$error.pattern">Het rijksregisternummer heeft geen geldig formaat.</div>
+          </div>
+          <div ng-messages="pec.disableInszNumber" class="alert alert-info">
+            <div>Het rijksregisternummer kan enkel aangepast worden wanneer er nog geen gekend is.</div>
           </div>
         </div>
         <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.name.$touched) && passholderEdit.name.$invalid }">
@@ -41,7 +44,7 @@
           <label class="control-label" for="date-of-birth">
             Geboortedatum
           </label>
-          <input type="date" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true" ng-model="pec.passholder.dob">
+          <input type="date" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true" ng-model="pec.passholder.dateOfBirth">
           <div ng-messages="passholderEdit.dateOfBirth.$error" ng-if="(passholderEdit.$submitted || passholderEdit.dateOfBirth.$touched) && passholderEdit.dateOfBirth.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.dateOfBirth.$error.required" ng-message="passholderEdit.dateOfBirth.$error.required">De geboortedatum is verplicht.</div>
             <div ng-if="passholderEdit.dateOfBirth.$error.date" ng-message="passholderEdit.dateOfBirth.$error.date">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>

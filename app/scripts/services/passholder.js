@@ -44,8 +44,8 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
           deferredPassholder.reject(e);
         }
 
-        passholderIdCache.put(identification, passholderId);
-        passholderCache.put(passholderId, passholderData);
+        passholderData.dateOfBirth = new Date(passholderData.dateOfBirth * 1000);
+        service.updatePassholderInCache(passholderData, identification, passholderId);
         deferredPassholder.resolve(passholderData);
       };
 
@@ -66,6 +66,29 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
     return deferredPassholder.promise;
   };
 
+  service.update = function(passholderData, identification) {
+    var deferredUpdate = $q.defer();
+    var passholderId;
+
+    try {
+      passholderId = identifyPassHolder(passholderData);
+    } catch (e) {
+      deferredUpdate.reject(e);
+    }
+
+    var successUpdatingPassholder = function(updatedPassholder) {
+      service.updatePassholderInCache(updatedPassholder, identification, passholderId);
+      deferredUpdate.resolve(updatedPassholder);
+    };
+    var errorUpdatingPassholder = function(e) {
+      deferredUpdate.reject(e);
+    };
+
+    service.updatePassholderOnServer(passholderData, identification).then(successUpdatingPassholder, errorUpdatingPassholder);
+
+    return deferredUpdate.promise;
+  };
+
   /**
    * Checks passholder data for a unique identifier
    *
@@ -76,7 +99,48 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
     if (((passholderData || {}).uitIdUser || {}).id) {
       return passholderData.uitIdUser.id;
     } else {
-      throw 'can\'t identify passholder data returned from server';
+      throw {
+        code: 'PASSHOLDER_NOT_IDENTIFIED',
+        title: 'Not identified',
+        message: 'Unable to identify the given passholder data'
+      };
     }
   }
+
+  service.updatePassholderOnServer = function(passholderData, identification) {
+    var deferred = $q.defer();
+
+    var successUpdatingPassholderOnServer = function(updatedPassholder) {
+      console.log('successUpdatingPassholder', updatedPassholder);
+      deferred.resolve(updatedPassholder);
+    };
+    var errorUpdatingPassholderOnServer = function(e) {
+      console.log('errorUpdatingPassholder', e);
+      deferred.reject({
+        code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER',
+        title: 'Passholder not updated on server',
+        message: 'The passholder could not be updated on the server.'
+      });
+    };
+
+    $http
+      .post(
+        apiUrl + '/' + identification,
+        passholderData,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .success(successUpdatingPassholderOnServer)
+      .error(errorUpdatingPassholderOnServer);
+
+    return deferred.promise;
+  };
+
+  service.updatePassholderInCache = function(passholderData, identification, passholderId) {
+    passholderIdCache.put(identification, passholderId);
+    passholderCache.put(passholderId, passholderData);
+  };
 }
