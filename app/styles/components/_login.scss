@@ -44,8 +44,13 @@
     }
   }
   &__intro {
-    font-style: italic;
-    color: $gray-50;
+    p {
+      font-style: italic;
+      color: $gray-50;
+    }
+  }
+  &__btn {
+    margin-bottom: .5em;
   }
   
 }
