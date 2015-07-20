@@ -111,11 +111,9 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
     var deferred = $q.defer();
 
     var successUpdatingPassholderOnServer = function(updatedPassholder) {
-      console.log('successUpdatingPassholder', updatedPassholder);
       deferred.resolve(updatedPassholder);
     };
-    var errorUpdatingPassholderOnServer = function(e) {
-      console.log('errorUpdatingPassholder', e);
+    var errorUpdatingPassholderOnServer = function() {
       deferred.reject({
         code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER',
         title: 'Passholder not updated on server',

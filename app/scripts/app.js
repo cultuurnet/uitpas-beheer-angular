@@ -115,13 +115,9 @@ angular
             },
             controller: 'PassholderEditController',
             controllerAs: 'pec'
-          }).result.then(function(message) {
-              console.log(message);
-              console.log('modal.then.yes');
+          }).result.then(function() {
               $state.go('^');
-          }, function() {
-            console.log('modal.then.no');
-          });
+          }, function() {});
         }]
       })
       .state('login', {
