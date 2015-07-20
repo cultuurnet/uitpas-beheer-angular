@@ -1,6 +1,7 @@
 // Custom variables and mixins
 @import "core/variables";
 @import "core/mixins";
+@import "core/type";
 @import "core/grid";
 
 // Core variables and mixins
@@ -16,7 +17,7 @@
 
 // Core CSS
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap/scaffolding";
-@import "bootstrap-sass-official/assets/stylesheets/bootstrap/type";
+//@import "bootstrap-sass-official/assets/stylesheets/bootstrap/type";
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap/code";
 //@import "bootstrap-sass-official/assets/stylesheets/bootstrap/grid";
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap/tables";
