@@ -23,14 +23,13 @@
           </li>
         </ul>
       </div>
-      
+
     </div>
   </div>
 
   <div class="site-login__intro" ng-if="::!counters.total">
     <p>Je bent nog geen lid van een UiTPAS-balie. Om deze applicatie te kunnen gebruiken, moet je lid zijn van een UiTPAS-balie.</p>
     <p>Stuur je e-mailadres en de naam van je organisatie naar de verantwoordelijke.</p>
-  </div>
     <ul class="list-unstyled" ng-repeat="contact in ::counters.contacts">
       <li class="vcard">
         <span class="org" ng-bind="::contact.name"></span>
@@ -38,7 +37,5 @@
         <span class="email"><a ng-href="mailto:{{ ::contact.email }}" ng-bind="::contact.email"></a></span>
       </li>
     </ul>
-  </div>
-
   </div>
 </div>
