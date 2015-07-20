@@ -31,7 +31,7 @@ describe('Controller: PassholderSearchController', function () {
     );
   });
 
-  it('should have some presetdata variables', function () {
+  it('should have some preset data variables', function () {
     expect(PassholderSearchController.passholderIdentification).toEqual('');
     expect(PassholderSearchController.passholderNotFound).toEqual(false);
   });
