@@ -11,13 +11,17 @@ textarea {
     outline: none;
     border-color: $gray-50;
   }
-  &.ng-invalid {
+  &.ng-dirty.ng-invalid {
     border-color: $state-danger-border;
     background-color: $state-danger-bg;
   }
 }
 
 label {
+  margin-bottom: 0;
+}
+
+form label {
   margin-bottom: $rh-xsm;
 }
 

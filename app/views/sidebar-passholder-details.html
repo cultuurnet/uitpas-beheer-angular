@@ -1,26 +1,28 @@
-<div class="back-nav">
-  <a ui-sref="counter.main">Terug</a>
+<div>
+  <a class="back-nav" ui-sref="counter.main">Terug</a>
 </div>
-<span ng-repeat="cardSystem in pdc.passholder.cardSystemSpecific">
+<div ng-repeat="cardSystem in pdc.passholder.cardSystemSpecific">
   <label>NR.</label> {{cardSystem.currentCard.uitpasNumber}}
-</span>
-<div class="passholder-data">
+</div>
+<div class="passholder passholder-data">
   <h3>Gegevens</h3>
-  <span class="name">{{pdc.passholder.firstName}} {{pdc.passholder.name}}</span>
-  <span class="address">
+  <div class="name">{{pdc.passholder.firstName}} {{pdc.passholder.name}}</div>
+  <div class="address">
     {{pdc.passholder.street}} {{pdc.passholder.number}} {{pdc.passholder.box}}<br />
     {{pdc.passholder.postalCode}} {{pdc.passholder.city}}
-  </span>
-  <span class="birthdate">{{pdc.passholder.dateOfBirth | date : 'dd/MM/yyyy'}}</span>
+  </div>
+  <div class="birthdate">{{pdc.passholder.dateOfBirth | date : 'dd/MM/yyyy'}}</div>
   <div class="contact-data">
-    <a href>Contactinformatie</a>
-    <div class="contact-data-container">
-      <span class="telephone">{{pdc.passholder.telephone}}</span>
-      <span class="email">{{pdc.passholder.email}}</span>
+    <a href class="toggle-down" data-toggle="collapse" aria-expanded="true">Contactinformatie<i></i></a>
+    <div class="panel panel-default panel-collapse">
+      <div class="panel-body">
+        <div class="telephone">{{pdc.passholder.telephone}}</div>
+        <div class="email">{{pdc.passholder.email}}</div>
+      </div>
     </div>
   </div>
 </div>
-<div class="points">
+<div class="passholder passholder-points">
   <h3>Puntensaldo</h3>
-  <span>{{pdc.passholder.points}}</span>
+  <span class="label label-points">{{pdc.passholder.points}}</span>
 </div>

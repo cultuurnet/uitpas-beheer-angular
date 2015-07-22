@@ -5,12 +5,83 @@
   > form,
   > div {
     @include clearfix;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: $rh-xsm;
+    padding-bottom: $rh-xsm;
     border-bottom: 1px solid $gray-25;
     + div,
     + form {
       border-top: 1px solid lighten($gray-0, 3%);
     }
+  }
+  h3 {
+    color: $gray-50;
+    font-size: 1em;
+    font-weight: 400;
+    text-shadow: 1px 1px $white;
+  }
+  .panel {
+    margin-bottom: 0;
+    + .panel {
+      margin-top: $rh-xsm;
+    }
+  }
+  .panel-body {
+    padding: 15px;
+  }
+}
+
+// Sidebar: Passholder
+a.back-nav:before {
+  @extend .glyphicon;
+  @extend .glyphicon-arrow-left;
+  font-size: .8em;
+  margin-right: 5px;
+}
+
+a.toggle-down {
+  display: inline-block;
+  margin: $rh-xsm 0;
+  i {
+    @extend .glyphicon;
+    @extend .glyphicon-chevron-down;
+    font-size: .8em;
+    margin-left: 5px;
+  }
+  &.collapse i {
+    @extend .glyphicon-chevron-up;
+  }
+}
+
+.passholder {
+  .name {
+    font-weight: 700;
+  }
+  // icons
+  .telephone,
+  .email {
+    position: relative;
+    padding-left: 20px;;
+    &:before {
+      @extend .glyphicon;
+      font-size: .8em;
+      margin-right: 5px;
+      position: absolute;
+      top: .55em;
+      left: 0;
+    }
+  }
+  .telephone {
+    @extend .glyphicon-earphone;
+  }
+  .email {
+    @extend .glyphicon-envelope;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  &-points .label {
+    float: right;
+    font-size: 1.2em;
+    font-weight: 700;
+    @include label-variant($label-success-bg);
   }
 }
