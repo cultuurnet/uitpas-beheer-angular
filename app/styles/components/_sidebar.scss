@@ -40,14 +40,14 @@ a.back-nav:before {
 
 a.toggle-down {
   display: inline-block;
-  margin: $rh-xsm 0;
+  margin: $rh-xsm 0 $rh-xxs;
   i {
     @extend .glyphicon;
     @extend .glyphicon-chevron-down;
     font-size: .8em;
     margin-left: 5px;
   }
-  &.collapse i {
+  &[aria-expanded='true'] i {
     @extend .glyphicon-chevron-up;
   }
 }

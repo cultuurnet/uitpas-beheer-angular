@@ -21,8 +21,7 @@ a {
   @include transitions((color, background, border));
   cursor: pointer;
   text-decoration: underline;
-  &:hover,
-  &:focus {
+  &:hover {
     text-decoration: none;
   }
 }

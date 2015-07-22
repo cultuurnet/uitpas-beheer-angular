@@ -13,8 +13,8 @@
   </div>
   <div class="birthdate">{{pdc.passholder.dateOfBirth | date : 'dd/MM/yyyy'}}</div>
   <div class="contact-data">
-    <a href class="toggle-down" data-toggle="collapse" aria-expanded="true">Contactinformatie<i></i></a>
-    <div class="panel panel-default panel-collapse">
+    <a href="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="true">Contactinformatie<i></i></a>
+    <div class="panel panel-default panel-collapse collapse" id="contact-data-container">
       <div class="panel-body">
         <div class="telephone">{{pdc.passholder.telephone}}</div>
         <div class="email">{{pdc.passholder.email}}</div>
