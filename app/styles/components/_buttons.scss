@@ -1,3 +1,4 @@
+// Buttons
 .btn-ghost {
   @include button-variant($btn-ghost-color, $btn-ghost-bg, $btn-ghost-border);
   &:hover,

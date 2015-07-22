@@ -1,0 +1,24 @@
+// Counters
+.vcard {
+  .org {
+    font-weight: 600;
+  }
+  .org + .tel,
+  .tel + .email {
+    &:before {
+      content: '•';
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+  }
+}
+
+.panel {
+  &__title {
+    border-bottom: 1px solid $gray-50;
+    padding-bottom: .5em;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: 600;
+  }
+}

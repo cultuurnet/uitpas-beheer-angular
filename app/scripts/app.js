@@ -131,10 +131,24 @@ angular
         controllerAs: 'counters',
         resolve: {
           list: ['counterService', function(counterService) {
-            return counterService.getList();
+            return counterService.getList().then(
+              function (list) {
+                return list;
+              },
+              function (error) {
+                return {};
+              }
+            );
           }],
           lastActiveId: ['counterService', function(counterService) {
-            return counterService.getLastActiveId();
+            return counterService.getLastActiveId().then(
+              function (activeId) {
+                return activeId;
+              },
+              function (error) {
+                return null;
+              }
+            );
           }]
         }
       });
