@@ -15,9 +15,10 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "components/main";
 @import "components/layout";
 @import "components/header";
+@import "components/footer";
 @import "components/navbar";
 @import "components/sidebar";
-@import "components/footer";
+@import "components/forms";
 
 // Print
 @import "core/print";
