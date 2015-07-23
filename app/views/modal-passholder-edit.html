@@ -5,8 +5,8 @@
   </div>
   <div class="modal-body">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.inszNumber.$touched) && passholderEdit.inszNumber.$invalid }">
+      <div class="grid">
+        <div class="grid__12 grid--bp-lrg__4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.inszNumber.$touched) && passholderEdit.inszNumber.$invalid }">
           <label class="control-label" for="insz-number">
             Rijksregisternummer
           </label>
@@ -19,7 +19,7 @@
             <div>Het rijksregisternummer kan enkel aangepast worden wanneer er nog geen gekend is.</div>
           </div>
         </div>
-        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.name.$touched) && passholderEdit.name.$invalid }">
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-lrg__4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.name.$touched) && passholderEdit.name.$invalid }">
           <label class="control-label" for="name">
             Naam
           </label>
@@ -28,7 +28,7 @@
             <div ng-if="passholderEdit.name.$error.required" ng-message="passholderEdit.name.$error.required">De naam is verplicht.</div>
           </div>
         </div>
-        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.firstName.$touched) && passholderEdit.firstName.$invalid }">
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-lrg__4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.firstName.$touched) && passholderEdit.firstName.$invalid }">
           <label class="control-label" for="firstName">
             Voornaam
           </label>
@@ -39,8 +39,8 @@
         </div>
       </div>
       <hr>
-      <div class="row">
-        <div class="col-xs-3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.dateOfBirth.$touched) && passholderEdit.dateOfBirth.$invalid }">
+      <div class="grid">
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.dateOfBirth.$touched) && passholderEdit.dateOfBirth.$invalid }">
           <label class="control-label" for="date-of-birth">
             Geboortedatum
           </label>
@@ -50,7 +50,7 @@
             <div ng-if="passholderEdit.dateOfBirth.$error.date" ng-message="passholderEdit.dateOfBirth.$error.date">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
           </div>
         </div>
-        <div class="col-xs-3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.placeOfBirth.$touched) && passholderEdit.placeOfBirth.$invalid }">
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.placeOfBirth.$touched) && passholderEdit.placeOfBirth.$invalid }">
           <label class="control-label" for="place-of-birth">
             Geboorteplaats
           </label>
@@ -59,25 +59,31 @@
             <div ng-if="passholderEdit.placeOfBirth.$error.required" ng-message="passholderEdit.placeOfBirth.$error.required">De geboorteplaats is verplicht.</div>
           </div>
         </div>
-        <div class="col-xs-3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.gender.$touched) && passholderEdit.gender.$invalid }">
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.gender.$touched) && passholderEdit.gender.$invalid }">
           <label class="control-label">
             Geslacht
           </label>
-          <div class="radio">
-            <label>
-              <input type="radio" id="gender-male" name="gender" value="MALE" required ng-model="pec.passholder.gender"> Man
-            </label>
-          </div>
-          <div class="radio">
-            <label>
-              <input type="radio" id="gender-female" name="gender" value="FEMALE" required ng-model="pec.passholder.gender"> Vrouw
-            </label>
+          <div class="grid radios">
+            <div class="grid__12 grid--bp-sml__6">
+              <div class="radio">
+                <label>
+                  <input type="radio" id="gender-male" name="gender" value="MALE" required ng-model="pec.passholder.gender"> Man
+                </label>
+              </div>
+            </div>
+            <div class="grid__12 grid--bp-sml__6">
+              <div class="radio">
+                <label>
+                  <input type="radio" id="gender-female" name="gender" value="FEMALE" required ng-model="pec.passholder.gender"> Vrouw
+                </label>
+              </div>
+            </div>
           </div>
           <div ng-messages="passholderEdit.gender.$error" ng-if="(passholderEdit.$submitted || passholderEdit.gender.$touched) && passholderEdit.gender.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.gender.$error.required" ng-message="passholderEdit.gender.$error.required">De geslacht is verplicht.</div>
           </div>
         </div>
-        <div class="col-xs-3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.nationality.$touched) && passholderEdit.nationality.$invalid }">
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.nationality.$touched) && passholderEdit.nationality.$invalid }">
           <label class="control-label" for="nationality">
             Nationaliteit
           </label>
@@ -88,8 +94,8 @@
         </div>
       </div>
       <hr>
-      <div class="row">
-        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.street.$touched) && passholderEdit.street.$invalid }">
+      <div class="grid">
+        <div class="grid__12 grid--bp-med__6 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.street.$touched) && passholderEdit.street.$invalid }">
           <label class="control-label" for="street">
             Straat, nummer en bus
           </label>
@@ -98,7 +104,7 @@
             <div ng-if="passholderEdit.street.$error.required" ng-message="passholderEdit.street.$error.required">De straat en nummer zijn verplicht.</div>
           </div>
         </div>
-        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.postalCode.$touched) && passholderEdit.postalCode.$invalid }">
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-med__3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.postalCode.$touched) && passholderEdit.postalCode.$invalid }">
           <label class="control-label" for="postal-code">
             postcode
           </label>
@@ -107,7 +113,7 @@
             <div ng-if="passholderEdit.postalCode.$error.required" ng-message="passholderEdit.postalCode.$error.required">De postcode is verplicht.</div>
           </div>
         </div>
-        <div class="col-xs-4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.city.$touched) && passholderEdit.city.$invalid }">
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-med__3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.city.$touched) && passholderEdit.city.$invalid }">
           <label class="control-label" for="city">
             Gemeente
           </label>

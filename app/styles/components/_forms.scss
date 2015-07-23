@@ -6,6 +6,7 @@ textarea {
   @include transitions((background, border));
   width: 100%;
   border: 1px solid $gray-25;
+  box-shadow: none;
   padding: $padding-base-vertical $padding-base-horizontal;
   &:focus {
     outline: none;
@@ -13,7 +14,7 @@ textarea {
   }
   &.ng-invalid {
     border-color: $state-danger-border;
-    background-color: $state-danger-bg;
+    background-color: lighten($state-danger-bg, 7%);
   }
 }
 
@@ -29,4 +30,30 @@ label em {
 
 .btn {
   @include transitions((color, background, border));
+}
+
+a + .btn {
+  margin-left: 10px;
+}
+
+.alert {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.field-group {
+  margin-bottom: $rh-xsm;
+}
+
+.field-group .alert {
+  margin-bottom: 0;
+}
+
+.radio {
+  margin-top: $padding-base-vertical;
+  margin-bottom: $padding-base-vertical;
+}
+
+.grid.radios > [class*='grid__'] {
+  margin-top: 0;
 }
