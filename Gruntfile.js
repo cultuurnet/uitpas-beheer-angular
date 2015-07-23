@@ -62,7 +62,7 @@ module.exports = function (grunt) {
       },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server', 'postcss']
+        tasks: ['compass:server', 'postcss', 'modernizr']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -135,6 +135,7 @@ module.exports = function (grunt) {
     jshint: {
       options: {
         jshintrc: '.jshintrc',
+        ignores: '<%= yeoman.app %>/scripts/libs/modernizr-custom.js',
         reporter: require('jshint-stylish')
       },
       all: {
@@ -374,6 +375,16 @@ module.exports = function (grunt) {
       }
     },
 
+    // Run modernizr
+    modernizr: {
+      dist: {
+        // [REQUIRED] Path to the build you're using for development. 
+        'devFile' : 'node_modules/grunt-modernizr/lib/modernizr-dev.js',
+        // Path to save out the built file. 
+        'outputFile' : '<%= yeoman.app %>/scripts/libs/modernizr-custom.js',
+      }
+    },
+
     // ng-annotate tries to make the code safe for minification automatically
     // by using the Angular long form for dependency injection.
     ngAnnotate: {
@@ -475,7 +486,7 @@ module.exports = function (grunt) {
       }
     }
   });
-
+  
   grunt.loadNpmTasks('grunt-karma-coveralls');
   grunt.loadNpmTasks('grunt-ng-constant');
 
@@ -505,7 +516,6 @@ module.exports = function (grunt) {
     'wiredep',
     'concurrent:test',
     'ngconstant:dev',
-    'postcss',
     'connect:test',
     'karma'
   ]);
@@ -516,6 +526,7 @@ module.exports = function (grunt) {
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
+    'modernizr',
     'postcss',
     'concat',
     'ngAnnotate',
