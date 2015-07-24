@@ -473,11 +473,20 @@ module.exports = function (grunt) {
       dev: {
         constants: loadConfig
       }
+    },
+    githooks: {
+      all: {
+        'pre-commit': {
+          taskNames: 'test',
+          args:  '-v --no-color'
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-karma-coveralls');
   grunt.loadNpmTasks('grunt-ng-constant');
+  grunt.loadNpmTasks('grunt-githooks');
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -533,19 +542,4 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
-
-  grunt.registerTask(
-    'install-git-pre-commit-hook',
-    'Install a Git pre-commit hook to run the tests before each commit',
-    function () {
-      var fs = require('fs');
-
-      var dest =  './.git/hooks/pre-commit';
-      var src = './contrib/pre-commit-hook';
-
-      grunt.file.copy(src, dest);
-
-      fs.chmodSync(dest, fs.lstatSync(src).mode);
-    }
-  );
 };
