@@ -538,10 +538,14 @@ module.exports = function (grunt) {
     'install-git-pre-commit-hook',
     'Install a Git pre-commit hook to run the tests before each commit',
     function () {
-      var path = require('path');
       var fs = require('fs');
 
-      grunt.file.copy('./contrib/pre-commit-hook', './.git/hooks/pre-commit');
+      var dest =  './.git/hooks/pre-commit';
+      var src = './contrib/pre-commit-hook';
+
+      grunt.file.copy(src, dest);
+
+      fs.chmodSync(dest, fs.lstatSync(src).mode);
     }
   );
 };
