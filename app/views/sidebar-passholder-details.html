@@ -16,8 +16,9 @@
     <a href="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="true">Contactinformatie<i></i></a>
     <div class="panel panel-default panel-collapse collapse" id="contact-data-container">
       <div class="panel-body">
-        <div class="telephone">{{pdc.passholder.telephone}}</div>
-        <div class="email">{{pdc.passholder.email}}</div>
+        <div class="telephone" ng-show="pdc.passholder.telephone">{{pdc.passholder.telephone}}</div>
+        <div class="telephone" ng-show="pdc.passholder.gsm">{{pdc.passholder.gsm}}</div>
+        <div class="email" ng-show="pdc.passholder.email">{{pdc.passholder.email}}</div>
       </div>
     </div>
   </div>
