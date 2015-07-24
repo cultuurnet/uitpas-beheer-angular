@@ -533,4 +533,15 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.registerTask(
+    'install-git-pre-commit-hook',
+    'Install a Git pre-commit hook to run the tests before each commit',
+    function () {
+      var path = require('path');
+      var fs = require('fs');
+
+      grunt.file.copy('./contrib/pre-commit-hook', './.git/hooks/pre-commit');
+    }
+  );
 };
