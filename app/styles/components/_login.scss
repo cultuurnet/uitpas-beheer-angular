@@ -51,6 +51,9 @@
   }
   &__btn {
     margin-bottom: .5em;
-  }
-  
+  } 
+}
+
+.no-svg .site-login__logo {
+  background: url(../images/svg/fallback/logo-uitpas-full.png) no-repeat 50% top;
 }
