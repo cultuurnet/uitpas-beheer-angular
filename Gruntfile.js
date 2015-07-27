@@ -135,7 +135,6 @@ module.exports = function (grunt) {
     jshint: {
       options: {
         jshintrc: '.jshintrc',
-        ignores: '<%= yeoman.app %>/scripts/libs/modernizr-custom.js',
         reporter: require('jshint-stylish')
       },
       all: {
@@ -202,7 +201,7 @@ module.exports = function (grunt) {
     wiredep: {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
-        ignorePath:  /\.\.\//
+        ignorePath:  /\.\.\//,
       },
       test: {
         devDependencies: true,
@@ -280,7 +279,27 @@ module.exports = function (grunt) {
               js: ['concat', 'uglifyjs'],
               css: ['cssmin']
             },
-            post: {}
+            post: {
+              js: [{
+                name: 'concat',
+                createConfig: function (context, block) {
+                  var generated = context.options.generated;
+                  // Iterate all the files and customize where needed
+                  generated.files.forEach(function (file) {
+                    var customizedSrc = file.src.map(function(srcFile) {
+                      // use a custom source for modernizr
+                      if(srcFile === 'bower_components/modernizr/modernizr.js') {
+                        srcFile = '.tmp/scripts/modernizr-custom.js';
+                      }
+
+                      return srcFile;
+                    });
+
+                    file.src = customizedSrc;
+                  });
+                }
+              }]
+            }
           }
         }
       }
@@ -381,7 +400,8 @@ module.exports = function (grunt) {
         // [REQUIRED] Path to the build you're using for development. 
         'devFile' : 'node_modules/grunt-modernizr/lib/modernizr-dev.js',
         // Path to save out the built file. 
-        'outputFile' : '<%= yeoman.app %>/scripts/libs/modernizr-custom.js',
+        'outputFile' : '.tmp/scripts/modernizr-custom.js',
+        uglify: false
       }
     },
 
@@ -526,7 +546,7 @@ module.exports = function (grunt) {
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
-    'modernizr',
+    'modernizr:dist',
     'postcss',
     'concat',
     'ngAnnotate',
