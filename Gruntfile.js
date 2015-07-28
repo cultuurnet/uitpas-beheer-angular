@@ -506,7 +506,7 @@ module.exports = function (grunt) {
       }
     }
   });
-  
+
   grunt.loadNpmTasks('grunt-karma-coveralls');
   grunt.loadNpmTasks('grunt-ng-constant');
 
