@@ -491,7 +491,9 @@ module.exports = function (grunt) {
         hashbang: '#!/bin/sh',
         template: 'node_modules/grunt-githooks/templates/shell.hb',
 
-        // Make sure all required packages are present in the PATH variable
+        // Make sure all required packages are present in the PATH variable,
+        // and then execute grunt with whatever taskName and args were
+        // configured above
         command: 'PATH=' + process.env.PATH + ' grunt',
 
         // We need these comments as the start and end markers, otherwise the
