@@ -484,12 +484,19 @@ module.exports = function (grunt) {
         }
       },
 
-      // Use shell instead of node because GUIs like SourceTree don't see node
-      // @see https://github.com/wecodemore/grunt-githooks/issues/8#issuecomment-34227306.
+      // @see https://github.com/wecodemore/grunt-githooks/issues/8#issuecomment-34227306
       options: {
+        // Use shell instead of node because GUIs like SourceTree don't see
+        // node
         hashbang: '#!/bin/sh',
         template: 'node_modules/grunt-githooks/templates/shell.hb',
+
+        // Make sure all required packages are present in the PATH variable
         command: 'PATH=' + process.env.PATH + ' grunt',
+
+        // We need these comments as the start and end markers, otherwise the
+        // default ones are used and those are JS comments that will cause the
+        // shell script to fail because it can't parse those
         startMarker: '## GRUNT-GITHOOKS START',
         endMarker: '## GRUNT-GITHOOKS END'
       }
