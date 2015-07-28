@@ -474,12 +474,24 @@ module.exports = function (grunt) {
         constants: loadConfig
       }
     },
+
+    // Git hooks configuration
     githooks: {
       all: {
         'pre-commit': {
           taskNames: 'test',
           args:  '-v --no-color'
         }
+      },
+
+      // Use shell instead of node because GUIs like SourceTree don't see node
+      // @see https://github.com/wecodemore/grunt-githooks/issues/8#issuecomment-34227306.
+      options: {
+        hashbang: '#!/bin/sh',
+        template: 'node_modules/grunt-githooks/templates/shell.hb',
+        command: 'PATH=' + process.env.PATH + ' grunt',
+        startMarker: '## GRUNT-GITHOOKS START',
+        endMarker: '## GRUNT-GITHOOKS END'
       }
     }
   });
