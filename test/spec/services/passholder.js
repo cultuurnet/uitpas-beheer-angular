@@ -28,18 +28,27 @@ describe('Service: passholderService', function () {
 
   it('returns a passholder from the server and keeps it cached', function() {
     var uitpasNumber = 'this-is-a-number';
+    var passholderData = {
+      name: 'Foo',
+      points: 0,
+      uitIdUser: {
+        id: 'passholder-id-123'
+      },
+      dateOfBirth: 1214524800
+    };
     var expectedPassholder = {
       name: 'Foo',
       points: 0,
       uitIdUser: {
         id: 'passholder-id-123'
-      }
+      },
+      dateOfBirth: new Date(1214524800000)
     };
 
     // Mock an HTTP response.
     $httpBackend
-      .expectGET(apiUrl + 'passholders?identification=' + uitpasNumber)
-      .respond(200, JSON.stringify(expectedPassholder));
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber)
+      .respond(200, JSON.stringify(passholderData));
 
     // Assertion method.
     var assertPassholder = function(passholder) {
@@ -70,11 +79,11 @@ describe('Service: passholderService', function () {
 
     // Mock an HTTP response.
     $httpBackend
-      .expectGET(apiUrl + 'passholders?identification=' + uitpasNumber)
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber)
       .respond(200, JSON.stringify(expectedPassholder));
 
     var failed = function(error) {
-      expect(error).toBe('can\'t identify passholder data returned from server');
+      expect(error.code).toBe('PASSHOLDER_NOT_IDENTIFIED');
     };
 
     // Request the passholder data and assert it when its returned.
@@ -95,7 +104,7 @@ describe('Service: passholderService', function () {
 
     // Mock an HTTP response.
     $httpBackend
-      .expectGET(apiUrl + 'passholders?identification=' + uitpasNumber)
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber)
       .respond(404, JSON.stringify(expectedError));
 
     var failed = function(error) {
