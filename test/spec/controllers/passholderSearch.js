@@ -6,7 +6,7 @@ describe('Controller: PassholderSearchController', function () {
   beforeEach(module('uitpasbeheerApp'));
   beforeEach(module('uitpasbeheerAppViews'));
 
-  var rootScope, $controller, passholderService, sharedDataService, $state, $stateParams, $q;
+  var rootScope, $controller, passholderService, sharedDataService, $state, $stateParams, $q, passholderSearchController;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($injector, _$rootScope_, _$q_) {
@@ -20,7 +20,7 @@ describe('Controller: PassholderSearchController', function () {
   }));
 
   beforeEach(function () {
-    PassholderSearchController = $controller(
+    passholderSearchController = $controller(
       'PassholderSearchController', {
         $rootScope: rootScope,
         passholderService: passholderService,
@@ -32,8 +32,8 @@ describe('Controller: PassholderSearchController', function () {
   });
 
   it('should have some presetdata variables', function () {
-    expect(PassholderSearchController.passholderIdentification).toEqual('');
-    expect(PassholderSearchController.passholderNotFound).toEqual(false);
+    expect(passholderSearchController.passholderIdentification).toEqual('');
+    expect(passholderSearchController.passholderNotFound).toEqual(false);
   });
 
   it('redirects to a passholder detail page with a valid number', function() {
@@ -45,7 +45,7 @@ describe('Controller: PassholderSearchController', function () {
     );
     spyOn(passholderService, 'find').and.returnValue(passholderDeferred.promise);
     spyOn($state, 'go');
-    PassholderSearchController.searchPassholder('valid identification number');
+    passholderSearchController.searchPassholder('valid identification number');
 
     rootScope.$digest();
     expect($state.go).toHaveBeenCalled();
@@ -63,7 +63,7 @@ describe('Controller: PassholderSearchController', function () {
     );
     spyOn(passholderService, 'find').and.returnValue(passholderDeferred.promise);
     spyOn($state, 'go');
-    PassholderSearchController.searchPassholder('invalid identification number');
+    passholderSearchController.searchPassholder('invalid identification number');
 
     rootScope.$digest();
     expect($state.go).toHaveBeenCalledWith(
@@ -77,7 +77,7 @@ describe('Controller: PassholderSearchController', function () {
       }
     );
     expect(passholderService.find).toHaveBeenCalledWith('invalid identification number');
-    expect(PassholderSearchController.passholder).toEqual(undefined);
-    expect(PassholderSearchController.passholderNotFound).toEqual(true);
+    expect(passholderSearchController.passholder).toEqual(undefined);
+    expect(passholderSearchController.passholderNotFound).toEqual(true);
   });
 });
