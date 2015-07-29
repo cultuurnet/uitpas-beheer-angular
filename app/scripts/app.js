@@ -135,7 +135,7 @@ angular
               function (list) {
                 return list;
               },
-              function (error) {
+              function () {
                 return {};
               }
             );
@@ -145,7 +145,7 @@ angular
               function (activeId) {
                 return activeId;
               },
-              function (error) {
+              function () {
                 return null;
               }
             );

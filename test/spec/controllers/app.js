@@ -111,11 +111,11 @@ describe('Controller: AppController', function () {
     var deferredLoginStatus = $q.defer();
     var loginStatusPromise = deferredLoginStatus.promise;
     var finished = function () {
-      expect(uitid.login).not.toHaveBeenCalled();
+      expect(appController.redirectToLogin).not.toHaveBeenCalled();
       done();
     };
     spyOn(uitid, 'getLoginStatus').and.returnValue(loginStatusPromise);
-    spyOn(uitid, 'login');
+    spyOn(appController, 'redirectToLogin');
     $scope.$emit('$stateChangeStart', stateChangeEvent);
     expect(uitid.getLoginStatus).toHaveBeenCalled();
 
@@ -129,12 +129,12 @@ describe('Controller: AppController', function () {
     var deferredLoginStatus = $q.defer();
     var loginStatusPromise = deferredLoginStatus.promise;
     var finished = function () {
-      expect(uitid.login).toHaveBeenCalled();
+      expect(appController.redirectToLogin).toHaveBeenCalled();
       expect(emitEvent.defaultPrevented).toBeTruthy();
       done();
     };
     spyOn(uitid, 'getLoginStatus').and.returnValue(loginStatusPromise);
-    spyOn(uitid, 'login');
+    spyOn(appController, 'redirectToLogin');
     var emitEvent = $scope.$emit('$stateChangeStart', stateChangeEvent);
     expect(uitid.getLoginStatus).toHaveBeenCalled();
 
