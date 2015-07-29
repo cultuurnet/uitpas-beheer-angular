@@ -480,7 +480,7 @@ module.exports = function (grunt) {
       all: {
         'pre-commit': {
           taskNames: 'test',
-          args:  '-v --no-color'
+          args:  '-v'
         }
       },
 
@@ -531,6 +531,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [
+    'jshint:all',
     'clean:server',
     'wiredep',
     'concurrent:test',

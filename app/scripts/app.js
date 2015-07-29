@@ -104,9 +104,6 @@ angular
             return counterService.getList().then(
               function (list) {
                 return list;
-              },
-              function (error) {
-                return {};
               }
             );
           }],
@@ -114,9 +111,6 @@ angular
             return counterService.getLastActiveId().then(
               function (activeId) {
                 return activeId;
-              },
-              function (error) {
-                return null;
               }
             );
           }]
