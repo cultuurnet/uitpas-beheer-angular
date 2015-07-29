@@ -480,7 +480,7 @@ module.exports = function (grunt) {
       all: {
         'pre-commit': {
           taskNames: 'test',
-          args:  '-v'
+          args:  '-v --no-color'
         }
       },
 
