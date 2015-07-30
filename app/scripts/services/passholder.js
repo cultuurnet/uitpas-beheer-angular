@@ -66,25 +66,33 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
     return deferredPassholder.promise;
   };
 
-  service.update = function(passholderData, identification) {
+  /**
+   * Update the information of a passholder by persisting it on the server and caching it locally
+   *
+   * @param {object} passholder
+   * @param {string} identification
+   * @return {Function|promise}
+   */
+  service.update = function(passholder, identification) {
     var deferredUpdate = $q.defer();
     var passholderId;
 
     try {
-      passholderId = identifyPassHolder(passholderData);
+      passholderId = identifyPassHolder(passholder);
     } catch (e) {
       deferredUpdate.reject(e);
     }
 
-    var successUpdatingPassholder = function(updatedPassholder) {
-      service.updatePassholderInCache(updatedPassholder, identification, passholderId);
-      deferredUpdate.resolve(updatedPassholder);
+    var successUpdatingPassholder = function(passholder) {
+      service.updatePassholderInCache(passholder, identification, passholderId);
+      deferredUpdate.resolve(passholder);
     };
     var errorUpdatingPassholder = function(e) {
       deferredUpdate.reject(e);
     };
 
-    service.updatePassholderOnServer(passholderData, identification).then(successUpdatingPassholder, errorUpdatingPassholder);
+    service.updatePassholderOnServer(passholder, identification)
+      .then(successUpdatingPassholder, errorUpdatingPassholder);
 
     return deferredUpdate.promise;
   };
@@ -110,8 +118,8 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
   service.updatePassholderOnServer = function(passholderData, identification) {
     var deferred = $q.defer();
 
-    var successUpdatingPassholderOnServer = function(updatedPassholder) {
-      deferred.resolve(updatedPassholder);
+    var successUpdatingPassholderOnServer = function(response) {
+      deferred.resolve(response.data);
     };
     var errorUpdatingPassholderOnServer = function() {
       deferred.reject({

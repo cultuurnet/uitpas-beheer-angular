@@ -21,11 +21,6 @@ describe('Service: passholderService', function () {
     $scope = $rootScope;
   }));
 
-  afterEach(function() {
-    $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest();
-  });
-
   it('returns a passholder from the server and keeps it cached', function() {
     var uitpasNumber = 'this-is-a-number';
     var passholderData = {
@@ -68,6 +63,9 @@ describe('Service: passholderService', function () {
     // Request the passholder data and assert it again, but this time without
     // mocking an HTTP request as the passholder object should have been cached.
     passholderService.find(uitpasNumber).then(assertPassholder, failed);
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
   });
 
   it('throws an error when an invalid passholder is returned', function() {
@@ -91,6 +89,9 @@ describe('Service: passholderService', function () {
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
   });
 
   it('throws an error when the request returns an error', function() {
@@ -116,5 +117,39 @@ describe('Service: passholderService', function () {
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
   });
+
+  it('should persist and cache passholders', function (done) {
+    var passholderData = {
+      name: 'Foo',
+      points: 0,
+      uitIdUser: {
+        id: 'J0HND03'
+      },
+      dateOfBirth: new Date(1214524800000)
+    };
+    var deferredPassholder = $q.defer();
+    var passholderPromise = deferredPassholder.promise;
+
+    var assertCachedAndPersisted = function () {
+      expect(passholderService.updatePassholderOnServer)
+        .toHaveBeenCalledWith(passholderData, 'some-identification');
+
+      expect(passholderService.updatePassholderInCache)
+        .toHaveBeenCalledWith(passholderData, 'some-identification', 'J0HND03');
+
+      done();
+    };
+
+    spyOn(passholderService, 'updatePassholderOnServer').and.returnValue(passholderPromise);
+    spyOn(passholderService, 'updatePassholderInCache');
+
+    passholderService.update(passholderData, 'some-identification').then(assertCachedAndPersisted);
+
+    deferredPassholder.resolve(passholderData);
+    $scope.$digest();
+  })
 });

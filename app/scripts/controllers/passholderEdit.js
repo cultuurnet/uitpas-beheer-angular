@@ -38,6 +38,7 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   };
 
   controller.validateInszNumber = (function() {
+    // examples: 930518-223-61, 93051822361, 930518 223 61
     var regex = /([\d]{6})[-\s]?([\d]{3})[-\s]?([\d]{2}$)/;
 
     return {
