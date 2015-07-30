@@ -504,11 +504,41 @@ module.exports = function (grunt) {
       dev: {
         constants: loadConfig
       }
+    },
+
+    // Git hooks configuration
+    githooks: {
+      all: {
+        'pre-commit': {
+          taskNames: 'test',
+          args:  '-v --no-color'
+        }
+      },
+
+      // @see https://github.com/wecodemore/grunt-githooks/issues/8#issuecomment-34227306
+      options: {
+        // Use shell instead of node because GUIs like SourceTree don't see
+        // node
+        hashbang: '#!/bin/sh',
+        template: 'node_modules/grunt-githooks/templates/shell.hb',
+
+        // Make sure all required packages are present in the PATH variable,
+        // and then execute grunt with whatever taskName and args were
+        // configured above
+        command: 'PATH=' + process.env.PATH + ' grunt',
+
+        // We need these comments as the start and end markers, otherwise the
+        // default ones are used and those are JS comments that will cause the
+        // shell script to fail because it can't parse those
+        startMarker: '## GRUNT-GITHOOKS START',
+        endMarker: '## GRUNT-GITHOOKS END'
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-karma-coveralls');
   grunt.loadNpmTasks('grunt-ng-constant');
+  grunt.loadNpmTasks('grunt-githooks');
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -532,6 +562,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [
+    'jshint:all',
     'clean:server',
     'wiredep',
     'concurrent:test',
