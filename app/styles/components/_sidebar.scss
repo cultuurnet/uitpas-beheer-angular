@@ -80,8 +80,12 @@ a.toggle-down {
   }
   &-points .label {
     float: right;
-    font-size: 1.2em;
+    font-size: 36px;
+    padding: 3px 7px;
     font-weight: 700;
     @include label-variant($label-success-bg);
+  }
+  &-points h3 {
+    float: left;
   }
 }

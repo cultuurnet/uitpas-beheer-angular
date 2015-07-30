@@ -1,24 +1,29 @@
 <div>
-  <a class="back-nav" ui-sref="counter.main">Terug</a>
-</div>
-<div ng-repeat="cardSystem in pdc.passholder.cardSystemSpecific">
-  <label>NR.</label> {{cardSystem.currentCard.uitpasNumber}}
+  <a class="back-nav" ui-sref="counter.main">Terug</a><br />
+  <label>NR.</label> <span ng-bind="pdc.passholder.passNumber"></span>
 </div>
 <div class="passholder passholder-data">
   <h3>Gegevens</h3>
-  <div class="name">{{pdc.passholder.firstName}} {{pdc.passholder.name}}</div>
+  <img class="pull-right" style="width: 47px; height: 64px" ng-src="{{pdc.passholder.picture}}" />
+  <div class="name">{{pdc.passholder.name.first}} {{pdc.passholder.name.last}}</div>
   <div class="address">
-    {{pdc.passholder.street}} {{pdc.passholder.number}} {{pdc.passholder.box}}<br />
-    {{pdc.passholder.postalCode}} {{pdc.passholder.city}}
+    {{pdc.passholder.address.street}}<br />
+    {{pdc.passholder.address.postalCode}} {{pdc.passholder.address.city}}
   </div>
-  <div class="birthdate">{{pdc.passholder.dateOfBirth | date : 'dd/MM/yyyy'}}</div>
+  <div class="birthdate">{{pdc.passholder.birth.date | date : 'dd/MM/yyyy'}}</div>
   <div class="contact-data">
     <a href="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="true">Contactinformatie<i></i></a>
     <div class="panel panel-default panel-collapse collapse" id="contact-data-container">
       <div class="panel-body">
-        <div class="telephone" ng-show="pdc.passholder.telephone">{{pdc.passholder.telephone}}</div>
-        <div class="telephone" ng-show="pdc.passholder.gsm">{{pdc.passholder.gsm}}</div>
-        <div class="email" ng-show="pdc.passholder.email">{{pdc.passholder.email}}</div>
+        <div class="telephone" ng-show="pdc.passholder.contact.telephoneNumber">
+            <span ng-bind="pdc.passholder.contact.telephoneNumber"></span>
+        </div>
+        <div class="telephone" ng-show="pdc.passholder.contact.mobileNumber">
+            <span ng-bind="pdc.passholder.contact.mobileNumber"></span>
+        </div>
+        <div class="email" ng-show="pdc.passholder.contact.email">
+            <span ng-bind="pdc.passholder.contact.email"></span>
+        </div>
       </div>
     </div>
   </div>

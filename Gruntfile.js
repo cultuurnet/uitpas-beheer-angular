@@ -282,7 +282,7 @@ module.exports = function (grunt) {
             post: {
               js: [{
                 name: 'concat',
-                createConfig: function (context, block) {
+                createConfig: function (context) {
                   var generated = context.options.generated;
                   // Iterate all the files and customize where needed
                   generated.files.forEach(function (file) {
