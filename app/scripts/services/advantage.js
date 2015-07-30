@@ -68,7 +68,7 @@ function advantageService($q, $http, $cacheFactory, appConfig) {
         );
       };
 
-      advantageRequest.succes(successGettingAdvantage);
+      advantageRequest.success(successGettingAdvantage);
       advantageRequest.error(errorGettingAdvantage);
     }
 
