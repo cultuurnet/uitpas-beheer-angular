@@ -120,6 +120,35 @@ angular
           }, function() {});
         }]
       })
+      .state('counter.main.passholder.editContact', {
+        onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+          $modal.open({
+            animation: false,
+            templateUrl: 'views/modal-passholder-edit-contact.html',
+            params: {
+              'identification': null,
+              'passholder': null
+            },
+            resolve: {
+              passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+                if ($stateParams.passholder) {
+                  return $stateParams.passholder;
+                }
+                else {
+                  return passholderService.find($stateParams.identification);
+                }
+              }],
+              identification: ['$stateParams', function($stateParams) {
+                return $stateParams.identification;
+              }]
+            },
+            controller: 'PassholderEditController',
+            controllerAs: 'pec'
+          }).result.then(function() {
+              $state.go('^');
+            }, function() {});
+        }]
+      })
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html'
