@@ -15,33 +15,33 @@ describe('Service: passholderService', function () {
   var passholderService, $httpBackend, $q, $scope, Passholder;
 
   var identityData = {
-    "uitPas": {
-      "number": "0930000422202",
-      "kansenStatuut": false,
-      "status": "ACTIVE"
+    'uitPas': {
+      'number': '0930000422202',
+      'kansenStatuut': false,
+      'status': 'ACTIVE'
     },
-    "passHolder": {
-      "name": {
-        "first": "Cassandra Ama",
-        "last": "Boadu"
+    'passHolder': {
+      'name': {
+        'first': 'Cassandra Ama',
+        'last': 'Boadu'
       },
-      "address": {
-        "street": "Steenweg op Aalst 94",
-        "postalCode": "9308",
-        "city": "Aalst"
+      'address': {
+        'street': 'Steenweg op Aalst 94',
+        'postalCode': '9308',
+        'city': 'Aalst'
       },
-      "birth": {
-        "date": "2003-12-06",
-        "place": "Sint-Agatha-Berchem"
+      'birth': {
+        'date': '2003-12-06',
+        'place': 'Sint-Agatha-Berchem'
       },
-      "gender": "FEMALE",
-      "nationality": "Belg",
-      "privacy": {
-        "email": false,
-        "sms": false
+      'gender': 'FEMALE',
+      'nationality': 'Belg',
+      'privacy': {
+        'email': false,
+        'sms': false
       },
-      "inszNumber": "",
-      "points": 4
+      'inszNumber': '',
+      'points': 4
     }
   };
 
@@ -90,10 +90,6 @@ describe('Service: passholderService', function () {
 
   it('throws an error when an invalid passholder is returned', function() {
     var uitpasNumber = 'this-is-a-number';
-    var expectedPassholder = {
-      name: 'Foo',
-      points: 0
-    };
 
     // Mock an HTTP response.
     $httpBackend

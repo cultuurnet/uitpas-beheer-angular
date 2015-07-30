@@ -6,7 +6,7 @@ describe('Controller: PassholderSearchController', function () {
   beforeEach(module('uitpasbeheerApp'));
   beforeEach(module('uitpasbeheerAppViews'));
 
-  var rootScope, $controller, passholderService, sharedDataService, $state, $stateParams, $q;
+  var rootScope, $controller, passholderService, sharedDataService, $state, $stateParams, $q, PassholderSearchController;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($injector, _$rootScope_, _$q_) {
