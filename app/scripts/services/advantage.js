@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .service('advantageService', advantageService);
 
 /* @ngInject */
-function advantageService($q, $http, $cacheFactory, appConfig) {
+function advantageService($q, $http, $rootScope, $cacheFactory, appConfig) {
   var apiUrl = appConfig.apiUrl + 'passholders';
   var advantageCache = $cacheFactory('advantageCache');
 
@@ -46,7 +46,6 @@ function advantageService($q, $http, $cacheFactory, appConfig) {
   service.find = function(passholderIdentification, advantageId) {
     var deferredAdvantage = $q.defer();
 
-    console.log(advantageId);
     var advantageFromCache = advantageCache.get(advantageId);
 
     if (advantageFromCache) {
@@ -55,6 +54,7 @@ function advantageService($q, $http, $cacheFactory, appConfig) {
       var advantageRequest = $http.get(apiUrl + '/' + passholderIdentification + '/advantages/' + advantageId);
 
       var successGettingAdvantage = function(advantageData) {
+        advantageCache.put(advantageId, advantageData);
         deferredAdvantage.resolve(advantageData);
       };
 
@@ -73,5 +73,37 @@ function advantageService($q, $http, $cacheFactory, appConfig) {
     }
 
     return deferredAdvantage.promise;
+  };
+
+  service.exchange = function(advantageId, passNumber) {
+    var deferredExchange = $q.defer();
+
+    var exchangeData = {
+      id: advantageId
+    };
+
+    var exchangeRequest = $http.post(
+      apiUrl + '/' + passNumber + '/advantages/exchanges',
+      exchangeData,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+    var exchangeFailed = function (error) {
+      deferredExchange.reject(error);
+    };
+
+    var advantageExchanged = function (updatedAdvantage) {
+      $rootScope.$emit('advantageExchanged', updatedAdvantage);
+      deferredExchange.resolve(updatedAdvantage);
+    };
+
+    exchangeRequest
+      .success(advantageExchanged)
+      .error(exchangeFailed);
+
+    return deferredExchange.promise;
   };
 }

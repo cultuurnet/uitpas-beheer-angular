@@ -1,6 +1,10 @@
 <div ng-repeat="advantage in pac.advantages">
-  <h3>{{advantage.title}}</h3>
-  <div ng-show="advantage.points > 0" class="points">-{{advantage.points}}</div>
+  <h3 ng-bind="::advantage.title"></h3>
+  <div ng-show="advantage.points > 0" class="points">
+      -<span ng-bind="::advantage.points"></span>
+  </div>
   <div ng-show="advantage.points == 0" class="points">gratis</div>
-  <button ng-show="advantage.exchangeable" ng-click="pac.exchangeAdvantage(advantage.id)">Omruilen</button>
+  <button ng-show="advantage.exchangeable" ng-disabled="advantage.locked" ng-click="pac.exchangeAdvantage(advantage)">
+      Omruilen
+  </button>
 </div>

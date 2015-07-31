@@ -25,32 +25,32 @@ describe('Service: advantage', function () {
     var passholderId = '123-passholder';
     var advantagesData = [
       {
-        id: "points-promotion--678",
-        title: "Testvoordeel beperkt per user",
+        id: 'points-promotion--678',
+        title: 'Testvoordeel beperkt per user',
         points: 2,
         exchangeable: true
       },
       {
-        id: "points-promotion--677",
-        title: "Testvoordeel beperkt in stock",
+        id: 'points-promotion--677',
+        title: 'Testvoordeel beperkt in stock',
         points: 2,
         exchangeable: true
       },
       {
-        id: "points-promotion--676",
-        title: "Testvoordeel 2 punten onbeperkt",
+        id: 'points-promotion--676',
+        title: 'Testvoordeel 2 punten onbeperkt',
         points: 2,
         exchangeable: true
       },
       {
-        id: "points-promotion--193",
-        title: "Gratis teaserticket en een 2de ticket voor de helft van de prijs",
+        id: 'points-promotion--193',
+        title: 'Gratis teaserticket en een 2de ticket voor de helft van de prijs',
         points: 10,
         exchangeable: true
       },
       {
-        id: "welcome--5",
-        title: "Theatercheque € 2,5 in cc De Werf",
+        id: 'welcome--5',
+        title: 'Theatercheque € 2,5 in cc De Werf',
         points: 0,
         exchangeable: true
       }
