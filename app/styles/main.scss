@@ -1,5 +1,5 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 
 @import "_bootstrap-custom.scss";
 
@@ -9,14 +9,16 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 // Molecules
 @import "components/login";
+@import "components/counters";
 
 // Organisms
 @import "components/main";
 @import "components/layout";
 @import "components/header";
+@import "components/footer";
 @import "components/navbar";
 @import "components/sidebar";
-@import "components/footer";
+@import "components/forms";
 
 // Print
 @import "core/print";

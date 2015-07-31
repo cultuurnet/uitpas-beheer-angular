@@ -62,7 +62,7 @@ module.exports = function (grunt) {
       },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server', 'postcss']
+        tasks: ['compass:server', 'postcss', 'modernizr']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -279,7 +279,27 @@ module.exports = function (grunt) {
               js: ['concat', 'uglifyjs'],
               css: ['cssmin']
             },
-            post: {}
+            post: {
+              js: [{
+                name: 'concat',
+                createConfig: function (context) {
+                  var generated = context.options.generated;
+                  // Iterate all the files and customize where needed
+                  generated.files.forEach(function (file) {
+                    var customizedSrc = file.src.map(function(srcFile) {
+                      // use a custom source for modernizr
+                      if(srcFile === 'bower_components/modernizr/modernizr.js') {
+                        srcFile = '.tmp/scripts/modernizr-custom.js';
+                      }
+
+                      return srcFile;
+                    });
+
+                    file.src = customizedSrc;
+                  });
+                }
+              }]
+            }
           }
         }
       }
@@ -371,6 +391,17 @@ module.exports = function (grunt) {
           src: ['*.html', 'views/{,*/}*.html'],
           dest: '<%= yeoman.dist %>'
         }]
+      }
+    },
+
+    // Run modernizr
+    modernizr: {
+      dist: {
+        // [REQUIRED] Path to the build you're using for development. 
+        'devFile' : 'node_modules/grunt-modernizr/lib/modernizr-dev.js',
+        // Path to save out the built file. 
+        'outputFile' : '.tmp/scripts/modernizr-custom.js',
+        uglify: false
       }
     },
 
@@ -473,11 +504,41 @@ module.exports = function (grunt) {
       dev: {
         constants: loadConfig
       }
+    },
+
+    // Git hooks configuration
+    githooks: {
+      all: {
+        'pre-commit': {
+          taskNames: 'test',
+          args:  '-v --no-color'
+        }
+      },
+
+      // @see https://github.com/wecodemore/grunt-githooks/issues/8#issuecomment-34227306
+      options: {
+        // Use shell instead of node because GUIs like SourceTree don't see
+        // node
+        hashbang: '#!/bin/sh',
+        template: 'node_modules/grunt-githooks/templates/shell.hb',
+
+        // Make sure all required packages are present in the PATH variable,
+        // and then execute grunt with whatever taskName and args were
+        // configured above
+        command: 'PATH=' + process.env.PATH + ' grunt',
+
+        // We need these comments as the start and end markers, otherwise the
+        // default ones are used and those are JS comments that will cause the
+        // shell script to fail because it can't parse those
+        startMarker: '## GRUNT-GITHOOKS START',
+        endMarker: '## GRUNT-GITHOOKS END'
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-karma-coveralls');
   grunt.loadNpmTasks('grunt-ng-constant');
+  grunt.loadNpmTasks('grunt-githooks');
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -501,11 +562,11 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [
+    'jshint:all',
     'clean:server',
     'wiredep',
     'concurrent:test',
     'ngconstant:dev',
-    'postcss',
     'connect:test',
     'karma'
   ]);
@@ -516,6 +577,7 @@ module.exports = function (grunt) {
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
+    'modernizr:dist',
     'postcss',
     'concat',
     'ngAnnotate',

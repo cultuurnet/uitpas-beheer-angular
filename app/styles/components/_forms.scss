@@ -1,0 +1,36 @@
+// Forms
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  @include transitions((background, border));
+  width: 100%;
+  border: 1px solid $gray-25;
+  padding: $padding-base-vertical $padding-base-horizontal;
+  &:focus {
+    outline: none;
+    border-color: darken($gray-25, 7%);
+  }
+  &.ng-dirty.ng-invalid {
+    border-color: $state-danger-border;
+    background-color: $state-danger-bg;
+  }
+}
+
+label {
+  margin-bottom: 0;
+}
+
+form label {
+  margin-bottom: $rh-xsm;
+}
+
+label em {
+  display: block;
+  font-weight: 400;
+  color: $gray-50;
+}
+
+.btn {
+  @include transitions((color, background, border));
+}

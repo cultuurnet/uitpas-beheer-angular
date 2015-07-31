@@ -1,32 +1,44 @@
-<h1>Welkom <span ng-bind="::app.user.nick"></span>,</h1>
-<h2 ng-if="::counters.total">Selecteer je balie</h2>
+<div class="site-login">
+  <div class="site-login__logo"><span class="hidden">UITPAS Balie</span></div>
 
-<div ng-if="::counters.lastActive">
-  <h3>Laatst gebruikt</h3>
-  <ul>
-    <li>
-      <a href="#" ng-click="counters.setActiveCounter(counters.lastActive)" ng-bind="::counters.lastActive.name"></a>
-    </li>
-  </ul>
-</div>
+  <h1 class="site-login__title"><b>Welkom <span ng-bind="::app.user.nick"></span></b>,</h1>
+  <h2>Selecteer je balie</h2>
+  <div ng-if="::counters.total">
+    <div class="panel panel-default">
+      <div class="panel-body">
 
-<div ng-if="::counters.list.length">
-  <h3 ng-if="::counters.lastActive">Andere balies</h3>
-  <ul ng-repeat="counter in ::counters.list">
-    <li>
-      <a href="#" ng-click="counters.setActiveCounter(counter)" ng-bind="::counter.name"></a>
-    </li>
-  </ul>
-</div>
+        <div ng-if="::counters.lastActive">
+          <h3 class="panel__title">Laatst gebruikt</h3>
+          <ul class="list-unstyled">
+            <li>
+              <a href="#" ng-click="counters.setActiveCounter(counters.lastActive)" ng-bind="::counters.lastActive.name"></a>
+            </li>
+          </ul>
+        </div>
 
-<div ng-if="::!counters.total">
-  <p>Je bent nog geen lid van een UiTPAS-balie. Om deze applicatie te kunnen gebruiken, moet je lid zijn van een UiTPAS-balie.</p>
-  <p>Stuur je e-mailadres en de naam van je organisatie naar de verantwoordelijke.</p>
-  <ul ng-repeat="contact in ::counters.contacts">
-    <li>
-      <em ng-bind="::contact.name"></em>
-      <span ng-bind="::contact.telephone"></span>
-      <a ng-href="mailto:{{ ::contact.email }}" ng-bind="::contact.email"></a>
-    </li>
-  </ul>
+        <div ng-if="::counters.list.length">
+          <h3 class="panel__title" ng-if="::counters.lastActive">Andere balies</h3>
+          <ul class="list-unstyled" ng-repeat="counter in ::counters.list">
+            <li>
+              <a href="#" ng-click="counters.setActiveCounter(counter)" ng-bind="::counter.name"></a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="site-login__intro" ng-if="::!counters.total">
+    <p>Je bent nog geen lid van een UiTPAS-balie. Om deze applicatie te kunnen gebruiken, moet je lid zijn van een UiTPAS-balie.</p>
+    <p>Stuur je e-mailadres en de naam van je organisatie naar de verantwoordelijke.</p>
+    <ul class="list-unstyled" ng-repeat="contact in ::counters.contacts">
+      <li class="vcard">
+        <span class="org" ng-bind="::contact.name"></span>
+        <span class="tel" ng-bind="::contact.telephone"></span>
+        <span class="email"><a ng-href="mailto:{{ ::contact.email }}" ng-bind="::contact.email"></a></span>
+      </li>
+    </ul>
+  </div>
 </div>

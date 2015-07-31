@@ -11,7 +11,17 @@ p {
   margin: 0 0 $rh-sml;
 }
 
+ol,
+ul {
+  margin: $rh-sml 0;
+}
+
 // Links
 a {
   @include transitions((color, background, border));
+  cursor: pointer;
+  text-decoration: underline;
+  &:hover {
+    text-decoration: none;
+  }
 }
