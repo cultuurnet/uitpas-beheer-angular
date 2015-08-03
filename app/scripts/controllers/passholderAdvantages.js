@@ -24,10 +24,11 @@ function passholderAdvantageController(passholder, advantages, advantageService)
    * @param {object} advantage
    */
   controller.exchangeAdvantage = function(advantage) {
-    advantage.locked = true;
+    advantage.exchanging = true;
 
     function unlockAdvantage() {
-      advantage.locked = false;
+      advantage.exchanging = false;
+      advantage.confirmingExchange = false;
     }
 
     advantageService
@@ -35,12 +36,20 @@ function passholderAdvantageController(passholder, advantages, advantageService)
       .then(updateExchangedAdvantage, unlockAdvantage);
   };
 
+  controller.initiateExchange = function (advantage) {
+    advantage.confirmingExchange = true;
+  };
+
+  controller.cancelExchange = function (advantage) {
+    advantage.confirmingExchange = false;
+  };
+
   function updateExchangedAdvantage(exchangedAdvantage) {
     controller.advantages = controller.advantages.map(function (advantage) {
       if (advantage.id === exchangedAdvantage.id) {
         advantage = exchangedAdvantage;
         if (advantage.exchangeable) {
-          advantage.locked = false;
+          advantage.exchanging = false;
         }
       }
       return advantage;

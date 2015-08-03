@@ -4,7 +4,18 @@
       -<span ng-bind="::advantage.points"></span>
   </div>
   <div ng-show="advantage.points == 0" class="points">gratis</div>
-  <button ng-show="advantage.exchangeable" ng-disabled="advantage.locked" ng-click="pac.exchangeAdvantage(advantage)">
+
+  <button ng-show="advantage.exchangeable && !advantage.confirmingExchange"
+          ng-click="pac.initiateExchange(advantage)">
       Omruilen
   </button>
+
+  <div ng-show="advantage.confirmingExchange && !advantage.exchanging">
+    <button ng-click="pac.exchangeAdvantage(advantage)" ng-disabled="advantage.locked">Bevestigen</button>
+    <a ng-click="pac.cancelExchange(advantage)">Annuleren</a>
+  </div>
+
+  <div ng-show="advantage.exchanging">
+    <span>exchanging...</span>
+  </div>
 </div>

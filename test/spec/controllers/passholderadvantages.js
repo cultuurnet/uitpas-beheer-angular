@@ -30,7 +30,7 @@ describe('Controller: PassholderAdvantagesController', function () {
 
   it('should lock an advantage before exchanging it', function () {
     advantageController.exchangeAdvantage(advantage);
-    expect(advantageController.advantages[0].locked).toBeTruthy();
+    expect(advantageController.advantages[0].exchanging).toBeTruthy();
   });
 
   it('should unlock and advantage after it failed to exchange', function () {
@@ -41,7 +41,8 @@ describe('Controller: PassholderAdvantagesController', function () {
     deferredExchange.reject();
     scope.$digest();
 
-    expect(advantageController.advantages[0].locked).toBeFalsy();
+    expect(advantageController.advantages[0].exchanging).toBeFalsy();
+    expect(advantageController.advantages[0].confirmingExchange).toBeFalsy();
   });
 
   it('should update and advantage after it is exchanged', function () {
@@ -61,4 +62,8 @@ describe('Controller: PassholderAdvantagesController', function () {
     expect(advantageController.advantages[0]).toEqual(updatedAdvantage);
   });
 
+  it('should confirm advantage exchanges', function () {
+    advantageController.initiateExchange(advantage);
+    expect(advantageController.advantages[0].confirmingExchange).toBeTruthy();
+  });
 });

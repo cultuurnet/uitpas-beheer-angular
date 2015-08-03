@@ -22,8 +22,8 @@ function ubrPassholderPoints ($rootScope, $animate) {
     function bouncePoints() {
       $animate.removeClass(element, 'animated pulse');
       $animate.addClass(element, 'animated pulse').then(function(){
-          $animate.removeClass(element, 'animated pulse');
-        });
+        $animate.removeClass(element, 'animated pulse');
+      });
     }
 
     $rootScope.$on('advantageExchanged', bouncePoints);
