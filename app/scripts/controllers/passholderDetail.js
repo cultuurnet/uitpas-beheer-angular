@@ -4,7 +4,7 @@
  * @ngdoc function
  * @name uitpasbeheerApp.controller:PassholderDetailController
  * @description
- * # PassholderController
+ * # PassholderDetailController
  * Controller of the uitpasbeheerApp
  */
 angular
@@ -16,8 +16,7 @@ function PassholderDetailController (passholder, $rootScope) {
   /*jshint validthis: true */
   var controller = this;
 
-  // Set default parameters.
-  controller.passholder = passholder;
+  controller.passholder = angular.copy(passholder);
 
   function updatePoints(event, exchangedAdvantage) {
     var newPointCount = controller.passholder.points - exchangedAdvantage.points;
