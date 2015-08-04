@@ -27,14 +27,20 @@ function passholderFactory() {
       this.address = jsonPassholder.address;
       this.birth = {
         date: new Date(jsonPassholder.birth.date),
-        place: jsonPassholder.birth.date
+        place: jsonPassholder.birth.place
       };
-      this.inszNumber = jsonPassholder.inszNumber;
-      this.picture = 'data:image/jpeg;base64, ' + jsonPassholder.picture;
+      if (jsonPassholder.inszNumber) {
+        this.inszNumber = jsonPassholder.inszNumber;
+      }
+      if (jsonPassholder.picture) {
+        this.picture = 'data:image/jpeg;base64, ' + jsonPassholder.picture;
+      }
       this.gender = jsonPassholder.gender;
       this.nationality = jsonPassholder.nationality;
       this.privacy = jsonPassholder.privacy;
-      this.contact = jsonPassholder.contact;
+      if (jsonPassholder.contact) {
+        this.contact = jsonPassholder.contact;
+      }
       this.points = jsonPassholder.points;
     }
   };
