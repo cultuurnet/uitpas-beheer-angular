@@ -1,4 +1,67 @@
 $bootstrap-sass-asset-helper: false !default;
+
+//
+// Custom Variables
+// --------------------------------------------------
+
+// Custom Grid
+// ----
+//
+// columns          - The total amount of columns - defined in bootstrap variables at top
+// gutter           - The amount of space between two columns - defined in bootstrap variables at top
+// container-*      - The total width of the container for large / medium / small
+$grid-container-width: 100%;
+
+
+// Custom Breakpoints
+// -----------
+$breakpoints: (
+  xxs: 320px,
+  xsm: 440px,
+  sml: 660px,
+  med: 820px,
+  lrg: 940px,
+  xlr: 1200px
+);
+
+
+// Custom Vertical Rythm
+// -----------
+$line-height-base-value: 24px;
+
+$rh-xxs: $line-height-base-value * .25;
+$rh-xsm: $line-height-base-value * .5;
+$rh-sml: $line-height-base-value;
+$rh-med: $line-height-base-value * 1.5;
+$rh-lrg: $line-height-base-value * 2;
+$rh-xlr: $line-height-base-value * 2.5;
+
+$rhythm: (
+  xxs: $rh-xxs,
+  xsm: $rh-xsm,
+  sml: $rh-sml,
+  med: $rh-med,
+  lrg: $rh-lrg,
+  xlr: $rh-xlr
+);
+
+
+// Custom Transitions
+// -----------
+//
+$transition-duration-base: 150ms;
+$transition-easing-base: ease-in-out;
+
+
+// Custom Border radius
+// -------------
+//
+$border-radius-sml: 2px;
+$border-radius-med: 3px;
+$border-radius-lrg: 5px;
+
+
+
 //
 // Variables
 // --------------------------------------------------
@@ -90,7 +153,7 @@ $line-height-computed:    floor(($font-size-base * $line-height-base)) !default;
 
 //** By default, this inherits from the `<body>`.
 $headings-font-family:    inherit !default;
-$headings-font-weight:    500 !default;
+$headings-font-weight:    700 !default;
 $headings-line-height:    1.1 !default;
 $headings-color:          inherit !default;
 
@@ -115,7 +178,7 @@ $icon-font-svg-id:        "glyphicons_halflingsregular" !default;
 //
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
-$padding-base-vertical:     10px !default;
+$padding-base-vertical:     7px !default;
 $padding-base-horizontal:   20px !default;
 
 $padding-large-vertical:    15px !default;
@@ -130,8 +193,8 @@ $padding-xs-horizontal:     5px !default;
 $line-height-large:         1.3333333 !default; // extra decimals for Win 8.1 Chrome
 $line-height-small:         1.2 !default;
 
-$border-radius-base:        2px !default;
-$border-radius-large:       7px !default;
+$border-radius-base:        0 !default;
+$border-radius-large:       3px !default;
 $border-radius-small:       0 !default;
 
 //** Global color for active items (e.g., navs or dropdowns).
@@ -244,7 +307,7 @@ $input-height-large:             (ceil($font-size-large * $line-height-large) + 
 $input-height-small:             (floor($font-size-small * $line-height-small) + ($padding-small-vertical * 2) + 2) !default;
 
 //** `.form-group` margin
-$form-group-margin-bottom:       15px !default;
+$form-group-margin-bottom:       $rh-xsm !default;
 
 $legend-color:                   $gray-dark !default;
 $legend-border-color:            #e5e5e5 !default;
@@ -355,7 +418,7 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 //** Number of columns in the grid.
 $grid-columns:              12 !default;
 //** Padding between columns. Gets divided in half for the left and right.
-$grid-gutter-width:         30px !default;
+$grid-gutter-width:         40px !default;
 // Navbar collapse
 //** Point at which the navbar becomes uncollapsed.
 $grid-float-breakpoint:     $screen-sm-min !default;
@@ -901,62 +964,3 @@ $hr-border:                   $gray-lighter !default;
 // Navbar
 $navbar-inverse-bg: $blue-75;
 $navbar-inverse-color: $gray-0;
-
-
-// Custom Grid
-// ----
-//
-// columns          - The total amount of columns
-// gutter           - The amount of space between two columns
-// container-*      - The total width of the container for large / medium / small
-$grid-gutter-width: 20px;
-$grid-columns: 12;
-$grid-container-width: 100%;
-
-
-// Breakpoints
-// -----------
-$breakpoints: (
-  xxs: 320px,
-  xsm: 440px,
-  sml: 660px,
-  med: 820px,
-  lrg: 940px,
-  xlr: 1200px
-);
-
-
-// Vertical Rythm
-// -----------
-$line-height-base-value: 24px;
-
-$rh-xxs: $line-height-base-value * .25;
-$rh-xsm: $line-height-base-value * .5;
-$rh-sml: $line-height-base-value;
-$rh-med: $line-height-base-value * 1.5;
-$rh-lrg: $line-height-base-value * 2;
-$rh-xlr: $line-height-base-value * 2.5;
-
-$rhythm: (
-  xxs: $rh-xxs,
-  xsm: $rh-xsm,
-  sml: $rh-sml,
-  med: $rh-med,
-  lrg: $rh-lrg,
-  xlr: $rh-xlr
-);
-
-
-// Transitions
-// -----------
-//
-$transition-duration-base: 150ms;
-$transition-easing-base: ease-in-out;
-
-
-// Border radius
-// -------------
-//
-$border-radius-sml: 2px;
-$border-radius-med: 3px;
-$border-radius-lrg: 5px;

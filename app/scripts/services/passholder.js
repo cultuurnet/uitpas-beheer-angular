@@ -12,8 +12,8 @@ angular
   .service('passholderService', passholderService);
 
 /* @ngInject */
-function passholderService($q, $http, $cacheFactory, appConfig) {
-  var apiUrl = appConfig.apiUrl + 'passholders';
+function passholderService($q, $http, $cacheFactory, appConfig, Pass) {
+  var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
 
@@ -35,24 +35,18 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
     if (passholderId) {
       deferredPassholder.resolve(passholderCache.get(passholderId));
     } else {
-      var passholderRequest = $http.get(apiUrl,
+      var passholderRequest = $http.get(apiUrl + 'identities/' + identification,
         {
-          withCredentials: true,
-          params: {
-            identification: identification
-          }
+          withCredentials: true
         });
 
-      var cacheAndResolvePassHolder = function (passholderData) {
-        try {
-          passholderId = identifyPassHolder(passholderData);
-        } catch (e) {
-          deferredPassholder.reject(e);
-        }
+      var cacheAndResolvePassHolder = function (passData) {
+        var pass = new Pass(passData);
+        var passholder = pass.passholder;
 
-        passholderIdCache.put(identification, passholderId);
-        passholderCache.put(passholderId, passholderData);
-        deferredPassholder.resolve(passholderData);
+        passholderIdCache.put(identification, pass.number);
+        passholderCache.put(pass.number, passholder);
+        deferredPassholder.resolve(passholder);
       };
 
       var rejectPassHolder = function () {
@@ -71,18 +65,4 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
 
     return deferredPassholder.promise;
   };
-
-  /**
-   * Checks passholder data for a unique identifier
-   *
-   * @param {object} passholderData
-   * @return {string}
-   */
-  function identifyPassHolder(passholderData) {
-    if (((passholderData || {}).uitIdUser || {}).id) {
-      return passholderData.uitIdUser.id;
-    } else {
-      throw 'can\'t identify passholder data returned from server';
-    }
-  }
 }
