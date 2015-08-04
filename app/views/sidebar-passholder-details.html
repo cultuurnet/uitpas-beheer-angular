@@ -4,7 +4,8 @@
 </div>
 <div class="passholder passholder-data">
   <h3>Gegevens</h3>
-  <img class="pull-right" style="width: 47px; height: 64px" ng-src="{{pdc.passholder.picture}}" />
+  <img ng-if="pdc.passholder.picture" class="pull-right" style="width: 47px; height: 64px"
+       ng-src="{{pdc.passholder.picture}}" />
   <div class="name">{{pdc.passholder.name.first}} {{pdc.passholder.name.middle}} {{pdc.passholder.name.last}}</div>
   <div class="address">
     {{pdc.passholder.address.street}}<br />
