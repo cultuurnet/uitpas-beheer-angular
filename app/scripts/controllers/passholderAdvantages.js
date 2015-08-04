@@ -33,7 +33,7 @@ function passholderAdvantageController(passholder, advantages, advantageService)
 
     advantageService
       .exchange(advantage.id, passholder.passNumber)
-      .then(updateExchangedAdvantage, unlockAdvantage);
+      .then(updateAdvantages, unlockAdvantage);
   };
 
   controller.initiateExchange = function (advantage) {
@@ -44,14 +44,23 @@ function passholderAdvantageController(passholder, advantages, advantageService)
     advantage.confirmingExchange = false;
   };
 
-  function updateExchangedAdvantage(exchangedAdvantage) {
+  function updateAdvantages(exchangedAdvantage) {
+    controller.passholder.points = controller.passholder.points - exchangedAdvantage.points;
     controller.advantages = controller.advantages.map(function (advantage) {
+
       if (advantage.id === exchangedAdvantage.id) {
         advantage = exchangedAdvantage;
         if (advantage.exchangeable) {
           advantage.exchanging = false;
         }
       }
+
+     if (advantage.points > controller.passholder.points) {
+       advantage.insufficientPoints = true;
+     } else {
+       advantage.insufficientPoints = false;
+     }
+
       return advantage;
     });
   }
