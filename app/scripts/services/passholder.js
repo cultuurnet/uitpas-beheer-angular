@@ -12,8 +12,8 @@ angular
   .service('passholderService', passholderService);
 
 /* @ngInject */
-function passholderService($q, $http, $cacheFactory, appConfig) {
-  var apiUrl = appConfig.apiUrl + 'passholders';
+function passholderService($q, $http, $cacheFactory, appConfig, Pass) {
+  var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
 
@@ -35,18 +35,17 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
     if (passholderId) {
       deferredPassholder.resolve(passholderCache.get(passholderId));
     } else {
-      var passholderRequest = $http.get(apiUrl + '/' + identification);
+      var passholderRequest = $http.get(apiUrl + 'identities/' + identification,
+        {
+          withCredentials: true
+        });
 
-      var cacheAndResolvePassHolder = function (passholderData) {
-        try {
-          passholderId = identifyPassHolder(passholderData);
-        } catch (e) {
-          deferredPassholder.reject(e);
-        }
-
-        passholderData.dateOfBirth = new Date(passholderData.dateOfBirth * 1000);
-        service.updatePassholderInCache(passholderData, identification, passholderId);
-        deferredPassholder.resolve(passholderData);
+      var cacheAndResolvePassHolder = function (passData) {
+        var pass = new Pass(passData);
+        var passholder = pass.passholder;
+        passholderIdCache.put(identification, pass.number);
+        passholderCache.put(pass.number, passholder);
+        deferredPassholder.resolve(passholder);
       };
 
       var rejectPassHolder = function () {
@@ -64,89 +63,5 @@ function passholderService($q, $http, $cacheFactory, appConfig) {
     }
 
     return deferredPassholder.promise;
-  };
-
-  /**
-   * Update the information of a passholder by persisting it on the server and caching it locally
-   *
-   * @param {object} passholder
-   * @param {string} identification
-   * @return {Function|promise}
-   */
-  service.update = function(passholder, identification) {
-    var deferredUpdate = $q.defer();
-    var passholderId;
-
-    try {
-      passholderId = identifyPassHolder(passholder);
-    } catch (e) {
-      deferredUpdate.reject(e);
-    }
-
-    var successUpdatingPassholder = function(passholder) {
-      service.updatePassholderInCache(passholder, identification, passholderId);
-      deferredUpdate.resolve(passholder);
-    };
-    var errorUpdatingPassholder = function(e) {
-      deferredUpdate.reject(e);
-    };
-
-    service.updatePassholderOnServer(passholder, identification)
-      .then(successUpdatingPassholder, errorUpdatingPassholder);
-
-    return deferredUpdate.promise;
-  };
-
-  /**
-   * Checks passholder data for a unique identifier
-   *
-   * @param {object} passholderData
-   * @return {string}
-   */
-  function identifyPassHolder(passholderData) {
-    if (((passholderData || {}).uitIdUser || {}).id) {
-      return passholderData.uitIdUser.id;
-    } else {
-      throw {
-        code: 'PASSHOLDER_NOT_IDENTIFIED',
-        title: 'Not identified',
-        message: 'Unable to identify the given passholder data'
-      };
-    }
-  }
-
-  service.updatePassholderOnServer = function(passholderData, identification) {
-    var deferred = $q.defer();
-
-    var successUpdatingPassholderOnServer = function(response) {
-      deferred.resolve(response.data);
-    };
-    var errorUpdatingPassholderOnServer = function() {
-      deferred.reject({
-        code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER',
-        title: 'Passholder not updated on server',
-        message: 'The passholder could not be updated on the server.'
-      });
-    };
-
-    $http
-      .post(
-        apiUrl + '/' + identification,
-        passholderData,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      .success(successUpdatingPassholderOnServer)
-      .error(errorUpdatingPassholderOnServer);
-
-    return deferred.promise;
-  };
-
-  service.updatePassholderInCache = function(passholderData, identification, passholderId) {
-    passholderIdCache.put(identification, passholderId);
-    passholderCache.put(passholderId, passholderData);
   };
 }

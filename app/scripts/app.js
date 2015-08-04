@@ -66,19 +66,28 @@ angular
         url: 'passholder/:identification',
         views: {
           'content@counter': {
-            templateUrl: 'views/sidebar-passholder-details.html',
-            controller: 'PassholderDetailController',
-            controllerAs: 'pdc'
+            templateUrl: 'views/split-content.html'
           },
           'sidebar@counter': {
             templateUrl: 'views/sidebar-passholder-details.html',
             controller: 'PassholderDetailController',
             controllerAs: 'pdc'
+          },
+          'top@counter.main.passholder': {
+            templateUrl: 'views/content-passholder-activities.html',
+            controller: 'PassholderDetailController',
+            controllerAs: 'pdc'
+          },
+          'bottom@counter.main.passholder': {
+            templateUrl: 'views/content-passholder-advantages.html',
+            controller: 'PassholderAdvantageController',
+            controllerAs: 'pac'
           }
         },
         params: {
           'identification': null,
-          'passholder': null
+          'passholder': null,
+          'advantages': null
         },
         resolve: {
           passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
@@ -88,6 +97,9 @@ angular
             else {
               return passholderService.find($stateParams.identification);
             }
+          }],
+          advantages: ['advantageService', '$stateParams', function(advantageService, $stateParams) {
+            return advantageService.list($stateParams.identification);
           }]
         }
       })

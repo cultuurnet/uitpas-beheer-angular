@@ -62,7 +62,7 @@ module.exports = function (grunt) {
       },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server', 'postcss']
+        tasks: ['compass:server', 'postcss', 'modernizr']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -279,7 +279,27 @@ module.exports = function (grunt) {
               js: ['concat', 'uglifyjs'],
               css: ['cssmin']
             },
-            post: {}
+            post: {
+              js: [{
+                name: 'concat',
+                createConfig: function (context) {
+                  var generated = context.options.generated;
+                  // Iterate all the files and customize where needed
+                  generated.files.forEach(function (file) {
+                    var customizedSrc = file.src.map(function(srcFile) {
+                      // use a custom source for modernizr
+                      if(srcFile === 'bower_components/modernizr/modernizr.js') {
+                        srcFile = '.tmp/scripts/modernizr-custom.js';
+                      }
+
+                      return srcFile;
+                    });
+
+                    file.src = customizedSrc;
+                  });
+                }
+              }]
+            }
           }
         }
       }
@@ -371,6 +391,17 @@ module.exports = function (grunt) {
           src: ['*.html', 'views/{,*/}*.html'],
           dest: '<%= yeoman.dist %>'
         }]
+      }
+    },
+
+    // Run modernizr
+    modernizr: {
+      dist: {
+        // [REQUIRED] Path to the build you're using for development. 
+        'devFile' : 'node_modules/grunt-modernizr/lib/modernizr-dev.js',
+        // Path to save out the built file. 
+        'outputFile' : '.tmp/scripts/modernizr-custom.js',
+        uglify: false
       }
     },
 
@@ -536,7 +567,6 @@ module.exports = function (grunt) {
     'wiredep',
     'concurrent:test',
     'ngconstant:dev',
-    'postcss',
     'connect:test',
     'karma'
   ]);
@@ -547,6 +577,7 @@ module.exports = function (grunt) {
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
+    'modernizr:dist',
     'postcss',
     'concat',
     'ngAnnotate',

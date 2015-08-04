@@ -10,15 +10,19 @@ textarea {
   padding: $padding-base-vertical $padding-base-horizontal;
   &:focus {
     outline: none;
-    border-color: $gray-50;
+    border-color: darken($gray-25, 7%);
   }
-  &.ng-invalid {
+  &.ng-dirty.ng-invalid {
     border-color: $state-danger-border;
     background-color: lighten($state-danger-bg, 7%);
   }
 }
 
 label {
+  margin-bottom: 0;
+}
+
+form label {
   margin-bottom: $rh-xsm;
 }
 

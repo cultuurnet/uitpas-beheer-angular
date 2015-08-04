@@ -5,13 +5,14 @@ describe('Controller: CountersController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var CountersController, $scope, $location, counterService, $q;
+  var CountersController, $scope, $location, counterService, $q, $state;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _$q_, _counterService_) {
+  beforeEach(inject(function ($controller, $rootScope, _$q_, _counterService_, _$state_) {
     counterService = _counterService_;
     $location = jasmine.createSpyObj('$location', ['path']);
     $scope = $rootScope.$new();
+    $state = _$state_;
     $q = _$q_;
     CountersController = $controller('CountersController', {
       $location: $location,
@@ -72,11 +73,12 @@ describe('Controller: CountersController', function () {
         activeCounterPromise = deferredActivation.promise;
 
     var counterActivated = function () {
-      expect($location.path).toHaveBeenCalledWith('/');
+      expect($state.go).toHaveBeenCalledWith('counter.main');
       done();
     };
 
     spyOn(counterService, 'setActive').and.returnValue(activeCounterPromise);
+    spyOn($state, 'go');
 
     CountersController.setActiveCounter(counterToActivate);
     expect(counterService.setActive).toHaveBeenCalledWith(counterToActivate);

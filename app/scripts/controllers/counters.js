@@ -12,7 +12,7 @@ angular
   .controller('CountersController', countersController);
 
 /* @ngInject */
-function countersController($location, counterService, list, lastActiveId) {
+function countersController($state, counterService, list, lastActiveId) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -35,7 +35,7 @@ function countersController($location, counterService, list, lastActiveId) {
 
   controller.setActiveCounter = function(activeCounter) {
     counterService.setActive(activeCounter).then(function() {
-      $location.path('/');
+      $state.go('counter.main');
     });
   };
 

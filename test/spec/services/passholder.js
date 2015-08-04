@@ -12,38 +12,56 @@ describe('Service: passholderService', function () {
   }));
 
   // Instantiate service.
-  var passholderService, $httpBackend, $q, $scope;
+  var passholderService, $httpBackend, $q, $scope, Passholder;
+
+  var identityData = {
+    'uitPas': {
+      'number': '0930000422202',
+      'kansenStatuut': false,
+      'status': 'ACTIVE'
+    },
+    'passHolder': {
+      'name': {
+        'first': 'Cassandra Ama',
+        'last': 'Boadu'
+      },
+      'address': {
+        'street': 'Steenweg op Aalst 94',
+        'postalCode': '9308',
+        'city': 'Aalst'
+      },
+      'birth': {
+        'date': '2003-12-06',
+        'place': 'Sint-Agatha-Berchem'
+      },
+      'gender': 'FEMALE',
+      'nationality': 'Belg',
+      'privacy': {
+        'email': false,
+        'sms': false
+      },
+      'inszNumber': '',
+      'points': 4
+    }
+  };
 
   beforeEach(inject(function ($injector, $rootScope) {
     $httpBackend = $injector.get('$httpBackend');
     passholderService = $injector.get('passholderService');
     $q = $injector.get('$q');
     $scope = $rootScope;
+    Passholder = $injector.get('Passholder');
   }));
 
   it('returns a passholder from the server and keeps it cached', function() {
-    var uitpasNumber = 'this-is-a-number';
-    var passholderData = {
-      name: 'Foo',
-      points: 0,
-      uitIdUser: {
-        id: 'passholder-id-123'
-      },
-      dateOfBirth: 1214524800
-    };
-    var expectedPassholder = {
-      name: 'Foo',
-      points: 0,
-      uitIdUser: {
-        id: 'passholder-id-123'
-      },
-      dateOfBirth: new Date(1214524800000)
-    };
+    var uitpasNumber = '0930000422202';
+    var expectedPassholder = new Passholder(identityData.passHolder);
+    expectedPassholder.passNumber = uitpasNumber;
 
     // Mock an HTTP response.
     $httpBackend
-      .expectGET(apiUrl + 'passholders/' + uitpasNumber)
-      .respond(200, JSON.stringify(passholderData));
+      .expectGET(apiUrl + 'identities/' + uitpasNumber)
+      .respond(200, JSON.stringify(identityData));
 
     // Assertion method.
     var assertPassholder = function(passholder) {
@@ -70,15 +88,11 @@ describe('Service: passholderService', function () {
 
   it('throws an error when an invalid passholder is returned', function() {
     var uitpasNumber = 'this-is-a-number';
-    var expectedPassholder = {
-      name: 'Foo',
-      points: 0
-    };
 
     // Mock an HTTP response.
     $httpBackend
-      .expectGET(apiUrl + 'passholders/' + uitpasNumber)
-      .respond(200, JSON.stringify(expectedPassholder));
+      .expectGET(apiUrl + 'identities/' + uitpasNumber)
+      .respond(200, JSON.stringify(identityData));
 
     var failed = function(error) {
       expect(error.code).toBe('PASSHOLDER_NOT_IDENTIFIED');
@@ -105,7 +119,7 @@ describe('Service: passholderService', function () {
 
     // Mock an HTTP response.
     $httpBackend
-      .expectGET(apiUrl + 'passholders/' + uitpasNumber)
+      .expectGET(apiUrl + 'identities/' + uitpasNumber)
       .respond(404, JSON.stringify(expectedError));
 
     var failed = function(error) {

@@ -1,28 +1,36 @@
-<div class="back-nav">
-  <a ui-sref="counter.main">Terug</a>
+<div>
+  <a class="back-nav" ui-sref="counter.main">Terug</a><br />
+  <label>NR.</label> <span ng-bind="pdc.passholder.passNumber"></span>
 </div>
-<span ng-repeat="cardSystem in pdc.passholder.cardSystemSpecific">
-  <label>NR.</label> {{cardSystem.currentCard.uitpasNumber}}
-</span>
-<div class="passholder-data">
+<div class="passholder passholder-data">
   <h3>Gegevens</h3><a ui-sref="counter.main.passholder.edit({passholder: pdc.passholder})" ui-sref-opts="{reload: true}">Aanpassen</a>
-  <img class="pull-right" src="data:image/jpeg;base64,{{pdc.passholder.picture}}" />
-  <span class="name">{{pdc.passholder.firstName}} {{pdc.passholder.name}}</span>
-  <span class="address">
-    {{pdc.passholder.street}} {{pdc.passholder.number}} {{pdc.passholder.box}}<br />
-    {{pdc.passholder.postalCode}} {{pdc.passholder.city}}
-  </span>
-  <span class="birthdate">{{pdc.passholder.dateOfBirth | date : 'dd/MM/yyyy'}}</span>
+  <img ng-if="pdc.passholder.picture" class="pull-right" style="width: 47px; height: 64px"
+       ng-src="{{pdc.passholder.picture}}" />
+  <div class="name">{{pdc.passholder.name.first}} {{pdc.passholder.name.middle}} {{pdc.passholder.name.last}}</div>
+  <div class="address">
+    {{pdc.passholder.address.street}}<br />
+    {{pdc.passholder.address.postalCode}} {{pdc.passholder.address.city}}
+  </div>
+  <div class="birthdate">{{pdc.passholder.birth.date | date : 'dd/MM/yyyy'}}</div>
   <div class="contact-data">
-    <a href>Contactinformatie</a>
-    <div class="contact-data-container">
-      <span class="telephone">{{pdc.passholder.telephone}}</span>
-      <span class="email">{{pdc.passholder.email}}</span>
-      <a ui-sref="counter.main.passholder.editContact({passholder: pdc.passholder})" ui-sref-opts="{reload: true}">Aanpassen</a>
+    <a href="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="true">Contactinformatie<i></i></a>
+    <div class="panel panel-default panel-collapse collapse" id="contact-data-container">
+      <div class="panel-body">
+        <div class="telephone" ng-show="pdc.passholder.contact.telephoneNumber">
+            <span ng-bind="pdc.passholder.contact.telephoneNumber"></span>
+        </div>
+        <div class="telephone" ng-show="pdc.passholder.contact.mobileNumber">
+            <span ng-bind="pdc.passholder.contact.mobileNumber"></span>
+        </div>
+        <div class="email" ng-show="pdc.passholder.contact.email">
+            <span ng-bind="pdc.passholder.contact.email"></span>
+        </div>
+        <a ui-sref="counter.main.passholder.editContact({passholder: pdc.passholder})" ui-sref-opts="{reload: true}">Aanpassen</a>
+      </div>
     </div>
   </div>
 </div>
-<div class="points">
+<div class="passholder passholder-points">
   <h3>Puntensaldo</h3>
-  <span>{{pdc.passholder.points}}</span>
+  <span ubr-passholder-points class="label label-points" ng-bind="pdc.passholder.points"></span>
 </div>

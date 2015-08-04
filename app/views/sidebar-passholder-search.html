@@ -1,7 +1,7 @@
 <form ng-submit="psc.searchPassholder(psc.passholderIdentification)">
   <div class="form-group">
     <label for="passholder-identification">
-      <span>UiTPASnummer</span> <em>of Rijksregisternummer</em>
+      <span>UiTPAS-nummer</span> <em>of Rijksregisternummer</em>
     </label>
     <input type="text" id="passholder-identification" ng-required="true" ng-class="{ 'form-error': psc.passholderNotFound }" auto-focus ng-model="psc.passholderIdentification">
   </div>
