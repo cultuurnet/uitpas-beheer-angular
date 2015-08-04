@@ -64,4 +64,75 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass) {
 
     return deferredPassholder.promise;
   };
+
+  /**
+   * Update the information of a passholder by persisting it on the server and caching it locally
+   *
+   * @param {object} passholder
+   * @param {string} identification
+   * @return {Function|promise}
+   */
+  service.update = function(passholder, identification) {
+    var deferredUpdate = $q.defer();
+    var passholderId;
+
+    var successUpdatingPassholder = function(passholder) {
+      service.updatePassholderInCache(passholder, identification, passholderId);
+      console.log(passholder, 'successUpdatingPassholder');
+      deferredUpdate.resolve(passholder);
+    };
+    var errorUpdatingPassholder = function(e) {
+      deferredUpdate.reject(e);
+    };
+
+    service.updatePassholderOnServer(passholder, identification)
+      .then(successUpdatingPassholder, errorUpdatingPassholder);
+
+    return deferredUpdate.promise;
+  };
+
+  service.updatePassholderOnServer = function(passholderData, identification) {
+    var deferred = $q.defer();
+
+    var successUpdatingPassholderOnServer = function(response) {
+
+      console.log(response, 'right after API call');
+      deferred.resolve(response);
+    };
+    var errorUpdatingPassholderOnServer = function(e) {
+      var message = 'The passholder could not be updated on the server';
+      if (e.code) {
+        message += ': ' + e.code;
+      }
+      else {
+        message += '.';
+      }
+
+      deferred.reject({
+        code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER',
+        title: 'Passholder not updated on server',
+        message: message
+      });
+    };
+console.log(passholderData, 'right before API call');
+    $http
+      .post(
+      apiUrl + 'passholders/' + identification,
+      passholderData,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+      .success(successUpdatingPassholderOnServer)
+      .error(errorUpdatingPassholderOnServer);
+
+    return deferred.promise;
+  };
+
+  service.updatePassholderInCache = function(passholderData, identification, passholderId) {
+    passholderIdCache.put(identification, passholderId);
+    passholderCache.put(passholderId, passholderData);
+  };
 }

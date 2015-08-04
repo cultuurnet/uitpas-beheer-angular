@@ -10,32 +10,22 @@
           <label class="control-label" for="telephone">
             Telefoon
           </label>
-          <input type="text" class="form-control" id="telephone" name="telephone" ng-model="pec.passholder.telephone">
+          <input type="text" class="form-control" id="telephone" name="telephone" ng-model="pec.passholder.contact.telephoneNumber">
         </div>
         <div class="field-group">
           <label class="control-label" for="gsm">
             GSM
           </label>
-          <input type="text" class="form-control" id="gsm" name="gsm" ng-model="pec.passholder.gsm">
-        </div>
-        <div class="checkbox">
-          <label for="sms-preferences">
-            <input type="checkbox" id="sms-preferences" name="sms-preferences" ng-model="pec.passholder.smsPreferences"> Updates ontvangen via sms
-          </label>
+          <input type="text" class="form-control" id="gsm" name="gsm" ng-model="pec.passholder.contact.mobileNumber">
         </div>
         <div class="field-group"  ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid }">
           <label class="control-label" for="email">
             E-mailadres
           </label>
-          <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.email">
+          <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
           </div>
-        </div>
-        <div class="checkbox">
-          <label for="email-preferences">
-            <input type="checkbox" id="email-preferences" name="email-preferences" ng-model="pec.passholder.emailPreferences"> Updates ontvangen via e-mail
-          </label>
         </div>
       </div>
     </div>

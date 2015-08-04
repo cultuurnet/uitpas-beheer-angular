@@ -6,45 +6,50 @@
   <div class="modal-body">
     <div class="container-fluid">
       <div class="grid">
-        <div class="grid__12 grid--bp-lrg__4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.inszNumber.$touched) && passholderEdit.inszNumber.$invalid }">
+        <div class="grid__12 grid--bp-lrg__4 field-group" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.inszNumber.$dirty) && passholderEdit.inszNumber.$invalid }">
           <label class="control-label" for="insz-number">
             Rijksregisternummer
           </label>
-          <input type="text" class="form-control" id="insz-number" ng-disabled="pec.disableInszNumber" name="inszNumber" ng-pattern="pec.validateInszNumber" ng-required="true" ng-model="pec.passholder.inszNumber">
+          <input type="text" class="form-control" id="insz-number" ng-disabled="pec.disableInszNumber" name="inszNumber" ng-pattern="pec.validateInszNumber" ng-model="pec.passholder.inszNumber">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.inszNumber.$dirty) && passholderEdit.inszNumber.$invalid" class="alert alert-danger">
-            <div ng-if="passholderEdit.inszNumber.$error.required">Het rijksregisternummer is verplicht.</div>
             <div ng-if="passholderEdit.inszNumber.$error.pattern">Het rijksregisternummer heeft geen geldig formaat.</div>
-          </div><pre>{{passholderEdit.inszNumber.$error}}</pre>
+          </div>
           <div ng-if="pec.disableInszNumber" class="alert alert-info">
             <div>Het rijksregisternummer kan enkel aangepast worden wanneer er nog geen gekend is.</div>
-          </div>
-        </div>
-        <div class="grid__12 grid--bp-xsm__6 grid--bp-lrg__4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.name.$touched) && passholderEdit.name.$invalid }">
-          <label class="control-label" for="name">
-            Naam
-          </label>
-          <input type="text" class="form-control" id="name" name="name" ng-required="true" ng-model="pec.passholder.name">
-          <div ng-if="(passholderEdit.$submitted || passholderEdit.name.$touched) && passholderEdit.name.$invalid" class="alert alert-danger">
-            <div ng-if="passholderEdit.name.$error.required">De naam is verplicht.</div>
           </div>
         </div>
         <div class="grid__12 grid--bp-xsm__6 grid--bp-lrg__4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.firstName.$touched) && passholderEdit.firstName.$invalid }">
           <label class="control-label" for="firstName">
             Voornaam
           </label>
-          <input type="text" class="form-control" id="firstName" name="firstName" ng-required="true" ng-model="pec.passholder.firstName">
+          <input type="text" class="form-control" id="firstName" name="firstName" ng-required="true" ng-model="pec.passholder.name.first">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.firstName.$touched) && passholderEdit.firstName.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.firstName.$error.required">De voornaam is verplicht.</div>
           </div>
         </div>
       </div>
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-lrg__4 field-group required">
+          <label class="control-label" for="middleName">
+            Extra namen
+          </label>
+          <input type="text" class="form-control" id="middleName" name="middleName" ng-model="pec.passholder.name.middle">
+        </div>
+        <div class="grid__12 grid--bp-xsm__6 grid--bp-lrg__4 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.lastName.$touched) && passholderEdit.lastName.$invalid }">
+          <label class="control-label" for="lastName">
+            Naam
+          </label>
+          <input type="text" class="form-control" id="lastName" name="lastName" ng-required="true" ng-model="pec.passholder.name.last">
+          <div ng-if="(passholderEdit.$submitted || passholderEdit.lastName.$touched) && passholderEdit.lastName.$invalid" class="alert alert-danger">
+            <div ng-if="passholderEdit.lastName.$error.required">De naam is verplicht.</div>
+          </div>
+        </div>
       <hr>
       <div class="grid">
         <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.dateOfBirth.$touched) && passholderEdit.dateOfBirth.$invalid }">
           <label class="control-label" for="date-of-birth">
             Geboortedatum
           </label>
-          <input type="date" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true" ng-model="pec.passholder.dateOfBirth">
+          <input type="date" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true" ng-model="pec.passholder.birth.date">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.dateOfBirth.$touched) && passholderEdit.dateOfBirth.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.dateOfBirth.$error.required">De geboortedatum is verplicht.</div>
             <div ng-if="passholderEdit.dateOfBirth.$error.date">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
@@ -54,7 +59,7 @@
           <label class="control-label" for="place-of-birth">
             Geboorteplaats
           </label>
-          <input type="text" class="form-control" id="place-of-birth" name="placeOfBirth" ng-required="true" ng-model="pec.passholder.placeOfBirth">
+          <input type="text" class="form-control" id="place-of-birth" name="placeOfBirth" ng-required="true" ng-model="pec.passholder.birth.place">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.placeOfBirth.$touched) && passholderEdit.placeOfBirth.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.placeOfBirth.$error.required">De geboorteplaats is verplicht.</div>
           </div>
@@ -99,7 +104,7 @@
           <label class="control-label" for="street">
             Straat, nummer en bus
           </label>
-          <input type="text" class="form-control" id="street" name="street" ng-required="true" ng-model="pec.passholder.street">
+          <input type="text" class="form-control" id="street" name="street" ng-required="true" ng-model="pec.passholder.address.street">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.street.$touched) && passholderEdit.street.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.street.$error.required">De straat en nummer zijn verplicht.</div>
           </div>
@@ -108,7 +113,7 @@
           <label class="control-label" for="postal-code">
             postcode
           </label>
-          <input type="text" class="form-control" id="postal-code" name="postalCode" ng-required="true" ng-model="pec.passholder.postalCode">
+          <input type="text" class="form-control" id="postal-code" name="postalCode" ng-required="true" ng-model="pec.passholder.address.postalCode">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.postalCode.$touched) && passholderEdit.postalCode.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.postalCode.$error.required">De postcode is verplicht.</div>
           </div>
@@ -117,7 +122,7 @@
           <label class="control-label" for="city">
             Gemeente
           </label>
-          <input type="text" class="form-control" id="city" name="city" ng-required="true" ng-model="pec.passholder.city">
+          <input type="text" class="form-control" id="city" name="city" ng-required="true" ng-model="pec.passholder.address.city">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.city.$touched) && passholderEdit.city.$invalid" class="alert alert-danger">
             <div ng-if="passholderEdit.city.$error.required">De stad is verplicht.</div>
           </div>

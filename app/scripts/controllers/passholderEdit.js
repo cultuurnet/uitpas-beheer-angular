@@ -18,18 +18,23 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   // Set default parameters.
   controller.passholder = passholder;
   controller.disableInszNumber = (passholder.inszNumber) ? true : false;
+  controller.formSubmitBusy = false;
 
   controller.submitForm = function(passholder, editForm) {
-    if(editForm.$valid) {
-      var updateOk = function(updatedPassholder) {
-        controller.passholder = updatedPassholder;
-        $modalInstance.close();
-      };
-      var updateFailed = function(e) {
-        $modalInstance.close(e);
-      };
+    if (!controller.formSubmitBusy) {
+      controller.formSubmitBusy = true;
+      if(editForm.$valid) {
+        var updateOk = function() {
+          $modalInstance.close();
+        };
+        var updateFailed = function(e) {
+          $modalInstance.close(e);
+        };
 
-      passholderService.update(passholder, identification).then(updateOk, updateFailed);
+        passholderService.update(passholder, identification).then(updateOk, updateFailed);
+      }
+    } else {
+      controller.formSubmitBusy = false;
     }
   };
 

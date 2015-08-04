@@ -127,9 +127,14 @@ angular
             },
             controller: 'PassholderEditController',
             controllerAs: 'pec'
-          }).result.then(function() {
-              $state.go('^');
-          }, function() {});
+          }).result.then(['passholderService', '$stateParams', function(passholderService, $stateParams) {
+              $stateParams.passholder = passholderService.find($stateParams.identification);
+              $state.go('',
+                $stateParams,
+                {
+                  reload: true
+                });
+          }], function() {});
         }]
       })
       .state('counter.main.passholder.editContact', {
@@ -156,9 +161,10 @@ angular
             },
             controller: 'PassholderEditController',
             controllerAs: 'pec'
-          }).result.then(function() {
+          }).result.then(['passholderService', '$stateParams', function(passholderService, $stateParams) {
+              $stateParams.passholder = passholderService.find($stateParams.identification);
               $state.go('^');
-            }, function() {});
+            }], function() {});
         }]
       })
       .state('login', {
