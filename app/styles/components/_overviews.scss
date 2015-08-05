@@ -1,0 +1,75 @@
+// Overviews
+.overview {
+  &__item {
+    margin-top: 0;
+    margin-bottom: $rh-xsm;
+  }
+  &__item-panel {
+    position: relative;
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      z-index: 1;
+      top: 1px;
+      left: ($grid-gutter-width/2);
+      right: ($grid-gutter-width/2);
+      height: 100%;
+
+      border: 3px solid $gray-0; 
+      box-shadow: 0 0 0 1px darken($gray-0, 3%);
+
+      @include transitions((border, background, box-shadow));
+    }
+    .box {
+      position: relative;
+      z-index: 10;
+      padding: $rh-sml;
+    }
+    &:hover {
+      &:before {
+        background-color: $hover-bg;
+        border-color: $hover-border;
+        box-shadow: 0 0 0 1px darken($hover-border, 5%);
+      }
+    }
+  }
+  &__title {
+    text-transform: uppercase;
+    padding-bottom: $rh-xsm;
+    border-bottom: 1px solid;
+  }
+  // Variants
+  &-advantages {
+    .points,
+    .messages,
+    .actions {
+      padding-bottom: $rh-xsm;
+      text-align: center;
+    }
+    .points {
+      color: $green-50;
+      font-weight: 600;
+    }
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+.box {
+  padding: $rh-sml;
+}
+
+.flexbox {
+  .flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: hidden;
+    @include breakpoint(map-get($breakpoints, xsm)) {
+      flex-direction: row;
+    }
+  }
+}
+

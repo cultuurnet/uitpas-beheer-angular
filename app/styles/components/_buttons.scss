@@ -1,4 +1,33 @@
 // Buttons
+.btn-default {
+  &:focus,
+  &.focus {
+    color: $white;
+    background-color: $brand-primary;
+        border-color: $brand-primary;
+  }
+  &:hover {
+    color: $white;
+    background-color: $brand-primary;
+        border-color: $brand-primary;
+  }
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    color: $white;
+    background-color: $brand-primary;
+        border-color: $brand-primary;
+
+    &:hover,
+    &:focus,
+    &.focus {
+      color: $white;
+      background-color: $brand-primary;
+        border-color: $brand-primary;
+    }
+  }
+}
+
 .btn-ghost {
   @include button-variant($btn-ghost-color, $btn-ghost-bg, $btn-ghost-border);
   &:hover,
@@ -7,7 +36,7 @@
   &:active,
   &.active,
   .open > &.dropdown-toggle {
-    color: $blue-75;
+    color: $brand-secondary;
     background-color: $white;
         border-color: darken($btn-ghost-border, 12%);
   }
