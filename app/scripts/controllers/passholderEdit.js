@@ -16,7 +16,7 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   var controller = this;
 
   // Set default parameters.
-  controller.passholder = passholder;
+  controller.passholder = angular.copy(passholder);
   controller.disableInszNumber = (passholder.inszNumber) ? true : false;
   controller.formSubmitBusy = false;
 
@@ -28,7 +28,15 @@ function PassholderEditController (passholder, identification, $modalInstance, p
           $modalInstance.close();
         };
         var updateFailed = function(e) {
-          $modalInstance.close(e);
+          if (e.apiError.code === 'INSZ_ALREADY_USED') {
+            editForm.inszNumber.$error.inUse = true;
+            editForm.inszNumber.$invalid = true;
+          }
+          if (e.apiError.code === 'EMAIL_ALREADY_USED') {
+            editForm.email.$error.inUse = true;
+            editForm.email.$invalid = true;
+          }
+          controller.formSubmitBusy = false;
         };
 
         passholderService.update(passholder, identification).then(updateOk, updateFailed);
@@ -43,8 +51,8 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   };
 
   controller.validateInszNumber = (function() {
-    // examples: 930518-223-61, 93051822361, 930518 223 61
-    var regex = /([\d]{6})[-\s]?([\d]{3})[-\s]?([\d]{2}$)/;
+    // examples: 930518-223-61, 93051822361, 930518 223 61, 930518.223.61
+    var regex = /([\d]{6})[-.\s]?([\d]{3})[-.\s]?([\d]{2}$)/;
 
     return {
       test: function(value) {

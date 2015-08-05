@@ -96,7 +96,7 @@ function advantageService($q, $http, $rootScope, $cacheFactory, appConfig) {
     };
 
     var advantageExchanged = function (updatedAdvantage) {
-      $rootScope.$emit('advantageExchanged', updatedAdvantage);
+      $rootScope.$emit('advantageExchanged', updatedAdvantage, passNumber);
       deferredExchange.resolve(updatedAdvantage);
     };
 

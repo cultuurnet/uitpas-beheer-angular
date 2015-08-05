@@ -12,7 +12,7 @@ angular
   .service('passholderService', passholderService);
 
 /* @ngInject */
-function passholderService($q, $http, $cacheFactory, appConfig, Pass) {
+function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope) {
   var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
@@ -73,31 +73,14 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass) {
    * @return {Function|promise}
    */
   service.update = function(passholder, identification) {
-    var deferredUpdate = $q.defer();
-    var passholderId;
-
-    var successUpdatingPassholder = function(passholder) {
-      service.updatePassholderInCache(passholder, identification, passholderId);
-      console.log(passholder, 'successUpdatingPassholder');
-      deferredUpdate.resolve(passholder);
-    };
-    var errorUpdatingPassholder = function(e) {
-      deferredUpdate.reject(e);
-    };
-
-    service.updatePassholderOnServer(passholder, identification)
-      .then(successUpdatingPassholder, errorUpdatingPassholder);
-
-    return deferredUpdate.promise;
-  };
-
-  service.updatePassholderOnServer = function(passholderData, identification) {
     var deferred = $q.defer();
 
-    var successUpdatingPassholderOnServer = function(response) {
+    var successUpdatingPassholderOnServer = function(passholderData) {
+      service.find(identification).then(function (cachedPassholder) {
+        cachedPassholder.parseJson(passholderData);
+        deferred.resolve(cachedPassholder);
+      });
 
-      console.log(response, 'right after API call');
-      deferred.resolve(response);
     };
     var errorUpdatingPassholderOnServer = function(e) {
       var message = 'The passholder could not be updated on the server';
@@ -111,14 +94,15 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass) {
       deferred.reject({
         code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER',
         title: 'Passholder not updated on server',
-        message: message
+        message: message,
+        apiError: e
       });
     };
-console.log(passholderData, 'right before API call');
+
     $http
       .post(
       apiUrl + 'passholders/' + identification,
-      passholderData,
+      passholder,
       {
         headers: {
           'Content-Type': 'application/json'
@@ -131,8 +115,17 @@ console.log(passholderData, 'right before API call');
     return deferred.promise;
   };
 
-  service.updatePassholderInCache = function(passholderData, identification, passholderId) {
-    passholderIdCache.put(identification, passholderId);
-    passholderCache.put(passholderId, passholderData);
+  service.updatePoints = function(event, exchangedAdvantage, passNumber) {
+    service.find(passNumber).then(function (cachedPassholder) {
+      var newPointCount = cachedPassholder.points - exchangedAdvantage.points;
+
+      if (newPointCount < 0) {
+        newPointCount = 0;
+      }
+
+      cachedPassholder.points = newPointCount;
+    });
   };
+
+  $rootScope.$on('advantageExchanged', service.updatePoints);
 }

@@ -5,33 +5,37 @@
   </div>
   <div class="modal-body">
     <div class="container-fluid">
-      <div class="grid">
-        <div class="field-group">
-          <label class="control-label" for="telephone">
-            Telefoon
-          </label>
-          <input type="text" class="form-control" id="telephone" name="telephone" ng-model="pec.passholder.contact.telephoneNumber">
-        </div>
-        <div class="field-group">
-          <label class="control-label" for="gsm">
-            GSM
-          </label>
-          <input type="text" class="form-control" id="gsm" name="gsm" ng-model="pec.passholder.contact.mobileNumber">
-        </div>
-        <div class="field-group"  ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid }">
-          <label class="control-label" for="email">
-            E-mailadres
-          </label>
-          <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email">
-          <div ng-if="(passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid" class="alert alert-danger">
-            <div ng-if="passholderEdit.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+      <fieldset ng-disabled="pec.formSubmitBusy">
+        <div class="grid">
+          <div class="field-group">
+            <label class="control-label" for="telephone">
+              Telefoon
+            </label>
+            <input type="text" class="form-control" id="telephone" name="telephone" ng-model="pec.passholder.contact.telephoneNumber">
+          </div>
+          <div class="field-group">
+            <label class="control-label" for="gsm">
+              GSM
+            </label>
+            <input type="text" class="form-control" id="gsm" name="gsm" ng-model="pec.passholder.contact.mobileNumber">
+          </div>
+          <div class="field-group"  ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid }">
+            <label class="control-label" for="email">
+              E-mailadres
+            </label>
+            <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email">
+            <div ng-if="(passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid" class="alert alert-danger">
+              <div ng-if="passholderEdit.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+              <div ng-if="passholderEdit.email.$error.inUse">Het email adres is reeds in gebruik.</div>
+            </div>
           </div>
         </div>
-      </div>
+      </fieldset>
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="pec.cancelModal()">Annuleren</a>
-    <button type="submit" class="btn btn-primary" ng-click="pec.submitForm(pec.passholder, passholderEdit)">Bewaren</button>
+    <button type="submit" class="btn btn-primary" ng-disabled="pec.formSubmitBusy" ng-click="pec.submitForm(pec.passholder, passholderEdit)">Bewaren</button>
+    <span ng-show="pec.formSubmitBusy">Formulier wordt verzonden</span>
   </div>
 </form>
