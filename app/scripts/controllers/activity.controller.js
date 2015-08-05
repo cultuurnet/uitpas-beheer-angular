@@ -29,6 +29,7 @@ function ActivityController ($scope, passholder, activityService, DateRange) {
   controller.queryModelOptions = {
     debounce: 300
   };
+  controller.totalActivities = 0;
 
   function getSearchParameters () {
     return {
@@ -69,8 +70,9 @@ function ActivityController ($scope, passholder, activityService, DateRange) {
   controller.search = function () {
     var searchParameters = getSearchParameters();
 
-    var showSearchResults = function (activities) {
-      controller.activities = activities;
+    var showSearchResults = function (pagedActivities) {
+      controller.activities = pagedActivities.activities;
+      controller.totalActivities = pagedActivities.totalActivities;
     };
 
     activityService

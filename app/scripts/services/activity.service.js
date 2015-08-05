@@ -46,15 +46,18 @@ function activityService($q, $http, appConfig) {
         });
 
     var handlePagedActivityResults = function (activityData) {
-      var activities = [];
+      var pagedResults = {
+        activities: [],
+        totalActivities: activityData.totalItems
+      };
 
       if (activityData.member) {
         activityData.member.forEach(function (activity) {
-          activities.push(activity);
+          pagedResults.activities.push(activity);
         });
       }
 
-      deferredActivities.resolve(activities);
+      deferredActivities.resolve(pagedResults);
     };
 
     var rejectSearch = function (error) {

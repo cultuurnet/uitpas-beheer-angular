@@ -9,4 +9,7 @@
   <ul>
     <li ng-repeat="activity in ac.activities" ng-bind="activity.title"></li>
   </ul>
+
+  <pagination total-items="ac.totalActivities" ng-model="ac.page" items-per-page="ac.limit"
+              ng-change="ac.searchParametersChanged()" max-size="10"></pagination>
 </section>

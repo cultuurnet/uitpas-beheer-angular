@@ -19,6 +19,7 @@ angular
     'config',
     'angular-spinkit',
     'ui.router',
+    'ui.bootstrap',
     'mp.autoFocus'
   ])
   /* @ngInject */
