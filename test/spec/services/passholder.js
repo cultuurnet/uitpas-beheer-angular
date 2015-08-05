@@ -12,7 +12,7 @@ describe('Service: passholderService', function () {
   }));
 
   // Instantiate service.
-  var passholderService, $httpBackend, $q, $scope, Passholder;
+  var passholderService, $httpBackend, $q, $scope, Passholder, Pass;
 
   var identityData = {
     'uitPas': {
@@ -40,8 +40,8 @@ describe('Service: passholderService', function () {
         'email': false,
         'sms': false
       },
-      'inszNumber': '',
-      'points': 4
+      'inszNumber': '930518-223-61',
+      'points': 123
     }
   };
 
@@ -51,6 +51,7 @@ describe('Service: passholderService', function () {
     $q = $injector.get('$q');
     $scope = $rootScope;
     Passholder = $injector.get('Passholder');
+    Pass = $injector.get('Pass');
   }));
 
   it('returns a passholder from the server and keeps it cached', function() {
@@ -137,33 +138,32 @@ describe('Service: passholderService', function () {
   });
 
   it('should persist and cache passholders', function (done) {
-    var passholderData = {
-      name: 'Foo',
-      points: 0,
-      uitIdUser: {
-        id: 'J0HND03'
-      },
-      dateOfBirth: new Date(1214524800000)
-    };
-    var deferredPassholder = $q.defer();
-    var passholderPromise = deferredPassholder.promise;
+    var uitpasNumber = '0930000422202';
+    var passholderPostData = identityData.passHolder;
+    passholderPostData.name.last = 'New last name';
+    passholderPostData.address.city = 'Leuven';
 
-    var assertCachedAndPersisted = function () {
-      expect(passholderService.updatePassholderOnServer)
-        .toHaveBeenCalledWith(passholderData, 'some-identification');
+    var expectedPassholder = identityData;
+    expectedPassholder.passHolder.name.last = 'New last name';
+    expectedPassholder.passHolder.address.city = 'Leuven';
+    var pass = new Pass(expectedPassholder);
 
-      expect(passholderService.updatePassholderInCache)
-        .toHaveBeenCalledWith(passholderData, 'some-identification', 'J0HND03');
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData)
+      .respond(200, JSON.stringify(passholderPostData));
 
+    $httpBackend
+      .expectGET(apiUrl + 'identities/' + uitpasNumber)
+      .respond(200, expectedPassholder);
+
+    var assertCachedAndPersisted = function (response) {
+      expect(passholderService.find).toHaveBeenCalled();
+      expect(response).toEqual(pass.passholder);
       done();
     };
+    spyOn(passholderService, 'find').and.callThrough();
 
-    spyOn(passholderService, 'updatePassholderOnServer').and.returnValue(passholderPromise);
-    spyOn(passholderService, 'updatePassholderInCache');
-
-    passholderService.update(passholderData, 'some-identification').then(assertCachedAndPersisted);
-
-    deferredPassholder.resolve(passholderData);
-    $scope.$digest();
-  })
+    passholderService.update(passholderPostData, uitpasNumber).then(assertCachedAndPersisted);
+    $httpBackend.flush();
+  });
 });
