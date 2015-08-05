@@ -1,1 +1,12 @@
-Passholder Activities stuff goes here.
+<section class="activities">
+  <h2>Activiteiten</h2>
+
+  <select ng-model="ac.dateRange" ng-change="ac.searchParametersChanged()"
+          ng-options="dateRange.label for dateRange in ac.dateRanges"></select>
+
+  <input ng-model="ac.query" ng-model-options="ac.queryModelOptions" ng-change="ac.searchParametersChanged()" />
+
+  <ul>
+    <li ng-repeat="activity in ac.activities" ng-bind="activity.title"></li>
+  </ul>
+</section>
