@@ -4,12 +4,31 @@
   <select ng-model="ac.dateRange" ng-change="ac.searchParametersChanged()"
           ng-options="dateRange.label for dateRange in ac.dateRanges"></select>
 
-  <input ng-model="ac.query" ng-model-options="ac.queryModelOptions" ng-change="ac.searchParametersChanged()" />
+  <input ng-model="ac.query" />
+  <button ng-click="ac.searchParametersChanged()">Zoeken</button>
 
-  <ul>
-    <li ng-repeat="activity in ac.activities" ng-bind="activity.title"></li>
-  </ul>
+  <div ng-show="!ac.activitiesLoaded">
+    <div class="spinner">
+      <circle-spinner></circle-spinner>
+    </div>
+  </div>
 
-  <pagination total-items="ac.totalActivities" ng-model="ac.page" items-per-page="ac.limit"
-              ng-change="ac.searchParametersChanged()" max-size="10"></pagination>
+  <div ng-if="ac.activitiesLoaded && ac.totalActivities > 0">
+    <ol>
+      <li ng-repeat="activity in ac.activities">
+        <ul>
+          <li ng-bind="activity.description"></li>
+          <li ng-bind="activity.id"></li>
+          <li ng-bind="activity.title"></li>
+          <li ng-bind="activity.when"></li>
+        </ul>
+      </li>
+    </ol>
+
+    <pagination total-items="ac.totalActivities" ng-model="ac.page" items-per-page="ac.limit"
+                ng-change="ac.searchParametersChanged()" max-size="10"></pagination>
+  </div>
+
+  <div ng-if="ac.activitiesLoaded && !ac.totalActivities">geen activiteiten gevonden... ¯\_(ツ)_/¯</div>
+
 </section>

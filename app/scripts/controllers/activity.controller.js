@@ -12,7 +12,7 @@ angular
   .controller('ActivityController', ActivityController);
 
 /* @ngInject */
-function ActivityController ($scope, passholder, activityService, DateRange) {
+function ActivityController (passholder, activityService, DateRange) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -26,10 +26,8 @@ function ActivityController ($scope, passholder, activityService, DateRange) {
     return rangeList;
   }, []);
   controller.dateRange = controller.dateRanges[0];
-  controller.queryModelOptions = {
-    debounce: 300
-  };
   controller.totalActivities = 0;
+  controller.activitiesLoaded = false;
 
   function getSearchParameters () {
     return {
@@ -59,7 +57,7 @@ function ActivityController ($scope, passholder, activityService, DateRange) {
       controller.page = 1;
     }
 
-    if (queryChanged || dateRangeChanged) {
+    if (queryChanged() || dateRangeChanged()) {
       resetActivePage();
     }
 
@@ -73,8 +71,10 @@ function ActivityController ($scope, passholder, activityService, DateRange) {
     var showSearchResults = function (pagedActivities) {
       controller.activities = pagedActivities.activities;
       controller.totalActivities = pagedActivities.totalActivities;
+      controller.activitiesLoaded = true;
     };
 
+    controller.activitiesLoaded = false;
     activityService
       .search(passholder, searchParameters)
       .then(showSearchResults);
