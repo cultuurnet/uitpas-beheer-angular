@@ -28,9 +28,12 @@
     }
     &:hover {
       &:before {
-        background-color: $hover-bg;
+/*         background-color: $hover-bg;
         border-color: $hover-border;
-        box-shadow: 0 0 0 1px darken($hover-border, 5%);
+        box-shadow: 0 0 0 1px darken($hover-border, 3%); */
+        background-color: lighten($brand-secondary, 70%);
+        border-color: lighten($brand-secondary, 65%);
+        box-shadow: 0 0 0 1px lighten($brand-secondary, 62%);
       }
     }
   }
@@ -42,7 +45,7 @@
   // Variants
   &-advantages {
     .points,
-    .messages,
+    .message,
     .actions {
       padding-bottom: $rh-xsm;
       text-align: center;
@@ -53,6 +56,42 @@
     }
     .btn {
       width: 100%;
+    }
+    .actions {
+      clear: both;
+      &-confirm {
+        @include breakpoint(map-get($breakpoints, xsm)) {
+          .btn {
+            width: 50%;
+            float: left;
+          }
+          a {
+            width: 50%;
+            text-align: center;
+          }
+        }
+      }
+    }
+    .message {
+      border: 1px solid;
+      border-radius: $border-radius-small;
+      padding: $rh-xxs;
+      @extend .small;
+      &-info {
+        color: $state-info-text;
+        background-color: $state-info-bg;
+        border-color: $state-info-border;
+      }
+      &-succes {
+        color: $state-success-text;
+        background-color: $state-success-bg;
+        border-color: $state-success-border;
+      }
+      &-danger {
+        color: $state-danger-text;
+        background-color: $state-danger-bg;
+        border-color: $state-danger-border;
+      }
     }
   }
 }
