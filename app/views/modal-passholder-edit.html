@@ -139,7 +139,7 @@
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="pec.cancelModal()">Annuleren</a>
-    <button type="submit" class="btn btn-primary" ng-disabled="pec.formSubmitBusy" ng-click="pec.submitForm(pec.passholder, passholderEdit)">Bewaren</button>
+    <button type="submit" class="btn btn-primary" ng-disabled="pec.formSubmitBusy || passholderEdit.$invalid" ng-click="pec.submitForm(pec.passholder, passholderEdit)">Bewaren</button>
     <span ng-show="pec.formSubmitBusy">Formulier wordt verzonden</span>
   </div>
 </form>
