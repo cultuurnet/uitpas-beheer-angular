@@ -22,7 +22,7 @@ describe('Directive: udbPassholderPoints', function () {
     spyOn($animate, 'removeClass').and.callThrough();
     spyOn($animate, 'addClass').and.returnValue(animationPromise);
 
-    $rootScope.$emit('advantageExchanged', {id: 'advantageId'});
+    $rootScope.$emit('advantageExchanged', {id: 'advantageId', points: 2});
     scope.$digest();
 
     expect($animate.removeClass).toHaveBeenCalledWith(jasmine.any(Object), 'animated pulse');
@@ -31,5 +31,22 @@ describe('Directive: udbPassholderPoints', function () {
     deferredAnimation.resolve();
     scope.$digest();
     expect($animate.removeClass.calls.count()).toEqual(2);
+  }));
+
+  it('should not pulse when a free advantage is exchanged', inject(function ($rootScope, $compile) {
+    var deferredAnimation = $q.defer();
+    var animationPromise = deferredAnimation.promise;
+
+    element = $compile('<span ubr-passholder-points></span>')(scope);
+    scope.$digest();
+
+    spyOn($animate, 'removeClass').and.callThrough();
+    spyOn($animate, 'addClass').and.returnValue(animationPromise);
+
+    $rootScope.$emit('advantageExchanged', {id: 'advantageId', points: 0});
+    scope.$digest();
+
+    expect($animate.removeClass).not.toHaveBeenCalledWith(jasmine.any(Object), 'animated pulse');
+    expect($animate.addClass).not.toHaveBeenCalledWith(jasmine.any(Object), 'animated pulse');
   }));
 });
