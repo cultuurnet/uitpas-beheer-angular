@@ -67,7 +67,7 @@ describe('Controller: ActivityController', function () {
     activityController.searchParametersChanged();
     expect(activityController.page).toEqual(1);
 
-    // do not rest when none of the above change
+    // do not reset when none of the above change
     activityController.page = 2;
     activityController.searchParametersChanged();
     expect(activityController.page).toEqual(2);
