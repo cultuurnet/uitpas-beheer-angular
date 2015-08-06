@@ -1,4 +1,4 @@
-// Loading
+// Loading Start screen
 .loading-indicator {
   position: absolute;
   top: 0;
@@ -30,4 +30,9 @@
 .loading-message {
   text-align: center;
   margin-top: 30px;
+}
+
+// Loading Items
+.loading {
+  @include animation(spin 1s infinite linear);
 }

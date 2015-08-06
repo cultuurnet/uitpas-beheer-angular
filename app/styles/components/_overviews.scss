@@ -2,7 +2,13 @@
 .overview {
   &__item {
     margin-top: 0;
-    margin-bottom: $rh-xsm;
+    margin-bottom: $rh-sml;
+    @include breakpoint(map-get($breakpoints, xsm)) {
+      min-height: 180px; // for older browsers not supporting flex
+    }
+    + .overview__item {
+      margin-top: 0;
+    }
   }
   &__item-panel {
     position: relative;
@@ -28,9 +34,6 @@
     }
     &:hover {
       &:before {
-/*         background-color: $hover-bg;
-        border-color: $hover-border;
-        box-shadow: 0 0 0 1px darken($hover-border, 3%); */
         background-color: lighten($brand-secondary, 70%);
         border-color: lighten($brand-secondary, 65%);
         box-shadow: 0 0 0 1px lighten($brand-secondary, 62%);
@@ -38,7 +41,7 @@
     }
   }
   &__item.unavailable {
-    opacity: .5;
+    opacity: .6;
   }
   &__title {
     text-transform: uppercase;
@@ -78,7 +81,7 @@
     .message {
       border: 1px solid;
       border-radius: $border-radius-small;
-      padding: $rh-xxs;
+      padding: $rh-xxs $rh-sml;
       @extend .small;
       &-info {
         color: $state-info-text;
@@ -95,6 +98,9 @@
         background-color: $state-danger-bg;
         border-color: $state-danger-border;
       }
+      .loading {
+        margin-right: 5px;
+      }
     }
   }
 }
@@ -104,13 +110,17 @@
 }
 
 .flexbox {
-  .flex-container {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    overflow: hidden;
-    @include breakpoint(map-get($breakpoints, xsm)) {
-      flex-direction: row;
+  @include breakpoint(map-get($breakpoints, xsm)) {
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      &:before,
+      &:after {
+        display: none; // fix for chrome
+      }
+    }
+    .overview__item {
+      min-height: 1px;
     }
   }
 }
