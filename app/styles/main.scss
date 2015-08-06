@@ -3,22 +3,23 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 @import "_bootstrap-custom.scss";
 
-// Atoms
+// Units
 @import "components/buttons";
 @import "components/loading";
 
-// Molecules
-@import "components/login";
-@import "components/counters";
-
-// Organisms
+// Regions
 @import "components/main";
 @import "components/layout";
 @import "components/header";
 @import "components/footer";
 @import "components/navbar";
 @import "components/sidebar";
+
+// Blocks
+@import "components/login";
+@import "components/counters";
 @import "components/forms";
+@import "components/overviews";
 
 // Print
 @import "core/print";
