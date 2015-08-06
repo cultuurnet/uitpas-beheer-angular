@@ -1,20 +1,24 @@
-<section class="activities">
-  <h2>Activiteiten</h2>
-
-  <select ng-model="ac.dateRange" ng-change="ac.searchParametersChanged()"
+<section class="overview overview-activities">
+  <h2 class="overview__title">Activiteiten</h2>
+  <div class="grid overview__search">
+    <div class="grid__12 grid--bp-sml__6 grid--bp-med__3">
+      <select ng-model="ac.dateRange" ng-change="ac.searchParametersChanged()"
           ng-options="dateRange.label for dateRange in ac.dateRanges"></select>
-
-  <input ng-model="ac.query" />
-  <button ng-click="ac.searchParametersChanged()">Zoeken</button>
-
-  <div ng-show="!ac.activitiesLoaded">
-    <div class="spinner">
-      <circle-spinner></circle-spinner>
+    </div>
+    <div class="grid__12 grid--bp-sml__6 grid--bp-med__push-3 text-right">
+      <input type="text" ng-model="ac.query" />
+      <button class="btn btn-ghost-dark" ng-click="ac.searchParametersChanged()">Zoeken</button>
     </div>
   </div>
 
+  <div class="overview__loading" ng-show="!ac.activitiesLoaded">
+    <div class="spinner spinner-small">
+      <circle-spinner></circle-spinner>
+    </div>
+  </div>
+  
   <div ng-if="ac.activitiesLoaded && ac.totalActivities > 0">
-    <ol>
+    <ol class="list-unstyled">
       <li ng-repeat="activity in ac.activities">
         <ul>
           <li ng-bind="activity.description"></li>

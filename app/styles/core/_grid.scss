@@ -80,10 +80,10 @@
 }
 
 // Creates all the offset class
-// Example: .grid--bp-med__offset-8
+// Example: .grid--bp-med__push-8
 @each $bp, $px in $breakpoints {
   @include breakpoint($px, 'min-width') {
-    .grid--bp-#{$bp}__offset {
+    .grid--bp-#{$bp}__push {
       @for $column from 1 through $grid-columns {
         &-#{$column} {
           @include make-column-push($column);
@@ -158,16 +158,6 @@
     }
   }
 }
-
-// TODO: Write functions to add a vertical divider
-
-// .grid--border.grid--2-col.grid--divider {
-//   background: linear-gradient(to right, transparent, $gray-10, transparent);
-//   background-position: 50%;
-//   background-repeat: repeat-y;
-//   background-size: 1px auto;
-// }
-
 .grid {
   &--eqh {
     display: flex;

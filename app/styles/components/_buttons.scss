@@ -28,8 +28,8 @@
   }
 }
 
-.btn-ghost {
-  @include button-variant($btn-ghost-color, $btn-ghost-bg, $btn-ghost-border);
+.btn-ghost-light {
+  @include button-variant($btn-ghost-light-color, $btn-ghost-light-bg, $btn-ghost-light-border);
   &:hover,
   &:focus,
   &.focus,
@@ -38,7 +38,19 @@
   .open > &.dropdown-toggle {
     color: $brand-secondary;
     background-color: $white;
-        border-color: darken($btn-ghost-border, 12%);
+    border-color: $brand-secondary;
+  }
+}
+
+.btn-ghost-dark {
+  @include button-variant($btn-ghost-dark-color, $btn-ghost-dark-bg, $btn-ghost-dark-border);
+  &:hover,
+  &:focus,
+  &.focus,
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    background-color: $gray-0;
   }
 }
 

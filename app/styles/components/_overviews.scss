@@ -1,17 +1,18 @@
 // Overviews
 .overview {
+  margin: $rh-sml 0;
   &__item {
     margin-top: 0;
     margin-bottom: $rh-sml;
-    @include breakpoint(map-get($breakpoints, xsm)) {
-      min-height: 180px; // for older browsers not supporting flex
-    }
     + .overview__item {
       margin-top: 0;
     }
   }
   &__item-panel {
     position: relative;
+    @include breakpoint(map-get($breakpoints, xsm)) {
+      min-height: 180px; // for older browsers not supporting flex
+    }
     &:before {
       content: '';
       display: block;
@@ -47,6 +48,26 @@
     text-transform: uppercase;
     padding-bottom: $rh-xsm;
     border-bottom: 1px solid;
+  }
+  &__search {
+    clear: both;
+    margin-bottom: $rh-sml;
+    vertical-align: baseline;
+    > div {
+      position: relative;
+    }
+    select {
+      max-width: 200px;
+    }
+    input[type=text] {
+      padding-right: 120px;
+    }
+    button {
+      width: 100px;
+      position: absolute;
+      right: ($grid-gutter-width/2);
+      top: 0;
+    }
   }
   // Variants
   &-advantages {
@@ -101,6 +122,26 @@
       .loading {
         margin-right: 5px;
       }
+    }
+  }
+  &-activities {
+    ol {
+      > li {
+        border-top: 1px solid $white;
+        border-bottom: 1px solid $gray-25;
+        padding: $rh-xsm $rh-xxs;
+        margin-bottom: 0;
+        @include transitions((border, background));
+        &:hover {
+          background-color: lighten($brand-secondary, 70%);
+        }
+        &:first-child {
+          border-top-color: $gray-25;
+        }
+      }
+    }
+    ul li {
+      display: inline-block;
     }
   }
 }
