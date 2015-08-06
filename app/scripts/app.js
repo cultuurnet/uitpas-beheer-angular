@@ -19,6 +19,7 @@ angular
     'config',
     'angular-spinkit',
     'ui.router',
+    'ui.bootstrap',
     'mp.autoFocus'
   ])
   /* @ngInject */
@@ -74,8 +75,8 @@ angular
           },
           'top@counter.main.passholder': {
             templateUrl: 'views/content-passholder-activities.html',
-            controller: 'PassholderDetailController',
-            controllerAs: 'pdc'
+            controller: 'ActivityController',
+            controllerAs: 'ac'
           },
           'bottom@counter.main.passholder': {
             templateUrl: 'views/content-passholder-advantages.html',
