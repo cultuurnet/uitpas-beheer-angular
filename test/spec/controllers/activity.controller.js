@@ -87,4 +87,13 @@ describe('Controller: ActivityController', function () {
     activityController.searchParametersChanged();
     expect(activityService.search).toHaveBeenCalledWith(passholder, expectedSearchParameters);
   });
+
+  it('should enter a loading state while retrieving search results', function (){
+    activityController.search();
+    expect(activityController.activitiesLoaded).toBeFalsy();
+
+    deferredActivities.resolve(pagedActivities);
+    $scope.$digest();
+    expect(activityController.activitiesLoaded).toBeTruthy();
+  });
 });
