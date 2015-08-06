@@ -37,6 +37,9 @@
       }
     }
   }
+  &__item.unavailable {
+    opacity: .5;
+  }
   &__title {
     text-transform: uppercase;
     padding-bottom: $rh-xsm;
