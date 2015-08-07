@@ -16,23 +16,27 @@
       <circle-spinner></circle-spinner>
     </div>
   </div>
+
+  <div class="alert alert-info" ng-if="ac.activitiesLoaded && !ac.totalActivities">geen activiteiten gevonden... ¯\_(ツ)_/¯</div>
   
-  <div ng-if="ac.activitiesLoaded && ac.totalActivities > 0">
-    <ol class="list-unstyled">
-      <li ng-repeat="activity in ac.activities">
-        <ul>
-          <li ng-bind="activity.description"></li>
-          <li ng-bind="activity.id"></li>
-          <li ng-bind="activity.title"></li>
-          <li ng-bind="activity.when"></li>
-        </ul>
-      </li>
-    </ol>
+  <ul class="list-unstyled" ng-if="ac.activitiesLoaded && ac.totalActivities > 0">
+    <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
+      <div class="grid flex-container grid-halfgutter">
+        <div class="grid__12 grid--bp-sml__6 first">
+          <div class="date" ng-bind="activity.when"></div>
+          <h3 ng-bind="activity.title"></h3>
+        </div>
+        <div class="grid__12 grid--bp-sml__3 middle">
+          <!-- col points -->
+        </div>
+        <div class="grid__12 grid--bp-sml__3 last">
+          <!-- col tarifs -->
+        </div>
+      </div>
+    </li>
+  </ul>
 
-    <pagination total-items="ac.totalActivities" ng-model="ac.page" items-per-page="ac.limit"
+  <pagination class="pagination pagination-sm" total-items="ac.totalActivities" ng-model="ac.page" items-per-page="ac.limit"
                 ng-change="ac.searchParametersChanged()" max-size="10"></pagination>
-  </div>
-
-  <div ng-if="ac.activitiesLoaded && !ac.totalActivities">geen activiteiten gevonden... ¯\_(ツ)_/¯</div>
 
 </section>

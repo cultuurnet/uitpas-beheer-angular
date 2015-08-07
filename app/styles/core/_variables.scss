@@ -556,19 +556,19 @@ $nav-pills-active-link-hover-color:         $component-active-color !default;
 
 $pagination-color:                     $link-color !default;
 $pagination-bg:                        #fff !default;
-$pagination-border:                    #ddd !default;
+$pagination-border:                    $gray-25 !default;
 
 $pagination-hover-color:               $link-hover-color !default;
-$pagination-hover-bg:                  $gray-lighter !default;
+$pagination-hover-bg:                  $gray-0 !default;
 $pagination-hover-border:              #ddd !default;
 
-$pagination-active-color:              #fff !default;
-$pagination-active-bg:                 $brand-primary !default;
-$pagination-active-border:             $brand-primary !default;
+$pagination-active-color:              $link-color !default;
+$pagination-active-bg:                 $gray-0!default;
+$pagination-active-border:             $gray-25 !default;
 
-$pagination-disabled-color:            $gray-light !default;
+$pagination-disabled-color:            $gray-25 !default;
 $pagination-disabled-bg:               #fff !default;
-$pagination-disabled-border:           #ddd !default;
+$pagination-disabled-border:           $gray-25 !default;
 
 
 //== Pager
@@ -727,7 +727,7 @@ $modal-sm:                    300px !default;
 //
 //## Define alert colors, border radius, and padding.
 
-$alert-padding:               15px !default;
+$alert-padding:               7px 10px !default;
 $alert-border-radius:         $border-radius-base !default;
 $alert-link-font-weight:      bold !default;
 
@@ -735,9 +735,9 @@ $alert-success-bg:            $state-success-bg !default;
 $alert-success-text:          $state-success-text !default;
 $alert-success-border:        $state-success-border !default;
 
-$alert-info-bg:               $state-info-bg !default;
+$alert-info-bg:               $hover-bg; //$state-info-bg !default;
 $alert-info-text:             $state-info-text !default;
-$alert-info-border:           $state-info-border !default;
+$alert-info-border:           $hover-border; //$state-info-border !default;
 
 $alert-warning-bg:            $state-warning-bg !default;
 $alert-warning-text:          $state-warning-text !default;
