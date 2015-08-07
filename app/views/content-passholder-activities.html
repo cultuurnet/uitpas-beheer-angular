@@ -36,7 +36,14 @@
     </li>
   </ul>
 
-  <pagination class="pagination pagination-sm" total-items="ac.totalActivities" ng-model="ac.page" items-per-page="ac.limit"
-                ng-change="ac.searchParametersChanged()" max-size="10"></pagination>
+  <pagination class="pagination pagination-sm"
+              total-items="ac.totalActivities"
+              ng-model="ac.page"
+              items-per-page="ac.limit"
+              ng-change="ac.searchParametersChanged()"
+              max-size="10"
+              previous-text="&lsaquo; Vorige"
+              next-text="Volgende &rsaquo;">
+  </pagination>
 
 </section>
