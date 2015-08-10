@@ -7,6 +7,9 @@
     <div class="container-fluid">
       <fieldset ng-disabled="pec.formSubmitBusy">
         <div class="grid">
+          <div class="grid__12 grid--bp-lrg__12">
+            <alert type="{{pec.formAlert.type}}" ng-show="pec.formAlert" ng-bind="pec.formAlert.message"></alert>
+          </div>
           <div class="grid__12 grid--bp-lrg__4 field-group" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.inszNumber.$dirty) && passholderEdit.inszNumber.$invalid }">
             <label class="control-label" for="insz-number">
               Rijksregisternummer

@@ -19,6 +19,7 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   controller.passholder = angular.copy(passholder);
   controller.disableInszNumber = (passholder.inszNumber) ? true : false;
   controller.formSubmitBusy = false;
+  controller.formAlert = undefined;
 
   controller.submitForm = function(passholder, editForm) {
     if (!controller.formSubmitBusy) {
@@ -36,6 +37,14 @@ function PassholderEditController (passholder, identification, $modalInstance, p
             editForm.email.$error.inUse = true;
             editForm.email.$invalid = true;
           }
+          if (e.apiError.code === 'ACTION_NOT_ALLOWED') {
+            controller.formAlert = {
+              message: 'Actie niet toegestaan.',
+              type: 'danger'
+            };
+          } else {
+            controller.formAlert = undefined;
+          }
           controller.formSubmitBusy = false;
         };
 
@@ -49,10 +58,6 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   };
 
   controller.cancelModal = function() {
-    $modalInstance.dismiss();
-  };
-
-  controller.dismiss = function() {
     $modalInstance.dismiss();
   };
 }
