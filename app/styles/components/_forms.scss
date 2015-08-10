@@ -35,3 +35,28 @@ label em {
 .btn {
   @include transitions((color, background, border));
 }
+
+.dropdown-menu {
+  li {
+    margin-bottom: .3em;
+  }
+}
+
+.btn-group.open .dropdown-toggle {
+  box-shadow: none;
+}
+
+.search {
+  input[type=text] {
+    padding-left: 30px;
+  }
+  &:after {
+    content: "\f002";
+    color: $gray-25;
+    font-family: "FontAwesome";
+    display: inline-block;
+    position: absolute;
+    left: 30px;
+    top: 7px;
+  }
+}

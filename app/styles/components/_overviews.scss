@@ -67,7 +67,7 @@
   }
   &__search {
     clear: both;
-    margin-bottom: $rh-sml;
+    margin-bottom: 1em;
     vertical-align: baseline;
     > div {
       position: relative;
@@ -78,7 +78,7 @@
     input[type=text] {
       padding-right: 120px;
     }
-    button {
+    .btn-ghost-dark {
       width: 100px;
       position: absolute;
       right: ($grid-gutter-width/2);
