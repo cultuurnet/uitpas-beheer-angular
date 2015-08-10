@@ -13,7 +13,7 @@ describe('Directive: appLoading', function () {
   }));
 
   it('should stop loading when the app is ready', inject(function ($rootScope, $compile) {
-    element = $compile('<app-loading></app-loading>')(scope);
+    element = $compile('<ubr-app-loading></ubr-app-loading>')(scope);
     scope.$digest();
 
     expect(scope.loading).toBeTruthy();
@@ -28,7 +28,7 @@ describe('Directive: appLoading', function () {
     $rootScope.appBusy = false;
     $rootScope.$digest();
 
-    element = $compile('<app-loading></app-loading>')(scope);
+    element = $compile('<ubr-app-loading></ubr-app-loading>')(scope);
     scope.$digest();
 
     expect(scope.loading).toBeFalsy();

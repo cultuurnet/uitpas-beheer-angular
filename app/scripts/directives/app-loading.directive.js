@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc directive
- * @name uitpasbeheerApp.directive:appLoading
+ * @name uitpasbeheerApp.directive:ubrAppLoading
  * @description
- * # appLoading
+ * # App loading directive.
  */
 angular
   .module('uitpasbeheerApp')
-  .directive('appLoading', appLoadingDirective);
+  .directive('ubrAppLoading', appLoadingDirective);
 
 /* @ngInject */
 function appLoadingDirective ($rootScope) {

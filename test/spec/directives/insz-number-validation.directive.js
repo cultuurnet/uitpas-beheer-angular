@@ -13,7 +13,7 @@ describe('Directive: inszNumberValidation', function () {
   }));
 
   xit('should make hidden element visible', inject(function ($compile) {
-    element = angular.element('<insz-number-validation></insz-number-validation>');
+    element = angular.element('<ubr-insz-number-validation></ubr-insz-number-validation>');
     element = $compile(element)(scope);
     expect(element.text()).toBe('this is the inszNumberValidation directive');
   }));
