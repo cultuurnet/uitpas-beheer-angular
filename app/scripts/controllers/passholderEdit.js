@@ -39,7 +39,9 @@ function PassholderEditController (passholder, identification, $modalInstance, p
           controller.formSubmitBusy = false;
         };
 
-        passholderService.update(passholder, identification).then(updateOk, updateFailed);
+        passholderService
+          .update(passholder, identification)
+          .then(updateOk, updateFailed);
       }
     } else {
       controller.formSubmitBusy = false;
@@ -47,6 +49,10 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   };
 
   controller.cancelModal = function() {
+    $modalInstance.dismiss();
+  };
+
+  controller.dismiss = function() {
     $modalInstance.dismiss();
   };
 }
