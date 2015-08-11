@@ -15,7 +15,10 @@
   </div>
   <div class="birthdate">{{pdc.passholder.birth.date | date : 'dd/MM/yyyy'}}</div>
   <div class="contact-data">
-    <a href="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="false">Contactinformatie<i></i></a>
+    <!-- tonen indien geen contactgegevens -->
+    <a ui-sref="counter.main.passholder.editContact()">Contactgegevens toevoegen</a>
+    <!-- tonen indien wel contactgegevens -->
+    <a data-target="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="false">Contactinformatie<i></i></a>
     <div class="panel panel-default panel-collapse collapse" id="contact-data-container">
       <div class="panel-body vcard">
         <div class="tel" ng-show="pdc.passholder.contact.telephoneNumber">

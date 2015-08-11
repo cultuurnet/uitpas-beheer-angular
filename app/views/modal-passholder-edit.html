@@ -8,7 +8,7 @@
       <fieldset ng-disabled="pec.formSubmitBusy">
         <div class="grid">
           <div class="grid__12 grid--bp-lrg__12">
-            <alert class="alert alert-{{pec.formAlert.type}}" type="{{pec.formAlert.type}}" ng-show="pec.formAlert" ng-bind="pec.formAlert.message"></alert>
+            <div class="alert alert-danger" type="{{pec.formAlert.type}}" ng-show="pec.formAlert" ng-bind="pec.formAlert.message"></div>
             <div ng-if="pec.disableInszNumber" class="alert alert-info">
               <div>Het rijksregisternummer kan enkel aangepast worden wanneer er nog geen gekend is.</div>
             </div>
@@ -133,7 +133,7 @@
             </label>
             <input type="text" class="form-control" id="city" name="city" ng-required="true" ng-model="pec.passholder.address.city">
             <div ng-if="(passholderEdit.$submitted || passholderEdit.city.$touched) && passholderEdit.city.$invalid" class="text-danger small">
-              <div ng-if="passholderEdit.city.$error.required">De stad is verplicht.</div>
+              <div ng-if="passholderEdit.city.$error.required">De gemeente is verplicht.</div>
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="pec.cancelModal()">Annuleren</a>
-    <button type="submit" class="btn btn-primary" ng-disabled="pec.formSubmitBusy || passholderEdit.$invalid" ng-click="pec.submitForm(pec.passholder, passholderEdit)">Bewaren</button>
-    <span ng-show="pec.formSubmitBusy">Formulier wordt verzonden</span>
+    <button type="submit" class="btn btn-primary" ng-disabled="pec.formSubmitBusy || passholderEdit.$invalid" ng-click="pec.submitForm(pec.passholder, passholderEdit)"><span ng-hide="pec.formSubmitBusy">Bewaren</span> <span ng-show="pec.formSubmitBusy"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span></button>
+    
   </div>
 </form>
