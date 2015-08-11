@@ -25,13 +25,25 @@ describe('Service: activity', function (){
         'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
         'title': 'Altijd open',
         'description': '',
-        'when': ''
+        'when': '',
+        'checkinConstraint': {
+          'allowed': true,
+          'startDate': 1439251200,
+          'endDate': 1439337599,
+          'reason': ''
+        }
       },
       {
         'id': 'eb7c1532-dc32-43bf-a0be-1b9dcf52d2be',
         'title': 'Testevent punten sparen',
         'description': '',
-        'when': ''
+        'when': '',
+        'checkinConstraint': {
+          'allowed': true,
+          'startDate': 1439251200,
+          'endDate': 1439337599,
+          'reason': ''
+        }
       }
     ],
     'firstPage': 'http://culpas-silex.dev/passholders/0900000330317/activities?date_type=today&limit=5&page=1&query=',
@@ -60,16 +72,28 @@ describe('Service: activity', function (){
     var expectedPagedActivities = {
       activities: [
         {
-          id: 'e71f3381-21aa-4f73-a860-17cf3e31f013',
-          title: 'Altijd open',
-          description: '',
-          when: ''
+          'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+          'title': 'Altijd open',
+          'description': '',
+          'when': '',
+          'checkinConstraint': {
+            'allowed': true,
+            'startDate': new Date(1439251200*1000),
+            'endDate': new Date(1439337599*1000),
+            'reason': ''
+          }
         },
         {
-          id: 'eb7c1532-dc32-43bf-a0be-1b9dcf52d2be',
-          title: 'Testevent punten sparen',
-          description: '',
-          when: ''
+          'id': 'eb7c1532-dc32-43bf-a0be-1b9dcf52d2be',
+          'title': 'Testevent punten sparen',
+          'description': '',
+          'when': '',
+          'checkinConstraint': {
+            'allowed': true,
+            'startDate': new Date(1439251200*1000),
+            'endDate': new Date(1439337599*1000),
+            'reason': ''
+          }
         }
       ],
       totalActivities: 2

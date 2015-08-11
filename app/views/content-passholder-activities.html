@@ -46,11 +46,19 @@
     <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
       <div class="grid flex-container grid-halfgutter">
         <div class="grid__12 grid--bp-sml__6 first">
-          <div class="date" ng-bind="activity.when"></div>
-          <h3 ng-bind="activity.title"></h3>
+          <div class="date" ng-bind="::activity.when"></div>
+          <h3 ng-bind="::activity.title"></h3>
         </div>
-        <div class="grid__12 grid--bp-sml__3 middle">
-          <!-- col points -->
+        <div class="grid__12 grid--bp-sml__3 middle" ng-switch="activity.getCheckinState().name">
+          <i ng-switch-when="already checked in">Punt gespaard</i>
+          <i ng-switch-when="not yet available">
+            Sparen mogelijk vanaf <span ng-bind="::activity.checkinConstraint.startDate | date:'dd/MM/yyyy'"></span> om <span ng-bind="::activity.checkinConstraint.startDate | date:'H:mm'"></span>
+          </i>
+          <i ng-switch-when="expired">Evenement afgelopen</i>
+          <div ng-switch-when="available">
+            <span class="activity-points">+1</span>
+            <button>Punt sparen</button>
+          </div>
         </div>
         <div class="grid__12 grid--bp-sml__3 last">
           <!-- col tarifs -->

@@ -12,7 +12,7 @@ angular
   .service('activityService', activityService);
 
 /* @ngInject */
-function activityService($q, $http, appConfig) {
+function activityService($q, $http, appConfig, Activity) {
   var apiUrl = appConfig.apiUrl;
 
   /*jshint validthis: true */
@@ -52,8 +52,8 @@ function activityService($q, $http, appConfig) {
       };
 
       if (activityData.member) {
-        activityData.member.forEach(function (activity) {
-          pagedResults.activities.push(activity);
+        activityData.member.forEach(function (jsonActivity) {
+          pagedResults.activities.push(new Activity(jsonActivity));
         });
       }
 
