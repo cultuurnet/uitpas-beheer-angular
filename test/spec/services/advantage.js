@@ -85,7 +85,8 @@ describe('Service: advantage', function () {
       message: 'No advantages found for passholder with identification number: 123-passholder'
     };
 
-    var assertNoSuccess = function() {
+    var assertNoSuccess = function(advantage) {
+      expect(advantage).toBeUndefined();
       done();
     };
 
@@ -102,6 +103,80 @@ describe('Service: advantage', function () {
       .then(assertNoSuccess, assertRejectedWithError);
 
     $httpBackend.flush();
+  });
+
+  it('should return a specified advantage', function() {
+    var uitpasNumber = '0930000422202';
+    var expectedAdvantage = {
+      id: 'points-promotion--678',
+      title: 'Testvoordeel beperkt per user',
+      points: 2,
+      exchangeable: true
+    };
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/advantages/' + expectedAdvantage.id)
+      .respond(200, JSON.stringify(expectedAdvantage));
+
+    // Assertion method.
+    var assertAdvantage = function(advantage) {
+      expect(advantage).toEqual(expectedAdvantage);
+    };
+
+    var failed = function(error) {
+      expect(error).toBeUndefined();
+    };
+
+    // Request the passholder data and assert it when its returned.
+    advantageService.find(uitpasNumber, expectedAdvantage.id).then(assertAdvantage, failed);
+
+    // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+  });
+
+  it('throws an error when it can\'t return a specified advantage', function() {
+    var uitpasNumber = '0930000422202';
+    var expectedAdvantage = {
+      id: 'points-promotion--678'
+    };
+    var APIError = {
+      type: 'error',
+      exception: 'CultuurNet/UiTPASBeheer/Counter/CounterNotSetException',
+      message: 'No active counter set for the current user.',
+      code: 'COUNTER_NOT_SET'
+    };
+    var expectedInternalError = {
+      code: 'ADVANTAGE_NOT_FOUND',
+      title: 'Advantage not found',
+      message: 'No advantage with id points-promotion--678 found for passholder with identification number: 0930000422202'
+    };
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/advantages/' + expectedAdvantage.id)
+      .respond(403, JSON.stringify(APIError));
+
+    // Assertion method.
+    var assertAdvantage = function(advantage) {
+      expect(advantage).toBeUndefined();
+    };
+
+    var failed = function(error) {
+      expect(error).toEqual(expectedInternalError);
+    };
+
+    // Request the passholder data and assert it when its returned.
+    advantageService.find(uitpasNumber, expectedAdvantage.id).then(assertAdvantage, failed);
+
+    // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
   });
 
 });
