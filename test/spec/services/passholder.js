@@ -166,4 +166,58 @@ describe('Service: passholderService', function () {
     passholderService.update(passholderPostData, uitpasNumber).then(assertCachedAndPersisted);
     $httpBackend.flush();
   });
+
+  it('throws an error when the passholder can\'t be updated on the server', function (done) {
+    var uitpasNumber = '0930000422202';
+    var passholderPostData = identityData.passHolder;
+
+    var expectedAPIError = {
+      code: 'Some error code'
+    };
+
+    var expectedInternalError = {
+      code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER',
+      title: 'Passholder not updated on server',
+      message: 'The passholder could not be updated on the server: Some error code',
+      apiError: expectedAPIError
+    };
+
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData)
+      .respond(403, JSON.stringify(expectedAPIError));
+
+    var assertRejectedWithError = function (response) {
+      expect(response).toEqual(expectedInternalError);
+      done();
+    };
+
+    var assertNoSuccess = function () {
+      expect(passholderService.find).not.toHaveBeenCalled();
+      done();
+    };
+
+    passholderService.update(passholderPostData, uitpasNumber).then(assertNoSuccess, assertRejectedWithError);
+    $httpBackend.flush();
+  });
+
+  it('should refetch and cache the passholder when an advantage is exchanged', function () {
+    var deferredPassholder = $q.defer();
+    var passholderPromise = deferredPassholder.promise;
+
+    var passholder = new Passholder(identityData.passHolder);
+    var advantage = {
+      exchangeable: true,
+      id: 'advantage-id',
+      points: 2,
+      title: 'untitled'
+    };
+
+    spyOn(passholderService, 'find').and.returnValue(passholderPromise);
+    deferredPassholder.resolve(passholder);
+
+    passholderService.updatePoints('advantageExchanged', advantage, identityData.uitPas.number);
+
+    expect(passholderService.find).toHaveBeenCalled();
+
+  });
 });
