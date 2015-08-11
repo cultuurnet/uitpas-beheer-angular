@@ -84,6 +84,10 @@ a.toggle-down {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .edit {
+    display: inline-block;
+    margin-top: $rh-xxs;
+  }
   &-points .label {
     float: right;
     font-size: 36px;
