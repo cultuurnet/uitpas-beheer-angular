@@ -30,7 +30,7 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
           'counter.main.passholder',
           {
             passholder: passholder,
-            identification: controller.passholderIdentification
+            identification: passholder.passNumber
           }
         );
       },
