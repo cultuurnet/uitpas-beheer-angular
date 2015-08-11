@@ -79,7 +79,7 @@ describe('Controller: PassholderAdvantagesController', function () {
     expect(advantageController.advantages[0].exchanging).toBe(false);
   });
 
-  fit('should set a variable for insufficient points after updating', function () {
+  it('should set a variable for insufficient points after updating', function () {
     advantageController.passholder.points = 1;
     var deferredExchange = $q.defer();
     var updatedAdvantage = {
