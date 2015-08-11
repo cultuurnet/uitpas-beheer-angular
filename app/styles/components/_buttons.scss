@@ -1,4 +1,23 @@
 // Buttons
+.btn {
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    background-color: $gray-25;
+    border-color: $gray-25;
+    color: $gray-50;
+    cursor: $cursor-disabled;
+    @include opacity(.65);
+    @include box-shadow(none);
+    &:hover,
+    &:focus {
+      background-color: $gray-25;
+      border-color: $gray-25;
+      color: $gray-50;
+    }
+  }
+}
+
 .btn-default {
   &:focus,
   &.focus {

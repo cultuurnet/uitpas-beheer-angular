@@ -5,7 +5,7 @@
   <label>NR.</label> <span ng-bind="pdc.passholder.passNumber"></span>
 </div>
 <div class="passholder passholder-data">
-  <h3>Gegevens</h3><a ui-sref="counter.main.passholder.edit()">Aanpassen</a>
+  <h3>Gegevens <a class="pull-right" ui-sref="counter.main.passholder.edit()">Aanpassen</a></h3>
   <img ng-if="pdc.passholder.picture" class="pull-right" style="width: 47px; height: 64px"
        ng-src="{{pdc.passholder.picture}}" />
   <div class="name">{{pdc.passholder.name.first}} {{pdc.passholder.name.middle}} {{pdc.passholder.name.last}}</div>
