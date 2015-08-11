@@ -22,7 +22,7 @@ describe('Controller: PassholderEditController', function () {
     $scope = $rootScope;
 
     controller = $controller('PassholderEditController', {
-      passholder: { inszNumber: "07111571331" },
+      passholder: { inszNumber: '07111571331' },
       identification: 123,
       $modalInstance: modalInstance,
       passholderService: passholderService
