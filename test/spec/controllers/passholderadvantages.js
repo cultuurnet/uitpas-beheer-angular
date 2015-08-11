@@ -45,7 +45,7 @@ describe('Controller: PassholderAdvantagesController', function () {
     expect(advantageController.advantages[0].confirmingExchange).toBeFalsy();
   });
 
-  it('should update and advantage after it is exchanged', function () {
+  it('should update an advantage after it is exchanged', function () {
     var deferredExchange = $q.defer();
     var updatedAdvantage = {
       exchangeable: false,
@@ -62,8 +62,46 @@ describe('Controller: PassholderAdvantagesController', function () {
     expect(advantageController.advantages[0]).toEqual(updatedAdvantage);
   });
 
+  it('should unlock an unlimited advantage after updating', function () {
+    var deferredExchange = $q.defer();
+    var updatedAdvantage = {
+      exchangeable: true,
+      id: 'advantage-id',
+      points: 2,
+      title: 'untitled'
+    };
+    spyOn(advantageService, 'exchange').and.returnValue(deferredExchange.promise);
+
+    advantageController.exchangeAdvantage(advantage);
+    deferredExchange.resolve(updatedAdvantage);
+    scope.$digest();
+
+    expect(advantageController.advantages[0].exchanging).toBe(false);
+  });
+
+  fit('should set a variable for insufficient points after updating', function () {
+    advantageController.passholder.points = 1;
+    var deferredExchange = $q.defer();
+    var updatedAdvantage = {
+      exchangeable: true,
+      id: 'advantage-id',
+      points: 2,
+      title: 'untitled'
+    };
+    spyOn(advantageService, 'exchange').and.returnValue(deferredExchange.promise);
+
+    advantageController.exchangeAdvantage(advantage);
+    deferredExchange.resolve(updatedAdvantage);
+    scope.$digest();
+
+    expect(advantageController.advantages[0].insufficientPoints).toBeTruthy();
+  });
+
   it('should confirm advantage exchanges', function () {
     advantageController.initiateExchange(advantage);
     expect(advantageController.advantages[0].confirmingExchange).toBeTruthy();
+
+    advantageController.cancelExchange(advantage);
+    expect(advantageController.advantages[0].confirmingExchange).toBeFalsy();
   });
 });
