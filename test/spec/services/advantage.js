@@ -71,4 +71,37 @@ describe('Service: advantage', function () {
     $httpBackend.flush();
   });
 
+  it('throws an error when it can\'t get a list of advantages for a given passholder', function (done) {
+    var passholderId = '123-passholder';
+    var APIError = {
+      type: 'error',
+      exception: 'CultuurNet/UiTPASBeheer/Counter/CounterNotSetException',
+      message: 'No active counter set for the current user.',
+      code: 'COUNTER_NOT_SET'
+    };
+    var expectedInternalError = {
+      code: 'ADVANTAGES_NOT_FOUND',
+      title: 'Advantages not found',
+      message: 'No advantages found for passholder with identification number: 123-passholder'
+    };
+
+    var assertNoSuccess = function() {
+      done();
+    };
+
+    var assertRejectedWithError = function(response) {
+      expect(response).toEqual(expectedInternalError);
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholders/' + passholderId + '/advantages')
+      .respond(403, JSON.stringify(APIError));
+
+    advantageService.list(passholderId)
+      .then(assertNoSuccess, assertRejectedWithError);
+
+    $httpBackend.flush();
+  });
+
 });

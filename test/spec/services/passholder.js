@@ -218,6 +218,5 @@ describe('Service: passholderService', function () {
     passholderService.updatePoints('advantageExchanged', advantage, identityData.uitPas.number);
 
     expect(passholderService.find).toHaveBeenCalled();
-
   });
 });
