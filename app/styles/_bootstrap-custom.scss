@@ -1,14 +1,14 @@
 // Custom variables and mixins
 @import "core/variables";
 @import "core/mixins";
-@import "core/type";
+@import "core/animations";
 @import "core/grid";
+@import "core/type";
+
 
 // Core variables and mixins
 //@import "core/bootstrapvariables";
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
-
-
 
 // Reset and dependencies
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap/normalize";

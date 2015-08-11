@@ -32,11 +32,13 @@
 }
 
 // Sidebar: Passholder
-a.back-nav:before {
-  @extend .glyphicon;
-  @extend .glyphicon-arrow-left;
-  font-size: .8em;
-  margin-right: 5px;
+.back-nav {
+  a:before {
+    @extend .glyphicon;
+    @extend .glyphicon-arrow-left;
+    font-size: .8em;
+    margin-right: 5px;
+  }
 }
 
 a.toggle-down {

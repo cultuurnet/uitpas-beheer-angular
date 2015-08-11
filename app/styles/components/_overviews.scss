@@ -1,0 +1,127 @@
+// Overviews
+.overview {
+  &__item {
+    margin-top: 0;
+    margin-bottom: $rh-sml;
+    @include breakpoint(map-get($breakpoints, xsm)) {
+      min-height: 180px; // for older browsers not supporting flex
+    }
+    + .overview__item {
+      margin-top: 0;
+    }
+  }
+  &__item-panel {
+    position: relative;
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      z-index: 1;
+      top: 1px;
+      left: ($grid-gutter-width/2);
+      right: ($grid-gutter-width/2);
+      height: 100%;
+
+      border: 3px solid $gray-0; 
+      box-shadow: 0 0 0 1px darken($gray-0, 3%);
+
+      @include transitions((border, background, box-shadow));
+    }
+    .box {
+      position: relative;
+      z-index: 10;
+      padding: $rh-sml;
+    }
+    &:hover {
+      &:before {
+        background-color: lighten($brand-secondary, 70%);
+        border-color: lighten($brand-secondary, 65%);
+        box-shadow: 0 0 0 1px lighten($brand-secondary, 62%);
+      }
+    }
+  }
+  &__item.unavailable {
+    opacity: .6;
+  }
+  &__title {
+    text-transform: uppercase;
+    padding-bottom: $rh-xsm;
+    border-bottom: 1px solid;
+  }
+  // Variants
+  &-advantages {
+    .points,
+    .message,
+    .actions {
+      padding-bottom: $rh-xsm;
+      text-align: center;
+    }
+    .points {
+      color: $green-50;
+      font-weight: 600;
+    }
+    .btn {
+      width: 100%;
+    }
+    .actions {
+      clear: both;
+      &-confirm {
+        @include breakpoint(map-get($breakpoints, xsm)) {
+          .btn {
+            width: 50%;
+            float: left;
+          }
+          a {
+            width: 50%;
+            text-align: center;
+          }
+        }
+      }
+    }
+    .message {
+      border: 1px solid;
+      border-radius: $border-radius-small;
+      padding: $rh-xxs $rh-sml;
+      @extend .small;
+      &-info {
+        color: $state-info-text;
+        background-color: $state-info-bg;
+        border-color: $state-info-border;
+      }
+      &-succes {
+        color: $state-success-text;
+        background-color: $state-success-bg;
+        border-color: $state-success-border;
+      }
+      &-danger {
+        color: $state-danger-text;
+        background-color: $state-danger-bg;
+        border-color: $state-danger-border;
+      }
+      .loading {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.box {
+  padding: $rh-sml;
+}
+
+.flexbox {
+  @include breakpoint(map-get($breakpoints, xsm)) {
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      &:before,
+      &:after {
+        display: none; // fix for chrome
+      }
+    }
+    .overview__item {
+      min-height: 1px;
+    }
+  }
+}
+

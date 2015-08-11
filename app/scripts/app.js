@@ -75,8 +75,8 @@ angular
           },
           'top@counter.main.passholder': {
             templateUrl: 'views/content-passholder-activities.html',
-            controller: 'PassholderDetailController',
-            controllerAs: 'pdc'
+            controller: 'ActivityController',
+            controllerAs: 'ac'
           },
           'bottom@counter.main.passholder': {
             templateUrl: 'views/content-passholder-advantages.html',
