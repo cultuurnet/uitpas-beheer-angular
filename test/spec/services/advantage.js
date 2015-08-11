@@ -128,11 +128,15 @@ describe('Service: advantage', function () {
       expect(error).toBeUndefined();
     };
 
-    // Request the passholder data and assert it when its returned.
+    // Request the advantage data and assert it when its returned.
     advantageService.find(uitpasNumber, expectedAdvantage.id).then(assertAdvantage, failed);
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
+
+    // Request the advantage data and assert it again, but this time without
+    // mocking an HTTP request as the advantage object should have been cached.
+    advantageService.find(uitpasNumber, expectedAdvantage.id).then(assertAdvantage, failed);
 
     $httpBackend.verifyNoOutstandingExpectation();
     $httpBackend.verifyNoOutstandingRequest();
@@ -169,7 +173,7 @@ describe('Service: advantage', function () {
       expect(error).toEqual(expectedInternalError);
     };
 
-    // Request the passholder data and assert it when its returned.
+    // Request the advantage data and assert it when its returned.
     advantageService.find(uitpasNumber, expectedAdvantage.id).then(assertAdvantage, failed);
 
     // Deliver the HTTP response so the user data is asserted.
