@@ -7,6 +7,7 @@ textarea {
   @include transitions((background, border));
   width: 100%;
   border: 1px solid $gray-25;
+  line-height: $line-height-base;
   padding: $padding-base-vertical $padding-base-horizontal;
   &:focus {
     outline: none;
@@ -50,13 +51,13 @@ label em {
   input[type=text] {
     padding-left: 30px;
   }
-  &:after {
-    content: "\f002";
+  @extend .glyphicon;
+  @extend .glyphicon-search;
+  &:before {
     color: $gray-25;
-    font-family: "FontAwesome";
     display: inline-block;
     position: absolute;
     left: 30px;
-    top: 7px;
+    top: 14px;
   }
 }
