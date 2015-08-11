@@ -24,7 +24,11 @@ describe('Factory: Passholder', function () {
         'email': false,
         'sms': false
       },
-      'points': 309
+      'contact': {
+        'email': 'email@email.com'
+      },
+      'points': 309,
+      'picture': 'picture-in-base64-format'
     };
 
     var expectedPassholder = {
@@ -46,7 +50,11 @@ describe('Factory: Passholder', function () {
         email: false,
         sms: false
       },
-      points: 309
+      contact: {
+        email: 'email@email.com'
+      },
+      points: 309,
+      picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format'
     };
 
     var passholder = new Passholder(jsonPassholder);
