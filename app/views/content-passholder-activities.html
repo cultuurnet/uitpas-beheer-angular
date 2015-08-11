@@ -66,7 +66,8 @@
               ng-change="ac.searchParametersChanged()"
               max-size="10"
               previous-text="&lsaquo; Vorige"
-              next-text="Volgende &rsaquo;">
+              next-text="Volgende &rsaquo;"
+              ng-show="ac.totalActivities > ac.limit">
   </pagination>
 
 </section>
