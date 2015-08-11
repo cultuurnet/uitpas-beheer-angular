@@ -12,7 +12,7 @@ describe('Service: passholderService', function () {
   }));
 
   // Instantiate service.
-  var passholderService, $httpBackend, $q, $scope, Passholder;
+  var passholderService, $httpBackend, $q, $scope, Passholder, Pass;
 
   var identityData = {
     'uitPas': {
@@ -40,8 +40,8 @@ describe('Service: passholderService', function () {
         'email': false,
         'sms': false
       },
-      'inszNumber': '',
-      'points': 4
+      'inszNumber': '930518-223-61',
+      'points': 123
     }
   };
 
@@ -51,12 +51,8 @@ describe('Service: passholderService', function () {
     $q = $injector.get('$q');
     $scope = $rootScope;
     Passholder = $injector.get('Passholder');
+    Pass = $injector.get('Pass');
   }));
-
-  afterEach(function() {
-    $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest();
-  });
 
   it('returns a passholder from the server and keeps it cached', function() {
     var uitpasNumber = '0930000422202';
@@ -86,6 +82,9 @@ describe('Service: passholderService', function () {
     // Request the passholder data and assert it again, but this time without
     // mocking an HTTP request as the passholder object should have been cached.
     passholderService.find(uitpasNumber).then(assertPassholder, failed);
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
   });
 
   it('throws an error when an invalid passholder is returned', function() {
@@ -97,7 +96,7 @@ describe('Service: passholderService', function () {
       .respond(200, JSON.stringify(identityData));
 
     var failed = function(error) {
-      expect(error).toBe('can\'t identify passholder data returned from server');
+      expect(error.code).toBe('PASSHOLDER_NOT_IDENTIFIED');
     };
 
     // Request the passholder data and assert it when its returned.
@@ -105,6 +104,9 @@ describe('Service: passholderService', function () {
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
   });
 
   it('throws an error when the request returns an error', function() {
@@ -129,6 +131,39 @@ describe('Service: passholderService', function () {
     passholderService.find(uitpasNumber).catch(failed);
 
     // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+  });
+
+  it('should persist and cache passholders', function (done) {
+    var uitpasNumber = '0930000422202';
+    var passholderPostData = identityData.passHolder;
+    passholderPostData.name.last = 'New last name';
+    passholderPostData.address.city = 'Leuven';
+
+    var expectedPassholder = identityData;
+    expectedPassholder.passHolder.name.last = 'New last name';
+    expectedPassholder.passHolder.address.city = 'Leuven';
+    var pass = new Pass(expectedPassholder);
+
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData)
+      .respond(200, JSON.stringify(passholderPostData));
+
+    $httpBackend
+      .expectGET(apiUrl + 'identities/' + uitpasNumber)
+      .respond(200, expectedPassholder);
+
+    var assertCachedAndPersisted = function (response) {
+      expect(passholderService.find).toHaveBeenCalled();
+      expect(response).toEqual(pass.passholder);
+      done();
+    };
+    spyOn(passholderService, 'find').and.callThrough();
+
+    passholderService.update(passholderPostData, uitpasNumber).then(assertCachedAndPersisted);
     $httpBackend.flush();
   });
 });

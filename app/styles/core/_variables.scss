@@ -423,7 +423,7 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 //** Number of columns in the grid.
 $grid-columns:              12 !default;
 //** Padding between columns. Gets divided in half for the left and right.
-$grid-gutter-width:         40px !default;
+$grid-gutter-width:         20px !default;
 // Navbar collapse
 //** Point at which the navbar becomes uncollapsed.
 $grid-float-breakpoint:     $screen-sm-min !default;
@@ -710,9 +710,9 @@ $modal-header-border-color:   #e5e5e5 !default;
 //** Modal footer border color
 $modal-footer-border-color:   $modal-header-border-color !default;
 
-$modal-lg:                    900px !default;
-$modal-md:                    600px !default;
-$modal-sm:                    300px !default;
+$modal-lg:                    60% !default;
+$modal-md:                    80% !default;
+$modal-sm:                    auto !default;
 
 
 //== Alerts
@@ -720,7 +720,7 @@ $modal-sm:                    300px !default;
 //## Define alert colors, border radius, and padding.
 
 $alert-padding:               15px !default;
-$alert-border-radius:         $border-radius-base !default;
+$alert-border-radius:         $border-radius-large !default;
 $alert-link-font-weight:      bold !default;
 
 $alert-success-bg:            $state-success-bg !default;

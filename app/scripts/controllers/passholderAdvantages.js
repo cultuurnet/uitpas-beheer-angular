@@ -45,7 +45,6 @@ function passholderAdvantageController(passholder, advantages, advantageService)
   };
 
   function updateAdvantages(exchangedAdvantage) {
-    controller.passholder.points = controller.passholder.points - exchangedAdvantage.points;
     controller.advantages = controller.advantages.map(function (advantage) {
 
       if (advantage.id === exchangedAdvantage.id) {

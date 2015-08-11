@@ -5,7 +5,7 @@
   <label>NR.</label> <span ng-bind="pdc.passholder.passNumber"></span>
 </div>
 <div class="passholder passholder-data">
-  <h3>Gegevens</h3>
+  <h3>Gegevens</h3><a ui-sref="counter.main.passholder.edit()">Aanpassen</a>
   <img ng-if="pdc.passholder.picture" class="pull-right" style="width: 47px; height: 64px"
        ng-src="{{pdc.passholder.picture}}" />
   <div class="name">{{pdc.passholder.name.first}} {{pdc.passholder.name.middle}} {{pdc.passholder.name.last}}</div>
@@ -17,16 +17,17 @@
   <div class="contact-data">
     <a href="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="false">Contactinformatie<i></i></a>
     <div class="panel panel-default panel-collapse collapse" id="contact-data-container">
-      <div class="panel-body">
-        <div class="telephone" ng-show="pdc.passholder.contact.telephoneNumber">
+      <div class="panel-body vcard">
+        <div class="tel" ng-show="pdc.passholder.contact.telephoneNumber">
             <span ng-bind="pdc.passholder.contact.telephoneNumber"></span>
         </div>
-        <div class="telephone" ng-show="pdc.passholder.contact.mobileNumber">
+        <div class="tel mobile" ng-show="pdc.passholder.contact.mobileNumber">
             <span ng-bind="pdc.passholder.contact.mobileNumber"></span>
         </div>
         <div class="email" ng-show="pdc.passholder.contact.email">
             <span ng-bind="pdc.passholder.contact.email"></span>
         </div>
+        <a ui-sref="counter.main.passholder.editContact()">Aanpassen</a>
       </div>
     </div>
   </div>

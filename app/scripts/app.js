@@ -19,6 +19,7 @@ angular
     'config',
     'angular-spinkit',
     'ui.router',
+    'ui.bootstrap',
     'mp.autoFocus'
   ])
   /* @ngInject */
@@ -74,8 +75,8 @@ angular
           },
           'top@counter.main.passholder': {
             templateUrl: 'views/content-passholder-activities.html',
-            controller: 'PassholderDetailController',
-            controllerAs: 'pdc'
+            controller: 'ActivityController',
+            controllerAs: 'ac'
           },
           'bottom@counter.main.passholder': {
             templateUrl: 'views/content-passholder-advantages.html',
@@ -101,6 +102,70 @@ angular
             return advantageService.list($stateParams.identification);
           }]
         }
+      })
+      .state('counter.main.passholder.edit', {
+        onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+          $modal
+            .open({
+              animation: false,
+              templateUrl: 'views/modal-passholder-edit.html',
+              params: {
+                'identification': null,
+                'passholder': null
+              },
+              resolve: {
+                passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+                  if ($stateParams.passholder) {
+                    return $stateParams.passholder;
+                  }
+                  else {
+                    return passholderService.find($stateParams.identification);
+                  }
+                }],
+                identification: ['$stateParams', function($stateParams) {
+                  return $stateParams.identification;
+                }]
+              },
+              controller: 'PassholderEditController',
+              controllerAs: 'pec'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
+      })
+      .state('counter.main.passholder.editContact', {
+        onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+          $modal
+            .open({
+              animation: false,
+              templateUrl: 'views/modal-passholder-edit-contact.html',
+              params: {
+                'identification': null,
+                'passholder': null
+              },
+              resolve: {
+                passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+                  if ($stateParams.passholder) {
+                    return $stateParams.passholder;
+                  }
+                  else {
+                    return passholderService.find($stateParams.identification);
+                  }
+                }],
+                identification: ['$stateParams', function($stateParams) {
+                  return $stateParams.identification;
+                }]
+              },
+              controller: 'PassholderEditController',
+              controllerAs: 'pec'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
       })
       .state('login', {
         url: '/login',

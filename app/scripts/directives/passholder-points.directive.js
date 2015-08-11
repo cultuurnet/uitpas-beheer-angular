@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name uitpasbeheerApp.directive:ubrPassholderPoints
  * @description
- * # Passholder points
+ * # Passholder points directive.
  */
 angular
   .module('uitpasbeheerApp')
@@ -26,7 +26,13 @@ function ubrPassholderPoints ($rootScope, $animate) {
       });
     }
 
-    $rootScope.$on('advantageExchanged', bouncePoints);
+    function handleExchange(event, exchangedAdvantage){
+      if (exchangedAdvantage.points > 0) {
+        bouncePoints();
+      }
+    }
+
+    $rootScope.$on('advantageExchanged', handleExchange);
   }
 }
 
