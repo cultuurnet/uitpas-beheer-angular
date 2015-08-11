@@ -69,7 +69,6 @@ function inszNumberValidation() {
       if (inszNumberRegexResult) {
         var rest = (inszNumberRegexResult[1] + inszNumberRegexResult[2] + inszNumberRegexResult[3] + inszNumberRegexResult[4]) % 97;
         if (String(97 - rest) !== inszNumberRegexResult[5]) {
-          console.log(97 - rest);
           errorMessages.checkDigit = 'INSZNUMBER_WRONG_CHECKDIGIT';
         }
       }
@@ -96,6 +95,7 @@ function inszNumberValidation() {
       }
 
       if (errorMessages.hasOwnProperty('dateOfBirth')) {
+        form.dateOfBirth.$setTouched();
         form.inszNumber.$setValidity('dateOfBirth', false);
         form.dateOfBirth.$setValidity('inszNumber', false);
       }
