@@ -4,7 +4,14 @@ describe('Factory: Activity', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  it('should correctly parse an activity with checking constraints', inject(function (Activity) {
+  var Activity, CheckinState;
+
+  beforeEach(inject(function($injector) {
+    Activity = $injector.get('Activity');
+    CheckinState = $injector.get('CheckinState');
+  }));
+
+  it('should correctly parse an activity with checking constraints', function () {
     var jsonActivity = {
       'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
       'title': 'Altijd open',
@@ -34,6 +41,24 @@ describe('Factory: Activity', function () {
     var activity = new Activity(jsonActivity);
 
     expect(activity).toEqual(expectedActivity);
+  });
 
-  }));
+  it('should create activities that return the right checkin state', function () {
+    var jsonActivity = {
+      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      'title': 'Altijd open',
+      'description': '',
+      'when': '',
+      'checkinConstraint': {
+        'allowed': true,
+        'startDate': 1439251200,
+        'endDate': 1439337599,
+        'reason': ''
+      }
+    };
+
+    var activity = new Activity(jsonActivity);
+
+    expect(activity.getCheckinState()).toEqual(CheckinState.AVAILABLE);
+  });
 });
