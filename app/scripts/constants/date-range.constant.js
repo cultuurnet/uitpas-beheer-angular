@@ -19,23 +19,23 @@ angular
    */
   {
     'TODAY': {
-      label: 'vandaag',
+      label: 'Vandaag',
       value: 'today'
     },
     'NEXT_7_DAYS': {
-      label: 'volgende 7 dagen',
+      label: 'Volgende 7 dagen',
       value: 'next_7_days'
     },
     'NEXT_30_DAYS': {
-      label: 'volgende 30 dagen',
+      label: 'Volgende 30 dagen',
       value: 'next_30_days'
     },
     'NEXT_12_MONTHS': {
-      label: 'volgende 12 maanden',
+      label: 'Volgende 12 maanden',
       value: 'next_12_months'
     },
     'PAST': {
-      label: 'afgelopen activiteiten ',
+      label: 'Afgelopen activiteiten ',
       value: 'past'
     }
   });
