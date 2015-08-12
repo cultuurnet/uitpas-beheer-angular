@@ -5,11 +5,10 @@ input[type="password"],
 select,
 textarea {
   @include transitions((background, border));
-  width: 100%;
   border: 1px solid $gray-25;
-  line-height: $line-height-base;
   box-shadow: none;
   padding: $padding-base-vertical $padding-base-horizontal;
+  width: 100%;
   &:focus {
     outline: none;
     border-color: darken($gray-25, 7%);
