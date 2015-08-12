@@ -74,8 +74,8 @@ a + .btn {
 .field-group {
   margin-bottom: $rh-xsm;
   margin-top: 0;
-  @include breakpoint(map-get($breakpoints, sml)) {
-    min-height: 96px; // to provide space for alert
+  @include breakpoint(map-get($breakpoints, xsm)) {
+    min-height: 85px; // to provide space for alert
   }
 }
 
