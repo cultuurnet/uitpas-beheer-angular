@@ -1,34 +1,73 @@
-<section class="activities">
-  <h2>Activiteiten</h2>
+<section class="overview overview-activities">
+  <h2 class="overview__title">Activiteiten</h2>
+  <div class="grid overview__search">
+    <div class="grid__12 grid--bp-med__6">
+      <div class="btn-group" dropdown>
+        <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
+        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
+          <span class="caret"></span>
+          <span class="sr-only">Split button!</span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.TODAY)">Vandaag</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_7_DAYS)">Volgende 7 dagen</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_30_DAYS)">Volgende 30 dagen</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_12_MONTHS)">Volgende 12 maanden</a>
+          </li>
+          <li class="divider"></li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">Afgelopen activiteiten</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid__12 grid--bp-med__6 search text-right">
+      <input type="text" ng-model="ac.query" />
+      <button class="btn btn-ghost-dark" ng-click="ac.searchParametersChanged()">Zoeken</button>
+    </div>
+  </div>
 
-  <select ng-model="ac.dateRange" ng-change="ac.searchParametersChanged()"
-          ng-options="dateRange.label for dateRange in ac.dateRanges"></select>
-
-  <input ng-model="ac.query" />
-  <button ng-click="ac.searchParametersChanged()">Zoeken</button>
-
-  <div ng-show="!ac.activitiesLoaded">
-    <div class="spinner">
+  <div class="overview__loading" ng-show="!ac.activitiesLoaded">
+    <div class="spinner spinner-small">
       <circle-spinner></circle-spinner>
     </div>
   </div>
 
-  <div ng-if="ac.activitiesLoaded && ac.totalActivities > 0">
-    <ol>
-      <li ng-repeat="activity in ac.activities">
-        <ul>
-          <li ng-bind="activity.description"></li>
-          <li ng-bind="activity.id"></li>
-          <li ng-bind="activity.title"></li>
-          <li ng-bind="activity.when"></li>
-        </ul>
-      </li>
-    </ol>
+  <div class="alert alert-info" ng-if="ac.activitiesLoaded && !ac.totalActivities">Helaas geen activiteiten gevonden... </div>
+  
+  <ul class="list-unstyled" ng-if="ac.activitiesLoaded && ac.totalActivities > 0">
+    <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
+      <div class="grid flex-container grid-halfgutter">
+        <div class="grid__12 grid--bp-sml__6 first">
+          <div class="date" ng-bind="activity.when"></div>
+          <h3 ng-bind="activity.title"></h3>
+        </div>
+        <div class="grid__12 grid--bp-sml__3 middle">
+          <!-- col points -->
+        </div>
+        <div class="grid__12 grid--bp-sml__3 last">
+          <!-- col tarifs -->
+        </div>
+      </div>
+    </li>
+  </ul>
 
-    <pagination total-items="ac.totalActivities" ng-model="ac.page" items-per-page="ac.limit"
-                ng-change="ac.searchParametersChanged()" max-size="10"></pagination>
-  </div>
-
-  <div ng-if="ac.activitiesLoaded && !ac.totalActivities">geen activiteiten gevonden... ¯\_(ツ)_/¯</div>
+  <pagination class="pagination"
+              total-items="ac.totalActivities"
+              ng-model="ac.page"
+              items-per-page="ac.limit"
+              ng-change="ac.searchParametersChanged()"
+              max-size="10"
+              previous-text="&lsaquo; Vorige"
+              next-text="Volgende &rsaquo;"
+              ng-show="ac.totalActivities > ac.limit">
+  </pagination>
 
 </section>

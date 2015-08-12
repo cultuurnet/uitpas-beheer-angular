@@ -15,3 +15,19 @@ body {
 .main-content {
   background-color: $white;
 }
+
+.grid-halfgutter {
+  @include make-row($grid-gutter-width/2);
+  > [class*="grid"] {
+    padding-left: ($grid-gutter-width/4);
+    padding-right: ($grid-gutter-width/4);
+  }
+}
+
+.grid-quartergutter {
+  @include make-row($grid-gutter-width/4);
+  > [class*="grid"] {
+    padding-left: ($grid-gutter-width/8);
+    padding-right: ($grid-gutter-width/8);
+  }
+}

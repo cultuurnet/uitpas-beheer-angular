@@ -8,6 +8,9 @@
   &-header {
     margin-bottom: 0;
   }
+  &-text {
+    margin-right: 0;
+  }
   &-right {
     text-align: right;
     font-size: $font-size-small;
@@ -23,6 +26,7 @@
     margin-top: 0;
     margin-bottom: 0;
     vertical-align: baseline;
+    width: 100px;
   }
   &-btn.btn-sm {
     margin-top: 0;

@@ -18,15 +18,15 @@
           <a class="small" ng-click="pac.cancelExchange(advantage)">Annuleren</a>
         </div>
 
-        <p class="message message-info" ng-show="advantage.exchanging">
+        <p class="alert alert-info small" ng-show="advantage.exchanging">
           <span class="glyphicon glyphicon-refresh loading"></span> Even geduld...
         </p>
 
-        <p class="message message-succes" ng-show="!advantage.exchangeable">
+        <p class="alert alert-success small" ng-show="!advantage.exchangeable">
           Voordeel omgeruild
         </p>
 
-        <p class="message message-danger" ng-show="advantage.exchangeable && advantage.insufficientPoints">
+        <p class="alert alert-danger small" ng-show="advantage.exchangeable && advantage.insufficientPoints">
           Onvoldoende punten
         </p> 
       </div>

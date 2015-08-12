@@ -1,17 +1,18 @@
 // Overviews
 .overview {
+  margin: $rh-sml 0;
   &__item {
     margin-top: 0;
-    margin-bottom: $rh-sml;
-    @include breakpoint(map-get($breakpoints, xsm)) {
-      min-height: 180px; // for older browsers not supporting flex
-    }
     + .overview__item {
       margin-top: 0;
     }
   }
   &__item-panel {
     position: relative;
+    margin-bottom: $rh-sml;
+    @include breakpoint(map-get($breakpoints, xsm)) {
+      min-height: 180px; // for older browsers not supporting flex
+    }
     &:before {
       content: '';
       display: block;
@@ -34,10 +35,26 @@
     }
     &:hover {
       &:before {
-        background-color: lighten($brand-secondary, 70%);
-        border-color: lighten($brand-secondary, 65%);
-        box-shadow: 0 0 0 1px lighten($brand-secondary, 62%);
+        background-color: $hover-bg;
+        border-color: $hover-border;
+        box-shadow: 0 0 0 1px darken($hover-bg, 3%);
       }
+    }
+  }
+  &__item-list {
+    border-top: 1px solid $white;
+    border-bottom: 1px solid $gray-25;
+    margin-bottom: 0;
+    padding: $rh-sml $rh-xxs;
+    @include transitions((border, background));
+    &:hover {
+      background-color: $hover-bg;
+    }
+    &:first-child {
+      border-top-color: $gray-25;
+    }
+    h3 {
+      color: $brand-primary;
     }
   }
   &__item.unavailable {
@@ -48,13 +65,36 @@
     padding-bottom: $rh-xsm;
     border-bottom: 1px solid;
   }
+  &__search {
+    clear: both;
+    margin-bottom: 1em;
+    vertical-align: baseline;
+    > div {
+      position: relative;
+    }
+    select {
+      max-width: 200px;
+    }
+    input[type=text] {
+      padding-right: 114px;
+    }
+    .btn-ghost-dark {
+      width: 100px;
+      position: absolute;
+      right: ($grid-gutter-width/2);
+      top: 0;
+    }
+  }
   // Variants
   &-advantages {
     .points,
-    .message,
     .actions {
       padding-bottom: $rh-xsm;
       text-align: center;
+    }
+    .alert {
+      text-align: center;
+      margin-bottom: 0;
     }
     .points {
       color: $green-50;
@@ -78,35 +118,40 @@
         }
       }
     }
-    .message {
-      border: 1px solid;
-      border-radius: $border-radius-small;
-      padding: $rh-xxs $rh-sml;
-      @extend .small;
-      &-info {
-        color: $state-info-text;
-        background-color: $state-info-bg;
-        border-color: $state-info-border;
+  }
+  &-activities {
+    .date {
+      color: $gray-50;
+    }
+    h3 {
+      margin-bottom: 0;
+    }
+    .middle {
+      //background-color: $gray-0;
+      @include transitions((background));
+    }
+    li {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
+    li:hover {
+      .middle {
+        //background-color: $hover-border;
       }
-      &-succes {
-        color: $state-success-text;
-        background-color: $state-success-bg;
-        border-color: $state-success-border;
-      }
-      &-danger {
-        color: $state-danger-text;
-        background-color: $state-danger-bg;
-        border-color: $state-danger-border;
-      }
-      .loading {
-        margin-right: 5px;
-      }
+    }
+    li .grid > [class*="grid"] {
+      padding-top: $rh-sml;
+      padding-bottom: $rh-sml;
     }
   }
 }
 
 .box {
   padding: $rh-sml;
+}
+
+.alert .loading {
+  margin-right: 5px;
 }
 
 .flexbox {

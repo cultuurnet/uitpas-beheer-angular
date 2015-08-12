@@ -21,11 +21,8 @@ function ActivityController (passholder, activityService, DateRange) {
   controller.page = 1;
   controller.limit = 5;
   controller.activities = [];
-  controller.dateRanges = Object.keys(DateRange).reduce(function(rangeList, range) {
-    rangeList.push(DateRange[range]);
-    return rangeList;
-  }, []);
-  controller.dateRange = controller.dateRanges[0];
+  controller.dateRanges = angular.copy(DateRange);
+  controller.dateRange = controller.dateRanges.TODAY;
   controller.totalActivities = 0;
   controller.activitiesLoaded = false;
 
@@ -40,6 +37,18 @@ function ActivityController (passholder, activityService, DateRange) {
 
   // keep track of the last used search parameters to check if the active page should be reset
   var lastSearchParameters = getSearchParameters();
+
+  /**
+   * Update the active date range and trigger a search parameter change if a new range is selected.
+   *
+   * @param {DateRange} dateRange
+   */
+  controller.updateDateRange = function (dateRange) {
+    if (!angular.equals(controller.dateRange, dateRange)) {
+      controller.dateRange = dateRange;
+      controller.searchParametersChanged();
+    }
+  };
 
   controller.searchParametersChanged = function () {
     var newSearchParameters = getSearchParameters();

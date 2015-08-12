@@ -21,34 +21,34 @@
 .btn-default {
   &:focus,
   &.focus {
-    color: $white;
-    background-color: $brand-primary;
-        border-color: $brand-primary;
+    //color: $white;
+    background-color: $gray-0;
+        //border-color: $brand-primary;
   }
   &:hover {
-    color: $white;
-    background-color: $brand-primary;
-        border-color: $brand-primary;
+    //color: $white;
+    background-color: $gray-0;
+        //border-color: $brand-primary;
   }
   &:active,
   &.active,
   .open > &.dropdown-toggle {
-    color: $white;
-    background-color: $brand-primary;
-        border-color: $brand-primary;
+    //color: $white;
+    background-color: $gray-0;
+        //border-color: $brand-primary;
 
     &:hover,
     &:focus,
     &.focus {
-      color: $white;
-      background-color: $brand-primary;
-        border-color: $brand-primary;
+      //color: $white;
+      background-color: $gray-0;
+        //border-color: $brand-primary;
     }
   }
 }
 
-.btn-ghost {
-  @include button-variant($btn-ghost-color, $btn-ghost-bg, $btn-ghost-border);
+.btn-ghost-light {
+  @include button-variant($btn-ghost-light-color, $btn-ghost-light-bg, $btn-ghost-light-border);
   &:hover,
   &:focus,
   &.focus,
@@ -57,7 +57,19 @@
   .open > &.dropdown-toggle {
     color: $brand-secondary;
     background-color: $white;
-        border-color: darken($btn-ghost-border, 12%);
+    border-color: $brand-secondary;
+  }
+}
+
+.btn-ghost-dark {
+  @include button-variant($btn-ghost-dark-color, $btn-ghost-dark-bg, $btn-ghost-dark-border);
+  &:hover,
+  &:focus,
+  &.focus,
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    background-color: $gray-0;
   }
 }
 
