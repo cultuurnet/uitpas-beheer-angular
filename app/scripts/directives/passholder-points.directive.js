@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name uitpasbeheerApp.directive:ubrPassholderPoints
  * @description
- * # Passholder points
+ * # Passholder points directive.
  */
 angular
   .module('uitpasbeheerApp')

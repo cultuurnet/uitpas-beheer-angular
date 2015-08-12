@@ -12,20 +12,9 @@ angular
   .controller('PassholderDetailController', PassholderDetailController);
 
 /* @ngInject */
-function PassholderDetailController (passholder, $rootScope) {
+function PassholderDetailController (passholder) {
   /*jshint validthis: true */
   var controller = this;
 
-  controller.passholder = angular.copy(passholder);
-
-  function updatePoints(event, exchangedAdvantage) {
-    var newPointCount = controller.passholder.points - exchangedAdvantage.points;
-
-    if (newPointCount < 0) {
-      newPointCount = 0;
-    }
-    controller.passholder.points = newPointCount;
-  }
-
-  $rootScope.$on('advantageExchanged', updatePoints);
+  controller.passholder = passholder;
 }
