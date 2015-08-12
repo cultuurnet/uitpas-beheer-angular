@@ -9,3 +9,10 @@
 .modal-sm {
   max-width: 600px;
 }
+
+.modal-sm {
+  .field-group {
+    min-height: auto;
+  }
+}
+

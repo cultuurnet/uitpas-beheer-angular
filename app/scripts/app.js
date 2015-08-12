@@ -107,12 +107,13 @@ angular
         onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
           $modal
             .open({
-              animation: false,
+              animation: true,
               templateUrl: 'views/modal-passholder-edit.html',
               params: {
                 'identification': null,
                 'passholder': null
               },
+              size: 'lg',
               resolve: {
                 passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
                   if ($stateParams.passholder) {
@@ -139,12 +140,13 @@ angular
         onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
           $modal
             .open({
-              animation: false,
+              animation: true,
               templateUrl: 'views/modal-passholder-edit-contact.html',
               params: {
                 'identification': null,
                 'passholder': null
               },
+              size: 'sm',
               resolve: {
                 passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
                   if ($stateParams.passholder) {
