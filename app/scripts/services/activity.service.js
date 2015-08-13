@@ -69,4 +69,37 @@ function activityService($q, $http, appConfig, Activity) {
 
     return deferredActivities.promise;
   };
+
+  service.checkin = function(activity, passholder) {
+    var deferredCheckin = $q.defer();
+
+    var checkinRequest = $http.post(
+      apiUrl + 'passholders/' + passholder.passNumber + '1/activities/checkins',
+      {
+        eventCdbid: activity.id
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    var checkinAccepted = function (newActivity) {
+      deferredCheckin.resolve(new Activity(newActivity));
+    };
+
+    var checkinRejected = function () {
+      deferredCheckin.reject({
+        code: 'CHECKIN_FAILED',
+        title: 'Punten sparen mislukt',
+        message: 'Het sparen van punt(en) voor ' + activity.title + ' is niet gelukt.'
+      });
+    };
+
+    checkinRequest.success(checkinAccepted);
+    checkinRequest.error(checkinRejected);
+
+    return deferredCheckin.promise;
+  };
 }

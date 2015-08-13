@@ -41,7 +41,7 @@
   </div>
 
   <div class="alert alert-info" ng-if="ac.activitiesLoaded && !ac.totalActivities">Helaas geen activiteiten gevonden... </div>
-  
+
   <ul class="list-unstyled" ng-if="ac.activitiesLoaded && ac.totalActivities > 0">
     <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
       <div class="grid flex-container grid-halfgutter">
@@ -57,7 +57,7 @@
           <i ng-switch-when="expired">Evenement afgelopen</i>
           <div ng-switch-when="available">
             <span class="activity-points">+1</span>
-            <button>Punt sparen</button>
+            <button ng-click="ac.checkin(activity)">Punt sparen</button>
           </div>
         </div>
         <div class="grid__12 grid--bp-sml__3 last">

@@ -35,7 +35,7 @@ function ActivityController (passholder, activityService, DateRange) {
     };
   }
 
-  // keep track of the last used search parameters to check if the active page should be reset
+  // Keep track of the last used search parameters to check if the active page should be reset.
   var lastSearchParameters = getSearchParameters();
 
   /**
@@ -89,6 +89,29 @@ function ActivityController (passholder, activityService, DateRange) {
       .then(showSearchResults);
   };
 
-  // do an initial search to populate the activity list
+  // Do an initial search to populate the activity list.
   controller.search();
+
+  controller.checkin = function (activity) {
+    activity.checkinBusy = true;
+
+    function updateActivity(newActivity) {
+      controller.activities = controller.activities.map(function (activity) {
+        if (activity.id === newActivity.id) {
+          activity = newActivity;
+          activity.checkinConstraint.reason = 'MAXIMUM_REACHED';
+          activity.checkinBusy = false;
+        }
+        return activity;
+      });
+    }
+
+    function checkinError(error) {
+      console.log(error);
+      activity.checkinBusy = false;
+      activity.checkinFailed = true;
+
+    }
+    activityService.checkin(activity, passholder).then(updateActivity, checkinError);
+  };
 }
