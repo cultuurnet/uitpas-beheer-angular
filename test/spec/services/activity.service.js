@@ -144,7 +144,7 @@ describe('Service: activity', function (){
     $httpBackend.flush();
   });
 
-  fit('throws an error when it can\'t check in a passholder to an activity', function (done) {
+  it('throws an error when it can\'t check in a passholder to an activity', function (done) {
     var passholder = { passNumber: '01234567891234' };
     var activity = { id: 'e71f3381-21aa-4f73-a860-17cf3e31f013' };
     var expectedError = {
