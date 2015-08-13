@@ -106,12 +106,11 @@ function ActivityController (passholder, activityService, DateRange) {
       });
     }
 
-    function checkinError(error) {
-      console.log(error);
+    function checkinError() {
       activity.checkinBusy = false;
       activity.checkinFailed = true;
-
     }
+
     activityService.checkin(activity, passholder).then(updateActivity, checkinError);
   };
 }

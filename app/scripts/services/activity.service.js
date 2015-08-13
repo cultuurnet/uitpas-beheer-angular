@@ -74,7 +74,7 @@ function activityService($q, $http, appConfig, Activity) {
     var deferredCheckin = $q.defer();
 
     var checkinRequest = $http.post(
-      apiUrl + 'passholders/' + passholder.passNumber + '1/activities/checkins',
+      apiUrl + 'passholders/' + passholder.passNumber + '/activities/checkins',
       {
         eventCdbid: activity.id
       },

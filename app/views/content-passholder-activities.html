@@ -49,7 +49,8 @@
           <div class="date" ng-bind="::activity.when"></div>
           <h3 ng-bind="::activity.title"></h3>
         </div>
-        <div class="grid__12 grid--bp-sml__3 middle" ng-switch="activity.getCheckinState().name">
+
+        <div class="grid__12 grid--bp-sml__3 middle" ng-switch="activity.getCheckinState().name" ng-if="!activity.checkinFailed && !activity.checkinBusy">
           <i ng-switch-when="already checked in">Punt gespaard</i>
           <i ng-switch-when="not yet available">
             Sparen mogelijk vanaf <span ng-bind="::activity.checkinConstraint.startDate | date:'dd/MM/yyyy'"></span> om <span ng-bind="::activity.checkinConstraint.startDate | date:'H:mm'"></span>
@@ -58,6 +59,14 @@
           <div ng-switch-when="available">
             <span class="activity-points">+1</span>
             <button ng-click="ac.checkin(activity)">Punt sparen</button>
+          </div>
+        </div>
+        <div class="grid__12 grid--bp-sml__3 middle" ng-if="activity.checkinFailed && !activity.checkinBusy">
+          <i class="error">Het sparen van punt(en) voor <span ng-bind="::activity.title"></span> is niet gelukt.</i>
+        </div>
+        <div class="grid__12 grid--bp-sml__3 middle" ng-if="!activity.checkinFailed && activity.checkinBusy">
+          <div class="spinner spinner-small">
+            <circle-spinner></circle-spinner>
           </div>
         </div>
         <div class="grid__12 grid--bp-sml__3 last">
