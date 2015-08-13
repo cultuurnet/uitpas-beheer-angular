@@ -83,4 +83,24 @@ describe('Directive: inszNumberValidation', function () {
     // The form should be error free now.
     expect(form.$valid).toBeTruthy();
   });
+
+  it('should correctly validate inszNumbers with a checkDigit below 10', function () {
+    scope.pec.passholder.inszNumber = '90080757002';
+    scope.pec.passholder.birth.date = new Date('1990-08-07');
+    scope.pec.passholder.gender = 'FEMALE';
+    scope.$digest();
+
+    expect(form.inszNumber.$error.checkDigit).toBeUndefined();
+    expect(form.$valid).toBeTruthy();
+  });
+
+  it('should correctly validate inszNumbers for people born in or after 2000', function () {
+    scope.pec.passholder.inszNumber = '02020231402';
+    scope.pec.passholder.birth.date = new Date('2002-02-02');
+    scope.pec.passholder.gender = 'FEMALE';
+    scope.$digest();
+
+    expect(form.inszNumber.$error.checkDigit).toBeUndefined();
+    expect(form.$valid).toBeTruthy();
+  });
 });
