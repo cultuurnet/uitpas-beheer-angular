@@ -13,8 +13,8 @@ describe('Service: activity', function (){
     });
   }));
 
-  var $scope, $httpBackend, activityService, DateRange;
-  
+  var $scope, $httpBackend, activityService, DateRange, Activity;
+
   var pagedActivityData = {
     '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
     '@type': 'PagedCollection',
@@ -55,6 +55,7 @@ describe('Service: activity', function (){
     $httpBackend = $injector.get('$httpBackend');
     activityService = $injector.get('activityService');
     DateRange = $injector.get('DateRange');
+    Activity = $injector.get('Activity');
   }));
 
   it('should return a list of activities for a given passholder and search parameters', function (done) {
@@ -107,6 +108,38 @@ describe('Service: activity', function (){
     activityService
       .search(passholder, searchParameters)
       .then(assertActivities);
+
+    $httpBackend.flush();
+  });
+
+  it('should check in a passholder to an activity', function (done) {
+    var passholder = { passNumber: '01234567891234' };
+    var activity = {
+      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      'title': 'Altijd open',
+      'description': '',
+      'when': '',
+      'checkinConstraint': {
+        'allowed': true,
+        'startDate': new Date(1438584553*1000),
+        'endDate': new Date(1438584553*1000),
+        'reason': ''
+      }
+    };
+    var updatedActivity = angular.copy(activity);
+    updatedActivity.checkinConstraint.reason = 'MAXIMUM_REACHED';
+
+    function assertActivity(newActivity) {
+      expect(newActivity).toEqual(new Activity(updatedActivity));
+      done();
+    }
+
+    $httpBackend.expectPOST(apiUrl + 'passholders/' + passholder.passNumber + '/activities/checkins')
+      .respond(200, updatedActivity);
+
+    activityService
+      .checkin(activity, passholder)
+      .then(assertActivity);
 
     $httpBackend.flush();
   });
