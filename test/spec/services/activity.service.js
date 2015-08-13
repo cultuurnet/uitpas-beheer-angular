@@ -143,4 +143,34 @@ describe('Service: activity', function (){
 
     $httpBackend.flush();
   });
+
+  fit('throws an error when it can\'t check in a passholder to an activity', function (done) {
+    var passholder = { passNumber: '01234567891234' };
+    var activity = { id: 'e71f3381-21aa-4f73-a860-17cf3e31f013' };
+    var expectedError = {
+      code: 'UNKNOWN_EVENT_CDBID',
+      exception: 'CultuurNet\UiTPASBeheer\Exception\ReadableCodeResponseException',
+      message: 'Event with cdbid [eb7c1532-dc32-43bf-a0be-1b9dcf52d2be1] not found. URL CALLED: https://acc2.uitid.be/uitid/rest/uitpas/passholder/checkin POST DATA: cdbid=eb7c1532-dc32-43bf-a0be-1b9dcf52d2be1&uitpasNumber=0930000419406&balieConsumerKey=31413BDF-DFC7-7A9F-10403618C2816E44',
+      type: 'error'
+    };
+
+    function assertActivity(newActivity) {
+      expect(newActivity).toBeUndefined();
+      done();
+    }
+
+    function assertError(error) {
+      expect(error.code).toBe('CHECKIN_FAILED');
+      done();
+    }
+
+    $httpBackend.expectPOST(apiUrl + 'passholders/' + passholder.passNumber + '/activities/checkins')
+      .respond(403, expectedError);
+
+    activityService
+      .checkin(activity, passholder)
+      .then(assertActivity, assertError);
+
+    $httpBackend.flush();
+  });
 });
