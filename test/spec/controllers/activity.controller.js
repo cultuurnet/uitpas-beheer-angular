@@ -128,7 +128,7 @@ describe('Controller: ActivityController', function () {
     expect(activityController.activities[0].checkinConstraint.reason).toEqual('MAXIMUM_REACHED');
   });
 
-  fit('should set error values when checking in a passholder to an activity fails', function () {
+  it('should set error values when checking in a passholder to an activity fails', function () {
     var deferredCheckin = $q.defer();
 
     var activity = {
