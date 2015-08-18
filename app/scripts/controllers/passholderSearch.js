@@ -23,31 +23,31 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
   controller.searchPassholder = function(identification) {
     $rootScope.appBusy = true;
 
-    passholderService.find(identification).then(
-      // Go to the passholder detail page if a passholder is found.
-      function (passholder) {
+    function displayPassholderDetails(passholder) {
         $state.go(
-          'counter.main.passholder',
-          {
-            passholder: passholder,
-            identification: passholder.passNumber
-          }
-        );
-      },
-      // Show an error message if the passholder identification is invalid.
-      function (error) {
-        controller.passholderNotFound = true;
-        $state.go(
-          'counter.main.error',
-          {
-            title: error.title,
-            description: error.message
-          },
-          {
-            reload: true
-          }
-        );
-      }
-    );
+        'counter.main.passholder',
+        {
+          passholder: passholder,
+          identification: passholder.passNumber
+        }
+      );
+    }
+
+    function displayIdentificationError(error) {
+      controller.passholderNotFound = true;
+      $state.go(
+        'counter.main.error',
+        {
+          title: error.title,
+          description: error.message
+        },
+        {
+          reload: true
+        }
+      );
+    }
+
+    passholderService.find(identification)
+      .then(displayPassholderDetails, displayIdentificationError);
   };
 }
