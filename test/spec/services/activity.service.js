@@ -68,7 +68,7 @@ describe('Service: activity', function (){
     };
     $httpBackend
       .expectGET(apiUrl + 'passholders/' + passholder.passNumber + '/activities?date_type=today&limit=5&page=1&query=something+awesome')
-      .respond(JSON.stringify(pagedActivityData));
+      .respond(200, JSON.stringify(pagedActivityData));
 
     var expectedPagedActivities = {
       activities: [
@@ -108,6 +108,42 @@ describe('Service: activity', function (){
     activityService
       .search(passholder, searchParameters)
       .then(assertActivities);
+
+    $httpBackend.flush();
+  });
+
+  it ('throws an error when it can\'t get a list of activities', function (done) {
+    var passholder = { passNumber: '01234567891234', points: 123 };
+    var searchParameters = {
+      query: 'something awesome',
+      dateRange: DateRange.TODAY,
+      page: 1,
+      limit: 5
+    };
+    var expectedError = {
+      code: 'UNKNOWN_EVENT_CDBID',
+      exception: 'CultuurNet\UiTPASBeheer\Exception\ReadableCodeResponseException',
+      message: 'Event with cdbid [eb7c1532-dc32-43bf-a0be-1b9dcf52d2be1] not found. URL CALLED: https://acc2.uitid.be/uitid/rest/uitpas/passholder/checkin POST DATA: cdbid=eb7c1532-dc32-43bf-a0be-1b9dcf52d2be1&uitpasNumber=0930000419406&balieConsumerKey=31413BDF-DFC7-7A9F-10403618C2816E44',
+      type: 'error'
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholders/' + passholder.passNumber + '/activities?date_type=today&limit=5&page=1&query=something+awesome')
+      .respond(403, expectedError);
+
+    function assertActivities(pagedActivities) {
+      expect(pagedActivities).toBeUndefined();
+      done();
+    }
+
+    function assertError(error) {
+      expect(error.code).toBe('UNKNOWN_EVENT_CDBID');
+      done();
+    }
+
+    activityService
+      .search(passholder, searchParameters)
+      .then(assertActivities, assertError);
 
     $httpBackend.flush();
   });
