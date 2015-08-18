@@ -67,8 +67,22 @@ function inszNumberValidation() {
 
     function validateInszNumberCheckDigit(inszNumberRegexResult, errorMessages) {
       if (inszNumberRegexResult) {
-        var rest = (inszNumberRegexResult[1] + inszNumberRegexResult[2] + inszNumberRegexResult[3] + inszNumberRegexResult[4]) % 97;
-        if (String(97 - rest) !== inszNumberRegexResult[5]) {
+        var checkDigit = inszNumberRegexResult[5];
+        var checklessNumber = inszNumberRegexResult[1] + inszNumberRegexResult[2] + inszNumberRegexResult[3] + inszNumberRegexResult[4];
+
+        var rest = checklessNumber % 97;
+        var expectedCheckDigit = String(97 - rest);
+        if (expectedCheckDigit.length === 1) {
+          expectedCheckDigit = '0' + expectedCheckDigit;
+        }
+
+        var rest2000 = ('2' + checklessNumber) % 97;
+        var expectedCheckDigit2000 = String(97 - rest2000);
+        if (expectedCheckDigit2000.length === 1) {
+          expectedCheckDigit2000 = '0' + expectedCheckDigit2000;
+        }
+
+        if (expectedCheckDigit !== checkDigit && expectedCheckDigit2000 !== checkDigit) {
           errorMessages.checkDigit = 'INSZNUMBER_WRONG_CHECKDIGIT';
         }
       }
