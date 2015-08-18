@@ -96,4 +96,68 @@ describe('Controller: ActivityController', function () {
     $scope.$digest();
     expect(activityController.activitiesLoaded).toBeTruthy();
   });
+
+  it('should check in a passholder to an activity', function () {
+    var deferredCheckin = $q.defer();
+
+    var activity = {
+      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      'title': 'Altijd open',
+      'description': '',
+      'when': '',
+      'checkinConstraint': {
+        'allowed': true,
+        'startDate': new Date(1438584553*1000),
+        'endDate': new Date(1438584553*1000),
+        'reason': ''
+      }
+    };
+    var updatedActivity = angular.copy(activity);
+    updatedActivity.checkinConstraint.reason = 'MAXIMUM_REACHED';
+
+    spyOn(activityService, 'checkin').and.returnValue(deferredCheckin.promise);
+
+    activityController.checkin(activity);
+    expect(activity.checkinBusy).toBeTruthy();
+
+    deferredCheckin.resolve(updatedActivity);
+    $scope.$digest();
+
+    expect(activityService.checkin).toHaveBeenCalledWith(activity, passholder);
+    expect(activityController.activities[0].checkinBusy).toBeFalsy();
+    expect(activityController.activities[0].checkinConstraint.reason).toEqual('MAXIMUM_REACHED');
+  });
+
+  fit('should set error values when checking in a passholder to an activity fails', function () {
+    var deferredCheckin = $q.defer();
+
+    var activity = {
+      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      'title': 'Altijd open',
+      'description': '',
+      'when': '',
+      'checkinConstraint': {
+        'allowed': true,
+        'startDate': new Date(1438584553*1000),
+        'endDate': new Date(1438584553*1000),
+        'reason': ''
+      }
+    };
+
+    spyOn(activityService, 'checkin').and.returnValue(deferredCheckin.promise);
+
+    activityController.checkin(activity);
+    expect(activity.checkinBusy).toBeTruthy();
+
+    deferredCheckin.reject({
+      code: 'CHECKIN_FAILED',
+      title: 'Punten sparen mislukt',
+      message: 'Het sparen van punt(en) voor ' + activity.title + ' is niet gelukt.'
+    });
+    $scope.$digest();
+
+    expect(activityService.checkin).toHaveBeenCalledWith(activity, passholder);
+    expect(activityController.activities[0].checkinBusy).toBeFalsy();
+    expect(activityController.activities[0].checkinFailed).toBeTruthy();
+  });
 });

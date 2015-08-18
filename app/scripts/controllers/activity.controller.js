@@ -107,8 +107,13 @@ function ActivityController (passholder, activityService, DateRange) {
     }
 
     function checkinError() {
-      activity.checkinBusy = false;
-      activity.checkinFailed = true;
+      controller.activities = controller.activities.map(function (existingActivity) {
+        if (existingActivity.id === activity.id) {
+          existingActivity.checkinBusy = false;
+          existingActivity.checkinFailed = true;
+        }
+        return existingActivity;
+      });
     }
 
     activityService.checkin(activity, passholder).then(updateActivity, checkinError);
