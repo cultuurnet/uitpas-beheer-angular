@@ -160,4 +160,13 @@ describe('Controller: ActivityController', function () {
     expect(activityController.activities[0].checkinBusy).toBeFalsy();
     expect(activityController.activities[0].checkinFailed).toBeTruthy();
   });
+
+  it('should trigger the search parameters changed when the date range changes', function () {
+    spyOn(activityController, 'searchParametersChanged');
+
+    activityController.updateDateRange(activityController.dateRanges.PAST);
+
+    expect(activityController.dateRange).toEqual(activityController.dateRanges.PAST);
+    expect(activityController.searchParametersChanged).toHaveBeenCalled();
+  });
 });
