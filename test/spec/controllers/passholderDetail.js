@@ -31,6 +31,13 @@ describe('Controller: PassholderDetailController', function () {
     expect(detailController.passholder.points).toEqual(100);
   });
 
+  it('should add activity points when checking in', function () {
+    scope.$emit('activityCheckedIn', { act: 'ivity', points: 27});
+    scope.$digest();
+
+    expect(detailController.passholder.points).toEqual(150);
+  });
+
   it('makes sure a passholder does not end up with negative points', function () {
     var expensiveAdvantage = advantage;
     expensiveAdvantage.points = 222;

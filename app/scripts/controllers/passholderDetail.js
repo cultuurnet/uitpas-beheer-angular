@@ -18,7 +18,7 @@ function PassholderDetailController (passholder, $rootScope) {
 
   controller.passholder = angular.copy(passholder);
 
-  function updatePoints(event, exchangedAdvantage) {
+  function subtractAdvantagePoints(event, exchangedAdvantage) {
     var newPointCount = controller.passholder.points - exchangedAdvantage.points;
 
     if (newPointCount < 0) {
@@ -27,5 +27,12 @@ function PassholderDetailController (passholder, $rootScope) {
     controller.passholder.points = newPointCount;
   }
 
-  $rootScope.$on('advantageExchanged', updatePoints);
+  function addCheckinPoint(event, checkedInActivity) {
+    var newPointCount = controller.passholder.points + checkedInActivity.points;
+
+    controller.passholder.points = newPointCount;
+  }
+
+  $rootScope.$on('advantageExchanged', subtractAdvantagePoints);
+  $rootScope.$on('activityCheckedIn', addCheckinPoint);
 }

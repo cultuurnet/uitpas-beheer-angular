@@ -12,7 +12,7 @@ angular
   .service('activityService', activityService);
 
 /* @ngInject */
-function activityService($q, $http, appConfig, Activity) {
+function activityService($q, $http, $rootScope, appConfig, Activity) {
   var apiUrl = appConfig.apiUrl;
 
   /*jshint validthis: true */
@@ -85,8 +85,10 @@ function activityService($q, $http, appConfig, Activity) {
       }
     );
 
-    var checkinAccepted = function (newActivity) {
-      deferredCheckin.resolve(new Activity(newActivity));
+    var checkinAccepted = function (jsonActivity) {
+      var checkedInActivity = new Activity(jsonActivity);
+      deferredCheckin.resolve(checkedInActivity);
+      $rootScope.$emit('activityCheckedIn', checkedInActivity);
     };
 
     var checkinRejected = function () {

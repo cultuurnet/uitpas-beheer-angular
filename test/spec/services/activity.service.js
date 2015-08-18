@@ -13,7 +13,7 @@ describe('Service: activity', function (){
     });
   }));
 
-  var $scope, $httpBackend, activityService, DateRange, Activity;
+  var $scope, $rootScope, $httpBackend, activityService, DateRange, Activity;
 
   var pagedActivityData = {
     '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
@@ -26,6 +26,7 @@ describe('Service: activity', function (){
         'title': 'Altijd open',
         'description': '',
         'when': '',
+        'points': 182,
         'checkinConstraint': {
           'allowed': true,
           'startDate': 1439251200,
@@ -38,6 +39,7 @@ describe('Service: activity', function (){
         'title': 'Testevent punten sparen',
         'description': '',
         'when': '',
+        'points': 182,
         'checkinConstraint': {
           'allowed': true,
           'startDate': 1439251200,
@@ -50,7 +52,8 @@ describe('Service: activity', function (){
     'lastPage': 'http://culpas-silex.dev/passholders/0900000330317/activities?date_type=today&limit=5&page=1&query='
   };
 
-  beforeEach(inject(function ($injector, $rootScope) {
+  beforeEach(inject(function ($injector) {
+    $rootScope = $injector.get('$rootScope');
     $scope = $rootScope.$new();
     $httpBackend = $injector.get('$httpBackend');
     activityService = $injector.get('activityService');
@@ -77,6 +80,7 @@ describe('Service: activity', function (){
           'title': 'Altijd open',
           'description': '',
           'when': '',
+          'points': 182,
           'checkinConstraint': {
             'allowed': true,
             'startDate': new Date(1439251200*1000),
@@ -89,6 +93,7 @@ describe('Service: activity', function (){
           'title': 'Testevent punten sparen',
           'description': '',
           'when': '',
+          'points': 182,
           'checkinConstraint': {
             'allowed': true,
             'startDate': new Date(1439251200*1000),
@@ -155,6 +160,7 @@ describe('Service: activity', function (){
       'title': 'Altijd open',
       'description': '',
       'when': '',
+      'points': 182,
       'checkinConstraint': {
         'allowed': true,
         'startDate': new Date(1438584553*1000),
@@ -164,9 +170,11 @@ describe('Service: activity', function (){
     };
     var updatedActivity = angular.copy(activity);
     updatedActivity.checkinConstraint.reason = 'MAXIMUM_REACHED';
+    spyOn($rootScope, '$emit');
 
     function assertActivity(newActivity) {
       expect(newActivity).toEqual(new Activity(updatedActivity));
+      expect($rootScope.$emit).toHaveBeenCalledWith('activityCheckedIn', new Activity(updatedActivity));
       done();
     }
 

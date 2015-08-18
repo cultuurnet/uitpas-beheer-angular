@@ -32,7 +32,12 @@ function ubrPassholderPoints ($rootScope, $animate) {
       }
     }
 
+    function handleCheckin() {
+      bouncePoints();
+    }
+
     $rootScope.$on('advantageExchanged', handleExchange);
+    $rootScope.$on('activityCheckedIn', handleCheckin);
   }
 }
 
