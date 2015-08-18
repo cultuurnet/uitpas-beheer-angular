@@ -20,8 +20,8 @@ describe('Factory: Activity', function () {
       'points': 182,
       'checkinConstraint': {
         'allowed': true,
-        'startDate': 1439251200,
-        'endDate': 1439337599,
+        'startDate': '2015-09-01T00:00:00+00:00',
+        'endDate': '2015-09-01T23:59:59+00:00',
         'reason': ''
       }
     };
@@ -34,8 +34,8 @@ describe('Factory: Activity', function () {
       'points': 182,
       'checkinConstraint': {
         'allowed': true,
-        'startDate': new Date(1439251200*1000),
-        'endDate': new Date(1439337599*1000),
+        'startDate': new Date('2015-09-01T00:00:00+00:00'),
+        'endDate': new Date('2015-09-01T23:59:59+00:00'),
         'reason': ''
       }
     };
@@ -53,8 +53,8 @@ describe('Factory: Activity', function () {
       'when': '',
       'checkinConstraint': {
         'allowed': true,
-        'startDate': 1439251200,
-        'endDate': 1439337599,
+        'startDate': '2015-09-01T00:00:00+00:00',
+        'endDate': '2015-09-01T23:59:59+00:00',
         'reason': ''
       }
     };

@@ -25,9 +25,9 @@ function activityFactory(CheckinState) {
   function parseJsonCheckinConstraint (jsonConstraint) {
     return {
       allowed: jsonConstraint.allowed,
-      endDate: new Date(jsonConstraint.endDate*1000),
+      endDate: new Date(jsonConstraint.endDate),
       reason: jsonConstraint.reason,
-      startDate: new Date(jsonConstraint.startDate*1000)
+      startDate: new Date(jsonConstraint.startDate)
     };
   }
 
