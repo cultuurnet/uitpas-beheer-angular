@@ -37,8 +37,7 @@ function activityFactory(CheckinState) {
       this.description = jsonActivity.description;
       this.title = jsonActivity.title;
       this.when = jsonActivity.when;
-      // TODO: points aren't sent from the API so this property defaults to 1 for now
-      this.points = jsonActivity.points || 1;
+      this.points = jsonActivity.points;
       this.checkinConstraint = parseJsonCheckinConstraint(jsonActivity.checkinConstraint);
     },
     getCheckinState: function () {
