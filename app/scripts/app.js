@@ -104,28 +104,37 @@ angular
         }
       })
       .state('counter.main.passholder.edit', {
-        onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+        resolve: {
+          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+            if ($stateParams.passholder) {
+              return $stateParams.passholder;
+            }
+            else {
+              return passholderService.find($stateParams.identification);
+            }
+          }],
+          identification: ['$stateParams', function($stateParams) {
+            return $stateParams.identification;
+          }]
+        },
+        onEnter: ['passholder', 'identification', '$state', '$modal', function(passholder, identification, $state, $modal) {
           $modal
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-edit.html',
               params: {
                 'identification': null,
-                'passholder': null
+                'passholder': null,
+                'activity': null
               },
               size: 'lg',
               resolve: {
-                passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
-                  if ($stateParams.passholder) {
-                    return $stateParams.passholder;
-                  }
-                  else {
-                    return passholderService.find($stateParams.identification);
-                  }
-                }],
-                identification: ['$stateParams', function($stateParams) {
-                  return $stateParams.identification;
-                }]
+                passholder: function() {
+                  return passholder;
+                },
+                identification: function() {
+                  return identification;
+                }
               },
               controller: 'PassholderEditController',
               controllerAs: 'pec'
@@ -137,7 +146,20 @@ angular
         }]
       })
       .state('counter.main.passholder.editContact', {
-        onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+        resolve: {
+          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+            if ($stateParams.passholder) {
+              return $stateParams.passholder;
+            }
+            else {
+              return passholderService.find($stateParams.identification);
+            }
+          }],
+          identification: ['$stateParams', function($stateParams) {
+            return $stateParams.identification;
+          }]
+        },
+        onEnter: ['passholder', 'identification', '$state', '$modal', function(passholder, identification, $state, $modal) {
           $modal
             .open({
               animation: true,
@@ -148,20 +170,68 @@ angular
               },
               size: 'sm',
               resolve: {
-                passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
-                  if ($stateParams.passholder) {
-                    return $stateParams.passholder;
-                  }
-                  else {
-                    return passholderService.find($stateParams.identification);
-                  }
-                }],
-                identification: ['$stateParams', function($stateParams) {
-                  return $stateParams.identification;
-                }]
+                passholder: function() {
+                  return passholder;
+                },
+                identification: function() {
+                  return identification;
+                }
               },
               controller: 'PassholderEditController',
               controllerAs: 'pec'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
+      })
+      .state('counter.main.passholder.activityTariffs', {
+        params: {
+          identification: null,
+          passholder: null,
+          activity: null
+        },
+        resolve: {
+          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+            if ($stateParams.passholder) {
+              return $stateParams.passholder;
+            }
+            else {
+              return passholderService.find($stateParams.identification);
+            }
+          }],
+          identification: ['$stateParams', function($stateParams) {
+            return $stateParams.identification;
+          }],
+          activity: ['$stateParams', function($stateParams) {
+            return $stateParams.activity;
+          }]
+        },
+        onEnter: ['passholder', 'identification', 'activity', '$state', '$modal', function(passholder, identification, activity, $state, $modal) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-passholder-activity-tariffs.html',
+              params: {
+                identification: null,
+                passholder: null,
+                activity: null
+              },
+              size: 'sm',
+              resolve: {
+                passholder: function () {
+                  return passholder;
+                },
+                identification: function () {
+                  return identification;
+                },
+                activity: function () {
+                  return activity;
+                }
+              },
+              controller: 'PassholderActivityTariffsController',
+              controllerAs: 'pat'
             })
             .result
             .finally(function() {

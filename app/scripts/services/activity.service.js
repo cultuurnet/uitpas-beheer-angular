@@ -69,4 +69,10 @@ function activityService($q, $http, appConfig) {
 
     return deferredActivities.promise;
   };
+
+  service.claimTariff = function(passholder, activity, tariff) {
+    console.log(passholder, activity, tariff);
+
+    return 'Okidokely';
+  };
 }
