@@ -41,7 +41,7 @@
   </div>
 
   <div class="alert alert-info" ng-if="ac.activitiesLoaded && !ac.totalActivities">Helaas geen activiteiten gevonden... </div>
-  
+
   <ul class="list-unstyled" ng-if="ac.activitiesLoaded && ac.totalActivities > 0">
     <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
       <div class="grid flex-container grid-halfgutter">
@@ -52,8 +52,22 @@
         <div class="grid__12 grid--bp-sml__3 middle">
           <!-- col points -->
         </div>
-        <div class="grid__12 grid--bp-sml__3 last">
-          <a ui-sref="counter.main.passholder.activityTariffs({ activity: activity })">Tarief kiezen voor "{{activity.title}}"</a>
+        <div class="grid__12 grid--bp-sml__3 last" ng-switch="ac.getActivityTariff(activity)">
+          <div class="free-event" ng-switch-when="free">Gratis</div>
+          <div class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<span><a class="history-modal" >Historiek</a></span></div>
+          <div class="price-differentiation" ng-switch-when="priceDifferentiation">
+            <span>vanaf <strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong></span>
+            <a class="tariff-modal" ui-sref="counter.main.passholder.activityTariffs({ activity: activity })">Tarief kiezen</a>
+          </div>
+          <div class="kansen-tariff" ng-switch-when="kansenTariff">
+            <span><strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong> aan kansentarief</span>
+            <a class="assign-tariff" onclick="ac.claimTariff(activity.sales.tariffs[0], activity)" >Tarief toekennen</a>
+          </div>
+          <div class="coupon" ng-switch-when="coupon">
+            <strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong>
+            <span>{{activity.sales.tariffs.list[0].name}}</span>
+            <a class="assign-tariff" onclick="ac.claimTariff(activity.sales.tariffs[0], activity)" >Tarief toekennen</a>
+          </div>
         </div>
       </div>
     </li>

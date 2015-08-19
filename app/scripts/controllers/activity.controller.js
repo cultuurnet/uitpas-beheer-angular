@@ -89,6 +89,44 @@ function ActivityController (passholder, activityService, DateRange) {
       .then(showSearchResults);
   };
 
-  // do an initial search to populate the activity list
+  // Do an initial search to populate the activity list.
   controller.search();
+
+  controller.getActivityTariff = function (activity) {
+    if (activity.free) {
+      activity.tariff = 'free';
+      return 'free';
+    }
+    else if (((activity || {}).sales || {}).maximumReached) {
+      activity.tariff = 'maximumreached';
+      return 'maximumReached';
+    }
+    else if (((activity || {}).sales || {}).differentiation) {
+      activity.tariff = 'priceDifferentiation';
+      return 'priceDifferentiation';
+    }
+    else if ((((activity || {}).sales || {}).tariffs || {}).kansentariefAvailable) {
+      activity.tariff = 'kansenTariff';
+      return 'kansenTariff';
+    }
+    else if ((((activity || {}).sales || {}).tariffs || {}).couponAvailable) {
+      activity.tariff = 'coupon';
+      return 'coupon';
+    }
+  };
+
+  controller.claimTariff = function (tariff, activity) {
+    var tariffClaimedSuccessfully = function () {
+      tariff.assigned = true;
+    };
+
+    var tariffNotClaimed= function (error) {
+      tariff.assignError = error;
+    };
+
+    activityService.claimTariff(passholder, activity, tariff).then(
+      tariffClaimedSuccessfully,
+      tariffNotClaimed
+    );
+  };
 }

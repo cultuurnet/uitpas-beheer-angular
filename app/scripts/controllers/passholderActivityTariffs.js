@@ -15,7 +15,6 @@ angular
 function PassholderActivityTariffsController (passholder, activity, $modalInstance, activityService) {
   /*jshint validthis: true */
   var controller = this;
-  console.log(activity, 'the activity in patCtrl');
 
   controller.passholder = passholder;
   controller.activity = activity;
@@ -28,7 +27,20 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
   controller.submitForm = function (passholder, activity, passholderActivityTariffsForm) {
     controller.formSubmitBusy = true;
     var tariff = getTariffFromForm(passholderActivityTariffsForm);
-    activityService.claimTariff(passholder, activity, tariff);
+
+    var tariffClaimedSuccessfully = function () {
+      tariff.assigned = true;
+    };
+
+    var tariffNotClaimed= function (error) {
+      tariff.assignError = error;
+    };
+
+    activityService.claimTariff(passholder, activity, tariff).then(
+      tariffClaimedSuccessfully,
+      tariffNotClaimed
+    );
+
     console.log(passholderActivityTariffsForm);
   };
 
