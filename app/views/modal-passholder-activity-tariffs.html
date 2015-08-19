@@ -5,12 +5,25 @@
   </div>
   <div class="modal-body">
     <div class="container-fluid">
-      <h3>Activity title goes here</h3>
+      <div class="activity-title">{{pat.activity.title}}</div>
       <fieldset ng-disabled="pat.formSubmitBusy">
-        <div class="grid">
-
+        <table>
+          <thead><th></th><th ng-repeat="(rank, value) in pat.activity.sales.base">{{rank}}</th></thead>
+          <tbody>
+            <tr class="base">
+              <th>Basistarief</th>
+              <td ng-repeat="value in pat.activity.sales.base">&euro; {{value}}</td>
+            </tr>
+            <tr ng-repeat="tariff in pat.activity.sales.tariffs.list" ng-class="tariff.type === 'COUPON' ? 'coupon' :'kansen-tariff'">
+              <th>{{tariff.name}}</th>
+              <td ng-repeat="price in tariff.prices" ng-class="{'lowest': (price === pat.activity.sales.tariffs.lowestAvailable)}">&euro; {{price}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          <div class="lowest-legend pull-left"><span class="color-thingie"></span> Laagste tarief</div>
+          <button type="submit" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid" ng-click="pat.submitForm(pat.passholder, pat.activity, passholderActivityTariffs)"><span ng-hide="pat.formSubmitBusy">Tarief toekennen</span> <span ng-show="pat.formSubmitBusy"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span></button>
         </div>
-        <button type="submit" class="btn btn-primary" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid" ng-click="pat.submitForm(pat.passholder, pat.activity, passholderActivityTariffs)"><span ng-hide="pat.formSubmitBusy">Tarief toekennen</span> <span ng-show="pat.formSubmitBusy"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span></button>
       </fieldset>
     </div>
   </div><!-- end modal-body -->
