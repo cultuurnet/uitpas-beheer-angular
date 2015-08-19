@@ -37,7 +37,7 @@ function activityFactory(CheckinState) {
       this.description = jsonActivity.description;
       this.title = jsonActivity.title;
       this.when = jsonActivity.when;
-      this.points = jsonActivity.points;
+      this.points = jsonActivity.points || 0;
       this.checkinConstraint = parseJsonCheckinConstraint(jsonActivity.checkinConstraint);
     },
     getCheckinState: function () {

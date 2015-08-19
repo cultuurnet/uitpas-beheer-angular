@@ -51,7 +51,8 @@ describe('Controller: ActivityController', function () {
   }));
 
   it('should fetch an initial list of activities for the active passholder', function () {
-    expect(activityController.activitiesLoaded).toBeTruthy();
+    expect(activityService.search).toHaveBeenCalled();
+    expect(activityController.activitiesLoading).toEqual(0);
   });
 
   it('should reset the active page when the query or date range search parameter changes', function () {
@@ -90,11 +91,11 @@ describe('Controller: ActivityController', function () {
 
   it('should enter a loading state while retrieving search results', function (){
     activityController.search();
-    expect(activityController.activitiesLoaded).toBeFalsy();
+    expect(activityController.activitiesLoading).toEqual(1);
 
     deferredActivities.resolve(pagedActivities);
     $scope.$digest();
-    expect(activityController.activitiesLoaded).toBeTruthy();
+    expect(activityController.activitiesLoading).toEqual(0);
   });
 
   it('should check in a passholder to an activity', function () {

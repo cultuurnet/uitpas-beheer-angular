@@ -51,6 +51,7 @@ describe('Factory: Activity', function () {
       'title': 'Altijd open',
       'description': '',
       'when': '',
+      'points': 182,
       'checkinConstraint': {
         'allowed': true,
         'startDate': '2015-09-01T00:00:00+00:00',
