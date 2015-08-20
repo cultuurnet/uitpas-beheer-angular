@@ -98,6 +98,15 @@ describe('Controller: ActivityController', function () {
     expect(activityController.activitiesLoading).toEqual(0);
   });
 
+  it('should exit the loading state when search results fail to load', function (){
+    activityController.search();
+    expect(activityController.activitiesLoading).toEqual(1);
+
+    deferredActivities.reject();
+    $scope.$digest();
+    expect(activityController.activitiesLoading).toEqual(0);
+  });
+
   it('should check in a passholder to an activity', function () {
     var deferredCheckin = $q.defer();
 
