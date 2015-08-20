@@ -2,6 +2,7 @@
 .sidebar {
   height: 100%;
   background-color: $gray-0;
+  padding: 0 15px;
   > form,
   > div {
     @include clearfix;
@@ -59,7 +60,7 @@ a.toggle-down {
     font-weight: 700;
   }
   // icons
-  .telephone,
+  .tel,
   .email {
     position: relative;
     padding-left: 20px;;
@@ -72,13 +73,21 @@ a.toggle-down {
       left: 0;
     }
   }
-  .telephone {
+  .tel {
     @extend .glyphicon-earphone;
+  }
+  .tel.mobile {
+    @extend .glyphicon-phone;
   }
   .email {
     @extend .glyphicon-envelope;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .edit {
+    display: inline-block;
+    margin-top: $rh-xsm;
+    margin-bottom: $rh-xxs;
   }
   &-points .label {
     float: right;

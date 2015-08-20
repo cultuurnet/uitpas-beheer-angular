@@ -103,6 +103,72 @@ angular
           }]
         }
       })
+      .state('counter.main.passholder.edit', {
+        onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-passholder-edit.html',
+              params: {
+                'identification': null,
+                'passholder': null
+              },
+              size: 'lg',
+              resolve: {
+                passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+                  if ($stateParams.passholder) {
+                    return $stateParams.passholder;
+                  }
+                  else {
+                    return passholderService.find($stateParams.identification);
+                  }
+                }],
+                identification: ['$stateParams', function($stateParams) {
+                  return $stateParams.identification;
+                }]
+              },
+              controller: 'PassholderEditController',
+              controllerAs: 'pec'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
+      })
+      .state('counter.main.passholder.editContact', {
+        onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-passholder-edit-contact.html',
+              params: {
+                'identification': null,
+                'passholder': null
+              },
+              size: 'sm',
+              resolve: {
+                passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+                  if ($stateParams.passholder) {
+                    return $stateParams.passholder;
+                  }
+                  else {
+                    return passholderService.find($stateParams.identification);
+                  }
+                }],
+                identification: ['$stateParams', function($stateParams) {
+                  return $stateParams.identification;
+                }]
+              },
+              controller: 'PassholderEditController',
+              controllerAs: 'pec'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
+      })
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html'

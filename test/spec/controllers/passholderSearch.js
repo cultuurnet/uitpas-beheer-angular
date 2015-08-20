@@ -38,17 +38,25 @@ describe('Controller: PassholderSearchController', function () {
 
   it('redirects to a passholder detail page with a valid number', function() {
     var passholderDeferred = $q.defer();
-    passholderDeferred.resolve(
-      {
-        passholder: 'object'
-      }
-    );
+    var expectedStateParameters = {
+      passholder: {
+        name: 'Dude Man',
+        passNumber: 'itsme-123456789'
+      },
+      identification: 'itsme-123456789'
+    };
     spyOn(passholderService, 'find').and.returnValue(passholderDeferred.promise);
     spyOn($state, 'go');
     passholderSearchController.searchPassholder('valid identification number');
 
+    passholderDeferred.resolve(
+      {
+        name: 'Dude Man',
+        passNumber: 'itsme-123456789'
+      }
+    );
     rootScope.$digest();
-    expect($state.go).toHaveBeenCalled();
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder', expectedStateParameters);
     expect(passholderService.find).toHaveBeenCalledWith('valid identification number');
   });
 

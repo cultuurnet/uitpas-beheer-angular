@@ -18,7 +18,7 @@
 
   </head>
   <body ng-app="uitpasbeheerApp" ng-controller="AppController as app">
-    <app-loading></app-loading>
+    <ubr-app-loading></ubr-app-loading>
     <ui-view></ui-view>
 
     <!-- build:js(.) scripts/vendor.js -->
@@ -46,7 +46,7 @@
         <script src="scripts/controllers/app.js"></script>
         <script src="scripts/services/uitid.js"></script>
         <script src="scripts/controllers/login.js"></script>
-        <script src="scripts/directives/apploading.js"></script>
+        <script src="scripts/directives/app-loading.directive.js"></script>
         <script src="scripts/directives/passholder-points.directive.js"></script>
         <script src="scripts/services/passholder.js"></script>
         <script src="scripts/services/shareddata.js"></script>
@@ -55,10 +55,12 @@
         <script src="scripts/controllers/error.js"></script>
         <script src="scripts/services/counterService.js"></script>
         <script src="scripts/controllers/counters.js"></script>
+        <script src="scripts/controllers/passholderEdit.js"></script>
         <script src="scripts/controllers/passholderAdvantages.js"></script>
         <script src="scripts/services/advantage.js"></script>
         <script src="scripts/factories/pass.factory.js"></script>
         <script src="scripts/factories/passholder.factory.js"></script>
+        <script src="scripts/directives/insz-number-validation.directive.js"></script>
         <script src="scripts/constants/date-range.constant.js"></script>
         <script src="scripts/constants/checkin-state.constant.js"></script>
         <script src="scripts/controllers/activity.controller.js"></script>
