@@ -71,8 +71,39 @@ function activityService($q, $http, appConfig) {
   };
 
   service.claimTariff = function(passholder, activity, tariff) {
+    var deferredClaim = $q.defer();
     console.log(passholder, activity, tariff);
 
-    return 'Okidokely';
+    var successfullClaim = function (claim) {
+      console.log(claim);
+      deferredClaim.resolve('Whoop Whoop');
+    };
+
+    var failedClaim = function () {
+      deferredClaim.reject({
+        code: 'TARIFF_NOT_CLAIMED',
+        title: 'Tarief niet toiegekend',
+        message: 'Het tarief {tariff_goes_here} voor activiteit {activity_goes_here} kon niet worden toegekend voor {passholder.name_goes_here}'
+      });
+    };
+
+    var claimRequest = $http.post(
+      apiUrl + '/pasholders/' + passholder.passNumber + '/activities/tariffs',
+      {
+        eventCdbid: activity.id,
+        tariffId: tariff.id
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    claimRequest
+      .success(successfullClaim)
+      .error(failedClaim);
+
+    return deferredClaim.promise;
   };
 }

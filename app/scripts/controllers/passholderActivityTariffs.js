@@ -18,6 +18,7 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
 
   controller.passholder = passholder;
   controller.activity = activity;
+  controller.selectedTariff = null;
   controller.formSubmitBusy = false;
 
   controller.cancelModal = function () {
