@@ -93,26 +93,26 @@ function ActivityController (passholder, activityService, DateRange) {
   controller.search();
 
   controller.getActivityTariff = function (activity) {
+    var tariff = null;
+
     if (activity.free) {
-      activity.tariff = 'free';
-      return 'free';
+      tariff = 'free';
     }
     else if (((activity || {}).sales || {}).maximumReached) {
-      activity.tariff = 'maximumreached';
-      return 'maximumReached';
+      tariff = 'maximumreached';
     }
     else if (((activity || {}).sales || {}).differentiation) {
-      activity.tariff = 'priceDifferentiation';
-      return 'priceDifferentiation';
+      tariff = 'priceDifferentiation';
     }
     else if ((((activity || {}).sales || {}).tariffs || {}).kansentariefAvailable) {
-      activity.tariff = 'kansenTariff';
-      return 'kansenTariff';
+      tariff = 'kansenTariff';
     }
     else if ((((activity || {}).sales || {}).tariffs || {}).couponAvailable) {
-      activity.tariff = 'coupon';
-      return 'coupon';
+      tariff = 'coupon';
     }
+
+    activity.tariff = tariff;
+    return tariff;
   };
 
   controller.claimTariff = function (tariff, activity) {
