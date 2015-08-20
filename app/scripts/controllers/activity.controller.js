@@ -24,7 +24,7 @@ function ActivityController (passholder, activityService, DateRange) {
   controller.dateRanges = angular.copy(DateRange);
   controller.dateRange = controller.dateRanges.TODAY;
   controller.totalActivities = 0;
-  controller.activitiesLoaded = false;
+  controller.activitiesLoading = 0;
 
   function getSearchParameters () {
     return {
@@ -35,7 +35,7 @@ function ActivityController (passholder, activityService, DateRange) {
     };
   }
 
-  // keep track of the last used search parameters to check if the active page should be reset
+  // Keep track of the last used search parameters to check if the active page should be reset.
   var lastSearchParameters = getSearchParameters();
 
   /**
@@ -80,15 +80,46 @@ function ActivityController (passholder, activityService, DateRange) {
     var showSearchResults = function (pagedActivities) {
       controller.activities = pagedActivities.activities;
       controller.totalActivities = pagedActivities.totalActivities;
-      controller.activitiesLoaded = true;
+      --controller.activitiesLoading;
     };
 
-    controller.activitiesLoaded = false;
+    var searchingFailed = function () {
+      --controller.activitiesLoading;
+    };
+
+    ++controller.activitiesLoading;
     activityService
       .search(passholder, searchParameters)
-      .then(showSearchResults);
+      .then(showSearchResults, searchingFailed);
   };
 
-  // do an initial search to populate the activity list
+  // Do an initial search to populate the activity list.
   controller.search();
+
+  controller.checkin = function (activity) {
+    activity.checkinBusy = true;
+
+    function updateActivity(newActivity) {
+      controller.activities = controller.activities.map(function (activity) {
+        if (activity.id === newActivity.id) {
+          activity = newActivity;
+          activity.checkinConstraint.reason = 'MAXIMUM_REACHED';
+          activity.checkinBusy = false;
+        }
+        return activity;
+      });
+    }
+
+    function checkinError() {
+      controller.activities = controller.activities.map(function (existingActivity) {
+        if (existingActivity.id === activity.id) {
+          existingActivity.checkinBusy = false;
+          existingActivity.checkinFailed = true;
+        }
+        return existingActivity;
+      });
+    }
+
+    activityService.checkin(activity, passholder).then(updateActivity, checkinError);
+  };
 }

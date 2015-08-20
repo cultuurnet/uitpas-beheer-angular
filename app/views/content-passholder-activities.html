@@ -4,7 +4,7 @@
     <div class="grid__12 grid--bp-med__6">
       <div class="btn-group" dropdown>
         <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
-        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
+        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="!!ac.activitiesLoading">
           <span class="caret"></span>
           <span class="sr-only">Split button!</span>
         </button>
@@ -30,27 +30,46 @@
     </div>
     <div class="grid__12 grid--bp-med__6 search text-right">
       <input class="form-control" type="text" ng-model="ac.query" />
-      <button class="btn btn-ghost-dark" ng-click="ac.searchParametersChanged()">Zoeken</button>
+      <button class="btn btn-ghost-dark" ng-click="ac.searchParametersChanged()" ng-disabled="!!ac.activitiesLoading">
+        Zoeken
+      </button>
     </div>
   </div>
 
-  <div class="overview__loading" ng-show="!ac.activitiesLoaded">
+  <div class="overview__loading" ng-show="ac.activitiesLoading">
     <div class="spinner spinner-small">
       <circle-spinner></circle-spinner>
     </div>
   </div>
 
-  <div class="alert alert-info" ng-if="ac.activitiesLoaded && !ac.totalActivities">Helaas geen activiteiten gevonden... </div>
-  
-  <ul class="list-unstyled" ng-if="ac.activitiesLoaded && ac.totalActivities > 0">
+  <div class="alert alert-info" ng-if="!ac.activitiesLoading && !ac.totalActivities">Helaas geen activiteiten gevonden... </div>
+
+  <ul class="list-unstyled" ng-if="!ac.activitiesLoading && ac.totalActivities > 0">
     <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
       <div class="grid flex-container grid-halfgutter">
         <div class="grid__12 grid--bp-sml__6 first">
-          <div class="date" ng-bind="activity.when"></div>
-          <h3 ng-bind="activity.title"></h3>
+          <div class="date" ng-bind="::activity.when"></div>
+          <h3 ng-bind="::activity.title"></h3>
         </div>
-        <div class="grid__12 grid--bp-sml__3 middle">
-          <!-- col points -->
+
+        <div class="grid__12 grid--bp-sml__3 middle" ng-switch="activity.getCheckinState().name" ng-if="!activity.checkinFailed && !activity.checkinBusy">
+          <i ng-switch-when="already checked in">Punten gespaard</i>
+          <i ng-switch-when="not yet available">
+            Sparen mogelijk vanaf <span ng-bind="::activity.checkinConstraint.startDate | date:'dd/MM/yyyy'"></span> om <span ng-bind="::activity.checkinConstraint.startDate | date:'H:mm'"></span>
+          </i>
+          <i ng-switch-when="expired">Evenement afgelopen</i>
+          <div ng-switch-when="available">
+            <span class="activity-points">+<span ng-bind="::activity.points"></span></span>
+            <button ng-click="ac.checkin(activity)">Punten sparen</button>
+          </div>
+        </div>
+        <div class="grid__12 grid--bp-sml__3 middle" ng-if="activity.checkinFailed && !activity.checkinBusy">
+          <i class="error">Het sparen van punt(en) voor <span ng-bind="::activity.title"></span> is niet gelukt.</i>
+        </div>
+        <div class="grid__12 grid--bp-sml__3 middle" ng-if="!activity.checkinFailed && activity.checkinBusy">
+          <div class="spinner spinner-small">
+            <circle-spinner></circle-spinner>
+          </div>
         </div>
         <div class="grid__12 grid--bp-sml__3 last">
           <!-- col tarifs -->
