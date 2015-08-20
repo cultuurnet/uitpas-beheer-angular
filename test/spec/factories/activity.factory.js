@@ -59,9 +59,30 @@ describe('Factory: Activity', function () {
         'reason': ''
       }
     };
-
     var activity = new Activity(jsonActivity);
-
     expect(activity.getCheckinState()).toEqual(CheckinState.AVAILABLE);
+
+    var jsonActivityMaximumReached = angular.copy(jsonActivity);
+    jsonActivityMaximumReached.checkinConstraint.reason = 'MAXIMUM_REACHED';
+    var activityMaximumReached = new Activity(jsonActivityMaximumReached);
+    expect(activityMaximumReached.getCheckinState()).toEqual(CheckinState.ALREADY_CHECKED_IN);
+
+    var jsonActivityInvalidDateTimeExpired = angular.copy(jsonActivity);
+    jsonActivityInvalidDateTimeExpired.checkinConstraint.reason = 'INVALID_DATE_TIME';
+    jsonActivityInvalidDateTimeExpired.checkinConstraint.endDate = new Date();
+    jsonActivityInvalidDateTimeExpired.checkinConstraint.endDate.setDate(jsonActivityInvalidDateTimeExpired.checkinConstraint.endDate.getDate() - 1);
+    jsonActivityInvalidDateTimeExpired.checkinConstraint.startDate = new Date();
+    jsonActivityInvalidDateTimeExpired.checkinConstraint.startDate.setDate(jsonActivityInvalidDateTimeExpired.checkinConstraint.startDate.getDate() - 2);
+    var activityInvalidDateTimeExpired = new Activity(jsonActivityInvalidDateTimeExpired);
+    expect(activityInvalidDateTimeExpired.getCheckinState()).toEqual(CheckinState.EXPIRED);
+
+    var jsonActivityInvalidDateTimeNotYetAvailable = angular.copy(jsonActivity);
+    jsonActivityInvalidDateTimeNotYetAvailable.checkinConstraint.reason = 'INVALID_DATE_TIME';
+    jsonActivityInvalidDateTimeNotYetAvailable.checkinConstraint.endDate = new Date();
+    jsonActivityInvalidDateTimeNotYetAvailable.checkinConstraint.endDate.setDate(jsonActivityInvalidDateTimeExpired.checkinConstraint.endDate.getDate() + 20);
+    jsonActivityInvalidDateTimeNotYetAvailable.checkinConstraint.startDate = new Date();
+    jsonActivityInvalidDateTimeNotYetAvailable.checkinConstraint.startDate.setDate(jsonActivityInvalidDateTimeExpired.checkinConstraint.startDate.getDate() + 10);
+    var activityInvalidDateTimeNotYetAvailable = new Activity(jsonActivityInvalidDateTimeNotYetAvailable);
+    expect(activityInvalidDateTimeNotYetAvailable.getCheckinState()).toEqual(CheckinState.NOT_YET_AVAILABLE);
   });
 });
