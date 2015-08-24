@@ -12,7 +12,7 @@ angular
   .service('activityService', activityService);
 
 /* @ngInject */
-function activityService($q, $http, appConfig) {
+function activityService($q, $http, $rootScope, appConfig, Activity) {
   var apiUrl = appConfig.apiUrl;
 
   /*jshint validthis: true */
@@ -52,8 +52,8 @@ function activityService($q, $http, appConfig) {
       };
 
       if (activityData.member) {
-        activityData.member.forEach(function (activity) {
-          pagedResults.activities.push(activity);
+        activityData.member.forEach(function (jsonActivity) {
+          pagedResults.activities.push(new Activity(jsonActivity));
         });
       }
 
@@ -105,5 +105,40 @@ function activityService($q, $http, appConfig) {
       .error(failedClaim);
 
     return deferredClaim.promise;
+  };
+
+  service.checkin = function(activity, passholder) {
+    var deferredCheckin = $q.defer();
+
+    var checkinRequest = $http.post(
+      apiUrl + 'passholders/' + passholder.passNumber + '/activities/checkins',
+      {
+        eventCdbid: activity.id
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    var checkinAccepted = function (jsonActivity) {
+      var checkedInActivity = new Activity(jsonActivity);
+      deferredCheckin.resolve(checkedInActivity);
+      $rootScope.$emit('activityCheckedIn', checkedInActivity);
+    };
+
+    var checkinRejected = function () {
+      deferredCheckin.reject({
+        code: 'CHECKIN_FAILED',
+        title: 'Punten sparen mislukt',
+        message: 'Het sparen van punt(en) voor ' + activity.title + ' is niet gelukt.'
+      });
+    };
+
+    checkinRequest.success(checkinAccepted);
+    checkinRequest.error(checkinRejected);
+
+    return deferredCheckin.promise;
   };
 }
