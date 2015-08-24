@@ -80,7 +80,7 @@ describe('Controller: PassholderActivityTariffsController', function () {
     expect(modalInstance.dismiss).toHaveBeenCalled();
   });
 
-  fit('can get tariff information from the submitted form', function () {
+  it('can get tariff information from the submitted form', function () {
     var tariffFormStubCoupon = {
       tariff: {
         $viewValue: 'COUPON-10-Prijs klasse'
