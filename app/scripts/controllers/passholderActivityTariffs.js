@@ -28,7 +28,7 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
 
   controller.submitForm = function (passholder, activity, passholderActivityTariffsForm) {
     controller.formSubmitBusy = true;
-    var tariff = getTariffFromForm(passholderActivityTariffsForm);
+    var tariff = controller.getTariffFromForm(passholderActivityTariffsForm);
 
     var tariffClaimedSuccessfully = function () {
       tariff.assigned = true;
@@ -50,7 +50,7 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
     );
   };
 
-  function getTariffFromForm(passholderActivityTariffsForm) {
+  controller.getTariffFromForm = function (passholderActivityTariffsForm) {
     var splitTariffValue = passholderActivityTariffsForm.tariff.$viewValue.split('-');
     var tariffValue = {
       type: splitTariffValue[0],
