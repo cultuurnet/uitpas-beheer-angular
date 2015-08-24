@@ -61,5 +61,5 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
     tariffValue.price = splitTariffValue.join('-');
 
     return tariffValue;
-  }
+  };
 }
