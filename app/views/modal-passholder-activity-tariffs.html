@@ -28,7 +28,7 @@
         </table>
         <!--<pre>{{passholderActivityTariffs|json}}</pre>-->
         <div>
-          <div class="lowest-legend pull-left"><span class="color-thingie"></span> Laagste tarief</div>
+          <div class="lowest-legend small pull-left">Laagste tarief</div>
           <button type="submit" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid" ng-click="pat.submitForm(pat.passholder, pat.activity, passholderActivityTariffs)"><span ng-hide="pat.formSubmitBusy">Tarief toekennen</span> <span ng-show="pat.formSubmitBusy"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span></button>
         </div>
       </fieldset>
