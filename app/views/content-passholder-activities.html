@@ -46,7 +46,7 @@
 
   <ul class="list-unstyled" ng-if="!ac.activitiesLoading && ac.totalActivities > 0">
     <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
-      <div class="grid flex-container grid-halfgutter">
+      <div class="grid flex-container">
         <div class="grid__12 grid--bp-sml__6 first">
           <div class="date" ng-bind="::activity.when"></div>
           <h3 ng-bind="::activity.title"></h3>
@@ -59,20 +59,20 @@
           </i>
           <i ng-switch-when="expired">Evenement afgelopen</i>
           <div ng-switch-when="available">
-            <span class="activity-points">+<span ng-bind="::activity.points"></span></span>
-            <button ng-click="ac.checkin(activity)">Punten sparen</button>
+            <div class="points">+<span ng-bind="::activity.points"></span></div>
+            <button class="btn btn-default btn-block btn-sm" ng-click="ac.checkin(activity)">Punten sparen</button>
           </div>
         </div>
         <div class="grid__12 grid--bp-sml__3 middle" ng-if="activity.checkinFailed && !activity.checkinBusy">
           <i class="error">Het sparen van punt(en) voor <span ng-bind="::activity.title"></span> is niet gelukt.</i>
         </div>
         <div class="grid__12 grid--bp-sml__3 middle" ng-if="!activity.checkinFailed && activity.checkinBusy">
-          <div class="spinner spinner-small">
+          <div class="spinner spinner-xsmall">
             <circle-spinner></circle-spinner>
           </div>
         </div>
         <div class="grid__12 grid--bp-sml__3 last" ng-show="activity.tariffClaimInProgress && !activity.tariffClaimError">
-          <div class="spinner spinner-xsmalll">
+          <div class="spinner spinner-xsmall">
             <circle-spinner></circle-spinner>
           </div>
         </div>
@@ -83,17 +83,17 @@
           <div class="free-event" ng-switch-when="free">Gratis</div>
           <div class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<!--<span><a class="history-modal" >Historiek</a></span>--></div>
           <div class="price-differentiation" ng-switch-when="priceDifferentiation">
-            <span>vanaf <strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong></span>
-            <a class="tariff-modal" ui-sref="counter.main.passholder.activityTariffs({ activity: activity })">Tarief kiezen</a>
+            <span><small>vanaf</small> <strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong></span>
+            <a class="btn btn-default btn-block btn-sm tariff-modal" ui-sref="counter.main.passholder.activityTariffs({ activity: activity })">Tarief kiezen</a>
           </div>
           <div class="kansen-tariff" ng-switch-when="kansenTariff" ng-hide="activity.tariffClaimInProgress">
-            <span><strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong> aan kansentarief</span>
-            <a class="assign-tariff" ng-click="ac.claimTariff(activity.sales.tariffs.list[0], activity)" >Tarief toekennen</a>
+            <span><strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong> <small>aan kansentarief</small></span>
+            <a class="btn btn-default btn-block btn-sm assign-tariff" ng-click="ac.claimTariff(activity.sales.tariffs.list[0], activity)" >Tarief toekennen</a>
           </div>
           <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = ac.getTariffCoupon(activity.sales.tariffs)">
             <strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong>
-            <span>{{tariffCoupon.name}}</span>
-            <a class="assign-tariff" ng-click="ac.claimTariff(tariffCoupon, activity)" >Tarief toekennen</a>
+            <small>{{tariffCoupon.name}}</small>
+            <a class="btn btn-default btn-block btn-sm assign-tariff" ng-click="ac.claimTariff(tariffCoupon, activity)" >Tarief toekennen</a>
           </div>
         </div>
       </div>

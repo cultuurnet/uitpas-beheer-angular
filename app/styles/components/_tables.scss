@@ -1,18 +1,6 @@
 table {
   width: 100%;
   margin: $rh-xsm 0;
-  tr {
-    border-bottom: 1px solid $gray-15;
-  }
-  td {
-    padding: $rh-xsm;
-    &.lowest {
-      background-color: lighten($brand-success, 30%);
-    }
-    .coupon & {
-      background-color: $gray-0;
-    }
-  }
   thead {
     border-bottom: 1px solid $gray-15;
   }
@@ -30,6 +18,29 @@ table {
   tbody td {
     text-align: center;
     vertical-align: middle;
+  }
+  tr {
+    border-bottom: 1px solid $gray-15;
+  }
+  td {
+    padding: $rh-xsm;
+    &.lowest {
+      background-color: lighten($brand-success, 30%);
+    }
+  }
+  .coupon {
+    th:before {
+      @extend .fa;
+      @extend .fa-ticket;
+      margin-right: 5px;
+    }
+    th,
+    td {
+      background-color: $gray-0;
+    }
+    td.lowest {
+      background-color: lighten($brand-success, 30%);
+    }
   }
 }
 td label {
