@@ -34,8 +34,8 @@
 // Sidebar: Passholder
 .back-nav {
   a:before {
-    @extend .glyphicon;
-    @extend .glyphicon-arrow-left;
+    @extend .fa;
+    @extend .fa-arrow-left;
     font-size: .8em;
     margin-right: 5px;
   }
@@ -45,13 +45,13 @@ a.toggle-down {
   display: inline-block;
   margin: $rh-xsm 0 $rh-xxs;
   i {
-    @extend .glyphicon;
-    @extend .glyphicon-chevron-down;
+    @extend .fa;
+    @extend .fa-chevron-down;
     font-size: .8em;
     margin-left: 5px;
   }
   &[aria-expanded='true'] i {
-    @extend .glyphicon-chevron-up;
+    @extend .fa-chevron-up;
   }
 }
 
@@ -65,24 +65,29 @@ a.toggle-down {
     position: relative;
     padding-left: 20px;;
     &:before {
-      @extend .glyphicon;
-      font-size: .8em;
+      @extend .fa;
       margin-right: 5px;
       position: absolute;
-      top: .55em;
+      top: 5px;
       left: 0;
+      width: 15px;
+      text-align: center;
     }
   }
-  .tel {
-    @extend .glyphicon-earphone;
+  .tel:before {
+    @extend .fa-phone;
   }
-  .tel.mobile {
-    @extend .glyphicon-phone;
+  .tel.mobile:before {
+    @extend .fa-mobile;
+    font-size: 1.2em;
   }
   .email {
-    @extend .glyphicon-envelope;
     overflow: hidden;
     text-overflow: ellipsis;
+    &:before {
+      @extend .fa-envelope;
+      font-size: .8em;
+    }
   }
   .edit {
     display: inline-block;
