@@ -34,14 +34,24 @@
 }
 
 // Loading Overviews
-.overview .spinning-dots-spinner {
+.spinner-small .spinning-dots-spinner {
   width: 30px;
   height: 30px;
   margin: $rh-lrg auto;
 }
-.overview .spinning-dots-spinner [class*="circle"] {
+.spinner-small .spinning-dots-spinner [class*="circle"] {
   width: 6px;
   height: 6px;
+  background-color: $gray-50;
+}
+.spinner-xsmall .spinning-dots-spinner {
+  width: 12px;
+  height: 12px;
+  margin: 0 auto;
+}
+.spinner-xsmall .spinning-dots-spinner [class*="circle"] {
+  width: 2px;
+  height: 2px;
   background-color: $gray-50;
 }
 
