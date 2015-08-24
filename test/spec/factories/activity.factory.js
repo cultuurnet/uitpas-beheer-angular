@@ -23,6 +23,29 @@ describe('Factory: Activity', function () {
         'startDate': '2015-09-01T00:00:00+00:00',
         'endDate': '2015-09-01T23:59:59+00:00',
         'reason': ''
+      },
+      free: true,
+      sales: {
+        maximumReached: false,
+        differentiation: false,
+        base: {
+          'Default prijsklasse': 6
+        },
+        tariffs: {
+          kansentariefAvailable: true,
+          couponAvailable: false,
+          lowestAvailable: 1.5,
+          list: [
+            {
+              name: 'Kansentarief',
+              type: 'KANSENTARIEF',
+              maximumReached: false,
+              prices: {
+                'Default prijsklasse': 1.5
+              }
+            }
+          ]
+        }
       }
     };
 
@@ -37,6 +60,29 @@ describe('Factory: Activity', function () {
         'startDate': new Date('2015-09-01T00:00:00+00:00'),
         'endDate': new Date('2015-09-01T23:59:59+00:00'),
         'reason': ''
+      },
+      free: true,
+      sales: {
+        maximumReached: false,
+        differentiation: false,
+        base: {
+          'Default prijsklasse': 6
+        },
+        tariffs: {
+          kansentariefAvailable: true,
+          couponAvailable: false,
+          lowestAvailable: 1.5,
+          list: [
+            {
+              name: 'Kansentarief',
+              type: 'KANSENTARIEF',
+              maximumReached: false,
+              prices: {
+                'Default prijsklasse': 1.5
+              }
+            }
+          ]
+        }
       }
     };
 

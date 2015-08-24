@@ -43,7 +43,7 @@
   }
   &__item-list {
     border-top: 1px solid $white;
-    border-bottom: 1px solid $gray-25;
+    border-bottom: 1px solid $gray-15;
     margin-bottom: 0;
     padding: $rh-sml $rh-xxs;
     @include transitions((border, background));
@@ -51,7 +51,7 @@
       background-color: $hover-bg;
     }
     &:first-child {
-      border-top-color: $gray-25;
+      border-top-color: $gray-15;
     }
     h3 {
       color: $brand-primary;
@@ -87,7 +87,6 @@
   }
   // Variants
   &-advantages {
-    .points,
     .actions {
       padding-bottom: $rh-xsm;
       text-align: center;
@@ -95,10 +94,6 @@
     .alert {
       text-align: center;
       margin-bottom: 0;
-    }
-    .points {
-      color: $green-50;
-      font-weight: 600;
     }
     .btn {
       width: 100%;
@@ -127,8 +122,16 @@
       margin-bottom: 0;
     }
     .middle {
-      //background-color: $gray-0;
       @include transitions((background));
+      background-color: $gray-0;
+      padding-left: $rh-sml;
+      padding-right: $rh-sml;
+      text-align: center;
+    }
+    .last {
+      padding-left: $rh-sml;
+      padding-right: $rh-sml;
+      text-align: center;
     }
     li {
       padding-bottom: 0;
@@ -136,13 +139,27 @@
     }
     li:hover {
       .middle {
-        //background-color: $hover-border;
+        background-color: $hover-border;
       }
     }
     li .grid > [class*="grid"] {
       padding-top: $rh-sml;
       padding-bottom: $rh-sml;
     }
+  }
+  .points {
+    color: $brand-success;
+    font-weight: 600;
+    padding-bottom: $rh-sml;
+    text-align: center;
+  }
+  .price-differentiation strong {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .kansen-tariff small {
+    display: block;
+    margin-bottom: 5px;
   }
 }
 

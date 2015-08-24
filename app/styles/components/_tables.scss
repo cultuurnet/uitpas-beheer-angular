@@ -1,0 +1,62 @@
+table {
+  width: 100%;
+  margin: $rh-xsm 0;
+  thead {
+    border-bottom: 1px solid $gray-15;
+  }
+  thead th {
+    padding: $rh-xsm;
+    text-align: center;
+    vertical-align: middle;
+  }
+  tbody th {
+    font-weight: normal;
+    padding: $rh-xsm;
+    text-align: left;
+    vertical-align: top;
+  }
+  tbody td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  tr {
+    border-bottom: 1px solid $gray-15;
+  }
+  td {
+    padding: $rh-xsm;
+    &.lowest {
+      background-color: lighten($brand-success, 30%);
+    }
+  }
+  .coupon {
+    th:before {
+      @extend .fa;
+      @extend .fa-ticket;
+      margin-right: 5px;
+    }
+    th,
+    td {
+      background-color: $gray-0;
+    }
+    td.lowest {
+      background-color: lighten($brand-success, 30%);
+    }
+  }
+}
+td label {
+  margin-bottom: 0;
+}
+td label input + span {
+  display: block;
+  font-weight: normal;
+}
+.lowest-legend {
+  &:before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    background-color: lighten($brand-success, 30%);
+  }
+}

@@ -31,6 +31,41 @@ function activityFactory(CheckinState) {
     };
   }
 
+  function parseJsonSales (jsonSales) {
+    return {
+      differentiation: jsonSales.differentiation,
+      maximumReached: jsonSales.maximumReached,
+      base: jsonSales.base,
+      tariffs: parseJsonSalesTariffs(jsonSales.tariffs)
+    };
+  }
+
+  function parseJsonSalesTariffs (jsonSalesTariffs) {
+    return {
+      kansentariefAvailable: jsonSalesTariffs.kansentariefAvailable,
+      couponAvailable: jsonSalesTariffs.couponAvailable,
+      lowestAvailable: jsonSalesTariffs.lowestAvailable,
+      list: parseJsonSalesTariffsList(jsonSalesTariffs.list)
+    };
+  }
+
+  function parseJsonSalesTariffsList (jsonSalesTariffsList) {
+    var list = [];
+    angular.forEach(jsonSalesTariffsList, function(listItem) {
+      var newListItem = {
+        name: listItem.name,
+        type: listItem.type,
+        maximumReached: listItem.maximumReached,
+        prices: listItem.prices
+      };
+      if (!angular.isUndefined(listItem.id)) {
+        newListItem.id = listItem.id;
+      }
+      list.push(newListItem);
+    });
+    return list;
+  }
+
   Activity.prototype = {
     parseJson: function (jsonActivity) {
       this.id = jsonActivity.id;
@@ -38,7 +73,11 @@ function activityFactory(CheckinState) {
       this.title = jsonActivity.title;
       this.when = jsonActivity.when;
       this.points = jsonActivity.points || 0;
+      this.free = jsonActivity.free;
       this.checkinConstraint = parseJsonCheckinConstraint(jsonActivity.checkinConstraint);
+      if (!angular.isUndefined(jsonActivity.sales)) {
+        this.sales = parseJsonSales(jsonActivity.sales);
+      }
     },
     getCheckinState: function () {
       var state;

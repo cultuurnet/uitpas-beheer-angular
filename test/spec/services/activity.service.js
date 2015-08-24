@@ -32,7 +32,8 @@ describe('Service: activity', function (){
           'startDate': '2015-09-01T00:00:00+00:00',
           'endDate': '2015-09-01T23:59:59+00:00',
           'reason': ''
-        }
+        },
+        'free': false
       },
       {
         'id': 'eb7c1532-dc32-43bf-a0be-1b9dcf52d2be',
@@ -45,7 +46,8 @@ describe('Service: activity', function (){
           'startDate': '2015-09-01T00:00:00+00:00',
           'endDate': '2015-09-01T23:59:59+00:00',
           'reason': ''
-        }
+        },
+        'free': true
       }
     ],
     'firstPage': 'http://culpas-silex.dev/passholders/0900000330317/activities?date_type=today&limit=5&page=1&query=',
@@ -86,7 +88,8 @@ describe('Service: activity', function (){
             'startDate': new Date('2015-09-01T00:00:00+00:00'),
             'endDate': new Date('2015-09-01T23:59:59+00:00'),
             'reason': ''
-          }
+          },
+          'free': false
         },
         {
           'id': 'eb7c1532-dc32-43bf-a0be-1b9dcf52d2be',
@@ -99,9 +102,10 @@ describe('Service: activity', function (){
             'startDate': new Date('2015-09-01T00:00:00+00:00'),
             'endDate': new Date('2015-09-01T23:59:59+00:00'),
             'reason': ''
-          }
+          },
+          'free': true
         }
-      ],
+    ],
       totalActivities: 2
     };
 
