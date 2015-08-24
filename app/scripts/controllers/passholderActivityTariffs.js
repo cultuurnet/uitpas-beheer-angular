@@ -20,6 +20,7 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
   controller.activity = activity;
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
+  controller.formSubmitError = false;
 
   controller.cancelModal = function () {
     $modalInstance.dismiss();
@@ -31,22 +32,33 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
 
     var tariffClaimedSuccessfully = function () {
       tariff.assigned = true;
+      controller.formSubmitBusy = false;
+      $modalInstance.close('fred');
     };
 
     var tariffNotClaimed= function (error) {
-      tariff.assignError = error;
+      controller.formSubmitError = error;
+      tariff.assignError = true;
+      controller.formSubmitBusy = false;
     };
+
 
     activityService.claimTariff(passholder, activity, tariff).then(
       tariffClaimedSuccessfully,
       tariffNotClaimed
     );
-
-    console.log(passholderActivityTariffsForm);
   };
 
   function getTariffFromForm(passholderActivityTariffsForm) {
-    console.log(passholderActivityTariffsForm);
-    return 'tariff';
+    var splitTariffValue = passholderActivityTariffsForm.tariff.$viewValue.split('-');
+    var tariffValue = {
+      type: splitTariffValue[0],
+      id: splitTariffValue[1]
+    };
+
+    splitTariffValue = splitTariffValue.slice(2);
+    tariffValue.price = splitTariffValue.join('-');
+
+    return tariffValue;
   }
 }

@@ -103,7 +103,7 @@ function ActivityController (passholder, activityService, DateRange) {
       tariff = 'free';
     }
     else if (((activity || {}).sales || {}).maximumReached) {
-      tariff = 'maximumreached';
+      tariff = 'maximumReached';
     }
     else if (((activity || {}).sales || {}).differentiation) {
       tariff = 'priceDifferentiation';
@@ -119,8 +119,23 @@ function ActivityController (passholder, activityService, DateRange) {
     return tariff;
   };
 
+  controller.getTariffCoupon = function(tariffs) {
+    var tariffCoupon = false;
+    angular.forEach(tariffs.list, function (tariff) {
+      if (tariff.type !== 'KANSENTARIEF') {
+        tariffCoupon = tariff;
+
+        tariffCoupon.price = Object.keys(tariff.prices)[0];
+      }
+    });
+
+    return tariffCoupon;
+  };
+
   controller.claimTariff = function (tariff, activity) {
+    activity.tariffClaimInProgress = true;
     var tariffClaimedSuccessfully = function () {
+      activity.tariffClaimInProgress = false;
       tariff.assigned = true;
     };
 

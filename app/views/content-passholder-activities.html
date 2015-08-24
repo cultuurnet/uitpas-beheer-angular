@@ -72,20 +72,23 @@
           </div>
         </div>
         <div class="grid__12 grid--bp-sml__3 last" ng-switch="ac.getActivityTariff(activity)">
+          <div class="spinner spinner-small" ng-show="activity.tariffClaimInProgress">
+            <circle-spinner></circle-spinner>
+          </div>
           <div class="free-event" ng-switch-when="free">Gratis</div>
           <div class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<!--<span><a class="history-modal" >Historiek</a></span>--></div>
           <div class="price-differentiation" ng-switch-when="priceDifferentiation">
             <span>vanaf <strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong></span>
             <a class="tariff-modal" ui-sref="counter.main.passholder.activityTariffs({ activity: activity })">Tarief kiezen</a>
           </div>
-          <div class="kansen-tariff" ng-switch-when="kansenTariff">
+          <div class="kansen-tariff" ng-switch-when="kansenTariff" ng-hide="activity.tariffClaimInProgress">
             <span><strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong> aan kansentarief</span>
-            <a class="assign-tariff" onclick="ac.claimTariff(activity.sales.tariffs[0], activity)" >Tarief toekennen</a>
+            <a class="assign-tariff" ng-click="ac.claimTariff(activity.sales.tariffs.list[0], activity)" >Tarief toekennen</a>
           </div>
-          <div class="coupon" ng-switch-when="coupon">
+          <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = ac.getTariffCoupon(activity.sales.tariffs)" ng-hide="activity.tariffClaimInProgress">
             <strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong>
-            <span>{{activity.sales.tariffs.list[0].name}}</span>
-            <a class="assign-tariff" onclick="ac.claimTariff(activity.sales.tariffs[0], activity)" >Tarief toekennen</a>
+            <span>{{tariffCoupon.name}}</span>
+            <a class="assign-tariff" ng-click="ac.claimTariff(tariffCoupon, activity)" >Tarief toekennen</a>
           </div>
         </div>
       </div>

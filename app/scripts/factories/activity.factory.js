@@ -52,12 +52,16 @@ function activityFactory(CheckinState) {
   function parseJsonSalesTariffsList (jsonSalesTariffsList) {
     var list = [];
     angular.forEach(jsonSalesTariffsList, function(listItem) {
-      list.push({
+      var newListItem = {
         name: listItem.name,
         type: listItem.type,
         maximumReached: listItem.maximumReached,
         prices: listItem.prices
-      });
+      };
+      if (!angular.isUndefined(listItem.id)) {
+        newListItem.id = listItem.id;
+      }
+      list.push(newListItem);
     });
     return list;
   }

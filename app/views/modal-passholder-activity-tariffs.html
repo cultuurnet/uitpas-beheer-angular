@@ -6,6 +6,7 @@
   <div class="modal-body">
     <div class="container-fluid">
       <div class="activity-title">{{pat.activity.title}}</div>
+      <div class="alert alert-danger" ng-show="pat.formSubmitError" ng-bind="pat.formSubmitError.message"></div>
       <fieldset ng-disabled="pat.formSubmitBusy">
         <table>
           <thead><th></th><th ng-repeat="(rank, value) in pat.activity.sales.base">{{rank}}</th></thead>
@@ -18,7 +19,7 @@
               <th>{{tariff.name}}</th>
               <td ng-repeat="(pKey, price) in tariff.prices" ng-class="{'lowest': (price === pat.activity.sales.tariffs.lowestAvailable)}">
                 <label for="price-{{tKey}}-{{pKey}}">
-                  <input type="radio" name="tariff" id="price-{{tKey}}-{{pKey}}" ng-model="pat.selectedTariff" required value="{{tariff.type}}-{{pKey}}">
+                  <input type="radio" name="tariff" id="price-{{tKey}}-{{pKey}}" ng-model="pat.selectedTariff" required value="{{tariff.type}}-{{tariff.id}}-{{pKey}}">
                   <span class="price">&euro; {{price}}</span>
                 </label>
               </td>

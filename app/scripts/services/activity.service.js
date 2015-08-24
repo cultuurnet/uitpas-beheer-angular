@@ -72,27 +72,30 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
 
   service.claimTariff = function(passholder, activity, tariff) {
     var deferredClaim = $q.defer();
-    console.log(passholder, activity, tariff);
 
-    var successfullClaim = function (claim) {
-      console.log(claim);
-      deferredClaim.resolve('Whoop Whoop');
+    var successfullClaim = function () {
+      deferredClaim.resolve();
     };
 
     var failedClaim = function () {
       deferredClaim.reject({
         code: 'TARIFF_NOT_CLAIMED',
-        title: 'Tarief niet toiegekend',
-        message: 'Het tarief {tariff_goes_here} voor activiteit {activity_goes_here} kon niet worden toegekend voor {passholder.name_goes_here}'
+        title: 'Tarief niet toegekend',
+        message: 'Het geselecteerde tarief voor activiteit "' + activity.title + '" kon niet worden toegekend voor ' + passholder.name.first + ' ' + passholder.name.last
       });
     };
 
+    var claimParameters = {
+      activityId: activity.id,
+      priceClass: tariff.price
+    };
+    if (tariff.type === 'COUPON') {
+      claimParameters.tariffId = tariff.id;
+    }
+
     var claimRequest = $http.post(
-      apiUrl + '/pasholders/' + passholder.passNumber + '/activities/tariffs',
-      {
-        eventCdbid: activity.id,
-        tariffId: tariff.id
-      },
+      apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales',
+      claimParameters,
       {
         headers: {
           'Content-Type': 'application/json'
