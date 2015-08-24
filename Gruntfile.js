@@ -397,9 +397,9 @@ module.exports = function (grunt) {
     // Run modernizr
     modernizr: {
       dist: {
-        // [REQUIRED] Path to the build you're using for development. 
+        // [REQUIRED] Path to the build you're using for development.
         'devFile' : 'node_modules/grunt-modernizr/lib/modernizr-dev.js',
-        // Path to save out the built file. 
+        // Path to save out the built file.
         'outputFile' : '.tmp/scripts/modernizr-custom.js',
         uglify: false
       }
@@ -451,6 +451,11 @@ module.exports = function (grunt) {
           cwd: '.',
           src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
           dest: '<%= yeoman.dist %>'
+        }, {
+          expand: true,
+          cwd: 'bower_components/fontawesome/',
+          src: 'fonts/*',
+          dest: '<%= yeoman.dist %>'
         }]
       },
       styles: {
@@ -458,6 +463,12 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      fonts: {
+        expand: true,
+        cwd: 'bower_components/fontawesome/fonts',
+        dest: '<%= yeoman.app %>/fonts',
+        src: '*'
       }
     },
 
