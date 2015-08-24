@@ -12,7 +12,7 @@ angular
   .controller('PassholderActivityTariffsController', PassholderActivityTariffsController);
 
 /* @ngInject */
-function PassholderActivityTariffsController (passholder, activity, $modalInstance, activityService) {
+function PassholderActivityTariffsController (passholder, activity, $modalInstance, activityService, $rootScope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -32,8 +32,9 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
 
     var tariffClaimedSuccessfully = function () {
       tariff.assigned = true;
+      $rootScope.$emit('activityTariffClaimed', activity);
       controller.formSubmitBusy = false;
-      $modalInstance.close('fred');
+      $modalInstance.close();
     };
 
     var tariffNotClaimed= function (error) {

@@ -12,7 +12,7 @@ angular
   .controller('ActivityController', ActivityController);
 
 /* @ngInject */
-function ActivityController (passholder, activityService, DateRange) {
+function ActivityController (passholder, activityService, DateRange, $rootScope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -124,8 +124,6 @@ function ActivityController (passholder, activityService, DateRange) {
     angular.forEach(tariffs.list, function (tariff) {
       if (tariff.type !== 'KANSENTARIEF') {
         tariffCoupon = tariff;
-
-        tariffCoupon.price = Object.keys(tariff.prices)[0];
       }
     });
 
@@ -134,13 +132,17 @@ function ActivityController (passholder, activityService, DateRange) {
 
   controller.claimTariff = function (tariff, activity) {
     activity.tariffClaimInProgress = true;
+
+    tariff.price = Object.keys(tariff.prices)[0];
+
     var tariffClaimedSuccessfully = function () {
+      activity.sales.maximumReached = true;
       activity.tariffClaimInProgress = false;
-      tariff.assigned = true;
     };
 
     var tariffNotClaimed = function (error) {
-      tariff.assignError = error;
+      activity.tariffClaimError = error;
+      activity.tariffClaimInProgress = false;
     };
 
     activityService.claimTariff(passholder, activity, tariff).then(
@@ -175,4 +177,15 @@ function ActivityController (passholder, activityService, DateRange) {
 
     activityService.checkin(activity, passholder).then(updateActivity, checkinError);
   };
+
+  function updateClaimedTariffActivity(event, claimedTariffActivity) {
+    controller.activities = controller.activities.map(function (existingActivity) {
+      if (existingActivity.id === claimedTariffActivity.id) {
+        existingActivity.sales.maximumReached = true;
+      }
+      return existingActivity;
+    });
+  }
+
+  $rootScope.$on('activityTariffClaimed', updateClaimedTariffActivity);
 }

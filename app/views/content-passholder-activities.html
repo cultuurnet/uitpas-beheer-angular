@@ -71,10 +71,15 @@
             <circle-spinner></circle-spinner>
           </div>
         </div>
-        <div class="grid__12 grid--bp-sml__3 last" ng-switch="ac.getActivityTariff(activity)">
-          <div class="spinner spinner-small" ng-show="activity.tariffClaimInProgress">
+        <div class="grid__12 grid--bp-sml__3 last" ng-show="activity.tariffClaimInProgress && !activity.tariffClaimError">
+          <div class="spinner spinner-small" >
             <circle-spinner></circle-spinner>
           </div>
+        </div>
+        <div class="grid__12 grid--bp-sml__3 last" ng-show="!activity.tariffClaimInProgress && activity.tariffClaimError">
+          <i class="error">{{activity.tariffClaimError.message}}</i>
+        </div>
+        <div class="grid__12 grid--bp-sml__3 last" ng-switch="ac.getActivityTariff(activity)" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
           <div class="free-event" ng-switch-when="free">Gratis</div>
           <div class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<!--<span><a class="history-modal" >Historiek</a></span>--></div>
           <div class="price-differentiation" ng-switch-when="priceDifferentiation">
@@ -85,7 +90,7 @@
             <span><strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong> aan kansentarief</span>
             <a class="assign-tariff" ng-click="ac.claimTariff(activity.sales.tariffs.list[0], activity)" >Tarief toekennen</a>
           </div>
-          <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = ac.getTariffCoupon(activity.sales.tariffs)" ng-hide="activity.tariffClaimInProgress">
+          <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = ac.getTariffCoupon(activity.sales.tariffs)">
             <strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong>
             <span>{{tariffCoupon.name}}</span>
             <a class="assign-tariff" ng-click="ac.claimTariff(tariffCoupon, activity)" >Tarief toekennen</a>
