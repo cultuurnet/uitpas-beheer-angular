@@ -178,13 +178,8 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
     activityService.checkin(activity, passholder).then(updateActivity, checkinError);
   };
 
-  function updateClaimedTariffActivity(event, claimedTariffActivity) {
-    controller.activities = controller.activities.map(function (existingActivity) {
-      if (existingActivity.id === claimedTariffActivity.id) {
-        existingActivity.sales.maximumReached = true;
-      }
-      return existingActivity;
-    });
+  function updateClaimedTariffActivity() {
+    controller.search();
   }
 
   $rootScope.$on('activityTariffClaimed', updateClaimedTariffActivity);
