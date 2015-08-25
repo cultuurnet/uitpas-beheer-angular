@@ -87,8 +87,13 @@ describe('Factory: Activity', function () {
     };
 
     var activity = new Activity(jsonActivity);
-
     expect(activity).toEqual(expectedActivity);
+
+    jsonActivity.sales.tariffs.list[0].id = '10';
+    expectedActivity.sales.tariffs.list[0].id = '10';
+
+    var activityWithId = new Activity(jsonActivity);
+    expect(activityWithId).toEqual(expectedActivity);
   });
 
   it('should create activities that return the right check-in state', function () {
