@@ -221,4 +221,165 @@ describe('Service: activity', function (){
 
     $httpBackend.flush();
   });
+
+  it('should claim a tariff for a passholder for an activity', function() {
+    // Claim a coupon tariff.
+    var passholder = { passNumber: '01234567891234' };
+    var activity = {
+      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      'title': 'Altijd open',
+      'description': '',
+      'when': '',
+      'points': 182,
+      'checkinConstraint': {
+        'allowed': true,
+        'startDate': '2015-09-01T00:00:00+00:00',
+        'endDate': '2015-09-01T23:59:59+00:00',
+        'reason': ''
+      },
+      free: true,
+      sales: {
+        maximumReached: false,
+        differentiation: false,
+        base: {
+          'Default prijsklasse': 6
+        },
+        tariffs: {
+          kansentariefAvailable: true,
+          couponAvailable: false,
+          lowestAvailable: 1.5,
+          list: [
+            {
+              name: 'Kansentarief',
+              type: 'KANSENTARIEF',
+              maximumReached: false,
+              prices: {
+                'Default prijsklasse': 1.5
+              }
+            }
+          ]
+        }
+      }
+    };
+    var tariff = {
+      type: 'COUPON',
+      price: 'Eerste rang',
+      id: '10'
+    };
+    var claim = {
+      id: '30819',
+      price: 1.5,
+      creationDate: 'string'
+    };
+    var expectedPostParams = {
+      activityId: 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      priceClass: 'Eerste rang',
+      tariffId: '10'
+    };
+
+    $httpBackend.expectPOST(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales', expectedPostParams)
+      .respond(200, claim);
+
+    activityService
+      .claimTariff(passholder, activity, tariff);
+
+    $httpBackend.flush();
+
+    // Claim a kansenstatuut tariff.
+    delete expectedPostParams.tariffId;
+    tariff.type = 'KANSENSTATUUT';
+    delete tariff.id;
+
+    $httpBackend.expectPOST(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales', expectedPostParams)
+      .respond(200, claim);
+
+    activityService
+      .claimTariff(passholder, activity, tariff);
+
+    $httpBackend.flush();
+  });
+
+  it('throws an error when it can\'t claim a tariff', function (done) {
+    var passholder = {
+      passNumber: '01234567891234',
+      name: {
+        first: 'voornaam',
+        last: 'achternaam'
+      }
+    };
+    var activity = {
+      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      'title': 'Altijd open',
+      'description': '',
+      'when': '',
+      'points': 182,
+      'checkinConstraint': {
+        'allowed': true,
+        'startDate': '2015-09-01T00:00:00+00:00',
+        'endDate': '2015-09-01T23:59:59+00:00',
+        'reason': ''
+      },
+      free: true,
+      sales: {
+        maximumReached: false,
+        differentiation: false,
+        base: {
+          'Default prijsklasse': 6
+        },
+        tariffs: {
+          kansentariefAvailable: true,
+          couponAvailable: false,
+          lowestAvailable: 1.5,
+          list: [
+            {
+              name: 'Kansentarief',
+              type: 'KANSENTARIEF',
+              maximumReached: false,
+              prices: {
+                'Default prijsklasse': 1.5
+              }
+            }
+          ]
+        }
+      }
+    };
+    var tariff = {
+      type: 'COUPON',
+      price: 'Eerste rang',
+      id: '10'
+    };
+    var apiError = {
+      code: '30819',
+      message: 'This is a meaningless message.'
+    };
+    var serviceError = {
+      code: 'TARIFF_NOT_CLAIMED',
+      title: 'Tarief niet toegekend',
+      message: 'Het geselecteerde tarief voor activiteit "' + activity.title + '" kon niet worden toegekend voor ' + passholder.name.first + ' ' + passholder.name.last
+    };
+    var expectedPostParams = {
+      activityId: 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      priceClass: 'Eerste rang',
+      tariffId: '10'
+    };
+
+    function assertSuccess (feedback) {
+      expect(feedback).toBeUndefined();
+      done();
+    }
+
+    function assertFailure (error) {
+      expect(error).toEqual(serviceError);
+      done();
+    }
+
+    $httpBackend.expectPOST(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales', expectedPostParams)
+      .respond(403, apiError);
+
+    activityService
+      .claimTariff(passholder, activity, tariff)
+      .then(assertSuccess, assertFailure);
+
+    $httpBackend.flush();
+  });
 });
