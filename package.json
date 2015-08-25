@@ -33,12 +33,15 @@
     "grunt-svgmin": "^2.0.0",
     "grunt-usemin": "^3.1.0",
     "grunt-wiredep": "^2.0.0",
+    "jasmine-core": "*",
     "jshint-stylish": "^1.0.0",
+    "karma": "0.13.0 || >= 0.14.0-rc.0",
     "karma-coverage": "^0.2.7",
     "karma-jasmine": "*",
     "karma-ng-html2js-preprocessor": "~0.1",
     "karma-phantomjs-launcher": "*",
     "load-grunt-tasks": "^3.1.0",
+    "phantomjs": ">=1.9",
     "time-grunt": "^1.0.0"
   },
   "engines": {
