@@ -54,7 +54,39 @@ describe('Service: passholderService', function () {
     Pass = $injector.get('Pass');
   }));
 
-  it('returns a passholder from the server and keeps it cached', function() {
+  it('returns a pass from the server and keeps it cached', function() {
+    var uitpasNumber = '0930000422202';
+    var expectedPass= new Pass(identityData);
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectGET(apiUrl + 'identities/' + uitpasNumber)
+      .respond(200, JSON.stringify(identityData));
+
+    // Assertion method.
+    var assertPass = function(pass) {
+      expect(pass).toEqual(expectedPass);
+    };
+
+    var failed = function(error) {
+      expect(error).toBeUndefined();
+    };
+
+    // Request the passholder data and assert it when its returned.
+    passholderService.findPass(uitpasNumber).then(assertPass, failed);
+
+    // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+
+    // Request the passholder data and assert it again, but this time without
+    // mocking an HTTP request as the passholder object should have been cached.
+    passholderService.findPass(uitpasNumber).then(assertPass, failed);
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+  });
+
+  it('returns a pass from the server and keeps it cached', function() {
     var uitpasNumber = '0930000422202';
     var expectedPassholder = new Passholder(identityData.passHolder);
     expectedPassholder.passNumber = uitpasNumber;
@@ -74,14 +106,14 @@ describe('Service: passholderService', function () {
     };
 
     // Request the passholder data and assert it when its returned.
-    passholderService.find(uitpasNumber).then(assertPassholder, failed);
+    passholderService.findPassholder(uitpasNumber).then(assertPassholder, failed);
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
 
     // Request the passholder data and assert it again, but this time without
     // mocking an HTTP request as the passholder object should have been cached.
-    passholderService.find(uitpasNumber).then(assertPassholder, failed);
+    passholderService.findPassholder(uitpasNumber).then(assertPassholder, failed);
 
     $httpBackend.verifyNoOutstandingExpectation();
     $httpBackend.verifyNoOutstandingRequest();

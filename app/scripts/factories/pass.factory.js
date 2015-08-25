@@ -26,6 +26,7 @@ function passFactory(Passholder) {
       this.number = jsonPass.uitPas.number;
       this.kansenStatuut = jsonPass.uitPas.kansenStatuut;
       this.status = jsonPass.uitPas.status;
+      this.type = jsonPass.uitPas.type;
 
       if(jsonPass.passHolder) {
         this.passholder = new Passholder(jsonPass.passHolder);

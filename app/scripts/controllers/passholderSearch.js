@@ -23,8 +23,14 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
   controller.searchPassholder = function(identification) {
     $rootScope.appBusy = true;
 
+    function redirectAccordingPassData(pass) {
+      if (pass.passholder) {
+        displayPassholderDetails(pass.passholder);
+      }
+    }
+
     function displayPassholderDetails(passholder) {
-        $state.go(
+      $state.go(
         'counter.main.passholder',
         {
           passholder: passholder,
@@ -47,7 +53,7 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
       );
     }
 
-    passholderService.find(identification)
-      .then(displayPassholderDetails, displayIdentificationError);
+    passholderService.findPass(identification)
+      .then(redirectAccordingPassData, displayIdentificationError);
   };
 }

@@ -45,19 +45,14 @@ describe('Controller: PassholderSearchController', function () {
       },
       identification: 'itsme-123456789'
     };
-    spyOn(passholderService, 'find').and.returnValue(passholderDeferred.promise);
+    spyOn(passholderService, 'findPass').and.returnValue(passholderDeferred.promise);
     spyOn($state, 'go');
     passholderSearchController.searchPassholder('valid identification number');
 
-    passholderDeferred.resolve(
-      {
-        name: 'Dude Man',
-        passNumber: 'itsme-123456789'
-      }
-    );
+    passholderDeferred.resolve(expectedStateParameters);
     rootScope.$digest();
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder', expectedStateParameters);
-    expect(passholderService.find).toHaveBeenCalledWith('valid identification number');
+    expect(passholderService.findPass).toHaveBeenCalledWith('valid identification number');
   });
 
   it('sets variables for an error message with an invalid number', function() {
@@ -69,7 +64,7 @@ describe('Controller: PassholderSearchController', function () {
         message: 'A useful description'
       }
     );
-    spyOn(passholderService, 'find').and.returnValue(passholderDeferred.promise);
+    spyOn(passholderService, 'findPass').and.returnValue(passholderDeferred.promise);
     spyOn($state, 'go');
     passholderSearchController.searchPassholder('invalid identification number');
 
@@ -84,7 +79,7 @@ describe('Controller: PassholderSearchController', function () {
         reload: true
       }
     );
-    expect(passholderService.find).toHaveBeenCalledWith('invalid identification number');
+    expect(passholderService.findPass).toHaveBeenCalledWith('invalid identification number');
     expect(passholderSearchController.passholder).toEqual(undefined);
     expect(passholderSearchController.passholderNotFound).toEqual(true);
   });
