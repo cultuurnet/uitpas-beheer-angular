@@ -59,18 +59,21 @@ a.toggle-down {
   .name {
     font-weight: 700;
   }
+  .vcard > div {
+    margin-bottom: 5px;
+  }
   // icons
   .tel,
   .email {
     position: relative;
-    padding-left: 20px;;
+    padding-left: 25px;
     &:before {
       @extend .fa;
-      margin-right: 5px;
       position: absolute;
-      top: 5px;
+      top: 0;
       left: 0;
-      width: 15px;
+      width: 20px;
+      line-height: 20px;
       text-align: center;
     }
   }
