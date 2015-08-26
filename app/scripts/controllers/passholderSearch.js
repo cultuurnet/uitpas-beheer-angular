@@ -27,6 +27,9 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
       if (pass.passholder) {
         displayPassholderDetails(pass.passholder);
       }
+      else {
+        registerNewPassholder(pass);
+      }
     }
 
     function displayPassholderDetails(passholder) {
@@ -35,6 +38,21 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
         {
           passholder: passholder,
           identification: passholder.passNumber
+        }
+      );
+    }
+
+    function registerNewPassholder(pass) {
+      console.log({
+        pass: pass,
+        identification: pass.number
+      });
+      $state.go(
+        'counter.main.register',
+        {
+          pass: pass,
+          identification: pass.number,
+          type: pass.type
         }
       );
     }

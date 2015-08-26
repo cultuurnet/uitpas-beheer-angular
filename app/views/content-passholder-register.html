@@ -1,0 +1,12 @@
+<div ng-switch="prc.pass.type">
+  <div class="card" ng-switch-when="CARD">
+    <span>Deze kaart is nog niet geregistreerd.</span>
+  </div>
+  <div class="key" ng-switch-when="KEY">
+    <span>Deze sleutelhanger is nog niet geregistreerd.</span>
+  </div>
+  <div class="sticker" ng-switch-when="STICKER">
+    <span>Deze sticker is nog niet geregistreerd.</span>
+  </div>
+  <button type="submit" class="btn btn-primary" ng-click="prc.startPassholderRegistration()">Pashouder registeren</button>
+</div>

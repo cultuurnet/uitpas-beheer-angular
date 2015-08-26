@@ -124,6 +124,9 @@ function inszNumberValidation() {
       else {
         form.inszNumber.$setValidity('checkDigit', true);
       }
+
+      // Remove the inUse invalidity when the value of the field changes.
+      form.inszNumber.$setValidity('inUse', true);
     });
 
     scope.$watch(function () {return form.gender.$viewValue;}, function() {
