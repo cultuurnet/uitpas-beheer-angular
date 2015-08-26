@@ -43,10 +43,6 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
     }
 
     function registerNewPassholder(pass) {
-      console.log({
-        pass: pass,
-        identification: pass.number
-      });
       $state.go(
         'counter.main.register',
         {
