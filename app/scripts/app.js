@@ -73,6 +73,7 @@ angular
       })
       .state('counter.main.passholder', {
         url: 'passholder/:identification',
+        requiresCounter: true,
         views: {
           'content@counter': {
             templateUrl: 'views/split-content.html'

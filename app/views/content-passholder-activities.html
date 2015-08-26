@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div class="alert alert-info" ng-if="!ac.activitiesLoading && !ac.totalActivities">Helaas geen activiteiten gevonden... </div>
+  <div class="text-muted" ng-if="!ac.activitiesLoading && !ac.totalActivities">Geen activiteiten gepland.</div>
 
   <ul class="list-unstyled" ng-if="!ac.activitiesLoading && ac.totalActivities > 0">
     <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
