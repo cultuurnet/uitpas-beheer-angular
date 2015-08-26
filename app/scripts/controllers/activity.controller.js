@@ -96,29 +96,6 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
   // Do an initial search to populate the activity list.
   controller.search();
 
-  controller.getActivityTariff = function (activity) {
-    var tariff = null;
-
-    if (activity.free) {
-      tariff = 'free';
-    }
-    else if (((activity || {}).sales || {}).maximumReached) {
-      tariff = 'maximumReached';
-    }
-    else if (((activity || {}).sales || {}).differentiation) {
-      tariff = 'priceDifferentiation';
-    }
-    else if ((((activity || {}).sales || {}).tariffs || {}).kansentariefAvailable) {
-      tariff = 'kansenTariff';
-    }
-    else if ((((activity || {}).sales || {}).tariffs || {}).couponAvailable) {
-      tariff = 'coupon';
-    }
-
-    activity.tariff = tariff;
-    return tariff;
-  };
-
   controller.getTariffCoupon = function(tariffs) {
     var tariffCoupon = false;
     angular.forEach(tariffs.list, function (tariff) {
@@ -145,10 +122,9 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
       activity.tariffClaimInProgress = false;
     };
 
-    activityService.claimTariff(passholder, activity, tariff).then(
-      tariffClaimedSuccessfully,
-      tariffNotClaimed
-    );
+    activityService
+      .claimTariff(passholder, activity, tariff)
+      .then(tariffClaimedSuccessfully, tariffNotClaimed);
   };
 
   controller.checkin = function (activity) {
@@ -175,7 +151,9 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
       });
     }
 
-    activityService.checkin(activity, passholder).then(updateActivity, checkinError);
+    activityService
+      .checkin(activity, passholder)
+      .then(updateActivity, checkinError);
   };
 
   function updateClaimedTariffActivity() {

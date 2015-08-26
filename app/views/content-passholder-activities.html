@@ -81,7 +81,7 @@
         <div class="grid__12 grid--bp-sml__3 last" ng-show="!activity.tariffClaimInProgress && activity.tariffClaimError">
           <i class="error">{{activity.tariffClaimError.message}}</i>
         </div>
-        <div class="grid__12 grid--bp-sml__3 last" ng-switch="ac.getActivityTariff(activity)" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
+        <div class="grid__12 grid--bp-sml__3 last" ng-switch="activity.getTariff()" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
           <i class="free-event" ng-switch-when="free">Gratis</i>
           <i class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<!--<span><a class="history-modal" >Historiek</a></span>--></i>
           <div class="price-differentiation" ng-switch-when="priceDifferentiation">

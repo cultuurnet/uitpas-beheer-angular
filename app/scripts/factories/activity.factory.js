@@ -101,6 +101,28 @@ function activityFactory(CheckinState) {
       }
 
       return state;
+    },
+    getTariff: function () {
+      var tariff = null,
+          activity = this;
+
+      if (activity.free) {
+        tariff = 'free';
+      }
+      else if (((activity || {}).sales || {}).maximumReached) {
+        tariff = 'maximumReached';
+      }
+      else if (((activity || {}).sales || {}).differentiation) {
+        tariff = 'priceDifferentiation';
+      }
+      else if ((((activity || {}).sales || {}).tariffs || {}).kansentariefAvailable) {
+        tariff = 'kansenTariff';
+      }
+      else if ((((activity || {}).sales || {}).tariffs || {}).couponAvailable) {
+        tariff = 'coupon';
+      }
+
+      return tariff;
     }
   };
 
