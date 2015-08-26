@@ -102,6 +102,11 @@ function activityFactory(CheckinState) {
 
       return state;
     },
+    /**
+     * Get the most suitable tariff based on the sales info of the activity.
+     *
+     * @return {string}
+     */
     getTariff: function () {
       var tariff = null,
           activity = this;
@@ -123,8 +128,20 @@ function activityFactory(CheckinState) {
       }
 
       return tariff;
+    },
+    getRedeemableCoupons: function () {
+      var tariffs = this.sales.tariffs.list;
+
+      var isRedeemableCoupon = function (tariff) {
+        return tariff.type === 'COUPON' && !tariff.maximumReached;
+      };
+
+      var coupons = tariffs.filter(isRedeemableCoupon, tariffs);
+
+      return coupons;
     }
   };
+
 
   return (Activity);
 }

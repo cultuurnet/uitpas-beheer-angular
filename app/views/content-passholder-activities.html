@@ -92,7 +92,7 @@
             <span><strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong> <small>aan kansentarief</small></span>
             <a class="btn btn-default btn-block btn-sm assign-tariff" ng-click="ac.claimTariff(activity.sales.tariffs.list[0], activity)" >Tarief toekennen</a>
           </div>
-          <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = ac.getTariffCoupon(activity.sales.tariffs)">
+          <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = activity.getRedeemableCoupons()[0]">
             <strong>&euro; {{activity.sales.tariffs.lowestAvailable}}</strong>
             <small>{{tariffCoupon.name}}</small>
             <a class="btn btn-default btn-block btn-sm assign-tariff" ng-click="ac.claimTariff(tariffCoupon, activity)" >Tarief toekennen</a>

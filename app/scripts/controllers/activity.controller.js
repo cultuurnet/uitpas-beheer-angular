@@ -96,17 +96,6 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
   // Do an initial search to populate the activity list.
   controller.search();
 
-  controller.getTariffCoupon = function(tariffs) {
-    var tariffCoupon = false;
-    angular.forEach(tariffs.list, function (tariff) {
-      if (tariff.type !== 'KANSENTARIEF') {
-        tariffCoupon = tariff;
-      }
-    });
-
-    return tariffCoupon;
-  };
-
   controller.claimTariff = function (tariff, activity) {
     activity.tariffClaimInProgress = true;
 

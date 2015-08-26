@@ -33,7 +33,7 @@ describe('Factory: Activity', function () {
         },
         tariffs: {
           kansentariefAvailable: true,
-          couponAvailable: false,
+          couponAvailable: true,
           lowestAvailable: 1.5,
           list: [
             {
@@ -42,6 +42,16 @@ describe('Factory: Activity', function () {
               maximumReached: false,
               prices: {
                 'Default prijsklasse': 1.5
+              }
+            },
+            {
+              "name": "Cultuurwaardebon",
+              "type": "COUPON",
+              "maximumReached": false,
+              "prices": {
+                "Rang 1": 22,
+                "Rang 2": 11,
+                "Rang 3+": 5.5
               }
             }
           ]
@@ -76,7 +86,7 @@ describe('Factory: Activity', function () {
         },
         tariffs: {
           kansentariefAvailable: true,
-          couponAvailable: false,
+          couponAvailable: true,
           lowestAvailable: 1.5,
           list: [
             {
@@ -85,6 +95,16 @@ describe('Factory: Activity', function () {
               maximumReached: false,
               prices: {
                 'Default prijsklasse': 1.5
+              }
+            },
+            {
+              "name": "Cultuurwaardebon",
+              "type": "COUPON",
+              "maximumReached": false,
+              "prices": {
+                "Rang 1": 22,
+                "Rang 2": 11,
+                "Rang 3+": 5.5
               }
             }
           ]
@@ -183,5 +203,48 @@ describe('Factory: Activity', function () {
     var activity = new Activity(jsonActivity);
 
     expect(activity.getTariff()).toEqual('coupon');
+  });
+
+  it('should return a list of coupons that are still redeemable', function () {
+    var jsonActivity = getJsonActivity();
+    var activity = new Activity(jsonActivity);
+
+    var coupons = activity.getRedeemableCoupons();
+    var expectedCoupons = [
+      {
+        "name": "Cultuurwaardebon",
+        "type": "COUPON",
+        "maximumReached": false,
+        "prices": {
+          "Rang 1": 22,
+          "Rang 2": 11,
+          "Rang 3+": 5.5
+        }
+      }
+    ];
+
+    expect(coupons).toEqual(expectedCoupons);
+  });
+
+  it('should not include coupons that have been maxed out when asking for redeemable coupons', function () {
+    var jsonActivity = getJsonActivity();
+    jsonActivity.sales.tariffs.couponAvailable = false;
+    jsonActivity.sales.tariffs.list = [
+      {
+        "name": "Cultuurwaardebon",
+        "type": "COUPON",
+        "maximumReached": true,
+        "prices": {
+          "Rang 1": 22,
+          "Rang 2": 11,
+          "Rang 3+": 5.5
+        }
+      }
+    ];
+    var activity = new Activity(jsonActivity);
+
+    var coupons = activity.getRedeemableCoupons();
+
+    expect(coupons).toEqual([]);
   });
 });
