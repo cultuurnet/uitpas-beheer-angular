@@ -13,7 +13,7 @@ describe('Service: activity', function (){
     });
   }));
 
-  var $scope, $rootScope, $httpBackend, activityService, DateRange, Activity;
+  var $scope, $q, $rootScope, $httpBackend, activityService, DateRange, Activity;
 
   var pagedActivityData = {
     '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
@@ -57,6 +57,7 @@ describe('Service: activity', function (){
   beforeEach(inject(function ($injector) {
     $rootScope = $injector.get('$rootScope');
     $scope = $rootScope.$new();
+    $q = $injector.get('$q');
     $httpBackend = $injector.get('$httpBackend');
     activityService = $injector.get('activityService');
     DateRange = $injector.get('DateRange');
@@ -140,11 +141,6 @@ describe('Service: activity', function (){
       .expectGET(apiUrl + 'passholders/' + passholder.passNumber + '/activities?date_type=today&limit=5&page=1&query=something+awesome')
       .respond(403, expectedError);
 
-    function assertActivities(pagedActivities) {
-      expect(pagedActivities).toBeUndefined();
-      done();
-    }
-
     function assertError(error) {
       expect(error.code).toBe('UNKNOWN_EVENT_CDBID');
       done();
@@ -152,7 +148,7 @@ describe('Service: activity', function (){
 
     activityService
       .search(passholder, searchParameters)
-      .then(assertActivities, assertError);
+      .catch(assertError);
 
     $httpBackend.flush();
   });
@@ -202,11 +198,6 @@ describe('Service: activity', function (){
       type: 'error'
     };
 
-    function assertActivity(newActivity) {
-      expect(newActivity).toBeUndefined();
-      done();
-    }
-
     function assertError(error) {
       expect(error.code).toBe('CHECKIN_FAILED');
       done();
@@ -217,12 +208,12 @@ describe('Service: activity', function (){
 
     activityService
       .checkin(activity, passholder)
-      .then(assertActivity, assertError);
+      .catch(assertError);
 
     $httpBackend.flush();
   });
 
-  it('should claim a tariff for a passholder for an activity', function() {
+  it('should claim a tariff for a passholder for an activity', function(done) {
     // Claim a coupon tariff.
     var passholder = { passNumber: '01234567891234' };
     var activity = {
@@ -280,7 +271,7 @@ describe('Service: activity', function (){
     $httpBackend.expectPOST(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales', expectedPostParams)
       .respond(200, claim);
 
-    activityService
+    var claimPromise = activityService
       .claimTariff(passholder, activity, tariff);
 
     $httpBackend.flush();
@@ -293,8 +284,15 @@ describe('Service: activity', function (){
     $httpBackend.expectPOST(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales', expectedPostParams)
       .respond(200, claim);
 
-    activityService
+    var kansenstatuutClaimPromise = activityService
       .claimTariff(passholder, activity, tariff);
+
+    var allTariffsClaimed = function () {
+      done();
+    };
+
+    $q.all([claimPromise, kansenstatuutClaimPromise])
+      .then(allTariffsClaimed);
 
     $httpBackend.flush();
   });
@@ -363,11 +361,6 @@ describe('Service: activity', function (){
       tariffId: '10'
     };
 
-    function assertSuccess (feedback) {
-      expect(feedback).toBeUndefined();
-      done();
-    }
-
     function assertFailure (error) {
       expect(error).toEqual(serviceError);
       done();
@@ -378,7 +371,7 @@ describe('Service: activity', function (){
 
     activityService
       .claimTariff(passholder, activity, tariff)
-      .then(assertSuccess, assertFailure);
+      .catch(assertFailure);
 
     $httpBackend.flush();
   });
