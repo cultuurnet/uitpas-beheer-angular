@@ -119,28 +119,6 @@ describe('Service: passholderService', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('throws an error when an invalid passholder is returned', function() {
-    var uitpasNumber = 'this-is-a-number';
-
-    // Mock an HTTP response.
-    $httpBackend
-      .expectGET(apiUrl + 'identities/' + uitpasNumber)
-      .respond(200, JSON.stringify(identityData));
-
-    var failed = function(error) {
-      expect(error.code).toBe('PASSHOLDER_NOT_IDENTIFIED');
-    };
-
-    // Request the passholder data and assert it when its returned.
-    passholderService.find(uitpasNumber).catch(failed);
-
-    // Deliver the HTTP response so the user data is asserted.
-    $httpBackend.flush();
-
-    $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest();
-  });
-
   it('throws an error when the request returns an error', function() {
     var uitpasNumber = 'this-is-a-number';
     var expectedError = {
@@ -160,7 +138,7 @@ describe('Service: passholderService', function () {
     };
 
     // Request the passholder data and assert it when its returned.
-    passholderService.find(uitpasNumber).catch(failed);
+    passholderService.findPass(uitpasNumber).catch(failed);
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
@@ -189,11 +167,11 @@ describe('Service: passholderService', function () {
       .respond(200, expectedPassholder);
 
     var assertCachedAndPersisted = function (response) {
-      expect(passholderService.find).toHaveBeenCalled();
+      expect(passholderService.findPass).toHaveBeenCalled();
       expect(response).toEqual(pass.passholder);
       done();
     };
-    spyOn(passholderService, 'find').and.callThrough();
+    spyOn(passholderService, 'findPass').and.callThrough();
 
     passholderService.update(passholderPostData, uitpasNumber).then(assertCachedAndPersisted);
     $httpBackend.flush();
@@ -224,7 +202,7 @@ describe('Service: passholderService', function () {
     };
 
     var assertNoSuccess = function () {
-      expect(passholderService.find).not.toHaveBeenCalled();
+      expect(passholderService.findPass).not.toHaveBeenCalled();
       done();
     };
 
@@ -244,11 +222,11 @@ describe('Service: passholderService', function () {
       title: 'untitled'
     };
 
-    spyOn(passholderService, 'find').and.returnValue(passholderPromise);
+    spyOn(passholderService, 'findPass').and.returnValue(passholderPromise);
     deferredPassholder.resolve(passholder);
 
     passholderService.updatePoints('advantageExchanged', advantage, identityData.uitPas.number);
 
-    expect(passholderService.find).toHaveBeenCalled();
+    expect(passholderService.findPass).toHaveBeenCalled();
   });
 });
