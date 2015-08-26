@@ -182,6 +182,17 @@ describe('Factory: Activity', function () {
     expect(activity.getTariff()).toEqual('maximumReached');
   });
 
+  it('should indicate when there are multiple redeemable tariffs', function () {
+    var jsonActivity = getJsonActivity();
+    jsonActivity.free = false;
+    jsonActivity.sales.maximumReached = false;
+    jsonActivity.sales.differentiation = true;
+
+    var activity = new Activity(jsonActivity);
+
+    expect(activity.getTariff()).toEqual('priceDifferentiation');
+  });
+
   it('should prefer a kansentarief-tariff when available and the activity is not free or maxed out already', function () {
     var jsonActivity = getJsonActivity();
     jsonActivity.free = false;

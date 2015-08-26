@@ -114,16 +114,16 @@ function activityFactory(CheckinState) {
       if (activity.free) {
         tariff = 'free';
       }
-      else if (((activity || {}).sales || {}).maximumReached) {
+      else if (activity.sales && activity.sales.maximumReached) {
         tariff = 'maximumReached';
       }
-      else if (((activity || {}).sales || {}).differentiation) {
+      else if (activity.sales && activity.sales.differentiation) {
         tariff = 'priceDifferentiation';
       }
-      else if ((((activity || {}).sales || {}).tariffs || {}).kansentariefAvailable) {
+      else if (activity.sales && activity.sales.tariffs && activity.sales.tariffs.kansentariefAvailable) {
         tariff = 'kansenTariff';
       }
-      else if ((((activity || {}).sales || {}).tariffs || {}).couponAvailable) {
+      else if (activity.sales && activity.sales.tariffs && activity.sales.tariffs.couponAvailable) {
         tariff = 'coupon';
       }
 
