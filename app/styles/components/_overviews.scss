@@ -144,7 +144,7 @@
       margin-top: 0;
     }
     li .btn-default {
-      min-width: 100px;  
+      min-width: 118px;  
     }
     @include breakpoint(map-get($breakpoints, med)) {
       .first {
