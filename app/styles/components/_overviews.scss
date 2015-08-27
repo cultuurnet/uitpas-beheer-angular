@@ -171,6 +171,20 @@
   margin-right: 5px;
 }
 
+.display-table {
+  @include breakpoint(map-get($breakpoints, sml)) {
+    display: table;
+    min-height: 120px;
+    width: 100%;
+    > div {
+      display: table-cell;
+      float: none;
+      min-height: 120px;
+      vertical-align: middle;
+    }
+  }
+}
+
 .flexbox {
   @include breakpoint(map-get($breakpoints, xsm)) {
     .flex-container {
@@ -180,6 +194,9 @@
       &:after {
         display: none; // fix for chrome
       }
+    }
+    > div {
+      display: flex;
     }
     .overview__item {
       min-height: 1px;

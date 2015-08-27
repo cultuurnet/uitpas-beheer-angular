@@ -48,7 +48,7 @@
 
   <ul class="list-unstyled" ng-if="!ac.activitiesLoading && ac.totalActivities > 0">
     <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
-      <div class="grid flex-container">
+      <div class="grid display-table">
         <div class="grid__12 grid--bp-sml__6 first">
           <div class="date" ng-bind="::activity.when"></div>
           <h3 ng-bind="::activity.title"></h3>
