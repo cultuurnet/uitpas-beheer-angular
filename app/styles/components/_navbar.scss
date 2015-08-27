@@ -11,6 +11,14 @@
   &-text {
     margin-right: 0;
   }
+  &-nav {
+    > li {
+      margin-bottom: 0;
+    }
+    > li > a {
+      line-height: 27px;
+    }
+  }
   &-right {
     text-align: right;
     font-size: $font-size-small;
