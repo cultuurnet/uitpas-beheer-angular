@@ -18,24 +18,7 @@ function PassholderRegisterController (pass, $state, Passholder, passholderServi
   controller.formSubmitBusy = false;
 
   controller.startPassholderRegistration = function() {
-    pass.passholder = new Passholder({
-      name: {
-        first: '',
-        last: ''
-      },
-      address: '',
-      birth: {
-        date: '',
-        place: ''
-      },
-      inszNumber: '',
-      picture: '',
-      gender: '',
-      nationality: '',
-      privacy: '',
-      contact: '',
-      points: ''
-    });
+    pass.passholder = new Passholder();
     $state.go(
       'counter.main.register.personalData',
       {
@@ -64,10 +47,9 @@ function PassholderRegisterController (pass, $state, Passholder, passholderServi
           );
         };
 
-        passholderService.findPassholder(personalDataForm.inszNumber.$viewValue).then(
-          setInszNumberError,
-          continueRegisterProcess
-        );
+        passholderService
+          .findPassholder(personalDataForm.inszNumber.$viewValue)
+          .then(setInszNumberError,continueRegisterProcess);
       } else {
         controller.formSubmitBusy = false;
       }

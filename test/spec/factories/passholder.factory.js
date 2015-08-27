@@ -11,6 +11,7 @@ describe('Factory: Passholder', function () {
         'last': 'D\'Hooghe'
       },
       'address': {
+        'street': 'Baanweg 60',
         'postalCode': '9308',
         'city': 'Aalst'
       },
@@ -37,6 +38,7 @@ describe('Factory: Passholder', function () {
         last: 'D\'Hooghe'
       },
       address: {
+        street: 'Baanweg 60',
         postalCode: '9308',
         city: 'Aalst'
       },
@@ -51,10 +53,13 @@ describe('Factory: Passholder', function () {
         sms: false
       },
       contact: {
-        email: 'email@email.com'
+        email: 'email@email.com',
+        telephoneNumber: '',
+        mobileNumber: ''
       },
       points: 309,
-      picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format'
+      picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
+      inszNumber: ''
     };
 
     var passholder = new Passholder(jsonPassholder);

@@ -15,10 +15,40 @@ function passholderFactory() {
   /**
    * @class Passholder
    * @constructor
-   * @param {object}  jsonPassholder
+   * @param {object}  [jsonPassholder]
    */
   var Passholder = function (jsonPassholder) {
-    this.parseJson(jsonPassholder);
+    this.name = {
+      first: '',
+      last: ''
+    };
+    this.address = {
+      street: '',
+      postalCode: '',
+      city: ''
+    };
+    this.birth = {
+      date: new Date(),
+      place: ''
+    };
+    this.inszNumber = '';
+    this.picture = '';
+    this.gender = '';
+    this.nationality = '';
+    this.privacy = {
+      email: false,
+      sms: false
+    };
+    this.contact = {
+      email: '',
+      telephoneNumber: '',
+      mobileNumber: ''
+    };
+    this.points = 0;
+
+    if (jsonPassholder) {
+      this.parseJson(jsonPassholder);
+    }
   };
 
   Passholder.prototype = {
@@ -39,7 +69,11 @@ function passholderFactory() {
       this.nationality = jsonPassholder.nationality;
       this.privacy = jsonPassholder.privacy;
       if (jsonPassholder.contact) {
-        this.contact = jsonPassholder.contact;
+        this.contact = {
+          email: jsonPassholder.contact.email || '',
+          telephoneNumber: jsonPassholder.contact.telephoneNumber || '',
+          mobileNumber: jsonPassholder.contact.mobileNumber || ''
+        };
       }
       this.points = jsonPassholder.points;
     }
