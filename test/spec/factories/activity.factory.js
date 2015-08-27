@@ -11,7 +11,7 @@ describe('Factory: Activity', function () {
     CheckinState = $injector.get('CheckinState');
   }));
 
-  it('should correctly parse an activity with check-in constraints', function () {
+  function getJsonActivity(){
     var jsonActivity = {
       'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
       'title': 'Altijd open',
@@ -33,7 +33,7 @@ describe('Factory: Activity', function () {
         },
         tariffs: {
           kansentariefAvailable: true,
-          couponAvailable: false,
+          couponAvailable: true,
           lowestAvailable: 1.5,
           list: [
             {
@@ -43,11 +43,27 @@ describe('Factory: Activity', function () {
               prices: {
                 'Default prijsklasse': 1.5
               }
+            },
+            {
+              "name": "Cultuurwaardebon",
+              "type": "COUPON",
+              "maximumReached": false,
+              "prices": {
+                "Rang 1": 22,
+                "Rang 2": 11,
+                "Rang 3+": 5.5
+              }
             }
           ]
         }
       }
     };
+
+    return jsonActivity;
+  }
+
+  it('should correctly parse an activity with check-in constraints', function () {
+    var jsonActivity = getJsonActivity();
 
     var expectedActivity = {
       'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
@@ -70,7 +86,7 @@ describe('Factory: Activity', function () {
         },
         tariffs: {
           kansentariefAvailable: true,
-          couponAvailable: false,
+          couponAvailable: true,
           lowestAvailable: 1.5,
           list: [
             {
@@ -80,6 +96,16 @@ describe('Factory: Activity', function () {
               prices: {
                 'Default prijsklasse': 1.5
               }
+            },
+            {
+              "name": "Cultuurwaardebon",
+              "type": "COUPON",
+              "maximumReached": false,
+              "prices": {
+                "Rang 1": 22,
+                "Rang 2": 11,
+                "Rang 3+": 5.5
+              }
             }
           ]
         }
@@ -87,8 +113,13 @@ describe('Factory: Activity', function () {
     };
 
     var activity = new Activity(jsonActivity);
-
     expect(activity).toEqual(expectedActivity);
+
+    jsonActivity.sales.tariffs.list[0].id = '10';
+    expectedActivity.sales.tariffs.list[0].id = '10';
+
+    var activityWithId = new Activity(jsonActivity);
+    expect(activityWithId).toEqual(expectedActivity);
   });
 
   it('should create activities that return the right check-in state', function () {
@@ -130,5 +161,101 @@ describe('Factory: Activity', function () {
     jsonActivityInvalidDateTimeNotYetAvailable.checkinConstraint.startDate.setDate(jsonActivityInvalidDateTimeExpired.checkinConstraint.startDate.getDate() + 10);
     var activityInvalidDateTimeNotYetAvailable = new Activity(jsonActivityInvalidDateTimeNotYetAvailable);
     expect(activityInvalidDateTimeNotYetAvailable.getCheckinState()).toEqual(CheckinState.NOT_YET_AVAILABLE);
+  });
+
+  it('should be free when explicitly stated so and whatever the tariffs are ', function () {
+    var jsonActivity = getJsonActivity();
+    jsonActivity.free = true;
+
+    var activity = new Activity(jsonActivity);
+
+    expect(activity.getTariff()).toBeTruthy();
+  });
+
+  it('should not return a tariff when the sales are maxed out', function () {
+    var jsonActivity = getJsonActivity();
+    jsonActivity.free = false;
+    jsonActivity.sales.maximumReached = true;
+
+    var activity = new Activity(jsonActivity);
+
+    expect(activity.getTariff()).toEqual('maximumReached');
+  });
+
+  it('should indicate when there are multiple redeemable tariffs', function () {
+    var jsonActivity = getJsonActivity();
+    jsonActivity.free = false;
+    jsonActivity.sales.maximumReached = false;
+    jsonActivity.sales.differentiation = true;
+
+    var activity = new Activity(jsonActivity);
+
+    expect(activity.getTariff()).toEqual('priceDifferentiation');
+  });
+
+  it('should prefer a kansentarief-tariff when available and the activity is not free or maxed out already', function () {
+    var jsonActivity = getJsonActivity();
+    jsonActivity.free = false;
+    jsonActivity.sales.maximumReached = false;
+    jsonActivity.sales.tariffs.kansentariefAvailable = true;
+
+    var activity = new Activity(jsonActivity);
+
+    expect(activity.getTariff()).toEqual('kansenTariff');
+  });
+
+  it('should have a coupon tariff when available and the activity is not free, does not have a kansentarief and is not maxed out already', function () {
+    var jsonActivity = getJsonActivity();
+    jsonActivity.free = false;
+    jsonActivity.sales.maximumReached = false;
+    jsonActivity.sales.tariffs.kansentariefAvailable = false;
+    jsonActivity.sales.tariffs.couponAvailable = true;
+
+    var activity = new Activity(jsonActivity);
+
+    expect(activity.getTariff()).toEqual('coupon');
+  });
+
+  it('should return a list of coupons that are still redeemable', function () {
+    var jsonActivity = getJsonActivity();
+    var activity = new Activity(jsonActivity);
+
+    var coupons = activity.getRedeemableCoupons();
+    var expectedCoupons = [
+      {
+        "name": "Cultuurwaardebon",
+        "type": "COUPON",
+        "maximumReached": false,
+        "prices": {
+          "Rang 1": 22,
+          "Rang 2": 11,
+          "Rang 3+": 5.5
+        }
+      }
+    ];
+
+    expect(coupons).toEqual(expectedCoupons);
+  });
+
+  it('should not include coupons that have been maxed out when asking for redeemable coupons', function () {
+    var jsonActivity = getJsonActivity();
+    jsonActivity.sales.tariffs.couponAvailable = false;
+    jsonActivity.sales.tariffs.list = [
+      {
+        "name": "Cultuurwaardebon",
+        "type": "COUPON",
+        "maximumReached": true,
+        "prices": {
+          "Rang 1": 22,
+          "Rang 2": 11,
+          "Rang 3+": 5.5
+        }
+      }
+    ];
+    var activity = new Activity(jsonActivity);
+
+    var coupons = activity.getRedeemableCoupons();
+
+    expect(coupons).toEqual([]);
   });
 });
