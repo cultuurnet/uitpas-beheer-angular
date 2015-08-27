@@ -1,0 +1,33 @@
+<div class="modal-body">
+  <div class="container-fluid">
+    <fieldset ng-disabled="prc.formSubmitBusy">
+      <div class="field-group">
+        <label class="control-label" for="telephone">
+          Telefoon
+        </label>
+        <input type="text" class="form-control" id="telephone" name="telephone" ng-model="prc.passholder.contact.telephoneNumber">
+      </div>
+      <div class="field-group">
+        <label class="control-label" for="gsm">
+          GSM
+        </label>
+        <input type="text" class="form-control" id="gsm" name="gsm" ng-model="prc.passholder.contact.mobileNumber">
+      </div>
+      <div class="field-group"  ng-class="{ 'has-error': (passholderRegisterContactData.$submitted || passholderRegisterContactData.email.$touched) && passholderRegisterContactData.email.$invalid }">
+        <label class="control-label" for="email">
+          E-mailadres
+        </label>
+        <input type="email" class="form-control" id="email" name="email" ng-model="prc.passholder.contact.email">
+        <div ng-if="(passholderRegisterContactData.$submitted || passholderRegisterContactData.email.$touched) && passholderRegisterContactData.email.$invalid" class="text-danger small">
+          <div ng-if="passholderRegisterContactData.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+          <div ng-if="passholderRegisterContactData.email.$error.inUse">Het email adres is reeds in gebruik.</div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</div><!-- end modal-body -->
+<div class="modal-footer">
+  <a class="pull-left" ui-sref="counter.main.register">Annuleren</a>
+  <button type="submit" class="btn btn-default modal-prev" ng-disabled="passholderRegisterContactData.$invalid" ng-click="prc.contactDataFormPrevious(passholderRegisterContactData)">Vorige</button>
+  <button type="submit" class="btn btn-default modal-next" ng-disabled="passholderRegisterContactData.$invalid" ng-click="prc.submitContactDataForm(passholderRegisterContactData)">Volgende</button>
+</div>

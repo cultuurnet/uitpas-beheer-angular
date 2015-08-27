@@ -1,0 +1,22 @@
+<form name="passholderRegisterContactData" ng-submit="prc.submitContactDataForm(passholderRegisterContactData)" novalidate ng-disabled="prc.formSubmitBusy">
+  <div class="modal-header">
+    <button type="button" class="close" aria-label="Close">
+      <a ui-sref="counter.main.register" aria-hidden="true">&times;</a>
+    </button>
+    <h4 class="modal-title">Pashouder toevoegen</h4>
+  </div>
+  <ul class="three steps step">
+    <li ui-sref-active="active"  class="step">
+      <a ui-sref="counter.main.register.form.personalData">Persoonsgegevens</a>
+    </li>
+    <li ui-sref-active="active" class="step">
+      <a ui-sref="counter.main.register.form.contactData">Contact</a>
+    </li>
+    <li ui-sref-active="active" class="step">
+      <a ui-sref="counter.main.register.form.price">Prijs</a>
+    </li>
+  </ul>
+
+  <div ui-view="registrationStep"></div>
+
+</form>

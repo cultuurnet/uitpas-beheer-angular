@@ -20,7 +20,8 @@ angular
     'angular-spinkit',
     'ui.router',
     'ui.bootstrap',
-    'mp.autoFocus'
+    'mp.autoFocus',
+    'ubr.registration'
   ])
   /* @ngInject */
   .config(function ($stateProvider, $locationProvider, $httpProvider) {
@@ -30,15 +31,6 @@ angular
       }
       else {
         return passholderService.findPassholder($stateParams.identification);
-      }
-    };
-
-    var getPassFromStateParams = function(passholderService, $stateParams) {
-      if ($stateParams.pass) {
-        return $stateParams.pass;
-      }
-      else {
-        return passholderService.findPass($stateParams.identification);
       }
     };
 
@@ -223,92 +215,6 @@ angular
               },
               controller: 'PassholderActivityTariffsController',
               controllerAs: 'pat'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }]
-      })
-      .state('counter.main.register', {
-        url: 'passholder/:identification/register',
-        requiresCounter: true,
-        params: {
-          pass: null,
-          identification: null
-        },
-        resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams],
-          identification: ['$stateParams', function($stateParams) {
-            return $stateParams.identification;
-          }]
-        },
-        views: {
-          'content@counter': {
-            templateUrl: 'views/content-passholder-register.html',
-            controller: 'PassholderRegisterController',
-            controllerAs: 'prc'
-          },
-          'sidebar@counter': {
-            templateUrl: 'views/sidebar-passholder-register.html',
-            controller: 'PassholderRegisterController',
-            controllerAs: 'prc'
-          }
-        }
-      })
-      .state('counter.main.register.personalData', {
-        params: {
-          pass: null
-        },
-        resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams]
-        },
-        onEnter : ['pass', '$state', '$modal', function(pass, $state, $modal) {
-          $modal
-            .open({
-              animation: true,
-              templateUrl: 'views/modal-passholder-register-personal-data.html',
-              params: {
-                'pass': null
-              },
-              size: 'lg',
-              resolve: {
-                pass: function() {
-                  return pass;
-                }
-              },
-              controller: 'PassholderRegisterController',
-              controllerAs: 'prc'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }]
-      })
-      .state('counter.main.register.contactData', {
-        params: {
-          pass: null
-        },
-        resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams]
-        },
-        onEnter : ['pass', '$state', '$modal', function(pass, $state, $modal) {
-          $modal
-            .open({
-              animation: true,
-              templateUrl: 'views/modal-passholder-register-contact-data.html',
-              params: {
-                'pass': null
-              },
-              size: 'lg',
-              resolve: {
-                pass: function() {
-                  return pass;
-                }
-              },
-              controller: 'PassholderRegisterController',
-              controllerAs: 'prc'
             })
             .result
             .finally(function() {

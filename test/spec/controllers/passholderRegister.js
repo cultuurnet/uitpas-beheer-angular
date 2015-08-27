@@ -1,9 +1,9 @@
 'use strict';
 
-describe('Controller: PassholderRegisterController', function () {
+xdescribe('Controller: PassholderRegisterController', function () {
 
   // load the controller's module
-  beforeEach(module('uitpasbeheerApp'));
+  beforeEach(module('ubr.registration'));
 
   var controller, $scope, Pass, unregisteredPass;
 

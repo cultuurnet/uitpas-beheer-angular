@@ -2,12 +2,13 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:PassholderRegisterController
+ * @name ubr.registration.controller:PassholderRegisterController
  * @description
  * # PassholderRegisterController
  * Controller of the uitpasbeheerApp
  */
-angular.module('uitpasbeheerApp')
+angular
+  .module('ubr.registration')
   .controller('PassholderRegisterController', PassholderRegisterController);
 
 /* @ngInject */
@@ -20,7 +21,7 @@ function PassholderRegisterController (pass, $state, Passholder, passholderServi
   controller.startPassholderRegistration = function() {
     pass.passholder = new Passholder();
     $state.go(
-      'counter.main.register.personalData',
+      'counter.main.register.form.personalData',
       {
         pass: pass
       }
@@ -40,7 +41,7 @@ function PassholderRegisterController (pass, $state, Passholder, passholderServi
         var continueRegisterProcess = function () {
           pass.passholder.name.first = personalDataForm.firstName.$viewValue;
           $state.go(
-            'counter.main.register.contactData',
+            'counter.main.register.form.contactData',
             {
               pass: pass
             }
@@ -70,7 +71,7 @@ function PassholderRegisterController (pass, $state, Passholder, passholderServi
 
   controller.contactDataFormPrevious = function () {
     $state.go(
-      'counter.main.register.personalData',
+      'counter.main.register.form.personalData',
       {
         pass: pass
       }
