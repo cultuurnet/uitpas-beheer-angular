@@ -54,9 +54,10 @@ td label input + span {
   &:before {
     content: '';
     display: inline-block;
-    width: 12px;
-    height: 12px;
+    width: 15px;
+    height: 15px;
     margin-right: 5px;
     background-color: adjust-color($brand-success, $saturation: 100%, $lightness: 35%);
+    border: 1px solid $gray-15;
   }
 }

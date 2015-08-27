@@ -121,11 +121,10 @@
     h3 {
       margin-bottom: 0;
     }
+    .first {
+      text-align: center;
+    }
     .middle {
-      @include transitions((background));
-      background-color: $gray-0;
-      padding-left: $rh-sml;
-      padding-right: $rh-sml;
       text-align: center;
     }
     .last {
@@ -137,23 +136,57 @@
       padding-bottom: 0;
       padding-top: 0;
     }
-    li:hover {
-      .middle {
-        background-color: $hover-border;
-      }
-    }
-    li .grid > [class*="grid"] {
+    li .grid {
       padding-top: $rh-sml;
       padding-bottom: $rh-sml;
+    }
+    li .grid > [class*="grid"] {
+      margin-top: 0;
+    }
+    li .btn-default {
+      min-width: 100px;  
+    }
+    @include breakpoint(map-get($breakpoints, med)) {
+      .first {
+        text-align: left;
+      }
+      .middle {
+        @include transitions((background));
+        background-color: $gray-0;
+        padding-left: $rh-sml;
+        padding-right: $rh-sml;
+      }
+      li .grid {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+      li .grid > [class*="grid"] {
+        padding-top: $rh-xxs;
+        padding-bottom: $rh-xxs;
+      }
+      li:hover .middle {
+        background-color: $hover-border;
+      }
+      li .btn-default {
+        display: block;
+        width: 100%;
+      }
     }
   }
   .points {
     color: $brand-success;
     font-weight: 600;
-    padding-bottom: $rh-sml;
+    line-height: 22px;
     text-align: center;
+    @include breakpoint(map-get($breakpoints, med)) {
+      line-height: 44px;
+    }
   }
   .price-differentiation strong {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .coupon small {
     display: block;
     margin-bottom: 5px;
   }
@@ -172,21 +205,21 @@
 }
 
 .display-table {
-  @include breakpoint(map-get($breakpoints, sml)) {
+  @include breakpoint(map-get($breakpoints, med)) {
     display: table;
-    min-height: 120px;
+    min-height: 90px;
     width: 100%;
     > div {
       display: table-cell;
       float: none;
-      min-height: 120px;
+      min-height: 90px;
       vertical-align: middle;
     }
   }
 }
 
 .flexbox {
-  @include breakpoint(map-get($breakpoints, xsm)) {
+  @include breakpoint(map-get($breakpoints, med)) {
     .flex-container {
       display: flex;
       flex-wrap: wrap;
