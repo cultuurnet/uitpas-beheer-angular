@@ -78,11 +78,15 @@
     input[type=text] {
       padding-right: 114px;
     }
+    .search {
+      position: relative;
+    }
     .btn-ghost-dark {
       width: 100px;
       position: absolute;
-      right: ($grid-gutter-width/2);
+      right: 0;
       top: 0;
+      height: 37px;
     }
   }
   // Variants

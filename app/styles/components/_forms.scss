@@ -53,7 +53,7 @@ label em {
   }
   &:before {
     @extend .fa;
-    @extend .fa-search;
+    content:"\f002";
     color: $gray-25;
     display: inline-block;
     position: absolute;
