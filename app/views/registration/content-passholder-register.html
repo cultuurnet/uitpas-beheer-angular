@@ -1,11 +1,14 @@
 <div ng-switch="prc.pass.type">
   <div class="card" ng-switch-when="CARD">
+    <img class="logo" src="images/svg/card-new.svg" width="150" height="150" alt="new card">
     <span>Deze kaart is nog niet geregistreerd.</span>
   </div>
   <div class="key" ng-switch-when="KEY">
+    <img class="logo" src="images/svg/key.svg" width="150" height="150" alt="key">
     <span>Deze sleutelhanger is nog niet geregistreerd.</span>
   </div>
   <div class="sticker" ng-switch-when="STICKER">
+    <img class="logo" src="images/svg/sticker.svg" width="150" height="150" alt="sticker">
     <span>Deze sticker is nog niet geregistreerd.</span>
   </div>
   <button type="submit" class="btn btn-primary" ng-click="prc.startPassholderRegistration()">Pashouder registeren</button>

@@ -45,7 +45,7 @@ module.exports = function(config) {
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
-      'app/scripts/**/*.module.js',
+      "app/scripts/registration/ubr.registration.module.js",
       "app/scripts/**/*.js",
       "app/views/*.html",
       //"test/mock/**/*.js",

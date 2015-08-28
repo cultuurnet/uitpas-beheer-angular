@@ -10,6 +10,7 @@
  */
 angular
   .module('ubr.registration', [
+    'ui.router',
     'uitpasbeheerApp'
   ])
   /* @ngInject */

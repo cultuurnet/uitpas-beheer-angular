@@ -1,3 +1,4 @@
+<form name="passholderRegisterContactData" ng-submit="prc.submitContactDataForm(passholderRegisterContactData)" novalidate ng-disabled="prc.formSubmitBusy">
 <div class="modal-body">
   <div class="container-fluid">
     <fieldset ng-disabled="prc.formSubmitBusy">
@@ -31,3 +32,4 @@
   <button type="submit" class="btn btn-default modal-prev" ng-disabled="passholderRegisterContactData.$invalid" ng-click="prc.contactDataFormPrevious(passholderRegisterContactData)">Vorige</button>
   <button type="submit" class="btn btn-default modal-next" ng-disabled="passholderRegisterContactData.$invalid" ng-click="prc.submitContactDataForm(passholderRegisterContactData)">Volgende</button>
 </div>
+</form>
