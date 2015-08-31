@@ -122,7 +122,6 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
     function updateActivity(newActivity) {
       controller.activities = controller.activities.map(function (activity) {
         if (activity.id === newActivity.id) {
-          activity = newActivity;
           activity.checkinConstraint.reason = 'MAXIMUM_REACHED';
           activity.checkinBusy = false;
         }
