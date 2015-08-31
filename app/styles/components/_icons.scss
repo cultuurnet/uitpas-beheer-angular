@@ -1,0 +1,16 @@
+// custom uitpas icons
+.icon {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  display: inline-block;
+  max-width: 100%;
+}
+.icon--card-scan {
+  background-image: url('../images/svg/fallback/card-scan.png');
+  width: 10em;
+  height: 10em;
+}
+.svg .icon--card-scan {
+  background-image: url('../images/svg/card-scan.svg');
+}
