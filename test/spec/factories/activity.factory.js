@@ -13,16 +13,16 @@ describe('Factory: Activity', function () {
 
   function getJsonActivity(){
     var jsonActivity = {
-      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
-      'title': 'Altijd open',
-      'description': '',
-      'when': '',
-      'points': 182,
-      'checkinConstraint': {
-        'allowed': true,
-        'startDate': '2015-09-01T00:00:00+00:00',
-        'endDate': '2015-09-01T23:59:59+00:00',
-        'reason': ''
+      id: 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      title: 'Altijd open',
+      description: '',
+      when: '',
+      points: 182,
+      checkinConstraint: {
+        allowed: true,
+        startDate: '2015-09-01T00:00:00+00:00',
+        endDate: '2015-09-01T23:59:59+00:00',
+        reason: ''
       },
       free: true,
       sales: {
@@ -45,13 +45,13 @@ describe('Factory: Activity', function () {
               }
             },
             {
-              "name": "Cultuurwaardebon",
-              "type": "COUPON",
-              "maximumReached": false,
-              "prices": {
-                "Rang 1": 22,
-                "Rang 2": 11,
-                "Rang 3+": 5.5
+              name: 'Cultuurwaardebon',
+              type: 'COUPON',
+              maximumReached: false,
+              prices: {
+                'Rang 1': 22,
+                'Rang 2': 11,
+                'Rang 3+': 5.5
               }
             }
           ]
@@ -66,16 +66,16 @@ describe('Factory: Activity', function () {
     var jsonActivity = getJsonActivity();
 
     var expectedActivity = {
-      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
-      'title': 'Altijd open',
-      'description': '',
-      'when': '',
-      'points': 182,
-      'checkinConstraint': {
-        'allowed': true,
-        'startDate': new Date('2015-09-01T00:00:00+00:00'),
-        'endDate': new Date('2015-09-01T23:59:59+00:00'),
-        'reason': ''
+      id: 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      title: 'Altijd open',
+      description: '',
+      when: '',
+      points: 182,
+      checkinConstraint: {
+        allowed: true,
+        startDate: new Date('2015-09-01T00:00:00+00:00'),
+        endDate: new Date('2015-09-01T23:59:59+00:00'),
+        reason: ''
       },
       free: true,
       sales: {
@@ -98,13 +98,13 @@ describe('Factory: Activity', function () {
               }
             },
             {
-              "name": "Cultuurwaardebon",
-              "type": "COUPON",
-              "maximumReached": false,
-              "prices": {
-                "Rang 1": 22,
-                "Rang 2": 11,
-                "Rang 3+": 5.5
+              name: 'Cultuurwaardebon',
+              type: 'COUPON',
+              maximumReached: false,
+              prices: {
+                'Rang 1': 22,
+                'Rang 2': 11,
+                'Rang 3+': 5.5
               }
             }
           ]
@@ -124,16 +124,16 @@ describe('Factory: Activity', function () {
 
   it('should create activities that return the right check-in state', function () {
     var jsonActivity = {
-      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
-      'title': 'Altijd open',
-      'description': '',
-      'when': '',
-      'points': 182,
-      'checkinConstraint': {
-        'allowed': true,
-        'startDate': '2015-09-01T00:00:00+00:00',
-        'endDate': '2015-09-01T23:59:59+00:00',
-        'reason': ''
+      id: 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      title: 'Altijd open',
+      description: '',
+      when: '',
+      points: 182,
+      checkinConstraint: {
+        allowed: true,
+        startDate: '2015-09-01T00:00:00+00:00',
+        endDate: '2015-09-01T23:59:59+00:00',
+        reason: ''
       }
     };
     var activity = new Activity(jsonActivity);
@@ -223,13 +223,13 @@ describe('Factory: Activity', function () {
     var coupons = activity.getRedeemableCoupons();
     var expectedCoupons = [
       {
-        "name": "Cultuurwaardebon",
-        "type": "COUPON",
-        "maximumReached": false,
-        "prices": {
-          "Rang 1": 22,
-          "Rang 2": 11,
-          "Rang 3+": 5.5
+        name: 'Cultuurwaardebon',
+        type: 'COUPON',
+        maximumReached: false,
+        prices: {
+          'Rang 1': 22,
+          'Rang 2': 11,
+          'Rang 3+': 5.5
         }
       }
     ];
@@ -242,13 +242,13 @@ describe('Factory: Activity', function () {
     jsonActivity.sales.tariffs.couponAvailable = false;
     jsonActivity.sales.tariffs.list = [
       {
-        "name": "Cultuurwaardebon",
-        "type": "COUPON",
-        "maximumReached": true,
-        "prices": {
-          "Rang 1": 22,
-          "Rang 2": 11,
-          "Rang 3+": 5.5
+        name: 'Cultuurwaardebon',
+        type: 'COUPON',
+        maximumReached: true,
+        prices: {
+          'Rang 1': 22,
+          'Rang 2': 11,
+          'Rang 3+': 5.5
         }
       }
     ];
