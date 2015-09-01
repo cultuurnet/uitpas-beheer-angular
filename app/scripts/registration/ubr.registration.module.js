@@ -58,7 +58,6 @@ angular
           pass: ['passholderService', '$stateParams', getPassFromStateParams]
         },
         onEnter : ['pass', '$state', '$modal', function(pass, $state, $modal) {
-          console.log('opening multi-step registration modal form');
           registrationModalInstance = $modal.open({
             animation: true,
             templateUrl: 'views/registration/multi-step-form.html',
@@ -75,12 +74,19 @@ angular
             controllerAs: 'prc'
           });
 
+          function registrationCanceled() {
+            $state.go('counter.main.register');
+          }
+
+          function passholderRegistered() {
+            $state.go('counter.main.passholder', {
+              identification: pass.number
+            });
+          }
+
           registrationModalInstance
             .result
-            .finally(function() {
-              console.log('modal closed, moving to parent');
-              $state.go('counter.main.register');
-          });
+            .then(passholderRegistered ,registrationCanceled);
         }]
       })
       .state('counter.main.register.form.personalData', {

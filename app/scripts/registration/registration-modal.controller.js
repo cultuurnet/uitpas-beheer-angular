@@ -18,7 +18,9 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
 
   controller.pass = pass;
   controller.formSubmitBusy = false;
-  controller.price = 0;
+  // Price is set to minus one to indicate it has not yet been initialized
+  controller.price = -1;
+  controller.unreducedPrice = -1;
   controller.priceModelOptions = {
     debounce: {
       'default': 500,
@@ -26,6 +28,12 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
     }
   };
   controller.voucherNumber = '';
+  controller.forms = {
+    personalData: {},
+    contactData: {},
+    price: {}
+  };
+  controller.asyncError = undefined;
 
   var placeholder = {
     'name': {
@@ -37,9 +45,9 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
       'postalCode': '3000',
       'city': 'Aalst'
     },
-    inszNumber: '99090900128',
+    inszNumber: '88080800114',
     'birth': {
-      'date': '1999-09-09',
+      'date': '1988-08-08',
       'place': 'Aalst'
     },
     'gender': 'MALE',
@@ -88,6 +96,7 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
       controller.formSubmitBusy = true;
       if (contactDataForm.$valid) {
         $state.go('counter.main.register.form.price');
+        controller.refreshUnreducedPriceInfo();
         controller.formSubmitBusy = false;
       } else {
         controller.formSubmitBusy = false;
@@ -108,18 +117,45 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
     }
   };
 
+  controller.refreshUnreducedPriceInfo = function () {
+    var updateUnreducedPriceInfo = function (priceInfo) {
+      var unreducedPrice = priceInfo.price;
+
+      controller.unreducedPrice = unreducedPrice;
+
+      if (controller.price === -1) {
+        controller.price = unreducedPrice;
+      }
+    };
+
+    counterService
+      .getRegistrationPriceInfo(pass, controller.passholder)
+      .then(updateUnreducedPriceInfo);
+  };
+
+  controller.refreshUnreducedPriceInfo();
+
   controller.refreshPriceInfo = function (voucherNumberFormState) {
-
     var updatePriceInfo = function (priceInfo) {
-      controller.price = priceInfo.price;
       voucherNumberFormState.$setValidity('validVoucher', true);
+
+      controller.price = priceInfo.price;
+
+      if (!controller.voucherNumber) {
+        controller.unreducedPrice = priceInfo.price;
+      }
     };
 
-    var showError = function () {
+    var showError = function (error) {
+      if (error.code === 'INVALID_VOUCHER_STATUS') {
+        voucherNumberFormState.$setValidity('redeemable', false);
+      }
+
       voucherNumberFormState.$setValidity('validVoucher', false);
-      console.log(voucherNumberFormState);
+      controller.price = controller.unreducedPrice;
     };
 
+    controller.price = -1;
     counterService
       .getRegistrationPriceInfo(pass, controller.passholder, controller.voucherNumber)
       .then(updatePriceInfo, showError);
@@ -128,13 +164,19 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
   controller.submitRegistration = function () {
 
     var handleRegistrationErrors = function (error) {
-      throw error;
+      // TODO: map all errors to something more suitable to display in the views
+      error.cleanMessage = error.message.split('URL CALLED')[0];
+      controller.asyncError = error;
+      controller.formSubmitBusy = false;
+
+      $state.go('counter.main.register.form.personalData');
     };
 
     var showRegisteredPassholder = function (passholder) {
-      console.log(passholder);
+      $modalInstance.close(passholder);
     };
 
+    controller.formSubmitBusy = true;
     passholderService
       .register(pass, controller.passholder, controller.voucherNumber)
       .then(showRegisteredPassholder, handleRegistrationErrors);
@@ -145,6 +187,6 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
   };
 
   this.close = function () {
-    $modalInstance.close('registration modal closed');
+    $modalInstance.dismiss('registration modal closed');
   };
 }

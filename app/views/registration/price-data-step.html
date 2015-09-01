@@ -1,4 +1,5 @@
-<form name="priceForm" ng-submit="prc.submitPersonalDataForm(passholderRegisterPersonalData)" novalidate ng-disabled="prc.formSubmitBusy">
+<form name="priceForm" ng-submit="prc.submitPersonalDataForm(passholderRegisterPersonalData)" novalidate
+      ng-disabled="prc.formSubmitBusy">
   <div class="modal-body">
     <div class="container-fluid">
 
@@ -7,11 +8,19 @@
       </label>
       <input name="voucherNumber" type="text" ng-model="prc.voucherNumber" ng-model-options="prc.priceModelOptions"
              ng-change="prc.refreshPriceInfo(priceForm.voucherNumber)">
-      <div ng-show="priceForm.voucherNumber.$touched">
-        <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.validVoucher">Het voucher-nummer is ongeldig.</div>
+      <div ng-if="priceForm.voucherNumber.$touched">
+        <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.validVoucher === true">Het voucher-nummer is ongeldig.</div>
+        <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.redeemable === true">Dit voucher-nummer is niet inruilbaar.</div>
       </div>
 
-      <span ng-bind="prc.price"></span>
+      <label>Prijs</label>
+      <div ng-show="prc.price === 0">Gratis</div>
+      <div ng-show="prc.price > 0"><span ng-bind="prc.price"></span> euro</div>
+      <span ng-show="prc.price < 0">
+        <div class="spinner spinner-xsmall">
+          <circle-spinner></circle-spinner>
+        </div>
+      </span>
     </div>
   </div><!-- end modal-body -->
 
