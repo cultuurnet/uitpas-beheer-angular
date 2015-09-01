@@ -1,6 +1,6 @@
 'use strict';
 
-xdescribe('Controller: PassholderRegisterController', function () {
+describe('Controller: PassholderRegisterController', function () {
 
   beforeEach(module('ubr.registration'));
 
