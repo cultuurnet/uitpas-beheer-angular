@@ -189,40 +189,38 @@ angular
         }]
       })
       .state('counter.main.passholder.memberships', {
-        url: '/memberships',
-        requiresCounter: true,
-        views: {
-          'content@counter': {
-            templateUrl: 'views/split-content.html'
-          },
-          'sidebar@counter': {
-            templateUrl: 'views/sidebar-passholder-details.html',
-            controller: 'PassholderDetailController',
-            controllerAs: 'pdc'
-          },
-          'top@counter.main.passholder.memberships': {
-            templateUrl: 'views/content-passholder-memberships.html',
-            controller: 'PassholderMembershipController',
-            controllerAs: 'ac'
-          }
-        },
-        params: {
-          'passholder': null,
-          'identification': null
-        },
         resolve: {
-          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+          passholder: ['passholderService', '$stateParams', function (passholderService, $stateParams) {
             if ($stateParams.passholder) {
               return $stateParams.passholder;
             }
             else {
               return passholderService.find($stateParams.identification);
             }
-          }],
-          identification: ['$stateParams', function($stateParams) {
-            return $stateParams.identification;
           }]
-        }
+        },
+        onEnter: ['passholder', '$state', '$modal', function(passholder, $state, $modal) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-passholder-memberships.html',
+              params: {
+                'passholder': null
+              },
+              size: 'lg',
+              resolve: {
+                passholder: function() {
+                  return passholder;
+                }
+              },
+              controller: 'PassholderMembershipController',
+              controllerAs: 'pec'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
       })
       .state('counter.main.passholder.activityTariffs', {
         params: {

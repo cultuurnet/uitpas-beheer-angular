@@ -12,7 +12,7 @@ angular
   .controller('PassholderMembershipController', PassholderMembershipController);
 
 /* @ngInject */
-function PassholderMembershipController (appConfig, passholder, moment, $rootScope, $scope, $http, MembershipEndDateCalculator, $filter, $sce, $modal) {
+function PassholderMembershipController (appConfig, passholder, moment, $rootScope, $scope, $http, MembershipEndDateCalculator, $filter, $sce, $modal, $modalInstance) {
   var apiUrl = appConfig.apiUrl;
   var cardNumber = passholder.passNumber;
   var legacyPassholder;
@@ -175,5 +175,9 @@ function PassholderMembershipController (appConfig, passholder, moment, $rootSco
       // Reload memberships.
       loadMemberships();
     })
+  };
+
+  $scope.closeModal = function() {
+    $modalInstance.dismiss();
   };
 }
