@@ -12,11 +12,28 @@ angular
   .controller('PassholderDetailController', PassholderDetailController);
 
 /* @ngInject */
-function PassholderDetailController (passholder, $rootScope) {
+function PassholderDetailController (passholder, membershipService, $rootScope) {
   /*jshint validthis: true */
   var controller = this;
 
   controller.passholder = angular.copy(passholder);
+
+  controller.membershipsLoading = false;
+
+  var listRetrieved = function(data) {
+    controller.memberships = data.passholder.memberships;
+  };
+
+  var loadMemberships = function() {
+    controller.membershipsLoading = true;
+    membershipService.list(passholder.passNumber)
+      .then(listRetrieved)
+      .finally(function() {
+        controller.membershipsLoading = false;
+      });
+  };
+
+  loadMemberships();
 
   function subtractAdvantagePoints(event, exchangedAdvantage) {
     var newPointCount = controller.passholder.points - exchangedAdvantage.points;
@@ -33,6 +50,7 @@ function PassholderDetailController (passholder, $rootScope) {
     controller.passholder.points = newPointCount;
   }
 
+  $rootScope.$on('membershipModified', loadMemberships);
   $rootScope.$on('advantageExchanged', subtractAdvantagePoints);
   $rootScope.$on('activityCheckedIn', addCheckinPoint);
 }

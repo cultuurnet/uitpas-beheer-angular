@@ -12,8 +12,7 @@ angular
   .controller('PassholderMembershipController', PassholderMembershipController);
 
 /* @ngInject */
-function PassholderMembershipController (appConfig, passholder, moment, $rootScope, $scope, $http, MembershipEndDateCalculator, $filter, $sce, $modal, $modalInstance) {
-  var apiUrl = appConfig.apiUrl;
+function PassholderMembershipController (passholder, moment, $rootScope, $scope, MembershipEndDateCalculator, membershipService, $filter, $sce, $modal, $modalInstance) {
   var cardNumber = passholder.passNumber;
   var legacyPassholder;
 
@@ -89,7 +88,7 @@ function PassholderMembershipController (appConfig, passholder, moment, $rootSco
     $scope.memberships = [];
     $scope.associations = [];
 
-    $http.get(apiUrl + 'uitpas/' + cardNumber + '/profile').success(function (data) {
+    var listRetrieved = function (data) {
       $scope.loadingMemberships = false;
 
       legacyPassholder = data.passholder;
@@ -102,7 +101,9 @@ function PassholderMembershipController (appConfig, passholder, moment, $rootSco
       $scope.atLeastOneKansenstatuutExpired = data.atLeastOneKansenstatuutExpired;
 
       allAssociations = data.allAssociations;
-    });
+    };
+
+    membershipService.list(cardNumber).then(listRetrieved);
   };
 
   loadMemberships();
@@ -129,8 +130,7 @@ function PassholderMembershipController (appConfig, passholder, moment, $rootSco
     });
 
     modalInstance.result.then(function (membership) {
-      // Reload memberships.
-      loadMemberships();
+      $rootScope.$emit('membershipModified');
     });
   };
 
@@ -152,9 +152,8 @@ function PassholderMembershipController (appConfig, passholder, moment, $rootSco
     });
 
     modalInstance.result.then(function (membership) {
-      // Reload memberships.
-      loadMemberships();
-    })
+      $rootScope.$emit('membershipModified');
+    });
   };
 
   $scope.openMembershipStopModal = function (membership) {
@@ -171,13 +170,14 @@ function PassholderMembershipController (appConfig, passholder, moment, $rootSco
       }
     });
 
-    modalInstance.result.then(function () {
-      // Reload memberships.
-      loadMemberships();
-    })
+    modalInstance.result.then(function (membership) {
+      $rootScope.$emit('membershipModified');
+    });
   };
 
   $scope.closeModal = function() {
     $modalInstance.dismiss();
   };
+
+  $rootScope.$on('membershipModified', loadMemberships);
 }

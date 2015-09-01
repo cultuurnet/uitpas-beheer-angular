@@ -40,4 +40,14 @@
 <div class="passholder passholder-memberships">
   <h3>Lidmaatschappen</h3>
   <a ui-sref="counter.main.passholder.memberships()">Beheren</a>
+
+  <div class="overview__loading" ng-show="pdc.membershipsLoading">
+    <div class="spinner spinner-small">
+      <circle-spinner></circle-spinner>
+    </div>
+  </div>
+
+  <div class="list-group no-margin">
+    <a ng-repeat="membership in pdc.memberships" ui-sref="counter.main.passholder.memberships()">{{membership.association.name}}</a>
+  </div>
 </div>
