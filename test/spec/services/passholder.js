@@ -299,4 +299,41 @@ describe('Service: passholderService', function () {
 
     expect(passholderService.findPassholder).toHaveBeenCalled();
   });
+
+  it('should register a passholder', function () {
+    var pass = new Pass(identityData);
+
+    var registration = {
+      passholder: pass.passholder
+    };
+
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + pass.number, registration)
+      .respond(200);
+
+    passholderService.register(pass, pass.passholder, false, false);
+    $httpBackend.flush();
+  });
+
+  it('should register a passholder with a voucher and kansenStatuut', function () {
+    var pass = new Pass(identityData);
+    var voucher = 'voucher';
+    var kansenStatuut = {
+      endDate: 'endDate',
+      remarks: 'remarks'
+    };
+
+    var registration = {
+      passholder: pass.passholder,
+      voucherNumber: voucher,
+      kansenStatuut: kansenStatuut
+    };
+
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + pass.number, registration)
+      .respond(200);
+
+    passholderService.register(pass, pass.passholder, voucher, kansenStatuut);
+    $httpBackend.flush();
+  });
 });
