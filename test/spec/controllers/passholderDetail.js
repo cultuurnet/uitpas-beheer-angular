@@ -5,10 +5,10 @@ describe('Controller: PassholderDetailController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var detailController, scope, advantage;
+  var detailController, scope, advantage, $q;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
+  beforeEach(inject(function ($controller, $injector, $rootScope) {
     advantage = {
       exchangeable: true,
       id: 'advantage-id',
@@ -18,9 +18,20 @@ describe('Controller: PassholderDetailController', function () {
 
     scope = $rootScope.$new();
 
+    $q = $injector.get('$q');
+
     detailController = $controller('PassholderDetailController', {
       passholder: { passNumber: '01234567891234', points: 123 },
-      $rootScope: scope
+      $rootScope: scope,
+      membershipService: {
+        list: function () {
+          var deferred = $q.defer();
+
+          deferred.reject({});
+
+          return deferred.promise;
+        }
+      }
     });
   }));
 
