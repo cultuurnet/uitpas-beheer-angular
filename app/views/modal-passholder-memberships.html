@@ -3,12 +3,12 @@
     <h4 class="modal-title">Lidmaatschappen</h4>
   </div>
   <div class="modal-body">
-<div class="ajax-progress" ng-show="loadingMemberships">
-  <span class="throbber"></span>
-  <span class="message">
-    Bezig met laden...
-  </span>
-</div>
+
+    <div class="overview__loading" ng-show="loadingMemberships">
+      <div class="spinner spinner-small">
+        <circle-spinner></circle-spinner>
+      </div>
+  </div>
 
 <div ng-repeat="membership in memberships"
      class="row-fluid membership-summary" style="margin-bottom:1em;"
