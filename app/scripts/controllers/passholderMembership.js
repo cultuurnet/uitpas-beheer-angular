@@ -12,7 +12,7 @@ angular
   .controller('PassholderMembershipController', PassholderMembershipController);
 
 /* @ngInject */
-function PassholderMembershipController (appConfig, identification, passholder, moment, $rootScope, $scope, $http, MembershipEndDateCalculator, $filter, $sce, $modal) {
+function PassholderMembershipController (appConfig, passholder, moment, $rootScope, $scope, $http, MembershipEndDateCalculator, $filter, $sce, $modal) {
   var apiUrl = appConfig.apiUrl;
   var cardNumber = passholder.passNumber;
   var legacyPassholder;
