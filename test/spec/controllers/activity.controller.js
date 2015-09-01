@@ -14,13 +14,25 @@ describe('Controller: ActivityController', function () {
         'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
         'title': 'Altijd open',
         'description': '',
-        'when': ''
+        'when': '',
+        'checkinConstraint': {
+          'allowed': true,
+          'startDate': new Date(1438584553*1000),
+          'endDate': new Date(1438584553*1000),
+          'reason': ''
+        }
       },
       {
         'id': 'eb7c1532-dc32-43bf-a0be-1b9dcf52d2be',
         'title': 'Testevent punten sparen',
         'description': '',
-        'when': ''
+        'when': '',
+        'checkinConstraint': {
+          'allowed': true,
+          'startDate': new Date(1438584553*1000),
+          'endDate': new Date(1438584553*1000),
+          'reason': ''
+        }
       }
     ],
     totalActivities: 2
@@ -119,30 +131,18 @@ describe('Controller: ActivityController', function () {
 
     var deferredCheckin = $q.defer();
 
-    var activity = {
-      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
-      'title': 'Altijd open',
-      'description': '',
-      'when': '',
-      'checkinConstraint': {
-        'allowed': true,
-        'startDate': new Date(1438584553*1000),
-        'endDate': new Date(1438584553*1000),
-        'reason': ''
-      }
-    };
-    var updatedActivity = angular.copy(activity);
+    var updatedActivity = angular.copy(activityController.activities[0]);
     updatedActivity.checkinConstraint.reason = 'MAXIMUM_REACHED';
 
     spyOn(activityService, 'checkin').and.returnValue(deferredCheckin.promise);
 
-    activityController.checkin(activity);
-    expect(activity.checkinBusy).toBeTruthy();
+    activityController.checkin(activityController.activities[0]);
+    expect(activityController.activities[0].checkinBusy).toBeTruthy();
 
     deferredCheckin.resolve(updatedActivity);
     $scope.$digest();
 
-    expect(activityService.checkin).toHaveBeenCalledWith(activity, passholder);
+    expect(activityService.checkin).toHaveBeenCalledWith(activityController.activities[0], passholder);
     expect(activityController.activities[0].checkinBusy).toBeFalsy();
     expect(activityController.activities[0].checkinConstraint.reason).toEqual('MAXIMUM_REACHED');
   });

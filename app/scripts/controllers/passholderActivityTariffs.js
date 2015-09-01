@@ -37,17 +37,15 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
       $modalInstance.close();
     };
 
-    var tariffNotClaimed= function (error) {
+    var tariffNotClaimed = function (error) {
       controller.formSubmitError = error;
       tariff.assignError = true;
       controller.formSubmitBusy = false;
     };
 
-
-    activityService.claimTariff(passholder, activity, tariff).then(
-      tariffClaimedSuccessfully,
-      tariffNotClaimed
-    );
+    activityService
+      .claimTariff(passholder, activity, tariff)
+      .then(tariffClaimedSuccessfully, tariffNotClaimed);
   };
 
   controller.getTariffFromForm = function (passholderActivityTariffsForm) {

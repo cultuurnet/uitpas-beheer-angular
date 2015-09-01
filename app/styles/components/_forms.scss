@@ -51,14 +51,14 @@ label em {
   input[type=text] {
     padding-left: 30px;
   }
-  @extend .glyphicon-search;
   &:before {
-    @extend .glyphicon;
+    @extend .fa;
+    content:"\f002";
     color: $gray-25;
     display: inline-block;
     position: absolute;
     left: $grid-gutter-width;
-    top: 14px;
+    top: 11px;
   }
 }
 

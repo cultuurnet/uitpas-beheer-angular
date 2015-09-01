@@ -105,4 +105,60 @@ describe('Controller: PassholderActivityTariffsController', function () {
     expect(controller.getTariffFromForm(tariffFormStubCoupon)).toEqual(expectedTariffInfoCoupon);
     expect(controller.getTariffFromForm(tariffFormStubKansenstatuut)).toEqual(expectedTariffInfoKansenstatuut);
   });
+
+  it('can submit the activity tariffs form', function () {
+    var deferredClaim = $q.defer();
+    var claimPromise = deferredClaim.promise;
+
+    var tariffFormStub = {
+      tariff: {
+        $viewValue: 'COUPON-10-Prijs klasse'
+      }
+    };
+
+    spyOn(activityService, 'claimTariff').and.returnValue(claimPromise);
+    spyOn($scope, '$emit');
+
+    controller.submitForm(passholder, activity, tariffFormStub);
+
+    expect(controller.formSubmitBusy).toBeTruthy();
+
+    deferredClaim.resolve({claim: 'claim'});
+    $scope.$digest();
+
+    expect($scope.$emit).toHaveBeenCalled();
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect(modalInstance.close).toHaveBeenCalled();
+  });
+
+  it('can handle errors during form submit', function () {
+    var deferredClaim = $q.defer();
+    var claimPromise = deferredClaim.promise;
+
+    var tariffFormStub = {
+      tariff: {
+        $viewValue: 'COUPON-10-Prijs klasse'
+      }
+    };
+    var serviceError = {
+      code: 'TARIFF_NOT_CLAIMED',
+      title: 'Tarief niet toegekend',
+      message: 'Het geselecteerde tarief voor activiteit "ACTIVITY" kon niet worden toegekend voor PASSHOLDER'
+    };
+
+    spyOn(activityService, 'claimTariff').and.returnValue(claimPromise);
+    spyOn($scope, '$emit');
+
+    controller.submitForm(passholder, activity, tariffFormStub);
+
+    expect(controller.formSubmitBusy).toBeTruthy();
+
+    deferredClaim.reject(serviceError);
+    $scope.$digest();
+
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect(controller.formSubmitError).toEqual(serviceError);
+    expect($scope.$emit).not.toHaveBeenCalled();
+    expect(modalInstance.close).not.toHaveBeenCalled();
+  });
 });
