@@ -19,7 +19,6 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
   $scope.membershipStatusSummary = function (membership) {
     var endDate = moment.unix(membership.endDate);
     var formattedDate = $filter('date')(endDate.toDate(), 'dd/MM/yyyy');
-    var now = new Date();
     if (moment().isAfter(endDate)) {
       return $sce.trustAsHtml('<strong>vervallen op</strong> ' + formattedDate);
     } else {
@@ -130,7 +129,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     });
 
     modalInstance.result.then(function (membership) {
-      $rootScope.$emit('membershipModified');
+      $rootScope.$emit('membershipModified', membership);
     });
   };
 
@@ -152,7 +151,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     });
 
     modalInstance.result.then(function (membership) {
-      $rootScope.$emit('membershipModified');
+      $rootScope.$emit('membershipModified', membership);
     });
   };
 
@@ -171,7 +170,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     });
 
     modalInstance.result.then(function (membership) {
-      $rootScope.$emit('membershipModified');
+      $rootScope.$emit('membershipModified', membership);
     });
   };
 

@@ -22,7 +22,7 @@ angular
     'ui.bootstrap',
     'mp.autoFocus'
   ])
-  .constant('moment', moment)
+  .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
   .config(function ($stateProvider, $locationProvider, $httpProvider) {
     $stateProvider

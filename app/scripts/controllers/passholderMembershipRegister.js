@@ -48,7 +48,7 @@ function PassholderMembershipRegisterController ($scope, $modalInstance, $http, 
         $modalInstance.close(data);
       })
       .error(
-      function (data, status, headers, config) {
+      function (data) {
         $scope.errors = [];
         angular.forEach(data.errors, function (error) {
           $scope.errors.push(error.message);

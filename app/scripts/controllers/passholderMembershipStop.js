@@ -39,14 +39,13 @@ function PassholderMembershipStopController ($scope, $modalInstance, $http, $fil
         // @todo parse response, check content type
         $modalInstance.close(data);
       })
-      .error(function (data, status, headers, config) {
+      .error(function (data) {
         $scope.errors = [];
         angular.forEach(data.errors, function (error) {
           $scope.errors.push(error.message);
         });
 
         $scope.waiting = false;
-      }
-    );
+      });
   };
 }

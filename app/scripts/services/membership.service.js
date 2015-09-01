@@ -26,7 +26,7 @@ function membershipService($q, $http, appConfig) {
       deferredList.resolve(data);
     };
 
-    var errorGettingList = function(data) {
+    var errorGettingList = function() {
       deferredList.reject();
     };
 

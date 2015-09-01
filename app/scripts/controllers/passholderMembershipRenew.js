@@ -43,12 +43,12 @@ function PassholderMembershipRenewController ($scope, $modalInstance, $http, $fi
         // @todo parse response, check content type
         $modalInstance.close(data);
       })
-      .error(function (data, status, headers, config) {
+      .error(function (data) {
         $scope.waiting = false;
         $scope.errors = [];
         angular.forEach(data.errors, function (error) {
           $scope.errors.push(error.message);
-        })
+        });
       }
     );
   };
