@@ -39,7 +39,7 @@ function PassholderMembershipRenewController ($scope, $modalInstance, $http, $fi
       requestData.endDate = $filter('date')(endDate.date, 'yyyy-MM-dd');
     }
 
-    var request = $http.post(appConfig.apiUrl + 'uitpas/' + passholder.passNumber + '/profile/memberships', requestData);
+    var request = $http.post(appConfig.apiUrl + 'passholders/' + passholder.passNumber + '/profile/memberships', requestData);
 
     request
       .success(function (data) {

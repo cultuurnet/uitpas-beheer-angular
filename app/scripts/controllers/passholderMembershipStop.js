@@ -31,7 +31,7 @@ function PassholderMembershipStopController ($scope, $modalInstance, $http, $fil
     // need to use its full form.
     var request = $http({
       method: 'DELETE',
-      url: appConfig.apiUrl + 'uitpas/' + passholder.passNumber + '/profile/memberships/' + membership.association.id
+      url: appConfig.apiUrl + 'passholders/' + passholder.passNumber + '/profile/memberships/' + membership.association.id
     });
 
     request

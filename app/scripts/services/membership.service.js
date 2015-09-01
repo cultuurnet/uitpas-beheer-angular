@@ -20,7 +20,7 @@ function membershipService($q, $http, appConfig) {
   service.list = function (cardNumber) {
     var deferredList = $q.defer();
 
-    var listRequest = $http.get(apiUrl + 'uitpas/' + cardNumber + '/profile');
+    var listRequest = $http.get(apiUrl + 'passholders/' + cardNumber + '/profile');
 
     var successGettingList = function(data) {
       deferredList.resolve(data);
