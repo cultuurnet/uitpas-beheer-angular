@@ -189,7 +189,7 @@ angular
         }]
       })
       .state('counter.main.passholder.memberships', {
-        url: 'passholder/:identification/memberships',
+        url: '/memberships',
         requiresCounter: true,
         views: {
           'content@counter': {
