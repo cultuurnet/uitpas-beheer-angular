@@ -48,9 +48,7 @@ angular
             controllerAs: 'prc'
           },
           'sidebar@counter': {
-            templateUrl: 'views/sidebar-passholder-register.html',
-            controller: 'PassholderRegisterController',
-            controllerAs: 'prc'
+            templateUrl: 'views/sidebar-passholder-register.html'
           }
         }
       })
@@ -59,12 +57,8 @@ angular
         resolve: {
           pass: ['passholderService', '$stateParams', getPassFromStateParams]
         },
-        onExit: function() {
-          if (registrationModalInstance) {
-            registrationModalInstance.close();
-          }
-        },
         onEnter : ['pass', '$state', '$modal', function(pass, $state, $modal) {
+          console.log('opening multi-step registration modal form');
           registrationModalInstance = $modal.open({
             animation: true,
             templateUrl: 'views/registration/multi-step-form.html',
@@ -77,8 +71,15 @@ angular
                 return pass;
               }
             },
-            controller: 'PassholderRegisterController',
+            controller: 'RegistrationModalController',
             controllerAs: 'prc'
+          });
+
+          registrationModalInstance
+            .result
+            .finally(function() {
+              console.log('modal closed, moving to parent');
+              $state.go('counter.main.register');
           });
         }]
       })

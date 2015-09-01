@@ -143,4 +143,39 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   $rootScope.$on('advantageExchanged', service.updatePoints);
+
+  service.register = function(pass, passholderData, voucherNumber, kansenstatuut){
+    var registration = {
+      passholder: passholderData
+    };
+
+    if (voucherNumber) {
+      registration.voucherNumber = voucherNumber;
+    }
+
+    if (kansenstatuut) {
+      registration.kansenStatuut = {
+        endDate: kansenstatuut.endDate,
+        remarks: kansenstatuut.remarks
+      };
+    }
+
+    var requestOptions = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    var passholderRegistered = function (registrationResponse) {
+      console.log(registrationResponse);
+    };
+
+    var registrationFailed = function (error) {
+      throw error;
+    };
+
+    $http
+      .post(apiUrl + 'passholders/' + pass.number, registration, requestOptions)
+      .then(passholderRegistered, registrationFailed);
+  };
 }

@@ -10,7 +10,7 @@
             <label class="control-label" for="insz-number">
               Rijksregisternummer
             </label>
-            <input type="text" class="form-control" id="insz-number" required name="inszNumber"ng-model="prc.passholder.inszNumber">
+            <input type="text" class="form-control" id="insz-number" required name="inszNumber" ng-model="prc.passholder.inszNumber">
             <div ng-if="(passholderRegisterPersonalData.$submitted || passholderRegisterPersonalData.inszNumber.$touched || passholderRegisterPersonalData.inszNumber.$dirty) && passholderRegisterPersonalData.inszNumber.$invalid" class="text-danger small">
               <div ng-if="passholderRegisterPersonalData.inszNumber.$error.gender">Het geslacht afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>
               <div ng-if="passholderRegisterPersonalData.inszNumber.$error.dateOfBirth">De geboortedatum afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>
@@ -51,7 +51,8 @@
               Geboortedatum
             </label>
             <input type="date" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true" ng-model="prc.passholder.birth.date">
-            <div ng-if="(passholderRegisterPersonalData.$submitted || passholderRegisterPersonalData.dateOfBirth.$touched || passholderRegisterPersonalData.dateOfBirth.$dirty) && passholderRegisterPersonalData.dateOfBirth.$invalid" class="text-danger small">
+            <div ng-if="(passholderRegisterPersonalData.$submitted || passholderRegisterPersonalData.dateOfBirth.$touched || passholderRegisterPersonalData.dateOfBirth.$dirty) && passholderRegisterPersonalData.dateOfBirth.$invalid"
+                 class="text-danger small">
               <div ng-if="passholderRegisterPersonalData.dateOfBirth.$error.required">De geboortedatum is verplicht.</div>
               <div ng-if="passholderRegisterPersonalData.dateOfBirth.$error.date">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
               <div ng-if="passholderRegisterPersonalData.dateOfBirth.$error.inszNumber">De geboortedatum komt niet overeen met het rijksregisternummer.</div>
@@ -135,7 +136,7 @@
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
-    <a class="pull-left" ui-sref="counter.main.register">Annuleren</a>
+    <a class="pull-left" ng-click="prc.close()">Annuleren</a>
     <button type="submit" class="btn btn-default modal-next" ng-disabled="prc.formSubmitBusy || passholderRegisterPersonalData.$invalid" ng-click="prc.submitPersonalDataForm(passholderRegisterPersonalData)">Volgende</button>
   </div>
 </form>

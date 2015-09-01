@@ -215,4 +215,36 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
 
     return deferred.promise;
   };
+
+  /**
+   * @param {Pass} pass
+   *   The pass that's going to be registered with the active counter.
+   */
+  service.getRegistrationPriceInfo = function (pass, passholder, voucherNumber, reason) {
+    var url = appConfig.apiUrl + 'uitpas/' + pass.number + '/price',
+        parameters = {
+          'reason': reason || 'FIRST_CARD',
+          'date_of_birth': passholder.birth.date.toISOString().slice(0, 10),
+          'postal_code': passholder.address.postalCode
+        },
+        config = {
+          headers: {},
+          params: parameters
+        },
+        deferredPriceInfo = $q.defer();
+
+    if (voucherNumber) {
+      parameters['voucher_number'] = voucherNumber;
+    }
+
+    var resolvePriceInfo = function (responseData) {
+      deferredPriceInfo.resolve(responseData.data);
+    };
+
+    $http
+      .get(url, config)
+      .then(resolvePriceInfo, deferredPriceInfo.reject);
+
+    return deferredPriceInfo.promise;
+  };
 }

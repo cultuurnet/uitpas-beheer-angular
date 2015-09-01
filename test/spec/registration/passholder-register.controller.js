@@ -2,6 +2,7 @@
 
 xdescribe('Controller: PassholderRegisterController', function () {
 
+  beforeEach(module('ubr.registration'));
 
   var registerController, $scope, Pass, unregisteredPass, $state, Passholder, passholderService, $controller;
 
