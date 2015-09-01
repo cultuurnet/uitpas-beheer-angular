@@ -12,7 +12,7 @@ angular
   .controller('PassholderMembershipStopController', PassholderMembershipStopController);
 
 /* @ngInject */
-function PassholderMembershipStopController ($scope, $modalInstance, $http, $filter, membership, passholder, appConfig) {
+function PassholderMembershipStopController ($scope, $modalInstance, membership, membershipService, passholder) {
   $scope.membership = membership;
 
   $scope.errors = [];
@@ -26,26 +26,27 @@ function PassholderMembershipStopController ($scope, $modalInstance, $http, $fil
   $scope.stop = function () {
     $scope.waiting = true;
 
-    // 'delete' is a JavaScript keyword and IE8 parses it as such, even when
-    // called as a method, so we can not use $http.delete() here and instead
-    // need to use its full form.
-    var request = $http({
-      method: 'DELETE',
-      url: appConfig.apiUrl + 'passholders/' + passholder.passNumber + '/profile/memberships/' + membership.association.id
-    });
+    var deferredStop = membershipService.stop(
+      passholder.passNumber,
+      membership.association.id
+    );
 
-    request
-      .success(function (data) {
-        // @todo parse response, check content type
-        $modalInstance.close(data);
-      })
-      .error(function (data) {
-        $scope.errors = [];
-        angular.forEach(data.errors, function (error) {
-          $scope.errors.push(error.message);
-        });
-
-        $scope.waiting = false;
-      });
+    deferredStop
+      .then(
+        function(data) {
+          $modalInstance.close(data);
+        },
+        function (data) {
+          $scope.errors = [];
+          angular.forEach(data.errors, function (error) {
+            $scope.errors.push(error.message);
+          });
+        }
+      )
+      .finally(
+        function() {
+          $scope.waiting = false;
+        }
+      );
   };
 }

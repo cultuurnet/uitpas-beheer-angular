@@ -12,7 +12,7 @@ angular
   .controller('PassholderMembershipRegisterController', PassholderMembershipRegisterController);
 
 /* @ngInject */
-function PassholderMembershipRegisterController ($scope, $modalInstance, $http, $filter, association, passholder, recentlyExpired, MembershipEndDateCalculator, appConfig) {
+function PassholderMembershipRegisterController ($scope, $modalInstance, association, passholder, recentlyExpired, membershipService, MembershipEndDateCalculator) {
   $scope.association = association;
 
   var membershipEndDateCalculator = new MembershipEndDateCalculator(association);
@@ -32,30 +32,26 @@ function PassholderMembershipRegisterController ($scope, $modalInstance, $http, 
   $scope.register = function (endDate) {
     $scope.waiting = true;
 
-    var requestData = {
-      associationId: $scope.association.id
-    };
-
-    if (!endDate.fixed) {
-      requestData.endDate = $filter('date')(endDate.date, 'yyyy-MM-dd');
-    }
-
-    var request = $http.post(appConfig.apiUrl + 'passholders/' + passholder.passNumber + '/profile/memberships', requestData);
-
-    request
-      .success(function (data) {
-        // @todo parse response, check content type, and data, refresh list.
-        $modalInstance.close(data);
-      })
-      .error(
-      function (data) {
-        $scope.errors = [];
-        angular.forEach(data.errors, function (error) {
-          $scope.errors.push(error.message);
-        });
-
-        $scope.waiting = false;
-      }
+    var deferredMembershipRegistration = membershipService.register(
+      passholder.passNumber,
+      $scope.association.id,
+      endDate
     );
+
+    deferredMembershipRegistration
+      .then(
+        function (data) {
+          $modalInstance.close(data);
+        },
+        function (data) {
+          $scope.errors = [];
+          angular.forEach(data.errors, function (error) {
+            $scope.errors.push(error.message);
+          });
+        }
+      )
+      .finally(function () {
+        $scope.waiting = false;
+      });
   };
 }

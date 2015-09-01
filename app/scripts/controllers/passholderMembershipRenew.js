@@ -12,7 +12,7 @@ angular
   .controller('PassholderMembershipRenewController', PassholderMembershipRenewController);
 
 /* @ngInject */
-function PassholderMembershipRenewController ($scope, $modalInstance, $http, $filter, moment, membership, association, passholder, appConfig) {
+function PassholderMembershipRenewController ($scope, $modalInstance, moment, membership, membershipService, association, passholder) {
   $scope.association = association;
 
   $scope.endDate = {
@@ -31,28 +31,24 @@ function PassholderMembershipRenewController ($scope, $modalInstance, $http, $fi
   $scope.register = function (endDate) {
     $scope.waiting = true;
 
-    var requestData = {
-      associationId: $scope.association.id
-    };
+    var deferredRenew = membershipService.register(passholder.passNumber, association.id, endDate);
 
-    if (!endDate.fixed) {
-      requestData.endDate = $filter('date')(endDate.date, 'yyyy-MM-dd');
-    }
-
-    var request = $http.post(appConfig.apiUrl + 'passholders/' + passholder.passNumber + '/profile/memberships', requestData);
-
-    request
-      .success(function (data) {
-        // @todo parse response, check content type
-        $modalInstance.close(data);
-      })
-      .error(function (data) {
-        $scope.waiting = false;
-        $scope.errors = [];
-        angular.forEach(data.errors, function (error) {
-          $scope.errors.push(error.message);
-        });
-      }
-    );
+    deferredRenew
+      .then(
+        function(data) {
+          $modalInstance.close(data);
+        },
+        function (data) {
+          $scope.errors = [];
+          angular.forEach(data.errors, function (error) {
+            $scope.errors.push(error.message);
+          });
+        }
+      )
+      .finally(
+        function () {
+          $scope.waiting = false;
+        }
+      );
   };
 }
