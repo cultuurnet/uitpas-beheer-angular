@@ -12,7 +12,7 @@ angular
   .controller('PassholderSearchController', PassholderSearchController);
 
 /* @ngInject */
-function PassholderSearchController ($rootScope, passholderService, $state) {
+function PassholderSearchController ($rootScope, passholderService, $state, eIdService) {
   /*jshint validthis: true */
   var controller = this;
 
