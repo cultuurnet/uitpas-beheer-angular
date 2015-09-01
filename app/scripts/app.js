@@ -22,6 +22,7 @@ angular
     'ui.bootstrap',
     'mp.autoFocus'
   ])
+  .constant('moment', moment)
   /* @ngInject */
   .config(function ($stateProvider, $locationProvider, $httpProvider) {
     $stateProvider
@@ -186,6 +187,42 @@ angular
               $state.go('^');
             });
         }]
+      })
+      .state('counter.main.passholder.memberships', {
+        url: 'passholder/:identification/memberships',
+        requiresCounter: true,
+        views: {
+          'content@counter': {
+            templateUrl: 'views/split-content.html'
+          },
+          'sidebar@counter': {
+            templateUrl: 'views/sidebar-passholder-details.html',
+            controller: 'PassholderDetailController',
+            controllerAs: 'pdc'
+          },
+          'top@counter.main.passholder.memberships': {
+            templateUrl: 'views/content-passholder-memberships.html',
+            controller: 'PassholderMembershipController',
+            controllerAs: 'ac'
+          }
+        },
+        params: {
+          'passholder': null,
+          'identification': null
+        },
+        resolve: {
+          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
+            if ($stateParams.passholder) {
+              return $stateParams.passholder;
+            }
+            else {
+              return passholderService.find($stateParams.identification);
+            }
+          }],
+          identification: ['$stateParams', function($stateParams) {
+            return $stateParams.identification;
+          }]
+        }
       })
       .state('counter.main.passholder.activityTariffs', {
         params: {
