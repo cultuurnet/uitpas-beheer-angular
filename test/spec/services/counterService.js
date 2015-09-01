@@ -12,7 +12,7 @@ describe('Service: counterService', function () {
   }));
 
   // instantiate service
-  var counterService, scope, $cookies, $httpBackend, $q;
+  var counterService, scope, $cookies, $httpBackend, $q, uitid;
 
   var fakeCookieKey = function (cookieKey) {
     spyOn(counterService, 'determineLastActiveCookieKey').and.callFake(function() {
@@ -44,6 +44,7 @@ describe('Service: counterService', function () {
   };
 
   beforeEach(inject(function ($injector, $rootScope) {
+    uitid = $injector.get('uitid');
     counterService = $injector.get('counterService');
     scope = $rootScope;
     $cookies = $injector.get('$cookies');
@@ -192,6 +193,20 @@ describe('Service: counterService', function () {
     scope.$digest();
   });
 
+  it('can get the active counter', function () {
+    var deferredRequest = $q.defer();
+    var counterPromise = deferredRequest.promise;
+
+    spyOn(counterService, 'getActiveFromServer').and.returnValue(counterPromise);
+
+    counterService.getActive();
+
+    deferredRequest.resolve(counters['1149']);
+    scope.$digest();
+
+    expect(counterService.active).toEqual(counters['1149']);
+  });
+
   it('can set an active counter', function (done) {
     var counterToActivate = counters['1149'];
 
@@ -232,5 +247,46 @@ describe('Service: counterService', function () {
     $httpBackend.flush();
   });
 
+  it('can determine the last active cookie key', function (done) {
+    var deferredUser = $q.defer();
+    var userPromise = deferredUser.promise;
+    var user = {
+      id: '65'
+    };
 
+    spyOn(uitid, 'getUser').and.returnValue(userPromise);
+
+    var assertCookieKey = function (cookieKey) {
+      expect(cookieKey).toEqual('lastActiveCounter-65');
+      done();
+    };
+
+    counterService
+      .determineLastActiveCookieKey()
+      .then(assertCookieKey);
+
+    deferredUser.resolve(user);
+
+    scope.$digest();
+  });
+
+  it('throws an error when it can not determine the last active cookie key', function (done) {
+    var deferredUser = $q.defer();
+    var userPromise = deferredUser.promise;
+
+    spyOn(uitid, 'getUser').and.returnValue(userPromise);
+
+    var assertNoCookieKey = function (cookieKey) {
+      expect(cookieKey).toBeUndefined();
+      done();
+    };
+
+    counterService
+      .determineLastActiveCookieKey()
+      .catch(assertNoCookieKey);
+
+    deferredUser.reject();
+
+    scope.$digest();
+  });
 });
