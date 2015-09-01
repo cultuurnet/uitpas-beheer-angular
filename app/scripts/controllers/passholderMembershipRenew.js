@@ -32,9 +32,12 @@ function PassholderMembershipRenewController ($scope, $modalInstance, $http, $fi
     $scope.waiting = true;
 
     var requestData = {
-      associationId: $scope.association.id,
-      endDate: $filter('date')(endDate.date, 'yyyy-MM-dd')
+      associationId: $scope.association.id
     };
+
+    if (!endDate.fixed) {
+      requestData.endDate = $filter('date')(endDate.date, 'yyyy-MM-dd');
+    }
 
     var request = $http.post(appConfig.apiUrl + 'uitpas/' + passholder.passNumber + '/profile/memberships', requestData);
 
