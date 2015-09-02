@@ -17,4 +17,10 @@ function PassholderRegisterController (pass) {
   var controller = this;
 
   controller.pass = pass;
+
+  controller.kansenstatuut = {
+    endDate: new Date(),
+    remarks: '',
+    includeRemarks: false
+  };
 }

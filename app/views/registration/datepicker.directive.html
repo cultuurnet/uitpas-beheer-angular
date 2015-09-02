@@ -1,0 +1,10 @@
+<label ng-attr-for="{{::datepicker.id}}" ng-bind="::datepicker.label"></label>
+<p class="input-group">
+    <input type="text" class="form-control" ng-attr-name="{{::datepicker.name}}" ng-attr-id="{{::datepicker.id}}"
+           ng-required="true"/>
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-click="datepicker.toggle()">
+        <i class="fa fa-calendar"></i>
+      </button>
+   </span>
+</p>

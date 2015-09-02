@@ -46,11 +46,10 @@
         </div>
         <hr>
         <div class="grid">
-          <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required" ng-class="{ 'has-error': (passholderRegisterPersonalData.$submitted || passholderRegisterPersonalData.dateOfBirth.$touched || passholderRegisterPersonalData.dateOfBirth.$dirty) && passholderRegisterPersonalData.dateOfBirth.$invalid }">
-            <label class="control-label" for="date-of-birth">
-              Geboortedatum
-            </label>
-            <input type="date" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true" ng-model="prc.passholder.birth.date">
+          <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required"
+               ng-class="{ 'has-error': (passholderRegisterPersonalData.$submitted || passholderRegisterPersonalData.dateOfBirth.$touched || passholderRegisterPersonalData.dateOfBirth.$dirty) && passholderRegisterPersonalData.dateOfBirth.$invalid }">
+            <ubr-datepicker ng-model="prc.passholder.birth.date" ubr-label="Geboortedatum" ubr-id="date-of-birth"
+                            ubr-name="dateOfBirth"></ubr-datepicker>
             <div ng-if="(passholderRegisterPersonalData.$submitted || passholderRegisterPersonalData.dateOfBirth.$touched || passholderRegisterPersonalData.dateOfBirth.$dirty) && passholderRegisterPersonalData.dateOfBirth.$invalid"
                  class="text-danger small">
               <div ng-if="passholderRegisterPersonalData.dateOfBirth.$error.required">De geboortedatum is verplicht.</div>

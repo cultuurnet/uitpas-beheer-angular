@@ -201,7 +201,17 @@ module.exports = function (grunt) {
     wiredep: {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
-        ignorePath:  /\.\.\//
+        ignorePath:  /\.\.\//,
+        options: {
+          'overrides': {
+            'moment': {
+              'main': [
+                'moment.js',
+                'locale/nl.js'
+              ]
+            }
+          }
+        }
       },
       test: {
         devDependencies: true,

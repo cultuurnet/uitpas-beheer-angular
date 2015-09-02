@@ -1,15 +1,43 @@
-<div ng-switch="prc.pass.type">
+<div class="pane pane-register text-center" ng-switch="prc.pass.type">
   <div class="card" ng-switch-when="CARD">
     <img class="logo" src="images/svg/card-new.svg" width="150" height="150" alt="new card">
-    <span>Deze kaart is nog niet geregistreerd.</span>
+    <p ng-hide="prc.pass.kansenStatuut">Deze kaart is nog niet geregistreerd.</p>
+    <p ng-show="prc.pass.kansenStatuut" class="alert alert-info"><em>Deze kaart is nog niet geregistreerd. Deze kaart is voorbehouden aan mensen met een kansenstatuut.</em></p>
   </div>
   <div class="key" ng-switch-when="KEY">
     <img class="logo" src="images/svg/key.svg" width="150" height="150" alt="key">
-    <span>Deze sleutelhanger is nog niet geregistreerd.</span>
+    <p ng-hide="prc.pass.kansenStatuut">Deze sleutelhanger is nog niet geregistreerd.</p>
+    <p ng-show="prc.pass.kansenStatuut" class="alert alert-info"><em>Deze sleutelhanger is nog niet geregistreerd. Deze sleutelhanger is voorbehouden aan mensen met een kansenstatuut.</em></p>
   </div>
   <div class="sticker" ng-switch-when="STICKER">
     <img class="logo" src="images/svg/sticker.svg" width="150" height="150" alt="sticker">
-    <span>Deze sticker is nog niet geregistreerd.</span>
+    <p ng-hide="prc.pass.kansenStatuut">Deze sticker is nog niet geregistreerd.</p>
+    <p ng-show="prc.pass.kansenStatuut" class="alert alert-info"><em>Deze sticker is nog niet geregistreerd. Deze sticker is voorbehouden aan mensen met een kansenstatuut.</em></p>
   </div>
-  <button type="submit" class="btn btn-primary" ui-sref="counter.main.register.form.personalData">Pashouder registeren</button>
+
+  <div class="panel panel-default text-left" ng-show="prc.pass.kansenStatuut">
+    <div class="panel-body">
+      <p class="element-title"></p>
+      <div class="form-group">
+        <div class="form-inline">
+          <ubr-datepicker ng-model="prc.kansenstatuut.endDate" ubr-label="Geldig tot" ubr-id="geldig-tot"
+                          ubr-name="endDate"></ubr-datepicker>
+        </div>
+      </div>
+      <div class="checkbox">
+        <label for="more-info-check">
+          <input type="checkbox" class="more-info-check" id="more-info-check" name="more-info" ng-model="prc.kansenstatuut.includeRemarks">
+          Voeg opmerkingen toe
+        </label>
+      </div>
+      <div class="form-group more-info" ng-show="prc.kansenstatuut.includeRemarks">
+        <textarea class="form-control" id="opmerkingen" rows="3" ng-model="prc.kansenstatuut.remarks"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" ui-sref="counter.main.register.form.personalData">Pashouder registeren</button>
+    </div>
+  </div> <!--/ end .panel-->
+
+  <p ng-hide="prc.pass.kansenStatuut">
+    <button type="submit" class="btn btn-primary" ui-sref="counter.main.register.form.personalData">Pashouder registeren</button>
+  </p>
 </div>
