@@ -136,6 +136,20 @@ describe('Service: counterService', function () {
     $httpBackend.flush();
   });
 
+  it('rejects when it can not get a list of counters', function (done) {
+    var checkRequestedListFailed = function (error) {
+      expect(error).toEqual('unable to retrieve counters for active user');
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'counters')
+      .respond(404);
+
+    counterService.getList().catch(checkRequestedListFailed);
+    $httpBackend.flush();
+  });
+
   it('automatically activates a counter when the user only has one', function (done) {
     var deferredRequest = $q.defer();
     var counterRequest = deferredRequest.promise;
@@ -195,6 +209,34 @@ describe('Service: counterService', function () {
     scope.$digest();
   });
 
+  it('can get the active counter from the server', function (done) {
+    var activeCounterId = '1149';
+    $httpBackend
+      .expectGET(apiUrl + 'counters/active')
+      .respond(200, activeCounterId);
+
+    var activeCounterPersisted = function (activeCounterIdFromServer) {
+      expect(activeCounterIdFromServer).toEqual(activeCounterId);
+      done();
+    };
+
+    counterService.getActiveFromServer().then(activeCounterPersisted);
+    $httpBackend.flush();
+  });
+
+  it('rejects when it can not get the active counter from the server', function (done) {
+    $httpBackend
+      .expectGET(apiUrl + 'counters/active')
+      .respond(404);
+
+    var activeCounterNotPersisted = function () {
+      done();
+    };
+
+    counterService.getActiveFromServer().catch(activeCounterNotPersisted);
+    $httpBackend.flush();
+  });
+
   it('can get the active counter', function () {
     var deferredRequest = $q.defer();
     var counterPromise = deferredRequest.promise;
@@ -233,6 +275,20 @@ describe('Service: counterService', function () {
     deferredToServer.resolve();
     deferredToClient.resolve();
     scope.$digest();
+  });
+
+  it('rejects when it can not set the active counter on the server', function (done) {
+    var counterId = 10;
+    $httpBackend
+      .expectPOST(apiUrl + 'counters/active', {id: counterId})
+      .respond(404);
+
+    var activeCounterNotPersisted = function () {
+      done();
+    };
+
+    counterService.setActiveOnServer(counterId).catch(activeCounterNotPersisted);
+    $httpBackend.flush();
   });
 
   it('rejects when it can not set the active counter id', function (done) {
