@@ -65,8 +65,6 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
 
   controller.passholder = new Passholder(placeholder);
 
-  console.log(controller.passholder);
-
   controller.submitPersonalDataForm = function(personalDataForm) {
     if (!controller.formSubmitBusy) {
       controller.formSubmitBusy = true;
@@ -77,7 +75,6 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
         };
 
         var continueRegisterProcess = function () {
-          controller.passholder.name.first = personalDataForm.firstName.$viewValue;
           $state.go('counter.main.register.form.contactData');
           controller.formSubmitBusy = false;
         };
@@ -133,8 +130,6 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
       .then(updateUnreducedPriceInfo);
   };
 
-  controller.refreshUnreducedPriceInfo();
-
   controller.refreshPriceInfo = function (voucherNumberFormState) {
     var updatePriceInfo = function (priceInfo) {
       voucherNumberFormState.$setValidity('validVoucher', true);
@@ -186,7 +181,7 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
     $state.go('counter.main.register.form.personalData');
   };
 
-  this.close = function () {
+  controller.close = function () {
     $modalInstance.dismiss('registration modal closed');
   };
 }
