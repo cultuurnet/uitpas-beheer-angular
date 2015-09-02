@@ -91,3 +91,11 @@ a + .btn {
 .grid.radios > [class*='grid__'] {
   margin-top: 0;
 }
+
+input[type=text].input-small {
+  width: auto;
+}
+
+.modal label[for=expirationDate] {
+  display: block;
+}

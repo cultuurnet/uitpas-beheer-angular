@@ -195,6 +195,18 @@
         margin-top: 5px;
       }
     }
+    .modal & {
+      margin: 0;
+      > ul {
+        margin: -16px -15px -15px;
+      }
+      li {
+        padding: 15px;
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
   }
   .points {
     color: $brand-success;
