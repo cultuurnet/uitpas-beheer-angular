@@ -235,6 +235,38 @@ describe('Service: counterService', function () {
     scope.$digest();
   });
 
+  it('rejects when it can not set the active counter id', function (done) {
+    var counterToActivate = counters['1149'];
+
+    var deferredToServer = $q.defer();
+    var setOnServer = deferredToServer.promise;
+    spyOn(counterService, 'setActiveOnServer').and.returnValue(setOnServer);
+
+    var deferredToCookie = $q.defer();
+    var setOnCookie = deferredToCookie.promise;
+    spyOn(counterService, 'determineLastActiveCookieKey').and.returnValue(setOnCookie);
+
+    spyOn(scope, '$emit');
+
+    var counterActivated = function (response) {
+      expect(response).toBeUndefined();
+      done();
+    };
+
+    var counterNotActivated = function (error) {
+      expect(error).toEqual('something went wrong while activating the counter');
+      done();
+    };
+
+    counterService.setActive(counterToActivate)
+      .then(counterActivated, counterNotActivated);
+
+    deferredToServer.reject();
+    deferredToCookie.reject();
+
+    scope.$digest();
+  });
+
   it('can persist the active counter', function (done) {
     var activeCounterId = '1149';
     $httpBackend
@@ -334,6 +366,14 @@ describe('Service: counterService', function () {
       .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?date_of_birth=1983-02-03&postal_code=3000&reason=FIRST_CARD')
       .respond(200, pricePromise);
 
+    counterService.getRegistrationPriceInfo(pass, passholder, voucherNumber, reason).then(assertPriceInfo);
+
+    deferredRequest.resolve(priceResponse);
+
+    $httpBackend.flush();
+
+    // Do that again with a voucher number.
+    voucherNumber = 'voucher number';
     counterService.getRegistrationPriceInfo(pass, passholder, voucherNumber, reason).then(assertPriceInfo);
 
     deferredRequest.resolve(priceResponse);
