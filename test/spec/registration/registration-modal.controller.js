@@ -181,6 +181,94 @@ describe('Controller: PassholderRegisterController', function () {
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 
+  it('should refresh the price info', function () {
+    var formStub = {
+      $valid: true,
+      $setValidity: jasmine.createSpy()
+    };
+    var deferredPriceInfo = $q.defer();
+    var priceInfoPromise = deferredPriceInfo.promise;
+    var returnedPriceInfo = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+    controller.voucherNumber = 'voucher';
+
+    spyOn(counterService, 'getRegistrationPriceInfo').and.returnValue(priceInfoPromise);
+
+    controller.refreshPriceInfo(formStub);
+
+    deferredPriceInfo.resolve(returnedPriceInfo);
+    $scope.$digest();
+
+    expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
+    expect(formStub.$setValidity).toHaveBeenCalledWith('validVoucher', true);
+  });
+
+  it('should refresh the price info to the priceInfo.price if no voucherNumber is present', function () {
+    var formStub = {
+      $valid: true,
+      $setValidity: jasmine.createSpy()
+    };
+    var deferredPriceInfo = $q.defer();
+    var priceInfoPromise = deferredPriceInfo.promise;
+    var returnedPriceInfo = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+
+    spyOn(counterService, 'getRegistrationPriceInfo').and.returnValue(priceInfoPromise);
+
+    controller.refreshPriceInfo(formStub);
+
+    deferredPriceInfo.resolve(returnedPriceInfo);
+    $scope.$digest();
+
+    expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
+    expect(formStub.$setValidity).toHaveBeenCalledWith('validVoucher', true);
+    expect(controller.unreducedPrice).toEqual('5,25');
+  });
+
+  it('should provide error info about the price info', function () {
+    var formStub = {
+      $valid: true,
+      $setValidity: jasmine.createSpy()
+    };
+    var deferredPriceInfo = $q.defer();
+    var priceInfoPromise = deferredPriceInfo.promise;
+    var returnedError = {
+      code: 'INVALID_VOUCHER_STATUS'
+    };
+    controller.voucherNumber = 'voucher';
+
+    spyOn(counterService, 'getRegistrationPriceInfo').and.returnValue(priceInfoPromise);
+
+    controller.refreshPriceInfo(formStub);
+
+    deferredPriceInfo.reject(returnedError);
+    $scope.$digest();
+
+    expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
+    expect(formStub.$setValidity).toHaveBeenCalledWith('redeemable', false);
+    expect(formStub.$setValidity).toHaveBeenCalledWith('validVoucher', false);
+  });
+
   it('should submit the registration', function () {
     var deferredRegistration = $q.defer();
     var registrationPromise = deferredRegistration.promise;
