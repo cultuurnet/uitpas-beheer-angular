@@ -109,7 +109,6 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
         controller.formSubmitBusy = false;
       } else {
         controller.formSubmitBusy = false;
-
       }
     }
   };

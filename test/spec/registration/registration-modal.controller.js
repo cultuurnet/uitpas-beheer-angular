@@ -155,6 +155,32 @@ describe('Controller: PassholderRegisterController', function () {
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 
+  it('should submit the price form', function () {
+    var formStub= {
+      $valid: true
+    };
+
+    spyOn(controller, 'submitRegistration');
+
+    controller.submitPriceForm(formStub);
+
+    expect(controller.submitRegistration).toHaveBeenCalled();
+    expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
+  it('should not submit the price form when there are errors', function () {
+    var formStub= {
+      $valid: false
+    };
+
+    spyOn(controller, 'submitRegistration');
+
+    controller.submitPriceForm(formStub);
+
+    expect(controller.submitRegistration).not.toHaveBeenCalled();
+    expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
   it('can dismiss the modal', function () {
     controller.close();
     expect(modalInstance.dismiss).toHaveBeenCalled();
