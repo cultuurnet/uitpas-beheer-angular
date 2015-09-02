@@ -36,7 +36,7 @@ describe('Controller: PassholderSearchController', function () {
     expect(passholderSearchController.passholderNotFound).toEqual(false);
   });
 
-  it('redirects to a passholder detail page with a valid number', function() {
+  it('redirects to a passholder detail page with a valid number', function () {
     var passholderDeferred = $q.defer();
     var expectedStateParameters = {
       passholder: {
@@ -55,7 +55,7 @@ describe('Controller: PassholderSearchController', function () {
     expect(passholderService.findPass).toHaveBeenCalledWith('valid identification number');
   });
 
-  it('sets variables for an error message with an invalid number', function() {
+  it('sets variables for an error message with an invalid number', function () {
     var passholderDeferred = $q.defer();
     passholderDeferred.reject(
       {
@@ -82,5 +82,26 @@ describe('Controller: PassholderSearchController', function () {
     expect(passholderService.findPass).toHaveBeenCalledWith('invalid identification number');
     expect(passholderSearchController.passholder).toEqual(undefined);
     expect(passholderSearchController.passholderNotFound).toEqual(true);
+  });
+
+  it('should redirect to the registration page for an empty pass', function () {
+    var deferredPass = $q.defer();
+    var passResponse = {
+      number: 'itsme-123456789',
+      type: 'CARD'
+    };
+    var expectedRequest = {
+      pass: passResponse,
+      identification: passResponse.number,
+      type: passResponse.type
+    };
+    spyOn(passholderService, 'findPass').and.returnValue(deferredPass.promise);
+    spyOn($state, 'go');
+    passholderSearchController.searchPassholder('valid identification number');
+
+    deferredPass.resolve(passResponse);
+    rootScope.$digest();
+    expect($state.go).toHaveBeenCalledWith('counter.main.register', expectedRequest);
+    expect(passholderService.findPass).toHaveBeenCalledWith('valid identification number');
   });
 });
