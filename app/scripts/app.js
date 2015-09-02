@@ -207,7 +207,7 @@ angular
               params: {
                 'passholder': null
               },
-              size: 'lg',
+              size: 'sm',
               resolve: {
                 passholder: function() {
                   return passholder;

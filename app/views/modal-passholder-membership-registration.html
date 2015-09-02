@@ -1,4 +1,4 @@
-<form class="form-horizontal" name="membershipRegistrationForm"
+<form class="form" name="membershipRegistrationForm"
       novalidate>
     <div class="modal-header">
       <h3>Aanvraag lidmaatschap</h3>
@@ -10,26 +10,22 @@
             {{error}}
           </div>
         </div>
-        <p style="text-align: center;">Lidmaatschap
-          <em>{{association.name}}</em> <span
+        <p class="alert alert-info text-center">Lidmaatschap
+          <strong>{{association.name}}</strong> <span
               ng-show="recentlyExpired">opnieuw</span>
           aanvragen?</p>
       </div>
-      <div class="control-group">
-        <div class="control-label">
-          <label for="expirationDate">Vervaldatum <span
-              ng-show="!endDate.fixed"
-              class="required">*</span></label>
-        </div>
-        <div class="controls">
-          <span ng-show="endDate.fixed" class="fixed-input">{{endDate.date | date:'dd/MM/yyyy'}}</span>
-          <input name="endDate" type="text" placeholder="mm/dd/jjjj"
-                 class="input-small"
-                 datepicker-popup="dd/MM/yyyy"
-                 ng-model="endDate.date"
-                 ng-show="!endDate.fixed"
-                 required/>
-        </div>
+      <div class="form-group">
+        <label for="expirationDate">Vervaldatum <span
+            ng-show="!endDate.fixed"
+            class="required">*</span></label>
+        <span ng-show="endDate.fixed" class="fixed-input">{{endDate.date | date:'dd/MM/yyyy'}}</span>
+        <input name="endDate" type="text" placeholder="mm/dd/jjjj"
+               class="input-small"
+               datepicker-popup="dd/MM/yyyy"
+               ng-model="endDate.date"
+               ng-show="!endDate.fixed"
+               required/>
       </div>
     </div>
     <div class="modal-footer">
@@ -37,7 +33,7 @@
         <div class="ajax-progress" ng-show="waiting">
           <span class="throbber"></span>
         </div>
-        <button class="btn btn-success" ng-click="register(endDate)"
+        <button class="btn btn-primary" ng-click="register(endDate)"
                 ng-disabled="membershipRegistrationForm.$invalid || waiting">
           Aanvragen
         </button>

@@ -9,53 +9,56 @@
         <circle-spinner></circle-spinner>
       </div>
   </div>
-
-<div ng-repeat="membership in memberships"
-     class="row-fluid membership-summary" style="margin-bottom:1em;"
-     ng-cloak class="ng-cloak">
-  <div class="span4 membership-name">
-    {{membership.association.name}}
-  </div>
-  <div class="span4 membership-status"
-       ng-bind-html="membershipStatusSummary(membership)">
-  </div>
-  <div class="span4 membership-actions">
-    <button class="btn btn-default" ng-show="canRenew(membership)"
-            ng-disabled="atLeastOneKansenstatuutExpired"
-            ng-click="openMembershipRenewalModal(membership)">
-      Verlengen
-    </button>
-    <button class="btn btn-danger" ng-show="canStop(membership)"
-            ng-click="openMembershipStopModal(membership)">
-      Stoppen
-    </button>
-    <button class="btn btn-default" ng-show="expired(membership)"
-            ng-disabled="!canApplyFor(membership.association) || atLeastOneKansenstatuutExpired"
-            ng-click="openMembershipRegistrationModal(membership.association, true)"
-            ng-attr-title="{{registerTitle(membership.association)}}">
-      Opnieuw aanvragen
-    </button>
-
-  </div>
-</div>
-
-<div
-    ng-repeat="association in associations | filter:{permissionRegister:true}"
-    class="row-fluid membership-summary" style="margin-bottom:1em;"
-    ng-cloak class="ng-cloak">
-  <div class="span4 membership-name">
-    {{association.name}}
-  </div>
-  <div class="span4 membership-status">
-    <strong>niet acief</strong>
-  </div>
-  <div class="span4 membership-actions">
-    <button class="btn btn-default"
-            ng-disabled="!canApplyFor(association) || atLeastOneKansenstatuutExpired"
-            ng-click="openMembershipRegistrationModal(association)"
-            ng-attr-title="{{registerTitle(association)}}">
-      Lidmaatschap aanvragen
-    </button>
+  <div class="overview overview-memberships">
+    <ul class="list-unstyled">
+      <li class="overview__item overview__item-list membership-summary" ng-repeat="membership in memberships"
+           ng-cloak class="ng-cloak">
+        <div class="grid display-table">
+          <div class="grid__12 grid--bp-sml__4 first membership-name">
+            <strong>{{membership.association.name}}</strong>
+          </div>
+          <div class="grid__12 grid--bp-sml__4 middle membership-status"
+               ng-bind-html="membershipStatusSummary(membership)">
+          </div>
+          <div class="grid__12 grid--bp-sml__4 last membership-actions">
+            <button class="btn btn-default" ng-show="canRenew(membership)"
+                    ng-disabled="atLeastOneKansenstatuutExpired"
+                    ng-click="openMembershipRenewalModal(membership)">
+              Verlengen
+            </button>
+            <button class="btn btn-link btn-danger" ng-show="canStop(membership)"
+                    ng-click="openMembershipStopModal(membership)">
+              Stoppen
+            </button>
+            <button class="btn btn-default" ng-show="expired(membership)"
+                    ng-disabled="!canApplyFor(membership.association) || atLeastOneKansenstatuutExpired"
+                    ng-click="openMembershipRegistrationModal(membership.association, true)"
+                    ng-attr-title="{{registerTitle(membership.association)}}">
+              Opnieuw aanvragen
+            </button>
+          </div>
+        </div>
+      </li>
+      <li class="overview__item overview__item-list associations-summary" ng-repeat="association in associations | filter:{permissionRegister:true}"
+      ng-cloak class="ng-cloak">
+        <div class="grid display-table">
+          <div class="grid__12 grid--bp-sml__4 first membership-name">
+            <strong>{{association.name}}</strong>
+          </div>
+          <div class="grid__12 grid--bp-sml__4 middle membership-status">
+            <strong>niet acief</strong>
+          </div>
+          <div class="grid__12 grid--bp-sml__4 last membership-actions">
+            <button class="btn btn-default"
+                    ng-disabled="!canApplyFor(association) || atLeastOneKansenstatuutExpired"
+                    ng-click="openMembershipRegistrationModal(association)"
+                    ng-attr-title="{{registerTitle(association)}}">
+              Lidmaatschap aanvragen
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
   </div>
 </div>
 </div>

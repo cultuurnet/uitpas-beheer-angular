@@ -115,6 +115,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     var modalInstance = $modal.open({
       templateUrl: 'views/modal-passholder-membership-registration.html',
       controller: 'PassholderMembershipRegisterController',
+      size: 'sm',
       resolve: {
         association: function () {
           return getAssociation(association.id);
@@ -137,6 +138,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     var modalInstance = $modal.open({
       templateUrl: 'views/modal-passholder-membership-renew.html',
       controller: 'PassholderMembershipRenewController',
+      size: 'sm',
       resolve: {
         membership: function() {
           return membership;
@@ -159,6 +161,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     var modalInstance = $modal.open({
       templateUrl: 'views/modal-passholder-membership-stop.html',
       controller: 'PassholderMembershipStopController',
+      size: 'sm',
       resolve: {
         membership: function() {
           return membership;

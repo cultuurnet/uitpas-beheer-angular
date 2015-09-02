@@ -56,6 +56,9 @@
     h3 {
       color: $brand-primary;
     }
+    .btn {
+      white-space: normal;
+    }
   }
   &__item.unavailable {
     opacity: .6;
@@ -177,6 +180,22 @@
       }
     }
   }
+  &-memberships {
+    .middle {
+      text-align: center;
+    }
+    .last {
+      padding-left: $rh-sml;
+      padding-right: $rh-sml;
+      text-align: center;
+    }
+    .last .btn {
+      width: 100%;
+      + .btn {
+        margin-top: 5px;
+      }
+    }
+  }
   .points {
     color: $brand-success;
     font-weight: 600;
@@ -218,6 +237,14 @@
       float: none;
       min-height: 90px;
       vertical-align: middle;
+    }
+  }
+}
+.modal .display-table {
+  @include breakpoint(map-get($breakpoints, med)) {
+    min-height: 35px;
+    > div {
+      min-height: 35px;
     }
   }
 }
