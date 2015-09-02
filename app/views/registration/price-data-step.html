@@ -6,7 +6,7 @@
       <label class="control-label" for="voucherNumber">
         Voucher-nummer
       </label>
-      <input name="voucherNumber" type="text" ng-model="prc.voucherNumber" ng-model-options="prc.priceModelOptions"
+      <input id="voucherNumber" name="voucherNumber" type="text" ng-model="prc.voucherNumber" ng-model-options="prc.priceModelOptions"
              ng-change="prc.refreshPriceInfo(priceForm.voucherNumber)">
       <div ng-if="priceForm.voucherNumber.$touched">
         <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.validVoucher === true">Het voucher-nummer is ongeldig.</div>

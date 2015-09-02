@@ -12,7 +12,7 @@ describe('Service: counterService', function () {
   }));
 
   // instantiate service
-  var counterService, scope, $cookies, $httpBackend, $q, uitid;
+  var counterService, scope, $cookies, $httpBackend, $q, uitid, Pass, Passholder;
 
   var fakeCookieKey = function (cookieKey) {
     spyOn(counterService, 'determineLastActiveCookieKey').and.callFake(function() {
@@ -21,6 +21,14 @@ describe('Service: counterService', function () {
       };
     });
   };
+
+  function fakeCounters(counters) {
+    spyOn(counterService, 'getList').and.callFake(function () {
+      return {
+        then: function(callback) { return callback(counters); }
+      };
+    });
+  }
 
   var counters = {
     '1149': {
@@ -44,6 +52,8 @@ describe('Service: counterService', function () {
   };
 
   beforeEach(inject(function ($injector, $rootScope) {
+    Pass = $injector.get('Pass');
+    Passholder = $injector.get('Passholder');
     uitid = $injector.get('uitid');
     counterService = $injector.get('counterService');
     scope = $rootScope;
@@ -125,14 +135,6 @@ describe('Service: counterService', function () {
     counterService.getList().then(checkRequestedList);
     $httpBackend.flush();
   });
-
-  function fakeCounters(counters) {
-    spyOn(counterService, 'getList').and.callFake(function () {
-      return {
-        then: function(callback) { return callback(counters); }
-      };
-    });
-  }
 
   it('automatically activates a counter when the user only has one', function (done) {
     var deferredRequest = $q.defer();
@@ -288,5 +290,54 @@ describe('Service: counterService', function () {
     deferredUser.reject();
 
     scope.$digest();
+  });
+
+  it('can get the price for a registration', function (done) {
+    var pass = new Pass({
+      uitPas: {
+        number: '123456789'
+      }
+    });
+    var passholder = new Passholder({
+      birth: {
+        date: '1983-02-03'
+      },
+      address: {
+        postalCode: 3000
+      }
+    });
+    var voucherNumber = false;
+    var reason = false;
+
+    var deferredRequest = $q.defer();
+    var pricePromise = deferredRequest.promise;
+
+    var priceResponse = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+
+    var assertPriceInfo = function(response) {
+      expect(response).toEqual(priceResponse);
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?date_of_birth=1983-02-03&postal_code=3000&reason=FIRST_CARD')
+      .respond(200, pricePromise);
+
+    counterService.getRegistrationPriceInfo(pass, passholder, voucherNumber, reason).then(assertPriceInfo);
+
+    deferredRequest.resolve(priceResponse);
+
+    $httpBackend.flush();
   });
 });
