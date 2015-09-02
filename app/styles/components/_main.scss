@@ -6,7 +6,6 @@ html {
 }
 
 // Type
-
 p {
   margin: 0 0 $rh-sml;
 }
@@ -29,4 +28,9 @@ a {
 hr {
   margin-top: $rh-xsm;
   margin-bottom: $rh-xsm;
+}
+
+.direction {
+  font-style: italic;
+  color: $gray-75;
 }

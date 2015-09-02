@@ -146,8 +146,9 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
   service.register = function(pass, passholderData, voucherNumber, kansenstatuut){
     var registration = {
-      passholder: passholderData
-    };
+          passHolder: passholderData
+        },
+        deferredPassholder = $q.defer();
 
     if (voucherNumber) {
       registration.voucherNumber = voucherNumber;
@@ -166,16 +167,22 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       }
     };
 
-    var passholderRegistered = function (registrationResponse) {
-      console.log(registrationResponse);
+    var resolveRegisteredPassholder = function (registrationResponse) {
+      // TODO: Clean up this cache mess...
+      passholderIdCache.remove(pass.number);
+      passholderCache.remove(pass.number);
+
+      deferredPassholder.resolve(registrationResponse.data);
     };
 
-    var registrationFailed = function (error) {
-      throw error;
+    var reportError = function (errorResponse) {
+      deferredPassholder.reject(errorResponse.data);
     };
 
     $http
-      .post(apiUrl + 'passholders/' + pass.number, registration, requestOptions)
-      .then(passholderRegistered, registrationFailed);
+      .put(apiUrl + 'passholders/' + pass.number, registration, requestOptions)
+      .then(resolveRegisteredPassholder, reportError);
+
+    return deferredPassholder.promise;
   };
 }

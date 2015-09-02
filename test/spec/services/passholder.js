@@ -304,11 +304,11 @@ describe('Service: passholderService', function () {
     var pass = new Pass(identityData);
 
     var registration = {
-      passholder: pass.passholder
+      passHolder: pass.passholder
     };
 
     $httpBackend
-      .expectPOST(apiUrl + 'passholders/' + pass.number, registration)
+      .expectPUT(apiUrl + 'passholders/' + pass.number, registration)
       .respond(200);
 
     passholderService.register(pass, pass.passholder, false, false);
@@ -324,13 +324,13 @@ describe('Service: passholderService', function () {
     };
 
     var registration = {
-      passholder: pass.passholder,
+      passHolder: pass.passholder,
       voucherNumber: voucher,
       kansenStatuut: kansenStatuut
     };
 
     $httpBackend
-      .expectPOST(apiUrl + 'passholders/' + pass.number, registration)
+      .expectPUT(apiUrl + 'passholders/' + pass.number, registration)
       .respond(200);
 
     passholderService.register(pass, pass.passholder, voucher, kansenStatuut);
