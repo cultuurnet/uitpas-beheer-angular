@@ -16,10 +16,6 @@ describe('Controller: PassholderRegisterController', function () {
     }
   };
 
-  var formStub = {
-    '$valid': true
-  };
-
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($injector, $rootScope) {
     modalInstance = {
@@ -58,10 +54,13 @@ describe('Controller: PassholderRegisterController', function () {
   });
 
   it('should submit the personal data form', function () {
-    formStub.inszNumber = {
-      $invalid: false,
+    var formStub = {
+      '$valid': true,
+      inszNumber: {
+        $invalid: false,
         $error: {
-        inUse: false
+          inUse: false
+        }
       }
     };
 
@@ -81,15 +80,32 @@ describe('Controller: PassholderRegisterController', function () {
     expect($state.go).toHaveBeenCalledWith('counter.main.register.form.contactData');
   });
 
+  it('should not submit the personal data form when there are errors', function () {
+    var formStub= {
+      $valid: false
+    };
+    spyOn(passholderService, 'findPassholder');
+    spyOn($state, 'go');
+
+    controller.submitPersonalDataForm(formStub);
+
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect(passholderService.findPassholder).not.toHaveBeenCalled();
+    expect($state.go).not.toHaveBeenCalledWith();
+  });
+
   it('should set error feedback in the personal data form', function () {
-    formStub.inszNumber = {
-      $invalid: false,
-      $error: {
-        inUse: false
-      },
-      $setValidity: function() {
-        this.$invalid = true;
-        this.$error.inUse = true;
+    var formStub = {
+      '$valid': true,
+      inszNumber: {
+        $invalid: false,
+        $error: {
+          inUse: false
+        },
+        $setValidity: function() {
+          this.$invalid = true;
+          this.$error.inUse = true;
+        }
       }
     };
 
@@ -109,6 +125,34 @@ describe('Controller: PassholderRegisterController', function () {
     expect($state.go).not.toHaveBeenCalled();
     expect(formStub.inszNumber.$error.inUse).toBeTruthy();
     expect(formStub.inszNumber.$invalid).toBeTruthy();
+  });
+
+  it('should submit the contact data form', function () {
+    var formStub= {
+      $valid: true
+    };
+    spyOn($state, 'go');
+    spyOn(controller, 'refreshUnreducedPriceInfo');
+
+    controller.submitContactDataForm(formStub);
+
+    expect($state.go).toHaveBeenCalledWith('counter.main.register.form.price');
+    expect(controller.refreshUnreducedPriceInfo).toHaveBeenCalled();
+    expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
+  it('should not submit the contact data form when there are errors', function () {
+    var formStub= {
+      $valid: false
+    };
+    spyOn($state, 'go');
+    spyOn(controller, 'refreshUnreducedPriceInfo');
+
+    controller.submitContactDataForm(formStub);
+
+    expect($state.go).not.toHaveBeenCalled();
+    expect(controller.refreshUnreducedPriceInfo).not.toHaveBeenCalled();
+    expect(controller.formSubmitBusy).toBeFalsy();
   });
 
   it('can dismiss the modal', function () {
