@@ -181,6 +181,45 @@ describe('Controller: PassholderRegisterController', function () {
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 
+  it('should submit the registration', function () {
+    var deferredRegistration = $q.defer();
+    var registrationPromise = deferredRegistration.promise;
+    var returnedPassholder = new Passholder();
+
+    spyOn(passholderService, 'register').and.returnValue(registrationPromise);
+
+    controller.submitRegistration();
+
+    deferredRegistration.resolve(returnedPassholder);
+
+    $scope.$digest();
+
+    expect(passholderService.register).toHaveBeenCalled();
+    expect(modalInstance.close).toHaveBeenCalled();
+  });
+
+  it('should redirect if the submit of the registration fails', function () {
+    var deferredRegistration = $q.defer();
+    var registrationPromise = deferredRegistration.promise;
+    var returnedError = {
+      code: 'ERROR',
+      message: 'Clean URL CALLED www.blah.blah/blah'
+    };
+
+    spyOn(passholderService, 'register').and.returnValue(registrationPromise);
+    spyOn($state, 'go');
+
+    controller.submitRegistration();
+
+    deferredRegistration.reject(returnedError);
+
+    $scope.$digest();
+
+    expect(passholderService.register).toHaveBeenCalled();
+    expect($state.go).toHaveBeenCalledWith('counter.main.register.form.personalData');
+    expect(controller.asyncError.cleanMessage).toEqual('Clean ');
+  });
+
   it('can dismiss the modal', function () {
     controller.close();
     expect(modalInstance.dismiss).toHaveBeenCalled();

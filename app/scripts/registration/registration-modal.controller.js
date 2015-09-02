@@ -176,10 +176,6 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
       .then(showRegisteredPassholder, handleRegistrationErrors);
   };
 
-  controller.contactDataFormPrevious = function () {
-    $state.go('counter.main.register.form.personalData');
-  };
-
   controller.close = function () {
     $modalInstance.dismiss('registration modal closed');
   };
