@@ -1,6 +1,6 @@
 'use strict';
 
-xdescribe('Controller: PassholderRegisterController', function () {
+describe('Controller: PassholderRegisterController', function () {
 
   beforeEach(module('ubr.registration'));
 
@@ -48,6 +48,6 @@ xdescribe('Controller: PassholderRegisterController', function () {
   it('should have a pass object', function () {
     expect(controller.pass).toEqual(unregisteredPass);
     expect(controller.formSubmitBusy).toBeFalsy();
-    expect(controller.price).toEqual(0);
+    expect(controller.price).toEqual(-1);
   });
 });
