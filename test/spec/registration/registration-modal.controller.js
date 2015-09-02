@@ -181,6 +181,33 @@ describe('Controller: PassholderRegisterController', function () {
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 
+  it('should refresh the unreduced price info', function () {
+    var deferredPriceInfo = $q.defer();
+    var priceInfoPromise = deferredPriceInfo.promise;
+    var returnedPriceInfo = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+
+    spyOn(counterService, 'getRegistrationPriceInfo').and.returnValue(priceInfoPromise);
+
+    controller.refreshUnreducedPriceInfo();
+
+    deferredPriceInfo.resolve(returnedPriceInfo);
+    $scope.$digest();
+
+    expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
+    expect(controller.unreducedPrice).toEqual('5,25');
+  });
+
   it('should refresh the price info', function () {
     var formStub = {
       $valid: true,
