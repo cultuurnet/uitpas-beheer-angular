@@ -315,6 +315,36 @@ describe('Service: passholderService', function () {
     $httpBackend.flush();
   });
 
+  it('throws an error when it fails to register a passholder', function (done) {
+    var pass = new Pass(identityData);
+
+    var registration = {
+      passHolder: pass.passholder
+    };
+
+    var expectedError = {data: {code: 'ERROR'}};
+
+    var assertRegistered = function (registrationResponse) {
+      expect(registrationResponse).toBeUndefined();
+      done();
+    };
+
+    var assertFail = function (error) {
+      expect(error).toEqual(expectedError);
+      done();
+    };
+
+    $httpBackend
+      .expectPUT(apiUrl + 'passholders/' + pass.number, registration)
+      .respond(404, expectedError);
+
+    passholderService.register(pass, pass.passholder, false, false).then(
+      assertRegistered,
+      assertFail
+    );
+    $httpBackend.flush();
+  });
+
   it('should register a passholder with a voucher and kansenStatuut', function () {
     var pass = new Pass(identityData);
     var voucher = 'voucher';

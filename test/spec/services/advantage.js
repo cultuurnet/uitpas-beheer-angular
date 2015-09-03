@@ -183,4 +183,70 @@ describe('Service: advantage', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
+  it('should exchange an advantage', function (done) {
+    var uitpasNumber = '0930000422202';
+    var expectedAdvantage = {
+      id: 'points-promotion--678',
+      title: 'Testvoordeel beperkt per user',
+      points: 2,
+      exchangeable: true
+    };
+    spyOn($scope, '$emit');
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber + '/advantages/exchanges', {id: expectedAdvantage.id})
+      .respond(200, JSON.stringify(expectedAdvantage));
+
+    // Assertion method.
+    var assertAdvantage = function(updatedAdvantage) {
+      expect(updatedAdvantage).toEqual(expectedAdvantage);
+      expect($scope.$emit).toHaveBeenCalledWith('advantageExchanged', updatedAdvantage, uitpasNumber);
+      done();
+    };
+
+    var failed = function(error) {
+      expect(error).toBeUndefined();
+      done();
+    };
+
+    // Request the advantage data and assert it when its returned.
+    advantageService.exchange(expectedAdvantage.id, uitpasNumber).then(assertAdvantage, failed);
+
+    // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+  });
+
+  it('throws an error when it fails to exchange an advantage', function (done) {
+    var uitpasNumber = '0930000422202';
+    var advantageId = 'points-promotion--678';
+    var expectedError = {
+      code: '65',
+      message: 'No go!'
+    };
+    spyOn($scope, '$emit');
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber + '/advantages/exchanges', {id: advantageId})
+      .respond(404, JSON.stringify(expectedError));
+
+    // Assertion method.
+    var assertAdvantage = function(updatedAdvantage) {
+      expect(updatedAdvantage).toBeUndefined();
+      done();
+    };
+
+    var failed = function(error) {
+      expect(error).toEqual(expectedError);
+      expect($scope.$emit).not.toHaveBeenCalled();
+      done();
+    };
+
+    // Request the advantage data and assert it when its returned.
+    advantageService.exchange(advantageId, uitpasNumber).then(assertAdvantage, failed);
+
+    // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+  });
 });
