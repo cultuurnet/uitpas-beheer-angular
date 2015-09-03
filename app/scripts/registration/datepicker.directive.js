@@ -63,10 +63,6 @@ function ubrDatepicker() {
         dateInputElement.data('DateTimePicker').toggle();
       };
 
-      datepicker.open = function () {
-        datepicker.opened = true;
-      };
-
       scope.datepicker = datepicker;
     }
   };

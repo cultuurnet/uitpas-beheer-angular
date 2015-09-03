@@ -44,12 +44,14 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
       'bower_components/moment/moment.js',
+      'bower_components/moment/locale/nl.js',
       'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/registration/ubr.registration.module.js",
       "app/scripts/**/*.js",
       "app/views/*.html",
+      "app/views/registration/*.html",
       //"test/mock/**/*.js",
       "test/spec/**/*.js"
     ],
@@ -100,6 +102,7 @@ module.exports = function(config) {
 
     preprocessors: {
       'app/views/*.html': 'ng-html2js',
+      'app/views/registration/*.html': 'ng-html2js',
       'app/scripts/*/**/*.js': ['coverage']
     },
 
@@ -107,7 +110,9 @@ module.exports = function(config) {
       // Views are moved to another path with a grunt task.
       // The cacheId has to be calculated the same way.
       cacheIdFromPath: function(filepath) {
-        var viewName = filepath.split('/').pop();
+        console.log(filepath);
+        var viewName = filepath.split('views/').pop();
+
         return 'views/' + viewName;
       },
 
