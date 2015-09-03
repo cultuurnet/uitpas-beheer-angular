@@ -110,9 +110,7 @@ module.exports = function(config) {
       // Views are moved to another path with a grunt task.
       // The cacheId has to be calculated the same way.
       cacheIdFromPath: function(filepath) {
-        console.log(filepath);
         var viewName = filepath.split('views/').pop();
-
         return 'views/' + viewName;
       },
 

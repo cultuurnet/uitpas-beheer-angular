@@ -157,7 +157,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     if (pass.isKansenstatuut()) {
 
       if (!kansenstatuutInfo) {
-        throw 'Registration for a pass with kansenstatuut should provide additional info.';
+        throw new Error('Registration for a pass with kansenstatuut should provide additional info.');
       }
 
       registration.kansenStatuut = {

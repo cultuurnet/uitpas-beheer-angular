@@ -371,4 +371,15 @@ describe('Service: passholderService', function () {
     passholderService.register(pass, pass.passholder, voucher, kansenstatuutInfo);
     $httpBackend.flush();
   });
+
+  it('should not register a kansenstatuut pass when additional information is missing', function () {
+    identityData.uitPas.kansenStatuut = true;
+    var pass = new Pass(identityData);
+
+    var registrationCall = function () {
+      passholderService.register(pass, pass.passholder, null);
+    };
+
+    expect(registrationCall).toThrowError('Registration for a pass with kansenstatuut should provide additional info.');
+  })
 });
