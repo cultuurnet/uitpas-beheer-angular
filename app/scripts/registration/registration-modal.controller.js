@@ -12,9 +12,18 @@ angular
   .controller('RegistrationModalController', RegistrationModalController);
 
 /* @ngInject */
-function RegistrationModalController (pass, $state, Passholder, passholderService, $modalInstance, counterService) {
+function RegistrationModalController (
+  pass,
+  $state,
+  Passholder,
+  passholderService,
+  $modalInstance,
+  counterService,
+  $stateParams
+) {
   /*jshint validthis: true */
   var controller = this;
+  var kansenstatuutInfo = $stateParams.kansenstatuut;
 
   controller.pass = pass;
   controller.formSubmitBusy = false;
@@ -172,7 +181,7 @@ function RegistrationModalController (pass, $state, Passholder, passholderServic
 
     controller.formSubmitBusy = true;
     passholderService
-      .register(pass, controller.passholder, controller.voucherNumber)
+      .register(pass, controller.passholder, controller.voucherNumber, kansenstatuutInfo)
       .then(showRegisteredPassholder, handleRegistrationErrors);
   };
 

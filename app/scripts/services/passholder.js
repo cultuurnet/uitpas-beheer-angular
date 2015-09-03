@@ -144,7 +144,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
   $rootScope.$on('advantageExchanged', service.updatePoints);
 
-  service.register = function(pass, passholderData, voucherNumber, kansenstatuut){
+  service.register = function(pass, passholderData, voucherNumber, kansenstatuutInfo){
     var registration = {
           passHolder: passholderData
         },
@@ -154,11 +154,19 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       registration.voucherNumber = voucherNumber;
     }
 
-    if (kansenstatuut) {
+    if (pass.isKansenstatuut()) {
+
+      if (!kansenstatuutInfo) {
+        throw 'Registration for a pass with kansenstatuut should provide additional info.';
+      }
+
       registration.kansenStatuut = {
-        endDate: kansenstatuut.endDate,
-        remarks: kansenstatuut.remarks
+        endDate: kansenstatuutInfo.endDate
       };
+
+      if (kansenstatuutInfo.includeRemarks) {
+        registration.kansenStatuut.remarks = kansenstatuutInfo.remarks;
+      }
     }
 
     var requestOptions = {

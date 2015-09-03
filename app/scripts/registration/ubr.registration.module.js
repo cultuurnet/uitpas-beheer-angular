@@ -64,7 +64,8 @@ angular
             animation: true,
             templateUrl: 'views/registration/multi-step-form.html',
             params: {
-              'pass': null
+              'pass': null,
+              'kansenstatuut': null
             },
             size: 'lg',
             resolve: {
@@ -97,6 +98,10 @@ angular
           'registrationStep@': {
             templateUrl: 'views/registration/personal-data-step.html'
           }
+        },
+        params: {
+          'pass': null,
+          'kansenstatuut': null
         }
       })
       .state('counter.main.register.form.contactData', {

@@ -12,7 +12,7 @@ angular
   .controller('PassholderRegisterController', PassholderRegisterController);
 
 /* @ngInject */
-function PassholderRegisterController (pass) {
+function PassholderRegisterController (pass, $state) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -22,5 +22,17 @@ function PassholderRegisterController (pass) {
     endDate: new Date(),
     remarks: '',
     includeRemarks: false
+  };
+
+  controller.startRegistration = function () {
+    var registrationParameters = {
+      kansenstatuut: false
+    };
+
+    if (pass.isKansenstatuut()) {
+      registrationParameters.kansenstatuut = controller.kansenstatuut;
+    }
+
+    $state.go('counter.main.register.form.personalData', registrationParameters);
   };
 }

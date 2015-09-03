@@ -346,24 +346,29 @@ describe('Service: passholderService', function () {
   });
 
   it('should register a passholder with a voucher and kansenStatuut', function () {
+    identityData.uitPas.kansenStatuut = true;
     var pass = new Pass(identityData);
     var voucher = 'voucher';
-    var kansenStatuut = {
+    var kansenstatuutInfo = {
       endDate: 'endDate',
-      remarks: 'remarks'
+      remarks: 'remarks',
+      includeRemarks: true
     };
 
     var registration = {
       passHolder: pass.passholder,
       voucherNumber: voucher,
-      kansenStatuut: kansenStatuut
+      kansenStatuut: {
+        endDate: 'endDate',
+        remarks: 'remarks'
+      }
     };
 
     $httpBackend
       .expectPUT(apiUrl + 'passholders/' + pass.number, registration)
       .respond(200);
 
-    passholderService.register(pass, pass.passholder, voucher, kansenStatuut);
+    passholderService.register(pass, pass.passholder, voucher, kansenstatuutInfo);
     $httpBackend.flush();
   });
 });

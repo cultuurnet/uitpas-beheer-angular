@@ -33,11 +33,11 @@
       <div class="form-group more-info" ng-show="prc.kansenstatuut.includeRemarks">
         <textarea class="form-control" id="opmerkingen" rows="3" ng-model="prc.kansenstatuut.remarks"></textarea>
       </div>
-      <button type="submit" class="btn btn-primary" ui-sref="counter.main.register.form.personalData">Pashouder registeren</button>
+      <button type="submit" class="btn btn-primary" ng-click="prc.startRegistration()">Pashouder registeren</button>
     </div>
   </div> <!--/ end .panel-->
 
   <p ng-hide="prc.pass.kansenStatuut">
-    <button type="submit" class="btn btn-primary" ui-sref="counter.main.register.form.personalData">Pashouder registeren</button>
+    <button type="submit" class="btn btn-primary" ng-click="prc.startRegistration()">Pashouder registeren</button>
   </p>
 </div>

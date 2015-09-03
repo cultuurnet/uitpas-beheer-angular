@@ -32,6 +32,9 @@ function passFactory(Passholder) {
         this.passholder = new Passholder(jsonPass.passHolder);
         this.passholder.passNumber = this.number;
       }
+    },
+    isKansenstatuut: function () {
+      return this.kansenStatuut ? true : false;
     }
   };
 
