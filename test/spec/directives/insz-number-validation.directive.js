@@ -82,6 +82,21 @@ describe('Directive: inszNumberValidation', function () {
     expect(form.inszNumber.$error.checkDigit).toBeUndefined();
     // The form should be error free now.
     expect(form.$valid).toBeTruthy();
+
+    // Change the inszNumber gender again to test the not female case.
+    scope.pec.passholder.inszNumber = '930517-223-91';
+    scope.$digest();
+    expect(form.gender.$error.inszNumber).toBeTruthy();
+    expect(form.inszNumber.$error.gender).toBeTruthy();
+
+    // Trigger the errors from the gender and date fields.
+    scope.pec.passholder.inszNumber = '930517-224-61';
+    scope.$digest();
+    scope.pec.passholder.gender = 'MALE';
+    scope.pec.passholder.birth.date = new Date('1993-05-18');
+    scope.$digest();
+    expect(form.gender.$error.inszNumber).toBeTruthy();
+    expect(form.dateOfBirth.$error.inszNumber).toBeTruthy();
   });
 
   it('should correctly validate inszNumbers with a checkDigit below 10', function () {
