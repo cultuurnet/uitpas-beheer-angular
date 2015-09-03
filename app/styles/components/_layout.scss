@@ -4,30 +4,28 @@ body {
   height: 100%;
 }
 
-.main-content,
-.main-content > .container,
-.main-content > .container > .grid {
+.main-content {
+  position: relative;
   @include breakpoint(map-get($breakpoints, sml)) {
-    height: 100%;
+  height: 100%;
+    > .sidebar {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    > .main,
+    > .footer {
+      margin-left: 33.333%;
+    }
+  }
+  @include breakpoint(map-get($breakpoints, med)) {
+    > .main,
+    > .footer {
+      margin-left: 25%;
+    }
   }
 }
 
 .main-content {
   background-color: $white;
-}
-
-.grid-halfgutter {
-  @include make-row($grid-gutter-width/2);
-  > [class*="grid"] {
-    padding-left: ($grid-gutter-width/4);
-    padding-right: ($grid-gutter-width/4);
-  }
-}
-
-.grid-quartergutter {
-  @include make-row($grid-gutter-width/4);
-  > [class*="grid"] {
-    padding-left: ($grid-gutter-width/8);
-    padding-right: ($grid-gutter-width/8);
-  }
 }
