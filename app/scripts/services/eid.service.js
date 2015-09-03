@@ -16,6 +16,36 @@ function eIdService($window, $q, $rootScope) {
   var service = this;
   var eIdFullData = {};
 
+  service.init = function () {
+    $window.readId = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
+      var eIdData = {
+        name: {
+          first: firstName,
+          last: lastName
+        },
+        inszNumber: inszNumber,
+        birth: {
+          date: dateOfBirth,
+          place: placeOfBirth
+        },
+        gender: gender,
+        nationality: nationality,
+        contact: {
+          street: street,
+          postalCode: postalCode,
+          city: city
+        }
+      };
+      console.log(eIdData);
+      $rootScope.$emit('eIdDataReceived', eIdData);
+    };
+
+    $window.readIdPhoto = function(base64Picture) {
+      console.log(base64Picture);
+      $rootScope.$emit('eIdPhotoReceived', base64Picture);
+    };
+  };
+
   service.getDataFromEId = function() {
     var deferredData = $q.defer();
     var dataPromise = deferredData.promise;
@@ -37,33 +67,4 @@ function eIdService($window, $q, $rootScope) {
 
     return dataPromise;
   };
-
-  $window.readId = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
-    var eIdData = {
-      name: {
-        first: firstName,
-        last: lastName
-      },
-      inszNumber: inszNumber,
-      birth: {
-        date: dateOfBirth,
-        place: placeOfBirth
-      },
-      gender: gender,
-      nationality: nationality,
-      contact: {
-        street: street,
-        postalCode: postalCode,
-        city: city
-      }
-    };
-    console.log(eIdData);
-    $rootScope.$emit('eIdDataReceived', eIdData);
-  };
-
-  $window.readIdPhoto = function(base64Picture) {
-    console.log(base64Picture);
-    $rootScope.$emit('eIdPhotoReceived', base64Picture);
-  };
-
 }

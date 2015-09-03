@@ -276,6 +276,7 @@ angular
     $locationProvider.html5Mode(true);
     $httpProvider.defaults.withCredentials = true;
   })
-  .run(function(nfcService) {
+  .run(function(nfcService, eIdService) {
     nfcService.init();
+    eIdService.init();
   });
