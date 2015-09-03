@@ -1,4 +1,5 @@
-<form name="passholderRegisterPersonalData" ng-submit="prc.submitPersonalDataForm(passholderRegisterPersonalData)" novalidate ubr-insz-number-validation ng-disabled="prc.formSubmitBusy">
+<form name="passholderRegisterPersonalData" ng-submit="prc.submitPersonalDataForm(passholderRegisterPersonalData)"
+      novalidate ubr-insz-number-validation ng-disabled="prc.formSubmitBusy">
   <div class="modal-body">
     <div class="container-fluid">
       <fieldset ng-disabled="prc.formSubmitBusy">
@@ -49,7 +50,7 @@
           <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required"
                ng-class="{ 'has-error': (passholderRegisterPersonalData.$submitted || passholderRegisterPersonalData.dateOfBirth.$touched || passholderRegisterPersonalData.dateOfBirth.$dirty) && passholderRegisterPersonalData.dateOfBirth.$invalid }">
             <ubr-datepicker ng-model="prc.passholder.birth.date" ubr-label="Geboortedatum" ubr-id="date-of-birth"
-                            ubr-name="dateOfBirth"></ubr-datepicker>
+                            name="dateOfBirth"></ubr-datepicker>
             <div ng-if="(passholderRegisterPersonalData.$submitted || passholderRegisterPersonalData.dateOfBirth.$touched || passholderRegisterPersonalData.dateOfBirth.$dirty) && passholderRegisterPersonalData.dateOfBirth.$invalid"
                  class="text-danger small">
               <div ng-if="passholderRegisterPersonalData.dateOfBirth.$error.required">De geboortedatum is verplicht.</div>
@@ -135,7 +136,8 @@
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
-    <a class="pull-left" ng-click="prc.close()">Annuleren</a>
-    <button type="submit" class="btn btn-default modal-next" ng-disabled="prc.formSubmitBusy || passholderRegisterPersonalData.$invalid" ng-click="prc.submitPersonalDataForm(passholderRegisterPersonalData)">Volgende</button>
+    <a class="btn btn-link pull-left" ng-click="prc.close()">Annuleren</a>
+    <button type="submit" class="btn btn-default modal-next" ng-disabled="prc.formSubmitBusy"
+            ng-click="prc.submitPersonalDataForm(passholderRegisterPersonalData)">Volgende</button>
   </div>
 </form>

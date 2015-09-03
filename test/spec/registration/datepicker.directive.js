@@ -11,7 +11,7 @@ describe('Directive: datepicker', function () {
     scope = $rootScope.$new();
     scope.date = new Date('12/12/2012');
 
-    var directiveElement = '<ubr-datepicker ng-model="date" ubr-label="Some date" ubr-id="some-date-id" ubr-name="someDate"></ubr-datepicker>';
+    var directiveElement = '<ubr-datepicker ng-model="date" ubr-label="Some date" ubr-id="some-date-id" name="someDate"></ubr-datepicker>';
     // The element has to be a child of a parent that has position relative else the datepicker won't open.
     var template = '<div style="position: relative;">' + directiveElement + '</div>';
 

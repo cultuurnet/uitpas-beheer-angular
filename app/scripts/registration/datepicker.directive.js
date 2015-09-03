@@ -17,7 +17,7 @@ function ubrDatepicker() {
     restrict: 'E',
     require:'ngModel',
     scope: {
-      name: '@ubrName',
+      name: '@name',
       label: '@ubrLabel',
       id: '@ubrId'
     },
@@ -27,7 +27,7 @@ function ubrDatepicker() {
 
       var datepicker = {
         opened: false,
-        date: new Date(),
+        date: ngModel.$viewValue,
         name: scope.name,
         label: scope.label,
         id: scope.id
