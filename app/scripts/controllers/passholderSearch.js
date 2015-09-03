@@ -12,9 +12,10 @@ angular
   .controller('PassholderSearchController', PassholderSearchController);
 
 /* @ngInject */
-function PassholderSearchController ($rootScope, passholderService, $state, eIdService) {
+function PassholderSearchController ($rootScope, passholderService, $state) {
   /*jshint validthis: true */
   var controller = this;
+
 
   // Set default parameters.
   controller.passholderIdentification = '';
@@ -50,4 +51,10 @@ function PassholderSearchController ($rootScope, passholderService, $state, eIdS
     passholderService.find(identification)
       .then(displayPassholderDetails, displayIdentificationError);
   };
+
+  controller.updatePassholderIdentificationFromNfc = function(event, nfcNumber) {
+    controller.searchPassholder(nfcNumber);
+  };
+
+  $rootScope.$on('nfcNumberReceived', controller.updatePassholderIdentificationFromNfc);
 }

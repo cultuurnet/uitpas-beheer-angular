@@ -275,4 +275,7 @@ angular
 
     $locationProvider.html5Mode(true);
     $httpProvider.defaults.withCredentials = true;
+  })
+  .run(function(nfcService) {
+    nfcService.init();
   });
