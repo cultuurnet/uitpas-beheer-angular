@@ -12,7 +12,7 @@ angular
   .controller('PassholderDetailController', PassholderDetailController);
 
 /* @ngInject */
-function PassholderDetailController (passholder, membershipService, $rootScope) {
+function PassholderDetailController (passholder, membershipService, $rootScope, moment) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -34,6 +34,13 @@ function PassholderDetailController (passholder, membershipService, $rootScope) 
   };
 
   loadMemberships();
+
+  controller.membershipHasExpired = membershipHasExpired;
+
+  function membershipHasExpired(membership) {
+    var endDate = moment.unix(membership.endDate);
+    return moment().isAfter(endDate);
+  }
 
   function subtractAdvantagePoints(event, exchangedAdvantage) {
     var newPointCount = controller.passholder.points - exchangedAdvantage.points;

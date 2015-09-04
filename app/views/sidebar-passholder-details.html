@@ -48,6 +48,6 @@
   </div>
 
   <div class="list-group no-margin">
-    <a ng-repeat="membership in pdc.memberships" ui-sref="counter.main.passholder.memberships()">{{membership.association.name}}</a>
+    <a ng-repeat="membership in pdc.memberships" ui-sref="counter.main.passholder.memberships()">{{membership.association.name}} <span ng-if="pdc.membershipHasExpired(membership)" ng-cloak class="label label-danger">Vervallen</span></a>
   </div>
 </div>
