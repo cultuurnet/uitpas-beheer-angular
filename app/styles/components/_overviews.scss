@@ -181,12 +181,14 @@
     }
   }
   &-memberships {
+    .first {
+      padding-left: 15px;
+    }
     .middle {
       text-align: center;
     }
     .last {
-      padding-left: $rh-sml;
-      padding-right: $rh-sml;
+      padding-right: 15px;
       text-align: center;
     }
     .last .btn {
@@ -201,7 +203,7 @@
         margin: -16px -15px -15px;
       }
       li {
-        padding: 15px;
+        padding: 15px 0;
         &:last-child {
           border-bottom: none;
         }
@@ -242,6 +244,8 @@
 .display-table {
   @include breakpoint(map-get($breakpoints, med)) {
     display: table;
+    margin-left: 0;
+    margin-right: 0;
     min-height: 90px;
     width: 100%;
     > div {
