@@ -28,9 +28,16 @@ function passFactory(Passholder) {
       this.status = jsonPass.uitPas.status;
       this.type = jsonPass.uitPas.type;
 
-      if(jsonPass.passHolder) {
+      if (jsonPass.passHolder) {
         this.passholder = new Passholder(jsonPass.passHolder);
         this.passholder.passNumber = this.number;
+      }
+
+      if (jsonPass.uitPas.cardSystem) {
+        this.cardSystem = {
+          id: jsonPass.uitPas.cardSystem.id,
+          name: jsonPass.uitPas.cardSystem.name || 'kaart-systeem'
+        };
       }
     },
     isKansenstatuut: function () {

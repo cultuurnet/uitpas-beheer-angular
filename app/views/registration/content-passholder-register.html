@@ -15,9 +15,13 @@
     <p ng-show="prc.pass.kansenStatuut" class="alert alert-info"><em>Deze sticker is nog niet geregistreerd. Deze sticker is voorbehouden aan mensen met een kansenstatuut.</em></p>
   </div>
 
+  <p class="alert alert-danger" ng-hide="prc.isCounterEligible()">
+    De actieve balie heeft onvoldoende bevoegdheid om deze UiTPAS te registeren.
+  </p>
+
   <div class="panel panel-default text-left" ng-show="prc.pass.kansenStatuut">
     <div class="panel-body">
-      <p class="element-title"></p>
+      <p class="element-title" ng-bind="prc.pass.cardSystem.name"></p>
       <div class="form-group">
         <div class="form-inline">
           <ubr-datepicker ng-model="prc.kansenstatuut.endDate" ubr-label="Geldig tot" ubr-id="geldig-tot"
@@ -33,11 +37,15 @@
       <div class="form-group more-info" ng-show="prc.kansenstatuut.includeRemarks">
         <textarea class="form-control" id="opmerkingen" rows="3" ng-model="prc.kansenstatuut.remarks"></textarea>
       </div>
-      <button type="submit" class="btn btn-primary" ng-click="prc.startRegistration()">Pashouder registeren</button>
+      <button type="submit" class="btn btn-primary" ng-click="prc.startRegistration()" ng-disabled="!prc.isCounterEligible()">
+        Pashouder registeren
+      </button>
     </div>
   </div> <!--/ end .panel-->
 
   <p ng-hide="prc.pass.kansenStatuut">
-    <button type="submit" class="btn btn-primary" ng-click="prc.startRegistration()">Pashouder registeren</button>
+    <button type="submit" class="btn btn-primary" ng-click="prc.startRegistration()" ng-disabled="!prc.isCounterEligible()">
+      Pashouder registeren
+    </button>
   </p>
 </div>

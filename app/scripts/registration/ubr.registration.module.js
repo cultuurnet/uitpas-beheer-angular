@@ -39,6 +39,9 @@ angular
           pass: ['passholderService', '$stateParams', getPassFromStateParams],
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
+          }],
+          activeCounter: ['counterService', function (counterService) {
+            return counterService.getActive();
           }]
         },
         views: {
