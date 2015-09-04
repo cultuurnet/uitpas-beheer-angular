@@ -381,5 +381,5 @@ describe('Service: passholderService', function () {
     };
 
     expect(registrationCall).toThrowError('Registration for a pass with kansenstatuut should provide additional info.');
-  })
+  });
 });

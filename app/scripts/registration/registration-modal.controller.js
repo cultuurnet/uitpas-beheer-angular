@@ -19,7 +19,8 @@ function RegistrationModalController (
   passholderService,
   $modalInstance,
   counterService,
-  $stateParams
+  $stateParams,
+  RegistrationAPIError
 ) {
   /*jshint validthis: true */
   var controller = this;
@@ -167,12 +168,19 @@ function RegistrationModalController (
   controller.submitRegistration = function () {
 
     var handleRegistrationErrors = function (error) {
-      // TODO: map all errors to something more suitable to display in the views
-      error.cleanMessage = error.message.split('URL CALLED')[0];
+      var knownAPIError = RegistrationAPIError[error.readableCode];
+      var step = 'personalData';
+
+      if (knownAPIError) {
+        error.cleanMessage = knownAPIError.message;
+        step = knownAPIError.step;
+      } else {
+        error.cleanMessage = error.message.split('URL CALLED')[0];
+      }
+
       controller.asyncError = error;
       controller.formSubmitBusy = false;
-
-      $state.go('counter.main.register.form.personalData');
+      $state.go('counter.main.register.form.' + step);
     };
 
     var showRegisteredPassholder = function (passholder) {

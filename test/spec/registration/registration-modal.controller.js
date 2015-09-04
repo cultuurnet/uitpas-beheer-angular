@@ -5,7 +5,8 @@ describe('Controller: PassholderRegisterController', function () {
   beforeEach(module('ubr.registration'));
   beforeEach(module('uitpasbeheerAppViews'));
 
-  var controller, Pass, unregisteredPass, $state, Passholder, passholderService, $scope, $controller, modalInstance, counterService, $q;
+  var controller, Pass, unregisteredPass, $state, Passholder, passholderService, $scope, $controller, modalInstance,
+      counterService, $q, RegistrationAPIError;
 
   var unregisteredPassData = {
     'uitPas': {
@@ -32,10 +33,17 @@ describe('Controller: PassholderRegisterController', function () {
     $scope = $rootScope;
     $q = $injector.get('$q');
 
-    $state = $injector.get('$state');
+    $state = jasmine.createSpyObj('$state', ['go']);
     Passholder = $injector.get('Passholder');
     passholderService = $injector.get('passholderService');
     counterService = $injector.get('counterService');
+
+    RegistrationAPIError = {
+      ORANGE_API_ERROR: {
+        message: 'Orange API Error',
+        step: 'orangeStep'
+      }
+    };
 
     controller = $controller('RegistrationModalController', {
       pass: unregisteredPass,
@@ -43,7 +51,8 @@ describe('Controller: PassholderRegisterController', function () {
       Passholder: Passholder,
       passholderService: passholderService,
       $modalInstance: modalInstance,
-      counterService: counterService
+      counterService: counterService,
+      RegistrationAPIError: RegistrationAPIError
     });
   }));
 
@@ -68,7 +77,6 @@ describe('Controller: PassholderRegisterController', function () {
     var passholderPromise = deferredPassholder.promise;
 
     spyOn(passholderService, 'findPassholder').and.returnValue(passholderPromise);
-    spyOn($state, 'go');
 
     controller.submitPersonalDataForm(formStub);
 
@@ -85,7 +93,6 @@ describe('Controller: PassholderRegisterController', function () {
       $valid: false
     };
     spyOn(passholderService, 'findPassholder');
-    spyOn($state, 'go');
 
     controller.submitPersonalDataForm(formStub);
 
@@ -113,7 +120,6 @@ describe('Controller: PassholderRegisterController', function () {
     var passholderPromise = deferredPassholder.promise;
 
     spyOn(passholderService, 'findPassholder').and.returnValue(passholderPromise);
-    spyOn($state, 'go');
 
     controller.submitPersonalDataForm(formStub);
 
@@ -131,7 +137,6 @@ describe('Controller: PassholderRegisterController', function () {
     var formStub= {
       $valid: true
     };
-    spyOn($state, 'go');
     spyOn(controller, 'refreshUnreducedPriceInfo');
 
     controller.submitContactDataForm(formStub);
@@ -145,7 +150,6 @@ describe('Controller: PassholderRegisterController', function () {
     var formStub= {
       $valid: false
     };
-    spyOn($state, 'go');
     spyOn(controller, 'refreshUnreducedPriceInfo');
 
     controller.submitContactDataForm(formStub);
@@ -318,11 +322,11 @@ describe('Controller: PassholderRegisterController', function () {
     var registrationPromise = deferredRegistration.promise;
     var returnedError = {
       code: 'ERROR',
+      readableCode: '',
       message: 'Clean URL CALLED www.blah.blah/blah'
     };
 
     spyOn(passholderService, 'register').and.returnValue(registrationPromise);
-    spyOn($state, 'go');
 
     controller.submitRegistration();
 
@@ -333,6 +337,34 @@ describe('Controller: PassholderRegisterController', function () {
     expect(passholderService.register).toHaveBeenCalled();
     expect($state.go).toHaveBeenCalledWith('counter.main.register.form.personalData');
     expect(controller.asyncError.cleanMessage).toEqual('Clean ');
+  });
+
+  it('should map a known API error to a readable error and registration step', function () {
+    var deferredRegistration = $q.defer();
+    var registrationPromise = deferredRegistration.promise;
+    var registrationError = {
+      code: 'LOL',
+      readableCode: 'ORANGE_API_ERROR',
+      message: 'I\'m a funky API error with technical details. Don\'t show me to noobs.'
+    };
+    var expectedAsyncError = {
+      cleanMessage: 'Orange API Error',
+      code: 'LOL',
+      readableCode: 'ORANGE_API_ERROR',
+      message: 'I\'m a funky API error with technical details. Don\'t show me to noobs.'
+    };
+
+    spyOn(passholderService, 'register').and.returnValue(registrationPromise);
+
+    controller.submitRegistration();
+
+    deferredRegistration.reject(registrationError);
+
+    $scope.$digest();
+
+    expect(passholderService.register).toHaveBeenCalled();
+    expect($state.go).toHaveBeenCalledWith('counter.main.register.form.orangeStep');
+    expect(controller.asyncError).toEqual(expectedAsyncError);
   });
 
   it('can dismiss the modal', function () {

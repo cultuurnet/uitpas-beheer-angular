@@ -25,22 +25,22 @@ describe('Controller: PassholderRegisterController', function () {
 
   function getCounter() {
     var counterData = {
-      "id": "452",
-      "consumerKey": "b95d1bcf-533d-45ac-afcd-e015cfe86c84",
-      "name": "Vierdewereldgroep Mensen voor Mensen",
-      "role": "admin",
-      "actorId": "b95d1bcf-533d-45ac-afcd-e015cfe86c84",
-      "cardSystems": {
-        "1": {
-          "permissions": ["registratie", "kansenstatuut toekennen"],
-          "groups": ["Geauthorizeerde registratie balies"],
-          "id": 1,
-          "name": "UiTPAS Regio Aalst",
-          "distributionKeys": []
+      'id': '452',
+      'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+      'name': 'Vierdewereldgroep Mensen voor Mensen',
+      'role': 'admin',
+      'actorId': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+      'cardSystems': {
+        '1': {
+          'permissions': ['registratie', 'kansenstatuut toekennen'],
+          'groups': ['Geauthorizeerde registratie balies'],
+          'id': 1,
+          'name': 'UiTPAS Regio Aalst',
+          'distributionKeys': []
         }
       },
-      "permissions": ["registratie", "kansenstatuut toekennen"],
-      "groups": ["Geauthorizeerde registratie balies"]
+      'permissions': ['registratie', 'kansenstatuut toekennen'],
+      'groups': ['Geauthorizeerde registratie balies']
     };
 
     return angular.copy(counterData);
