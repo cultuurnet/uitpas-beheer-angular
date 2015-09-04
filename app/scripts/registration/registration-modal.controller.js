@@ -45,35 +45,7 @@ function RegistrationModalController (
   };
   controller.asyncError = undefined;
 
-  var placeholder = {
-    'name': {
-      'first': 'Victor',
-      'last': 'D\'Hooghe'
-    },
-    'address': {
-      'street': 'Baanweg 60',
-      'postalCode': '3000',
-      'city': 'Aalst'
-    },
-    inszNumber: '88080800114',
-    'birth': {
-      'date': '1988-08-08',
-      'place': 'Aalst'
-    },
-    'gender': 'MALE',
-    'nationality': 'belg',
-    'privacy': {
-      'email': false,
-      'sms': false
-    },
-    'contact': {
-      'email': 'email@email.com'
-    },
-    'points': 309,
-    'picture': 'picture-in-base64-format'
-  };
-
-  controller.passholder = new Passholder(placeholder);
+  controller.passholder = new Passholder();
 
   controller.submitPersonalDataForm = function(personalDataForm) {
     if (!controller.formSubmitBusy) {
