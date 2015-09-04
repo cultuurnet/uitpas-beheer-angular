@@ -1,0 +1,73 @@
+// Steps
+.steps {
+  @extend %ext-listreset;
+  border-bottom: 1px solid $gray-15;
+  border-top: 1px solid $gray-15;
+  overflow: hidden;
+  li {
+    position: relative;
+    margin-bottom: 0;
+  }
+  li + li {
+    border-top: 1px solid $gray-15;
+  }
+  a {
+    display: block;
+    padding: $rh-xxs $rh-sml;
+    text-align: center;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+  .step.active {
+    background-color: $gray-0;
+  }
+  @include breakpoint(map-get($breakpoints, xsm)) {
+    display: table;
+    width: 100%;
+    a {
+      padding: $rh-xsm $rh-sml;
+    }
+    li {
+      display: table-cell;
+      + li {
+        border-top: none;
+      }
+    }
+    li + li:before {
+      position: absolute;
+      z-index: 2;
+      content: '';
+      top: 50%;
+      left: -32px;
+      border: medium none;
+      background-color: #ffffff;
+      width: 2em;
+      height: 2em;
+      border-bottom: 1px solid $gray-15;
+      border-right: 1px solid $gray-15;
+      -webkit-transform: translateY(-50%) translateX(50%) rotate(-45deg);
+      -ms-transform: translateY(-50%) translateX(50%) rotate(-45deg);
+      transform: translateY(-50%) translateX(50%) rotate(-45deg);
+    }
+    li.active + li:before {
+      background-color: $gray-0;
+    }
+    &.two li {
+      width: 50%;
+    }
+    &.three li {
+      width: 33.333%;
+    }
+    &.four li {
+      width: 25%;
+    }
+    &.five li {
+      width: 20%;
+    }
+  }
+}
+.modal-header + .steps {
+  border-top: none;
+}
