@@ -37,3 +37,17 @@
   <h3>Puntensaldo</h3>
   <span ubr-passholder-points class="label label-points" ng-bind="pdc.passholder.points"></span>
 </div>
+<div class="passholder passholder-memberships">
+  <h3>Lidmaatschappen</h3>
+  <a ui-sref="counter.main.passholder.memberships()">Beheren</a>
+
+  <div class="overview__loading" ng-show="pdc.membershipsLoading">
+    <div class="spinner spinner-small">
+      <circle-spinner></circle-spinner>
+    </div>
+  </div>
+
+  <div class="list-group no-margin">
+    <a ng-repeat="membership in pdc.memberships" ui-sref="counter.main.passholder.memberships()">{{membership.association.name}} <span ng-if="pdc.membershipHasExpired(membership)" ng-cloak class="label label-danger">Vervallen</span></a>
+  </div>
+</div>
