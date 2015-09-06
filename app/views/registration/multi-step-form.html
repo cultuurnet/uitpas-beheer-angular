@@ -1,16 +1,26 @@
 <div class="modal-header">
   <button type="button"  ng-click="prc.close()" class="close" aria-label="Close">&times;</button>
-  <h4 class="modal-title">Pashouder toevoegen</h4>
+  <h4 class="modal-title">Pashouder toevoegen: Stap <span ng-bind="prc.getStepNumber()"></span></h4>
 </div>
 <ul class="three steps step">
   <li ui-sref-active="active" class="step">
     <a ui-sref="counter.main.register.form.personalData">Persoonsgegevens</a>
   </li>
-  <li ui-sref-active="active" class="step">
-    <a ui-sref="counter.main.register.form.contactData">Contact</a>
+  <li ui-sref-active="active" class="step" ng-switch="prc.getStepNumber() < 2">
+    <span ng-switch-when="true">
+      Contact
+    </span>
+    <span ng-switch-default>
+      <a ui-sref="counter.main.register.form.contactData" >Contact</a>
+    </span>
   </li>
-  <li ui-sref-active="active" class="step">
-    <a ui-sref="counter.main.register.form.price">Prijs</a>
+  <li ui-sref-active="active" class="step" ng-switch="prc.getStepNumber() < 3">
+    <span ng-switch-when="true">
+      Prijs
+    </span>
+    <span ng-switch-default>
+      <a ui-sref="counter.main.register.form.price" ng-hide="prc.getStepNumber() < 3">Prijs</a>
+    </span>
   </li>
 </ul>
 

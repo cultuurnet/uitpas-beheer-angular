@@ -42,6 +42,7 @@ function ubrDatepicker() {
       dateInputElement.datetimepicker({
         locale: 'nl',
         format: 'DD/MM/YYYY',
+        defaultDate: false,
         icons: {
           time: 'fa fa-clock-o',
           date: 'fa fa-calendar',

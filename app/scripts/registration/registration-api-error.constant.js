@@ -35,7 +35,7 @@ angular
       step: 'price'
     },
     PARSE_INVALID_CITY_NAME: {
-      message: 'De opgegeven stad is niet geldig.',
+      message: 'De opgegeven postcode is niet geldig.',
       step: 'personalData'
     },
     PARSE_INVALID_VOUCHERNUMBER: {

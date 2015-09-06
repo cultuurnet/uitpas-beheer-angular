@@ -38,11 +38,6 @@ function RegistrationModalController (
     }
   };
   controller.voucherNumber = '';
-  controller.forms = {
-    personalData: {},
-    contactData: {},
-    price: {}
-  };
   controller.asyncError = undefined;
 
   controller.passholder = new Passholder();
@@ -68,6 +63,10 @@ function RegistrationModalController (
         controller.formSubmitBusy = false;
       }
     }
+  };
+
+  controller.getStepNumber = function () {
+    return $state.current.stepNumber;
   };
 
   controller.submitContactDataForm = function(contactDataForm) {
@@ -140,7 +139,7 @@ function RegistrationModalController (
   controller.submitRegistration = function () {
 
     var handleRegistrationErrors = function (error) {
-      var knownAPIError = RegistrationAPIError[error.readableCode];
+      var knownAPIError = RegistrationAPIError[error.code];
       var step = 'personalData';
 
       if (knownAPIError) {

@@ -102,10 +102,7 @@ angular
             templateUrl: 'views/registration/personal-data-step.html'
           }
         },
-        params: {
-          'pass': null,
-          'kansenstatuut': null
-        }
+        stepNumber: 1
       })
       .state('counter.main.register.form.contactData', {
         url: '/contact-info',
@@ -113,7 +110,8 @@ angular
           'registrationStep@': {
             templateUrl: 'views/registration/contact-data-step.html'
           }
-        }
+        },
+        stepNumber: 2
       })
       .state('counter.main.register.form.price', {
         url: '/price',
@@ -121,6 +119,7 @@ angular
           'registrationStep@': {
             templateUrl: 'views/registration/price-data-step.html'
           }
-        }
+        },
+        stepNumber: 3
       });
   });

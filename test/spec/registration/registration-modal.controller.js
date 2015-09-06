@@ -343,14 +343,12 @@ describe('Controller: PassholderRegisterController', function () {
     var deferredRegistration = $q.defer();
     var registrationPromise = deferredRegistration.promise;
     var registrationError = {
-      code: 'LOL',
-      readableCode: 'ORANGE_API_ERROR',
+      code: 'ORANGE_API_ERROR',
       message: 'I\'m a funky API error with technical details. Don\'t show me to noobs.'
     };
     var expectedAsyncError = {
       cleanMessage: 'Orange API Error',
-      code: 'LOL',
-      readableCode: 'ORANGE_API_ERROR',
+      code: 'ORANGE_API_ERROR',
       message: 'I\'m a funky API error with technical details. Don\'t show me to noobs.'
     };
 
