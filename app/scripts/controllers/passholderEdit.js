@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .controller('PassholderEditController', PassholderEditController);
 
 /* @ngInject */
-function PassholderEditController (passholder, identification, $modalInstance, passholderService) {
+function PassholderEditController (passholder, identification, $modalInstance, passholderService, eIdService) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -20,6 +20,8 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   controller.disableInszNumber = (passholder.inszNumber) ? true : false;
   controller.formSubmitBusy = false;
   controller.formAlert = undefined;
+  controller.eIdData = {};
+  controller.eIdError = false;
 
   controller.submitForm = function(passholder, editForm) {
     if (!controller.formSubmitBusy) {
@@ -55,6 +57,20 @@ function PassholderEditController (passholder, identification, $modalInstance, p
     } else {
       controller.formSubmitBusy = false;
     }
+  };
+
+  controller.getDataFromEId = function() {
+    var gotEIdData = function(eIdData) {
+      controller.eIdData = eIdData;
+      controller.eIdError = false;
+    };
+
+    var failedGettingEIdData = function(error) {
+      controller.eIdData = error;
+      controller.eIdData = {};
+    };
+
+    eIdService.getDataFromEId().then(gotEIdData, failedGettingEIdData);
   };
 
   controller.cancelModal = function() {
