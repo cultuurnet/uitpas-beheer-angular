@@ -477,4 +477,46 @@ describe('Service: counterService', function () {
 
     $httpBackend.flush();
   });
+
+  it('can get the price for a registration with voucher number', function (done) {
+    var pass = new Pass({
+      uitPas: {
+        number: '123456789'
+      }
+    });
+    var passholder = new Passholder();
+
+    var deferredRequest = $q.defer();
+    var pricePromise = deferredRequest.promise;
+
+    var priceResponse = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+
+    var assertPriceInfo = function(response) {
+      expect(response).toEqual(priceResponse);
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?reason=FIRST_CARD')
+      .respond(200, pricePromise);
+
+    counterService
+      .getRegistrationPriceInfo(pass, passholder)
+      .then(assertPriceInfo);
+
+    deferredRequest.resolve(priceResponse);
+
+    $httpBackend.flush();
+  });
 });

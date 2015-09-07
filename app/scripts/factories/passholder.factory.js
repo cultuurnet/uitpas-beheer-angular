@@ -56,7 +56,7 @@ function passholderFactory() {
       this.name = jsonPassholder.name;
       this.address = jsonPassholder.address;
       this.birth = {
-        date: new Date(jsonPassholder.birth.date),
+        date: (jsonPassholder.birth.date ? new Date(jsonPassholder.birth.date) : null),
         place: jsonPassholder.birth.place
       };
       if (jsonPassholder.inszNumber) {

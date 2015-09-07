@@ -223,9 +223,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
   service.getRegistrationPriceInfo = function (pass, passholder, voucherNumber, reason) {
     var url = appConfig.apiUrl + 'uitpas/' + pass.number + '/price',
         parameters = {
-          'reason': reason || 'FIRST_CARD',
-          'date_of_birth': passholder.birth.date.toISOString().slice(0, 10),
-          'postal_code': passholder.address.postalCode
+          'reason': reason || 'FIRST_CARD'
         },
         config = {
           headers: {},
@@ -235,6 +233,14 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
 
     if (voucherNumber) {
       parameters['voucher_number'] = voucherNumber;
+    }
+
+    if (passholder.birth.date) {
+        parameters['date_of_birth'] = passholder.birth.date.toISOString().slice(0, 10);
+    }
+
+    if (passholder.address.postalCode) {
+      parameters['postal_code'] = passholder.address.postalCode;
     }
 
     var resolvePriceInfo = function (responseData) {

@@ -20,7 +20,9 @@ function RegistrationModalController (
   $modalInstance,
   counterService,
   $stateParams,
-  RegistrationAPIError
+  RegistrationAPIError,
+  $rootScope,
+  $scope
 ) {
   /*jshint validthis: true */
   var controller = this;
@@ -39,12 +41,28 @@ function RegistrationModalController (
   };
   controller.voucherNumber = '';
   controller.asyncError = undefined;
+  controller.furthestStep = 0;
 
   controller.passholder = new Passholder();
+
+  controller.showFieldError = function (form, field) {
+    var hasErrors = false;
+
+    function steppedTo() {
+      return controller.getStepNumber() <= controller.furthestStep;
+    }
+
+    if (form[field]) {
+      hasErrors = (form.$submitted || form[field].$touched || steppedTo()) && form[field].$invalid;
+    }
+
+    return hasErrors;
+  };
 
   controller.submitPersonalDataForm = function(personalDataForm) {
     if (!controller.formSubmitBusy) {
       controller.formSubmitBusy = true;
+      controller.updateFurthestStep();
       if (personalDataForm.$valid) {
         var setInszNumberError = function () {
           personalDataForm.inszNumber.$setValidity('inUse', false);
@@ -52,6 +70,7 @@ function RegistrationModalController (
         };
 
         var continueRegisterProcess = function () {
+          controller.refreshUnreducedPriceInfo();
           $state.go('counter.main.register.form.contactData');
           controller.formSubmitBusy = false;
         };
@@ -69,12 +88,20 @@ function RegistrationModalController (
     return $state.current.stepNumber;
   };
 
+  controller.updateFurthestStep = function (event, toState, toParams, fromState) {
+    var stepNumber = fromState ? fromState.stepNumber : null;
+
+    if (stepNumber && stepNumber > controller.furthestStep) {
+      controller.furthestStep = stepNumber;
+    }
+  };
+
   controller.submitContactDataForm = function(contactDataForm) {
     if (!controller.formSubmitBusy) {
       controller.formSubmitBusy = true;
       if (contactDataForm.$valid) {
+        controller.updateFurthestStep(3);
         $state.go('counter.main.register.form.price');
-        controller.refreshUnreducedPriceInfo();
         controller.formSubmitBusy = false;
       } else {
         controller.formSubmitBusy = false;
@@ -85,6 +112,7 @@ function RegistrationModalController (
   controller.submitPriceForm = function(priceFormData) {
     if (!controller.formSubmitBusy) {
       controller.formSubmitBusy = true;
+      controller.updateFurthestStep();
       if (priceFormData.$valid) {
         controller.submitRegistration();
         controller.formSubmitBusy = false;
@@ -108,32 +136,6 @@ function RegistrationModalController (
     counterService
       .getRegistrationPriceInfo(pass, controller.passholder)
       .then(updateUnreducedPriceInfo);
-  };
-
-  controller.refreshPriceInfo = function (voucherNumberFormState) {
-    var updatePriceInfo = function (priceInfo) {
-      voucherNumberFormState.$setValidity('validVoucher', true);
-
-      controller.price = priceInfo.price;
-
-      if (!controller.voucherNumber) {
-        controller.unreducedPrice = priceInfo.price;
-      }
-    };
-
-    var showError = function (error) {
-      if (error.code === 'INVALID_VOUCHER_STATUS') {
-        voucherNumberFormState.$setValidity('redeemable', false);
-      }
-
-      voucherNumberFormState.$setValidity('validVoucher', false);
-      controller.price = controller.unreducedPrice;
-    };
-
-    controller.price = -1;
-    counterService
-      .getRegistrationPriceInfo(pass, controller.passholder, controller.voucherNumber)
-      .then(updatePriceInfo, showError);
   };
 
   controller.submitRegistration = function () {
@@ -173,4 +175,8 @@ function RegistrationModalController (
   controller.close = function () {
     $modalInstance.dismiss('registration modal closed');
   };
+
+  var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
+
+  $scope.$on('$destroy', stateChangeStartListener);
 }
