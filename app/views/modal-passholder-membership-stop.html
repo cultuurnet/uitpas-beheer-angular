@@ -1,0 +1,31 @@
+<form class="form" name="membershipStopForm" novalidate>
+    <div class="modal-header">
+      <h3>Stopzetting lidmaatschap</h3>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="errors" ng-show="errors.length > 0">
+          <div class="messages error" ng-repeat="error in errors">
+            {{error}}
+          </div>
+        </div>
+        <p class="alert alert-info text-center">Bent u zeker dat u het lidmaatschap bij
+          <em>{{membership.association.name}}</em> wil stopzetten?
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="btn-toolbar">
+        <div class="ajax-progress" ng-show="waiting">
+          <span class="throbber"></span>
+        </div>
+        <button class="btn btn-danger" ng-click="stop()"
+                ng-disabled="membershipStopForm.$invalid || waiting">
+          Stoppen
+        </button>
+        <button class="btn btn-default" ng-click="cancel()"
+                ng-disabled="waiting">
+          Annuleren
+        </button>
+      </div>
+    </div>
+  </form>

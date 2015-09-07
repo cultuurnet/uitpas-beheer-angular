@@ -16,6 +16,7 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
   /*jshint validthis: true */
   var controller = this;
 
+
   // Set default parameters.
   controller.passholderIdentification = '';
   controller.passholderNotFound = false;
@@ -70,4 +71,10 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
     passholderService.findPass(identification)
       .then(redirectAccordingPassData, displayIdentificationError);
   };
+
+  controller.updatePassholderIdentificationFromNfc = function(event, nfcNumber) {
+    controller.searchPassholder(nfcNumber);
+  };
+
+  $rootScope.$on('nfcNumberReceived', controller.updatePassholderIdentificationFromNfc);
 }

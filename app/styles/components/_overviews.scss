@@ -56,6 +56,9 @@
     h3 {
       color: $brand-primary;
     }
+    .btn {
+      white-space: normal;
+    }
   }
   &__item.unavailable {
     opacity: .6;
@@ -177,6 +180,36 @@
       }
     }
   }
+  &-memberships {
+    .first {
+      padding-left: 15px;
+    }
+    .middle {
+      text-align: center;
+    }
+    .last {
+      padding-right: 15px;
+      text-align: center;
+    }
+    .last .btn {
+      width: 100%;
+      + .btn {
+        margin-top: 5px;
+      }
+    }
+    .modal & {
+      margin: 0;
+      > ul {
+        margin: -16px -15px -15px;
+      }
+      li {
+        padding: 15px 0;
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
   .points {
     color: $brand-success;
     font-weight: 600;
@@ -211,6 +244,8 @@
 .display-table {
   @include breakpoint(map-get($breakpoints, med)) {
     display: table;
+    margin-left: 0;
+    margin-right: 0;
     min-height: 90px;
     width: 100%;
     > div {
@@ -218,6 +253,14 @@
       float: none;
       min-height: 90px;
       vertical-align: middle;
+    }
+  }
+}
+.modal .display-table {
+  @include breakpoint(map-get($breakpoints, med)) {
+    min-height: 35px;
+    > div {
+      min-height: 35px;
     }
   }
 }

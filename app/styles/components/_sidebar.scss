@@ -8,10 +8,9 @@
     overflow-y: auto;
     height: 100%;
     width: 100%;
-    padding: 20px 1em 1em 1em;
   }
-  > form,
-  > div {
+  .inside > form,
+  .inside > div {
     @include clearfix;
     padding-top: $rh-xsm;
     padding-bottom: $rh-xsm;
@@ -35,6 +34,12 @@
   }
   .panel-body {
     padding: 15px;
+  }
+  .list-group {
+    margin: 0;
+  }
+  .list-group-item a {
+    text-decoration: none;
   }
 }
 

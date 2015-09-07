@@ -104,4 +104,13 @@ describe('Controller: PassholderSearchController', function () {
     expect($state.go).toHaveBeenCalledWith('counter.main.register', expectedRequest);
     expect(passholderService.findPass).toHaveBeenCalledWith('valid identification number');
   });
+
+  it('should submit the search form when a nfc number is emited', function() {
+    var number = '123456789';
+    spyOn(passholderSearchController, 'searchPassholder');
+    rootScope.$emit('nfcNumberReceived', number);
+
+    rootScope.$digest();
+    expect(passholderSearchController.searchPassholder).toHaveBeenCalledWith(number);
+  });
 });
