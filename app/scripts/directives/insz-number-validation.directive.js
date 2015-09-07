@@ -98,6 +98,12 @@ function inszNumberValidation() {
       var regexResult = regex.exec(inszNumber);
       var errorMessages = {};
 
+      if (inszNumber && !regexResult) {
+        form.inszNumber.$setValidity('inszNumber', false);
+      } else {
+        form.inszNumber.$setValidity('inszNumber', true);
+      }
+
       validateInszNumberGender(regexResult, gender, errorMessages);
       if (birthDate) {
         validateInszNumberBirthDate(regexResult, birthDate, errorMessages);

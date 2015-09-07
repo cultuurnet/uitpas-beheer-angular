@@ -18,7 +18,8 @@
               <div ng-if="personalDataForm.inszNumber.$error.dateOfBirth">De geboortedatum afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>
               <div ng-if="personalDataForm.inszNumber.$error.checkDigit">Het controle getal van het rijksregisternummer is foutief.</div>
               <div ng-if="personalDataForm.inszNumber.$error.inUse">Dit rijksregisternummer is reeds in gebruik.</div>
-              <div ng-if="personalDataForm.inszNumber.$error.required">het rijksregisternummer is verplicht.</div>
+              <div ng-if="personalDataForm.inszNumber.$error.required">Het rijksregisternummer is verplicht.</div>
+              <div ng-if="personalDataForm.inszNumber.$error.inszNumber">Dit is geen geldig rijksregisternummer.</div>
             </div>
           </div>
           <div class="grid__12 grid--bp-xsm__6 grid--bp-lrg__3 field-group required"

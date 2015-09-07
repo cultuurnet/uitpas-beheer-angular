@@ -53,7 +53,7 @@ function RegistrationModalController (
     }
 
     if (form[field]) {
-      hasErrors = (form.$submitted || form[field].$touched || steppedTo()) && form[field].$invalid;
+      hasErrors = (form.$submitted || form[field].$touched || form[field].$dirty || steppedTo()) && form[field].$invalid;
     }
 
     return hasErrors;
