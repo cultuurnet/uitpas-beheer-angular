@@ -18,7 +18,7 @@
       <div class="field-group">
         <label>Prijs:</label>
         <div ng-show="prc.price === 0">Gratis</div>
-        <div ng-show="prc.price > 0"><span ng-bind="prc.price"></span> euro</div>
+        <div ng-show="prc.price > 0"><span ng-bind="prc.price | number: 2"></span> euro</div>
         <span ng-show="prc.price < 0">
           <div class="spinner spinner-xsmall">
             <circle-spinner></circle-spinner>

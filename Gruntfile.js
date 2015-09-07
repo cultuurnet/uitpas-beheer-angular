@@ -209,6 +209,11 @@ module.exports = function (grunt) {
                 'moment.js',
                 'locale/nl.js'
               ]
+            },
+            'angular-i18n': {
+              'main': [
+                'angular-locale_nl-be.js'
+              ]
             }
           }
         }
