@@ -33,6 +33,10 @@ function ubrDatepicker() {
         id: scope.id
       };
 
+      dateInputElement.bind('blur', function () {
+        ngModel.$setTouched();
+      });
+
       datepicker.updateModel = function (changeEvent) {
         // The changeEvent date properties contains a Moment object if
         // a valid date was entered.
