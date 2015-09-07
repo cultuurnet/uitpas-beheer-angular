@@ -26,8 +26,9 @@ describe('Service: eIdService', function () {
 
   it('should add some functions to $window on init', function () {
     service.init();
-    expect($window.readId).toBeDefined();
-    expect($window.readIdPhoto).toBeDefined();
+    expect($window.readEid).toBeDefined();
+    expect($window.readEidPhoto).toBeDefined();
+    expect($window.readEidError).toBeDefined();
   });
 
   it('should emit when the readId function is called', function () {
@@ -52,7 +53,7 @@ describe('Service: eIdService', function () {
 
     service.init();
     spyOn($scope, '$emit');
-    $window.readId(
+    $window.readEid(
       eIdData.name.first,
       eIdData.name.last,
       eIdData.inszNumber,
@@ -71,7 +72,15 @@ describe('Service: eIdService', function () {
     var photo = 'base64PictureString';
     service.init();
     spyOn($scope, '$emit');
-    $window.readIdPhoto(photo);
+    $window.readEidPhoto(photo);
     expect($scope.$emit).toHaveBeenCalledWith('eIdPhotoReceived', photo);
+  });
+
+  it('should emit when the readIdError function is called', function () {
+    var message = 'Could not read the eid.';
+    service.init();
+    spyOn($scope, '$emit');
+    $window.readEidError(message);
+    expect($scope.$emit).toHaveBeenCalledWith('eIdErrorReceived', message);
   });
 });
