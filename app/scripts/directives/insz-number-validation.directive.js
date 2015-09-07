@@ -91,12 +91,17 @@ function inszNumberValidation() {
     scope.$watch(function () {return form.inszNumber.$viewValue;}, function() {
       var inszNumber = form.inszNumber.$viewValue;
       var gender = form.gender.$viewValue;
-      var birthDate = new Date(form.dateOfBirth.$viewValue);
+      var birthDate;
+      if (form.dateOfBirth && form.dateOfBirth.$viewValue) {
+        birthDate = new Date(form.dateOfBirth.$viewValue);
+      }
       var regexResult = regex.exec(inszNumber);
       var errorMessages = {};
 
       validateInszNumberGender(regexResult, gender, errorMessages);
-      validateInszNumberBirthDate(regexResult, birthDate, errorMessages);
+      if (birthDate) {
+        validateInszNumberBirthDate(regexResult, birthDate, errorMessages);
+      }
       validateInszNumberCheckDigit(regexResult, errorMessages);
 
       if (errorMessages.hasOwnProperty('gender')) {
@@ -109,13 +114,18 @@ function inszNumberValidation() {
       }
 
       if (errorMessages.hasOwnProperty('dateOfBirth')) {
-        form.dateOfBirth.$setTouched();
+        if (form.dateOfBirth) {
+          form.dateOfBirth.$setTouched();
+          form.dateOfBirth.$setValidity('inszNumber', false);
+        }
         form.inszNumber.$setValidity('dateOfBirth', false);
-        form.dateOfBirth.$setValidity('inszNumber', false);
       }
       else {
         form.inszNumber.$setValidity('dateOfBirth', true);
-        form.dateOfBirth.$setValidity('inszNumber', true);
+
+        if (form.dateOfBirth) {
+          form.dateOfBirth.$setValidity('inszNumber', true);
+        }
       }
 
       if (errorMessages.hasOwnProperty('checkDigit')) {
@@ -148,13 +158,21 @@ function inszNumberValidation() {
       }
     });
 
-    scope.$watch(function () {return form.dateOfBirth.$viewValue;}, function() {
+    scope.$watch(function () {return form.dateOfBirth && form.dateOfBirth.$viewValue;}, function() {
+      if (!form.inszNumber || !form.dateOfBirth) {
+        return;
+      }
+
       var inszNumber = form.inszNumber.$viewValue;
-      var birthDate = new Date(form.dateOfBirth.$viewValue);
-      var regexResult = regex.exec(inszNumber);
+
       var errorMessages = {};
 
-      validateInszNumberBirthDate(regexResult, birthDate, errorMessages);
+      if (form.dateOfBirth.$viewValue) {
+        var birthDate = new Date(form.dateOfBirth.$viewValue);
+        var regexResult = regex.exec(inszNumber);
+
+        validateInszNumberBirthDate(regexResult, birthDate, errorMessages);
+      }
 
       if (errorMessages.hasOwnProperty('dateOfBirth')) {
         form.dateOfBirth.$setValidity('inszNumber', false);

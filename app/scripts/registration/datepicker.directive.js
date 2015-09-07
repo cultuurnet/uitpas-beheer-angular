@@ -34,15 +34,20 @@ function ubrDatepicker() {
       };
 
       datepicker.updateModel = function (changeEvent) {
-        // The changeEvent date properties contains a Moment object
-        var date = changeEvent.date.toDate();
+        // The changeEvent date properties contains a Moment object if
+        // a valid date was entered.
+        var date = null;
+        if (changeEvent.date) {
+          date = changeEvent.date.toDate();
+        }
+
         ngModel.$setViewValue(date);
       };
 
       dateInputElement.datetimepicker({
         locale: 'nl',
         format: 'DD/MM/YYYY',
-        defaultDate: false,
+        useCurrent: false,
         icons: {
           time: 'fa fa-clock-o',
           date: 'fa fa-calendar',

@@ -28,7 +28,7 @@ function passholderFactory() {
       city: ''
     };
     this.birth = {
-      date: new Date(),
+      date: null,
       place: ''
     };
     this.inszNumber = '';
