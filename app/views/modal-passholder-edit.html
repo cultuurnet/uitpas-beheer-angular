@@ -8,7 +8,7 @@
       <fieldset ng-disabled="pec.formSubmitBusy">
         <div class="grid">
           <div class="grid__12 grid--bp-lrg__12">
-            <div class="alert alert-info">
+            <div class="alert alert-info" ng-show="pec.isJavaFXBrowser">
               Plaats de e-id van de pashouder in de lezer en deze gegevens worden snel voor jou ingevuld. <a ng-click="pec.getDataFromEId()">Gegevens inlezen</a>
             </div>
             <div class="alert alert-danger" type="{{pec.formAlert.type}}" ng-show="pec.formAlert" ng-bind="pec.formAlert.message"></div>

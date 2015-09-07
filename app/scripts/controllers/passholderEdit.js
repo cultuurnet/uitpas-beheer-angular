@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .controller('PassholderEditController', PassholderEditController);
 
 /* @ngInject */
-function PassholderEditController (passholder, identification, $modalInstance, passholderService, eIdService) {
+function PassholderEditController (passholder, identification, $modalInstance, passholderService, eIdService, isJavaFXBrowser) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -22,6 +22,7 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   controller.formAlert = undefined;
   controller.eIdData = {};
   controller.eIdError = false;
+  controller.isJavaFXBrowser = isJavaFXBrowser;
 
   controller.submitForm = function(passholder, editForm) {
     if (!controller.formSubmitBusy) {
