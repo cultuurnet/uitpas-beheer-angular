@@ -39,12 +39,12 @@ describe('Service: eIdService', function () {
       },
       inszNumber: 'inszNumber',
       birth: {
-        date: 'dateOfBirth',
+        date: new Date('1985-05-05'),
         place: 'placeOfBirth'
       },
-      gender: 'gender',
+      gender: 'FEMALE',
       nationality: 'nationality',
-      contact: {
+      address: {
         street: 'street',
         postalCode: 'postalCode',
         city: 'city'
@@ -59,11 +59,11 @@ describe('Service: eIdService', function () {
       eIdData.inszNumber,
       eIdData.birth.date,
       eIdData.birth.place,
-      eIdData.gender,
+      'F',
       eIdData.nationality,
-      eIdData.contact.street,
-      eIdData.contact.postalCode,
-      eIdData.contact.city
+      eIdData.address.street,
+      eIdData.address.postalCode,
+      eIdData.address.city
     );
     expect($scope.$emit).toHaveBeenCalledWith('eIdDataReceived', eIdData);
   });

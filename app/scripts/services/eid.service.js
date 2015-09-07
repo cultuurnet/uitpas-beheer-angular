@@ -18,6 +18,12 @@ function eIdService($window, $q, $rootScope, $interval) {
 
   service.init = function () {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
+      if (gender === 'M') {
+        gender = 'MALE';
+      } else if (gender === 'F') {
+        gender = 'FEMALE';
+      }
+
       var eIdData = {
         name: {
           first: firstName,
@@ -25,12 +31,12 @@ function eIdService($window, $q, $rootScope, $interval) {
         },
         inszNumber: inszNumber,
         birth: {
-          date: dateOfBirth,
+          date: new Date(dateOfBirth),
           place: placeOfBirth
         },
         gender: gender,
         nationality: nationality,
-        contact: {
+        address: {
           street: street,
           postalCode: postalCode,
           city: city
@@ -53,7 +59,7 @@ function eIdService($window, $q, $rootScope, $interval) {
     var dataPromise = deferredData.promise;
 
     // Return eIdData if we already have it.
-    if ((eIdFullData.name || {}).first !== undefined && eIdFullData.base64Picture !== undefined) {
+    if ((eIdFullData.name || {}).first !== undefined && eIdFullData.picture !== undefined) {
       deferredData.resolve(eIdFullData);
     }
     // Or ask the browser to get the eId data.
@@ -65,7 +71,7 @@ function eIdService($window, $q, $rootScope, $interval) {
       var waitTimeOut = 1000;
 
       var waitForIt = $interval(function () {
-        if ((eIdFullData.name || {}).first !== undefined && eIdFullData.base64Picture !== undefined) {
+        if ((eIdFullData.name || {}).first !== undefined && eIdFullData.picture !== undefined) {
           $interval.cancel(waitForIt);
           deferredData.resolve(eIdFullData);
         }
@@ -74,7 +80,7 @@ function eIdService($window, $q, $rootScope, $interval) {
         }
         else {
           $interval.cancel(waitForIt);
-          deferredData.reject('Could not, just could not. ...');
+          deferredData.reject('De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit of de lezer correct aangesloten is aan de pc.');
         }
       }, waitTimeOut);
 
@@ -95,6 +101,6 @@ function eIdService($window, $q, $rootScope, $interval) {
   });
 
   $rootScope.$on('eIdPhotoReceived', function(event, base64Picture) {
-    eIdFullData.base64Picture = base64Picture;
+    eIdFullData.picture = base64Picture;
   });
 }

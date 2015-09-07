@@ -63,11 +63,16 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   controller.getDataFromEId = function() {
     var gotEIdData = function(eIdData) {
       controller.eIdData = eIdData;
-      controller.eIdError = false;
+      if (controller.disableInszNumber && controller.passholder.inszNumber !== eIdData.inszNumber) {
+        controller.eIdError = 'Het rijksregisternummer van de e-id verschilt van het rijksregisternummer dat beschikbaar is in de UiTPAS databank.';
+      } else {
+        angular.merge(controller.passholder, eIdData);
+        controller.eIdError = false;
+      }
     };
 
     var failedGettingEIdData = function(error) {
-      controller.eIdData = error;
+      controller.eIdError = error;
       controller.eIdData = {};
     };
 
