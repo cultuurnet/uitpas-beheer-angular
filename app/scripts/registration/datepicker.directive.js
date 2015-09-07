@@ -34,7 +34,10 @@ function ubrDatepicker() {
       };
 
       dateInputElement.bind('blur', function () {
-        ngModel.$setTouched();
+        if (!ngModel.$touched) {
+          ngModel.$setTouched();
+        }
+        scope.$apply();
       });
 
       datepicker.updateModel = function (changeEvent) {
