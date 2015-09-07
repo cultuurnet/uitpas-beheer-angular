@@ -12,7 +12,7 @@ angular
   .controller('PassholderSearchController', PassholderSearchController);
 
 /* @ngInject */
-function PassholderSearchController ($rootScope, passholderService, $state) {
+function PassholderSearchController ($rootScope, passholderService, $state, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -76,5 +76,7 @@ function PassholderSearchController ($rootScope, passholderService, $state) {
     controller.searchPassholder(nfcNumber);
   };
 
-  $rootScope.$on('nfcNumberReceived', controller.updatePassholderIdentificationFromNfc);
+  var cleanupNfcNumberReceivedListener = $rootScope.$on('nfcNumberReceived', controller.updatePassholderIdentificationFromNfc);
+
+  $scope.$on('$destroy', cleanupNfcNumberReceivedListener);
 }

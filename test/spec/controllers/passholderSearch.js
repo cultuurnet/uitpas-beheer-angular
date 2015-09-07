@@ -22,6 +22,7 @@ describe('Controller: PassholderSearchController', function () {
   beforeEach(function () {
     passholderSearchController = $controller(
       'PassholderSearchController', {
+        $scope: rootScope.$new(),
         $rootScope: rootScope,
         passholderService: passholderService,
         sharedDataService:  sharedDataService,
