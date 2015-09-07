@@ -1,0 +1,47 @@
+<form class="form" name="membershipRegistrationForm"
+      novalidate>
+    <div class="modal-header">
+      <h3>Aanvraag lidmaatschap</h3>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="errors" ng-show="errors.length > 0">
+          <div class="messages error" ng-repeat="error in errors">
+            {{error}}
+          </div>
+        </div>
+        <p class="alert alert-info text-center">Lidmaatschap
+          <strong>{{association.name}}</strong> <span
+              ng-show="recentlyExpired">opnieuw</span>
+          aanvragen?</p>
+      </div>
+      <div class="form-group">
+        <label for="expirationDate">Vervaldatum <span
+            ng-show="!endDate.fixed"
+            class="required">*</span></label>
+        <span ng-show="endDate.fixed" class="fixed-input">{{endDate.date | date:'dd/MM/yyyy'}}</span>
+        <div ng-hide="endDate.fixed">
+          <input name="endDate" type="text" placeholder="mm/dd/jjjj"
+                 class="input-small"
+                 datepicker-popup="dd/MM/yyyy"
+                 ng-model="endDate.date"
+                 required/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="btn-toolbar">
+        <div class="ajax-progress" ng-show="waiting">
+          <span class="throbber"></span>
+        </div>
+        <button class="btn btn-primary" ng-click="register(endDate)"
+                ng-disabled="membershipRegistrationForm.$invalid || waiting">
+          Aanvragen
+        </button>
+        <button class="btn btn-default" ng-click="cancel()"
+                ng-disabled="waiting">
+          Annuleren
+        </button>
+      </div>
+    </div>
+  </form>

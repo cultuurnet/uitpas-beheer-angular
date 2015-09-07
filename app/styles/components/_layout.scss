@@ -5,6 +5,7 @@ body {
 }
 
 .main-content {
+  height: 100%;
   position: relative;
   @include breakpoint(map-get($breakpoints, sml)) {
   height: 100%;
