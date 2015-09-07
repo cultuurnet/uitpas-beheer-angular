@@ -36,12 +36,10 @@ function eIdService($window, $q, $rootScope) {
           city: city
         }
       };
-      console.log(eIdData);
       $rootScope.$emit('eIdDataReceived', eIdData);
     };
 
     $window.readIdPhoto = function(base64Picture) {
-      console.log(base64Picture);
       $rootScope.$emit('eIdPhotoReceived', base64Picture);
     };
   };
@@ -54,12 +52,10 @@ function eIdService($window, $q, $rootScope) {
 
     // wait until the functions readEid & readEidPhoto are called and emitted
     $rootScope.$on('eIdDataReceived', function(event, eIdData) {
-      console.log(eIdData);
       angular.merge(eIdFullData, eIdData);
     });
 
     $rootScope.$on('eIdPhotoReceived', function(base64Picture) {
-      console.log(base64Picture);
       eIdFullData.base64Picture = base64Picture;
     });
 
