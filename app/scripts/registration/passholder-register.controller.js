@@ -12,7 +12,7 @@ angular
   .controller('PassholderRegisterController', PassholderRegisterController);
 
 /* @ngInject */
-function PassholderRegisterController (pass, $state, activeCounter) {
+function PassholderRegisterController (pass, $state, activeCounter, moment) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -37,7 +37,7 @@ function PassholderRegisterController (pass, $state, activeCounter) {
   };
 
   controller.kansenstatuut = {
-    endDate: new Date(),
+    endDate: moment().endOf('year').toDate(),
     remarks: '',
     includeRemarks: false
   };
