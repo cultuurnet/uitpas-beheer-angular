@@ -164,6 +164,12 @@ function RegistrationModalController (
       .then(showRegisteredPassholder, handleRegistrationErrors);
   };
 
+  controller.emailChanged = function () {
+    if (controller.asyncError && controller.asyncError.code === 'EMAIL_ALREADY_USED') {
+      controller.asyncError = undefined;
+    }
+  };
+
   controller.close = function () {
     $modalInstance.dismiss('registration modal closed');
   };

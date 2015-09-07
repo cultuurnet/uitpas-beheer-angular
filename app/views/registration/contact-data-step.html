@@ -19,7 +19,7 @@
           E-mailadres
         </label>
         <input type="email" class="form-control" id="email" name="email"  ng-model="prc.passholder.contact.email"
-               ng-required="true">
+               ng-required="true" ng-change="prc.emailChanged()">
         <div ng-if="(contactDataForm.$submitted || contactDataForm.email.$touched) && contactDataForm.email.$invalid" 
              class="text-danger small">
           <div ng-if="contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
