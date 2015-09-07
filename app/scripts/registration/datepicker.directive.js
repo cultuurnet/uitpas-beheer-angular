@@ -46,6 +46,8 @@ function ubrDatepicker() {
         var date = null;
         if (changeEvent.date) {
           date = changeEvent.date.toDate();
+
+          datepicker.date = changeEvent.date.format('DD/MM/YYYY');
         }
 
         ngModel.$setViewValue(date);
