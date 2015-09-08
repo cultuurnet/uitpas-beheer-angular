@@ -26,7 +26,7 @@ describe('Service: nfcService', function () {
     service.init();
     spyOn($scope, '$emit');
     $window.readNfc(number);
-    expect($scope.$emit).toHaveBeenCalledWith('nfcNumberReceived', '123456789');
+    expect($scope.$emit).toHaveBeenCalledWith('nfcNumberReceived', number);
   });
 
 });

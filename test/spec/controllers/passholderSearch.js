@@ -24,6 +24,7 @@ describe('Controller: PassholderSearchController', function () {
       'PassholderSearchController', {
         $scope: rootScope.$new(),
         $rootScope: rootScope,
+        $scope: rootScope.$new(),
         passholderService: passholderService,
         sharedDataService:  sharedDataService,
         $state: $state,
