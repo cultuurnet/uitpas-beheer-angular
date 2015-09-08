@@ -39,6 +39,8 @@ function ubrVoucherNumber(counterService, $timeout) {
       var showError = function (error) {
         if (error.code === 'INVALID_VOUCHER_STATUS') {
           modelController.$setValidity('redeemable', false);
+        } else {
+          registrationController.handleAsyncError(error);
         }
 
         modelController.$setValidity('voucher', false);
@@ -46,6 +48,8 @@ function ubrVoucherNumber(counterService, $timeout) {
         modelController.$setTouched();
       };
 
+      registrationController.clearAsyncError('PARSE_INVALID_VOUCHERNUMBER');
+      registrationController.clearAsyncError('UNKNOWN_VOUCHER');
       registrationController.price = -1;
       counterService
         .getRegistrationPriceInfo(registrationController.pass, registrationController.passholder, voucherNumber)

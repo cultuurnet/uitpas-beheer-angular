@@ -128,7 +128,7 @@
               Postcode
             </label>
             <input type="text" class="form-control" id="postal-code" name="postalCode" ng-required="true"
-                   ng-model="prc.passholder.address.postalCode" ng-pattern="/^\d{4}$/">
+                   ng-model="prc.passholder.address.postalCode" ng-pattern="/^\d{4}$/" ng-change="prc.postalCodeChanged()">
             <div ng-if="prc.showFieldError(personalDataForm, 'postalCode')" class="text-danger small">
               <div ng-if="personalDataForm.postalCode.$error.required">De postcode is verplicht.</div>
               <div ng-if="personalDataForm.postalCode.$error.pattern">Dit is geen geldige postcode.</div>

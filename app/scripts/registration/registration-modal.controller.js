@@ -22,7 +22,8 @@ function RegistrationModalController (
   $stateParams,
   RegistrationAPIError,
   $rootScope,
-  $scope
+  $scope,
+  $q
 ) {
   /*jshint validthis: true */
   var controller = this;
@@ -70,9 +71,15 @@ function RegistrationModalController (
         };
 
         var continueRegisterProcess = function () {
-          controller.refreshUnreducedPriceInfo();
-          $state.go('counter.main.register.form.contactData');
-          controller.formSubmitBusy = false;
+          controller
+            .refreshUnreducedPriceInfo()
+            .then(function () {
+              controller.formSubmitBusy = false;
+
+              if (!controller.asyncError) {
+                $state.go('counter.main.register.form.contactData');
+              }
+            });
         };
 
         passholderService
@@ -123,6 +130,7 @@ function RegistrationModalController (
   };
 
   controller.refreshUnreducedPriceInfo = function () {
+    var deferredRefresh = $q.defer();
     var updateUnreducedPriceInfo = function (priceInfo) {
       var unreducedPrice = priceInfo.price;
 
@@ -135,27 +143,32 @@ function RegistrationModalController (
 
     counterService
       .getRegistrationPriceInfo(pass, controller.passholder)
-      .then(updateUnreducedPriceInfo);
+      .then(updateUnreducedPriceInfo, controller.handleAsyncError)
+      .finally(deferredRefresh.resolve);
+
+    return deferredRefresh.promise;
+  };
+
+  controller.handleAsyncError = function (error) {
+    var knownAPIError = RegistrationAPIError[error.code];
+    var step = 'personalData';
+
+    if (knownAPIError) {
+      error.cleanMessage = knownAPIError.message;
+      step = knownAPIError.step;
+    } else {
+      error.cleanMessage = error.message.split('URL CALLED')[0];
+    }
+
+    controller.asyncError = error;
+    $state.go('counter.main.register.form.' + step);
+  };
+
+  controller.unlockForm = function () {
+    controller.formSubmitBusy = false;
   };
 
   controller.submitRegistration = function () {
-
-    var handleRegistrationErrors = function (error) {
-      var knownAPIError = RegistrationAPIError[error.code];
-      var step = 'personalData';
-
-      if (knownAPIError) {
-        error.cleanMessage = knownAPIError.message;
-        step = knownAPIError.step;
-      } else {
-        error.cleanMessage = error.message.split('URL CALLED')[0];
-      }
-
-      controller.asyncError = error;
-      controller.formSubmitBusy = false;
-      $state.go('counter.main.register.form.' + step);
-    };
-
     var showRegisteredPassholder = function (passholder) {
       $modalInstance.close(passholder);
     };
@@ -163,13 +176,22 @@ function RegistrationModalController (
     controller.formSubmitBusy = true;
     passholderService
       .register(pass, controller.passholder, controller.voucherNumber, kansenstatuutInfo)
-      .then(showRegisteredPassholder, handleRegistrationErrors);
+      .then(showRegisteredPassholder, controller.handleAsyncError)
+      .finally(controller.unlockForm);
+  };
+
+  controller.clearAsyncError = function (errorCode) {
+    if (controller.asyncError && controller.asyncError.code === errorCode) {
+      controller.asyncError = undefined;
+    }
   };
 
   controller.emailChanged = function () {
-    if (controller.asyncError && controller.asyncError.code === 'EMAIL_ALREADY_USED') {
-      controller.asyncError = undefined;
-    }
+    controller.clearAsyncError('EMAIL_ALREADY_USED');
+  };
+
+  controller.postalCodeChanged = function () {
+    controller.clearAsyncError('PARSE_INVALID_CITY_IDENTIFIER');
   };
 
   controller.close = function () {

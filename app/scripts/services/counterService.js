@@ -247,9 +247,13 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
       deferredPriceInfo.resolve(responseData.data);
     };
 
+    var handleErrorResponse = function (errorResponse) {
+      deferredPriceInfo.reject(errorResponse.data);
+    };
+
     $http
       .get(url, config)
-      .then(resolvePriceInfo, deferredPriceInfo.reject);
+      .then(resolvePriceInfo, handleErrorResponse);
 
     return deferredPriceInfo.promise;
   };
