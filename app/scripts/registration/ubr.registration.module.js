@@ -102,6 +102,10 @@ angular
             templateUrl: 'views/registration/personal-data-step.html'
           }
         },
+        params: {
+          'pass': null,
+          'kansenstatuut': null
+        },
         stepNumber: 1
       })
       .state('counter.main.register.form.contactData', {
