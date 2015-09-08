@@ -33,7 +33,12 @@ describe('Controller: PassholderRegisterController', function () {
     $scope = $rootScope.$new();
     $q = $injector.get('$q');
 
-    $state = jasmine.createSpyObj('$state', ['go']);
+    $state = {
+      current: {
+        stepNumber: 1
+      },
+      go: jasmine.createSpy('go')
+    };
     Passholder = $injector.get('Passholder');
     passholderService = $injector.get('passholderService');
     counterService = $injector.get('counterService');
@@ -283,5 +288,59 @@ describe('Controller: PassholderRegisterController', function () {
   it('can dismiss the modal', function () {
     controller.close();
     expect(modalInstance.dismiss).toHaveBeenCalled();
+  });
+
+  it('should reset the right async error when a relevant field changes', function () {
+    spyOn(controller, 'clearAsyncError');
+
+    controller.emailChanged();
+    expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('EMAIL_ALREADY_USED');
+
+    controller.postalCodeChanged();
+    expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('PARSE_INVALID_CITY_IDENTIFIER');
+  });
+
+  it('should clear the async error by error code', function () {
+    controller.asyncError = {
+      code: 'SOME_ASYNC_ERROR',
+      message: 'Something went horribly wrong, run for cover.'
+    };
+
+    controller.clearAsyncError('SOME_ASYNC_ERROR')
+
+    expect(controller.asyncError).toBeUndefined();
+  });
+
+  it('should always show form field errors when the form was already stepped to', function () {
+    controller.furthestStep = 2;
+
+    var blueForm = {
+      $submitted: false,
+      purpleField: {
+        $touched: false,
+        $dirty: false,
+        $invalid: true
+      }
+    };
+
+    controller.getStepNumber.and.returnValue(1);
+    expect(controller.showFieldError(blueForm, 'purpleField')).toBeTruthy();
+
+    controller.getStepNumber.and.returnValue(3);
+    expect(controller.showFieldError(blueForm, 'purpleField')).toBeFalsy();
+  });
+
+  it('should update the furthest step when stepping away', function () {
+    controller.furthestStep = 1;
+    controller.updateFurthestStep(null, null, null, {stepNumber: 3});
+    expect(controller.furthestStep).toEqual(3);
+
+    // the furthest step should not be updated when navigating away from an earlier step
+    controller.updateFurthestStep(null, null, null, {stepNumber: 2});
+    expect(controller.furthestStep).toEqual(3);
+
+    // do nothing when navigating from a state without steps
+    controller.updateFurthestStep(null, null, null, {});
+    expect(controller.furthestStep).toEqual(3);
   });
 });
