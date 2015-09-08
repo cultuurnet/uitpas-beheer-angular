@@ -5,10 +5,29 @@ describe('Controller: PassholderEditController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var controller, modalInstance, passholderService, $q, $scope;
+  var controller, modalInstance, passholderService, $q, $scope, eIdService, $rootScope, isJavaFXBrowser;
+  var eIdRawData = {
+    name: {
+      first: 'Alberto',
+      last: 'Contador'
+    },
+    inszNumber: '720923-383-17',
+    birth: {
+      date: new Date('1972-09-23'),
+      place: 'Madrid'
+    },
+    gender: 'MALE',
+    nationality: 'Spaans',
+    address: {
+      street: 'Calle Alava',
+      postalCode: '28017',
+      city: 'Madrid'
+    }
+  };
+  var eIdRawPhoto = 'base64PictureString';
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $injector, $rootScope) {
+  beforeEach(inject(function ($controller, $injector, _$rootScope_) {
     modalInstance = {
       close: jasmine.createSpy('modalInstance.close'),
       dismiss: jasmine.createSpy('modalInstance.dismiss'),
@@ -17,15 +36,22 @@ describe('Controller: PassholderEditController', function () {
       }
     };
 
+    isJavaFXBrowser = false;
     passholderService = $injector.get('passholderService');
+    eIdService = $injector.get('eIdService');
     $q = $injector.get('$q');
-    $scope = $rootScope;
+    $scope = _$rootScope_.$new();
+    $rootScope = _$rootScope_;
 
     controller = $controller('PassholderEditController', {
       passholder: { inszNumber: '07111571331' },
       identification: 123,
       $modalInstance: modalInstance,
-      passholderService: passholderService
+      passholderService: passholderService,
+      eIdService: eIdService,
+      isJavaFXBrowser: isJavaFXBrowser,
+      $rootScope: $rootScope,
+      $scope: $scope
     });
   }));
 
@@ -157,5 +183,33 @@ describe('Controller: PassholderEditController', function () {
       type: 'danger'
     };
     expect(controller.formAlert).toEqual(actionNotAllowedAlert);
+  });
+
+  it('should call the eIdService to get the eId data', function () {
+    spyOn(eIdService, 'getDataFromEId');
+    controller.getDataFromEId();
+    expect(eIdService.getDataFromEId).toHaveBeenCalled();
+  });
+
+  it('should react to receiving the eId data', function () {
+    $rootScope.$emit('eIdDataReceived', eIdRawData);
+    expect(controller.eIdData).toEqual(eIdRawData);
+    expect(controller.passholder).not.toEqual(eIdRawData);
+
+    eIdRawData.inszNumber = '07111571331';
+    $rootScope.$emit('eIdDataReceived', eIdRawData);
+    expect(controller.eIdData).toEqual(eIdRawData);
+    expect(controller.passholder).toEqual(eIdRawData);
+  });
+
+  it('should react to receiving the eId photo', function () {
+    $rootScope.$emit('eIdPhotoReceived', eIdRawPhoto);
+    expect(controller.eIdData.picture).toEqual(eIdRawPhoto);
+    expect(controller.passholder.picture).toEqual(eIdRawPhoto);
+  });
+
+  it('should react to an eId read error', function () {
+    $rootScope.$emit('eIdErrorReceived', '');
+    expect(controller.eIdError).toEqual('De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.');
   });
 });

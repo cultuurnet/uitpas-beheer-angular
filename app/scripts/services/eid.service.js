@@ -11,10 +11,9 @@ angular.module('uitpasbeheerApp')
   .service('eIdService', eIdService);
 
 /* @ngInject */
-function eIdService($window, $q, $rootScope, $interval) {
+function eIdService($window, $rootScope) {
   /*jshint validthis: true */
   var service = this;
-  var eIdFullData = {};
 
   service.init = function () {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
@@ -55,52 +54,6 @@ function eIdService($window, $q, $rootScope, $interval) {
   };
 
   service.getDataFromEId = function() {
-    var deferredData = $q.defer();
-    var dataPromise = deferredData.promise;
-
-    // Return eIdData if we already have it.
-    if ((eIdFullData.name || {}).first !== undefined && eIdFullData.picture !== undefined) {
-      deferredData.resolve(eIdFullData);
-    }
-    // Or ask the browser to get the eId data.
-    else {
-      $window.alert('READEID');
-
-      var waitCycles = 5;
-      var waitCyclesDone = 0;
-      var waitTimeOut = 1000;
-
-      var waitForIt = $interval(function () {
-        if ((eIdFullData.name || {}).first !== undefined && eIdFullData.picture !== undefined) {
-          $interval.cancel(waitForIt);
-          deferredData.resolve(eIdFullData);
-        }
-        else if (waitCyclesDone < waitCycles) {
-          ++waitCyclesDone;
-        }
-        else {
-          $interval.cancel(waitForIt);
-          deferredData.reject('De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit of de lezer correct aangesloten is aan de pc.');
-        }
-      }, waitTimeOut);
-
-      // Reject the promise if something went wrong getting the eId data.
-      $rootScope.$on('eIdErrorReceived', function(message) {
-        $interval.cancel(waitForIt);
-        deferredData.reject(message);
-      });
-
-
-    }
-
-    return dataPromise;
+    $window.alert('READEID');
   };
-
-  $rootScope.$on('eIdDataReceived', function(event, eIdData) {
-    angular.merge(eIdFullData, eIdData);
-  });
-
-  $rootScope.$on('eIdPhotoReceived', function(event, base64Picture) {
-    eIdFullData.picture = base64Picture;
-  });
 }
