@@ -80,7 +80,7 @@ function PassholderEditController (passholder, identification, $modalInstance, p
     }
     $scope.$apply();
   });
-  var cleanupEIdPhotReceivedListener = $rootScope.$on('eIdPhotoReceived', function(event, base64Picture) {
+  var cleanupEIdPhotoReceivedListener = $rootScope.$on('eIdPhotoReceived', function(event, base64Picture) {
     controller.eIdData.picture = base64Picture;
     controller.passholder.picture = base64Picture;
     $scope.$apply();
@@ -91,6 +91,6 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   });
 
   $scope.$on('$destroy', cleanupEIdDataReceivedListener);
-  $scope.$on('$destroy', cleanupEIdPhotReceivedListener);
+  $scope.$on('$destroy', cleanupEIdPhotoReceivedListener);
   $scope.$on('$destroy', cleanupEIdErrorReceivedListener);
 }
