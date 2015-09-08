@@ -47,4 +47,15 @@ describe('Directive: datepicker', function () {
     expect(datepickerShowSpy).toHaveBeenCalled();
   });
 
+  it('it should flag the input field as touched after it received focus', function () {
+    var dateInputElement = element.find('input');
+    var ngModelController = dateInputElement.controller('ngModel');
+
+    expect(ngModelController.$touched).toBeFalsy();
+
+    dateInputElement.blur();
+
+    expect(ngModelController.$touched).toBeTruthy();
+  });
+
 });
