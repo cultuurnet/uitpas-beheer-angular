@@ -70,21 +70,6 @@ describe('Service: eIdService', function () {
       eIdRawData.address.city
     );
     expect($scope.$emit).toHaveBeenCalledWith('eIdDataReceived', eIdRawData);
-
-    $window.readEid(
-      eIdRawData.name.first,
-      eIdRawData.name.last,
-      eIdRawData.inszNumber,
-      eIdRawData.birth.date,
-      eIdRawData.birth.place,
-      'F',
-      eIdRawData.nationality,
-      eIdRawData.address.street,
-      eIdRawData.address.postalCode,
-      eIdRawData.address.city
-    );
-    eIdRawData.gender = 'FEMALE';
-    expect($scope.$emit).toHaveBeenCalledWith('eIdDataReceived', eIdRawData);
   });
 
   it('should emit when the readIdPhoto function is called', function () {
@@ -105,5 +90,48 @@ describe('Service: eIdService', function () {
   it('should request to read the eId', function () {
     service.getDataFromEId();
     expect($window.alert).toHaveBeenCalled();
+  });
+
+  it('should accept both F and V values for the female gender', function() {
+    service.init();
+    spyOn($scope, '$emit');
+
+    eIdRawData.gender = 'FEMALE';
+    var expectedEmitArgs = [
+      'eIdDataReceived',
+      eIdRawData
+    ];
+
+    $window.readEid(
+      eIdRawData.name.first,
+      eIdRawData.name.last,
+      eIdRawData.inszNumber,
+      eIdRawData.birth.date,
+      eIdRawData.birth.place,
+      'F',
+      eIdRawData.nationality,
+      eIdRawData.address.street,
+      eIdRawData.address.postalCode,
+      eIdRawData.address.city
+    );
+
+    expect($scope.$emit.calls.count()).toEqual(1);
+    expect($scope.$emit.calls.mostRecent().args).toEqual(expectedEmitArgs);
+
+    $window.readEid(
+      eIdRawData.name.first,
+      eIdRawData.name.last,
+      eIdRawData.inszNumber,
+      eIdRawData.birth.date,
+      eIdRawData.birth.place,
+      'V',
+      eIdRawData.nationality,
+      eIdRawData.address.street,
+      eIdRawData.address.postalCode,
+      eIdRawData.address.city
+    );
+
+    expect($scope.$emit.calls.count()).toEqual(2);
+    expect($scope.$emit.calls.mostRecent().args).toEqual(expectedEmitArgs);
   });
 });

@@ -19,7 +19,7 @@ function eIdService($window, $rootScope) {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
       if (gender === 'M') {
         gender = 'MALE';
-      } else if (gender === 'F') {
+      } else if (gender === 'F' || gender === 'V') {
         gender = 'FEMALE';
       }
 
