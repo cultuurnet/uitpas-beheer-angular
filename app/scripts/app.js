@@ -296,4 +296,5 @@ angular
   .run(function(nfcService, eIdService) {
     nfcService.init();
     eIdService.init();
-  });
+  })
+  .constant('isJavaFXBrowser', navigator.userAgent.indexOf('JavaFX') > -1);
