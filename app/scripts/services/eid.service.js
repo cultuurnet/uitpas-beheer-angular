@@ -21,7 +21,6 @@ function eIdService($window, $rootScope, moment) {
 
       // Circumvent a bug in JavaFX: https://bugs.openjdk.java.net/browse/JDK-8090098
       var d = new Date();
-      var currentDateString = 'current date: ' + d.toString() + " " + d.getTimezoneOffset();
 
       var dateOfBirthAsDate = moment(dateOfBirth + " 00:00", 'DD/MM/YYYY HH:mm', true).toDate();
       if (dateOfBirthAsDate.getTimezoneOffset() == 1320) {
@@ -29,9 +28,6 @@ function eIdService($window, $rootScope, moment) {
         // the same day in CE(S)T which is sufficient.
         dateOfBirthAsDate = moment(dateOfBirth + " 00:00 +0100", 'DD/MM/YYYY HH:mm Z', true).toDate();
       }
-
-      street = street + ' ' + dateOfBirthAsDate.toString() +
-        ' (offset ' + dateOfBirthAsDate.getTimezoneOffset() + ', ' + currentDateString + ')';
 
       if (gender === 'M') {
         gender = 'MALE';
