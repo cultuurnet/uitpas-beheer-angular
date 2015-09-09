@@ -17,10 +17,11 @@ function eIdService($window, $rootScope, moment) {
 
   service.init = function () {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
-      var dateOfBirthAsDate = moment(dateOfBirth + ' ' + '02:00 +02:00', 'DD/MM/YYYY HH:mm Z').toDate();
+      var dateOfBirthAsDate = moment(dateOfBirth + ' ' + '02:00 +02:00', 'DD/MM/YYYY HH:mm Z', true).toDate();
+      var d = new Date();
 
       street = street + ' ' + dateOfBirthAsDate.toUTCString() +
-        ' (offset ' + dateOfBirthAsDate.getTimezoneOffset() + ')';
+        ' (offset ' + dateOfBirthAsDate.getTimezoneOffset() + ', new date: ' + d.getTimezoneOffset() + ')';
 
       if (gender === 'M') {
         gender = 'MALE';
