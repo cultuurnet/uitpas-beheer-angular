@@ -23,7 +23,9 @@ function RegistrationModalController (
   RegistrationAPIError,
   $rootScope,
   $scope,
-  $q
+  $q,
+  eIdService,
+  isJavaFXBrowser
 ) {
   /*jshint validthis: true */
   var controller = this;
@@ -45,6 +47,10 @@ function RegistrationModalController (
   controller.furthestStep = 0;
 
   controller.passholder = new Passholder();
+
+  controller.eIdData = {};
+  controller.eIdError = false;
+  controller.isJavaFXBrowser = isJavaFXBrowser;
 
   controller.showFieldError = function (form, field) {
     var hasErrors = false;
@@ -198,7 +204,33 @@ function RegistrationModalController (
     $modalInstance.dismiss('registration modal closed');
   };
 
+  controller.getDataFromEId = function() {
+    eIdService.getDataFromEId();
+  };
+
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
   $scope.$on('$destroy', stateChangeStartListener);
+
+  var cleanupEIdDataReceivedListener = $rootScope.$on('eIdDataReceived', function(event, eIdData) {
+    angular.merge(controller.eIdData, eIdData);
+    angular.merge(controller.passholder, eIdData);
+    controller.eIdError = false;
+    $scope.$apply();
+  });
+
+  var cleanupEIdPhotoReceivedListener = $rootScope.$on('eIdPhotoReceived', function(event, base64Picture) {
+    controller.eIdData.picture = base64Picture;
+    controller.passholder.picture = base64Picture;
+    $scope.$apply();
+  });
+
+  var cleanupEIdErrorReceivedListener = $rootScope.$on('eIdErrorReceived', function() {
+    controller.eIdError = 'De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.';
+    $scope.$apply();
+  });
+
+  $scope.$on('$destroy', cleanupEIdDataReceivedListener);
+  $scope.$on('$destroy', cleanupEIdPhotoReceivedListener);
+  $scope.$on('$destroy', cleanupEIdErrorReceivedListener);
 }
