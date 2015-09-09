@@ -45,7 +45,7 @@ function ubrDatepicker() {
         // a valid date was entered.
         var date = null;
         if (changeEvent.date) {
-          date = changeEvent.date.toDate();
+          date = changeEvent.date;
 
           datepicker.date = changeEvent.date.format('DD/MM/YYYY');
         }

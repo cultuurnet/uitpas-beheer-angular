@@ -9,7 +9,7 @@ describe('Directive: datepicker', function () {
 
   beforeEach(inject(function($injector, $rootScope, $compile){
     scope = $rootScope.$new();
-    scope.date = new Date('12/12/2012');
+    scope.date = moment('2012-12-12');
 
     var directiveElement = '<ubr-datepicker ng-model="date" ubr-label="Some date" ubr-id="some-date-id" name="someDate"></ubr-datepicker>';
     // The element has to be a child of a parent that has position relative else the datepicker won't open.
@@ -29,9 +29,10 @@ describe('Directive: datepicker', function () {
   }
 
   it('should initialize with the date that is passed as a model', function () {
-    var moment = datepicker.date();
+    var date = datepicker.date();
+    var expectedDate = moment("12-12-2012", "MM-DD-YYYY");
 
-    expect(moment.toDate()).toEqual(scope.date);
+    expect(date.isSame(expectedDate)).toBeTruthy();
   });
 
   it('should show the datepicker when the input button is clicked', function () {
@@ -58,4 +59,11 @@ describe('Directive: datepicker', function () {
     expect(ngModelController.$touched).toBeTruthy();
   });
 
+  it('should include the timezone when changing dates', function () {
+    datepicker.date(moment('2001-01-01'));
+    var date = scope.date;
+    var expectedDate = moment('2001-01-01');
+
+    expect(date.isSame(expectedDate)).toBeTruthy();
+  });
 });

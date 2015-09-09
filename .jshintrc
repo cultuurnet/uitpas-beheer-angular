@@ -19,6 +19,7 @@
   "smarttabs": true,
   "sub": true,
   "globals": {
-    "angular": false
+    "angular": false,
+    "moment": false
   }
 }

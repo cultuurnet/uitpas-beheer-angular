@@ -236,7 +236,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
     }
 
     if (passholder.birth.date) {
-        parameters['date_of_birth'] = passholder.birth.date.toISOString().slice(0, 10);
+        parameters['date_of_birth'] = passholder.birth.date.format('YYYY-MM-DD');
     }
 
     if (passholder.address.postalCode) {

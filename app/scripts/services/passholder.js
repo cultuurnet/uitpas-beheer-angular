@@ -144,9 +144,9 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
   $rootScope.$on('advantageExchanged', service.updatePoints);
 
-  service.register = function(pass, passholderData, voucherNumber, kansenstatuutInfo){
+  service.register = function(pass, passholder, voucherNumber, kansenstatuutInfo){
     var registration = {
-          passHolder: passholderData
+          passHolder: passholder.serialize()
         },
         deferredPassholder = $q.defer();
 
@@ -161,7 +161,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       }
 
       registration.kansenStatuut = {
-        endDate: kansenstatuutInfo.endDate
+        endDate: kansenstatuutInfo.endDate.format('YYYY-MM-DD')
       };
 
       if (kansenstatuutInfo.includeRemarks) {

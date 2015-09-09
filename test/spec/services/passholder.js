@@ -177,14 +177,14 @@ describe('Service: passholderService', function () {
 
   it('should persist and cache passholders', function (done) {
     var uitpasNumber = '0930000422202';
-    var passholderPostData = identityData.passHolder;
+    var passholderPostData = angular.copy(identityData.passHolder);
     passholderPostData.name.last = 'New last name';
     passholderPostData.address.city = 'Leuven';
 
-    var expectedPassholder = identityData;
-    expectedPassholder.passHolder.name.last = 'New last name';
-    expectedPassholder.passHolder.address.city = 'Leuven';
-    var pass = new Pass(expectedPassholder);
+    var identityResponseData = angular.copy(identityData);
+    identityResponseData.passHolder.name.last = 'New last name';
+    identityResponseData.passHolder.address.city = 'Leuven';
+    var pass = new Pass(identityResponseData);
 
     $httpBackend
       .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData)
@@ -192,11 +192,13 @@ describe('Service: passholderService', function () {
 
     $httpBackend
       .expectGET(apiUrl + 'identities/' + uitpasNumber)
-      .respond(200, expectedPassholder);
+      .respond(200, identityResponseData);
+
+    var expectedPassholderData = pass.passholder;
 
     var assertCachedAndPersisted = function (response) {
       expect(passholderService.findPass).toHaveBeenCalled();
-      expect(response).toEqual(pass.passholder);
+      expect(response).toEqual(expectedPassholderData);
       done();
     };
     spyOn(passholderService, 'findPass').and.callThrough();
@@ -304,7 +306,7 @@ describe('Service: passholderService', function () {
     var pass = new Pass(identityData);
 
     var registration = {
-      passHolder: pass.passholder
+      passHolder: pass.passholder.serialize()
     };
 
     $httpBackend
@@ -319,7 +321,7 @@ describe('Service: passholderService', function () {
     var pass = new Pass(identityData);
 
     var registration = {
-      passHolder: pass.passholder
+      passHolder: pass.passholder.serialize()
     };
 
     var expectedError = {data: {code: 'ERROR'}};
@@ -350,16 +352,16 @@ describe('Service: passholderService', function () {
     var pass = new Pass(identityData);
     var voucher = 'voucher';
     var kansenstatuutInfo = {
-      endDate: 'endDate',
+      endDate: moment('2011-11-11'),
       remarks: 'remarks',
       includeRemarks: true
     };
 
     var registration = {
-      passHolder: pass.passholder,
+      passHolder: pass.passholder.serialize(),
       voucherNumber: voucher,
       kansenStatuut: {
-        endDate: 'endDate',
+        endDate: '2011-11-11',
         remarks: 'remarks'
       }
     };
