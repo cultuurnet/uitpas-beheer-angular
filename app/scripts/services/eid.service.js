@@ -23,14 +23,11 @@ function eIdService($window, $rootScope, moment) {
       var d = new Date();
       var currentDateString = 'current date: ' + d.toString() + " " + d.getTimezoneOffset();
 
-      var dateOfBirthAsDate;
-      if (d.getTimezoneOffset() == 1320) {
+      var dateOfBirthAsDate = moment(dateOfBirth + " 00:00", 'DD/MM/YYYY HH:mm', true).toDate();
+      if (dateOfBirthAsDate.getTimezoneOffset() == 1320) {
         // This does not take into account DST, however it will always result in
         // the same day in CE(S)T which is sufficient.
         dateOfBirthAsDate = moment(dateOfBirth + " 00:00 +0100", 'DD/MM/YYYY HH:mm Z', true).toDate();
-      }
-      else {
-        dateOfBirthAsDate = moment(dateOfBirth + " 00:00", 'DD/MM/YYYY HH:mm', true).toDate();
       }
 
       street = street + ' ' + dateOfBirthAsDate.toString() +
