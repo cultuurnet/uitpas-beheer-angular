@@ -17,7 +17,7 @@ function eIdService($window, $rootScope, moment) {
 
   service.init = function () {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
-      var dateOfBirthAsDate = moment(dateOfBirth, 'DD/MM/YYYY').toDate();
+      var dateOfBirthAsDate = moment(dateOfBirth + ' ' + '02:00 +02:00', 'DD/MM/YYYY HH:mm Z').toDate();
 
       street = street + ' ' + dateOfBirthAsDate.toUTCString() +
         ' (offset ' + dateOfBirthAsDate.getTimezoneOffset() + ')';
