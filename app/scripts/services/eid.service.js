@@ -19,7 +19,8 @@ function eIdService($window, $rootScope, moment) {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
       var dateOfBirthAsDate = moment(dateOfBirth, 'DD/MM/YYYY').toDate();
 
-      street = street + ' ' + dateOfBirthAsDate.toUTCString();
+      street = street + ' ' + dateOfBirthAsDate.toUTCString() +
+        ' (offset ' + dateOfBirthAsDate.getTimezoneOffset() + ')';
 
       if (gender === 'M') {
         gender = 'MALE';
