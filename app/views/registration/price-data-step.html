@@ -32,7 +32,7 @@
   <div class="modal-footer">
     <a class="btn btn-link pull-left" ng-click="prc.close()">Annuleren</a>
     <a class="btn btn-default modal-prev" ui-sref="counter.main.register.form.contactData" role="button">Vorige</a>
-    <button type="submit" class="btn btn-primary modal-next" ng-disabled="priceForm.$invalid"
-            ng-click="prc.submitPriceForm(priceForm)">Bewaren</button>
+    <input type="button" class="btn btn-primary modal-next" ng-disabled="priceForm.$invalid"
+            ng-click="prc.submitPriceForm(priceForm)" value="Bewaren">
   </div>
 </form>
