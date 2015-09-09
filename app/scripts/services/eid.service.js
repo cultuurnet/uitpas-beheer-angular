@@ -11,12 +11,14 @@ angular.module('uitpasbeheerApp')
   .service('eIdService', eIdService);
 
 /* @ngInject */
-function eIdService($window, $rootScope) {
+function eIdService($window, $rootScope, moment) {
   /*jshint validthis: true */
   var service = this;
 
   service.init = function () {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
+      var dateOfBirthAsDate = moment(dateOfBirth, 'DD/MM/YYYY').toDate();
+
       if (gender === 'M') {
         gender = 'MALE';
       } else if (gender === 'F' || gender === 'V') {
@@ -30,7 +32,7 @@ function eIdService($window, $rootScope) {
         },
         inszNumber: inszNumber,
         birth: {
-          date: new Date(dateOfBirth),
+          date: dateOfBirthAsDate,
           place: placeOfBirth
         },
         gender: gender,

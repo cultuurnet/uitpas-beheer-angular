@@ -24,7 +24,7 @@ describe('Service: eIdService', function () {
     },
     inszNumber: '720923-383-17',
     birth: {
-      date: new Date('1972-09-23'),
+      date: moment('1972-09-23').toDate(),
       place: 'Madrid'
     },
     gender: 'MALE',
@@ -35,6 +35,8 @@ describe('Service: eIdService', function () {
       city: 'Madrid'
     }
   };
+
+  var eIdFormattedBirthDate = moment(eIdRawData.birth.date).format('DD/MM/YYYY');
 
   var eIdRawPhoto = 'base64PictureString';
 
@@ -61,7 +63,7 @@ describe('Service: eIdService', function () {
       eIdRawData.name.first,
       eIdRawData.name.last,
       eIdRawData.inszNumber,
-      eIdRawData.birth.date,
+      eIdFormattedBirthDate,
       eIdRawData.birth.place,
       'M',
       eIdRawData.nationality,
@@ -106,7 +108,7 @@ describe('Service: eIdService', function () {
       eIdRawData.name.first,
       eIdRawData.name.last,
       eIdRawData.inszNumber,
-      eIdRawData.birth.date,
+      eIdFormattedBirthDate,
       eIdRawData.birth.place,
       'F',
       eIdRawData.nationality,
@@ -122,7 +124,7 @@ describe('Service: eIdService', function () {
       eIdRawData.name.first,
       eIdRawData.name.last,
       eIdRawData.inszNumber,
-      eIdRawData.birth.date,
+      eIdFormattedBirthDate,
       eIdRawData.birth.place,
       'V',
       eIdRawData.nationality,
