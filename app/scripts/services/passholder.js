@@ -95,8 +95,8 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
         cachedPass.passholder.parseJson(passholderData);
         deferred.resolve(cachedPass.passholder);
       });
-
     };
+
     var errorUpdatingPassholderOnServer = function(e) {
       var message = 'The passholder could not be updated on the server';
       if (!angular.isUndefined(e) && e.code) {
@@ -114,16 +114,14 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       });
     };
 
-    $http
-      .post(
-      apiUrl + 'passholders/' + identification,
-      passholder.serialize(),
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+    var config = {
+      headers: {
+        'Content-Type': 'application/json'
       }
-    )
+    };
+
+    $http
+      .post(apiUrl + 'passholders/' + identification, passholder.serialize(), config)
       .success(successUpdatingPassholderOnServer)
       .error(errorUpdatingPassholderOnServer);
 

@@ -60,10 +60,11 @@
             <label class="control-label" for="date-of-birth">
               Geboortedatum
             </label>
-            <input type="date" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true" ng-model="pec.passholder.birth.date">
+            <input type="text" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true"
+                   ng-model="pec.passholder.birth.date" ubr-date-field placeholder="dd/mm/jjjj">
             <div ng-if="(passholderEdit.$submitted || passholderEdit.dateOfBirth.$touched || passholderEdit.dateOfBirth.$dirty) && passholderEdit.dateOfBirth.$invalid" class="text-danger small">
               <div ng-if="passholderEdit.dateOfBirth.$error.required">De geboortedatum is verplicht.</div>
-              <div ng-if="passholderEdit.dateOfBirth.$error.date">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
+              <div ng-if="passholderEdit.dateOfBirth.$error.parse">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
               <div ng-if="passholderEdit.dateOfBirth.$error.inszNumber">De geboortedatum komt niet overeen met het rijksregisternummer.</div>
             </div>
           </div>

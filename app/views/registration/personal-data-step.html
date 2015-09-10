@@ -53,12 +53,15 @@
         <div class="grid">
           <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required"
                ng-class="{ 'has-error': (personalDataForm.$submitted || personalDataForm.dateOfBirth.$touched || personalDataForm.dateOfBirth.$dirty) && personalDataForm.dateOfBirth.$invalid }">
-            <ubr-datepicker ng-model="prc.passholder.birth.date" ubr-label="Geboortedatum" ubr-id="date-of-birth"
-                            name="dateOfBirth" ng-required="true"></ubr-datepicker>
+            <label class="control-label" for="date-of-birth">
+              Geboortedatum
+            </label>
+            <input type="text" class="form-control" id="date-of-birth" name="dateOfBirth" ng-required="true"
+                   ng-model="prc.passholder.birth.date" ubr-date-field placeholder="dd/mm/jjjj">
             <div ng-if="(personalDataForm.$submitted || personalDataForm.dateOfBirth.$touched || personalDataForm.dateOfBirth.$dirty) && personalDataForm.dateOfBirth.$invalid"
                  class="text-danger small">
               <div ng-if="personalDataForm.dateOfBirth.$error.required">De geboortedatum is verplicht.</div>
-              <div ng-if="personalDataForm.dateOfBirth.$error.date">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
+              <div ng-if="personalDataForm.dateOfBirth.$error.parse">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
               <div ng-if="personalDataForm.dateOfBirth.$error.inszNumber">De geboortedatum komt niet overeen met het rijksregisternummer.</div>
             </div>
           </div>

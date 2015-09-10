@@ -354,7 +354,7 @@ describe('Service: passholderService', function () {
     var pass = new Pass(identityData);
     var voucher = 'voucher';
     var kansenstatuutInfo = {
-      endDate: moment('2011-11-11'),
+      endDate: new Date('2011-11-11'),
       remarks: 'remarks',
       includeRemarks: true
     };

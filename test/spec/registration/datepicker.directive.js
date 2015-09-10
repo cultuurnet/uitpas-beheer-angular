@@ -58,11 +58,4 @@ describe('Directive: datepicker', function () {
     expect(ngModelController.$touched).toBeTruthy();
   });
 
-  it('should include the timezone when changing dates', function () {
-    datepicker.date(moment('2001-01-01'));
-    var date = scope.date;
-    var expectedDate = moment('2001-01-01');
-
-    expect(date.isSame(expectedDate)).toBeTruthy();
-  });
 });
