@@ -4,11 +4,12 @@ describe('Directive: datepicker', function () {
 
   beforeEach(module('ubr.registration'));
 
-  var dateInput, scope, form;
+  var dateInput, scope, form, day;
 
-  beforeEach(inject(function($injector, $rootScope, $compile) {
+  beforeEach(inject(function($injector, $rootScope, $compile, _day_) {
     scope = $rootScope.$new();
     scope.date = new Date('2012-12-12');
+    day = _day_;
 
     var inputTemplate = '<input type="text" ng-model="date" ubr-date-field name="date" />';
     var formTemplate = '<form name="greenForm">' + inputTemplate + '</form>';
@@ -25,7 +26,7 @@ describe('Directive: datepicker', function () {
   });
 
   it('should parse a correctly formatted date string to a date object', function () {
-    var expectedDate = moment('1955-05-05').toDate();
+    var expectedDate = day('1955-05-05').toDate();
     form.date.$setViewValue('05/05/1955');
 
     expect(form.date.$invalid).toBeFalsy();

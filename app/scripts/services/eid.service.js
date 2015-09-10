@@ -18,7 +18,7 @@ function eIdService($window, $rootScope, day) {
   service.init = function () {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
 
-      var dateOfBirthAsDate = day(dateOfBirth, 'DD/MM/YYYY').toDate();
+      var dateOfBirthAsDate = day(dateOfBirth, 'D/M/YYYY').toDate();
 
       if (gender === 'M') {
         gender = 'MALE';

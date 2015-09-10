@@ -15,28 +15,11 @@ describe('Service: eIdService', function () {
   }));
 
   // Instantiate service.
-  var service, $q, $scope, $window, $interval;
+  var service, $q, $scope, $window, $interval, day;
 
-  var eIdRawData = {
-    name: {
-      first: 'Alberto',
-      last: 'Contador'
-    },
-    inszNumber: '720923-383-17',
-    birth: {
-      date: moment('1972-09-23').toDate(  ),
-      place: 'Madrid'
-    },
-    gender: 'MALE',
-    nationality: 'Spaans',
-    address: {
-      street: 'Calle Alava',
-      postalCode: '28017',
-      city: 'Madrid'
-    }
-  };
+  var eIdRawData;
 
-  var eIdFormattedBirthDate = moment(eIdRawData.birth.date).format('DD/MM/YYYY');
+  var eIdFormattedBirthDate;
 
   var eIdRawPhoto = 'base64PictureString';
 
@@ -44,9 +27,29 @@ describe('Service: eIdService', function () {
   beforeEach(inject(function ($injector, $rootScope) {
     service = $injector.get('eIdService');
     $q = $injector.get('$q');
+    day = $injector.get('day');
     $scope = $rootScope;
     $window = $injector.get('$window');
     $interval = $injector.get('$interval');
+
+    eIdRawData = {
+      name: {
+        first: 'Alberto',
+        last: 'Contador'
+      },
+      inszNumber: '720923-383-17',
+      birth: {
+        date: '23/09/1972',
+        place: 'Madrid'
+      },
+      gender: 'MALE',
+      nationality: 'Spaans',
+      address: {
+        street: 'Calle Alava',
+        postalCode: '28017',
+        city: 'Madrid'
+      }
+    };
   }));
 
   it('should add some functions to $window on init', function () {
@@ -63,7 +66,7 @@ describe('Service: eIdService', function () {
       eIdRawData.name.first,
       eIdRawData.name.last,
       eIdRawData.inszNumber,
-      eIdFormattedBirthDate,
+      eIdRawData.birth.date,
       eIdRawData.birth.place,
       'M',
       eIdRawData.nationality,
@@ -71,7 +74,11 @@ describe('Service: eIdService', function () {
       eIdRawData.address.postalCode,
       eIdRawData.address.city
     );
-    expect($scope.$emit).toHaveBeenCalledWith('eIdDataReceived', eIdRawData);
+
+    var expectedData = angular.copy(eIdRawData);
+    expectedData.birth.date = day(expectedData.birth.date, 'D/M/YYYY').toDate();
+
+    expect($scope.$emit).toHaveBeenCalledWith('eIdDataReceived', expectedData);
   });
 
   it('should emit when the readIdPhoto function is called', function () {
@@ -99,16 +106,18 @@ describe('Service: eIdService', function () {
     spyOn($scope, '$emit');
 
     eIdRawData.gender = 'FEMALE';
+    var expectedData = angular.copy(eIdRawData);
+    expectedData.birth.date = day(expectedData.birth.date, 'D/M/YYYY').toDate();
     var expectedEmitArgs = [
       'eIdDataReceived',
-      eIdRawData
+      expectedData
     ];
 
     $window.readEid(
       eIdRawData.name.first,
       eIdRawData.name.last,
       eIdRawData.inszNumber,
-      eIdFormattedBirthDate,
+      eIdRawData.birth.date,
       eIdRawData.birth.place,
       'F',
       eIdRawData.nationality,
@@ -124,7 +133,7 @@ describe('Service: eIdService', function () {
       eIdRawData.name.first,
       eIdRawData.name.last,
       eIdRawData.inszNumber,
-      eIdFormattedBirthDate,
+      eIdRawData.birth.date,
       eIdRawData.birth.place,
       'V',
       eIdRawData.nationality,

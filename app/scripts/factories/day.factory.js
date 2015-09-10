@@ -17,13 +17,27 @@ function dayFactory() {
    * @constructor
    */
   var Day = function (dayString, dayFormat) {
-    var day = moment(dayString + ' 00:00', dayFormat + ' HH:mm', true);
+    var customRegex = null;
 
-    // Circumvent a bug in JavaFX: https://bugs.openjdk.java.net/browse/JDK-8090098
-    if (day.toDate().getTimezoneOffset() === 1320) {
-      // This does not take into account DST, however it will always result in
-      // the same day in CE(S)T which is sufficient.
-      day = moment(dayString + ' 00:00 +0100', dayFormat + ' HH:mm Z', true);
+    if (dayFormat === 'D/M/YYYY') {
+      customRegex = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-](\d{4})$/;
+    }
+
+    var defaultRegex = /^(\d{4})[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/;
+
+    var dayRegex = customRegex || defaultRegex;
+
+    var dayParts = dayString.match(dayRegex);
+
+    var day = moment('break stuff');
+    if (dayParts) {
+      var date = null;
+      if (customRegex) {
+        date = new Date(dayParts[3] + '-' +  dayParts[2] + '-' + dayParts[1]);
+      } else {
+        date = new Date(dayParts[1] + '-' +  dayParts[2] + '-' + dayParts[3]);
+      }
+      day = moment(date);
     }
 
     return day;
