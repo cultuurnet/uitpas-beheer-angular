@@ -31,12 +31,19 @@ function dayFactory() {
 
     var day = moment('break stuff');
     if (dayParts) {
-      var date = null;
+      var date, year, month, dayOfMonth;
+
       if (customRegex) {
-        date = new Date(dayParts[3] + '-' +  dayParts[2] + '-' + dayParts[1]);
+        year = dayParts[3];
+        month = dayParts[2].length === 1 ? '0' + dayParts[2] : dayParts[2];
+        dayOfMonth = dayParts[1].length === 1 ? '0' + dayParts[1] : dayParts[1];
       } else {
-        date = new Date(dayParts[1] + '-' +  dayParts[2] + '-' + dayParts[3]);
+        year = dayParts[1];
+        month = dayParts[2];
+        dayOfMonth = dayParts[3];
       }
+
+      date = new Date(year + '-' +  month + '-' + dayOfMonth);
       day = moment(date);
     }
 
