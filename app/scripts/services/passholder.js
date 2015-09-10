@@ -117,7 +117,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     $http
       .post(
       apiUrl + 'passholders/' + identification,
-      passholder,
+      passholder.serialize(),
       {
         headers: {
           'Content-Type': 'application/json'
