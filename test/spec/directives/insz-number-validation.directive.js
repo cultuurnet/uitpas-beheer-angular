@@ -7,43 +7,24 @@ describe('Directive: inszNumberValidation', function () {
   beforeEach(module('uitpasbeheerAppViews'));
 
   var formElement,
-    scope,
-    form;
+      scope,
+      form;
 
   beforeEach(inject(function ($rootScope, $templateCache, $compile) {
     scope = $rootScope.$new();
 
-    var templateHtml = $templateCache.get('views/modal-passholder-edit.html');
-    formElement = angular.element('<div>' + templateHtml + '</div>');
-    $compile(formElement)(scope);
-    scope.pec = {
-      passholder: {
-        'name': {
-          'first': 'Cassandra Ama',
-          'last': 'Boadu'
-        },
-        'address': {
-          'street': 'Steenweg op Aalst 94',
-          'postalCode': '9308',
-          'city': 'Aalst'
-        },
-        'birth': {
-          'date': new Date('1993-05-18'),
-          'place': 'Sint-Agatha-Berchem'
-        },
-        'gender': 'MALE',
-        'nationality': 'Belg',
-        'privacy': {
-          'email': false,
-          'sms': false
-        },
-        'inszNumber': '930518-223-61',
-        'points': 123
-      }
-    };
-    scope.$digest();
+    var inszNumberInputTemplate = '<input type="text" name="inszNumber" ng-model="inszNumber">',
+        dateInputTemplate = '<input type="text" name="dateOfBirth" ng-model="dateOfBirth">',
+        genderInputTemplate = '<input type="radio" name="gender" value="MALE" ng-model="gender"><input type="radio" name="gender" value="FEMALE" ng-model="gender">';
+    formElement = angular.element('<form name="form" ubr-insz-number-validation>' + inszNumberInputTemplate + dateInputTemplate + genderInputTemplate + '</form>');
 
-    form = scope.passholderEdit;
+    scope.inszNumber = '93051822361';
+    scope.dateOfBirth = new Date('1993-05-18');
+    scope.gender = 'MALE';
+    $compile(formElement)(scope);
+    form = scope.form;
+
+    scope.$apply();
   }));
 
   it('should start out in a valid state', function () {
@@ -52,8 +33,7 @@ describe('Directive: inszNumberValidation', function () {
 
   it('should set and remove errors on inszNumber, gender and dateOfBirth fields', function () {
     // Change the inszNumber so there have to be a lot of errors.
-    scope.pec.passholder.inszNumber = '930517-224-61';
-    scope.$digest();
+    form.inszNumber.$setViewValue('930517-224-61');
     // InszNumber field errors.
     expect(form.inszNumber.$error.gender).toBeTruthy();
     expect(form.inszNumber.$error.dateOfBirth).toBeTruthy();
@@ -65,44 +45,44 @@ describe('Directive: inszNumberValidation', function () {
     expect(form.dateOfBirth.$error.inszNumber).toBeTruthy();
 
     // Change the birth date so these errors should be gone.
-    scope.pec.passholder.birth.date = new Date('1993-05-17');
+    scope.dateOfBirth = new Date('1993-05-17');
     scope.$digest();
     expect(form.dateOfBirth.$error.inszNumber).toBeUndefined();
     expect(form.inszNumber.$error.dateOfBirth).toBeUndefined();
 
     // Change the gender value so these errors should be gone.
-    scope.pec.passholder.gender = 'FEMALE';
+    scope.gender = 'FEMALE';
     scope.$digest();
     expect(form.gender.$error.inszNumber).toBeUndefined();
     expect(form.inszNumber.$error.gender).toBeUndefined();
 
     // Change the inszNumber check digit so that error should be gone.
-    scope.pec.passholder.inszNumber = '930517-224-90';
+    scope.inszNumber = '930517-224-90';
     scope.$digest();
     expect(form.inszNumber.$error.checkDigit).toBeUndefined();
     // The form should be error free now.
     expect(form.$valid).toBeTruthy();
 
     // Change the inszNumber gender again to test the not female case.
-    scope.pec.passholder.inszNumber = '930517-223-91';
+    scope.inszNumber = '930517-223-91';
     scope.$digest();
     expect(form.gender.$error.inszNumber).toBeTruthy();
     expect(form.inszNumber.$error.gender).toBeTruthy();
 
     // Trigger the errors from the gender and date fields.
-    scope.pec.passholder.inszNumber = '930517-224-61';
+    scope.inszNumber = '930517-224-61';
     scope.$digest();
-    scope.pec.passholder.gender = 'MALE';
-    scope.pec.passholder.birth.date = new Date('1993-05-18');
+    scope.gender = 'MALE';
+    scope.dateOfBirth = new Date('1993-05-18');
     scope.$digest();
     expect(form.gender.$error.inszNumber).toBeTruthy();
     expect(form.dateOfBirth.$error.inszNumber).toBeTruthy();
   });
 
   it('should correctly validate inszNumbers with a checkDigit below 10', function () {
-    scope.pec.passholder.inszNumber = '90080757002';
-    scope.pec.passholder.birth.date = new Date('1990-08-07');
-    scope.pec.passholder.gender = 'FEMALE';
+    scope.inszNumber = '90080757002';
+    scope.dateOfBirth = new Date('1990-08-07');
+    scope.gender = 'FEMALE';
     scope.$digest();
 
     expect(form.inszNumber.$error.checkDigit).toBeUndefined();
@@ -110,9 +90,9 @@ describe('Directive: inszNumberValidation', function () {
   });
 
   it('should correctly validate inszNumbers for people born in or after 2000', function () {
-    scope.pec.passholder.inszNumber = '02020231402';
-    scope.pec.passholder.birth.date = new Date('2002-02-02');
-    scope.pec.passholder.gender = 'FEMALE';
+    scope.inszNumber = '02020231402';
+    scope.dateOfBirth = new Date('2002-02-02');
+    scope.gender = 'FEMALE';
     scope.$digest();
 
     expect(form.inszNumber.$error.checkDigit).toBeUndefined();
