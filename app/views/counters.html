@@ -19,7 +19,7 @@
         <div ng-if="::counters.list.length">
           <h3 class="panel__title" ng-if="::counters.lastActive">Andere balies</h3>
           <ul class="list-unstyled">
-            <li ng-repeat="counter in ::counters.list">
+            <li ng-repeat="counter in ::counters.list | orderBy:'name'">
               <a href="#" ng-click="counters.setActiveCounter(counter)" ng-bind="::counter.name"></a>
             </li>
           </ul>
