@@ -18,15 +18,13 @@ function eIdService($window, $rootScope, moment) {
   service.init = function () {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
 
+      var dateOfBirthAsDate = moment(dateOfBirth + ' 00:00', 'DD/MM/YYYY HH:mm', true).toDate();
 
       // Circumvent a bug in JavaFX: https://bugs.openjdk.java.net/browse/JDK-8090098
-      var d = new Date();
-
-      var dateOfBirthAsDate = moment(dateOfBirth + " 00:00", 'DD/MM/YYYY HH:mm', true).toDate();
-      if (dateOfBirthAsDate.getTimezoneOffset() == 1320) {
+      if (dateOfBirthAsDate.getTimezoneOffset() === 1320) {
         // This does not take into account DST, however it will always result in
         // the same day in CE(S)T which is sufficient.
-        dateOfBirthAsDate = moment(dateOfBirth + " 00:00 +0100", 'DD/MM/YYYY HH:mm Z', true).toDate();
+        dateOfBirthAsDate = moment(dateOfBirth + ' 00:00 +0100', 'DD/MM/YYYY HH:mm Z', true).toDate();
       }
 
       if (gender === 'M') {
