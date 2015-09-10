@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .factory('Passholder', passholderFactory);
 
 /* @ngInject */
-function passholderFactory() {
+function passholderFactory(moment) {
   /**
    * @class Passholder
    * @constructor
@@ -56,7 +56,7 @@ function passholderFactory() {
       this.name = jsonPassholder.name;
       this.address = jsonPassholder.address;
       this.birth = {
-        date: (jsonPassholder.birth.date ? moment(jsonPassholder.birth.date) : null),
+        date: (jsonPassholder.birth.date ? new Date(jsonPassholder.birth.date) : null),
         place: jsonPassholder.birth.place
       };
       if (jsonPassholder.inszNumber) {
@@ -80,7 +80,7 @@ function passholderFactory() {
     serialize: function () {
       var serializedPassholder = angular.copy(this);
 
-      serializedPassholder.birth.date = (this.birth.date ? this.birth.date.format('YYYY-MM-DD') : null);
+      serializedPassholder.birth.date = (this.birth.date ? moment(this.birth.date).format('YYYY-MM-DD') : null);
 
       return serializedPassholder;
     }

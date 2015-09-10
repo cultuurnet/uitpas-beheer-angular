@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .service('counterService', counterService);
 
 /* @ngInject */
-function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
+function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment) {
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
@@ -236,7 +236,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
     }
 
     if (passholder.birth.date) {
-        parameters['date_of_birth'] = passholder.birth.date.format('YYYY-MM-DD');
+        parameters['date_of_birth'] = moment(passholder.birth.date).format('YYYY-MM-DD');
     }
 
     if (passholder.address.postalCode) {
