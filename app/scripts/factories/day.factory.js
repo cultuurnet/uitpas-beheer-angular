@@ -5,7 +5,10 @@
  * @name uitpasbeheerApp.day
  * @description
  * # day factory
- * Factory in the passbeheerApp.
+ * Creates moment objects from date strings.
+ * Circumvents a bug in JavaFX: https://bugs.openjdk.java.net/browse/JDK-8090098.
+ * The best workaround so far is to regex match the year, month and date and pass.
+ * Then pass them along as an ISO date string to the native Date class.
  */
 angular.module('uitpasbeheerApp')
   .factory('day', dayFactory);
@@ -13,7 +16,14 @@ angular.module('uitpasbeheerApp')
 /* @ngInject */
 function dayFactory() {
   /**
-   * @class UbrDay
+   * @param {string} dayString
+   * The date string to parse.
+   *
+   * @param {string} [dayFormat]
+   *  This optional parameter enables you to match alternative formats.
+   *  When not specified the ISO date format is assumed.
+   *
+   * @return {moment}
    * @constructor
    */
   var Day = function (dayString, dayFormat) {
