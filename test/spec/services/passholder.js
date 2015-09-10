@@ -243,7 +243,8 @@ describe('Service: passholderService', function () {
 
   it('throws an error without additional info when the passholder can\'t be updated on the server', function (done) {
     var uitpasNumber = '0930000422202';
-    var passholderPostData = identityData.passHolder;
+    var pass = new Pass(identityData);
+    var passholderPostData = pass.passholder;
 
     var expectedAPIError = {};
 
@@ -255,7 +256,7 @@ describe('Service: passholderService', function () {
     };
 
     $httpBackend
-      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData)
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
       .respond(403, JSON.stringify(expectedAPIError));
 
     var assertRejectedWithError = function (response) {
