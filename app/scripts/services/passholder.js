@@ -117,7 +117,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     $http
       .post(
       apiUrl + 'passholders/' + identification,
-      passholder,
+      passholder.serialize(),
       {
         headers: {
           'Content-Type': 'application/json'
@@ -161,7 +161,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       }
 
       registration.kansenStatuut = {
-        endDate: kansenstatuutInfo.endDate.format('YYYY-MM-DD')
+        endDate: moment(kansenstatuutInfo.endDate).format('YYYY-MM-DD')
       };
 
       if (kansenstatuutInfo.includeRemarks) {

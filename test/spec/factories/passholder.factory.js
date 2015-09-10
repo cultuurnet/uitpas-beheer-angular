@@ -43,7 +43,7 @@ describe('Factory: Passholder', function () {
         city: 'Aalst'
       },
       birth: {
-        date: moment('2007-11-15'),
+        date: new Date('2007-11-15'),
         place: 'Aalst'
       },
       gender: 'MALE',
