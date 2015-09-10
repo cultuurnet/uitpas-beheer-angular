@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .factory('Passholder', passholderFactory);
 
 /* @ngInject */
-function passholderFactory(moment) {
+function passholderFactory(moment, day) {
   /**
    * @class Passholder
    * @constructor
@@ -56,7 +56,7 @@ function passholderFactory(moment) {
       this.name = jsonPassholder.name;
       this.address = jsonPassholder.address;
       this.birth = {
-        date: (jsonPassholder.birth.date ? new Date(jsonPassholder.birth.date) : null),
+        date: (jsonPassholder.birth.date ? day(jsonPassholder.birth.date, 'YYYY-MM-DD').toDate() : null),
         place: jsonPassholder.birth.place
       };
       if (jsonPassholder.inszNumber) {

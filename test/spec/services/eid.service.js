@@ -24,7 +24,7 @@ describe('Service: eIdService', function () {
     },
     inszNumber: '720923-383-17',
     birth: {
-      date: moment('1972-09-23').toDate(),
+      date: moment('1972-09-23').toDate(  ),
       place: 'Madrid'
     },
     gender: 'MALE',

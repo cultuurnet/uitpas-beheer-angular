@@ -4,7 +4,7 @@ describe('Factory: Passholder', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  it('should correctly parse a passholder with a missing picture', inject(function (Passholder) {
+  it('should correctly parse a passholder with a missing picture', inject(function (Passholder, day) {
     var jsonPassholder = {
       'name': {
         'first': 'Victor',
@@ -43,7 +43,7 @@ describe('Factory: Passholder', function () {
         city: 'Aalst'
       },
       birth: {
-        date: new Date('2007-11-15'),
+        date: day('2007-11-15', 'YYYY-MM-DD').toDate(),
         place: 'Aalst'
       },
       gender: 'MALE',

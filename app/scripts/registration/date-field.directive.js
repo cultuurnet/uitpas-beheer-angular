@@ -11,17 +11,17 @@ angular
   .directive('ubrDateField', ubrDateField);
 
 /* @ngInject */
-function ubrDateField() {
+function ubrDateField(day) {
   return {
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
 
-      function dateParser(date) {
-        if (date) {
-          var day = moment(date, 'DD/MM/YYYY');
+      function dateParser(dayString) {
+        if (dayString) {
+          var moment = day(dayString, 'D/M/YYYY');
 
-          if (day.isValid()) {
-            return day.toDate();
+          if (moment.isValid()) {
+            return moment.toDate();
           } else {
             return undefined;
           }
