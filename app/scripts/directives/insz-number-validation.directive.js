@@ -91,7 +91,7 @@ function inszNumberValidation() {
     scope.$watch(function () {return form.inszNumber.$viewValue;}, function() {
       var inszNumber = form.inszNumber.$viewValue;
       var gender = form.gender.$viewValue;
-      var birthDate = new Date(form.dateOfBirth.$viewValue);
+      var birthDate = form.dateOfBirth.$modelValue;
       var regexResult = regex.exec(inszNumber);
       var errorMessages = {};
 
@@ -171,7 +171,7 @@ function inszNumberValidation() {
       var errorMessages = {};
 
       if (form.dateOfBirth.$viewValue) {
-        var birthDate = new Date(form.dateOfBirth.$viewValue);
+        var birthDate = form.dateOfBirth.$modelValue;
         var regexResult = regex.exec(inszNumber);
 
         validateInszNumberBirthDate(regexResult, birthDate, errorMessages);
