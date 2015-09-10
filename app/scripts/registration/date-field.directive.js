@@ -36,6 +36,6 @@ function ubrDateField() {
 
       ngModel.$parsers.push(dateParser);
       ngModel.$formatters.push(dateFormatter);
-    }
+      }
   };
 }
