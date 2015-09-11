@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: eIdService', function () {
+describe('Service: eIDService', function () {
 
   var apiUrl = 'http://example.com/';
 
@@ -25,7 +25,7 @@ describe('Service: eIdService', function () {
 
 
   beforeEach(inject(function ($injector, $rootScope) {
-    service = $injector.get('eIdService');
+    service = $injector.get('eIDService');
     $q = $injector.get('$q');
     day = $injector.get('day');
     $scope = $rootScope;
@@ -96,8 +96,8 @@ describe('Service: eIdService', function () {
     expect($scope.$emit).toHaveBeenCalledWith('eIdErrorReceived', message);
   });
 
-  it('should request to read the eId', function () {
-    service.getDataFromEId();
+  it('should request to read the eID', function () {
+    service.getDataFromEID();
     expect($window.alert).toHaveBeenCalled();
   });
 

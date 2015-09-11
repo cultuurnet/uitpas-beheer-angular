@@ -4,14 +4,14 @@
  * @ngdoc service
  * @name uitpasbeheerApp.eIdService
  * @description
- * # eIdService
+ * # eIDService
  * Service in the uitpasbeheerApp.
  */
 angular.module('uitpasbeheerApp')
-  .service('eIdService', eIdService);
+  .service('eIDService', eIDService);
 
 /* @ngInject */
-function eIdService($window, $rootScope, day) {
+function eIDService($window, $rootScope, day) {
   /*jshint validthis: true */
   var service = this;
 
@@ -56,7 +56,7 @@ function eIdService($window, $rootScope, day) {
     };
   };
 
-  service.getDataFromEId = function() {
+  service.getDataFromEID = function() {
     $window.alert('READEID');
   };
 }

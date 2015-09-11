@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .controller('PassholderEditController', PassholderEditController);
 
 /* @ngInject */
-function PassholderEditController (passholder, identification, $modalInstance, passholderService, eIdService, isJavaFXBrowser, $rootScope, $scope) {
+function PassholderEditController (passholder, identification, $modalInstance, passholderService, eIDService, isJavaFXBrowser, $rootScope, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -60,8 +60,8 @@ function PassholderEditController (passholder, identification, $modalInstance, p
     }
   };
 
-  controller.getDataFromEId = function() {
-    eIdService.getDataFromEId();
+  controller.getDataFromEID = function() {
+    eIDService.getDataFromEID();
   };
 
   controller.cancelModal = function() {

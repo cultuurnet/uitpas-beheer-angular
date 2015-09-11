@@ -5,8 +5,8 @@ describe('Controller: PassholderEditController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var controller, modalInstance, passholderService, $q, $scope, eIdService, $rootScope, isJavaFXBrowser;
-  var eIdRawData = {
+  var controller, modalInstance, passholderService, $q, $scope, eIDService, $rootScope, isJavaFXBrowser;
+  var eIDRawData = {
     name: {
       first: 'Alberto',
       last: 'Contador'
@@ -24,7 +24,7 @@ describe('Controller: PassholderEditController', function () {
       city: 'Madrid'
     }
   };
-  var eIdRawPhoto = 'base64PictureString';
+  var eIDRawPhoto = 'base64PictureString';
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $injector, _$rootScope_) {
@@ -38,7 +38,7 @@ describe('Controller: PassholderEditController', function () {
 
     isJavaFXBrowser = false;
     passholderService = $injector.get('passholderService');
-    eIdService = $injector.get('eIdService');
+    eIDService = $injector.get('eIDService');
     $q = $injector.get('$q');
     $scope = _$rootScope_.$new();
     $rootScope = _$rootScope_;
@@ -48,7 +48,7 @@ describe('Controller: PassholderEditController', function () {
       identification: 123,
       $modalInstance: modalInstance,
       passholderService: passholderService,
-      eIdService: eIdService,
+      eIDService: eIDService,
       isJavaFXBrowser: isJavaFXBrowser,
       $rootScope: $rootScope,
       $scope: $scope
@@ -185,27 +185,27 @@ describe('Controller: PassholderEditController', function () {
     expect(controller.formAlert).toEqual(actionNotAllowedAlert);
   });
 
-  it('should call the eIdService to get the eId data', function () {
-    spyOn(eIdService, 'getDataFromEId');
-    controller.getDataFromEId();
-    expect(eIdService.getDataFromEId).toHaveBeenCalled();
+  it('should call the eIDService to get the eId data', function () {
+    spyOn(eIDService, 'getDataFromEID');
+    controller.getDataFromEID();
+    expect(eIDService.getDataFromEID).toHaveBeenCalled();
   });
 
   it('should react to receiving the eId data', function () {
-    $rootScope.$emit('eIdDataReceived', eIdRawData);
-    expect(controller.eIdData).toEqual(eIdRawData);
-    expect(controller.passholder).not.toEqual(eIdRawData);
+    $rootScope.$emit('eIdDataReceived', eIDRawData);
+    expect(controller.eIdData).toEqual(eIDRawData);
+    expect(controller.passholder).not.toEqual(eIDRawData);
 
-    eIdRawData.inszNumber = '07111571331';
-    $rootScope.$emit('eIdDataReceived', eIdRawData);
-    expect(controller.eIdData).toEqual(eIdRawData);
-    expect(controller.passholder).toEqual(eIdRawData);
+    eIDRawData.inszNumber = '07111571331';
+    $rootScope.$emit('eIdDataReceived', eIDRawData);
+    expect(controller.eIdData).toEqual(eIDRawData);
+    expect(controller.passholder).toEqual(eIDRawData);
   });
 
   it('should react to receiving the eId photo', function () {
-    $rootScope.$emit('eIdPhotoReceived', eIdRawPhoto);
-    expect(controller.eIdData.picture).toEqual(eIdRawPhoto);
-    expect(controller.passholder.picture).toEqual(eIdRawPhoto);
+    $rootScope.$emit('eIdPhotoReceived', eIDRawPhoto);
+    expect(controller.eIdData.picture).toEqual(eIDRawPhoto);
+    expect(controller.passholder.picture).toEqual(eIDRawPhoto);
   });
 
   it('should react to an eId read error', function () {

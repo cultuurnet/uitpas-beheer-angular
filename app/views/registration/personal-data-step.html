@@ -8,7 +8,7 @@
             <div class="alert alert-info" ng-show="prc.isJavaFXBrowser">
               Plaats de e-id van de pashouder in de lezer en deze gegevens worden snel voor jou ingevuld. <a ng-click="prc.getDataFromEId()">Gegevens inlezen</a>
             </div>
-            <div class="alert alert-danger" ng-show="prc.isJavaFXBrowser && prc.eIdError" ng-bind="prc.eIdError"></div>
+            <div class="alert alert-danger" ng-show="prc.isJavaFXBrowser && prc.eIDError" ng-bind="prc.eIDError"></div>
             <div class="alert alert-danger" type="{{prc.formAlert.type}}" ng-show="prc.formAlert" ng-bind="prc.formAlert.message"></div>
           </div>
           <div class="grid__12 grid--bp-lrg__3 field-group"
