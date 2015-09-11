@@ -26,6 +26,10 @@ angular
       message: 'Het opgegeven e-mail adres is reeds in gebruik.',
       step: 'contactData'
     },
+    EMAIL_ADDRESS_INVALID: {
+      message: 'Het opgegeven e-mail adres is niet geldig.',
+      step: 'contactData'
+    },
     UNKNOWN_VOUCHER: {
       message: 'De opgegeven voucher bestaat niet.',
       step: 'price'
