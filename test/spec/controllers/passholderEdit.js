@@ -185,31 +185,31 @@ describe('Controller: PassholderEditController', function () {
     expect(controller.formAlert).toEqual(actionNotAllowedAlert);
   });
 
-  it('should call the eIDService to get the eId data', function () {
+  it('should call the eIDService to get the eID data', function () {
     spyOn(eIDService, 'getDataFromEID');
     controller.getDataFromEID();
     expect(eIDService.getDataFromEID).toHaveBeenCalled();
   });
 
-  it('should react to receiving the eId data', function () {
-    $rootScope.$emit('eIdDataReceived', eIDRawData);
-    expect(controller.eIdData).toEqual(eIDRawData);
+  it('should react to receiving the eID data', function () {
+    $rootScope.$emit('eIDDataReceived', eIDRawData);
+    expect(controller.eIDData).toEqual(eIDRawData);
     expect(controller.passholder).not.toEqual(eIDRawData);
 
     eIDRawData.inszNumber = '07111571331';
-    $rootScope.$emit('eIdDataReceived', eIDRawData);
-    expect(controller.eIdData).toEqual(eIDRawData);
+    $rootScope.$emit('eIDDataReceived', eIDRawData);
+    expect(controller.eIDData).toEqual(eIDRawData);
     expect(controller.passholder).toEqual(eIDRawData);
   });
 
-  it('should react to receiving the eId photo', function () {
-    $rootScope.$emit('eIdPhotoReceived', eIDRawPhoto);
-    expect(controller.eIdData.picture).toEqual(eIDRawPhoto);
+  it('should react to receiving the eID photo', function () {
+    $rootScope.$emit('eIDPhotoReceived', eIDRawPhoto);
+    expect(controller.eIDData.picture).toEqual(eIDRawPhoto);
     expect(controller.passholder.picture).toEqual(eIDRawPhoto);
   });
 
-  it('should react to an eId read error', function () {
-    $rootScope.$emit('eIdErrorReceived', '');
-    expect(controller.eIdError).toEqual('De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.');
+  it('should react to an eID read error', function () {
+    $rootScope.$emit('eIDErrorReceived', '');
+    expect(controller.eIDError).toEqual('De eID kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.');
   });
 });

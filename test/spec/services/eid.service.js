@@ -17,11 +17,9 @@ describe('Service: eIDService', function () {
   // Instantiate service.
   var service, $q, $scope, $window, $interval, day;
 
-  var eIdRawData;
+  var eIDRawData;
 
-  var eIdFormattedBirthDate;
-
-  var eIdRawPhoto = 'base64PictureString';
+  var eIDRawPhoto = 'base64PictureString';
 
 
   beforeEach(inject(function ($injector, $rootScope) {
@@ -32,7 +30,7 @@ describe('Service: eIDService', function () {
     $window = $injector.get('$window');
     $interval = $injector.get('$interval');
 
-    eIdRawData = {
+    eIDRawData = {
       name: {
         first: 'Alberto',
         last: 'Contador'
@@ -63,29 +61,29 @@ describe('Service: eIDService', function () {
     service.init();
     spyOn($scope, '$emit');
     $window.readEid(
-      eIdRawData.name.first,
-      eIdRawData.name.last,
-      eIdRawData.inszNumber,
-      eIdRawData.birth.date,
-      eIdRawData.birth.place,
+      eIDRawData.name.first,
+      eIDRawData.name.last,
+      eIDRawData.inszNumber,
+      eIDRawData.birth.date,
+      eIDRawData.birth.place,
       'M',
-      eIdRawData.nationality,
-      eIdRawData.address.street,
-      eIdRawData.address.postalCode,
-      eIdRawData.address.city
+      eIDRawData.nationality,
+      eIDRawData.address.street,
+      eIDRawData.address.postalCode,
+      eIDRawData.address.city
     );
 
-    var expectedData = angular.copy(eIdRawData);
+    var expectedData = angular.copy(eIDRawData);
     expectedData.birth.date = day(expectedData.birth.date, 'D/M/YYYY').toDate();
 
-    expect($scope.$emit).toHaveBeenCalledWith('eIdDataReceived', expectedData);
+    expect($scope.$emit).toHaveBeenCalledWith('eIDDataReceived', expectedData);
   });
 
   it('should emit when the readIdPhoto function is called', function () {
     service.init();
     spyOn($scope, '$emit');
-    $window.readEidPhoto(eIdRawPhoto);
-    expect($scope.$emit).toHaveBeenCalledWith('eIdPhotoReceived', eIdRawPhoto);
+    $window.readEidPhoto(eIDRawPhoto);
+    expect($scope.$emit).toHaveBeenCalledWith('eIDPhotoReceived', eIDRawPhoto);
   });
 
   it('should emit when the readIdError function is called', function () {
@@ -93,7 +91,7 @@ describe('Service: eIDService', function () {
     service.init();
     spyOn($scope, '$emit');
     $window.readEidError(message);
-    expect($scope.$emit).toHaveBeenCalledWith('eIdErrorReceived', message);
+    expect($scope.$emit).toHaveBeenCalledWith('eIDErrorReceived', message);
   });
 
   it('should request to read the eID', function () {
@@ -105,41 +103,41 @@ describe('Service: eIDService', function () {
     service.init();
     spyOn($scope, '$emit');
 
-    eIdRawData.gender = 'FEMALE';
-    var expectedData = angular.copy(eIdRawData);
+    eIDRawData.gender = 'FEMALE';
+    var expectedData = angular.copy(eIDRawData);
     expectedData.birth.date = day(expectedData.birth.date, 'D/M/YYYY').toDate();
     var expectedEmitArgs = [
-      'eIdDataReceived',
+      'eIDDataReceived',
       expectedData
     ];
 
     $window.readEid(
-      eIdRawData.name.first,
-      eIdRawData.name.last,
-      eIdRawData.inszNumber,
-      eIdRawData.birth.date,
-      eIdRawData.birth.place,
+      eIDRawData.name.first,
+      eIDRawData.name.last,
+      eIDRawData.inszNumber,
+      eIDRawData.birth.date,
+      eIDRawData.birth.place,
       'F',
-      eIdRawData.nationality,
-      eIdRawData.address.street,
-      eIdRawData.address.postalCode,
-      eIdRawData.address.city
+      eIDRawData.nationality,
+      eIDRawData.address.street,
+      eIDRawData.address.postalCode,
+      eIDRawData.address.city
     );
 
     expect($scope.$emit.calls.count()).toEqual(1);
     expect($scope.$emit.calls.mostRecent().args).toEqual(expectedEmitArgs);
 
     $window.readEid(
-      eIdRawData.name.first,
-      eIdRawData.name.last,
-      eIdRawData.inszNumber,
-      eIdRawData.birth.date,
-      eIdRawData.birth.place,
+      eIDRawData.name.first,
+      eIDRawData.name.last,
+      eIDRawData.inszNumber,
+      eIDRawData.birth.date,
+      eIDRawData.birth.place,
       'V',
-      eIdRawData.nationality,
-      eIdRawData.address.street,
-      eIdRawData.address.postalCode,
-      eIdRawData.address.city
+      eIDRawData.nationality,
+      eIDRawData.address.street,
+      eIDRawData.address.postalCode,
+      eIDRawData.address.city
     );
 
     expect($scope.$emit.calls.count()).toEqual(2);

@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.eIdService
+ * @name uitpasbeheerApp.eIDService
  * @description
  * # eIDService
  * Service in the uitpasbeheerApp.
@@ -26,7 +26,7 @@ function eIDService($window, $rootScope, day) {
         gender = 'FEMALE';
       }
 
-      var eIdData = {
+      var eIDData = {
         name: {
           first: firstName,
           last: lastName
@@ -44,15 +44,15 @@ function eIDService($window, $rootScope, day) {
           city: city
         }
       };
-      $rootScope.$emit('eIdDataReceived', eIdData);
+      $rootScope.$emit('eIDDataReceived', eIDData);
     };
 
     $window.readEidPhoto = function(base64Picture) {
-      $rootScope.$emit('eIdPhotoReceived', base64Picture);
+      $rootScope.$emit('eIDPhotoReceived', base64Picture);
     };
 
     $window.readEidError = function(message) {
-      $rootScope.$emit('eIdErrorReceived', message);
+      $rootScope.$emit('eIDErrorReceived', message);
     };
   };
 

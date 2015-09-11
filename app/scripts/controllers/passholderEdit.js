@@ -20,8 +20,8 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   controller.disableInszNumber = (passholder.inszNumber) ? true : false;
   controller.formSubmitBusy = false;
   controller.formAlert = undefined;
-  controller.eIdData = {};
-  controller.eIdError = false;
+  controller.eIDData = {};
+  controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
 
   controller.submitForm = function(passholder, editForm) {
@@ -69,28 +69,28 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   };
 
 
-  var cleanupEIdDataReceivedListener = $rootScope.$on('eIdDataReceived', function(event, eIdData) {
-    angular.merge(controller.eIdData, eIdData);
+  var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
+    angular.merge(controller.eIDData, eIDData);
 
-    if (controller.disableInszNumber && controller.passholder.inszNumber !== eIdData.inszNumber) {
-      controller.eIdError = 'Het rijksregisternummer van de e-id verschilt van het rijksregisternummer dat beschikbaar is in de UiTPAS databank.';
+    if (controller.disableInszNumber && controller.passholder.inszNumber !== eIDData.inszNumber) {
+      controller.eIDError = 'Het rijksregisternummer van de e-id verschilt van het rijksregisternummer dat beschikbaar is in de UiTPAS databank.';
     } else {
-      angular.merge(controller.passholder, eIdData);
-      controller.eIdError = false;
+      angular.merge(controller.passholder, eIDData);
+      controller.eIDError = false;
     }
     $scope.$apply();
   });
-  var cleanupEIdPhotoReceivedListener = $rootScope.$on('eIdPhotoReceived', function(event, base64Picture) {
-    controller.eIdData.picture = base64Picture;
+  var cleanupEIDPhotoReceivedListener = $rootScope.$on('eIDPhotoReceived', function(event, base64Picture) {
+    controller.eIDData.picture = base64Picture;
     controller.passholder.picture = base64Picture;
     $scope.$apply();
   });
-  var cleanupEIdErrorReceivedListener = $rootScope.$on('eIdErrorReceived', function() {
-    controller.eIdError = 'De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.';
+  var cleanupEIDErrorReceivedListener = $rootScope.$on('eIDErrorReceived', function() {
+    controller.eIDError = 'De eID kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.';
     $scope.$apply();
   });
 
-  $scope.$on('$destroy', cleanupEIdDataReceivedListener);
-  $scope.$on('$destroy', cleanupEIdPhotoReceivedListener);
-  $scope.$on('$destroy', cleanupEIdErrorReceivedListener);
+  $scope.$on('$destroy', cleanupEIDDataReceivedListener);
+  $scope.$on('$destroy', cleanupEIDPhotoReceivedListener);
+  $scope.$on('$destroy', cleanupEIDErrorReceivedListener);
 }
