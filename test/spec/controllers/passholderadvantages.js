@@ -121,4 +121,22 @@ describe('Controller: PassholderAdvantagesController', function () {
 
     expect(advantageController.availablePoints).toEqual(4);
   });
+
+  it('should mark advantages with insufficient points when updating advantage exchangeability', function () {
+    var mockAdvantages = [
+      { points: 0, insufficientPoints: false},
+      { points: 1, insufficientPoints: false},
+      { points: 2, insufficientPoints: false}
+    ];
+    var expectedAdvantages = [
+      { points: 0, insufficientPoints: false},
+      { points: 1, insufficientPoints: false},
+      { points: 2, insufficientPoints: true}
+    ];
+    advantageController.availablePoints = 2;
+    advantageController.advantages = mockAdvantages;
+
+    advantageController.updateExchangeability(1);
+    expect(advantageController.advantages).toEqual(expectedAdvantages);
+  })
 });

@@ -61,10 +61,10 @@ function passholderAdvantageController(passholder, advantages, advantageService,
       return advantage;
     });
     
-    updateExchangeability(updatedPointCount);
+    controller.updateExchangeability(updatedPointCount);
   }
 
-  function updateExchangeability(pointCount) {
+  controller.updateExchangeability = function (pointCount) {
     controller.advantages = controller.advantages.map(function (advantage) {
 
       if (advantage.points > pointCount) {
@@ -75,13 +75,13 @@ function passholderAdvantageController(passholder, advantages, advantageService,
       
       return advantage;
     });
-  }
+  };
 
   function activityCheckedIn(event, activity) {
     var updatedPointCount = controller.availablePoints + activity.points;
     controller.availablePoints = updatedPointCount;
     
-    updateExchangeability(updatedPointCount);
+    controller.updateExchangeability(updatedPointCount);
   }
 
   var activityCheckinListener = $rootScope.$on('activityCheckedIn', activityCheckedIn);
