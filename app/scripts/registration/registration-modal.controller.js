@@ -67,8 +67,8 @@ function RegistrationModalController (
   };
 
   controller.submitPersonalDataForm = function(personalDataForm) {
-    if (!controller.formSubmitBusy) {
-      controller.formSubmitBusy = true;
+
+    function validatePersonalData() {
       controller.updateFurthestStep();
       if (personalDataForm.$valid) {
         var setInszNumberError = function () {
@@ -95,6 +95,10 @@ function RegistrationModalController (
         controller.formSubmitBusy = false;
       }
     }
+
+    controller
+      .startSubmit(personalDataForm)
+      .then(validatePersonalData);
   };
 
   controller.getStepNumber = function () {
@@ -109,30 +113,46 @@ function RegistrationModalController (
     }
   };
 
-  controller.submitContactDataForm = function(contactDataForm) {
+  controller.startSubmit = function (form) {
+    var deferredStart = $q.defer();
+
     if (!controller.formSubmitBusy) {
+      form.$setSubmitted();
       controller.formSubmitBusy = true;
-      if (contactDataForm.$valid) {
-        controller.updateFurthestStep(3);
-        $state.go('counter.main.register.form.price');
-        controller.formSubmitBusy = false;
-      } else {
-        controller.formSubmitBusy = false;
-      }
+      deferredStart.resolve();
+    } else {
+      deferredStart.reject('another form submit is already in progress');
     }
+
+    return deferredStart.promise;
   };
 
-  controller.submitPriceForm = function(priceFormData) {
-    if (!controller.formSubmitBusy) {
-      controller.formSubmitBusy = true;
-      controller.updateFurthestStep();
-      if (priceFormData.$valid) {
-        controller.submitRegistration();
-        controller.formSubmitBusy = false;
-      } else {
-        controller.formSubmitBusy = false;
-      }
-    }
+  controller.submitContactDataForm = function(contactDataForm) {
+    controller
+      .startSubmit(contactDataForm)
+      .then(function () {
+        if (contactDataForm.$valid) {
+          controller.updateFurthestStep(3);
+          $state.go('counter.main.register.form.price');
+          controller.formSubmitBusy = false;
+        } else {
+          controller.formSubmitBusy = false;
+        }
+      });
+  };
+
+  controller.submitPriceForm = function(priceDataForm) {
+    controller
+      .startSubmit(priceDataForm)
+      .then(function () {
+        controller.updateFurthestStep();
+        if (priceDataForm.$valid) {
+          controller.submitRegistration();
+          controller.formSubmitBusy = false;
+        } else {
+          controller.formSubmitBusy = false;
+        }
+      });
   };
 
   controller.refreshUnreducedPriceInfo = function () {

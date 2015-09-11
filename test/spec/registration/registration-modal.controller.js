@@ -79,7 +79,8 @@ describe('Controller: PassholderRegisterController', function () {
         $error: {
           inUse: false
         }
-      }
+      },
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
 
     var deferredPassholder = $q.defer();
@@ -102,11 +103,14 @@ describe('Controller: PassholderRegisterController', function () {
 
   it('should not submit the personal data form when there are errors', function () {
     var formStub= {
-      $valid: false
+      $valid: false,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
     spyOn(passholderService, 'findPassholder');
 
     controller.submitPersonalDataForm(formStub);
+
+    $scope.$digest();
 
     expect(controller.formSubmitBusy).toBeFalsy();
     expect(passholderService.findPassholder).not.toHaveBeenCalled();
@@ -125,7 +129,8 @@ describe('Controller: PassholderRegisterController', function () {
           this.$invalid = true;
           this.$error.inUse = true;
         }
-      }
+      },
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
 
     var deferredPassholder = $q.defer();
@@ -147,10 +152,12 @@ describe('Controller: PassholderRegisterController', function () {
 
   it('should submit the contact data form', function () {
     var formStub= {
-      $valid: true
+      $valid: true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
 
     controller.submitContactDataForm(formStub);
+    $scope.$digest();
 
     expect($state.go).toHaveBeenCalledWith('counter.main.register.form.price');
     expect(controller.formSubmitBusy).toBeFalsy();
@@ -158,10 +165,12 @@ describe('Controller: PassholderRegisterController', function () {
 
   it('should not submit the contact data form when there are errors', function () {
     var formStub= {
-      $valid: false
+      $valid: false,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
 
     controller.submitContactDataForm(formStub);
+    $scope.$digest();
 
     expect($state.go).not.toHaveBeenCalled();
     expect(controller.formSubmitBusy).toBeFalsy();
@@ -169,12 +178,14 @@ describe('Controller: PassholderRegisterController', function () {
 
   it('should submit the price form', function () {
     var formStub= {
-      $valid: true
+      $valid: true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
 
     spyOn(controller, 'submitRegistration');
 
     controller.submitPriceForm(formStub);
+    $scope.$digest();
 
     expect(controller.submitRegistration).toHaveBeenCalled();
     expect(controller.formSubmitBusy).toBeFalsy();
@@ -182,12 +193,14 @@ describe('Controller: PassholderRegisterController', function () {
 
   it('should not submit the price form when there are errors', function () {
     var formStub= {
-      $valid: false
+      $valid: false,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
 
     spyOn(controller, 'submitRegistration');
 
     controller.submitPriceForm(formStub);
+    $scope.$digest();
 
     expect(controller.submitRegistration).not.toHaveBeenCalled();
     expect(controller.formSubmitBusy).toBeFalsy();
