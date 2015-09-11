@@ -5,10 +5,10 @@ describe('Controller: PassholderAdvantagesController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var advantageController, scope, advantage, advantageService, $q;
+  var advantageController, scope, advantage, advantageService, $q, $rootScope, Activity;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, $injector) {
+  beforeEach(inject(function ($controller, $injector) {
     advantage = {
       exchangeable: true,
       id: 'advantage-id',
@@ -16,15 +16,20 @@ describe('Controller: PassholderAdvantagesController', function () {
       title: 'untitled'
     };
 
+    $rootScope = $injector.get('$rootScope');
+
     scope = $rootScope.$new();
 
     advantageService = $injector.get('advantageService');
     $q = $injector.get('$q');
+    Activity = $injector.get('Activity');
 
     advantageController = $controller('PassholderAdvantageController', {
       passholder: { passNumber: '01234567891234' },
       advantages: [advantage],
-      advantageService: advantageService
+      advantageService: advantageService,
+      '$rootScope': $rootScope,
+      '$scope': scope
     });
   }));
 
@@ -80,7 +85,7 @@ describe('Controller: PassholderAdvantagesController', function () {
   });
 
   it('should set a variable for insufficient points after updating', function () {
-    advantageController.passholder.points = 1;
+    advantageController.availablePoints = 1;
     var deferredExchange = $q.defer();
     var updatedAdvantage = {
       exchangeable: true,
@@ -104,4 +109,34 @@ describe('Controller: PassholderAdvantagesController', function () {
     advantageController.cancelExchange(advantage);
     expect(advantageController.advantages[0].confirmingExchange).toBeFalsy();
   });
+
+  it('should update the available point when a checkin occurs', function () {
+    advantageController.availablePoints = 3;
+    var checkedInActivity = {
+      points: 1
+    };
+
+    $rootScope.$emit('activityCheckedIn', checkedInActivity);
+    scope.$digest();
+
+    expect(advantageController.availablePoints).toEqual(4);
+  });
+
+  it('should mark advantages with insufficient points when updating advantage exchangeability', function () {
+    var mockAdvantages = [
+      { points: 0, insufficientPoints: false},
+      { points: 1, insufficientPoints: false},
+      { points: 2, insufficientPoints: false}
+    ];
+    var expectedAdvantages = [
+      { points: 0, insufficientPoints: false},
+      { points: 1, insufficientPoints: false},
+      { points: 2, insufficientPoints: true}
+    ];
+    advantageController.availablePoints = 2;
+    advantageController.advantages = mockAdvantages;
+
+    advantageController.updateExchangeability(1);
+    expect(advantageController.advantages).toEqual(expectedAdvantages);
+  })
 });
