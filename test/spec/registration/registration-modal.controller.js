@@ -314,7 +314,9 @@ describe('Controller: PassholderRegisterController', function () {
     spyOn(controller, 'clearAsyncError');
 
     controller.emailChanged();
-    expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('EMAIL_ALREADY_USED');
+    expect(controller.clearAsyncError.calls.first().args[0]).toEqual('EMAIL_ALREADY_USED');
+    expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('EMAIL_ADDRESS_INVALID');
+
 
     controller.postalCodeChanged();
     expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('PARSE_INVALID_CITY_IDENTIFIER');

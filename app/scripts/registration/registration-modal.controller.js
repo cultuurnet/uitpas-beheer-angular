@@ -214,6 +214,7 @@ function RegistrationModalController (
 
   controller.emailChanged = function () {
     controller.clearAsyncError('EMAIL_ALREADY_USED');
+    controller.clearAsyncError('EMAIL_ADDRESS_INVALID');
   };
 
   controller.postalCodeChanged = function () {
