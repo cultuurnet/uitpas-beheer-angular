@@ -4,13 +4,14 @@ describe('Factory: Passholder', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  it('should correctly parse a passholder with a missing picture', inject(function (Passholder) {
+  it('should correctly parse a passholder with a missing picture', inject(function (Passholder, day) {
     var jsonPassholder = {
       'name': {
         'first': 'Victor',
         'last': 'D\'Hooghe'
       },
       'address': {
+        'street': 'Baanweg 60',
         'postalCode': '9308',
         'city': 'Aalst'
       },
@@ -37,11 +38,12 @@ describe('Factory: Passholder', function () {
         last: 'D\'Hooghe'
       },
       address: {
+        street: 'Baanweg 60',
         postalCode: '9308',
         city: 'Aalst'
       },
       birth: {
-        date: new Date('2007-11-15'),
+        date: day('2007-11-15', 'YYYY-MM-DD').toDate(),
         place: 'Aalst'
       },
       gender: 'MALE',
@@ -51,10 +53,13 @@ describe('Factory: Passholder', function () {
         sms: false
       },
       contact: {
-        email: 'email@email.com'
+        email: 'email@email.com',
+        telephoneNumber: '',
+        mobileNumber: ''
       },
       points: 309,
-      picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format'
+      picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
+      inszNumber: ''
     };
 
     var passholder = new Passholder(jsonPassholder);

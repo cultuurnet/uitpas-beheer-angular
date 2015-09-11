@@ -24,12 +24,32 @@ function PassholderSearchController ($rootScope, passholderService, $state, $sco
   controller.searchPassholder = function(identification) {
     $rootScope.appBusy = true;
 
+    function redirectAccordingPassData(pass) {
+      if (pass.passholder) {
+        displayPassholderDetails(pass.passholder);
+      }
+      else {
+        registerNewPassholder(pass);
+      }
+    }
+
     function displayPassholderDetails(passholder) {
-        $state.go(
+      $state.go(
         'counter.main.passholder',
         {
           passholder: passholder,
           identification: passholder.passNumber
+        }
+      );
+    }
+
+    function registerNewPassholder(pass) {
+      $state.go(
+        'counter.main.register',
+        {
+          pass: pass,
+          identification: pass.number,
+          type: pass.type
         }
       );
     }
@@ -48,8 +68,8 @@ function PassholderSearchController ($rootScope, passholderService, $state, $sco
       );
     }
 
-    passholderService.find(identification)
-      .then(displayPassholderDetails, displayIdentificationError);
+    passholderService.findPass(identification)
+      .then(redirectAccordingPassData, displayIdentificationError);
   };
 
   controller.updatePassholderIdentificationFromNfc = function(event, nfcNumber) {

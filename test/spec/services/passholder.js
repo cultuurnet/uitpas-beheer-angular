@@ -54,6 +54,66 @@ describe('Service: passholderService', function () {
     Pass = $injector.get('Pass');
   }));
 
+  it('returns a pass from the server and keeps it cached', function() {
+    var uitpasNumber = '0930000422202';
+    var expectedPass= new Pass(identityData);
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectGET(apiUrl + 'identities/' + uitpasNumber)
+      .respond(200, JSON.stringify(identityData));
+
+    // Assertion method.
+    var assertPass = function(pass) {
+      expect(pass).toEqual(expectedPass);
+    };
+
+    var failed = function(error) {
+      expect(error).toBeUndefined();
+    };
+
+    // Request the passholder data and assert it when its returned.
+    passholderService.findPass(uitpasNumber).then(assertPass, failed);
+
+    // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+
+    // Request the passholder data and assert it again, but this time without
+    // mocking an HTTP request as the passholder object should have been cached.
+    passholderService.findPass(uitpasNumber).then(assertPass, failed);
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+  });
+
+  it('throws an error when the pass request returns an error', function() {
+    var uitpasNumber = 'this-is-a-number';
+    var expectedError = {
+      type: 'error',
+      exception: 'CultuurNet\\UiTPASBeheer\\PassHolder\\PassHolderNotFoundException',
+      message: 'No passholder found with this identification.',
+      code: 'PASSHOLDER_NOT_FOUND'
+    };
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectGET(apiUrl + 'identities/' + uitpasNumber)
+      .respond(404, JSON.stringify(expectedError));
+
+    var failed = function(error) {
+      expect(error).toEqual({ code: 'PASSHOLDER_NOT_FOUND', title: 'Not found', message: 'Passholder not found for identification number: this-is-a-number' });
+    };
+
+    // Request the passholder data and assert it when its returned.
+    passholderService.findPass(uitpasNumber).catch(failed);
+
+    // Deliver the HTTP response so the user data is asserted.
+    $httpBackend.flush();
+
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+  });
+
   it('returns a passholder from the server and keeps it cached', function() {
     var uitpasNumber = '0930000422202';
     var expectedPassholder = new Passholder(identityData.passHolder);
@@ -74,42 +134,20 @@ describe('Service: passholderService', function () {
     };
 
     // Request the passholder data and assert it when its returned.
-    passholderService.find(uitpasNumber).then(assertPassholder, failed);
+    passholderService.findPassholder(uitpasNumber).then(assertPassholder, failed);
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
 
     // Request the passholder data and assert it again, but this time without
     // mocking an HTTP request as the passholder object should have been cached.
-    passholderService.find(uitpasNumber).then(assertPassholder, failed);
+    passholderService.findPassholder(uitpasNumber).then(assertPassholder, failed);
 
     $httpBackend.verifyNoOutstandingExpectation();
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('throws an error when an invalid passholder is returned', function() {
-    var uitpasNumber = 'this-is-a-number';
-
-    // Mock an HTTP response.
-    $httpBackend
-      .expectGET(apiUrl + 'identities/' + uitpasNumber)
-      .respond(200, JSON.stringify(identityData));
-
-    var failed = function(error) {
-      expect(error.code).toBe('PASSHOLDER_NOT_IDENTIFIED');
-    };
-
-    // Request the passholder data and assert it when its returned.
-    passholderService.find(uitpasNumber).catch(failed);
-
-    // Deliver the HTTP response so the user data is asserted.
-    $httpBackend.flush();
-
-    $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest();
-  });
-
-  it('throws an error when the request returns an error', function() {
+  it('throws an error when the passholder request returns an error', function() {
     var uitpasNumber = 'this-is-a-number';
     var expectedError = {
       type: 'error',
@@ -128,7 +166,7 @@ describe('Service: passholderService', function () {
     };
 
     // Request the passholder data and assert it when its returned.
-    passholderService.find(uitpasNumber).catch(failed);
+    passholderService.findPassholder(uitpasNumber).catch(failed);
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
@@ -139,37 +177,40 @@ describe('Service: passholderService', function () {
 
   it('should persist and cache passholders', function (done) {
     var uitpasNumber = '0930000422202';
-    var passholderPostData = identityData.passHolder;
+    var pass = new Pass(identityData);
+    var passholderPostData = pass.passholder;
     passholderPostData.name.last = 'New last name';
     passholderPostData.address.city = 'Leuven';
 
-    var expectedPassholder = identityData;
-    expectedPassholder.passHolder.name.last = 'New last name';
-    expectedPassholder.passHolder.address.city = 'Leuven';
-    var pass = new Pass(expectedPassholder);
+    var identityResponseData = angular.copy(identityData);
+    identityResponseData.passHolder.name.last = 'New last name';
+    identityResponseData.passHolder.address.city = 'Leuven';
+
+    var expectedPassholderData = passholderPostData.serialize();
 
     $httpBackend
-      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData)
-      .respond(200, JSON.stringify(passholderPostData));
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, expectedPassholderData)
+      .respond(200, JSON.stringify(expectedPassholderData));
 
     $httpBackend
       .expectGET(apiUrl + 'identities/' + uitpasNumber)
-      .respond(200, expectedPassholder);
+      .respond(200, JSON.stringify(identityResponseData));
 
     var assertCachedAndPersisted = function (response) {
-      expect(passholderService.find).toHaveBeenCalled();
-      expect(response).toEqual(pass.passholder);
+      expect(passholderService.findPass).toHaveBeenCalled();
+      expect(response).toEqual(passholderPostData);
       done();
     };
-    spyOn(passholderService, 'find').and.callThrough();
+    spyOn(passholderService, 'findPass').and.callThrough();
 
     passholderService.update(passholderPostData, uitpasNumber).then(assertCachedAndPersisted);
     $httpBackend.flush();
   });
 
-  it('throws an error when the passholder can\'t be updated on the server', function (done) {
+  it('throws an error with additional info when the passholder can\'t be updated on the server', function (done) {
     var uitpasNumber = '0930000422202';
-    var passholderPostData = identityData.passHolder;
+    var pass = new Pass(identityData);
+    var passholderPostData = pass.passholder;
 
     var expectedAPIError = {
       code: 'Some error code'
@@ -183,7 +224,7 @@ describe('Service: passholderService', function () {
     };
 
     $httpBackend
-      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData)
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
       .respond(403, JSON.stringify(expectedAPIError));
 
     var assertRejectedWithError = function (response) {
@@ -192,7 +233,39 @@ describe('Service: passholderService', function () {
     };
 
     var assertNoSuccess = function () {
-      expect(passholderService.find).not.toHaveBeenCalled();
+      expect(passholderService.findPass).not.toHaveBeenCalled();
+      done();
+    };
+
+    passholderService.update(passholderPostData, uitpasNumber).then(assertNoSuccess, assertRejectedWithError);
+    $httpBackend.flush();
+  });
+
+  it('throws an error without additional info when the passholder can\'t be updated on the server', function (done) {
+    var uitpasNumber = '0930000422202';
+    var pass = new Pass(identityData);
+    var passholderPostData = pass.passholder;
+
+    var expectedAPIError = {};
+
+    var expectedInternalError = {
+      code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER',
+      title: 'Passholder not updated on server',
+      message: 'The passholder could not be updated on the server.',
+      apiError: expectedAPIError
+    };
+
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
+      .respond(403, JSON.stringify(expectedAPIError));
+
+    var assertRejectedWithError = function (response) {
+      expect(response).toEqual(expectedInternalError);
+      done();
+    };
+
+    var assertNoSuccess = function () {
+      expect(passholderService.findPass).not.toHaveBeenCalled();
       done();
     };
 
@@ -201,6 +274,7 @@ describe('Service: passholderService', function () {
   });
 
   it('should refetch and cache the passholder when an advantage is exchanged', function () {
+    // Exhange an advantage with less points.
     var deferredPassholder = $q.defer();
     var passholderPromise = deferredPassholder.promise;
 
@@ -212,11 +286,104 @@ describe('Service: passholderService', function () {
       title: 'untitled'
     };
 
-    spyOn(passholderService, 'find').and.returnValue(passholderPromise);
-    deferredPassholder.resolve(passholder);
-
+    spyOn(passholderService, 'findPassholder').and.returnValue(passholderPromise);
     passholderService.updatePoints('advantageExchanged', advantage, identityData.uitPas.number);
 
-    expect(passholderService.find).toHaveBeenCalled();
+    deferredPassholder.resolve(passholder);
+    $scope.$digest();
+
+    expect(passholderService.findPassholder).toHaveBeenCalled();
+
+    // Exhange an advantage with more points.
+    advantage.points = 125;
+    passholderService.updatePoints('advantageExchanged', advantage, identityData.uitPas.number);
+
+    deferredPassholder.resolve(passholder);
+    $scope.$digest();
+
+    expect(passholderService.findPassholder).toHaveBeenCalled();
+  });
+
+  it('should register a passholder', function () {
+    var pass = new Pass(identityData);
+
+    var registration = {
+      passHolder: pass.passholder.serialize()
+    };
+
+    $httpBackend
+      .expectPUT(apiUrl + 'passholders/' + pass.number, registration)
+      .respond(200);
+
+    passholderService.register(pass, pass.passholder, false, false);
+    $httpBackend.flush();
+  });
+
+  it('throws an error when it fails to register a passholder', function (done) {
+    var pass = new Pass(identityData);
+
+    var registration = {
+      passHolder: pass.passholder.serialize()
+    };
+
+    var expectedError = {data: {code: 'ERROR'}};
+
+    var assertRegistered = function (registrationResponse) {
+      expect(registrationResponse).toBeUndefined();
+      done();
+    };
+
+    var assertFail = function (error) {
+      expect(error).toEqual(expectedError);
+      done();
+    };
+
+    $httpBackend
+      .expectPUT(apiUrl + 'passholders/' + pass.number, registration)
+      .respond(404, expectedError);
+
+    passholderService.register(pass, pass.passholder, false, false).then(
+      assertRegistered,
+      assertFail
+    );
+    $httpBackend.flush();
+  });
+
+  it('should register a passholder with a voucher and kansenStatuut', function () {
+    identityData.uitPas.kansenStatuut = true;
+    var pass = new Pass(identityData);
+    var voucher = 'voucher';
+    var kansenstatuutInfo = {
+      endDate: new Date('2011-11-11'),
+      remarks: 'remarks',
+      includeRemarks: true
+    };
+
+    var registration = {
+      passHolder: pass.passholder.serialize(),
+      voucherNumber: voucher,
+      kansenStatuut: {
+        endDate: '2011-11-11',
+        remarks: 'remarks'
+      }
+    };
+
+    $httpBackend
+      .expectPUT(apiUrl + 'passholders/' + pass.number, registration)
+      .respond(200);
+
+    passholderService.register(pass, pass.passholder, voucher, kansenstatuutInfo);
+    $httpBackend.flush();
+  });
+
+  it('should not register a kansenstatuut pass when additional information is missing', function () {
+    identityData.uitPas.kansenStatuut = true;
+    var pass = new Pass(identityData);
+
+    var registrationCall = function () {
+      passholderService.register(pass, pass.passholder, null);
+    };
+
+    expect(registrationCall).toThrowError('Registration for a pass with kansenstatuut should provide additional info.');
   });
 });

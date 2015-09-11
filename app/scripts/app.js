@@ -20,11 +20,21 @@ angular
     'angular-spinkit',
     'ui.router',
     'ui.bootstrap',
-    'mp.autoFocus'
+    'mp.autoFocus',
+    'ubr.registration'
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
   .config(function ($stateProvider, $locationProvider, $httpProvider) {
+    var getPassholderFromStateParams = function(passholderService, $stateParams) {
+      if ($stateParams.passholder) {
+        return $stateParams.passholder;
+      }
+      else {
+        return passholderService.findPassholder($stateParams.identification);
+      }
+    };
+
     $stateProvider
       // Default parent state.
       .state('counter', {
@@ -92,14 +102,7 @@ angular
           'advantages': null
         },
         resolve: {
-          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
-            if ($stateParams.passholder) {
-              return $stateParams.passholder;
-            }
-            else {
-              return passholderService.find($stateParams.identification);
-            }
-          }],
+          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
           advantages: ['advantageService', '$stateParams', function(advantageService, $stateParams) {
             return advantageService.list($stateParams.identification);
           }]
@@ -107,14 +110,7 @@ angular
       })
       .state('counter.main.passholder.edit', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
-            if ($stateParams.passholder) {
-              return $stateParams.passholder;
-            }
-            else {
-              return passholderService.find($stateParams.identification);
-            }
-          }],
+          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }]
@@ -149,14 +145,7 @@ angular
       })
       .state('counter.main.passholder.editContact', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
-            if ($stateParams.passholder) {
-              return $stateParams.passholder;
-            }
-            else {
-              return passholderService.find($stateParams.identification);
-            }
-          }],
+          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }]
@@ -229,14 +218,7 @@ angular
           activity: null
         },
         resolve: {
-          passholder: ['passholderService', '$stateParams', function(passholderService, $stateParams) {
-            if ($stateParams.passholder) {
-              return $stateParams.passholder;
-            }
-            else {
-              return passholderService.find($stateParams.identification);
-            }
-          }],
+          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }],
@@ -311,8 +293,8 @@ angular
     $locationProvider.html5Mode(true);
     $httpProvider.defaults.withCredentials = true;
   })
-  .run(function(nfcService, eIdService) {
+  .run(function(nfcService, eIDService) {
     nfcService.init();
-    eIdService.init();
+    eIDService.init();
   })
   .constant('isJavaFXBrowser', navigator.userAgent.indexOf('JavaFX') > -1);

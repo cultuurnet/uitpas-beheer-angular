@@ -1,13 +1,16 @@
 // Modal
 .modal {
-}
-
-.modal-lg {
-  max-width: 1200px;
-}
-
-.modal-sm {
-  max-width: 600px;
+  &-sm {
+    max-width: 600px;
+  }
+  &-lg {
+    max-width: 1200px;
+  }
+  &-footer {
+    a.pull-left {
+      vertical-align: middle;
+    }
+  }
 }
 
 .modal-sm {
@@ -21,4 +24,3 @@
     min-width: 204px;
   }
 }
-

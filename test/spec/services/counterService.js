@@ -12,7 +12,7 @@ describe('Service: counterService', function () {
   }));
 
   // instantiate service
-  var counterService, scope, $cookies, $httpBackend, $q;
+  var counterService, scope, $cookies, $httpBackend, $q, uitid, Pass, Passholder;
 
   var fakeCookieKey = function (cookieKey) {
     spyOn(counterService, 'determineLastActiveCookieKey').and.callFake(function() {
@@ -21,6 +21,14 @@ describe('Service: counterService', function () {
       };
     });
   };
+
+  function fakeCounters(counters) {
+    spyOn(counterService, 'getList').and.callFake(function () {
+      return {
+        then: function(callback) { return callback(counters); }
+      };
+    });
+  }
 
   var counters = {
     '1149': {
@@ -44,6 +52,9 @@ describe('Service: counterService', function () {
   };
 
   beforeEach(inject(function ($injector, $rootScope) {
+    Pass = $injector.get('Pass');
+    Passholder = $injector.get('Passholder');
+    uitid = $injector.get('uitid');
     counterService = $injector.get('counterService');
     scope = $rootScope;
     $cookies = $injector.get('$cookies');
@@ -125,13 +136,19 @@ describe('Service: counterService', function () {
     $httpBackend.flush();
   });
 
-  function fakeCounters(counters) {
-    spyOn(counterService, 'getList').and.callFake(function () {
-      return {
-        then: function(callback) { return callback(counters); }
-      };
-    });
-  }
+  it('rejects when it can not get a list of counters', function (done) {
+    var checkRequestedListFailed = function (error) {
+      expect(error).toEqual('unable to retrieve counters for active user');
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'counters')
+      .respond(404);
+
+    counterService.getList().catch(checkRequestedListFailed);
+    $httpBackend.flush();
+  });
 
   it('automatically activates a counter when the user only has one', function (done) {
     var deferredRequest = $q.defer();
@@ -192,6 +209,48 @@ describe('Service: counterService', function () {
     scope.$digest();
   });
 
+  it('can get the active counter from the server', function (done) {
+    var activeCounterId = '1149';
+    $httpBackend
+      .expectGET(apiUrl + 'counters/active')
+      .respond(200, activeCounterId);
+
+    var activeCounterPersisted = function (activeCounterIdFromServer) {
+      expect(activeCounterIdFromServer).toEqual(activeCounterId);
+      done();
+    };
+
+    counterService.getActiveFromServer().then(activeCounterPersisted);
+    $httpBackend.flush();
+  });
+
+  it('rejects when it can not get the active counter from the server', function (done) {
+    $httpBackend
+      .expectGET(apiUrl + 'counters/active')
+      .respond(404);
+
+    var activeCounterNotPersisted = function () {
+      done();
+    };
+
+    counterService.getActiveFromServer().catch(activeCounterNotPersisted);
+    $httpBackend.flush();
+  });
+
+  it('can get the active counter', function () {
+    var deferredRequest = $q.defer();
+    var counterPromise = deferredRequest.promise;
+
+    spyOn(counterService, 'getActiveFromServer').and.returnValue(counterPromise);
+
+    counterService.getActive();
+
+    deferredRequest.resolve(counters['1149']);
+    scope.$digest();
+
+    expect(counterService.active).toEqual(counters['1149']);
+  });
+
   it('can set an active counter', function (done) {
     var counterToActivate = counters['1149'];
 
@@ -218,6 +277,52 @@ describe('Service: counterService', function () {
     scope.$digest();
   });
 
+  it('rejects when it can not set the active counter on the server', function (done) {
+    var counterId = 10;
+    $httpBackend
+      .expectPOST(apiUrl + 'counters/active', {id: counterId})
+      .respond(404);
+
+    var activeCounterNotPersisted = function () {
+      done();
+    };
+
+    counterService.setActiveOnServer(counterId).catch(activeCounterNotPersisted);
+    $httpBackend.flush();
+  });
+
+  it('rejects when it can not set the active counter id', function (done) {
+    var counterToActivate = counters['1149'];
+
+    var deferredToServer = $q.defer();
+    var setOnServer = deferredToServer.promise;
+    spyOn(counterService, 'setActiveOnServer').and.returnValue(setOnServer);
+
+    var deferredToCookie = $q.defer();
+    var setOnCookie = deferredToCookie.promise;
+    spyOn(counterService, 'determineLastActiveCookieKey').and.returnValue(setOnCookie);
+
+    spyOn(scope, '$emit');
+
+    var counterActivated = function (response) {
+      expect(response).toBeUndefined();
+      done();
+    };
+
+    var counterNotActivated = function (error) {
+      expect(error).toEqual('something went wrong while activating the counter');
+      done();
+    };
+
+    counterService.setActive(counterToActivate)
+      .then(counterActivated, counterNotActivated);
+
+    deferredToServer.reject();
+    deferredToCookie.reject();
+
+    scope.$digest();
+  });
+
   it('can persist the active counter', function (done) {
     var activeCounterId = '1149';
     $httpBackend
@@ -232,5 +337,186 @@ describe('Service: counterService', function () {
     $httpBackend.flush();
   });
 
+  it('can determine the last active cookie key', function (done) {
+    var deferredUser = $q.defer();
+    var userPromise = deferredUser.promise;
+    var user = {
+      id: '65'
+    };
 
+    spyOn(uitid, 'getUser').and.returnValue(userPromise);
+
+    var assertCookieKey = function (cookieKey) {
+      expect(cookieKey).toEqual('lastActiveCounter-65');
+      done();
+    };
+
+    counterService
+      .determineLastActiveCookieKey()
+      .then(assertCookieKey);
+
+    deferredUser.resolve(user);
+
+    scope.$digest();
+  });
+
+  it('throws an error when it can not determine the last active cookie key', function (done) {
+    var deferredUser = $q.defer();
+    var userPromise = deferredUser.promise;
+
+    spyOn(uitid, 'getUser').and.returnValue(userPromise);
+
+    var assertNoCookieKey = function (cookieKey) {
+      expect(cookieKey).toBeUndefined();
+      done();
+    };
+
+    counterService
+      .determineLastActiveCookieKey()
+      .catch(assertNoCookieKey);
+
+    deferredUser.reject();
+
+    scope.$digest();
+  });
+
+  it('can get the price for a registration', function (done) {
+    var pass = new Pass({
+      uitPas: {
+        number: '123456789'
+      }
+    });
+    var passholder = new Passholder({
+      birth: {
+        date: '1983-02-03'
+      },
+      address: {
+        postalCode: 3000
+      }
+    });
+    var voucherNumber = false;
+    var reason = false;
+
+    var deferredRequest = $q.defer();
+    var pricePromise = deferredRequest.promise;
+
+    var priceResponse = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+
+    var assertPriceInfo = function(response) {
+      expect(response).toEqual(priceResponse);
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?date_of_birth=1983-02-03&postal_code=3000&reason=FIRST_CARD')
+      .respond(200, pricePromise);
+
+    counterService.getRegistrationPriceInfo(pass, passholder, voucherNumber, reason).then(assertPriceInfo);
+
+    deferredRequest.resolve(priceResponse);
+
+    $httpBackend.flush();
+  });
+
+  it('can get the price for a registration with voucher number', function (done) {
+    var pass = new Pass({
+      uitPas: {
+        number: '123456789'
+      }
+    });
+    var passholder = new Passholder({
+      birth: {
+        date: '1983-02-03'
+      },
+      address: {
+        postalCode: 3000
+      }
+    });
+    var voucherNumber = 'voucher number';
+    var reason = false;
+
+    var deferredRequest = $q.defer();
+    var pricePromise = deferredRequest.promise;
+
+    var priceResponse = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+
+    var assertPriceInfo = function(response) {
+      expect(response).toEqual(priceResponse);
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?date_of_birth=1983-02-03&postal_code=3000&reason=FIRST_CARD&voucher_number=voucher+number')
+      .respond(200, pricePromise);
+
+    counterService.getRegistrationPriceInfo(pass, passholder, voucherNumber, reason).then(assertPriceInfo);
+
+    deferredRequest.resolve(priceResponse);
+
+    $httpBackend.flush();
+  });
+
+  it('can get the price for a registration with voucher number', function (done) {
+    var pass = new Pass({
+      uitPas: {
+        number: '123456789'
+      }
+    });
+    var passholder = new Passholder();
+
+    var deferredRequest = $q.defer();
+    var pricePromise = deferredRequest.promise;
+
+    var priceResponse = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+
+    var assertPriceInfo = function(response) {
+      expect(response).toEqual(priceResponse);
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?reason=FIRST_CARD')
+      .respond(200, pricePromise);
+
+    counterService
+      .getRegistrationPriceInfo(pass, passholder)
+      .then(assertPriceInfo);
+
+    deferredRequest.resolve(priceResponse);
+
+    $httpBackend.flush();
+  });
 });

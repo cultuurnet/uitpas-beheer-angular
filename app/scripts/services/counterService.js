@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .service('counterService', counterService);
 
 /* @ngInject */
-function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
+function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment) {
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
@@ -214,5 +214,47 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig) {
     );
 
     return deferred.promise;
+  };
+
+  /**
+   * @param {Pass} pass
+   *   The pass that's going to be registered with the active counter.
+   */
+  service.getRegistrationPriceInfo = function (pass, passholder, voucherNumber, reason) {
+    var url = appConfig.apiUrl + 'uitpas/' + pass.number + '/price',
+        parameters = {
+          'reason': reason || 'FIRST_CARD'
+        },
+        config = {
+          headers: {},
+          params: parameters
+        },
+        deferredPriceInfo = $q.defer();
+
+    if (voucherNumber) {
+      parameters['voucher_number'] = voucherNumber;
+    }
+
+    if (passholder.birth.date) {
+        parameters['date_of_birth'] = moment(passholder.birth.date).format('YYYY-MM-DD');
+    }
+
+    if (passholder.address.postalCode) {
+      parameters['postal_code'] = passholder.address.postalCode;
+    }
+
+    var resolvePriceInfo = function (responseData) {
+      deferredPriceInfo.resolve(responseData.data);
+    };
+
+    var handleErrorResponse = function (errorResponse) {
+      deferredPriceInfo.reject(errorResponse.data);
+    };
+
+    $http
+      .get(url, config)
+      .then(resolvePriceInfo, handleErrorResponse);
+
+    return deferredPriceInfo.promise;
   };
 }

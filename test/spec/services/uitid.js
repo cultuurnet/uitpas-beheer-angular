@@ -9,13 +9,16 @@ describe('Service: uitid', function () {
     $provide.constant('appConfig', {
       apiUrl: apiUrl
     });
+    var $window = { location: { href: '' } };
+    $provide.value('$window', $window);
   }));
 
   // Instantiate service.
-  var uitid, $httpBackend;
+  var uitid, $httpBackend, $window;
 
   beforeEach(inject(function ($injector, _uitid_) {
     $httpBackend = $injector.get('$httpBackend');
+    $window = $injector.get('$window');
     uitid = _uitid_;
   }));
 
@@ -113,4 +116,11 @@ describe('Service: uitid', function () {
     $httpBackend.flush();
   });
 
+  it('redirects the user after login', function () {
+    var destination = 'destination';
+
+    uitid.login(destination);
+
+    expect($window.location.href).toEqual(apiUrl + 'culturefeed/oauth/connect?destination=' + destination);
+  });
 });

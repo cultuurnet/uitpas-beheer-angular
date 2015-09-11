@@ -2,35 +2,38 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.eIdService
+ * @name uitpasbeheerApp.eIDService
  * @description
- * # eIdService
+ * # eIDService
  * Service in the uitpasbeheerApp.
  */
 angular.module('uitpasbeheerApp')
-  .service('eIdService', eIdService);
+  .service('eIDService', eIDService);
 
 /* @ngInject */
-function eIdService($window, $rootScope) {
+function eIDService($window, $rootScope, day) {
   /*jshint validthis: true */
   var service = this;
 
   service.init = function () {
     $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
+
+      var dateOfBirthAsDate = day(dateOfBirth, 'D/M/YYYY').toDate();
+
       if (gender === 'M') {
         gender = 'MALE';
       } else if (gender === 'F' || gender === 'V') {
         gender = 'FEMALE';
       }
 
-      var eIdData = {
+      var eIDData = {
         name: {
           first: firstName,
           last: lastName
         },
         inszNumber: inszNumber,
         birth: {
-          date: new Date(dateOfBirth),
+          date: dateOfBirthAsDate,
           place: placeOfBirth
         },
         gender: gender,
@@ -41,19 +44,19 @@ function eIdService($window, $rootScope) {
           city: city
         }
       };
-      $rootScope.$emit('eIdDataReceived', eIdData);
+      $rootScope.$emit('eIDDataReceived', eIDData);
     };
 
     $window.readEidPhoto = function(base64Picture) {
-      $rootScope.$emit('eIdPhotoReceived', base64Picture);
+      $rootScope.$emit('eIDPhotoReceived', base64Picture);
     };
 
     $window.readEidError = function(message) {
-      $rootScope.$emit('eIdErrorReceived', message);
+      $rootScope.$emit('eIDErrorReceived', message);
     };
   };
 
-  service.getDataFromEId = function() {
+  service.getDataFromEID = function() {
     $window.alert('READEID');
   };
 }

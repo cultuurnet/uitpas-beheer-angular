@@ -27,7 +27,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    * @returns {Promise}
    *   A passholder promise.
    */
-  service.find = function(identification) {
+  service.findPass = function(identification) {
     var deferredPassholder = $q.defer();
 
     var passholderId = passholderIdCache.get(identification);
@@ -42,10 +42,9 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
       var cacheAndResolvePassHolder = function (passData) {
         var pass = new Pass(passData);
-        var passholder = pass.passholder;
         passholderIdCache.put(identification, pass.number);
-        passholderCache.put(pass.number, passholder);
-        deferredPassholder.resolve(passholder);
+        passholderCache.put(pass.number, pass);
+        deferredPassholder.resolve(pass);
       };
 
       var rejectPassHolder = function () {
@@ -65,6 +64,22 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     return deferredPassholder.promise;
   };
 
+  service.findPassholder = function(identification) {
+    var deferredPassholder = $q.defer();
+    var passholderPromise = deferredPassholder.promise;
+
+    service.findPass(identification).then(
+      function(pass) {
+        deferredPassholder.resolve(pass.passholder);
+      },
+      function(error) {
+        deferredPassholder.reject(error);
+      }
+    );
+
+    return passholderPromise;
+  };
+
   /**
    * Update the information of a passholder by persisting it on the server and caching it locally
    *
@@ -76,15 +91,15 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     var deferred = $q.defer();
 
     var successUpdatingPassholderOnServer = function(passholderData) {
-      service.find(identification).then(function (cachedPassholder) {
-        cachedPassholder.parseJson(passholderData);
-        deferred.resolve(cachedPassholder);
+      service.findPass(identification).then(function (cachedPass) {
+        cachedPass.passholder.parseJson(passholderData);
+        deferred.resolve(cachedPass.passholder);
       });
-
     };
+
     var errorUpdatingPassholderOnServer = function(e) {
       var message = 'The passholder could not be updated on the server';
-      if (e.code) {
+      if (!angular.isUndefined(e) && e.code) {
         message += ': ' + e.code;
       }
       else {
@@ -99,16 +114,14 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       });
     };
 
-    $http
-      .post(
-      apiUrl + 'passholders/' + identification,
-      passholder,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+    var config = {
+      headers: {
+        'Content-Type': 'application/json'
       }
-    )
+    };
+
+    $http
+      .post(apiUrl + 'passholders/' + identification, passholder.serialize(), config)
       .success(successUpdatingPassholderOnServer)
       .error(errorUpdatingPassholderOnServer);
 
@@ -116,7 +129,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   service.updatePoints = function(event, exchangedAdvantage, passNumber) {
-    service.find(passNumber).then(function (cachedPassholder) {
+    service.findPassholder(passNumber).then(function (cachedPassholder) {
       var newPointCount = cachedPassholder.points - exchangedAdvantage.points;
 
       if (newPointCount < 0) {
@@ -128,4 +141,54 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   $rootScope.$on('advantageExchanged', service.updatePoints);
+
+  service.register = function(pass, passholder, voucherNumber, kansenstatuutInfo){
+    var registration = {
+          passHolder: passholder.serialize()
+        },
+        deferredPassholder = $q.defer();
+
+    if (voucherNumber) {
+      registration.voucherNumber = voucherNumber;
+    }
+
+    if (pass.isKansenstatuut()) {
+
+      if (!kansenstatuutInfo) {
+        throw new Error('Registration for a pass with kansenstatuut should provide additional info.');
+      }
+
+      registration.kansenStatuut = {
+        endDate: moment(kansenstatuutInfo.endDate).format('YYYY-MM-DD')
+      };
+
+      if (kansenstatuutInfo.includeRemarks) {
+        registration.kansenStatuut.remarks = kansenstatuutInfo.remarks;
+      }
+    }
+
+    var requestOptions = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    var resolveRegisteredPassholder = function (registrationResponse) {
+      // TODO: Clean up this cache mess...
+      passholderIdCache.remove(pass.number);
+      passholderCache.remove(pass.number);
+
+      deferredPassholder.resolve(registrationResponse.data);
+    };
+
+    var reportError = function (errorResponse) {
+      deferredPassholder.reject(errorResponse.data);
+    };
+
+    $http
+      .put(apiUrl + 'passholders/' + pass.number, registration, requestOptions)
+      .then(resolveRegisteredPassholder, reportError);
+
+    return deferredPassholder.promise;
+  };
 }

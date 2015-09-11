@@ -7,6 +7,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "components/buttons";
 @import "components/loading";
 @import "components/icons";
+@import "components/steps";
 
 // Regions
 @import "components/main";
@@ -18,6 +19,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 // Blocks
 @import "components/login";
+@import "components/registration";
 @import "components/counters";
 @import "components/forms";
 @import "components/tables";

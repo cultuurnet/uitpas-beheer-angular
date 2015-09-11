@@ -1,0 +1,38 @@
+<form name="priceForm" ng-submit="prc.submitPersonalDataForm(passholderRegisterPersonalData)" novalidate
+      ng-disabled="prc.formSubmitBusy">
+  <div class="modal-body">
+    <div class="container-fluid">
+
+       <div class="field-group" ng-class="{ 'has-error': prc.showFieldError(priceForm, 'voucherNumber') }">
+        <label class="control-label" for="voucherNumber">
+          Voucher-nummer
+        </label>
+        <input name="voucherNumber" type="text" ng-model="prc.voucherNumber" ng-model-options="prc.priceModelOptions"
+               ng-change="refreshPriceInfo()" id="voucherNumber" ubr-voucher-number class="form-control">
+        <div ng-show="prc.showFieldError(priceForm, 'voucherNumber')">
+          <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.voucher === true">Het voucher-nummer is ongeldig.</div>
+          <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.redeemable === true">Dit voucher-nummer is niet inruilbaar.</div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Prijs:</label>
+        <div ng-show="prc.price === 0">Gratis</div>
+        <div ng-show="prc.price > 0"><span ng-bind="prc.price | number: 2"></span> euro</div>
+        <span ng-show="prc.price < 0">
+          <div class="spinner spinner-xsmall">
+            <circle-spinner></circle-spinner>
+          </div>
+        </span>
+      </div>
+
+    </div>
+  </div><!-- end modal-body -->
+
+  <div class="modal-footer">
+    <a class="btn btn-link pull-left" ng-click="prc.close()">Annuleren</a>
+    <a class="btn btn-default modal-prev" ui-sref="counter.main.register.form.contactData" role="button">Vorige</a>
+    <input type="button" class="btn btn-primary modal-next" ng-disabled="priceForm.$invalid"
+            ng-click="prc.submitPriceForm(priceForm)" value="Bewaren">
+  </div>
+</form>

@@ -1,0 +1,37 @@
+<form name="contactDataForm" ng-submit="prc.submitContactDataForm(contactDataForm)" novalidate ng-disabled="prc.formSubmitBusy">
+<div class="modal-body">
+  <div class="container-fluid">
+    <fieldset ng-disabled="prc.formSubmitBusy">
+      <div class="field-group">
+        <label class="control-label" for="telephone">
+          Telefoon
+        </label>
+        <input type="text" class="form-control" id="telephone" name="telephone" ng-model="prc.passholder.contact.telephoneNumber">
+      </div>
+      <div class="field-group">
+        <label class="control-label" for="gsm">
+          GSM
+        </label>
+        <input type="text" class="form-control" id="gsm" name="gsm" ng-model="prc.passholder.contact.mobileNumber">
+      </div>
+      <div class="field-group"  ng-class="{ 'has-error': prc.showFieldError(contactDataForm, 'email') }">
+        <label class="control-label" for="email">
+          E-mailadres
+        </label>
+        <input type="email" class="form-control" id="email" name="email"  ng-model="prc.passholder.contact.email"
+               ng-required="true" ng-change="prc.emailChanged()">
+        <div ng-if="prc.showFieldError(contactDataForm, 'email')" class="text-danger small">
+          <div ng-if="contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+          <div ng-if="contactDataForm.email.$error.inUse">Het e-mailadres is reeds in gebruik.</div>
+          <div ng-if="contactDataForm.email.$error.required">Een geldig e-mailadres is verplicht.</div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</div><!-- end modal-body -->
+<div class="modal-footer">
+  <a class="btn btn-link pull-left" ng-click="prc.close()">Annuleren</a>
+  <a class="btn btn-default modal-prev" ui-sref="counter.main.register.form.personalData" role="button">Vorige</a>
+  <input type="button" class="btn btn-default modal-next" ng-click="prc.submitContactDataForm(contactDataForm)" value="Volgende">
+</div>
+</form>
