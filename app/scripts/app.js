@@ -293,8 +293,8 @@ angular
     $locationProvider.html5Mode(true);
     $httpProvider.defaults.withCredentials = true;
   })
-  .run(function(nfcService, eIdService) {
+  .run(function(nfcService, eIDService) {
     nfcService.init();
-    eIdService.init();
+    eIDService.init();
   })
   .constant('isJavaFXBrowser', navigator.userAgent.indexOf('JavaFX') > -1);
