@@ -6,7 +6,7 @@ describe('Controller: PassholderRegisterController', function () {
   beforeEach(module('uitpasbeheerAppViews'));
 
   var controller, Pass, unregisteredPass, $state, Passholder, passholderService, $scope, $controller, modalInstance,
-      counterService, $q, RegistrationAPIError;
+      counterService, $q, RegistrationAPIError, $rootScope, eIDService;
 
   var unregisteredPassData = {
     'uitPas': {
@@ -18,7 +18,7 @@ describe('Controller: PassholderRegisterController', function () {
   };
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($injector, $rootScope) {
+  beforeEach(inject(function ($injector) {
     modalInstance = {
       close: jasmine.createSpy('modalInstance.close'),
       dismiss: jasmine.createSpy('modalInstance.dismiss'),
@@ -26,6 +26,8 @@ describe('Controller: PassholderRegisterController', function () {
         then: jasmine.createSpy('modalInstance.result.then')
       }
     };
+
+    $rootScope = $injector.get('$rootScope');
 
     $controller = $injector.get('$controller');
     Pass = $injector.get('Pass');
@@ -50,6 +52,8 @@ describe('Controller: PassholderRegisterController', function () {
       }
     };
 
+    eIDService = jasmine.createSpyObj('eIDService', ['getDataFromEID']);
+
     controller = $controller('RegistrationModalController', {
       pass: unregisteredPass,
       $state: $state,
@@ -59,7 +63,10 @@ describe('Controller: PassholderRegisterController', function () {
       counterService: counterService,
       RegistrationAPIError: RegistrationAPIError,
       $rootScope: $rootScope,
-      $scope: $scope
+      $scope: $scope,
+      $q: $q,
+      eIDService: eIDService,
+      isJavaFXBrowser: true
     });
 
     spyOn(controller, 'getStepNumber');
@@ -357,5 +364,45 @@ describe('Controller: PassholderRegisterController', function () {
     // do nothing when navigating from a state without steps
     controller.updateFurthestStep(null, null, null, {});
     expect(controller.furthestStep).toEqual(3);
+  });
+
+  describe('When scanning an eID', function () {
+
+    it('should fetch data from the reader', function () {
+      controller.getDataFromEID();
+
+      expect(eIDService.getDataFromEID).toHaveBeenCalled();
+    });
+
+    it('should update the registration info', function () {
+      var eIDData = {
+        name: {
+          first: 'Dirk',
+          last: 'Dirkly'
+        }
+      };
+
+      $rootScope.$emit('eIDDataReceived', eIDData);
+      expect(controller.eIDError).toBeFalsy();
+      expect(controller.passholder.name.first).toEqual('Dirk');
+      expect(controller.passholder.name.last).toEqual('Dirkly');
+    });
+
+    it('should display an error when something goes wrong', function () {
+      var expectedErrorMessage = 'De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.';
+
+      $rootScope.$emit('eIDErrorReceived');
+
+      expect(controller.eIDError).toEqual(expectedErrorMessage);
+    });
+
+    it('should update the picture attached to the registration', function () {
+      // base64 encoded picture data
+      var pictureData = 'asdf546456afds546fads645afds654afds456afds654fds';
+
+      $rootScope.$emit('eIDPhotoReceived', pictureData);
+
+      expect(controller.passholder.picture).toEqual(pictureData);
+    })
   });
 });

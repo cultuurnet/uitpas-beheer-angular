@@ -24,7 +24,7 @@ function RegistrationModalController (
   $rootScope,
   $scope,
   $q,
-  eIdService,
+  eIDService,
   isJavaFXBrowser
 ) {
   /*jshint validthis: true */
@@ -48,8 +48,8 @@ function RegistrationModalController (
 
   controller.passholder = new Passholder();
 
-  controller.eIdData = {};
-  controller.eIdError = false;
+  controller.eIDData = {};
+  controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
 
   controller.showFieldError = function (form, field) {
@@ -225,33 +225,32 @@ function RegistrationModalController (
     $modalInstance.dismiss('registration modal closed');
   };
 
-  controller.getDataFromEId = function() {
-    eIdService.getDataFromEId();
+  controller.getDataFromEID = function() {
+    eIDService.getDataFromEID();
   };
 
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
-  $scope.$on('$destroy', stateChangeStartListener);
-
-  var cleanupEIdDataReceivedListener = $rootScope.$on('eIdDataReceived', function(event, eIdData) {
-    angular.merge(controller.eIdData, eIdData);
-    angular.merge(controller.passholder, eIdData);
-    controller.eIdError = false;
+  var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
+    angular.merge(controller.eIDData, eIDData);
+    angular.merge(controller.passholder, eIDData);
+    controller.eIDError = false;
     $scope.$apply();
   });
 
-  var cleanupEIdPhotoReceivedListener = $rootScope.$on('eIdPhotoReceived', function(event, base64Picture) {
-    controller.eIdData.picture = base64Picture;
+  var cleanupEIDPhotoReceivedListener = $rootScope.$on('eIDPhotoReceived', function(event, base64Picture) {
+    controller.eIDData.picture = base64Picture;
     controller.passholder.picture = base64Picture;
     $scope.$apply();
   });
 
-  var cleanupEIdErrorReceivedListener = $rootScope.$on('eIdErrorReceived', function() {
-    controller.eIdError = 'De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.';
+  var cleanupEIDErrorReceivedListener = $rootScope.$on('eIDErrorReceived', function() {
+    controller.eIDError = 'De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.';
     $scope.$apply();
   });
 
-  $scope.$on('$destroy', cleanupEIdDataReceivedListener);
-  $scope.$on('$destroy', cleanupEIdPhotoReceivedListener);
-  $scope.$on('$destroy', cleanupEIdErrorReceivedListener);
+  $scope.$on('$destroy', cleanupEIDDataReceivedListener);
+  $scope.$on('$destroy', cleanupEIDPhotoReceivedListener);
+  $scope.$on('$destroy', cleanupEIDErrorReceivedListener);
+  $scope.$on('$destroy', stateChangeStartListener);
 }

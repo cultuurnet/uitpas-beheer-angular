@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.eIdService
+ * @name uitpasbeheerApp.eIDService
  * @description
- * # eIdService
+ * # eIDService
  * Service in the uitpasbeheerApp.
  */
 angular.module('uitpasbeheerApp')
-  .service('eIdService', eIdService);
+  .service('eIDService', eIDService);
 
 /* @ngInject */
-function eIdService($window, $rootScope, day) {
+function eIDService($window, $rootScope, day) {
   /*jshint validthis: true */
   var service = this;
 
@@ -26,7 +26,7 @@ function eIdService($window, $rootScope, day) {
         gender = 'FEMALE';
       }
 
-      var eIdData = {
+      var eIDData = {
         name: {
           first: firstName,
           last: lastName
@@ -44,19 +44,19 @@ function eIdService($window, $rootScope, day) {
           city: city
         }
       };
-      $rootScope.$emit('eIdDataReceived', eIdData);
+      $rootScope.$emit('eIDDataReceived', eIDData);
     };
 
     $window.readEidPhoto = function(base64Picture) {
-      $rootScope.$emit('eIdPhotoReceived', base64Picture);
+      $rootScope.$emit('eIDPhotoReceived', base64Picture);
     };
 
     $window.readEidError = function(message) {
-      $rootScope.$emit('eIdErrorReceived', message);
+      $rootScope.$emit('eIDErrorReceived', message);
     };
   };
 
-  service.getDataFromEId = function() {
+  service.getDataFromEID = function() {
     $window.alert('READEID');
   };
 }
