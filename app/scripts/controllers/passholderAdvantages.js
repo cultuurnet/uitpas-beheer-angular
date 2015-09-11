@@ -11,12 +11,13 @@ angular.module('uitpasbeheerApp')
   .controller('PassholderAdvantageController', passholderAdvantageController);
 
 /* @ngInject */
-function passholderAdvantageController(passholder, advantages, advantageService) {
+function passholderAdvantageController(passholder, advantages, advantageService, $rootScope, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
   controller.advantages = advantages;
   controller.passholder = passholder;
+  controller.availablePoints = passholder.points;
 
   /**
    * Exchange an advantage for the active passholder
@@ -45,8 +46,11 @@ function passholderAdvantageController(passholder, advantages, advantageService)
   };
 
   function updateAdvantages(exchangedAdvantage) {
-    controller.advantages = controller.advantages.map(function (advantage) {
 
+    var updatedPointCount = controller.availablePoints - exchangedAdvantage.points;
+    controller.availablePoints = updatedPointCount;
+
+    controller.advantages = controller.advantages.map(function (advantage) {
       if (advantage.id === exchangedAdvantage.id) {
         advantage = exchangedAdvantage;
         if (advantage.exchangeable) {
@@ -54,13 +58,34 @@ function passholderAdvantageController(passholder, advantages, advantageService)
         }
       }
 
-     if (advantage.points > controller.passholder.points) {
-       advantage.insufficientPoints = true;
-     } else {
-       advantage.insufficientPoints = false;
-     }
+      return advantage;
+    });
+    
+    updateExchangeability(updatedPointCount);
+  }
 
+  function updateExchangeability(pointCount) {
+    controller.advantages = controller.advantages.map(function (advantage) {
+
+      if (advantage.points > pointCount) {
+        advantage.insufficientPoints = true;
+      } else {
+        advantage.insufficientPoints = false;
+      }
+      
       return advantage;
     });
   }
+
+  function activityCheckedIn(event, activity) {
+    var updatedPointCount = controller.availablePoints + activity.points;
+    controller.availablePoints = updatedPointCount;
+    
+    updateExchangeability(updatedPointCount);
+  }
+
+  var activityCheckinListener = $rootScope.$on('activityCheckedIn', activityCheckedIn);
+
+  $scope.$on('$destroy', activityCheckinListener);
+
 }
