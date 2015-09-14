@@ -19,11 +19,16 @@
           E-mailadres
         </label>
         <input type="email" class="form-control" id="email" name="email"  ng-model="prc.passholder.contact.email"
-               ng-required="true" ng-change="prc.emailChanged()">
+               ng-required="!prc.allowNoEmail" ng-disabled="prc.allowNoEmail" ng-change="prc.emailChanged()">
         <div ng-if="prc.showFieldError(contactDataForm, 'email')" class="text-danger small">
           <div ng-if="contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
           <div ng-if="contactDataForm.email.$error.inUse">Het e-mailadres is reeds in gebruik.</div>
           <div ng-if="contactDataForm.email.$error.required">Een geldig e-mailadres is verplicht.</div>
+        </div>
+      </div>
+      <div class="field-group allow-no-email-group">
+        <div class="form-control">
+          <label for="allow-no-email"><input name="allow-no-email" id="allow-no-email" type="checkbox" ng-model="prc.allowNoEmail">Geen e-mail</label>
         </div>
       </div>
     </fieldset>
