@@ -69,7 +69,7 @@ describe('Controller: PassholderRegisterController', function () {
       isJavaFXBrowser: true
     });
 
-    spyOn(controller, 'getStepNumber');
+    spyOn(controller, 'getStepNumber').and.callThrough();
   }));
 
   it('should have a pass object', function () {
@@ -166,6 +166,26 @@ describe('Controller: PassholderRegisterController', function () {
     controller.submitContactDataForm(formStub);
     $scope.$digest();
 
+    expect($state.go).toHaveBeenCalledWith('counter.main.register.form.price');
+    expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
+  it('should remove the email value when no email is required', function () {
+    var formStub= {
+      $valid: true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted'),
+      allowNoEmail: {
+        $viewValue: true
+      },
+      email: {
+        '$setViewValue': jasmine.createSpy('$setViewValue')
+      }
+    };
+
+    controller.submitContactDataForm(formStub);
+    $scope.$digest();
+
+    expect(formStub.email.$setViewValue).toHaveBeenCalledWith('');
     expect($state.go).toHaveBeenCalledWith('counter.main.register.form.price');
     expect(controller.formSubmitBusy).toBeFalsy();
   });
@@ -364,6 +384,11 @@ describe('Controller: PassholderRegisterController', function () {
     // do nothing when navigating from a state without steps
     controller.updateFurthestStep(null, null, null, {});
     expect(controller.furthestStep).toEqual(3);
+  });
+
+  it('should return the current step number', function () {
+    var currentStepNumber = controller.getStepNumber();
+    expect(currentStepNumber).toEqual(1);
   });
 
   describe('When scanning an eID', function () {

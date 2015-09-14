@@ -128,6 +128,11 @@ function RegistrationModalController (
   };
 
   controller.submitContactDataForm = function(contactDataForm) {
+    // Remove the email value if the no email checkbox is checked.
+    if (((contactDataForm || {}).allowNoEmail || {}).$viewValue) {
+      contactDataForm.email.$setViewValue('');
+    }
+
     controller
       .startSubmit(contactDataForm)
       .then(function () {
