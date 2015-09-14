@@ -81,6 +81,34 @@ describe('Controller: PassholderEditController', function () {
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 
+  it('should remove the email value when no email is required', function () {
+    var deferredUpdate = $q.defer();
+    var updatePromise = deferredUpdate.promise;
+    var formStub= {
+      $valid: true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted'),
+      allowNoEmail: {
+        $viewValue: true
+      },
+      email: {
+        '$setViewValue': jasmine.createSpy('$setViewValue')
+      }
+    };
+
+    spyOn(passholderService, 'update').and.returnValue(updatePromise);
+
+    controller.submitForm({}, formStub);
+    deferredUpdate.reject({
+      apiError: {
+        code: 'SOME_ERROR'
+      }
+    });
+    $scope.$digest();
+
+    expect(formStub.email.$setViewValue).toHaveBeenCalledWith('');
+    expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
   it('should close the edit modal after successfully updating a passholder', function () {
     var deferredUpdate = $q.defer();
     var updatePromise = deferredUpdate.promise;

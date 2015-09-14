@@ -28,6 +28,11 @@ function PassholderEditController (passholder, identification, $modalInstance, p
     if (!controller.formSubmitBusy) {
       controller.formSubmitBusy = true;
       if(editForm.$valid) {
+        // Remove the email value if the no email checkbox is checked.
+        if (((editForm || {}).allowNoEmail || {}).$viewValue) {
+          editForm.email.$setViewValue('');
+        }
+
         var updateOk = function() {
           $modalInstance.close();
         };

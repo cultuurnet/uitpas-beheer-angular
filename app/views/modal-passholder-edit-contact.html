@@ -22,10 +22,17 @@
           <label class="control-label" for="email">
             E-mailadres
           </label>
-          <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email">
+          <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email"
+                 ng-required="!pec.allowNoEmail" ng-disabled="pec.allowNoEmail">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid" class="text-danger small">
             <div ng-if="passholderEdit.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
             <div ng-if="passholderEdit.email.$error.inUse">Het email adres is reeds in gebruik.</div>
+            <div ng-if="passholderEdit.email.$error.required">Een geldig e-mailadres is verplicht.</div>
+          </div>
+        </div>
+        <div class="field-group allow-no-email-group">
+          <div class="form-control">
+            <label for="allow-no-email"><input name="allowNoEmail" id="allow-no-email" type="checkbox" ng-model="pec.allowNoEmail">Geen e-mail</label>
           </div>
         </div>
       </fieldset>
