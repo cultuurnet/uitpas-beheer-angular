@@ -26,8 +26,21 @@ describe('Controller: PassholderEditController', function () {
   };
   var eIDRawPhoto = 'base64PictureString';
 
+  var getSpyForm = function (formData) {
+    var spyForm = {
+      $valid: true,
+      $setSubmitted: jasmine.createSpy('$setSubmitted')
+    };
+
+    if (formData) {
+      angular.merge(spyForm, formData);
+    }
+
+    return spyForm;
+  };
+
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $injector, _$rootScope_) {
+  beforeEach(inject(function ($controller, $injector, _$rootScope_, Passholder) {
     modalInstance = {
       close: jasmine.createSpy('modalInstance.close'),
       dismiss: jasmine.createSpy('modalInstance.dismiss'),
@@ -44,8 +57,8 @@ describe('Controller: PassholderEditController', function () {
     $rootScope = _$rootScope_;
 
     controller = $controller('PassholderEditController', {
-      passholder: { inszNumber: '07111571331' },
-      identification: 123,
+      passholder: new Passholder({ inszNumber: '07111571331' }),
+      identification: '07111571331',
       $modalInstance: modalInstance,
       passholderService: passholderService,
       eIDService: eIDService,
@@ -60,7 +73,7 @@ describe('Controller: PassholderEditController', function () {
   });
 
   it('should lock down the form while submitting', function () {
-    controller.submitForm({}, {});
+    controller.submitForm(getSpyForm());
     expect(controller.formSubmitBusy).toBeTruthy();
   });
 
@@ -69,7 +82,7 @@ describe('Controller: PassholderEditController', function () {
     var updatePromise = deferredUpdate.promise;
     spyOn(passholderService, 'update').and.returnValue(updatePromise);
 
-    controller.submitForm({}, { '$valid': true });
+    controller.submitForm(getSpyForm());
     expect(controller.formSubmitBusy).toBeTruthy();
 
     deferredUpdate.reject({
@@ -81,32 +94,22 @@ describe('Controller: PassholderEditController', function () {
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 
-  it('should remove the email value when no email is required', function () {
-    var deferredUpdate = $q.defer();
-    var updatePromise = deferredUpdate.promise;
-    var formStub= {
-      $valid: true,
-      '$setSubmitted': jasmine.createSpy('$setSubmitted'),
-      allowNoEmail: {
-        $viewValue: true
-      },
-      email: {
-        '$setViewValue': jasmine.createSpy('$setViewValue')
-      }
-    };
-
-    spyOn(passholderService, 'update').and.returnValue(updatePromise);
-
-    controller.submitForm({}, formStub);
-    deferredUpdate.reject({
-      apiError: {
-        code: 'SOME_ERROR'
-      }
+  it('should remove the email address when marked as excluded', function () {
+    controller.excludeEmail = true;
+    controller.passholder.contact.email = 'some@email.be';
+    var expectedPassholderData = angular.copy(controller.passholder);
+    var formStub = getSpyForm({
+      email: 'some@email.be'
     });
+
+    expectedPassholderData.contact.email = '';
+
+    spyOn(passholderService, 'update').and.returnValue($q.when('passholder updated'));
+
+    controller.submitForm(formStub);
     $scope.$digest();
 
-    expect(formStub.email.$setViewValue).toHaveBeenCalledWith('');
-    expect(controller.formSubmitBusy).toBeFalsy();
+    expect(passholderService.update).toHaveBeenCalledWith(expectedPassholderData, '07111571331');
   });
 
   it('should close the edit modal after successfully updating a passholder', function () {
@@ -114,7 +117,7 @@ describe('Controller: PassholderEditController', function () {
     var updatePromise = deferredUpdate.promise;
     spyOn(passholderService, 'update').and.returnValue(updatePromise);
 
-    controller.submitForm({}, { '$valid': true });
+    controller.submitForm(getSpyForm());
 
     deferredUpdate.resolve({
       pass: 'holder'
@@ -140,9 +143,10 @@ describe('Controller: PassholderEditController', function () {
         $error: {
           inUse: false
         }
-      }
+      },
+      $setSubmitted: jasmine.createSpy('$setSubmitted')
     };
-    controller.submitForm({}, formState);
+    controller.submitForm(formState);
 
     deferredUpdate.reject({
       apiError: {
@@ -164,16 +168,17 @@ describe('Controller: PassholderEditController', function () {
     var updatePromise = deferredUpdate.promise;
     spyOn(passholderService, 'update').and.returnValue(updatePromise);
 
-    var formState = {
+    var formState = getSpyForm({
       '$valid': true,
       email: {
         $invalid: false,
         $error: {
           inUse: false
         }
-      }
-    };
-    controller.submitForm({}, formState);
+      },
+      $setSubmitted: jasmine.createSpy('$setSubmitted')
+    });
+    controller.submitForm(formState);
 
     deferredUpdate.reject({
       apiError: {
@@ -196,9 +201,10 @@ describe('Controller: PassholderEditController', function () {
     spyOn(passholderService, 'update').and.returnValue(updatePromise);
 
     var formState = {
-      '$valid': true
+      '$valid': true,
+      $setSubmitted: jasmine.createSpy('$setSubmitted')
     };
-    controller.submitForm({}, formState);
+    controller.submitForm(formState);
 
     deferredUpdate.reject({
       apiError: {
@@ -210,7 +216,7 @@ describe('Controller: PassholderEditController', function () {
       message: 'Actie niet toegestaan.',
       type: 'danger'
     };
-    expect(controller.formAlert).toEqual(actionNotAllowedAlert);
+    expect(controller.asyncError).toEqual(actionNotAllowedAlert);
   });
 
   it('should call the eIDService to get the eID data', function () {
@@ -220,6 +226,7 @@ describe('Controller: PassholderEditController', function () {
   });
 
   it('should react to receiving the eID data', function () {
+    controller.passholder = { inszNumber: '07111571331' };
     $rootScope.$emit('eIDDataReceived', eIDRawData);
     expect(controller.eIDData).toEqual(eIDRawData);
     expect(controller.passholder).not.toEqual(eIDRawData);

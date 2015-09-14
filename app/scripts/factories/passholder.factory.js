@@ -55,10 +55,12 @@ function passholderFactory(moment, day) {
     parseJson: function (jsonPassholder) {
       this.name = jsonPassholder.name;
       this.address = jsonPassholder.address;
-      this.birth = {
-        date: (jsonPassholder.birth.date ? day(jsonPassholder.birth.date, 'YYYY-MM-DD').toDate() : null),
-        place: jsonPassholder.birth.place
-      };
+      if (jsonPassholder.birth) {
+        this.birth = {
+          date: (jsonPassholder.birth.date ? day(jsonPassholder.birth.date, 'YYYY-MM-DD').toDate() : null),
+          place: jsonPassholder.birth.place
+        };
+      }
       if (jsonPassholder.inszNumber) {
         this.inszNumber = jsonPassholder.inszNumber;
       }

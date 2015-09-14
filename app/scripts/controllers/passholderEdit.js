@@ -19,53 +19,66 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   controller.passholder = angular.copy(passholder);
   controller.disableInszNumber = (passholder.inszNumber) ? true : false;
   controller.formSubmitBusy = false;
-  controller.formAlert = undefined;
+  controller.asyncError = null;
   controller.eIDData = {};
   controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
-  controller.allowNoEmail = (passholder.contact.email === '');
+  controller.excludeEmail = passholder.contact.email ? false : true;
 
-  controller.submitForm = function(passholder, editForm) {
+  controller.submitForm = function(editForm) {
     if (!controller.formSubmitBusy) {
       controller.formSubmitBusy = true;
+      editForm.$setSubmitted();
       if(editForm.$valid) {
-        // Remove the email value if the no email checkbox is checked.
-        if (((editForm || {}).allowNoEmail || {}).$viewValue) {
-          editForm.email.$setViewValue('');
-        }
+        var passholder = angular.copy(controller.passholder);
 
         var updateOk = function(updatedPassholder) {
           $rootScope.$emit('passholderUpdated', updatedPassholder);
-
           $modalInstance.close();
         };
-        var updateFailed = function(e) {
-          if (e.apiError.code === 'INSZ_ALREADY_USED') {
+
+        var updateFailed = function(errorResponse) {
+          var errorCode = errorResponse.apiError.code;
+          // clear any previous async errors
+          controller.asyncError = null;
+
+          if (errorCode === 'INSZ_ALREADY_USED') {
             editForm.inszNumber.$error.inUse = true;
             editForm.inszNumber.$invalid = true;
           }
-          if (e.apiError.code === 'EMAIL_ALREADY_USED') {
+          if (errorCode === 'EMAIL_ALREADY_USED') {
             editForm.email.$error.inUse = true;
             editForm.email.$invalid = true;
           }
-          if (e.apiError.code === 'ACTION_NOT_ALLOWED') {
-            controller.formAlert = {
+          if (errorCode === 'ACTION_NOT_ALLOWED') {
+            controller.asyncError = {
               message: 'Actie niet toegestaan.',
               type: 'danger'
             };
-          } else {
-            controller.formAlert = undefined;
           }
+          if (errorCode === 'EMAIL_ADDRESS_INVALID') {
+            editForm.email.$error.formatAsync = true;
+            editForm.email.$invalid = true;
+          }
+
           controller.formSubmitBusy = false;
         };
+
+        if (controller.excludeEmail) {
+          passholder.contact.email = '';
+        }
 
         passholderService
           .update(passholder, identification)
           .then(updateOk, updateFailed);
+      } else {
+        controller.formSubmitBusy = false;
       }
-    } else {
-      controller.formSubmitBusy = false;
     }
+  };
+
+  controller.emailChanged = function (form) {
+    form.email.$setValidity('formatAsync', true);
   };
 
   controller.getDataFromEID = function() {
@@ -81,7 +94,7 @@ function PassholderEditController (passholder, identification, $modalInstance, p
     angular.merge(controller.eIDData, eIDData);
 
     if (controller.disableInszNumber && controller.passholder.inszNumber !== eIDData.inszNumber) {
-      controller.eIDError = 'Het rijksregisternummer van de e-id verschilt van het rijksregisternummer dat beschikbaar is in de UiTPAS databank.';
+      controller.eIDError = 'Het rijksregisternummer van de eID verschilt van het rijksregisternummer dat beschikbaar is in de UiTPAS databank.';
     } else {
       angular.merge(controller.passholder, eIDData);
       controller.eIDError = false;
