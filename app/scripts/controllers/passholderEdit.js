@@ -23,6 +23,7 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   controller.eIDData = {};
   controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
+  controller.allowNoEmail = (passholder.contact.email === '');
 
   controller.submitForm = function(passholder, editForm) {
     if (!controller.formSubmitBusy) {
@@ -33,7 +34,9 @@ function PassholderEditController (passholder, identification, $modalInstance, p
           editForm.email.$setViewValue('');
         }
 
-        var updateOk = function() {
+        var updateOk = function(updatedPassholder) {
+          $rootScope.$emit('passholderUpdated', updatedPassholder);
+
           $modalInstance.close();
         };
         var updateFailed = function(e) {

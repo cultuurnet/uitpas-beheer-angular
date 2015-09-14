@@ -5,10 +5,10 @@ describe('Controller: PassholderDetailController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var detailController, scope, advantage, $q;
+  var detailController, $rootScope, advantage, $q, moment, $scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $injector, $rootScope) {
+  beforeEach(inject(function ($controller, $injector, _$rootScope_) {
     advantage = {
       exchangeable: true,
       id: 'advantage-id',
@@ -16,13 +16,15 @@ describe('Controller: PassholderDetailController', function () {
       title: 'untitled'
     };
 
-    scope = $rootScope.$new();
+    $scope = _$rootScope_.$new();
+    $rootScope = _$rootScope_;
 
     $q = $injector.get('$q');
+    moment = $injector.get('moment');
 
     detailController = $controller('PassholderDetailController', {
-      passholder: { passNumber: '01234567891234', points: 123 },
-      $rootScope: scope,
+      passholder: { passNumber: '01234567891234', points: 123, name: {first: 'Fred'} },
+      $rootScope: $rootScope,
       membershipService: {
         list: function () {
           var deferred = $q.defer();
@@ -31,20 +33,22 @@ describe('Controller: PassholderDetailController', function () {
 
           return deferred.promise;
         }
-      }
+      },
+      $scope: $scope,
+      moment: moment
     });
   }));
 
   it('should update passholder points when an advantage is exchanged', function () {
-    scope.$emit('advantageExchanged', advantage);
-    scope.$digest();
+    $rootScope.$emit('advantageExchanged', advantage);
+    $rootScope.$digest();
 
     expect(detailController.passholder.points).toEqual(100);
   });
 
   it('should add activity points when checking in', function () {
-    scope.$emit('activityCheckedIn', { act: 'ivity', points: 27});
-    scope.$digest();
+    $rootScope.$emit('activityCheckedIn', { act: 'ivity', points: 27});
+    $rootScope.$digest();
 
     expect(detailController.passholder.points).toEqual(150);
   });
@@ -53,9 +57,14 @@ describe('Controller: PassholderDetailController', function () {
     var expensiveAdvantage = advantage;
     expensiveAdvantage.points = 222;
 
-    scope.$emit('advantageExchanged', expensiveAdvantage);
-    scope.$digest();
+    $rootScope.$emit('advantageExchanged', expensiveAdvantage);
+    $rootScope.$digest();
 
     expect(detailController.passholder.points).toEqual(0);
+  });
+
+  it('should update the passholder in the sidebar after the passholder is edited', function () {
+    $rootScope.$emit('passholderUpdated', { passNumber: '01234567891234', points: 123, name: {first: 'Karel'} });
+    expect(detailController.passholder.name.first).toEqual('Karel');
   });
 });
