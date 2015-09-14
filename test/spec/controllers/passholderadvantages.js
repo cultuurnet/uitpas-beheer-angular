@@ -138,5 +138,5 @@ describe('Controller: PassholderAdvantagesController', function () {
 
     advantageController.updateExchangeability(1);
     expect(advantageController.advantages).toEqual(expectedAdvantages);
-  })
+  });
 });
