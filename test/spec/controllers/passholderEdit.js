@@ -78,18 +78,16 @@ describe('Controller: PassholderEditController', function () {
   });
 
   it('should unlock the form after a submit is rejected', function () {
-    var deferredUpdate = $q.defer();
-    var updatePromise = deferredUpdate.promise;
-    spyOn(passholderService, 'update').and.returnValue(updatePromise);
+    var apiError = {
+      apiError: {
+        code: 'SOME_ERROR'
+      }
+    };
+    spyOn(passholderService, 'update').and.returnValue($q.reject(apiError));
 
     controller.submitForm(getSpyForm());
     expect(controller.formSubmitBusy).toBeTruthy();
 
-    deferredUpdate.reject({
-      apiError: {
-        code: 'SOME_ERROR'
-      }
-    });
     $scope.$digest();
     expect(controller.formSubmitBusy).toBeFalsy();
   });
@@ -104,7 +102,7 @@ describe('Controller: PassholderEditController', function () {
 
     expectedPassholderData.contact.email = '';
 
-    spyOn(passholderService, 'update').and.returnValue($q.when('passholder updated'));
+    spyOn(passholderService, 'update').and.returnValue($q.resolve('passholder updated'));
 
     controller.submitForm(formStub);
     $scope.$digest();
@@ -113,15 +111,13 @@ describe('Controller: PassholderEditController', function () {
   });
 
   it('should close the edit modal after successfully updating a passholder', function () {
-    var deferredUpdate = $q.defer();
-    var updatePromise = deferredUpdate.promise;
-    spyOn(passholderService, 'update').and.returnValue(updatePromise);
+    var updatedPassholder = {
+      pass: 'holder'
+    };
+    spyOn(passholderService, 'update').and.returnValue($q.resolve(updatedPassholder));
 
     controller.submitForm(getSpyForm());
 
-    deferredUpdate.resolve({
-      pass: 'holder'
-    });
     $scope.$digest();
     expect(modalInstance.close).toHaveBeenCalled();
   });
@@ -132,9 +128,12 @@ describe('Controller: PassholderEditController', function () {
   });
 
   it('should handle a failed update because of an already used Insz number', function () {
-    var deferredUpdate = $q.defer();
-    var updatePromise = deferredUpdate.promise;
-    spyOn(passholderService, 'update').and.returnValue(updatePromise);
+    var apiError = {
+      apiError: {
+        code: 'INSZ_ALREADY_USED'
+      }
+    };
+    spyOn(passholderService, 'update').and.returnValue($q.reject(apiError));
 
     var formState = {
       '$valid': true,
@@ -148,11 +147,6 @@ describe('Controller: PassholderEditController', function () {
     };
     controller.submitForm(formState);
 
-    deferredUpdate.reject({
-      apiError: {
-        code: 'INSZ_ALREADY_USED'
-      }
-    });
     $scope.$digest();
     var invalidInszNumberFormState = {
       $error: {
@@ -164,9 +158,11 @@ describe('Controller: PassholderEditController', function () {
   });
 
   it('should handle a failed update because of an already used email address', function () {
-    var deferredUpdate = $q.defer();
-    var updatePromise = deferredUpdate.promise;
-    spyOn(passholderService, 'update').and.returnValue(updatePromise);
+    var apiError = {
+      apiError: {
+        code: 'EMAIL_ALREADY_USED'
+      }
+    };
 
     var formState = getSpyForm({
       '$valid': true,
@@ -178,45 +174,45 @@ describe('Controller: PassholderEditController', function () {
       },
       $setSubmitted: jasmine.createSpy('$setSubmitted')
     });
-    controller.submitForm(formState);
 
-    deferredUpdate.reject({
-      apiError: {
-        code: 'EMAIL_ALREADY_USED'
-      }
-    });
-    $scope.$digest();
     var invalidEmailFormState = {
       $error: {
         inUse: true
       },
       $invalid: true
     };
+
+    spyOn(passholderService, 'update').and.returnValue($q.reject(apiError));
+
+    controller.submitForm(formState);
+    $scope.$digest();
+
     expect(formState.email).toEqual(invalidEmailFormState);
   });
 
   it('should set an alert when the update fails because an action is not allowed', function () {
-    var deferredUpdate = $q.defer();
-    var updatePromise = deferredUpdate.promise;
-    spyOn(passholderService, 'update').and.returnValue(updatePromise);
+    var apiError = {
+      apiError: {
+        code: 'ACTION_NOT_ALLOWED'
+      }
+    };
 
     var formState = {
       '$valid': true,
       $setSubmitted: jasmine.createSpy('$setSubmitted')
     };
-    controller.submitForm(formState);
 
-    deferredUpdate.reject({
-      apiError: {
-        code: 'ACTION_NOT_ALLOWED'
-      }
-    });
-    $scope.$digest();
-    var actionNotAllowedAlert = {
+    var actionNotAllowedError = {
       message: 'Actie niet toegestaan.',
       type: 'danger'
     };
-    expect(controller.asyncError).toEqual(actionNotAllowedAlert);
+
+    spyOn(passholderService, 'update').and.returnValue($q.reject(apiError));
+
+    controller.submitForm(formState);
+    $scope.$digest();
+
+    expect(controller.asyncError).toEqual(actionNotAllowedError);
   });
 
   it('should call the eIDService to get the eID data', function () {
