@@ -28,7 +28,8 @@ function PassholderEditController (passholder, identification, $modalInstance, p
     if (!controller.formSubmitBusy) {
       controller.formSubmitBusy = true;
       if(editForm.$valid) {
-        var updateOk = function() {
+        var updateOk = function(updatedPassholder) {
+          $rootScope.$emit('passholderUpdated', updatedPassholder);
           $modalInstance.close();
         };
         var updateFailed = function(e) {
