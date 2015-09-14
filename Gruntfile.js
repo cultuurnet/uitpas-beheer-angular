@@ -17,12 +17,6 @@ module.exports = function (grunt) {
 
   var modRewrite = require('connect-modrewrite');
 
-  // Configurable paths for the application
-  var appConfig = {
-    app: require('./bower.json').appPath || 'app',
-    dist: 'dist'
-  };
-
   var loadConfig = function() {
     var config = {};
 
@@ -35,6 +29,13 @@ module.exports = function (grunt) {
     return {
       appConfig: config
     };
+  };
+
+  // Configurable paths for the application
+  var appConfig = {
+    app: require('./bower.json').appPath || 'app',
+    dist: 'dist',
+    basePath: loadConfig().appConfig.basePath || '/'
   };
 
   // Define the configuration for all the tasks
@@ -339,7 +340,12 @@ module.exports = function (grunt) {
           '<%= yeoman.dist %>',
           '<%= yeoman.dist %>/images',
           '<%= yeoman.dist %>/styles'
-        ]
+        ],
+        blockReplacements: {
+          basePath: function () {
+            return ['<base href="', appConfig.basePath, '">'].join('');
+          }
+        }
       }
     },
 

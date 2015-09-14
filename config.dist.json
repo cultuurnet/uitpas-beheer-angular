@@ -1,3 +1,4 @@
 {
-  "apiUrl": "http://culpas-silex.dev/"
+  "apiUrl": "http://culpas-silex.dev/",
+  "basePath": "/"
 }
