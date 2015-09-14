@@ -30,6 +30,6 @@ describe('Directive: datepicker', function () {
     form.date.$setViewValue('05/05/1955');
 
     expect(form.date.$invalid).toBeFalsy();
-    expect(scope.date).toEqual(expectedDate)
+    expect(scope.date).toEqual(expectedDate);
   });
 });

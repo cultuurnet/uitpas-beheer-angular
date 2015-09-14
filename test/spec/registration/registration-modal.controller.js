@@ -328,7 +328,7 @@ describe('Controller: PassholderRegisterController', function () {
       message: 'Something went horribly wrong, run for cover.'
     };
 
-    controller.clearAsyncError('SOME_ASYNC_ERROR')
+    controller.clearAsyncError('SOME_ASYNC_ERROR');
 
     expect(controller.asyncError).toBeUndefined();
   });
@@ -403,6 +403,6 @@ describe('Controller: PassholderRegisterController', function () {
       $rootScope.$emit('eIDPhotoReceived', pictureData);
 
       expect(controller.passholder.picture).toEqual(pictureData);
-    })
+    });
   });
 });
