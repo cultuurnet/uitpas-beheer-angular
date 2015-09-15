@@ -24,3 +24,17 @@
     min-width: 204px;
   }
 }
+
+// modal edit contact
+.modal {
+  .checkbox {
+    label {
+      font-weight: 400;
+    }
+    &.exclude-email-group {
+      @include breakpoint(map-get($breakpoints, med)) {
+        padding-top: 2.05em;
+      }
+    }
+  }
+}

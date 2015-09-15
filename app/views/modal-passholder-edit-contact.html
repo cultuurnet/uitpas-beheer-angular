@@ -23,23 +23,27 @@
           </label>
           <input type="text" class="form-control" id="gsm" name="gsm" ng-model="pec.passholder.contact.mobileNumber">
         </div>
-        <div class="field-group"  ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid }">
-          <label class="control-label" for="email">
-            E-mailadres
-          </label>
-          <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email"
-                 ubr-ignore-field="pec.excludeEmail" ng-required="!pec.excludeEmail" ng-disabled="pec.excludeEmail"
-                 ng-change="pec.emailChanged(passholderEdit)">
-          <div ng-if="(passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid" class="text-danger small">
-            <div ng-if="passholderEdit.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
-            <div ng-if="passholderEdit.email.$error.inUse">Het email adres is reeds in gebruik.</div>
-            <div ng-if="passholderEdit.email.$error.required">Een geldig e-mailadres is verplicht.</div>
-            <div ng-if="passholderEdit.email.$error.formatAsync">Het opgegeven e-mail adres is niet geldig.</div>
-          </div>
-        </div>
-        <div class="field-group exclude-email-group">
-          <div class="form-control">
-            <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-model="pec.excludeEmail"> Geen e-mail</label>
+        <div class="field-group">
+          <div class="grid">
+            <div class="grid__12 grid--bp-med__8" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid }">
+              <label class="control-label" for="email">
+                E-mailadres
+              </label>
+              <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email"
+                     ubr-ignore-field="pec.excludeEmail" ng-required="!pec.excludeEmail" ng-disabled="pec.excludeEmail"
+                     ng-change="pec.emailChanged(passholderEdit)">
+              <div ng-if="(passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid" class="text-danger small">
+                <div ng-if="passholderEdit.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+                <div ng-if="passholderEdit.email.$error.inUse">Het email adres is reeds in gebruik.</div>
+                <div ng-if="passholderEdit.email.$error.required">Een geldig e-mailadres is verplicht.</div>
+                <div ng-if="passholderEdit.email.$error.formatAsync">Het opgegeven e-mail adres is niet geldig.</div>
+              </div>
+            </div>
+            <div class="grid__12 grid--bp-med__4">
+              <div class="checkbox exclude-email-group">
+                <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-model="pec.excludeEmail"> Geen e-mail</label>
+              </div>
+            </div>
           </div>
         </div>
       </fieldset>
