@@ -28,7 +28,8 @@
             E-mailadres
           </label>
           <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email"
-                 ng-required="!pec.excludeEmail" ng-disabled="pec.excludeEmail" ng-change="pec.emailChanged(passholderEdit)">
+                 ubr-ignore-field="pec.excludeEmail" ng-required="!pec.excludeEmail" ng-disabled="pec.excludeEmail"
+                 ng-change="pec.emailChanged(passholderEdit)">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid" class="text-danger small">
             <div ng-if="passholderEdit.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
             <div ng-if="passholderEdit.email.$error.inUse">Het email adres is reeds in gebruik.</div>

@@ -170,24 +170,30 @@ describe('Controller: PassholderRegisterController', function () {
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 
-  it('should remove the email value when no email is required', function () {
-    var formStub= {
-      $valid: true,
-      '$setSubmitted': jasmine.createSpy('$setSubmitted'),
-      allowNoEmail: {
-        $viewValue: true
-      },
-      email: {
-        '$setViewValue': jasmine.createSpy('$setViewValue')
-      }
-    };
+  it('should remove the email value when marked as excluded', function () {
+    var expectedPassholderData = angular.copy(controller.passholder);
+    expectedPassholderData.contact.email = '';
+    controller.passholder.contact.email = 'some@email.be';
 
-    controller.submitContactDataForm(formStub);
-    $scope.$digest();
+    spyOn(passholderService, 'register').and.returnValue($q.resolve('passholder registered'));
 
-    expect(formStub.email.$setViewValue).toHaveBeenCalledWith('');
-    expect($state.go).toHaveBeenCalledWith('counter.main.register.form.price');
-    expect(controller.formSubmitBusy).toBeFalsy();
+    controller.excludeEmail = true;
+    controller.submitRegistration();
+
+    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined);
+  });
+
+  it('should include the email address when not marked as excluded', function () {
+    var expectedPassholderData = angular.copy(controller.passholder);
+    expectedPassholderData.contact.email = 'include@email.me';
+    controller.passholder.contact.email = 'include@email.me';
+
+    spyOn(passholderService, 'register').and.returnValue($q.resolve('passholder registered'));
+
+    controller.excludeEmail = false;
+    controller.submitRegistration();
+
+    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined);
   });
 
   it('should not submit the contact data form when there are errors', function () {
