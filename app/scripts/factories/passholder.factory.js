@@ -47,13 +47,13 @@ function passholderFactory(moment, day) {
     this.points = 0;
     this.kansenStatuten = [
       {
-        status: 'active',
+        status: 'ACTIVE',
         endDate: day('2015-12-06', 'YYYY-MM-DD').toDate(),
-        card: {
-          number: "0930000473817",
+        uitPas: {
+          number: '0930000473817',
           kansenStatuut: true,
-          status: "ACTIVE",
-          type: "CARD",
+          status: 'ACTIVE',
+          type: 'CARD',
           cardSystem: {
             name: 'UiTPAS Regio Aalst',
             id: '1'
@@ -63,11 +63,11 @@ function passholderFactory(moment, day) {
       {
         status: 'IN_GRACE_PERIOD',
         endDate: day('2015-10-06', 'YYYY-MM-DD').toDate(),
-        card: {
-          number: "0930000473817",
+        uitPas: {
+          number: '0930000473817',
           kansenStatuut: true,
-          status: "ACTIVE",
-          type: "KEY",
+          status: 'ACTIVE',
+          type: 'KEY',
           cardSystem: {
             name: 'UiTPAS Regio Gent',
             id: '2'
@@ -77,11 +77,11 @@ function passholderFactory(moment, day) {
       {
         status: 'EXPIRED',
         endDate: day('2012-12-06', 'YYYY-MM-DD').toDate(),
-        card: {
-          number: "0930000473817",
+        uitPas: {
+          number: '0930000473817',
           kansenStatuut: true,
-          status: "ACTIVE",
-          type: "STICKER",
+          status: 'ACTIVE',
+          type: 'STICKER',
           cardSystem: {
             name: 'UiTPAS Regio Brugge',
             id: '3'
