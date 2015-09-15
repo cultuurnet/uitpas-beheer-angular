@@ -69,7 +69,7 @@ describe('Controller: PassholderRegisterController', function () {
       isJavaFXBrowser: true
     });
 
-    spyOn(controller, 'getStepNumber');
+    spyOn(controller, 'getStepNumber').and.callThrough();
   }));
 
   it('should have a pass object', function () {
@@ -168,6 +168,32 @@ describe('Controller: PassholderRegisterController', function () {
 
     expect($state.go).toHaveBeenCalledWith('counter.main.register.form.price');
     expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
+  it('should remove the email value when marked as excluded', function () {
+    var expectedPassholderData = angular.copy(controller.passholder);
+    expectedPassholderData.contact.email = '';
+    controller.passholder.contact.email = 'some@email.be';
+
+    spyOn(passholderService, 'register').and.returnValue($q.resolve('passholder registered'));
+
+    controller.excludeEmail = true;
+    controller.submitRegistration();
+
+    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined);
+  });
+
+  it('should include the email address when not marked as excluded', function () {
+    var expectedPassholderData = angular.copy(controller.passholder);
+    expectedPassholderData.contact.email = 'include@email.me';
+    controller.passholder.contact.email = 'include@email.me';
+
+    spyOn(passholderService, 'register').and.returnValue($q.resolve('passholder registered'));
+
+    controller.excludeEmail = false;
+    controller.submitRegistration();
+
+    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined);
   });
 
   it('should not submit the contact data form when there are errors', function () {
@@ -364,6 +390,11 @@ describe('Controller: PassholderRegisterController', function () {
     // do nothing when navigating from a state without steps
     controller.updateFurthestStep(null, null, null, {});
     expect(controller.furthestStep).toEqual(3);
+  });
+
+  it('should return the current step number', function () {
+    var currentStepNumber = controller.getStepNumber();
+    expect(currentStepNumber).toEqual(1);
   });
 
   describe('When scanning an eID', function () {

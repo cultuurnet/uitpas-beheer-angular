@@ -47,7 +47,7 @@ function RegistrationModalController (
   controller.furthestStep = 0;
 
   controller.passholder = new Passholder();
-
+  controller.excludeEmail = false;
   controller.eIDData = {};
   controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
@@ -128,6 +128,11 @@ function RegistrationModalController (
   };
 
   controller.submitContactDataForm = function(contactDataForm) {
+    // Remove the email value if the no email checkbox is checked.
+    if (controller.excludeEmail) {
+      contactDataForm.email.$setViewValue('');
+    }
+
     controller
       .startSubmit(contactDataForm)
       .then(function () {
@@ -199,9 +204,15 @@ function RegistrationModalController (
       $modalInstance.close(passholder);
     };
 
+    var passholderData = angular.copy(controller.passholder);
+
+    if (controller.excludeEmail) {
+      passholderData.contact.email = '';
+    }
+
     controller.formSubmitBusy = true;
     passholderService
-      .register(pass, controller.passholder, controller.voucherNumber, kansenstatuutInfo)
+      .register(pass, passholderData, controller.voucherNumber, kansenstatuutInfo)
       .then(showRegisteredPassholder, controller.handleAsyncError)
       .finally(controller.unlockForm);
   };

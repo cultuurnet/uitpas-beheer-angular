@@ -5,6 +5,11 @@
   </div>
   <div class="modal-body">
     <div class="container-fluid">
+
+      <div class="alert alert-danger" ng-show="pec.asyncError">
+        <span ng-bind="pec.asyncError.message"></span>
+      </div>
+
       <fieldset ng-disabled="pec.formSubmitBusy">
         <div class="field-group">
           <label class="control-label" for="telephone">
@@ -22,10 +27,19 @@
           <label class="control-label" for="email">
             E-mailadres
           </label>
-          <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email">
+          <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email"
+                 ubr-ignore-field="pec.excludeEmail" ng-required="!pec.excludeEmail" ng-disabled="pec.excludeEmail"
+                 ng-change="pec.emailChanged(passholderEdit)">
           <div ng-if="(passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid" class="text-danger small">
             <div ng-if="passholderEdit.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
             <div ng-if="passholderEdit.email.$error.inUse">Het email adres is reeds in gebruik.</div>
+            <div ng-if="passholderEdit.email.$error.required">Een geldig e-mailadres is verplicht.</div>
+            <div ng-if="passholderEdit.email.$error.formatAsync">Het opgegeven e-mail adres is niet geldig.</div>
+          </div>
+        </div>
+        <div class="field-group exclude-email-group">
+          <div class="form-control">
+            <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-model="pec.excludeEmail"> Geen e-mail</label>
           </div>
         </div>
       </fieldset>
@@ -33,6 +47,9 @@
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="pec.cancelModal()">Annuleren</a>
-    <button type="button" class="btn btn-primary" ng-disabled="pec.formSubmitBusy || passholderEdit.$invalid" ng-click="pec.submitForm(pec.passholder, passholderEdit)"><span ng-hide="pec.formSubmitBusy">Bewaren</span> <span ng-show="pec.formSubmitBusy"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span></button>
+    <button type="button" class="btn btn-primary" ng-disabled="pec.formSubmitBusy"
+            ng-click="pec.submitForm(passholderEdit)">
+      <span ng-hide="pec.formSubmitBusy">Bewaren</span> <span ng-show="pec.formSubmitBusy"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span>
+    </button>
   </div>
 </form>
