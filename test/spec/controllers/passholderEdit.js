@@ -215,6 +215,29 @@ describe('Controller: PassholderEditController', function () {
     expect(controller.asyncError).toEqual(actionNotAllowedError);
   });
 
+  it('should show an error when an async email formatting error occurs', function () {
+    var emailFormatError = $q.reject({
+      apiError: {
+        code: 'EMAIL_ADDRESS_INVALID'
+      }
+    });
+
+    var form = getSpyForm({
+      email: {
+        $error: {},
+        $invalid: false
+      }
+    });
+
+    spyOn(passholderService, 'update').and.returnValue(emailFormatError);
+
+    controller.submitForm(form);
+    $scope.$digest();
+
+    expect(form.email.$invalid).toBeTruthy();
+    expect(form.email.$error.formatAsync).toBeTruthy();
+  });
+
   it('should call the eIDService to get the eID data', function () {
     spyOn(eIDService, 'getDataFromEID');
     controller.getDataFromEID();
