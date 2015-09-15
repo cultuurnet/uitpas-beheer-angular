@@ -17,6 +17,9 @@ textarea {
     border-color: $state-danger-border;
     background-color: lighten($state-danger-bg, 7%);
   }
+  + .text-danger.small {
+    margin-top: $rh-xxs;
+  }
 }
 
 label {
