@@ -86,6 +86,10 @@ a + .btn {
   margin-bottom: 0;
 }
 
+.field-group [class^="grid"] {
+  margin-top: 0;
+}
+
 .radio {
   margin-top: $padding-base-vertical;
   margin-bottom: $padding-base-vertical;
