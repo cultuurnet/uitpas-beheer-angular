@@ -25,7 +25,6 @@ function ignoreFieldDirective () {
   function link(scope, element, attrs, ngModel) {
 
     var defaultValidators = ngModel.$validators;
-    console.log(defaultValidators);
 
     function toggleValidation(shouldValidate) {
       if (shouldValidate) {
