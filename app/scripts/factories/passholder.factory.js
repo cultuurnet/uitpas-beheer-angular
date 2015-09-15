@@ -45,6 +45,47 @@ function passholderFactory(moment, day) {
       mobileNumber: ''
     };
     this.points = 0;
+    this.kansenStatuten = [
+      {
+        status: 'active',
+        cardSystem: {
+          name: 'UiTPAS Regio Aalst',
+          id: '1'
+        },
+        endDate: day('2015-12-06', 'YYYY-MM-DD').toDate(),
+        preferences: {
+          sms: 'NOTIFICATION_SMS',
+          email: 'NOTIFICATION_MAILS'
+        },
+        type: 'CARD'
+      },
+      {
+        status: 'inGracePeriod',
+        cardSystem: {
+          name: 'UiTPAS Regio Gent',
+          id: '2'
+        },
+        endDate: day('2015-10-06', 'YYYY-MM-DD').toDate(),
+        preferences: {
+          sms: 'ALL_SMS',
+          email: 'ALL_MAILS'
+        },
+        type: 'STICKER'
+      },
+      {
+        status: 'expired',
+        cardSystem: {
+          name: 'UiTPAS Regio Brugge',
+          id: '3'
+        },
+        endDate: day('2012-12-06', 'YYYY-MM-DD').toDate(),
+        preferences: {
+          sms: 'NOTIFICATION_SMS',
+          email: 'NOTIFICATION_MAILS'
+        },
+        type: 'KEY'
+      }
+    ];
 
     if (jsonPassholder) {
       this.parseJson(jsonPassholder);
