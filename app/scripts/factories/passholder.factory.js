@@ -48,42 +48,45 @@ function passholderFactory(moment, day) {
     this.kansenStatuten = [
       {
         status: 'active',
-        cardSystem: {
-          name: 'UiTPAS Regio Aalst',
-          id: '1'
-        },
         endDate: day('2015-12-06', 'YYYY-MM-DD').toDate(),
-        preferences: {
-          sms: 'NOTIFICATION_SMS',
-          email: 'NOTIFICATION_MAILS'
-        },
-        type: 'CARD'
+        card: {
+          number: "0930000473817",
+          kansenStatuut: true,
+          status: "ACTIVE",
+          type: "CARD",
+          cardSystem: {
+            name: 'UiTPAS Regio Aalst',
+            id: '1'
+          }
+        }
       },
       {
-        status: 'inGracePeriod',
-        cardSystem: {
-          name: 'UiTPAS Regio Gent',
-          id: '2'
-        },
+        status: 'IN_GRACE_PERIOD',
         endDate: day('2015-10-06', 'YYYY-MM-DD').toDate(),
-        preferences: {
-          sms: 'ALL_SMS',
-          email: 'ALL_MAILS'
-        },
-        type: 'STICKER'
+        card: {
+          number: "0930000473817",
+          kansenStatuut: true,
+          status: "ACTIVE",
+          type: "KEY",
+          cardSystem: {
+            name: 'UiTPAS Regio Gent',
+            id: '2'
+          }
+        }
       },
       {
-        status: 'expired',
-        cardSystem: {
-          name: 'UiTPAS Regio Brugge',
-          id: '3'
-        },
+        status: 'EXPIRED',
         endDate: day('2012-12-06', 'YYYY-MM-DD').toDate(),
-        preferences: {
-          sms: 'NOTIFICATION_SMS',
-          email: 'NOTIFICATION_MAILS'
-        },
-        type: 'KEY'
+        card: {
+          number: "0930000473817",
+          kansenStatuut: true,
+          status: "ACTIVE",
+          type: "STICKER",
+          cardSystem: {
+            name: 'UiTPAS Regio Brugge',
+            id: '3'
+          }
+        }
       }
     ];
 
