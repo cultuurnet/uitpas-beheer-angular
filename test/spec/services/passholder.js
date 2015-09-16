@@ -12,7 +12,7 @@ describe('Service: passholderService', function () {
   }));
 
   // Instantiate service.
-  var passholderService, $httpBackend, $q, $scope, Passholder, Pass;
+  var passholderService, $httpBackend, $q, $scope, Passholder, Pass, $cacheFactory;
 
   var identityData = {
     'uitPas': {
@@ -52,6 +52,7 @@ describe('Service: passholderService', function () {
     $scope = $rootScope;
     Passholder = $injector.get('Passholder');
     Pass = $injector.get('Pass');
+    $cacheFactory = $injector.get('$cacheFactory');
   }));
 
   it('returns a pass from the server and keeps it cached', function() {
@@ -198,7 +199,12 @@ describe('Service: passholderService', function () {
 
     var assertCachedAndPersisted = function (response) {
       expect(passholderService.findPass).toHaveBeenCalled();
+
       expect(response).toEqual(passholderPostData);
+
+      var passholderCache = $cacheFactory.get('passholderCache');
+      var cachedPass = passholderCache.get(uitpasNumber);
+      expect(cachedPass).toEqual(pass);
       done();
     };
     spyOn(passholderService, 'findPass').and.callThrough();
