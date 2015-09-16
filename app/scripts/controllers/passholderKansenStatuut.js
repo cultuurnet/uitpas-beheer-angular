@@ -42,6 +42,5 @@ function PassholderKansenStatuutController (passholder, activeCounter, $modalIns
     }
 
     return isEligible;
-  }
-
+  };
 }
