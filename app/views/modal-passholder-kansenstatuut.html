@@ -17,7 +17,7 @@
         <tbody>
           <tr ng-repeat="kansenStatuut in pksc.passholder.kansenStatuten" ng-class="kansenStatuut.status">
             <td class="uitpas-cardsystem">
-              {{kansenStatuut.uitPas.cardSystem.name}}
+              {{kansenStatuut.cardSystem.name}}
             </td>
             <td ng-switch="kansenStatuut.status" class="uitpas-status">
               <span class="label label-success" ng-switch-when="ACTIVE">Actief</span>

@@ -18,7 +18,6 @@ function PassholderKansenStatuutController (passholder, moment, $rootScope, $sco
 
   controller.formSubmitBusy = false;
   controller.passholder = passholder;
-  console.log(controller.passholder);
 
   controller.cancelModal = function () {
     $modalInstance.dismiss();
