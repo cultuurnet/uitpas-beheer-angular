@@ -28,7 +28,8 @@
               {{kansenStatuut.endDate | date : 'dd/MM/yyyy'}}
             </td>
             <td>
-              <input type="button" class="btn btn-primary" ng-disabled="true" value="Bewerken">
+              <input type="button" class="btn btn-primary" ng-disabled="!pksc.counterCanAlterKansenStatuut(kansenStatuut)" value="Bewerken">
+              <div class="alert alert-danger" ng-hide="pksc.counterCanAlterKansenStatuut(kansenStatuut)">Deze balie heeft geen rechten om dit kansenstatuut aan te passen.</div>
             </td>
           </tr>
         </tbody>

@@ -183,9 +183,12 @@ angular
           passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
+          }],
+          activeCounter: ['counterService', function (counterService) {
+            return counterService.getActive();
           }]
         },
-        onEnter: ['passholder', 'identification', '$state', '$modal', function(passholder, identification, $state, $modal) {
+        onEnter: ['passholder', 'activeCounter', '$state', '$modal', function(passholder, activeCounter, $state, $modal) {
           $modal
             .open({
               animation: true,
@@ -199,8 +202,8 @@ angular
                 passholder: function() {
                   return passholder;
                 },
-                identification: function() {
-                  return identification;
+                activeCounter: function() {
+                  return activeCounter;
                 }
               },
               controller: 'PassholderKansenStatuutController',
