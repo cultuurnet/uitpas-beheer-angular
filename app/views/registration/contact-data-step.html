@@ -14,16 +14,27 @@
         </label>
         <input type="text" class="form-control" id="gsm" name="gsm" ng-model="prc.passholder.contact.mobileNumber">
       </div>
-      <div class="field-group"  ng-class="{ 'has-error': prc.showFieldError(contactDataForm, 'email') }">
-        <label class="control-label" for="email">
-          E-mailadres
-        </label>
-        <input type="email" class="form-control" id="email" name="email"  ng-model="prc.passholder.contact.email"
-               ng-required="true" ng-change="prc.emailChanged()">
-        <div ng-if="prc.showFieldError(contactDataForm, 'email')" class="text-danger small">
-          <div ng-if="contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
-          <div ng-if="contactDataForm.email.$error.inUse">Het e-mailadres is reeds in gebruik.</div>
-          <div ng-if="contactDataForm.email.$error.required">Een geldig e-mailadres is verplicht.</div>
+      <div class="field-group" >
+        <div class="grid">
+          <div class="grid__12 grid--bp-med__8" ng-class="{ 'has-error': prc.showFieldError(contactDataForm, 'email') }">
+            <label class="control-label" for="email">
+              E-mailadres
+            </label>
+            <input type="email" class="form-control" id="email" name="email" ng-model="prc.passholder.contact.email"
+             ng-required="!prc.excludeEmail" ng-change="prc.emailChanged()" ubr-ignore-field="prc.excludeEmail"
+             ng-disabled="prc.excludeEmail">
+            <div ng-if="prc.showFieldError(contactDataForm, 'email')" class="text-danger small">
+              <div ng-if="contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+              <div ng-if="contactDataForm.email.$error.inUse">Het e-mailadres is reeds in gebruik.</div>
+              <div ng-if="contactDataForm.email.$error.required">Een geldig e-mailadres is verplicht.</div>
+            </div>
+          </div>
+          <div class="grid__12 grid--bp-med__4">
+            <div class="checkbox exclude-email-group">
+              <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-change="prc.emailChanged()"
+                 ng-model="prc.excludeEmail"> Geen e-mail</label>
+            </div>
+          </div>
         </div>
       </div>
     </fieldset>

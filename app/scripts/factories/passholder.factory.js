@@ -12,6 +12,23 @@ angular.module('uitpasbeheerApp')
 
 /* @ngInject */
 function passholderFactory(moment, day) {
+
+  function parseJsonContact(passholder, jsonContact) {
+    if (jsonContact) {
+      passholder.contact = {
+        email: jsonContact.email || '',
+        telephoneNumber: jsonContact.telephoneNumber || '',
+        mobileNumber: jsonContact.mobileNumber || ''
+      };
+    } else {
+      passholder.contact = {
+        email: '',
+        telephoneNumber: '',
+        mobileNumber: ''
+      };
+    }
+  }
+
   /**
    * @class Passholder
    * @constructor
@@ -81,10 +98,12 @@ function passholderFactory(moment, day) {
     parseJson: function (jsonPassholder) {
       this.name = jsonPassholder.name;
       this.address = jsonPassholder.address;
-      this.birth = {
-        date: (jsonPassholder.birth.date ? day(jsonPassholder.birth.date, 'YYYY-MM-DD').toDate() : null),
-        place: jsonPassholder.birth.place
-      };
+      if (jsonPassholder.birth) {
+        this.birth = {
+          date: (jsonPassholder.birth.date ? day(jsonPassholder.birth.date, 'YYYY-MM-DD').toDate() : null),
+          place: jsonPassholder.birth.place
+        };
+      }
       if (jsonPassholder.inszNumber) {
         this.inszNumber = jsonPassholder.inszNumber;
       }
@@ -94,13 +113,7 @@ function passholderFactory(moment, day) {
       this.gender = jsonPassholder.gender;
       this.nationality = jsonPassholder.nationality;
       this.privacy = jsonPassholder.privacy;
-      if (jsonPassholder.contact) {
-        this.contact = {
-          email: jsonPassholder.contact.email || '',
-          telephoneNumber: jsonPassholder.contact.telephoneNumber || '',
-          mobileNumber: jsonPassholder.contact.mobileNumber || ''
-        };
-      }
+      parseJsonContact(this, jsonPassholder.contact);
       this.points = jsonPassholder.points;
     },
     serialize: function () {
