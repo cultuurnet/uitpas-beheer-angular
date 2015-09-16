@@ -36,20 +36,4 @@ describe('Controller: PassholderKansenStatuutController', function () {
     controller.cancelModal();
     expect(modalInstance.dismiss).toHaveBeenCalled();
   });
-
-  it('can verify if the active counter can edit a kansenstatuut', function () {
-    var kansenStatuutTrue = {
-      cardSystem: {
-        id: 1
-      }
-    };
-    expect(controller.counterCanAlterKansenStatuut(kansenStatuutTrue)).toBeTruthy();
-
-    var kansenStatuutFalse = {
-      cardSystem: {
-        id: 2
-      }
-    };
-    expect(controller.counterCanAlterKansenStatuut(kansenStatuutFalse)).toBeFalsy();
-  });
 });
