@@ -36,7 +36,8 @@ describe('Factory: Passholder', function () {
       }
     }],
     'points': 309,
-    'picture': 'picture-in-base64-format'
+    'picture': 'picture-in-base64-format',
+    'remarks': 'remarks'
   };
 
   function getJsonPassholder() {
@@ -81,7 +82,8 @@ describe('Factory: Passholder', function () {
       }],
       points: 309,
       picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
-      inszNumber: ''
+      inszNumber: '',
+      remarks: 'remarks'
     };
 
     var passholder = new Passholder(jsonPassholder);

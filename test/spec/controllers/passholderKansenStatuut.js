@@ -28,12 +28,29 @@ describe('Controller: PassholderKansenStatuutController', function () {
     controller = $controller('PassholderKansenStatuutController', {
       passholder: { passNumber: '01234567891234' },
       activeCounter: activeCounter,
-      $modalInstance: modalInstance
+      $modalInstance: modalInstance,
+      cardSystemId: 1
     });
   }));
 
   it('can dismiss the modal', function () {
     controller.cancelModal();
     expect(modalInstance.dismiss).toHaveBeenCalled();
+  });
+
+  it('can verify if the active counter can edit a kansenstatuut', function () {
+    var kansenStatuutTrue = {
+      cardSystem: {
+        id: 1
+      }
+    };
+    expect(controller.counterCanAlterKansenStatuut(kansenStatuutTrue)).toBeTruthy();
+
+    var kansenStatuutFalse = {
+      cardSystem: {
+        id: 2
+      }
+    };
+    expect(controller.counterCanAlterKansenStatuut(kansenStatuutFalse)).toBeFalsy();
   });
 });

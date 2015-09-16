@@ -79,6 +79,7 @@ function passholderFactory(moment, day) {
     };
     this.points = 0;
     this.kansenStatuten = [];
+    this.remarks = '';
 
     if (jsonPassholder) {
       this.parseJson(jsonPassholder);
@@ -107,6 +108,7 @@ function passholderFactory(moment, day) {
       parseJsonContact(this, jsonPassholder.contact);
       parseJsonKansenStatuten(this, jsonPassholder.kansenStatuten);
       this.points = jsonPassholder.points;
+      this.remarks = jsonPassholder.remarks || 'Some test string to work with';
     },
     serialize: function () {
       var serializedPassholder = angular.copy(this);

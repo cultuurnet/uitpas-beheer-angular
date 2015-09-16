@@ -194,8 +194,9 @@ angular
               animation: true,
               templateUrl: 'views/modal-passholder-kansenstatuut.html',
               params: {
-                'identification': null,
-                'passholder': null
+                'passholder': null,
+                'activeCounter': null,
+                'cardSystemId': null
               },
               size: 'sm',
               resolve: {
@@ -204,6 +205,53 @@ angular
                 },
                 activeCounter: function() {
                   return activeCounter;
+                },
+                cardSystemId: null
+              },
+              controller: 'PassholderKansenStatuutController',
+              controllerAs: 'pksc'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
+      })
+      .state('counter.main.passholder.kansenStatuut.edit', {
+        url: '/:cardSystemId',
+        resolve: {
+          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          identification: ['$stateParams', function($stateParams) {
+            return $stateParams.identification;
+          }],
+          activeCounter: ['counterService', function (counterService) {
+            return counterService.getActive();
+          }],
+          cardSystemId: ['$stateParams', function($stateParams) {
+            console.log($stateParams);
+            return $stateParams.cardSystemId;
+          }]
+        },
+        onEnter: ['passholder', 'activeCounter', 'cardSystemId', '$state', '$modal', function(passholder, activeCounter, cardSystemId, $state, $modal) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-passholder-kansenstatuut-edit.html',
+              params: {
+                'passholder': null,
+                'activeCounter': null,
+                'cardSystemId': null
+              },
+              size: 'sm',
+              resolve: {
+                passholder: function() {
+                  return passholder;
+                },
+                activeCounter: function() {
+                  return activeCounter;
+                },
+                cardSystemId: function() {
+                  return cardSystemId;
                 }
               },
               controller: 'PassholderKansenStatuutController',

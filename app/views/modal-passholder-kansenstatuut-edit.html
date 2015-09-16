@@ -1,0 +1,29 @@
+<form name="kansenStatuutEdit" ng-submit="pksc.submitForm(kansenStatuutEdit)" novalidate ng-class="{'form-submiting': pksc.formSubmitBusy}">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="pksc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Kansenstatuut aanpassen</h4>
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid">
+      <fieldset ng-disabled="pksc.formSubmitBusy">
+        <div class="grid">
+          <h3>Kansenstatuut {{pksc.kansenStatuutToEdit.name}}</h3>
+          <pre>{{pksc.kansenStatuutToEdit|json}}</pre>
+          <div class="grid__12 grid--bp-lrg__3 field-group" ng-class="{ 'has-error': (kansenStatuutEdit.$submitted || kansenStatuutEdit.endDate.$dirty) && kansenStatuutEdit.endDate.$invalid }">
+            <label class="control-label" for="end-date">
+              Geldig tot
+            </label>
+            <input type="date" class="form-control" id="end-date" name="endDate" ng-model="pksc.kansenStatuutToEdit.endDate">
+            <div ng-if="(kansenStatuutEdit.$submitted || kansenStatuutEdit.endDate.$touched || kansenStatuutEdit.endDate.$dirty) && kansenStatuutEdit.endDate.$invalid" class="text-danger small">
+              <div ng-if="kansenStatuutEdit.endDate.$error.gender">Het geslacht afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div><!-- end modal-body -->
+  <div class="modal-footer">
+    <a ng-click="pksc.cancelModal()">Annuleren</a>
+    <button type="button" class="btn btn-primary" ng-disabled="pksc.formSubmitBusy || kansenStatuutEdit.$invalid" ng-click="pksc.submitForm(kansenStatuutEdit)"><span ng-hide="pksc.formSubmitBusy">Bewaren</span> <span ng-show="pksc.formSubmitBusy"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span></button>
+  </div>
+</form>
