@@ -32,8 +32,8 @@ function PassholderKansenStatuutController (passholder, activeCounter, $modalIns
   controller.counterCanAlterKansenStatuut = function (kansenStatuut) {
     var isEligible = false;
 
-    if (activeCounter.cardSystems[kansenStatuut.cardSystem.id]) {
-      var cardSystemPermissions = activeCounter.cardSystems[kansenStatuut.cardSystem.id].permissions;
+    if (controller.activeCounter.cardSystems[kansenStatuut.cardSystem.id]) {
+      var cardSystemPermissions = controller.activeCounter.cardSystems[kansenStatuut.cardSystem.id].permissions;
 
       // Check if active counter and card system is allowed to assign kansenstatuut passes
       if (cardSystemPermissions.indexOf('kansenstatuut toekennen') !== -1) {
