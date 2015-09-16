@@ -27,6 +27,14 @@ describe('Factory: Passholder', function () {
     'contact': {
       'email': 'email@email.com'
     },
+    kansenStatuten: [{
+      status: 'ACTIVE',
+      endDate: '2015-12-06',
+      cardSystem: {
+        name: 'UiTPAS Regio Aalst',
+        id: '1'
+      }
+    }],
     'points': 309,
     'picture': 'picture-in-base64-format'
   };
@@ -63,6 +71,14 @@ describe('Factory: Passholder', function () {
         telephoneNumber: '',
         mobileNumber: ''
       },
+      kansenStatuten: [{
+        status: 'ACTIVE',
+        endDate: day('2015-12-06', 'YYYY-MM-DD').toDate(),
+        cardSystem: {
+          name: 'UiTPAS Regio Aalst',
+          id: '1'
+        }
+      }],
       points: 309,
       picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
       inszNumber: ''
