@@ -93,6 +93,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     var successUpdatingPassholderOnServer = function(passholderData) {
       service.findPass(identification).then(function (cachedPass) {
         cachedPass.passholder.parseJson(passholderData);
+        passholderCache.put(cachedPass.number, cachedPass);
         deferred.resolve(cachedPass.passholder);
       });
     };
