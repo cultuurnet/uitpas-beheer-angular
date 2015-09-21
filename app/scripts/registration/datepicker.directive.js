@@ -57,7 +57,7 @@ function ubrDatepicker() {
         locale: 'nl',
         format: 'DD/MM/YYYY',
         useCurrent: false,
-        //minDate: new Date(),
+        minDate: new Date(),
         icons: {
           time: 'fa fa-clock-o',
           date: 'fa fa-calendar',
