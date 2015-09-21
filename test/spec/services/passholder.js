@@ -40,6 +40,7 @@ describe('Service: passholderService', function () {
         'email': false,
         'sms': false
       },
+      'kansenStatuten': [],
       'inszNumber': '930518-223-61',
       'points': 123
     }

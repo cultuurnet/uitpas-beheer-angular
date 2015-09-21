@@ -29,6 +29,22 @@ function passholderFactory(moment, day) {
     }
   }
 
+  function parseJsonKansenStatuten(passholder, jsonKansenStatuten) {
+    if (jsonKansenStatuten) {
+      angular.forEach(jsonKansenStatuten, function (jsonKansenStatuut) {
+        var kansenStatuut = {
+          status: jsonKansenStatuut.status,
+          endDate: day(jsonKansenStatuut.endDate, 'YYYY-MM-DD').toDate(),
+          cardSystem: {
+            id: jsonKansenStatuut.cardSystem.id,
+            name: jsonKansenStatuut.cardSystem.name
+          }
+        };
+        passholder.kansenStatuten.push(kansenStatuut);
+      });
+    }
+  }
+
   /**
    * @class Passholder
    * @constructor
@@ -62,6 +78,7 @@ function passholderFactory(moment, day) {
       mobileNumber: ''
     };
     this.points = 0;
+    this.kansenStatuten = [];
 
     if (jsonPassholder) {
       this.parseJson(jsonPassholder);
@@ -88,6 +105,7 @@ function passholderFactory(moment, day) {
       this.nationality = jsonPassholder.nationality;
       this.privacy = jsonPassholder.privacy;
       parseJsonContact(this, jsonPassholder.contact);
+      parseJsonKansenStatuten(this, jsonPassholder.kansenStatuten);
       this.points = jsonPassholder.points;
     },
     serialize: function () {
