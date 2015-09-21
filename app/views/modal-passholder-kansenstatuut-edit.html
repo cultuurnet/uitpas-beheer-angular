@@ -7,13 +7,12 @@
     <div class="container-fluid">
       <fieldset ng-disabled="pksc.formSubmitBusy">
         <div class="grid">
-          <h3>Kansenstatuut {{pksc.kansenStatuutToEdit.name}}</h3>
-          <pre>{{pksc.kansenStatuutToEdit|json}}</pre>
-          <div class="grid__12 grid--bp-lrg__3 field-group" ng-class="{ 'has-error': (kansenStatuutEdit.$submitted || kansenStatuutEdit.endDate.$dirty) && kansenStatuutEdit.endDate.$invalid }">
-            <label class="control-label" for="end-date">
-              Geldig tot
-            </label>
-            <input type="date" class="form-control" id="end-date" name="endDate" ng-model="pksc.kansenStatuutToEdit.endDate">
+          <h3>Kansenstatuut {{pksc.kansenstatuut.name}}</h3>
+          <pre>{{pksc.kansenstatuut|json}}</pre>
+          <div class="grid__12 grid--bp-lrg__3 field-group"
+               ng-class="{ 'has-error': (kansenStatuutEdit.$submitted || kansenStatuutEdit.endDate.$dirty) && kansenStatuutEdit.endDate.$invalid }">
+            <ubr-datepicker ng-model="pksc.kansenstatuut.endDate" ubr-label="Geldig tot" ubr-id="geldig-tot"
+                            ubr-name="endDate"></ubr-datepicker>
             <div ng-if="(kansenStatuutEdit.$submitted || kansenStatuutEdit.endDate.$touched || kansenStatuutEdit.endDate.$dirty) && kansenStatuutEdit.endDate.$invalid" class="text-danger small">
               <div ng-if="kansenStatuutEdit.endDate.$error.gender">Het geslacht afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>
             </div>

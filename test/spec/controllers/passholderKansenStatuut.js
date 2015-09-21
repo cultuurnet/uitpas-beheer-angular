@@ -8,7 +8,7 @@ describe('Controller: PassholderKansenStatuutController', function () {
   var controller, activeCounter, modalInstance;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller) {
+  beforeEach(inject(function ($controller, Passholder) {
     activeCounter = {
       cardSystems: {
         1: {
@@ -26,7 +26,7 @@ describe('Controller: PassholderKansenStatuutController', function () {
     };
 
     controller = $controller('PassholderKansenStatuutController', {
-      passholder: { passNumber: '01234567891234' },
+      passholder: new Passholder({ passNumber: '01234567891234' }),
       activeCounter: activeCounter,
       $modalInstance: modalInstance,
       cardSystemId: 1

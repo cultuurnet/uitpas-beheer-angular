@@ -27,7 +27,9 @@
             {{kansenStatuut.endDate | date : 'dd/MM/yyyy'}}
           </td>
           <td>
-            <input type="button" class="btn btn-primary" ng-show="pksc.counterCanAlterKansenStatuut(kansenStatuut)" value="Bewerken" ui-sref="counter.main.passholder.kansenStatuut.edit({ cardSystemId: kansenStatuut.cardSystem.id })">
+            <input type="button" class="btn btn-primary" ng-show="pksc.counterCanAlterKansenStatuut(kansenStatuut)"
+                   ui-sref="counter.main.passholder.kansenStatuut.edit({ cardSystemId: kansenStatuut.cardSystem.id })"
+                   value="Bewerken">
           </td>
         </tr>
       </tbody>

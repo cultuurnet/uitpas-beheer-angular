@@ -20,6 +20,11 @@ function PassholderKansenStatuutController (passholder, activeCounter, cardSyste
   controller.passholder = passholder;
   controller.activeCounter = activeCounter;
   controller.cardSystemid = cardSystemId;
+  controller.kansenstatuut = passholder.getKansenstatuutByCardSystemID(cardSystemId);
+
+  console.log(controller.kansenstatuut);
+
+  console.log(passholder);
 
   controller.cancelModal = function () {
     $modalInstance.dismiss();
@@ -39,16 +44,4 @@ function PassholderKansenStatuutController (passholder, activeCounter, cardSyste
 
     return isEligible;
   };
-
-  controller.getKansenStatuutToEdit = function (cardSystemId) {
-    angular.forEach(controller.passholder.kansenStatuten, function (kansenStatuut) {
-      if (kansenStatuut.cardSystem.id === cardSystemId) {
-        console.log('fred', kansenStatuut);
-        return kansenStatuut;
-      }
-    });
-  };
-  if (controller.cardSystemId) {
-    controller.kansenStatuutToEdit = controller.getKansenStatuutToEdit(cardSystemId);
-  }
 }

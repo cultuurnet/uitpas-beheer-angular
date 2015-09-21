@@ -110,6 +110,18 @@ function passholderFactory(moment, day) {
       this.points = jsonPassholder.points;
       this.remarks = jsonPassholder.remarks || 'Some test string to work with';
     },
+    getKansenstatuutByCardSystemID: function (cardSystemID) {
+      var passholder = this,
+          matchingKansenstatuut = null;
+
+      angular.forEach(passholder.kansenStatuten, function (kansenstatuut) {
+        if (kansenstatuut.cardSystem.id === cardSystemID) {
+          matchingKansenstatuut = kansenstatuut;
+        }
+      });
+
+      return matchingKansenstatuut;
+    },
     serialize: function () {
       var serializedPassholder = angular.copy(this);
 

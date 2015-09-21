@@ -40,11 +40,18 @@ describe('Factory: Passholder', function () {
     'remarks': 'remarks'
   };
 
+  var Passholder, day;
+
+  beforeEach(inject(function (_Passholder_, _day_) {
+    Passholder = _Passholder_;
+    day = _day_
+  }));
+
   function getJsonPassholder() {
     return angular.copy(jsonPassholder);
-  }
+  };
 
-  it('should correctly parse a passholder with a missing picture', inject(function (Passholder, day) {
+  it('should correctly parse a passholder with a missing picture', function () {
     var jsonPassholder = getJsonPassholder();
 
     var expectedPassholder = {
@@ -90,9 +97,9 @@ describe('Factory: Passholder', function () {
 
     expect(passholder).toEqual(expectedPassholder);
 
-  }));
+  });
 
-  it('should overwrite existing contact info with defaults when parsing data without a contact property', inject(function (Passholder){
+  it('should overwrite existing contact info with defaults when parsing data without a contact property', function() {
     var existingPassholder = new Passholder(getJsonPassholder());
     var expectedContactInfo = {
       email: '',
@@ -107,5 +114,21 @@ describe('Factory: Passholder', function () {
 
     existingPassholder.parseJson(newPassholderData);
     expect(existingPassholder.contact).toEqual(expectedContactInfo);
-  }));
+  });
+
+  it('should return a kansenstatuut for a given card system ID', function () {
+    var expectedKansenstatuut = {
+      status: 'ACTIVE',
+      endDate: day('2015-12-06', 'YYYY-MM-DD').toDate(),
+      cardSystem: {
+        name: 'UiTPAS Regio Aalst',
+        id: '1'
+      }
+    };
+    var passholder = new Passholder(getJsonPassholder());
+
+    var kansenstatuut = passholder.getKansenstatuutByCardSystemID('1');
+
+    expect(kansenstatuut).toEqual(expectedKansenstatuut);
+  })
 });
