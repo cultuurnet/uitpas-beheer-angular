@@ -17,7 +17,7 @@ function ubrDatepicker() {
     restrict: 'E',
     require:'ngModel',
     scope: {
-      name: '@name',
+      name: '@ubrName',
       label: '@ubrLabel',
       id: '@ubrId'
     },
@@ -57,6 +57,7 @@ function ubrDatepicker() {
         locale: 'nl',
         format: 'DD/MM/YYYY',
         useCurrent: false,
+        //minDate: new Date(),
         icons: {
           time: 'fa fa-clock-o',
           date: 'fa fa-calendar',

@@ -192,4 +192,35 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     return deferredPassholder.promise;
   };
+
+  /**
+   * Renew the kansenstatuut of a passholder with a new end date.
+   *
+   * @param {Passholder} passholder
+   * @param {object} kansenstatuut
+   * @param {Date} endDate
+   */
+  service.renewKansenstatuut = function (passholder, kansenstatuut, endDate) {
+    var cardSystemId = kansenstatuut.cardSystem.id,
+        passholderId = passholder.passNumber,
+        kansenstatuutData = {
+          endDate: moment(endDate).format('YYYY-MM-DD')
+        },
+        requestOptions = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        },
+        deferredRenew = $q.defer();
+
+    $http
+      .patch(
+        apiUrl + 'passholders/' + passholderId + '/kansenstatuten/' + cardSystemId,
+        kansenstatuutData,
+        requestOptions
+      )
+      .then(deferredRenew.resolve, deferredRenew.reject);
+
+    return deferredRenew.promise;
+  };
 }
