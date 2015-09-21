@@ -49,7 +49,7 @@ describe('Factory: Passholder', function () {
 
   function getJsonPassholder() {
     return angular.copy(jsonPassholder);
-  };
+  }
 
   it('should correctly parse a passholder with a missing picture', function () {
     var jsonPassholder = getJsonPassholder();
@@ -130,5 +130,15 @@ describe('Factory: Passholder', function () {
     var kansenstatuut = passholder.getKansenstatuutByCardSystemID('1');
 
     expect(kansenstatuut).toEqual(expectedKansenstatuut);
-  })
+  });
+
+  it('should not create duplicate kansenstatuten when parsing new kansenstatuut data', function () {
+    var originalPassholderData = getJsonPassholder();
+    var passholder = new Passholder(originalPassholderData);
+    var expectedKansenstatuten = angular.copy(passholder.kansenStatuten);
+    var updatedPassholderData = getJsonPassholder();
+
+    passholder.parseJson(updatedPassholderData);
+    expect(passholder.kansenStatuten).toEqual(expectedKansenstatuten);
+  });
 });

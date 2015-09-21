@@ -31,6 +31,8 @@ function passholderFactory(moment, day) {
 
   function parseJsonKansenStatuten(passholder, jsonKansenStatuten) {
     if (jsonKansenStatuten) {
+      var kansenstatuten = [];
+
       angular.forEach(jsonKansenStatuten, function (jsonKansenStatuut) {
         var kansenStatuut = {
           status: jsonKansenStatuut.status,
@@ -40,8 +42,10 @@ function passholderFactory(moment, day) {
             name: jsonKansenStatuut.cardSystem.name
           }
         };
-        passholder.kansenStatuten.push(kansenStatuut);
+        kansenstatuten.push(kansenStatuut);
       });
+
+      passholder.kansenStatuten = kansenstatuten;
     }
   }
 
@@ -108,7 +112,7 @@ function passholderFactory(moment, day) {
       parseJsonContact(this, jsonPassholder.contact);
       parseJsonKansenStatuten(this, jsonPassholder.kansenStatuten);
       this.points = jsonPassholder.points;
-      this.remarks = jsonPassholder.remarks || 'Some test string to work with';
+      this.remarks = jsonPassholder.remarks || '';
     },
     getKansenstatuutByCardSystemID: function (cardSystemID) {
       var passholder = this,
