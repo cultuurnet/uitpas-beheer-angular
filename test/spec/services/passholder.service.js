@@ -46,6 +46,10 @@ describe('Service: passholderService', function () {
     }
   };
 
+  function getPassData() {
+    return angular.copy(identityData);
+  }
+
   beforeEach(inject(function ($injector, $rootScope) {
     $httpBackend = $injector.get('$httpBackend');
     passholderService = $injector.get('passholderService');
@@ -392,5 +396,34 @@ describe('Service: passholderService', function () {
     };
 
     expect(registrationCall).toThrowError('Registration for a pass with kansenstatuut should provide additional info.');
+  });
+
+  it('should update the kansenstatuut of a passholder when renewing', function (done) {
+    var passData = getPassData();
+    passData.passHolder.kansenStatuten = [{
+      status: 'ACTIVE',
+      endDate: '2015-12-06',
+      cardSystem: {
+        name: 'UiTPAS Regio Aalst',
+        id: '1'
+      }
+    }];
+    var pass = new Pass(passData);
+    var passholder = pass.passholder;
+    var kansenstatuut = passholder.kansenStatuten[0];
+    var endDate = new Date('2345-01-01');
+    var updateData = {
+      endDate: '2345-01-01'
+    };
+
+    $httpBackend
+      .expectPATCH(apiUrl + 'passholders/' + pass.number + '/kansenstatuten/' + 1, updateData)
+      .respond(200);
+
+    passholderService
+      .renewKansenstatuut(passholder, kansenstatuut, endDate)
+      .then(done);
+
+    $httpBackend.flush();
   });
 });
