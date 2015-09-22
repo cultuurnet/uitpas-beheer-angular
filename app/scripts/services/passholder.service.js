@@ -223,4 +223,25 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     return deferredRenew.promise;
   };
+
+  /**
+   * Update the remarks for a passholder.
+   *
+   * @param {Passholder} passholder
+   * @param {string} remarks
+   */
+  service.updateRemarks = function (passholder, remarks) {
+    var passholderId = passholder.passNumber;
+    var passholderPath = apiUrl + 'passholders/' + passholderId;
+    var remarksData = {
+      remarks: remarks
+    };
+    var requestOptions = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    return $http.patch(passholderPath, remarksData, requestOptions);
+  };
 }

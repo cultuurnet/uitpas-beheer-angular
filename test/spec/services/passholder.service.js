@@ -426,4 +426,23 @@ describe('Service: passholderService', function () {
 
     $httpBackend.flush();
   });
+
+  it('should patch the passholder when updating passholder remarks', function (done) {
+    var pass = new Pass(getPassData());
+    var passholder = pass.passholder;
+    var remarks = 'remarkable';
+    var expectedRemarksData = {
+      remarks: 'remarkable'
+    };
+
+    $httpBackend
+       .expectPATCH(apiUrl + 'passholders/' + pass.number, expectedRemarksData)
+       .respond(200);
+
+    passholderService
+      .updateRemarks(passholder, remarks)
+      .then(done);
+
+    $httpBackend.flush();
+  })
 });

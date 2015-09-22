@@ -192,7 +192,7 @@ angular
           $modal
             .open({
               animation: true,
-              templateUrl: 'views/modal-passholder-kansenstatuut.html',
+              templateUrl: 'views/kansenstatuut/kansenstatuten-modal.html',
               params: {
                 'passholder': null,
                 'activeCounter': null,
@@ -236,7 +236,7 @@ angular
           $modal
             .open({
               animation: true,
-              templateUrl: 'views/modal-passholder-kansenstatuut-edit.html',
+              templateUrl: 'views/kansenstatuut/edit-kansenstatuut-modal.html',
               params: {
                 'passholder': null,
                 'activeCounter': null,
