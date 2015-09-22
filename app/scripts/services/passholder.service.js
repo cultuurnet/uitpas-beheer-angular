@@ -122,7 +122,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     };
 
     $http
-      .post(apiUrl + 'passholders/' + identification, passholder.serialize(), config)
+      .patch(apiUrl + 'passholders/' + identification, passholder.serialize(), config)
       .success(successUpdatingPassholderOnServer)
       .error(errorUpdatingPassholderOnServer);
 
