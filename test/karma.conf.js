@@ -41,6 +41,7 @@ module.exports = function(config) {
       'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-spinkit/build/angular-spinkit.js',
       'bower_components/angular-touch/angular-touch.js',
+      'bower_components/angular-truncate/src/truncate.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
       'bower_components/moment/moment.js',

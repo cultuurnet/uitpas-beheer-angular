@@ -11,7 +11,8 @@
 angular
   .module('ubr.kansenstatuut', [
     'ui.router',
-    'uitpasbeheerApp'
+    'uitpasbeheerApp',
+    'truncate'
   ])
   /* @ngInject */
   .config(function ($stateProvider) {

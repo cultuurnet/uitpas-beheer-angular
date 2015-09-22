@@ -42,7 +42,7 @@
       <div ng-if="!pksc.passholder.remarks" class="alert alert-info" role="alert">
         Geen extra informatie ingevoerd.
       </div>
-      <p ng-if="pksc.passholder.remarks" ng-bind="pksc.passholder.remarks"></p>
+      <p ng-if="pksc.passholder.remarks" ng-bind="pksc.passholder.remarks | characters:300"></p>
       <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editRemarks" class="btn btn-primary"
              value="Bewerken">
     </section>
