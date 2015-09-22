@@ -12,7 +12,7 @@
     <div class="container-fluid">
       <fieldset ng-disabled="ekmc.updatePending">
         <div class="grid">
-          <h3>Kansenstatuut {{ekmc.kansenstatuut.name}}</h3>
+          <h3>Kansenstatuut {{ekmc.kansenstatuut.cardSystem.name}}</h3>
           <div class="grid__12 grid--bp-lrg__3 field-group"
                ng-class="{ 'has-error': (editForm.$submitted || editForm.endDate.$dirty) && editForm.endDate.$invalid }">
             <ubr-datepicker ng-model="ekmc.kansenstatuut.endDate" ubr-label="Geldig tot" ubr-id="geldig-tot"
