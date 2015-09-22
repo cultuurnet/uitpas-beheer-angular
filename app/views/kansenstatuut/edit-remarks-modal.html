@@ -1,0 +1,34 @@
+<form name="editForm" ng-submit="ermc.updateRemarks(editForm)" novalidate ng-class="{'form-submiting': ermc.updatePending}">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="ermc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Kansenstatuut info aanpassen</h4>
+  </div>
+  <div class="modal-body">
+
+    <div class="alert alert-danger" ng-show="ermc.asyncError">
+      <span ng-bind="ermc.asyncError.message"></span>
+    </div>
+
+    <div class="container-fluid">
+      <fieldset ng-disabled="ermc.updatePending">
+        <div class="grid">
+          <div class="grid__12 grid--bp-lrg__12 field-group"
+               ng-class="{ 'has-error': (editForm.$submitted || editForm.remarks.$dirty) && editForm.remarks.$invalid }">
+            <label for="edit-remarks">Meer info</label>
+            <textarea name="remarks" id="edit-remarks" rows="10" ng-model="ermc.remarks"></textarea>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div><!-- end modal-body -->
+  <div class="modal-footer">
+    <a ng-click="ermc.cancelModal()">Annuleren</a>
+    <button type="button" class="btn btn-primary" ng-disabled="ermc.updatePending || editForm.$invalid"
+            ng-click="ermc.updateRemarks(editForm)">
+      <span ng-hide="ermc.updatePending">Bewaren</span>
+      <span ng-show="ermc.updatePending">
+        <span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden
+      </span>
+    </button>
+  </div>
+</form>

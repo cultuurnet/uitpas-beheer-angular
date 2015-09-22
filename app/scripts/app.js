@@ -21,7 +21,8 @@ angular
     'ui.router',
     'ui.bootstrap',
     'mp.autoFocus',
-    'ubr.registration'
+    'ubr.registration',
+    'ubr.kansenstatuut'
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
@@ -170,92 +171,6 @@ angular
               },
               controller: 'PassholderEditController',
               controllerAs: 'pec'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }]
-      })
-      .state('counter.main.passholder.kansenStatuut', {
-        url: '/kansenstatuut',
-        resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
-          identification: ['$stateParams', function($stateParams) {
-            return $stateParams.identification;
-          }],
-          activeCounter: ['counterService', function (counterService) {
-            return counterService.getActive();
-          }]
-        },
-        onEnter: ['passholder', 'activeCounter', '$state', '$modal', function(passholder, activeCounter, $state, $modal) {
-          $modal
-            .open({
-              animation: true,
-              templateUrl: 'views/kansenstatuut/kansenstatuten-modal.html',
-              params: {
-                'passholder': null,
-                'activeCounter': null,
-                'cardSystemId': null
-              },
-              size: 'sm',
-              resolve: {
-                passholder: function() {
-                  return passholder;
-                },
-                activeCounter: function() {
-                  return activeCounter;
-                },
-                cardSystemId: null
-              },
-              controller: 'PassholderKansenStatuutController',
-              controllerAs: 'pksc'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }]
-      })
-      .state('counter.main.passholder.kansenStatuut.edit', {
-        url: '/:cardSystemId',
-        resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
-          identification: ['$stateParams', function($stateParams) {
-            return $stateParams.identification;
-          }],
-          activeCounter: ['counterService', function (counterService) {
-            return counterService.getActive();
-          }],
-          cardSystemId: ['$stateParams', function($stateParams) {
-            console.log($stateParams);
-            return $stateParams.cardSystemId;
-          }]
-        },
-        onEnter: ['passholder', 'activeCounter', 'cardSystemId', '$state', '$modal', function(passholder, activeCounter, cardSystemId, $state, $modal) {
-          $modal
-            .open({
-              animation: true,
-              templateUrl: 'views/kansenstatuut/edit-kansenstatuut-modal.html',
-              params: {
-                'passholder': null,
-                'activeCounter': null,
-                'cardSystemId': null
-              },
-              size: 'sm',
-              resolve: {
-                passholder: function() {
-                  return passholder;
-                },
-                activeCounter: function() {
-                  return activeCounter;
-                },
-                cardSystemId: function() {
-                  return cardSystemId;
-                }
-              },
-              controller: 'PassholderKansenStatuutController',
-              controllerAs: 'pksc'
             })
             .result
             .finally(function() {

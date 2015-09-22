@@ -3,7 +3,9 @@
   <h4 class="modal-title">Kansenstatuut</h4>
 </div>
 <div class="modal-body">
-  <div class="container-fluid">
+  <section class="container-fluid">
+
+    <h3>Kansenstatuten</h3>
     <table>
       <thead>
         <tr>
@@ -34,9 +36,17 @@
         </tr>
       </tbody>
     </table>
-    <div>
 
-    </div>
+    <section class="more-info">
+      <h3>Meer info</h3>
+      <div ng-if="!pksc.passholder.remarks" class="alert alert-info" role="alert">
+        Geen extra informatie ingevoerd.
+      </div>
+      <p ng-if="pksc.passholder.remarks" ng-bind="pksc.passholder.remarks"></p>
+      <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editRemarks" class="btn btn-primary"
+             value="bewerken">
+    </section>
+
   </div>
 </div><!-- end modal-body -->
 <div class="modal-footer">

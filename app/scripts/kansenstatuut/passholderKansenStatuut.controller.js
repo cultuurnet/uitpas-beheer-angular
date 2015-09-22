@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:PassholderKansenStatuutController
+ * @name ubr.kansenstatuut.controller:PassholderKansenStatuutController
  * @description
  * # PassholderKansenStatuutController
- * Controller of the uitpasbeheerApp
+ * Controller of ubr.kansenstatuut
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.kansenstatuut')
   .controller('PassholderKansenStatuutController', PassholderKansenStatuutController);
 
 /* @ngInject */

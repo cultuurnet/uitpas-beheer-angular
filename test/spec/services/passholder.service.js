@@ -431,13 +431,14 @@ describe('Service: passholderService', function () {
     var pass = new Pass(getPassData());
     var passholder = pass.passholder;
     var remarks = 'remarkable';
-    var expectedRemarksData = {
-      remarks: 'remarkable'
-    };
+    var expectedData = passholder.serialize();
+    expectedData.remarks = 'remarkable';
+
+    spyOn(passholderService, 'findPass').and.returnValue($q.resolve(pass));
 
     $httpBackend
-       .expectPATCH(apiUrl + 'passholders/' + pass.number, expectedRemarksData)
-       .respond(200);
+       .expectPATCH(apiUrl + 'passholders/' + pass.number, expectedData)
+       .respond(200, expectedData);
 
     passholderService
       .updateRemarks(passholder, remarks)

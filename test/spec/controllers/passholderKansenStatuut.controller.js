@@ -3,7 +3,7 @@
 describe('Controller: PassholderKansenStatuutController', function () {
 
   // load the controller's module
-  beforeEach(module('uitpasbeheerApp'));
+  beforeEach(module('ubr.kansenstatuut'));
 
   var controller, activeCounter, modalInstance, passholderService, $q, scope;
 

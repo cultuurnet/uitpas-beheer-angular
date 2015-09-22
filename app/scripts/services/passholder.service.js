@@ -233,15 +233,28 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   service.updateRemarks = function (passholder, remarks) {
     var passholderId = passholder.passNumber;
     var passholderPath = apiUrl + 'passholders/' + passholderId;
-    var remarksData = {
-      remarks: remarks
-    };
+    var passholderData = passholder.serialize();
+    passholderData.remarks = remarks;
     var requestOptions = {
       headers: {
         'Content-Type': 'application/json'
       }
     };
+    var deferredUpdate = $q.defer();
 
-    return $http.patch(passholderPath, remarksData, requestOptions);
+    function updateLocalPassholder (updateReponse) {
+      var passholderData = updateReponse.data;
+      service.findPass(passholderId).then(function (cachedPass) {
+        cachedPass.passholder.parseJson(passholderData);
+        passholderCache.put(cachedPass.number, cachedPass);
+        deferredUpdate.resolve(cachedPass.passholder);
+      });
+    }
+
+    $http
+      .patch(passholderPath, passholderData, requestOptions)
+      .then(updateLocalPassholder, deferredUpdate.reject);
+
+    return deferredUpdate.promise;
   };
 }
