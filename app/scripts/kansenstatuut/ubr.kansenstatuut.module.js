@@ -72,8 +72,8 @@ angular
               return cardSystemId;
             }
           },
-          controller: 'PassholderKansenStatuutController',
-          controllerAs: 'pksc'
+          controller: 'EditKansenstatuutModalController',
+          controllerAs: 'ekmc'
         })
         .result
         .finally(function () {
@@ -113,7 +113,7 @@ angular
                 },
                 cardSystemId: null
               },
-              controller: 'PassholderKansenStatuutController',
+              controller: 'KansenstatutenModalController',
               controllerAs: 'pksc'
             })
             .result

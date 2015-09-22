@@ -201,17 +201,23 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    * @param {Date} endDate
    */
   service.renewKansenstatuut = function (passholder, kansenstatuut, endDate) {
-    var cardSystemId = kansenstatuut.cardSystem.id,
-        passholderId = passholder.passNumber,
-        kansenstatuutData = {
-          endDate: moment(endDate).format('YYYY-MM-DD')
-        },
-        requestOptions = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        },
-        deferredRenew = $q.defer();
+    var cardSystemId = kansenstatuut.cardSystem.id;
+    var passholderId = passholder.passNumber;
+    var kansenstatuutData = {
+      endDate: moment(endDate).format('YYYY-MM-DD')
+    };
+    var requestOptions = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    var deferredRenew = $q.defer();
+
+    function updateLocalKansenstatuut () {
+      var cachedKansenstatuut = passholder.getKansenstatuutByCardSystemID(kansenstatuut.cardSystem.id);
+      cachedKansenstatuut.endDate = endDate;
+      deferredRenew.resolve();
+    }
 
     $http
       .patch(
@@ -219,7 +225,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
         kansenstatuutData,
         requestOptions
       )
-      .then(deferredRenew.resolve, deferredRenew.reject);
+      .then(updateLocalKansenstatuut, deferredRenew.reject);
 
     return deferredRenew.promise;
   };
@@ -242,18 +248,35 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     };
     var deferredUpdate = $q.defer();
 
-    function updateLocalPassholder (updateReponse) {
-      var passholderData = updateReponse.data;
-      service.findPass(passholderId).then(function (cachedPass) {
-        cachedPass.passholder.parseJson(passholderData);
-        passholderCache.put(cachedPass.number, cachedPass);
-        deferredUpdate.resolve(cachedPass.passholder);
-      });
+    function updateLocalPassholder(updateResponse) {
+      service
+        .updateCachedPassholder(passholderId, updateResponse.data)
+        .then(deferredUpdate.resolve);
     }
 
     $http
       .patch(passholderPath, passholderData, requestOptions)
       .then(updateLocalPassholder, deferredUpdate.reject);
+
+    return deferredUpdate.promise;
+  };
+
+  /**
+   * @param {string} passholderId
+   * @param {object} passholderData
+   */
+   service.updateCachedPassholder = function(passholderId, passholderData) {
+     var deferredUpdate = $q.defer();
+
+     function updateCachedPass(cachedPass) {
+       cachedPass.passholder.parseJson(passholderData);
+       passholderCache.put(cachedPass.number, cachedPass);
+       deferredUpdate.resolve(cachedPass.passholder);
+     }
+
+    service
+      .findPass(passholderId)
+      .then(updateCachedPass);
 
     return deferredUpdate.promise;
   };

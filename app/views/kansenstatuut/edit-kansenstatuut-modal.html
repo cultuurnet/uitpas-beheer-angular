@@ -1,21 +1,21 @@
-<form name="editForm" ng-submit="pksc.updateKansenstatuut(editForm)" novalidate ng-class="{'form-submiting': pksc.updatePending}">
+<form name="editForm" ng-submit="ekmc.updateKansenstatuut(editForm)" novalidate ng-class="{'form-submiting': ekmc.updatePending}">
   <div class="modal-header">
-    <button type="button" class="close" ng-click="pksc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" ng-click="ekmc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">Kansenstatuut aanpassen</h4>
   </div>
   <div class="modal-body">
 
-    <div class="alert alert-danger" ng-show="pksc.asyncError">
-      <span ng-bind="pksc.asyncError.message"></span>
+    <div class="alert alert-danger" ng-show="ekmc.asyncError">
+      <span ng-bind="ekmc.asyncError.message"></span>
     </div>
 
     <div class="container-fluid">
-      <fieldset ng-disabled="pksc.updatePending">
+      <fieldset ng-disabled="ekmc.updatePending">
         <div class="grid">
-          <h3>Kansenstatuut {{pksc.kansenstatuut.name}}</h3>
+          <h3>Kansenstatuut {{ekmc.kansenstatuut.name}}</h3>
           <div class="grid__12 grid--bp-lrg__3 field-group"
                ng-class="{ 'has-error': (editForm.$submitted || editForm.endDate.$dirty) && editForm.endDate.$invalid }">
-            <ubr-datepicker ng-model="pksc.kansenstatuut.endDate" ubr-label="Geldig tot" ubr-id="geldig-tot"
+            <ubr-datepicker ng-model="ekmc.kansenstatuut.endDate" ubr-label="Geldig tot" ubr-id="geldig-tot"
                             ubr-name="endDate"></ubr-datepicker>
             <div ng-if="(editForm.$submitted || editForm.endDate.$touched || editForm.endDate.$dirty) && editForm.endDate.$invalid" class="text-danger small">
               <div ng-if="editForm.endDate.$error.gender">Het geslacht afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>
@@ -26,10 +26,10 @@
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
-    <a ng-click="pksc.cancelModal()">Annuleren</a>
-    <button type="button" class="btn btn-primary" ng-disabled="pksc.updatePending || editForm.$invalid"
-            ng-click="pksc.updateKansenstatuut(editForm)">
-      <span ng-hide="pksc.updatePending">Bewaren</span> <span ng-show="pksc.updatePending"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span>
+    <a ng-click="ekmc.cancelModal()">Annuleren</a>
+    <button type="button" class="btn btn-primary" ng-disabled="ekmc.updatePending || editForm.$invalid"
+            ng-click="ekmc.updateKansenstatuut(editForm)">
+      <span ng-hide="ekmc.updatePending">Bewaren</span> <span ng-show="ekmc.updatePending"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span>
     </button>
   </div>
 </form>
