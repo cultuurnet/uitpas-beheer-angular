@@ -18,6 +18,9 @@ table {
   tbody td {
     text-align: center;
     vertical-align: middle;
+    &:first-child {
+      text-align: left;
+    }
   }
   tr {
     border-bottom: 1px solid $gray-15;

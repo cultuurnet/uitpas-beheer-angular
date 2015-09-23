@@ -23,7 +23,7 @@
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="ermc.cancelModal()">Annuleren</a>
-    <button type="button" class="btn btn-primary" ng-disabled="ermc.updatePending || editForm.$invalid"
+    <button type="button" class="btn btn-primary btn-small" ng-disabled="ermc.updatePending || editForm.$invalid"
             ng-click="ermc.updateRemarks(editForm)">
       <span ng-hide="ermc.updatePending">Bewaren</span>
       <span ng-show="ermc.updatePending">
