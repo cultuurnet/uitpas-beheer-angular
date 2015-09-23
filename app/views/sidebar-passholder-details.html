@@ -39,8 +39,8 @@
 </div>
 <div class="passholder passholder-kansenstatuten" ng-show="pdc.passholder.kansenStatuten.length">
   <h3>Kansenstatuut <a class="pull-right" ui-sref="counter.main.passholder.kansenStatuut()">Beheren</a></h3>
-  <div class="kansenstatuut list-group-item" ng-class="'status-' + kansenStatuut.status" ng-repeat="kansenStatuut in pdc.passholder.kansenStatuten">
-    <a ui-sref="counter.main.passholder.kansenStatuut()">{{kansenStatuut.cardSystem.name}}</a>
+  <div class="kansenstatuut list-group">
+    <a class="list-group-item" ng-class="'status-' + kansenStatuut.status" ng-repeat="kansenStatuut in pdc.passholder.kansenStatuten" ui-sref="counter.main.passholder.kansenStatuut()">{{kansenStatuut.cardSystem.name}}</a>
     <small class="label label-danger" ng-show="kansenStatuut.status === 'EXPIRED'">Vervallen</small>
     <small class="label label-warning" ng-show="kansenStatuut.status === 'IN_GRACE_PERIOD'">Vervallen op {{kansenStatuut.endDate | date : 'dd/MM/yyyy'}}</small>
   </div>
