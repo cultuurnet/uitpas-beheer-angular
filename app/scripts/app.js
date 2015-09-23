@@ -180,14 +180,7 @@ angular
       })
       .state('counter.main.passholder.memberships', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', function (passholderService, $stateParams) {
-            if ($stateParams.passholder) {
-              return $stateParams.passholder;
-            }
-            else {
-              return passholderService.find($stateParams.identification);
-            }
-          }]
+          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams]
         },
         onEnter: ['passholder', '$state', '$modal', function(passholder, $state, $modal) {
           $modal
