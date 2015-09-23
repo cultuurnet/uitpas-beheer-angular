@@ -122,7 +122,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     };
 
     $http
-      .patch(apiUrl + 'passholders/' + identification, passholder.serialize(), config)
+      .post(apiUrl + 'passholders/' + identification, passholder.serialize(), config)
       .success(successUpdatingPassholderOnServer)
       .error(errorUpdatingPassholderOnServer);
 
@@ -223,7 +223,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     }
 
     $http
-      .patch(
+      .post(
         apiUrl + 'passholders/' + passholderId + '/kansenstatuten/' + cardSystemId,
         kansenstatuutData,
         requestOptions
@@ -262,7 +262,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     }
 
     $http
-      .patch(passholderPath, passholderData, requestOptions)
+      .post(passholderPath, passholderData, requestOptions)
       .then(updateLocalPassholder, deferredUpdate.reject);
 
     return deferredUpdate.promise;

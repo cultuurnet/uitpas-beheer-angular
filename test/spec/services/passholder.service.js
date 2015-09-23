@@ -195,7 +195,7 @@ describe('Service: passholderService', function () {
     var expectedPassholderData = passholderPostData.serialize();
 
     $httpBackend
-      .expectPATCH(apiUrl + 'passholders/' + uitpasNumber, expectedPassholderData)
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, expectedPassholderData)
       .respond(200, JSON.stringify(expectedPassholderData));
 
     $httpBackend
@@ -235,7 +235,7 @@ describe('Service: passholderService', function () {
     };
 
     $httpBackend
-      .expectPATCH(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
       .respond(403, JSON.stringify(expectedAPIError));
 
     var assertRejectedWithError = function (response) {
@@ -267,7 +267,7 @@ describe('Service: passholderService', function () {
     };
 
     $httpBackend
-      .expectPATCH(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
       .respond(403, JSON.stringify(expectedAPIError));
 
     var assertRejectedWithError = function (response) {
@@ -417,7 +417,7 @@ describe('Service: passholderService', function () {
     };
 
     $httpBackend
-      .expectPATCH(apiUrl + 'passholders/' + pass.number + '/kansenstatuten/' + 1, updateData)
+      .expectPOST(apiUrl + 'passholders/' + pass.number + '/kansenstatuten/' + 1, updateData)
       .respond(200);
 
     passholderService
@@ -437,7 +437,7 @@ describe('Service: passholderService', function () {
     spyOn(passholderService, 'findPass').and.returnValue($q.resolve(pass));
 
     $httpBackend
-       .expectPATCH(apiUrl + 'passholders/' + pass.number, expectedData)
+       .expectPOST(apiUrl + 'passholders/' + pass.number, expectedData)
        .respond(200, expectedData);
 
     passholderService
