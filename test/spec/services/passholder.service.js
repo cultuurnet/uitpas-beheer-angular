@@ -46,6 +46,10 @@ describe('Service: passholderService', function () {
     }
   };
 
+  function getPassData() {
+    return angular.copy(identityData);
+  }
+
   beforeEach(inject(function ($injector, $rootScope) {
     $httpBackend = $injector.get('$httpBackend');
     passholderService = $injector.get('passholderService');
@@ -191,7 +195,7 @@ describe('Service: passholderService', function () {
     var expectedPassholderData = passholderPostData.serialize();
 
     $httpBackend
-      .expectPATCH(apiUrl + 'passholders/' + uitpasNumber, expectedPassholderData)
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, expectedPassholderData)
       .respond(200, JSON.stringify(expectedPassholderData));
 
     $httpBackend
@@ -231,7 +235,7 @@ describe('Service: passholderService', function () {
     };
 
     $httpBackend
-      .expectPATCH(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
       .respond(403, JSON.stringify(expectedAPIError));
 
     var assertRejectedWithError = function (response) {
@@ -263,7 +267,7 @@ describe('Service: passholderService', function () {
     };
 
     $httpBackend
-      .expectPATCH(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber, passholderPostData.serialize())
       .respond(403, JSON.stringify(expectedAPIError));
 
     var assertRejectedWithError = function (response) {
@@ -393,4 +397,53 @@ describe('Service: passholderService', function () {
 
     expect(registrationCall).toThrowError('Registration for a pass with kansenstatuut should provide additional info.');
   });
+
+  it('should update the kansenstatuut of a passholder when renewing', function (done) {
+    var passData = getPassData();
+    passData.passHolder.kansenStatuten = [{
+      status: 'ACTIVE',
+      endDate: '2015-12-06',
+      cardSystem: {
+        name: 'UiTPAS Regio Aalst',
+        id: '1'
+      }
+    }];
+    var pass = new Pass(passData);
+    var passholder = pass.passholder;
+    var kansenstatuut = passholder.kansenStatuten[0];
+    var endDate = new Date('2345-01-01');
+    var updateData = {
+      endDate: '2345-01-01'
+    };
+
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + pass.number + '/kansenstatuten/' + 1, updateData)
+      .respond(200);
+
+    passholderService
+      .renewKansenstatuut(passholder, kansenstatuut, endDate)
+      .then(done);
+
+    $httpBackend.flush();
+  });
+
+  it('should patch the passholder when updating passholder remarks', function (done) {
+    var pass = new Pass(getPassData());
+    var passholder = pass.passholder;
+    var remarks = 'remarkable';
+    var expectedData = passholder.serialize();
+    expectedData.remarks = 'remarkable';
+
+    spyOn(passholderService, 'findPass').and.returnValue($q.resolve(pass));
+
+    $httpBackend
+       .expectPOST(apiUrl + 'passholders/' + pass.number, expectedData)
+       .respond(200, expectedData);
+
+    passholderService
+      .updateRemarks(passholder, remarks)
+      .then(done);
+
+    $httpBackend.flush();
+  })
 });
