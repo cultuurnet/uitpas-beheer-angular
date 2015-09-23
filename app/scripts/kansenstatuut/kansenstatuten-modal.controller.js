@@ -12,7 +12,7 @@ angular
   .controller('KansenstatutenModalController', KansenstatutenModalController);
 
 /* @ngInject */
-function KansenstatutenModalController (passholder, activeCounter, cardSystemId, $modalInstance) {
+function KansenstatutenModalController (passholder, activeCounter, cardSystemId, $modalInstance, $rootScope, passholderService, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -39,4 +39,18 @@ function KansenstatutenModalController (passholder, activeCounter, cardSystemId,
 
     return isEligible;
   };
+
+  function refreshPassholder () {
+    passholderService.findPassholder(passholder.passNumber).then(
+      function (passholder) {
+        controller.passholder = passholder;
+      }
+    );
+  }
+
+  var refreshPassHolderOnKansenStatuutRenewalListener = $rootScope.$on('kansenStatuutRenewed', refreshPassholder);
+  var refreshPassHolderOnRemarksUpdatedListener = $rootScope.$on('remarksUpdated', refreshPassholder);
+
+  $scope.$on('$destroy', refreshPassHolderOnKansenStatuutRenewalListener);
+  $scope.$on('$destroy', refreshPassHolderOnRemarksUpdatedListener);
 }
