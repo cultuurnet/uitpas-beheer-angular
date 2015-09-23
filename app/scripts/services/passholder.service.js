@@ -216,7 +216,10 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     function updateLocalKansenstatuut () {
       var cachedKansenstatuut = passholder.getKansenstatuutByCardSystemID(kansenstatuut.cardSystem.id);
       cachedKansenstatuut.endDate = endDate;
+      cachedKansenstatuut.status = 'ACTIVE';
       deferredRenew.resolve();
+
+      $rootScope.$emit('kansenStatuutRenewed', cachedKansenstatuut);
     }
 
     $http
@@ -251,7 +254,11 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     function updateLocalPassholder(updateResponse) {
       service
         .updateCachedPassholder(passholderId, updateResponse.data)
-        .then(deferredUpdate.resolve);
+        .then(function () {
+          deferredUpdate.resolve();
+
+          $rootScope.$emit('remarksUpdated');
+        });
     }
 
     $http

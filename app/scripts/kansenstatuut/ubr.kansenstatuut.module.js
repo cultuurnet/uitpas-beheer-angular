@@ -18,12 +18,7 @@ angular
   .config(function ($stateProvider) {
 
     var getPassholderFromStateParams = function(passholderService, $stateParams) {
-      if ($stateParams.passholder) {
-        return $stateParams.passholder;
-      }
-      else {
         return passholderService.findPassholder($stateParams.identification);
-      }
     };
 
     editRemarksModal.$inject = ['passholder', '$state', '$modal'];
