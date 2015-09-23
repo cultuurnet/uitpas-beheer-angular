@@ -5,7 +5,7 @@ describe('Controller: PassholderDetailController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var detailController, $rootScope, advantage, $q, moment, $scope;
+  var detailController, $rootScope, advantage, $q, moment, $scope, passholderService, deferredPassholder;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $injector, _$rootScope_) {
@@ -22,6 +22,8 @@ describe('Controller: PassholderDetailController', function () {
     $q = $injector.get('$q');
     moment = $injector.get('moment');
 
+    passholderService = $injector.get('passholderService');
+
     detailController = $controller('PassholderDetailController', {
       passholder: { passNumber: '01234567891234', points: 123, name: {first: 'Fred'} },
       $rootScope: $rootScope,
@@ -35,12 +37,20 @@ describe('Controller: PassholderDetailController', function () {
         }
       },
       $scope: $scope,
-      moment: moment
+      moment: moment,
+      passholderService: passholderService
     });
+
+    deferredPassholder = $q.defer();
+    deferredPassholder.resolve(angular.copy(detailController.passholder));
+
+    spyOn(passholderService, 'findPassholder').and.returnValue(
+      deferredPassholder.promise
+    );
   }));
 
   it('should update passholder points when an advantage is exchanged', function () {
-    $rootScope.$emit('advantageExchanged', advantage);
+    $rootScope.$emit('advantageExchanged', advantage, detailController.passholder.passNumber);
     $rootScope.$digest();
 
     expect(detailController.passholder.points).toEqual(100);

@@ -39,7 +39,7 @@ function dayFactory() {
 
     var dayParts = dayString.match(dayRegex);
 
-    var day = moment('break stuff');
+    var day = moment.invalid();
     if (dayParts) {
       var date, year, month, dayOfMonth;
 

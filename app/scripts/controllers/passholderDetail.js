@@ -12,7 +12,7 @@ angular
   .controller('PassholderDetailController', PassholderDetailController);
 
 /* @ngInject */
-function PassholderDetailController (passholder, membershipService, $rootScope, moment, $scope) {
+function PassholderDetailController (passholder, membershipService, $rootScope, moment, $scope, passholderService) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -61,13 +61,23 @@ function PassholderDetailController (passholder, membershipService, $rootScope, 
     controller.passholder = angular.copy(updatedPassholder);
   }
 
+  function refreshPassholder () {
+    passholderService.findPassholder(passholder.passNumber).then(
+      function (passholder) {
+        controller.passholder = passholder;
+      }
+    );
+  }
+
   var cleanupMembershipModifiedListener = $rootScope.$on('membershipModified', loadMemberships);
   var cleanupAdvantageExchangedListener = $rootScope.$on('advantageExchanged', subtractAdvantagePoints);
   var cleanupActivityCheckedInListener = $rootScope.$on('activityCheckedIn', addCheckinPoint);
   var cleanupPassholderUpdatedListener = $rootScope.$on('passholderUpdated', setPassholderForSidebar);
+  var cleanupKansenStatuutRenewalListener = $rootScope.$on('kansenStatuutRenewed', refreshPassholder);
 
   $scope.$on('$destroy', cleanupMembershipModifiedListener);
   $scope.$on('$destroy', cleanupAdvantageExchangedListener);
   $scope.$on('$destroy', cleanupActivityCheckedInListener);
   $scope.$on('$destroy', cleanupPassholderUpdatedListener);
+  $scope.$on('$destroy', cleanupKansenStatuutRenewalListener);
 }
