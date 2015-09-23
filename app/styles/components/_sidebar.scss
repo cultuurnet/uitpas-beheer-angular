@@ -144,6 +144,7 @@ a.toggle-down {
 
 // Sidebar: kansenstatuurt
 a.list-group-item {
+  text-decoration: none;
   color: $brand-primary;
   &:hover,
   &:focus {
