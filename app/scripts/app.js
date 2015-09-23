@@ -22,7 +22,8 @@ angular
     'ui.bootstrap',
     'mp.autoFocus',
     'ubr.registration',
-    'ubr.kansenstatuut'
+    'ubr.kansenstatuut',
+    'ubr.group'
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */

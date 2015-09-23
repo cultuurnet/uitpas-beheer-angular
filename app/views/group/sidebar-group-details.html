@@ -2,20 +2,20 @@
   <a ui-sref="counter.main">Terug</a>
 </div>
 <div class="passholder passholder-number">
-  <label>NR.</label> <span ng-bind="gdc.group.passNumber"></span>
+  <label>NR.</label> <span ng-bind="::gdc.group.passNumber"></span>
 </div>
 <div class="passholder passholder-data">
   <h3>Gegevens</h3>
   <div class="group name">
-    <span class="icon icon--group"></span>
+    <span class="icon icon--card-group"></span>
     <p>
       <strong>Groepspas</strong><br>
-      {{gdc.group.name}}
+      <span ng-bind="::gdc.group.name"></span>
     </p>
 
   </div>
 </div>
 <div class="group group-remaining-tickets">
   <h3>Resterende beurten</h3>
-  <span class="badge badge-group-remaining-tickets" ng-bind="gdc.group.points"></span>
+  <span class="badge badge-group-remaining-tickets" ng-bind="gdc.group.availableTickets"></span>
 </div>

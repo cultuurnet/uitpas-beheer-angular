@@ -33,6 +33,14 @@ function passFactory(Passholder) {
         this.passholder.passNumber = this.number;
       }
 
+      if(jsonPass.group) {
+        this.group = {
+          passNumber: this.number,
+          name: jsonPass.group.name,
+          availableTickets: jsonPass.group.availableTickets
+        };
+      }
+
       if (jsonPass.uitPas.cardSystem) {
         this.cardSystem = {
           id: jsonPass.uitPas.cardSystem.id,

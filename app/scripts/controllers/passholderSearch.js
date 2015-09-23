@@ -28,9 +28,16 @@ function PassholderSearchController ($rootScope, passholderService, $state, $sco
       if (pass.passholder) {
         displayPassholderDetails(pass.passholder);
       }
+      else if (pass.group) {
+        displayGroupDetails(pass.group);
+      }
       else {
         registerNewPassholder(pass);
       }
+    }
+
+    function displayGroupDetails() {
+      $state.go('counter.main.group', {identification: identification});
     }
 
     function displayPassholderDetails(passholder) {
