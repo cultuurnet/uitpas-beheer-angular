@@ -1,59 +1,37 @@
-<div class="col-xs-12">
+<div>
   <p class="block-title">Toestellen</p>
-  <div class="slats">
 
-    <div class="slats-item">
-      <div class="row">
-        <div class="col-xs-12 col-sm-4">
-          <p><strong>CID031-RPI</strong></p>
+  <div class="spinner" ng-if="cidc.loadingData">
+    <circle-spinner></circle-spinner>
+  </div>
+
+  <div class="slats" ng-if="!cidc.loadingData">
+
+    <div class="slats-item" ng-repeat="device in cidc.devices">
+      <div class="row clearfix">
+        <div class="grid--bp-sml__4 grid--bp-med__4">
+          <p><strong ng-bind="device.name"></strong></p>
         </div>
-        <div class="col-xs-12 col-sm-4">
+        <div class="grid--bp-sml__4 grid--bp-med__4">
           <div class="form-group">
-            <select class="form-control">
-              <option>Zuil kiest automatisch</option>
-              <option>Evenement 1</option>
-              <option>Evenement 2</option>
+            <select class="form-control" ng-model="device.activityId" ng-options="activity.id as activity.title for activity in cidc.activities" ng-change="cidc.clearState(device)">
+              <option value="">Zuil kiest automatisch</option>
             </select>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="slats-item">
-      <div class="row">
-        <div class="col-xs-12 col-sm-4">
-          <p><strong>CID032-RPI</strong></p>
-        </div>
-        <div class="col-xs-12 col-sm-4">
-          <div class="form-group">
-            <select class="form-control">
-              <option>Zuil kiest automatisch</option>
-              <option>Evenement 1</option>
-              <option>Evenement 2</option>
-            </select>
+        <div class="grid--bp-sml__4 grid--bp-med__4">
+          <div ng-if="device.state && device.state.connecting">
+            <div class="spinner">
+              <circle-spinner></circle-spinner>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="slats-item">
-      <div class="row">
-        <div class="col-xs-12 col-sm-4">
-          <p><strong>CID033-RPI</strong></p>
-        </div>
-        <div class="col-xs-12 col-sm-4">
-          <div class="form-group">
-            <select class="form-control">
-              <option>Zuil kiest automatisch</option>
-              <option>Evenement 1</option>
-              <option>Evenement 2</option>
-            </select>
-          </div>
+          <div ng-if="device.state && device.state.succeeded"><i class="fa fa-check-circle"></i></div>
+          <div ng-if="device.state && device.state.failed"><i class="fa fa-exclamation-triangle"></i></div>
         </div>
       </div>
     </div>
 
   </div>
 
-  <p><a class="btn btn-primary">Bewaren</a></p>
+  <p><a class="btn btn-primary" ng-click="cidc.connectDevicesToActivities()">Bewaren</a></p>
 </div>
