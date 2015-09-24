@@ -9,21 +9,52 @@ body {
   position: relative;
   @include breakpoint(map-get($breakpoints, sml)) {
   height: 100%;
-    > .sidebar {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
     > .main,
     > .footer {
       margin-left: 33.333%;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+    > .sidebar {
+      position: fixed;
+      top: 50px;
+      left: 0;
+      z-index: 700;
     }
   }
   @include breakpoint(map-get($breakpoints, med)) {
     > .main,
     > .footer {
       margin-left: 25%;
+      padding-left: 15px;
+      padding-right: 15px;
     }
+  }
+  @include breakpoint(768px) {
+    > .sidebar {
+      top: 60px;
+    }
+  }
+}
+
+// fix navbar
+body {
+  @include breakpoint(map-get($breakpoints, sml)) {
+    padding-top: 50px;
+  }
+  @include breakpoint(map-get($breakpoints, med)) {
+    padding-top: 60px;
+  }
+}
+.navbar { 
+  @include breakpoint(660px) { 
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 800;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 

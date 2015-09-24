@@ -118,7 +118,7 @@ $hover-border: adjust_hue(lighten(desaturate($brand-primary, 23), 43), 347);
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-$body-bg:               $gray-0 !default;
+$body-bg:               $white !default;
 //** Global text color on `<body>`.
 $text-color:            $gray-dark !default;
 
