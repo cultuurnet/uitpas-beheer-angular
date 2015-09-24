@@ -29,9 +29,7 @@ angular
             controllerAs: 'cidc'
           },
           sidebar: {
-            templateUrl: 'views/checkindevices/sidebar-checkindevices.html',
-            controller: 'CheckInDevicesConnectionsController',
-            controllerAs: 'cidc'
+            templateUrl: 'views/checkindevices/sidebar-checkindevices.html'
           },
           header: {
             templateUrl: 'views/header.html'
