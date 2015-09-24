@@ -4,9 +4,9 @@
 <div class="passholder passholder-number">
   <label>NR.</label> <span ng-bind="::gdc.group.passNumber"></span>
 </div>
-<div class="passholder passholder-data">
+<div class="passholder passholder-data passholder-group">
   <h3>Gegevens</h3>
-  <div class="group name">
+  <div class="passholder-group-name">
     <span class="icon icon--card-group"></span>
     <p>
       <strong>Groepspas</strong><br>
@@ -15,7 +15,7 @@
 
   </div>
 </div>
-<div class="group group-remaining-tickets">
+<div class="passholder passholder-points passholder-group-points remaining-tickets">
   <h3>Resterende beurten</h3>
-  <span class="badge badge-group-remaining-tickets" ng-bind="gdc.group.availableTickets"></span>
+  <span class="label label-points" ng-bind="gdc.group.availableTickets"></span>
 </div>
