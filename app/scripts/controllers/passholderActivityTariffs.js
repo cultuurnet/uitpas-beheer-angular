@@ -34,6 +34,13 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
     }
   } : null;
 
+  function init() {
+    var firstTariff = controller.activity.sales.tariffs.list[0];
+    var defaultTariff = firstTariff.prices[0];
+    controller.selectedTariff = defaultTariff;
+  }
+  init();
+
   controller.cancelModal = function () {
     $modalInstance.dismiss();
   };

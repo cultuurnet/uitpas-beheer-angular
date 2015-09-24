@@ -93,19 +93,19 @@ describe('Factory: Activity', function () {
               name: 'Kansentarief',
               type: 'KANSENTARIEF',
               maximumReached: false,
-              prices: {
-                'Default prijsklasse': 1.5
-              }
+              prices: [
+                {priceClass: 'Default prijsklasse', price: 1.5, type: 'KANSENTARIEF'}
+              ]
             },
             {
               name: 'Cultuurwaardebon',
               type: 'COUPON',
               maximumReached: false,
-              prices: {
-                'Rang 1': 22,
-                'Rang 2': 11,
-                'Rang 3+': 5.5
-              }
+              prices: [
+                {priceClass: 'Rang 1', price: 22, type: 'COUPON'},
+                {priceClass: 'Rang 2', price: 11, type: 'COUPON'},
+                {priceClass: 'Rang 3+', price: 5.5, type: 'COUPON'}
+              ]
             }
           ]
         }
@@ -226,11 +226,11 @@ describe('Factory: Activity', function () {
         name: 'Cultuurwaardebon',
         type: 'COUPON',
         maximumReached: false,
-        prices: {
-          'Rang 1': 22,
-          'Rang 2': 11,
-          'Rang 3+': 5.5
-        }
+        prices: [
+          {priceClass: 'Rang 1', price: 22, type: 'COUPON'},
+          {priceClass: 'Rang 2', price: 11, type: 'COUPON'},
+          {priceClass: 'Rang 3+', price: 5.5, type: 'COUPON'}
+        ]
       }
     ];
 

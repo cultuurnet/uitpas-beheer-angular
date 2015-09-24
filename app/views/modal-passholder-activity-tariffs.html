@@ -18,11 +18,11 @@
             </tr>
             <tr ng-repeat="(tKey, tariff) in ::pat.activity.sales.tariffs.list" ng-class="tariff.type === 'COUPON' ? 'coupon' :'kansen-tariff'">
               <th>{{tariff.name}}</th>
-              <td ng-repeat="(pKey, price) in ::tariff.prices" ng-class="{'lowest': (price === pat.activity.sales.tariffs.lowestAvailable)}">
-                <label for="price-{{::tKey}}-{{::pKey}}">
-                  <input type="radio" name="tariff" id="price-{{::tKey}}-{{::pKey}}" ng-model="pat.selectedTariff"
-                         required ng-value="{type: tariff.type, id: tariff.id, price: price, priceClass: pKey}">
-                  <span class="price">&euro; {{::price}}</span>
+              <td ng-repeat="priceInfo in ::tariff.prices" ng-class="{'lowest': (price === pat.activity.sales.tariffs.lowestAvailable)}">
+                <label for="price-{{::tKey}}-{{::priceInfo.priceClass}}">
+                  <input type="radio" name="tariff" id="price-{{::tKey}}-{{::priceInfo.priceClass}}" ng-model="pat.selectedTariff"
+                         required ng-value="priceInfo">
+                  <span class="price">&euro; {{::priceInfo.price}}</span>
                 </label>
               </td>
             </tr>
