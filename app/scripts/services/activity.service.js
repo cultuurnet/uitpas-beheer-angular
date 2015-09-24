@@ -78,6 +78,7 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
       console.log(ticketSaleResponse);
       var ticketSale = ticketSaleResponse;
       ticketSale.ticketCount = amount;
+      ticketSale.passholder = passholder;
       deferredClaim.resolve(ticketSale);
       $rootScope.$emit('ticketsSold', ticketSale);
     };

@@ -12,24 +12,9 @@ angular
   .controller('GroupDetailController', GroupDetailController);
 
 /* @ngInject */
-function GroupDetailController (group, $rootScope, $scope) {
+function GroupDetailController (group) {
   /*jshint validthis: true */
   var controller = this;
 
   controller.group = group;
-  controller.availableTickets = group.availableTickets;
-
-  function updateAvailableTickets(event, ticketSale) {
-    var newTicketCount = controller.availableTickets - ticketSale.ticketCount;
-
-    if (newTicketCount < 0) {
-      newTicketCount = 0;
-    }
-
-    controller.availableTickets = newTicketCount;
-  }
-
-  var ticketsSoldListener = $rootScope.$on('ticketsSold', updateAvailableTickets);
-
-  $scope.$on('$destroy', ticketsSoldListener);
 }
