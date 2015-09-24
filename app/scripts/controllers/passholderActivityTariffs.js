@@ -21,6 +21,18 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
   controller.formSubmitError = false;
+  controller.groupSale = passholder.hasOwnProperty('availableTickets') ? {
+    tickets: 1,
+    maxTickets: passholder.availableTickets,
+    getTotalPrice: function () {
+      var defaultPrice = 0;
+      var selectedPrice = controller.selectedTariff ? controller.selectedTariff.price : null;
+      var ticketPrice = selectedPrice ? selectedPrice : defaultPrice;
+      var totalPrice = ticketPrice * this.tickets;
+
+      return totalPrice;
+    }
+  } : null;
 
   controller.cancelModal = function () {
     $modalInstance.dismiss();

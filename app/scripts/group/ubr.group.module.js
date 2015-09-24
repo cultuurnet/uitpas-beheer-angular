@@ -16,11 +16,19 @@ angular
   /* @ngInject */
   .config(function ($stateProvider) {
 
-    getGroup.$inject = ['$stateParams', 'passholderService'];
-    function getGroup($stateParams, passholderService) {
+    getGroup.$inject = ['$stateParams', 'passholderService', '$q'];
+    function getGroup($stateParams, passholderService, $q) {
       var groupId = $stateParams.identification;
+      var deferredGroup = $q.defer();
 
-      return passholderService.findPass(groupId);
+      function pluckGroupFromPass(pass) {
+        deferredGroup.resolve(pass.group);
+      }
+      passholderService
+        .findPass(groupId)
+        .then(pluckGroupFromPass);
+
+      return deferredGroup.promise;
     }
 
     $stateProvider
@@ -35,7 +43,8 @@ angular
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }],
-          groupPass: getGroup
+          group: getGroup,
+          passholder: getGroup
         },
         views: {
           'sidebar@counter': {
@@ -45,9 +54,55 @@ angular
           },
           'content@counter': {
             templateUrl: 'views/group/activities.html',
-            controller: 'GroupActivityController',
-            controllerAs: 'gac'
+            controller: 'ActivityController',
+            controllerAs: 'ac'
           }
         }
+      })
+      .state('counter.main.group.activityTariffs', {
+        params: {
+          identification: null,
+          passholder: null,
+          activity: null
+        },
+        resolve: {
+          passholder: getGroup,
+          identification: ['$stateParams', function($stateParams) {
+            return $stateParams.identification;
+          }],
+          activity: ['$stateParams', function($stateParams) {
+            return $stateParams.activity;
+          }]
+        },
+        onEnter: ['passholder', 'identification', 'activity', '$state', '$modal', function(passholder, identification, activity, $state, $modal) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-passholder-activity-tariffs.html',
+              params: {
+                identification: null,
+                passholder: null,
+                activity: null
+              },
+              size: 'sm',
+              resolve: {
+                passholder: function () {
+                  return passholder;
+                },
+                identification: function () {
+                  return identification;
+                },
+                activity: function () {
+                  return activity;
+                }
+              },
+              controller: 'PassholderActivityTariffsController',
+              controllerAs: 'pat'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
       });
   });

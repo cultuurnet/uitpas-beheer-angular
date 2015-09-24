@@ -12,9 +12,10 @@ angular
   .controller('GroupActivityController', GroupActivityController);
 
 /* @ngInject */
-function GroupActivityController (groupPass) {
+function GroupActivityController (group, activityService) {
   /*jshint validthis: true */
   var controller = this;
 
-  controller.group = groupPass.group;
+  controller.group = group;
+  controller.activities = activityService.search(group, {});
 }
