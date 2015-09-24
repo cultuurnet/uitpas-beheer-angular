@@ -254,7 +254,7 @@ describe('Service: activity', function (){
     };
     var tariff = {
       type: 'COUPON',
-      price: 'Eerste rang',
+      priceClass: 'Eerste rang',
       id: '10'
     };
     var claim = {
@@ -343,17 +343,12 @@ describe('Service: activity', function (){
     };
     var tariff = {
       type: 'COUPON',
-      price: 'Eerste rang',
+      priceClass: 'Eerste rang',
       id: '10'
     };
     var apiError = {
       code: '30819',
       message: 'This is a meaningless message.'
-    };
-    var serviceError = {
-      code: 'TARIFF_NOT_CLAIMED',
-      title: 'Tarief niet toegekend',
-      message: 'Het geselecteerde tarief voor activiteit "' + activity.title + '" kon niet worden toegekend voor ' + passholder.name.first + ' ' + passholder.name.last
     };
     var expectedPostParams = {
       activityId: 'e71f3381-21aa-4f73-a860-17cf3e31f013',
@@ -362,7 +357,7 @@ describe('Service: activity', function (){
     };
 
     function assertFailure (error) {
-      expect(error).toEqual(serviceError);
+      expect(error).toEqual(apiError);
       done();
     }
 

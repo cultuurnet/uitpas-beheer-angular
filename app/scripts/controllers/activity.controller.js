@@ -99,7 +99,7 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
   controller.claimTariff = function (tariff, activity) {
     activity.tariffClaimInProgress = true;
 
-    tariff.price = Object.keys(tariff.prices)[0];
+    tariff.priceClass = Object.keys(tariff.prices)[0];
 
     var tariffClaimedSuccessfully = function () {
       activity.sales.maximumReached = true;

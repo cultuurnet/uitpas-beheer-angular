@@ -38,9 +38,9 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
     $modalInstance.dismiss();
   };
 
-  controller.submitForm = function (passholder, activity, passholderActivityTariffsForm) {
-    controller.formSubmitBusy = true;
-    var tariff = controller.getTariffFromForm(passholderActivityTariffsForm);
+  controller.claimTariff = function (passholder, activity) {
+    var tariff = angular.copy(controller.selectedTariff);
+    var ticketCount = controller.groupSale ? controller.groupSale.tickets : null;
 
     var tariffClaimedSuccessfully = function () {
       tariff.assigned = true;
@@ -55,21 +55,9 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
       controller.formSubmitBusy = false;
     };
 
+    controller.formSubmitBusy = true;
     activityService
-      .claimTariff(passholder, activity, tariff)
+      .claimTariff(passholder, activity, tariff, ticketCount)
       .then(tariffClaimedSuccessfully, tariffNotClaimed);
-  };
-
-  controller.getTariffFromForm = function (passholderActivityTariffsForm) {
-    var splitTariffValue = passholderActivityTariffsForm.tariff.$viewValue.split('-');
-    var tariffValue = {
-      type: splitTariffValue[0],
-      id: splitTariffValue[1]
-    };
-
-    splitTariffValue = splitTariffValue.slice(2);
-    tariffValue.price = splitTariffValue.join('-');
-
-    return tariffValue;
   };
 }
