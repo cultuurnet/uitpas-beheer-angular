@@ -23,7 +23,7 @@ describe('Service: CheckInDevices', function () {
     $scope = $rootScope;
   }));
 
-  fit('can retrieve a list of devices', function (done) {
+  it('can retrieve a list of devices', function (done) {
     var devices = [
       {
         "id": "foo",

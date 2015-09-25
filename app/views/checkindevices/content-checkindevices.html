@@ -1,5 +1,5 @@
 <div>
-  <p class="block-title">Toestellen</p>
+  <h2 class="block-title">Toestellen</h2>
 
   <div class="spinner" ng-if="cidc.loadingData">
     <circle-spinner></circle-spinner>
@@ -19,14 +19,16 @@
             </select>
           </div>
         </div>
-        <div class="grid--bp-sml__4 grid--bp-med__4">
+        <div class="grid--bp-sml__4 grid--bp-med__4" style="line-height: 2.5em;">
           <div ng-if="device.state && device.state.connecting">
-            <div class="spinner">
-              <circle-spinner></circle-spinner>
-            </div>
+            <i class="fa fa-circle-o-notch fa-spin"></i>
           </div>
-          <div ng-if="device.state && device.state.succeeded"><i class="fa fa-check-circle"></i></div>
-          <div ng-if="device.state && device.state.failed"><i class="fa fa-exclamation-triangle"></i></div>
+          <div ng-if="device.state && device.state.succeeded">
+            <i class="fa fa-check-circle" style="color: green;"></i>
+          </div>
+          <div ng-if="device.state && device.state.failed">
+            <i class="fa fa-exclamation-triangle" style="color: red;"></i>
+          </div>
         </div>
       </div>
     </div>

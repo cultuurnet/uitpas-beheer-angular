@@ -58,6 +58,10 @@ function CheckInDevices($q, $http, $rootScope, appConfig) {
   service.connectDeviceToActivity = function(deviceId, activityId) {
     var deferred = $q.defer();
 
+    if (typeof activityId === 'undefined') {
+      activityId = null;
+    }
+
     var request = $http.post(
       apiUrl + '/' + deviceId,
       {
