@@ -1,4 +1,5 @@
-<form name="passholderActivityTariffs" ng-submit="pat.submitForm(pat.passholder, pat.activity, passholderActivityTariffs)" novalidate ng-class="{'form-submiting': pat.formSubmitBusy}">
+<form name="passholderActivityTariffs" ng-submit="pat.claimTariff(pat.passholder, pat.activity)"
+      novalidate ng-class="{'form-submiting': pat.formSubmitBusy}">
   <div class="modal-header">
     <button type="button" class="close" ng-click="pat.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">Prijzen</h4>
@@ -6,7 +7,7 @@
   <div class="modal-body">
     <div class="container-fluid">
       <div class="activity-title" ng-bind="::pat.activity.title"></div>
-      <div class="alert alert-danger" ng-show="pat.formSubmitError" ng-bind="pat.formSubmitError.message"></div>
+      <div class="alert alert-danger" ng-show="pat.asyncError" ng-bind="pat.asyncError.cleanMessage"></div>
       <fieldset ng-disabled="pat.formSubmitBusy">
         <table>
           <thead><th></th><th ng-repeat="(rank, value) in ::pat.activity.sales.base" ng-bind="::rank"></th></thead>
@@ -17,24 +18,48 @@
             </tr>
             <tr ng-repeat="(tKey, tariff) in ::pat.activity.sales.tariffs.list" ng-class="tariff.type === 'COUPON' ? 'coupon' :'kansen-tariff'">
               <th>{{tariff.name}}</th>
-              <td ng-repeat="(pKey, price) in ::tariff.prices" ng-class="{'lowest': (price === pat.activity.sales.tariffs.lowestAvailable)}">
-                <label for="price-{{::tKey}}-{{::pKey}}">
-                  <input type="radio" name="tariff" id="price-{{::tKey}}-{{::pKey}}" ng-model="pat.selectedTariff" required value="{{::tariff.type}}-{{::tariff.id}}-{{::pKey}}">
-                  <span class="price">&euro; {{::price}}</span>
+              <td ng-repeat="priceInfo in ::tariff.prices" ng-class="{'lowest': (priceInfo.price === pat.activity.sales.tariffs.lowestAvailable)}">
+                <label for="price-{{::tKey}}-{{::priceInfo.priceClass}}">
+                  <input type="radio" name="tariff" id="price-{{::tKey}}-{{::priceInfo.priceClass}}" ng-model="pat.selectedTariff"
+                         required ng-value="priceInfo" ng-change="pat.clearAsyncError()">
+                  <span class="price">&euro; {{::priceInfo.price}}</span>
                 </label>
               </td>
             </tr>
           </tbody>
         </table>
         <!--<pre>{{passholderActivityTariffs|json}}</pre>-->
-        <div>
-          <div class="lowest-legend small pull-left">Laagste tarief</div>
-          <button type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid" ng-click="pat.submitForm(pat.passholder, pat.activity, passholderActivityTariffs)"><span ng-hide="pat.formSubmitBusy">Tarief toekennen</span> <span ng-show="pat.formSubmitBusy"><span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden</span></button>
+        <div class="grid">
+          <div class="grid__12 grid--bp-lrg__4">
+            <div class="lowest-legend small pull-left">Laagste tarief</div>
+          </div>
+
+          <div ng-if="pat.groupSale">
+            <div class="grid__12 grid--bp-lrg__4">
+              <label for="tariff-ticket-count">Aantal personen</label><br>
+              <input type="text" value="1" ng-model="pat.groupSale.tickets" min="1" max="{{pat.groupSale.maxTickets}}"
+                     ng-touch-spin id="tariff-ticket-count" name="ticketCount" ng-change="pat.clearAsyncError()">
+            </div>
+
+            <div class="grid__12 grid--bp-lrg__4">
+              <strong>Totaal</strong><br>
+              <span ng-if="pat.selectedTariff">&euro; {{pat.groupSale.getTotalPrice()}}</span>
+              <span ng-if="!pat.selectedTariff">selecteer een tarief</span>
+            </div>
+          </div>
+
         </div>
       </fieldset>
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="pat.cancelModal()">Annuleren</a>
+    <button type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid"
+            ng-click="pat.claimTariff(pat.passholder, pat.activity, passholderActivityTariffs)">
+      <span ng-hide="pat.formSubmitBusy">Tarief toekennen</span>
+            <span ng-show="pat.formSubmitBusy">
+              <span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden
+            </span>
+    </button>
   </div>
 </form>

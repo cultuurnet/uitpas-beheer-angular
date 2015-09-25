@@ -56,8 +56,18 @@ function activityFactory(CheckinState) {
         name: listItem.name,
         type: listItem.type,
         maximumReached: listItem.maximumReached,
-        prices: listItem.prices
+        prices: []
       };
+
+      for(var priceClass in listItem.prices) {
+        var priceInfo = {
+          type: listItem.type,
+          price: listItem.prices[priceClass],
+          priceClass: priceClass
+        };
+        newListItem.prices.push(priceInfo);
+      }
+
       if (!angular.isUndefined(listItem.id)) {
         newListItem.id = listItem.id;
       }

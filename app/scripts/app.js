@@ -21,6 +21,7 @@ angular
     'ui.router',
     'ui.bootstrap',
     'mp.autoFocus',
+    'jkuri.touchspin',
     'ubr.registration',
     'ubr.kansenstatuut',
     'ubr.group',
@@ -28,7 +29,10 @@ angular
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
-  .config(function ($stateProvider, $locationProvider, $httpProvider) {
+  .config(function ($stateProvider, $locationProvider, $httpProvider, ngTouchSpinProvider) {
+
+    ngTouchSpinProvider.arrowControlsEnabled(false);
+
     var getPassholderFromStateParams = function(passholderService, $stateParams) {
       if ($stateParams.passholder) {
         return $stateParams.passholder;

@@ -12,9 +12,9 @@ angular
   .controller('GroupDetailController', GroupDetailController);
 
 /* @ngInject */
-function GroupDetailController (groupPass) {
+function GroupDetailController (group) {
   /*jshint validthis: true */
   var controller = this;
 
-  controller.group = groupPass.group;
+  controller.group = group;
 }

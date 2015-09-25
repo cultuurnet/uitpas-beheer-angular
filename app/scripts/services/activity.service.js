@@ -70,25 +70,25 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
     return deferredActivities.promise;
   };
 
-  service.claimTariff = function(passholder, activity, tariff) {
+  service.claimTariff = function(passholder, activity, tariff, ticketCount) {
     var deferredClaim = $q.defer();
+    var amount = ticketCount || 1;
 
-    var successfullClaim = function () {
-      deferredClaim.resolve();
-    };
-
-    var failedClaim = function () {
-      deferredClaim.reject({
-        code: 'TARIFF_NOT_CLAIMED',
-        title: 'Tarief niet toegekend',
-        message: 'Het geselecteerde tarief voor activiteit "' + activity.title + '" kon niet worden toegekend voor ' + passholder.name.first + ' ' + passholder.name.last
-      });
+    var handleTicketSale = function (ticketSaleResponse) {
+      var ticketSale = ticketSaleResponse;
+      ticketSale.ticketCount = amount;
+      ticketSale.passholder = passholder;
+      deferredClaim.resolve(ticketSale);
+      $rootScope.$emit('ticketsSold', ticketSale);
     };
 
     var claimParameters = {
       activityId: activity.id,
-      priceClass: tariff.price
+      priceClass: tariff.priceClass,
     };
+    if (ticketCount) {
+      claimParameters.amount = amount;
+    }
     if (tariff.type === 'COUPON') {
       claimParameters.tariffId = tariff.id;
     }
@@ -104,8 +104,8 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
     );
 
     claimRequest
-      .success(successfullClaim)
-      .error(failedClaim);
+      .success(handleTicketSale)
+      .error(deferredClaim.reject);
 
     return deferredClaim.promise;
   };

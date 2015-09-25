@@ -287,4 +287,30 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     return deferredUpdate.promise;
   };
+
+  function updateAvailableTickets(event, ticketSale) {
+    var passholderId = ticketSale.passholder.passNumber;
+    var ticketsSold = ticketSale.ticketCount;
+
+    function updateGroupTicketCount(pass) {
+      var group = pass.group;
+
+      if (group) {
+        var newTicketCount = group.availableTickets - ticketsSold;
+
+        if (newTicketCount < 0) {
+          newTicketCount = 0;
+        }
+
+        group.availableTickets = newTicketCount;
+        passholderCache.put(passholderId, pass);
+      }
+    }
+
+    service
+      .findPass(passholderId)
+      .then(updateGroupTicketCount);
+  }
+
+  $rootScope.$on('ticketsSold', updateAvailableTickets);
 }

@@ -12,7 +12,14 @@ angular
   .controller('PassholderActivityTariffsController', PassholderActivityTariffsController);
 
 /* @ngInject */
-function PassholderActivityTariffsController (passholder, activity, $modalInstance, activityService, $rootScope) {
+function PassholderActivityTariffsController (
+  passholder,
+  activity,
+  $modalInstance,
+  activityService,
+  $rootScope,
+  TicketSaleAPIError
+) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -20,15 +27,51 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
   controller.activity = activity;
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
-  controller.formSubmitError = false;
+  controller.asyncError = false;
+  controller.groupSale = passholder.hasOwnProperty('availableTickets') ? {
+    tickets: 1,
+    maxTickets: passholder.availableTickets,
+    getTotalPrice: function () {
+      var defaultPrice = 0;
+      var selectedPrice = controller.selectedTariff ? controller.selectedTariff.price : null;
+      var ticketPrice = selectedPrice ? selectedPrice : defaultPrice;
+      var totalPrice = ticketPrice * this.tickets;
+
+      return totalPrice;
+    }
+  } : null;
+
+  function init() {
+    var firstTariff = controller.activity.sales.tariffs.list[0];
+    var defaultTariff = firstTariff.prices[0];
+    controller.selectedTariff = defaultTariff;
+  }
+  init();
 
   controller.cancelModal = function () {
     $modalInstance.dismiss();
   };
 
-  controller.submitForm = function (passholder, activity, passholderActivityTariffsForm) {
-    controller.formSubmitBusy = true;
-    var tariff = controller.getTariffFromForm(passholderActivityTariffsForm);
+  controller.clearAsyncError = function () {
+    controller.asyncError = false;
+  };
+
+  controller.handleAsyncError = function (error) {
+    var knownAPIError = TicketSaleAPIError[error.code];
+
+    if (knownAPIError) {
+      error.cleanMessage = knownAPIError.message;
+    } else {
+      error.cleanMessage = error.message.split('URL CALLED')[0];
+    }
+
+    controller.asyncError = error;
+    controller.formSubmitBusy = false;
+  };
+
+  controller.claimTariff = function (passholder, activity) {
+    var tariff = angular.copy(controller.selectedTariff);
+    var ticketCount = controller.groupSale ? controller.groupSale.tickets : null;
 
     var tariffClaimedSuccessfully = function () {
       tariff.assigned = true;
@@ -38,26 +81,13 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
     };
 
     var tariffNotClaimed = function (error) {
-      controller.formSubmitError = error;
+      controller.handleAsyncError(error);
       tariff.assignError = true;
-      controller.formSubmitBusy = false;
     };
 
+    controller.formSubmitBusy = true;
     activityService
-      .claimTariff(passholder, activity, tariff)
+      .claimTariff(passholder, activity, tariff, ticketCount)
       .then(tariffClaimedSuccessfully, tariffNotClaimed);
-  };
-
-  controller.getTariffFromForm = function (passholderActivityTariffsForm) {
-    var splitTariffValue = passholderActivityTariffsForm.tariff.$viewValue.split('-');
-    var tariffValue = {
-      type: splitTariffValue[0],
-      id: splitTariffValue[1]
-    };
-
-    splitTariffValue = splitTariffValue.slice(2);
-    tariffValue.price = splitTariffValue.join('-');
-
-    return tariffValue;
   };
 }

@@ -215,6 +215,12 @@ module.exports = function (grunt) {
               'main': [
                 'angular-locale_nl-be.js'
               ]
+            },
+            'bootstrap-touchspin': {
+              main: [
+                'dist/jquery.bootstrap-touchspin.js',
+                'dist/jquery.bootstrap-touchspin.css'
+              ]
             }
           }
         }

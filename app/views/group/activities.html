@@ -1,1 +1,105 @@
-<div></div>
+<section class="overview overview-activities">
+  <h2 class="overview__title">Activiteiten</h2>
+  <div class="grid overview__search">
+    <div class="grid__12 grid--bp-med__6">
+      <div class="btn-group" dropdown>
+        <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
+        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="!!ac.activitiesLoading">
+          <span class="caret"></span>
+          <span class="sr-only">Split button!</span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.TODAY)">Vandaag</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_7_DAYS)">Volgende 7 dagen</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_30_DAYS)">Volgende 30 dagen</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_12_MONTHS)">Volgende 12 maanden</a>
+          </li>
+          <li class="divider"></li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">Afgelopen activiteiten</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid__12 grid--bp-med__6 text-right">
+      <div class="search">
+        <input class="form-control" type="text" ng-model="ac.query" />
+        <button class="btn btn-ghost-dark" ng-click="ac.searchParametersChanged()" ng-disabled="!!ac.activitiesLoading">
+          Zoeken
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overview__loading" ng-show="ac.activitiesLoading">
+    <div class="spinner spinner-small">
+      <circle-spinner></circle-spinner>
+    </div>
+  </div>
+
+  <div class="text-muted" ng-if="!ac.activitiesLoading && !ac.totalActivities">Geen activiteiten gepland.</div>
+
+  <ul class="list-unstyled" ng-if="!ac.activitiesLoading && ac.totalActivities > 0">
+    <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
+      <div class="grid display-table">
+
+        <div class="grid__12 grid--bp-med__9 first">
+          <div class="date" ng-bind="::activity.when"></div>
+          <h3 ng-bind="::activity.title"></h3>
+        </div> <!--/ end .grid-first -->
+
+        <div class="grid__12 grid--bp-med__3 last">
+          <!--status busy-->
+          <div class="content-holder" ng-show="activity.tariffClaimInProgress && !activity.tariffClaimError">
+            <div class="spinner spinner-xsmall">
+              <circle-spinner></circle-spinner>
+            </div>
+          </div>
+          <!--status error-->
+          <div class="content-holder" ng-show="!activity.tariffClaimInProgress && activity.tariffClaimError">
+            <i class="error">{{activity.tariffClaimError.message}}</i>
+          </div>
+          <!--status start-->
+          <div class="content-holder" ng-switch="activity.getTariff()" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
+            <i class="free-event" ng-switch-when="free">Gratis</i>
+            <i class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<!--<span><a class="history-modal" >Historiek</a></span>--></i>
+            <div class="price-differentiation" ng-switch-when="priceDifferentiation">
+              <small>vanaf</small><br><strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong>
+              <a class="btn btn-default btn-sm tariff-modal" ui-sref="counter.main.group.activityTariffs({ activity: activity })">Tarief kiezen</a>
+            </div>
+            <div class="kansen-tariff" ng-switch-when="kansenTariff" ng-hide="activity.tariffClaimInProgress">
+              <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br><small>aan kansentarief</small>
+              <a class="btn btn-default btn-sm assign-tariff" ui-sref="counter.main.group.activityTariffs({ activity: activity })" >Tarief toekennen</a>
+            </div>
+            <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = activity.getRedeemableCoupons()[0]">
+              <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br>
+              <small ng-bind="::tariffCoupon.name"></small>
+              <a class="btn btn-default btn-sm assign-tariff" ui-sref="counter.main.group.activityTariffs({ activity: activity })" >Tarief toekennen</a>
+            </div>
+          </div>
+        </div> <!--/ end .grid-last -->
+
+      </div> <!--/ end .grid -->
+
+    </li>
+  </ul>
+
+  <pagination class="pagination"
+              total-items="ac.totalActivities"
+              ng-model="ac.page"
+              items-per-page="ac.limit"
+              ng-change="ac.searchParametersChanged()"
+              max-size="10"
+              previous-text="&lsaquo; Vorige"
+              next-text="Volgende &rsaquo;"
+              ng-show="ac.totalActivities > ac.limit">
+  </pagination>
+
+</section>
