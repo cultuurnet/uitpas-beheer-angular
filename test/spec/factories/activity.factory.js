@@ -48,6 +48,7 @@ describe('Factory: Activity', function () {
               name: 'Cultuurwaardebon',
               type: 'COUPON',
               maximumReached: false,
+              id: '10',
               prices: {
                 'Rang 1': 22,
                 'Rang 2': 11,
@@ -101,10 +102,11 @@ describe('Factory: Activity', function () {
               name: 'Cultuurwaardebon',
               type: 'COUPON',
               maximumReached: false,
+              id: '10',
               prices: [
-                {priceClass: 'Rang 1', price: 22, type: 'COUPON'},
-                {priceClass: 'Rang 2', price: 11, type: 'COUPON'},
-                {priceClass: 'Rang 3+', price: 5.5, type: 'COUPON'}
+                {priceClass: 'Rang 1', price: 22, type: 'COUPON', couponId: '10'},
+                {priceClass: 'Rang 2', price: 11, type: 'COUPON', couponId: '10'},
+                {priceClass: 'Rang 3+', price: 5.5, type: 'COUPON', couponId: '10'}
               ]
             }
           ]
@@ -114,9 +116,6 @@ describe('Factory: Activity', function () {
 
     var activity = new Activity(jsonActivity);
     expect(activity).toEqual(expectedActivity);
-
-    jsonActivity.sales.tariffs.list[0].id = '10';
-    expectedActivity.sales.tariffs.list[0].id = '10';
 
     var activityWithId = new Activity(jsonActivity);
     expect(activityWithId).toEqual(expectedActivity);
@@ -226,10 +225,11 @@ describe('Factory: Activity', function () {
         name: 'Cultuurwaardebon',
         type: 'COUPON',
         maximumReached: false,
+        id: '10',
         prices: [
-          {priceClass: 'Rang 1', price: 22, type: 'COUPON'},
-          {priceClass: 'Rang 2', price: 11, type: 'COUPON'},
-          {priceClass: 'Rang 3+', price: 5.5, type: 'COUPON'}
+          {priceClass: 'Rang 1', price: 22, type: 'COUPON', couponId: '10'},
+          {priceClass: 'Rang 2', price: 11, type: 'COUPON', couponId: '10'},
+          {priceClass: 'Rang 3+', price: 5.5, type: 'COUPON',couponId: '10'}
         ]
       }
     ];
@@ -245,6 +245,7 @@ describe('Factory: Activity', function () {
         name: 'Cultuurwaardebon',
         type: 'COUPON',
         maximumReached: true,
+        id: 123,
         prices: {
           'Rang 1': 22,
           'Rang 2': 11,

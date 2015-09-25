@@ -70,7 +70,7 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
     return deferredActivities.promise;
   };
 
-  service.claimTariff = function(passholder, activity, tariff, ticketCount) {
+  service.claimTariff = function(passholder, activity, priceInfo, ticketCount) {
     var deferredClaim = $q.defer();
     var amount = ticketCount || 1;
 
@@ -84,13 +84,13 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
 
     var claimParameters = {
       activityId: activity.id,
-      priceClass: tariff.priceClass,
+      priceClass: priceInfo.priceClass
     };
     if (ticketCount) {
       claimParameters.amount = amount;
     }
-    if (tariff.type === 'COUPON') {
-      claimParameters.tariffId = tariff.id;
+    if (priceInfo.type === 'COUPON') {
+      claimParameters.tariffId = priceInfo.couponId;
     }
 
     var claimRequest = $http.post(

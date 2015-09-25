@@ -54,6 +54,47 @@ describe('Service: activity', function (){
     'lastPage': 'http://culpas-silex.dev/passholders/0900000330317/activities?date_type=today&limit=5&page=1&query='
   };
 
+  function getJsonActivity() {
+    var jsonActivity = {
+      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      'title': 'Altijd open',
+      'description': '',
+      'when': '',
+      'points': 182,
+      'checkinConstraint': {
+        'allowed': true,
+        'startDate': '2015-09-01T00:00:00+00:00',
+        'endDate': '2015-09-01T23:59:59+00:00',
+        'reason': ''
+      },
+      free: true,
+      sales: {
+        maximumReached: false,
+        differentiation: false,
+        base: {
+          'Default prijsklasse': 6
+        },
+        tariffs: {
+          kansentariefAvailable: true,
+          couponAvailable: false,
+          lowestAvailable: 1.5,
+          list: [
+            {
+              name: 'Kansentarief',
+              type: 'KANSENTARIEF',
+              maximumReached: false,
+              prices: {
+                'Default prijsklasse': 1.5
+              }
+            }
+          ]
+        }
+      }
+    };
+
+    return angular.copy(jsonActivity);
+  }
+
   beforeEach(inject(function ($injector) {
     $rootScope = $injector.get('$rootScope');
     $scope = $rootScope.$new();
@@ -216,7 +257,7 @@ describe('Service: activity', function (){
   it('should claim a tariff for a passholder for an activity', function(done) {
     // Claim a coupon tariff.
     var passholder = { passNumber: '01234567891234' };
-    var activity = {
+    var jsonActivity = {
       'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
       'title': 'Altijd open',
       'description': '',
@@ -252,10 +293,11 @@ describe('Service: activity', function (){
         }
       }
     };
-    var tariff = {
+    var activity = new Activity(jsonActivity);
+    var priceInfo = {
       type: 'COUPON',
       priceClass: 'Eerste rang',
-      id: '10'
+      couponId: '10'
     };
     var claim = {
       id: '30819',
@@ -272,20 +314,20 @@ describe('Service: activity', function (){
       .respond(200, claim);
 
     var claimPromise = activityService
-      .claimTariff(passholder, activity, tariff);
+      .claimTariff(passholder, activity, priceInfo);
 
     $httpBackend.flush();
 
     // Claim a kansenstatuut tariff.
     delete expectedPostParams.tariffId;
-    tariff.type = 'KANSENSTATUUT';
-    delete tariff.id;
+    priceInfo.type = 'KANSENSTATUUT';
+    delete priceInfo.id;
 
     $httpBackend.expectPOST(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales', expectedPostParams)
       .respond(200, claim);
 
     var kansenstatuutClaimPromise = activityService
-      .claimTariff(passholder, activity, tariff);
+      .claimTariff(passholder, activity, priceInfo);
 
     var allTariffsClaimed = function () {
       done();
@@ -305,46 +347,11 @@ describe('Service: activity', function (){
         last: 'achternaam'
       }
     };
-    var activity = {
-      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
-      'title': 'Altijd open',
-      'description': '',
-      'when': '',
-      'points': 182,
-      'checkinConstraint': {
-        'allowed': true,
-        'startDate': '2015-09-01T00:00:00+00:00',
-        'endDate': '2015-09-01T23:59:59+00:00',
-        'reason': ''
-      },
-      free: true,
-      sales: {
-        maximumReached: false,
-        differentiation: false,
-        base: {
-          'Default prijsklasse': 6
-        },
-        tariffs: {
-          kansentariefAvailable: true,
-          couponAvailable: false,
-          lowestAvailable: 1.5,
-          list: [
-            {
-              name: 'Kansentarief',
-              type: 'KANSENTARIEF',
-              maximumReached: false,
-              prices: {
-                'Default prijsklasse': 1.5
-              }
-            }
-          ]
-        }
-      }
-    };
+    var activity = new Activity(getJsonActivity());
     var tariff = {
       type: 'COUPON',
       priceClass: 'Eerste rang',
-      id: '10'
+      couponId: '10'
     };
     var apiError = {
       code: '30819',
