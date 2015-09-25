@@ -24,7 +24,8 @@ angular
     'jkuri.touchspin',
     'ubr.registration',
     'ubr.kansenstatuut',
-    'ubr.group'
+    'ubr.group',
+    'ubr.checkindevices'
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */

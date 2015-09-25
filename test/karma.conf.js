@@ -53,9 +53,11 @@ module.exports = function(config) {
       "app/scripts/registration/ubr.registration.module.js",
       "app/scripts/kansenstatuut/ubr.kansenstatuut.module.js",
       "app/scripts/group/ubr.group.module.js",
+      "app/scripts/checkindevices/ubr.checkindevices.module.js",
       "app/scripts/**/*.js",
       "app/views/*.html",
       "app/views/registration/*.html",
+      "app/views/checkindevices/*.html",
       //"test/mock/**/*.js",
       "test/spec/**/*.js"
     ],
