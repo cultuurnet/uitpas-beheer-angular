@@ -75,7 +75,6 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
     var amount = ticketCount || 1;
 
     var handleTicketSale = function (ticketSaleResponse) {
-      console.log(ticketSaleResponse);
       var ticketSale = ticketSaleResponse;
       ticketSale.ticketCount = amount;
       ticketSale.passholder = passholder;

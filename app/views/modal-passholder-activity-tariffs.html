@@ -7,7 +7,7 @@
   <div class="modal-body">
     <div class="container-fluid">
       <div class="activity-title" ng-bind="::pat.activity.title"></div>
-      <div class="alert alert-danger" ng-show="pat.formSubmitError" ng-bind="pat.formSubmitError.message"></div>
+      <div class="alert alert-danger" ng-show="pat.asyncError" ng-bind="pat.asyncError.cleanMessage"></div>
       <fieldset ng-disabled="pat.formSubmitBusy">
         <table>
           <thead><th></th><th ng-repeat="(rank, value) in ::pat.activity.sales.base" ng-bind="::rank"></th></thead>
@@ -21,7 +21,7 @@
               <td ng-repeat="priceInfo in ::tariff.prices" ng-class="{'lowest': (price === pat.activity.sales.tariffs.lowestAvailable)}">
                 <label for="price-{{::tKey}}-{{::priceInfo.priceClass}}">
                   <input type="radio" name="tariff" id="price-{{::tKey}}-{{::priceInfo.priceClass}}" ng-model="pat.selectedTariff"
-                         required ng-value="priceInfo">
+                         required ng-value="priceInfo" ng-change="pat.clearAsyncError()">
                   <span class="price">&euro; {{::priceInfo.price}}</span>
                 </label>
               </td>
@@ -38,7 +38,7 @@
             <div class="grid__12 grid--bp-lrg__4">
               <label for="tariff-ticket-count">Aantal personen</label><br>
               <input type="text" value="1" ng-model="pat.groupSale.tickets" min="1" max="{{pat.groupSale.maxTickets}}"
-                     ng-touch-spin id="tariff-ticket-count" name="ticketCount">
+                     ng-touch-spin id="tariff-ticket-count" name="ticketCount" ng-change="pat.clearAsyncError()">
             </div>
 
             <div class="grid__12 grid--bp-lrg__4">

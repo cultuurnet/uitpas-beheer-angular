@@ -134,7 +134,7 @@ describe('Controller: PassholderActivityTariffsController', function () {
     $scope.$digest();
 
     expect(controller.formSubmitBusy).toBeFalsy();
-    expect(controller.formSubmitError).toEqual(serviceError);
+    expect(controller.asyncError).toEqual(serviceError);
     expect($scope.$emit).not.toHaveBeenCalled();
     expect(modalInstance.close).not.toHaveBeenCalled();
   });

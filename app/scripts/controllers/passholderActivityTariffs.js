@@ -12,7 +12,14 @@ angular
   .controller('PassholderActivityTariffsController', PassholderActivityTariffsController);
 
 /* @ngInject */
-function PassholderActivityTariffsController (passholder, activity, $modalInstance, activityService, $rootScope) {
+function PassholderActivityTariffsController (
+  passholder,
+  activity,
+  $modalInstance,
+  activityService,
+  $rootScope,
+  TicketSaleAPIError
+) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -20,7 +27,7 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
   controller.activity = activity;
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
-  controller.formSubmitError = false;
+  controller.asyncError = false;
   controller.groupSale = passholder.hasOwnProperty('availableTickets') ? {
     tickets: 1,
     maxTickets: passholder.availableTickets,
@@ -45,6 +52,23 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
     $modalInstance.dismiss();
   };
 
+  controller.clearAsyncError = function () {
+    controller.asyncError = false;
+  };
+
+  controller.handleAsyncError = function (error) {
+    var knownAPIError = TicketSaleAPIError[error.code];
+
+    if (knownAPIError) {
+      error.cleanMessage = knownAPIError.message;
+    } else {
+      error.cleanMessage = error.message.split('URL CALLED')[0];
+    }
+
+    controller.asyncError = error;
+    controller.formSubmitBusy = false;
+  };
+
   controller.claimTariff = function (passholder, activity) {
     var tariff = angular.copy(controller.selectedTariff);
     var ticketCount = controller.groupSale ? controller.groupSale.tickets : null;
@@ -57,9 +81,8 @@ function PassholderActivityTariffsController (passholder, activity, $modalInstan
     };
 
     var tariffNotClaimed = function (error) {
-      controller.formSubmitError = error;
+      controller.handleAsyncError(error);
       tariff.assignError = true;
-      controller.formSubmitBusy = false;
     };
 
     controller.formSubmitBusy = true;

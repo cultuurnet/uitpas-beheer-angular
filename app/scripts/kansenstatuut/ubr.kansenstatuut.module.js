@@ -133,7 +133,6 @@ angular
             return counterService.getActive();
           }],
           cardSystemId: ['$stateParams', function ($stateParams) {
-            console.log($stateParams);
             return $stateParams.cardSystemId;
           }]
         },
