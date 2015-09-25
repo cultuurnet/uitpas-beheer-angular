@@ -4,7 +4,7 @@ describe('Controller: PassholderActivityTariffsController', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  var $scope, $httpBackend, $q, controller, activityService, modalInstance;
+  var $scope, $httpBackend, $q, $controller, activityService, modalInstance, TicketSaleAPIError;
 
   var activity = {
     'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
@@ -34,9 +34,9 @@ describe('Controller: PassholderActivityTariffsController', function () {
           name: 'Kansentarief',
           type: 'KANSENTARIEF',
           maximumReached: false,
-          prices: {
-            'Default prijsklasse': 1.5
-          }
+          prices: [
+            {priceClass: 'Default prijsklasse', price: 1.5, type: 'KANSENTARIEF'}
+          ]
         }
       ]
     }
@@ -46,7 +46,7 @@ describe('Controller: PassholderActivityTariffsController', function () {
   var passholder = { passNumber: '01234567891234', points: 123 };
 
   beforeEach(inject(function ($injector, $rootScope){
-    var $controller = $injector.get('$controller');
+    $controller = $injector.get('$controller');
 
     modalInstance = {
       close: jasmine.createSpy('modalInstance.close'),
@@ -60,28 +60,42 @@ describe('Controller: PassholderActivityTariffsController', function () {
     activityService = $injector.get('activityService');
     $scope = $rootScope.$new();
     $httpBackend = $injector.get('$httpBackend');
+    TicketSaleAPIError = {
+      ORANGE_API_ERROR: {
+        message: 'Orange API Error',
+        step: 'orangeStep'
+      }
+    };
+  }));
 
-    controller = $controller('PassholderActivityTariffsController', {
+  function getControllerForPassholder(passholder) {
+    var controller = $controller('PassholderActivityTariffsController', {
       passholder: passholder,
       activity: activity,
       $modalInstance: modalInstance,
       activityService: activityService,
-      $rootScope: $scope
+      $rootScope: $scope,
+      TicketSaleAPIError: TicketSaleAPIError
     });
-  }));
+
+    return controller;
+  }
 
   it('should should have certain paramaters at initialisation', function () {
+    var controller = getControllerForPassholder(passholder);
     expect(controller.passholder).toEqual(passholder);
     expect(controller.activity).toEqual(activity);
   });
 
   it('can dismiss the modal', function () {
+    var controller = getControllerForPassholder(passholder);
     controller.cancelModal();
     expect(modalInstance.dismiss).toHaveBeenCalled();
   });
   
 
   it('can submit the activity tariffs form', function () {
+    var controller = getControllerForPassholder(passholder);
     var deferredClaim = $q.defer();
     var claimPromise = deferredClaim.promise;
 
@@ -108,6 +122,7 @@ describe('Controller: PassholderActivityTariffsController', function () {
   });
 
   it('can handle errors during form submit', function () {
+    var controller = getControllerForPassholder(passholder);
     var deferredClaim = $q.defer();
     var claimPromise = deferredClaim.promise;
 
@@ -137,5 +152,35 @@ describe('Controller: PassholderActivityTariffsController', function () {
     expect(controller.asyncError).toEqual(serviceError);
     expect($scope.$emit).not.toHaveBeenCalled();
     expect(modalInstance.close).not.toHaveBeenCalled();
+  });
+
+  it('it should keep track of the total ticket price when buying multiple group tickets', function (){
+    var group = {availableTickets: 10};
+    var controller = getControllerForPassholder(group);
+
+    expect(controller.groupSale.maxTickets).toEqual(10);
+    expect(controller.groupSale.getTotalPrice()).toEqual(1.5);
+
+    controller.groupSale.tickets = 5;
+    expect(controller.groupSale.getTotalPrice()).toEqual(7.5);
+  });
+
+  it('it displays a user friendly error message when the API returns a known error', function () {
+    var controller = getControllerForPassholder(passholder);
+    var ticketSaleError = {
+      code: 'ORANGE_API_ERROR',
+      message: 'I\'m a funky API error with technical details. Don\'t show me to noobs.'
+    };
+    var expectedAsyncError = {
+      cleanMessage: 'Orange API Error',
+      code: 'ORANGE_API_ERROR',
+      message: 'I\'m a funky API error with technical details. Don\'t show me to noobs.'
+    };
+
+    controller.handleAsyncError(ticketSaleError);
+    expect(controller.asyncError).toEqual(expectedAsyncError);
+
+    controller.clearAsyncError();
+    expect(controller.asyncError).toEqual(false);
   });
 });
