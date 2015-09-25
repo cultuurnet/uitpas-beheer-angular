@@ -59,18 +59,22 @@ function activityFactory(CheckinState) {
         prices: []
       };
 
+      if (!angular.isUndefined(listItem.id)) {
+        newListItem.id = listItem.id;
+      }
+
       for(var priceClass in listItem.prices) {
         var priceInfo = {
           type: listItem.type,
           price: listItem.prices[priceClass],
-          priceClass: priceClass
+          priceClass: priceClass,
         };
+        if (listItem.id) {
+          priceInfo.couponId = listItem.id;
+        }
         newListItem.prices.push(priceInfo);
       }
 
-      if (!angular.isUndefined(listItem.id)) {
-        newListItem.id = listItem.id;
-      }
       list.push(newListItem);
     });
     return list;
