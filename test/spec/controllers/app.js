@@ -14,17 +14,11 @@ describe('Controller: AppController', function () {
     uitid = $injector.get('uitid');
     $q = $injector.get('$q');
     counterService = $injector.get('counterService');
-    $state = $injector.get('$state');
+    $state = jasmine.createSpyObj('$state', ['go']);
   }));
 
   beforeEach(function () {
-    spyOn(uitid, 'getUser').and.callFake(function () {
-      return {
-        then: function (callback) {
-          return callback({some: 'user'});
-        }
-      };
-    });
+    spyOn(uitid, 'getUser').and.returnValue($q.resolve({some: 'user'}));
 
     appController = $controller(
       'AppController', {
@@ -39,6 +33,9 @@ describe('Controller: AppController', function () {
 
   it('can login a user', function () {
     var redirectUrl = 'http://some.url';
+    $state.current = {
+      name: 'someState'
+    };
     spyOn($location, 'absUrl').and.returnValue(redirectUrl);
     spyOn(uitid, 'login');
     appController.login();
@@ -76,7 +73,6 @@ describe('Controller: AppController', function () {
   });
 
   it ('goes to the counter.main.error state when a state change error occurs', function () {
-    spyOn($state, 'go');
     $scope.$broadcast('$stateChangeError', 'toState', 'toParams', 'fromState', 'fromParams', {
       code: 'PASSHOLDER_NOT_FOUND',
       title: 'Not found',
@@ -95,13 +91,11 @@ describe('Controller: AppController', function () {
   });
 
   it('should set the right app state when redirecting to login', function () {
-    spyOn($state, 'go').and.stub();
     appController.redirectToLogin();
     expect($state.go).toHaveBeenCalledWith('login');
   });
 
   it('should set the right app state when redirecting to counters', function () {
-    spyOn($state, 'go').and.stub();
     appController.redirectToCounters();
     expect($state.go).toHaveBeenCalledWith('counters');
   });

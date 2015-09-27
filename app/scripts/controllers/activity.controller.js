@@ -12,7 +12,7 @@ angular
   .controller('ActivityController', ActivityController);
 
 /* @ngInject */
-function ActivityController (passholder, activityService, DateRange, $rootScope) {
+function ActivityController (passholder, activityService, DateRange, $rootScope, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -96,6 +96,17 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
   // Do an initial search to populate the activity list.
   controller.search();
 
+  /**
+   * Instantly claim a tariff without choosing a price class.
+   *  This is useful for activities that only have one tariff with a single price class.
+   *  An extra pending state property is added to activities to track async communication.
+   *  If there are multiple tariff or price options you should allow the user to pick the one he likes best.
+   *
+   *  This just picks the first price class for the given tariff!
+   *
+   * @param {object} tariff
+   * @param {Activity} activity
+   */
   controller.claimTariff = function (tariff, activity) {
     activity.tariffClaimInProgress = true;
 
@@ -103,17 +114,20 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
 
     var tariffClaimedSuccessfully = function () {
       activity.sales.maximumReached = true;
-      activity.tariffClaimInProgress = false;
     };
 
     var tariffNotClaimed = function (error) {
       activity.tariffClaimError = error;
+    };
+
+    var clearPendingState = function () {
       activity.tariffClaimInProgress = false;
     };
 
     activityService
       .claimTariff(passholder, activity, priceInfo)
-      .then(tariffClaimedSuccessfully, tariffNotClaimed);
+      .then(tariffClaimedSuccessfully, tariffNotClaimed)
+      .finally(clearPendingState);
   };
 
   controller.checkin = function (activity) {
@@ -148,5 +162,7 @@ function ActivityController (passholder, activityService, DateRange, $rootScope)
     controller.search();
   }
 
-  $rootScope.$on('activityTariffClaimed', updateClaimedTariffActivity);
+  var activityTariffClaimedListener = $rootScope.$on('activityTariffClaimed', updateClaimedTariffActivity);
+
+  $scope.$on('$destroy', activityTariffClaimedListener);
 }
