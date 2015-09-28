@@ -243,4 +243,19 @@ describe('Controller: ActivityController', function () {
     expect(activity.tariffClaimInProgress).toEqual(false);
     expect(activity.tariffClaimError).toEqual('break stuff');
   });
+
+  it('should refresh the list of activities when a tariff is claimed', function () {
+    // when triggered by an external event, eg: when picking a tariff using a modal
+    spyOn(activityController, 'search');
+    activityController.updateClaimedTariffActivity();
+    expect(activityController.search).toHaveBeenCalled();
+
+    // when claiming a tariff instantly
+    activityController.search.calls.reset();
+    activityService.claimTariff.and.returnValue($q.resolve());
+    activityController.claimTariff({prices: ['priceInfo']}, {});
+
+    $scope.$digest();
+    expect(activityController.search).toHaveBeenCalled();
+  });
 });

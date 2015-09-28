@@ -113,7 +113,7 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
     var priceInfo = tariff.prices[0];
 
     var tariffClaimedSuccessfully = function () {
-      activity.sales.maximumReached = true;
+      controller.search();
     };
 
     var tariffNotClaimed = function (error) {
@@ -158,11 +158,11 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
       .then(updateActivity, checkinError);
   };
 
-  function updateClaimedTariffActivity() {
+  controller.updateClaimedTariffActivity = function () {
     controller.search();
-  }
+  };
 
-  var activityTariffClaimedListener = $rootScope.$on('activityTariffClaimed', updateClaimedTariffActivity);
+  var activityTariffClaimedListener = $rootScope.$on('activityTariffClaimed', controller.updateClaimedTariffActivity);
 
   $scope.$on('$destroy', activityTariffClaimedListener);
 }
