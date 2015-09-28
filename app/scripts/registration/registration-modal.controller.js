@@ -25,7 +25,8 @@ function RegistrationModalController (
   $scope,
   $q,
   eIDService,
-  isJavaFXBrowser
+  isJavaFXBrowser,
+  activeCounter
 ) {
   /*jshint validthis: true */
   var controller = this;
@@ -51,6 +52,7 @@ function RegistrationModalController (
   controller.eIDData = {};
   controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
+  controller.activeCounter = activeCounter;
 
   controller.showFieldError = function (form, field) {
     var hasErrors = false;

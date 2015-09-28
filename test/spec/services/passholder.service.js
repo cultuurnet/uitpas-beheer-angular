@@ -445,5 +445,5 @@ describe('Service: passholderService', function () {
       .then(done);
 
     $httpBackend.flush();
-  })
+  });
 });
