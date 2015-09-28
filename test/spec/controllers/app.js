@@ -137,7 +137,7 @@ describe('Controller: AppController', function () {
     $scope.$digest();
   });
 
-  it('requires an active counter for the states that need one', function (done) {
+  it('should redirect to counter selection page when a counter is required but not set', function (done) {
     var toState = { requiresCounter: true };
     var deferredCounter = $q.defer();
     var counterPromise = deferredCounter.promise;
@@ -155,4 +155,16 @@ describe('Controller: AppController', function () {
     counterPromise.finally(finished);
     $scope.$digest();
   });
+
+  it('should block state changes and make sure an active counter is set when required before moving on', function () {
+    var toState = { requiresCounter: true };
+    var stateChangeEvent = jasmine.createSpyObj('stateChangeEvent', ['preventDefault']);
+    spyOn(counterService, 'getActive').and.returnValue($q.resolve({some: 'counter'}));
+
+    appController.requireActiveCounter(stateChangeEvent, toState, {});
+
+    $scope.$digest();
+    expect($state.go).toHaveBeenCalledWith(toState, {});
+    expect(appController.counter).toEqual({some: 'counter'});
+  })
 });

@@ -57,16 +57,16 @@ function appController($rootScope, $location, uitid, counterService, $state) {
     };
 
     var activateCounter = function (activeCounter) {
-      app.counter = activeCounter;
+      app.setActiveCounter(event, activeCounter);
       $state.go(toState, toParams);
     };
 
     counterService.getActive().then(activateCounter, chooseCounter);
   };
 
-  $rootScope.$on('activeCounterChanged', function (event, activeCounter) {
+  app.setActiveCounter = function (event, activeCounter) {
     app.counter = activeCounter;
-  });
+  };
 
   app.login = function () {
     var destination = $location.absUrl();
@@ -124,4 +124,6 @@ function appController($rootScope, $location, uitid, counterService, $state) {
   $rootScope.$on('$stateChangeStart', app.authenticateStateChange);
 
   $rootScope.$on('$stateChangeStart', app.requireActiveCounter);
+
+  $rootScope.$on('activeCounterChanged', app.setActiveCounter);
 }
