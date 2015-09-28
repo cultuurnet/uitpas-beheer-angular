@@ -42,15 +42,22 @@ angular
       }
     };
 
+    redirectOnScan.$inject = ['UiTPASRouter'];
+    function redirectOnScan(UiTPASRouter) {
+      UiTPASRouter.redirectOnScanEnabled(true);
+    }
+
     $stateProvider
       // Default parent state.
       .state('counter', {
         templateUrl: 'views/split-view.html',
-        requiresCounter: true
+        requiresCounter: true,
+        onEnter: redirectOnScan
       })
       .state('counter.main', {
         url: '/',
         requiresCounter: true,
+        redirectOnScan: true,
         views: {
           content: {
             templateUrl: 'views/content-passholder-search.html',
@@ -68,6 +75,7 @@ angular
         }
       })
       .state('counter.main.error', {
+        redirectOnScan: true,
         views: {
           'content@counter': {
             templateUrl: 'views/error.html',
@@ -83,6 +91,7 @@ angular
       .state('counter.main.passholder', {
         url: 'passholder/:identification',
         requiresCounter: true,
+        redirectOnScan: true,
         views: {
           'content@counter': {
             templateUrl: 'views/split-content.html'

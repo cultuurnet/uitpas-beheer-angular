@@ -3,9 +3,9 @@
     <label for="passholder-identification">
       <span>UiTPAS-nummer</span> <em>of Rijksregisternummer</em>
     </label>
-    <input type="text" id="passholder-identification" ng-required="true" ng-class="{ 'form-error': psc.passholderNotFound }" auto-focus ng-model="psc.passholderIdentification">
+    <input type="text" id="passholder-identification" ng-required="true" auto-focus ng-model="psc.passholderIdentification">
   </div>
-  <input class="btn btn-primary" type="submit" value="Bevestigen">
+  <input class="btn btn-primary" type="button" value="Bevestigen" ng-click="psc.findPassholder()">
 </form>
 <div class="no-card">
   <h5>Geen kaart?</h5>

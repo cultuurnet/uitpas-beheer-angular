@@ -35,6 +35,7 @@ angular
       .state('counter.main.group', {
         url: 'group/:identification',
         requiresCounter: true,
+        redirectOnScan: true,
         params: {
           pass: null,
           identification: null
