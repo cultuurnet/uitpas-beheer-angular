@@ -32,7 +32,7 @@
         <!--<pre>{{passholderActivityTariffs|json}}</pre>-->
         <div class="grid">
           <div class="grid__12 grid--bp-lrg__4">
-            <div class="lowest-legend small pull-left">Laagste tarief</div>
+            <div class="lowest-legend small"><em>Laagste tarief</em></div>
           </div>
 
           <div ng-if="pat.groupSale">
@@ -54,12 +54,12 @@
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
-    <a ng-click="pat.cancelModal()">Annuleren</a>
+    <a class="btn btn-link" ng-click="pat.cancelModal()">Annuleren</a>
     <button type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid"
             ng-click="pat.claimTariff(pat.passholder, pat.activity, passholderActivityTariffs)">
       <span ng-hide="pat.formSubmitBusy">Tarief toekennen</span>
             <span ng-show="pat.formSubmitBusy">
-              <span class="glyphicon glyphicon-refresh loading small"></span> Formulier wordt verzonden
+              <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
             </span>
     </button>
   </div>
