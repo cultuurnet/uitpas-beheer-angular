@@ -49,25 +49,17 @@ function counterFactory() {
         this.cardSystems = parseJsonCardSystems(jsonCounter.cardSystems);
       }
     },
+    isAllowed: function (permission, cardSystemId) {
+      return cardSystemId &&
+        this.cardSystems[cardSystemId] &&
+        this.cardSystems[cardSystemId].permissions.indexOf(permission) !== -1;
+    },
     isRegistrationCounter: function (cardSystemId) {
-      var registrationCounter = false;
-      if (cardSystemId && this.cardSystems[cardSystemId]) {
-        // Check if the card system is allowed to register at the active counter.
-        if (this.cardSystems[cardSystemId].permissions.indexOf('registratie') !== -1) {
-          registrationCounter = true;
-        }
-      }
-      return registrationCounter;
+      return this.isAllowed('registratie', cardSystemId);
     },
     isAuthorisedRegistrationCounter: function (cardSystemId) {
-      var authorisedCounter = false;
-      if (cardSystemId && this.cardSystems[cardSystemId]) {
-        // Check if the card system is allowed to register at the active counter.
-        if (this.cardSystems[cardSystemId].permissions.indexOf('kansenstatuut toekennen') !== -1) {
-          authorisedCounter = true;
-        }
-      }
-      return authorisedCounter;
+      return this.isRegistrationCounter(cardSystemId) &&
+        this.isAllowed('kansenstatuut toekennen', cardSystemId);
     },
     isAllowedToLeaveInszNumberEmpty: function (cardSystemId) {
       return this.isAuthorisedRegistrationCounter(cardSystemId);
