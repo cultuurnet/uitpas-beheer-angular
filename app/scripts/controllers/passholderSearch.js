@@ -12,78 +12,16 @@ angular
   .controller('PassholderSearchController', PassholderSearchController);
 
 /* @ngInject */
-function PassholderSearchController ($rootScope, passholderService, $state, $scope) {
+function PassholderSearchController (UiTPASRouter) {
   /*jshint validthis: true */
   var controller = this;
 
-
   // Set default parameters.
-  controller.passholderIdentification = '';
-  controller.passholderNotFound = false;
+  controller.passholderIdentification = UiTPASRouter.getLastIdentification() || '';
 
-  controller.searchPassholder = function(identification) {
-    $rootScope.appBusy = true;
-
-    function redirectAccordingPassData(pass) {
-      if (pass.passholder) {
-        displayPassholderDetails(pass.passholder);
-      }
-      else if (pass.group) {
-        displayGroupDetails(pass.group);
-      }
-      else {
-        registerNewPassholder(pass);
-      }
+  controller.findPassholder = function () {
+    if (controller.passholderIdentification) {
+      UiTPASRouter.go(controller.passholderIdentification);
     }
-
-    function displayGroupDetails() {
-      $state.go('counter.main.group', {identification: identification});
-    }
-
-    function displayPassholderDetails(passholder) {
-      $state.go(
-        'counter.main.passholder',
-        {
-          passholder: passholder,
-          identification: passholder.passNumber
-        }
-      );
-    }
-
-    function registerNewPassholder(pass) {
-      $state.go(
-        'counter.main.register',
-        {
-          pass: pass,
-          identification: pass.number,
-          type: pass.type
-        }
-      );
-    }
-
-    function displayIdentificationError(error) {
-      controller.passholderNotFound = true;
-      $state.go(
-        'counter.main.error',
-        {
-          title: error.title,
-          description: error.message
-        },
-        {
-          reload: true
-        }
-      );
-    }
-
-    passholderService.findPass(identification)
-      .then(redirectAccordingPassData, displayIdentificationError);
   };
-
-  controller.updatePassholderIdentificationFromNfc = function(event, nfcNumber) {
-    controller.searchPassholder(nfcNumber);
-  };
-
-  var cleanupNfcNumberReceivedListener = $rootScope.$on('nfcNumberReceived', controller.updatePassholderIdentificationFromNfc);
-
-  $scope.$on('$destroy', cleanupNfcNumberReceivedListener);
 }
