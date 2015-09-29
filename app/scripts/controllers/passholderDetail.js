@@ -12,12 +12,13 @@ angular
   .controller('PassholderDetailController', PassholderDetailController);
 
 /* @ngInject */
-function PassholderDetailController (pass, membershipService, $rootScope, moment, $scope, passholderService) {
+function PassholderDetailController (pass, membershipService, $rootScope, moment, $scope, passholderService, activeCounter) {
   /*jshint validthis: true */
   var controller = this;
 
   controller.passholder = angular.copy(pass.passholder);
   controller.pass = pass;
+  controller.activeCounter = activeCounter;
 
   controller.membershipsLoading = false;
 

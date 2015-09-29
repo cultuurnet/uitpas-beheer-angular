@@ -38,7 +38,8 @@ describe('Controller: PassholderDetailController', function () {
       },
       $scope: $scope,
       moment: moment,
-      passholderService: passholderService
+      passholderService: passholderService,
+      activeCounter: {}
     });
 
     deferredPassholder = $q.defer();
