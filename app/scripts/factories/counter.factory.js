@@ -51,9 +51,10 @@ function counterFactory() {
     },
     isRegistrationCounter: function (pass) {
       var registrationCounter = false;
-      if (this.cardSystems[pass.cardSystem.id]) {
+      var id = ((pass || {}).cardSystem || {}).id;
+      if (id && this.cardSystems[id]) {
         // Check if the card system is allowed to register at the active counter.
-        if (this.cardSystems[pass.cardSystem.id].permissions.indexOf('registratie') !== -1) {
+        if (this.cardSystems[id].permissions.indexOf('registratie') !== -1) {
           registrationCounter = true;
         }
       }
@@ -61,9 +62,10 @@ function counterFactory() {
     },
     isAuthorisedRegistrationCounter: function (pass) {
       var authorisedCounter = false;
-      if (this.cardSystems[pass.cardSystem.id]) {
+      var id = ((pass || {}).cardSystem || {}).id;
+      if (id && this.cardSystems[id]) {
         // Check if the card system is allowed to register at the active counter.
-        if (this.cardSystems[pass.cardSystem.id].permissions.indexOf('kansenstatuut toekennen') !== -1) {
+        if (this.cardSystems[id].permissions.indexOf('kansenstatuut toekennen') !== -1) {
           authorisedCounter = true;
         }
       }

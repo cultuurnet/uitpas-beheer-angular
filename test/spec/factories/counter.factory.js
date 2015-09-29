@@ -81,4 +81,24 @@ describe('Factory: Counter', function () {
     pass.cardSystem.id = 2;
     expect(counter.isRegistrationCounter(pass)).toBeFalsy();
   });
+
+  it('should return unauthorised if an invalid pass object is given for a counter check', function () {
+    var counter = new Counter(getJsonCounter());
+    var pass = 'wrong';
+
+    expect(counter.isRegistrationCounter(pass)).toBeFalsy();
+    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
+
+    pass = {};
+    expect(counter.isRegistrationCounter(pass)).toBeFalsy();
+    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
+
+    pass.cardSystem = {};
+    expect(counter.isRegistrationCounter(pass)).toBeFalsy();
+    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
+
+    pass.cardSystem.id = 1;
+    expect(counter.isRegistrationCounter(pass)).toBeTruthy();
+    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeTruthy();
+  });
 });
