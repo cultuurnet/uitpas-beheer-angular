@@ -73,14 +73,14 @@ describe('Controller: EditKansenstatuutModalController', function () {
     var expectedEndDate = new Date('1922-02-02');
     var errorResponse = {
       data: {
-        code: "TOTALLY_UNACCEPTABLE_DUDE",
-        exception: "CultuurNet\UiTPASBeheer\Exception\ReadableCodeResponseException",
-        message: "You did something wrong!",
-        type: "error"
+        code: 'TOTALLY_UNACCEPTABLE_DUDE',
+        exception: 'CultuurNet\UiTPASBeheer\Exception\ReadableCodeResponseException',
+        message: 'You did something wrong!',
+        type: 'error'
       }
     };
     var expectedAsyncError = {
-      message: "You did something wrong!"
+      message: 'You did something wrong!'
     };
     controller.kansenstatuut = {
       endDate: new Date('1922-02-02')
