@@ -12,11 +12,13 @@ angular
   .controller('PassholderDetailController', PassholderDetailController);
 
 /* @ngInject */
-function PassholderDetailController (passholder, membershipService, $rootScope, moment, $scope, passholderService) {
+function PassholderDetailController (pass, membershipService, $rootScope, moment, $scope, passholderService, activeCounter) {
   /*jshint validthis: true */
   var controller = this;
 
-  controller.passholder = angular.copy(passholder);
+  controller.passholder = angular.copy(pass.passholder);
+  controller.pass = pass;
+  controller.activeCounter = activeCounter;
 
   controller.membershipsLoading = false;
 
@@ -26,7 +28,7 @@ function PassholderDetailController (passholder, membershipService, $rootScope, 
 
   var loadMemberships = function() {
     controller.membershipsLoading = true;
-    membershipService.list(passholder.passNumber)
+    membershipService.list(controller.pass.number)
       .then(listRetrieved)
       .finally(function() {
         controller.membershipsLoading = false;
@@ -62,7 +64,7 @@ function PassholderDetailController (passholder, membershipService, $rootScope, 
   }
 
   function refreshPassholder () {
-    passholderService.findPassholder(passholder.passNumber).then(
+    passholderService.findPassholder(pass.number).then(
       function (passholder) {
         controller.passholder = passholder;
       }

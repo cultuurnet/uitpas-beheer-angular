@@ -50,6 +50,9 @@ function passFactory(Passholder) {
     },
     isKansenstatuut: function () {
       return this.kansenStatuut ? true : false;
+    },
+    isBlocked: function() {
+      return this.status === 'BLOCKED';
     }
   };
 

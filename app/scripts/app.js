@@ -42,6 +42,15 @@ angular
       }
     };
 
+    var getPassFromStateParams = function(passholderService, $stateParams) {
+      if ($stateParams.pass) {
+        return $stateParams.pass;
+      }
+      else {
+        return passholderService.findPass($stateParams.identification);
+      }
+    };
+
     redirectOnScan.$inject = ['UiTPASRouter'];
     function redirectOnScan(UiTPASRouter) {
       UiTPASRouter.redirectOnScanEnabled(true);
@@ -94,7 +103,15 @@ angular
         redirectOnScan: true,
         views: {
           'content@counter': {
-            templateUrl: 'views/split-content.html'
+            templateProvider: function ($templateFactory, pass) {
+              var templatePath = 'views/split-content.html';
+              if (pass.isBlocked()) {
+                templatePath = 'views/content-passholder-blocked.html';
+              }
+              return $templateFactory.fromUrl(templatePath);
+            },
+            controller: 'PassholderDetailController',
+            controllerAs: 'pdc'
           },
           'sidebar@counter': {
             templateUrl: 'views/sidebar-passholder-details.html',
@@ -114,13 +131,19 @@ angular
         },
         params: {
           'identification': null,
+          'pass': null,
           'passholder': null,
-          'advantages': null
+          'advantages': null,
+          'activeCounter': null
         },
         resolve: {
+          pass: ['passholderService', '$stateParams', getPassFromStateParams],
           passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
           advantages: ['advantageService', '$stateParams', function(advantageService, $stateParams) {
             return advantageService.list($stateParams.identification);
+          }],
+          activeCounter: ['counterService', function (counterService) {
+            return counterService.getActive();
           }]
         }
       })

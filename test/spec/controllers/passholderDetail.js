@@ -25,7 +25,7 @@ describe('Controller: PassholderDetailController', function () {
     passholderService = $injector.get('passholderService');
 
     detailController = $controller('PassholderDetailController', {
-      passholder: { passNumber: '01234567891234', points: 123, name: {first: 'Fred'} },
+      pass: { passholder: { passNumber: '01234567891234', points: 123, name: {first: 'Fred'} } },
       $rootScope: $rootScope,
       membershipService: {
         list: function () {
@@ -38,7 +38,8 @@ describe('Controller: PassholderDetailController', function () {
       },
       $scope: $scope,
       moment: moment,
-      passholderService: passholderService
+      passholderService: passholderService,
+      activeCounter: {}
     });
 
     deferredPassholder = $q.defer();
