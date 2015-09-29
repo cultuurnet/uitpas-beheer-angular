@@ -16,7 +16,7 @@
             <label class="control-label" for="insz-number">
               Rijksregisternummer
             </label>
-            <input type="text" class="form-control" id="insz-number" ng-required="!prc.activeCounter.isAllowedToLeaveInszNumberEmpty(prc.pass)" name="inszNumber" ng-model="prc.passholder.inszNumber">
+            <input type="text" class="form-control" id="insz-number" ng-required="!prc.activeCounter.isAllowedToLeaveInszNumberEmpty(prc.pass.cardSystem.id)" name="inszNumber" ng-model="prc.passholder.inszNumber">
             <div ng-if="prc.showFieldError(personalDataForm, 'inszNumber')" class="text-danger small">
               <div ng-if="personalDataForm.inszNumber.$error.gender">Het geslacht afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>
               <div ng-if="personalDataForm.inszNumber.$error.dateOfBirth">De geboortedatum afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>

@@ -49,30 +49,28 @@ function counterFactory() {
         this.cardSystems = parseJsonCardSystems(jsonCounter.cardSystems);
       }
     },
-    isRegistrationCounter: function (pass) {
+    isRegistrationCounter: function (cardSystemId) {
       var registrationCounter = false;
-      var id = ((pass || {}).cardSystem || {}).id;
-      if (id && this.cardSystems[id]) {
+      if (cardSystemId && this.cardSystems[cardSystemId]) {
         // Check if the card system is allowed to register at the active counter.
-        if (this.cardSystems[id].permissions.indexOf('registratie') !== -1) {
+        if (this.cardSystems[cardSystemId].permissions.indexOf('registratie') !== -1) {
           registrationCounter = true;
         }
       }
       return registrationCounter;
     },
-    isAuthorisedRegistrationCounter: function (pass) {
+    isAuthorisedRegistrationCounter: function (cardSystemId) {
       var authorisedCounter = false;
-      var id = ((pass || {}).cardSystem || {}).id;
-      if (id && this.cardSystems[id]) {
+      if (cardSystemId && this.cardSystems[cardSystemId]) {
         // Check if the card system is allowed to register at the active counter.
-        if (this.cardSystems[id].permissions.indexOf('kansenstatuut toekennen') !== -1) {
+        if (this.cardSystems[cardSystemId].permissions.indexOf('kansenstatuut toekennen') !== -1) {
           authorisedCounter = true;
         }
       }
       return authorisedCounter;
     },
-    isAllowedToLeaveInszNumberEmpty: function (pass) {
-      return this.isAuthorisedRegistrationCounter(pass);
+    isAllowedToLeaveInszNumberEmpty: function (cardSystemId) {
+      return this.isAuthorisedRegistrationCounter(cardSystemId);
     }
   };
 

@@ -64,48 +64,34 @@ describe('Factory: Counter', function () {
 
   it('should tell if a counter can register a passholder', function () {
     var counter = new Counter(getJsonCounter());
-    var pass = {
-      cardSystem: {
-        id: 1
-      }
-    };
+    var passCardSystemId = 1;
 
-    expect(counter.isRegistrationCounter(pass)).toBeTruthy();
-    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeTruthy();
-    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeTruthy();
+    expect(counter.isRegistrationCounter(passCardSystemId)).toBeTruthy();
+    expect(counter.isAuthorisedRegistrationCounter(passCardSystemId)).toBeTruthy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(passCardSystemId)).toBeTruthy();
 
     counter.cardSystems[1].permissions = ['registratie'];
-    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
-    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeFalsy();
+    expect(counter.isAuthorisedRegistrationCounter(passCardSystemId)).toBeFalsy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(passCardSystemId)).toBeFalsy();
 
     counter.cardSystems[1].permissions = [];
-    expect(counter.isRegistrationCounter(pass)).toBeFalsy();
+    expect(counter.isRegistrationCounter(passCardSystemId)).toBeFalsy();
 
-    pass.cardSystem.id = 2;
-    expect(counter.isRegistrationCounter(pass)).toBeFalsy();
+    passCardSystemId = 2;
+    expect(counter.isRegistrationCounter(passCardSystemId)).toBeFalsy();
   });
 
-  it('should return unauthorised if an invalid pass object is given for a counter check', function () {
+  it('should return unauthorised if an invalid string is given for a counter check', function () {
     var counter = new Counter(getJsonCounter());
-    var pass = 'wrong';
+    var passCardSystemId = 'wrong';
 
-    expect(counter.isRegistrationCounter(pass)).toBeFalsy();
-    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
-    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeFalsy();
+    expect(counter.isRegistrationCounter(passCardSystemId)).toBeFalsy();
+    expect(counter.isAuthorisedRegistrationCounter(passCardSystemId)).toBeFalsy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(passCardSystemId)).toBeFalsy();
 
-    pass = {};
-    expect(counter.isRegistrationCounter(pass)).toBeFalsy();
-    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
-    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeFalsy();
-
-    pass.cardSystem = {};
-    expect(counter.isRegistrationCounter(pass)).toBeFalsy();
-    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
-    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeFalsy();
-
-    pass.cardSystem.id = 1;
-    expect(counter.isRegistrationCounter(pass)).toBeTruthy();
-    expect(counter.isAuthorisedRegistrationCounter(pass)).toBeTruthy();
-    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeTruthy();
+    passCardSystemId = 1;
+    expect(counter.isRegistrationCounter(passCardSystemId)).toBeTruthy();
+    expect(counter.isAuthorisedRegistrationCounter(passCardSystemId)).toBeTruthy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(passCardSystemId)).toBeTruthy();
   });
 });

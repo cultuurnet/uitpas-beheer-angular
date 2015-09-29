@@ -26,7 +26,7 @@ function KansenstatutenModalController (passholder, activeCounter, cardSystemId,
   };
 
   controller.counterCanAlterKansenStatuut = function (kansenStatuut) {
-    return controller.activeCounter.isAuthorisedRegistrationCounter(kansenStatuut);
+    return controller.activeCounter.isAuthorisedRegistrationCounter(kansenStatuut.cardSystem.id);
   };
 
   function refreshPassholder () {
