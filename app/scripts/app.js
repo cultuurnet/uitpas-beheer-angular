@@ -105,7 +105,7 @@ angular
           'content@counter': {
             templateProvider: function ($templateFactory, pass) {
               var templatePath = 'views/split-content.html';
-              if (pass.status === 'BLOCKED') {
+              if (pass.isBlocked()) {
                 templatePath = 'views/content-passholder-blocked.html';
               }
               return $templateFactory.fromUrl(templatePath);
