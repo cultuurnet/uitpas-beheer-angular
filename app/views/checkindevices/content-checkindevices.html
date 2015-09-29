@@ -1,39 +1,37 @@
-<div>
-  <h2 class="block-title">Toestellen</h2>
+<section class="overview overview-devices">
+  <h2 class="overview__title">Toestellen</h2>
 
-  <div class="spinner" ng-if="cidc.loadingData">
-    <circle-spinner></circle-spinner>
+  <div class="overview__loading" ng-if="cidc.loadingData">
+    <div class="spinner spinner-small">
+      <circle-spinner></circle-spinner>
+    </div>
   </div>
 
-  <div class="slats" ng-if="!cidc.loadingData">
-
-    <div class="slats-item" ng-repeat="device in cidc.devices">
+  <ul class="list-unstyled" ng-if="!cidc.loadingData">
+    <li class="overview__item overview__item-list overview__item-list-small" ng-repeat="device in cidc.devices">
       <div class="row clearfix">
-        <div class="grid--bp-sml__4 grid--bp-med__4">
-          <p><strong ng-bind="device.name"></strong></p>
+        <div class="grid__12 grid--bp-med__3 grid--bp-lrg__4">
+          <strong ng-bind="device.name"></strong>
         </div>
-        <div class="grid--bp-sml__4 grid--bp-med__4">
-          <div class="form-group">
-            <select class="form-control" ng-model="device.activityId" ng-options="activity.id as activity.title for activity in cidc.activities" ng-change="cidc.clearState(device)">
-              <option value="">Zuil kiest automatisch</option>
-            </select>
-          </div>
+        <div class="grid__10 grid--bp-med__6 grid--bp-lrg__4">
+          <select class="form-control" ng-model="device.activityId" ng-options="activity.id as activity.title for activity in cidc.activities" ng-change="cidc.clearState(device)">
+            <option value="">Zuil kiest automatisch</option>
+          </select>
         </div>
-        <div class="grid--bp-sml__4 grid--bp-med__4" style="line-height: 2.5em;">
-          <div ng-if="device.state && device.state.connecting">
+        <div class="grid__2 grid--bp-med__3 grid--bp-lrg__4">
+          <div class="status" ng-if="device.state && device.state.connecting">
             <i class="fa fa-circle-o-notch fa-spin"></i>
           </div>
-          <div ng-if="device.state && device.state.succeeded">
-            <i class="fa fa-check-circle" style="color: green;"></i>
+          <div class="status" ng-if="device.state && device.state.succeeded">
+            <i class="fa fa-check-circle text-success"></i>
           </div>
-          <div ng-if="device.state && device.state.failed">
-            <i class="fa fa-exclamation-triangle" style="color: crimson;"></i>
+          <div class="status" ng-if="device.state && device.state.failed">
+            <i class="fa fa-exclamation-triangle text-danger"></i>
           </div>
         </div>
       </div>
-    </div>
-
-  </div>
+    </li>
+  </ul>
 
   <p><a class="btn btn-primary" ng-click="cidc.connectDevicesToActivities()">Bewaren</a></p>
-</div>
+</section>
