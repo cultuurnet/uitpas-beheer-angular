@@ -137,7 +137,7 @@ describe('Controller: AppController', function () {
     $scope.$digest();
   });
 
-  it('should redirect to counter selection page when a counter is required but not set', function (done) {
+  it('requires an active counter for the states that need one', function (done) {
     var toState = { requiresCounter: true };
     var deferredCounter = $q.defer();
     var counterPromise = deferredCounter.promise;
