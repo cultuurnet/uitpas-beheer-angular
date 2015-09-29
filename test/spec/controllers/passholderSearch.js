@@ -45,5 +45,5 @@ describe('Controller: searchController', function () {
     searchController.passholderIdentification = 'identity-123';
     searchController.findPassholder();
     expect(UiTPASRouter.go).toHaveBeenCalledWith('identity-123');
-  })
+  });
 });

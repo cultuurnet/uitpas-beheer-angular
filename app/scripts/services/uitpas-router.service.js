@@ -41,7 +41,7 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
 
     function redirectAccordingPassData(pass) {
       if (pass.passholder) {
-        displayPassholderDetails(pass.passholder);
+        displayPassholderDetails(pass);
       }
       else if (pass.group) {
         displayGroupDetails(pass.group);
@@ -55,12 +55,12 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
       $state.go('counter.main.group', {identification: identification});
     }
 
-    function displayPassholderDetails(passholder) {
+    function displayPassholderDetails(pass) {
       $state.go(
         'counter.main.passholder',
         {
-          passholder: passholder,
-          identification: passholder.passNumber
+          pass: pass,
+          identification: pass.number
         }
       );
     }

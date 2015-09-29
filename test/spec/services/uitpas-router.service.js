@@ -69,13 +69,16 @@ describe('Service: UiTPAS router', function () {
 
   it('redirects to a passholder detail page with a valid number', function () {
     var expectedStateParameters = {
-      passholder: {
-        name: 'Dude Man',
-        passNumber: 'itsme-123456789'
+      pass: {
+        passholder: {
+          name: 'Dude Man',
+          passNumber: 'itsme-123456789'
+        },
+        number: 'itsme-123456789',
       },
       identification: 'itsme-123456789'
     };
-    passholderService.findPass.and.returnValue($q.resolve(expectedStateParameters));
+    passholderService.findPass.and.returnValue($q.resolve(expectedStateParameters.pass));
     router.go('valid identification number');
 
     rootScope.$digest();
@@ -140,9 +143,4 @@ describe('Service: UiTPAS router', function () {
     expect($state.go).toHaveBeenCalledWith('counter.main.group', {identification: '09014578631'});
     expect(passholderService.findPass).toHaveBeenCalledWith('09014578631');
   });
-
-  //it('should have some presetdata variables', function () {
-  //  expect(passholderSearchController.passholderIdentification).toEqual('');
-  //  expect(passholderSearchController.passholderNotFound).toEqual(false);
-  //});
 });
