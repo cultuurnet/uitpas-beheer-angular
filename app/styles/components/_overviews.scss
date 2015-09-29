@@ -59,6 +59,9 @@
     .btn {
       white-space: normal;
     }
+    &-small {
+      padding: $rh-xsm $rh-xxs;
+    }
   }
   &__item.unavailable {
     opacity: .6;
@@ -209,6 +212,11 @@
           border-bottom: none;
         }
       }
+    }
+  }
+  &-devices {
+    .status {
+      padding-top: $padding-base-vertical;
     }
   }
   .points {

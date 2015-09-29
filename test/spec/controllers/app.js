@@ -14,17 +14,11 @@ describe('Controller: AppController', function () {
     uitid = $injector.get('uitid');
     $q = $injector.get('$q');
     counterService = $injector.get('counterService');
-    $state = $injector.get('$state');
+    $state = jasmine.createSpyObj('$state', ['go']);
   }));
 
   beforeEach(function () {
-    spyOn(uitid, 'getUser').and.callFake(function () {
-      return {
-        then: function (callback) {
-          return callback({some: 'user'});
-        }
-      };
-    });
+    spyOn(uitid, 'getUser').and.returnValue($q.resolve({some: 'user'}));
 
     appController = $controller(
       'AppController', {
@@ -39,6 +33,9 @@ describe('Controller: AppController', function () {
 
   it('can login a user', function () {
     var redirectUrl = 'http://some.url';
+    $state.current = {
+      name: 'someState'
+    };
     spyOn($location, 'absUrl').and.returnValue(redirectUrl);
     spyOn(uitid, 'login');
     appController.login();
@@ -76,7 +73,6 @@ describe('Controller: AppController', function () {
   });
 
   it ('goes to the counter.main.error state when a state change error occurs', function () {
-    spyOn($state, 'go');
     $scope.$broadcast('$stateChangeError', 'toState', 'toParams', 'fromState', 'fromParams', {
       code: 'PASSHOLDER_NOT_FOUND',
       title: 'Not found',
@@ -95,13 +91,11 @@ describe('Controller: AppController', function () {
   });
 
   it('should set the right app state when redirecting to login', function () {
-    spyOn($state, 'go').and.stub();
     appController.redirectToLogin();
     expect($state.go).toHaveBeenCalledWith('login');
   });
 
   it('should set the right app state when redirecting to counters', function () {
-    spyOn($state, 'go').and.stub();
     appController.redirectToCounters();
     expect($state.go).toHaveBeenCalledWith('counters');
   });
@@ -143,7 +137,7 @@ describe('Controller: AppController', function () {
     $scope.$digest();
   });
 
-  it('requires an active counter for the states that need one', function (done) {
+  it('should redirect to counter selection page when a counter is required but not set', function (done) {
     var toState = { requiresCounter: true };
     var deferredCounter = $q.defer();
     var counterPromise = deferredCounter.promise;
@@ -160,5 +154,17 @@ describe('Controller: AppController', function () {
     deferredCounter.reject();
     counterPromise.finally(finished);
     $scope.$digest();
+  });
+
+  it('should block state changes and make sure an active counter is set when required before moving on', function () {
+    var toState = { requiresCounter: true };
+    var stateChangeEvent = jasmine.createSpyObj('stateChangeEvent', ['preventDefault']);
+    spyOn(counterService, 'getActive').and.returnValue($q.resolve({some: 'counter'}));
+
+    appController.requireActiveCounter(stateChangeEvent, toState, {});
+
+    $scope.$digest();
+    expect($state.go).toHaveBeenCalledWith(toState, {});
+    expect(appController.counter).toEqual({some: 'counter'});
   });
 });

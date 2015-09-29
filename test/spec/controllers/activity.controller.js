@@ -20,6 +20,28 @@ describe('Controller: ActivityController', function () {
           'startDate': new Date(1438584553*1000),
           'endDate': new Date(1438584553*1000),
           'reason': ''
+        },
+        sales: {
+          maximumReached: false,
+          differentiation: false,
+          base: {
+            'Default prijsklasse': 6
+          },
+          tariffs: {
+            kansentariefAvailable: true,
+            couponAvailable: true,
+            lowestAvailable: 1.5,
+            list: [
+              {
+                name: 'Kansentarief',
+                type: 'KANSENTARIEF',
+                maximumReached: false,
+                prices: [
+                  {priceClass: 'Default prijsklasse', price: 1.5, type: 'KANSENTARIEF'}
+                ]
+              }
+            ]
+          }
         }
       },
       {
@@ -45,17 +67,19 @@ describe('Controller: ActivityController', function () {
     $q = $injector.get('$q');
     deferredActivities = $q.defer();
     var activityPromise = deferredActivities.promise;
-    activityService = $injector.get('activityService');
+    activityService = jasmine.createSpyObj('activityService', ['checkin', 'claimTariff', 'search']);
     DateRange = $injector.get('DateRange');
     $scope = $rootScope.$new();
     $httpBackend = $injector.get('$httpBackend');
 
-    spyOn(activityService, 'search').and.returnValue(activityPromise);
+    activityService.search.and.returnValue(activityPromise);
 
     activityController = $controller('ActivityController', {
       passholder: passholder,
       activityService: activityService,
-      DateRange: DateRange
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope
     });
   }));
 
@@ -134,7 +158,7 @@ describe('Controller: ActivityController', function () {
     var updatedActivity = angular.copy(activityController.activities[0]);
     updatedActivity.checkinConstraint.reason = 'MAXIMUM_REACHED';
 
-    spyOn(activityService, 'checkin').and.returnValue(deferredCheckin.promise);
+    activityService.checkin.and.returnValue(deferredCheckin.promise);
 
     activityController.checkin(activityController.activities[0]);
     expect(activityController.activities[0].checkinBusy).toBeTruthy();
@@ -166,7 +190,7 @@ describe('Controller: ActivityController', function () {
       }
     };
 
-    spyOn(activityService, 'checkin').and.returnValue(deferredCheckin.promise);
+    activityService.checkin.and.returnValue(deferredCheckin.promise);
 
     activityController.checkin(activity);
     expect(activity.checkinBusy).toBeTruthy();
@@ -190,5 +214,48 @@ describe('Controller: ActivityController', function () {
 
     expect(activityController.dateRange).toEqual(activityController.dateRanges.PAST);
     expect(activityController.searchParametersChanged).toHaveBeenCalled();
+  });
+
+  it('should trigger a pending state on activities when claiming a tariff inline', function () {
+    var activity = angular.copy(pagedActivities.activities[0]);
+    var tariff = activity.sales.tariffs.list[0];
+    var deferredClaim = $q.defer();
+
+    activityService.claimTariff.and.returnValue(deferredClaim.promise);
+
+    activityController.claimTariff(tariff, activity);
+    expect(activity.tariffClaimInProgress).toEqual(true);
+
+    deferredClaim.resolve();
+    $scope.$digest();
+    expect(activity.tariffClaimInProgress).toEqual(false);
+  });
+
+  it('should set an error state on an activity when claiming a tariff fails', function () {
+    var activity = angular.copy(pagedActivities.activities[0]);
+    var tariff = activity.sales.tariffs.list[0];
+
+    activityService.claimTariff.and.returnValue($q.reject('break stuff'));
+
+    activityController.claimTariff(tariff, activity);
+    expect(activity.tariffClaimInProgress).toEqual(true);
+    $scope.$digest();
+    expect(activity.tariffClaimInProgress).toEqual(false);
+    expect(activity.tariffClaimError).toEqual('break stuff');
+  });
+
+  it('should refresh the list of activities when a tariff is claimed', function () {
+    // when triggered by an external event, eg: when picking a tariff using a modal
+    spyOn(activityController, 'search');
+    activityController.updateClaimedTariffActivity();
+    expect(activityController.search).toHaveBeenCalled();
+
+    // when claiming a tariff instantly
+    activityController.search.calls.reset();
+    activityService.claimTariff.and.returnValue($q.resolve());
+    activityController.claimTariff({prices: ['priceInfo']}, {});
+
+    $scope.$digest();
+    expect(activityController.search).toHaveBeenCalled();
   });
 });
