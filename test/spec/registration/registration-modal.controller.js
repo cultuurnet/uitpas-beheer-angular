@@ -1,12 +1,12 @@
 'use strict';
 
-describe('Controller: PassholderRegisterController', function () {
+describe('Controller: RegistrationModalController', function () {
 
   beforeEach(module('ubr.registration'));
   beforeEach(module('uitpasbeheerAppViews'));
 
   var controller, Pass, unregisteredPass, $state, Passholder, passholderService, $scope, $controller, modalInstance,
-      counterService, $q, RegistrationAPIError, $rootScope, eIDService;
+      counterService, $q, RegistrationAPIError, $rootScope, eIDService, Counter, activeCounter;
 
   var unregisteredPassData = {
     'uitPas': {
@@ -34,6 +34,25 @@ describe('Controller: PassholderRegisterController', function () {
     unregisteredPass = new Pass(unregisteredPassData);
     $scope = $rootScope.$new();
     $q = $injector.get('$q');
+    Counter = $injector.get('Counter');
+    activeCounter = new Counter({
+      'id': '452',
+      'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+      'name': 'Vierdewereldgroep Mensen voor Mensen',
+      'role': 'admin',
+      'actorId': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+      'cardSystems': {
+        '1': {
+          'permissions': ['registratie', 'kansenstatuut toekennen'],
+          'groups': ['Geauthorizeerde registratie balies'],
+          'id': 1,
+          'name': 'UiTPAS Regio Aalst',
+          'distributionKeys': []
+        }
+      },
+      'permissions': ['registratie', 'kansenstatuut toekennen'],
+      'groups': ['Geauthorizeerde registratie balies']
+    });
 
     $state = {
       current: {
@@ -66,7 +85,8 @@ describe('Controller: PassholderRegisterController', function () {
       $scope: $scope,
       $q: $q,
       eIDService: eIDService,
-      isJavaFXBrowser: true
+      isJavaFXBrowser: true,
+      activeCounter: activeCounter
     });
 
     spyOn(controller, 'getStepNumber').and.callThrough();

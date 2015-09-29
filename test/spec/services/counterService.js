@@ -12,7 +12,7 @@ describe('Service: counterService', function () {
   }));
 
   // instantiate service
-  var counterService, scope, $cookies, $httpBackend, $q, uitid, Pass, Passholder;
+  var counterService, scope, $cookies, $httpBackend, $q, uitid, Pass, Passholder, Counter;
 
   var fakeCookieKey = function (cookieKey) {
     spyOn(counterService, 'determineLastActiveCookieKey').and.callFake(function() {
@@ -32,22 +32,22 @@ describe('Service: counterService', function () {
 
   var counters = {
     '1149': {
-      'id': '1149',
+      'actorId': 'c1372ef5-65db-4f95-aa2f-478fb5b58258',
       'consumerKey': '9d466f7f88231cf298d5cb5dd23d55af',
+      'id': '1149',
       'name': 'KSA-VKSJ Denderhoutem',
       'role': 'member',
-      'actorId': 'c1372ef5-65db-4f95-aa2f-478fb5b58258',
+      'permissions': [],
+      'groups': ['Checkin and Ticket balies'],
       'cardSystems': {
         '1': {
-          'permissions': [],
+          'distributionKeys': [],
           'groups': ['Checkin and Ticket balies'],
-          'id': 1,
           'name': 'UiTPAS Regio Aalst',
-          'distributionKeys': []
+          'permissions': [],
+          'id': 1
         }
-      },
-      'permissions': [],
-      'groups': ['Checkin and Ticket balies']
+      }
     }
   };
 
@@ -60,6 +60,7 @@ describe('Service: counterService', function () {
     $cookies = $injector.get('$cookies');
     $httpBackend = $injector.get('$httpBackend');
     $q = $injector.get('$q');
+    Counter = $injector.get('Counter');
   }));
 
   it('should remember the last active counter', function (done) {
@@ -118,13 +119,17 @@ describe('Service: counterService', function () {
   });
 
   it('returns a list of counters for the active user', function (done) {
+    var counterObjects = {
+      '1149': new Counter(counters[1149])
+    };
+
     var checkCachedList = function (list) {
-      expect(list).toEqual(counters);
+      expect(list).toEqual(counterObjects);
       done();
     };
 
     var checkRequestedList = function (list) {
-      expect(list).toEqual(counters);
+      expect(list).toEqual(counterObjects);
       counterService.getList().then(checkCachedList);
     };
 
@@ -210,13 +215,13 @@ describe('Service: counterService', function () {
   });
 
   it('can get the active counter from the server', function (done) {
-    var activeCounterId = '1149';
+    var activeCounter = new Counter(counters[1149]);
     $httpBackend
       .expectGET(apiUrl + 'counters/active')
-      .respond(200, activeCounterId);
+      .respond(200, activeCounter);
 
-    var activeCounterPersisted = function (activeCounterIdFromServer) {
-      expect(activeCounterIdFromServer).toEqual(activeCounterId);
+    var activeCounterPersisted = function (activeCounterFromServer) {
+      expect(activeCounterFromServer).toEqual(activeCounter);
       done();
     };
 
