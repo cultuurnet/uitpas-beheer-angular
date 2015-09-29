@@ -70,6 +70,9 @@ function counterFactory() {
         }
       }
       return authorisedCounter;
+    },
+    isAllowedToLeaveInszNumberEmpty: function (pass) {
+      return this.isAuthorisedRegistrationCounter(pass);
     }
   };
 

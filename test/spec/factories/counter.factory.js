@@ -59,6 +59,7 @@ describe('Factory: Counter', function () {
     expect(counter).toEqual(expectedCounter);
     expect(counter.isRegistrationCounter).toBeDefined();
     expect(counter.isAuthorisedRegistrationCounter).toBeDefined();
+    expect(counter.isAllowedToLeaveInszNumberEmpty).toBeDefined();
   });
 
   it('should tell if a counter can register a passholder', function () {
@@ -71,9 +72,11 @@ describe('Factory: Counter', function () {
 
     expect(counter.isRegistrationCounter(pass)).toBeTruthy();
     expect(counter.isAuthorisedRegistrationCounter(pass)).toBeTruthy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeTruthy();
 
     counter.cardSystems[1].permissions = ['registratie'];
     expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeFalsy();
 
     counter.cardSystems[1].permissions = [];
     expect(counter.isRegistrationCounter(pass)).toBeFalsy();
@@ -88,17 +91,21 @@ describe('Factory: Counter', function () {
 
     expect(counter.isRegistrationCounter(pass)).toBeFalsy();
     expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeFalsy();
 
     pass = {};
     expect(counter.isRegistrationCounter(pass)).toBeFalsy();
     expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeFalsy();
 
     pass.cardSystem = {};
     expect(counter.isRegistrationCounter(pass)).toBeFalsy();
     expect(counter.isAuthorisedRegistrationCounter(pass)).toBeFalsy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeFalsy();
 
     pass.cardSystem.id = 1;
     expect(counter.isRegistrationCounter(pass)).toBeTruthy();
     expect(counter.isAuthorisedRegistrationCounter(pass)).toBeTruthy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(pass)).toBeTruthy();
   });
 });
