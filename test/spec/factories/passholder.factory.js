@@ -44,7 +44,7 @@ describe('Factory: Passholder', function () {
 
   beforeEach(inject(function (_Passholder_, _day_) {
     Passholder = _Passholder_;
-    day = _day_
+    day = _day_;
   }));
 
   function getJsonPassholder() {

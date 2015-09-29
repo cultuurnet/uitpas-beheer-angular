@@ -3,7 +3,7 @@
 describe('Service: CheckInDevices', function () {
 
   var apiUrl = 'http://example.com/';
-  var $scope, $q, $rootScope, $httpBackend, CheckInDevices;
+  var $scope, $q, $httpBackend, CheckInDevices;
 
   beforeEach(module('ubr.checkindevices'));
 
@@ -26,13 +26,13 @@ describe('Service: CheckInDevices', function () {
   it('can retrieve a list of devices', function (done) {
     var devices = [
       {
-        "id": "foo",
-        "name": "test device 1"
+        'id': 'foo',
+        'name': 'test device 1'
       },
       {
-        "id": "bar",
-        "name": "test device 2",
-        "activityId": "34475f7a-d1d5-481d-b205-9537ae0f9e73"
+        'id': 'bar',
+        'name': 'test device 2',
+        'activityId': '34475f7a-d1d5-481d-b205-9537ae0f9e73'
       }
     ];
 

@@ -166,5 +166,5 @@ describe('Controller: AppController', function () {
     $scope.$digest();
     expect($state.go).toHaveBeenCalledWith(toState, {});
     expect(appController.counter).toEqual({some: 'counter'});
-  })
+  });
 });
