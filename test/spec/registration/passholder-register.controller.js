@@ -4,7 +4,7 @@ describe('Controller: PassholderRegisterController', function () {
 
   beforeEach(module('ubr.registration'));
 
-  var registerController, $scope, Pass, unregisteredPass, $state, $controller, permissionError;
+  var registerController, $scope, Pass, unregisteredPass, $state, $controller, permissionError, Counter;
 
   function getUnregisteredPassData () {
     var unregisteredPassData = {
@@ -24,7 +24,7 @@ describe('Controller: PassholderRegisterController', function () {
   }
 
   function getCounter() {
-    var counterData = {
+    var counterData = new Counter({
       'id': '452',
       'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
       'name': 'Vierdewereldgroep Mensen voor Mensen',
@@ -41,7 +41,7 @@ describe('Controller: PassholderRegisterController', function () {
       },
       'permissions': ['registratie', 'kansenstatuut toekennen'],
       'groups': ['Geauthorizeerde registratie balies']
-    };
+    });
 
     return angular.copy(counterData);
   }
@@ -55,6 +55,7 @@ describe('Controller: PassholderRegisterController', function () {
     unregisteredPass = getUnregisteredPassData();
     $scope = $rootScope;
     permissionError = Error('The active counter does not have the required permissions to register this UiTPAS.');
+    Counter = $injector.get('Counter');
   }));
 
   it('should have a pass object', function () {

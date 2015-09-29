@@ -11,14 +11,14 @@ angular.module('uitpasbeheerApp')
   .service('counterService', counterService);
 
 /* @ngInject */
-function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment) {
+function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment, Counter) {
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
   var service = this;
 
   service.active = undefined;
-  service.list = undefined;
+  service.list = {};
 
   /**
    * @returns {Promise}
@@ -27,14 +27,17 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
   service.getList = function() {
     var deferredList = $q.defer();
 
-    if (service.list !== undefined) {
+    if (Object.keys(service.list).length > 0) {
       deferredList.resolve(service.list);
     } else {
       $http
         .get(apiUrl)
         .success(function(listData) {
-          service.list = listData;
-          deferredList.resolve(listData);
+          service.list = {};
+          angular.forEach(listData, function (jsonCounter, key) {
+            service.list[key] = new Counter(jsonCounter);
+          });
+          deferredList.resolve(service.list);
         })
         .error(function() {
           deferredList.reject('unable to retrieve counters for active user');
@@ -91,7 +94,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
     $http
       .get(apiUrl + '/active')
       .success(function(counter) {
-        deferred.resolve(counter);
+        deferred.resolve(new Counter(counter));
       })
       .error(function() {
         deferred.reject();

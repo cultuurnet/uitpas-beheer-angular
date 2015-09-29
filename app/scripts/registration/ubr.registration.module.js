@@ -60,9 +60,12 @@ angular
       .state('counter.main.register.form', {
         abstract: true,
         resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams]
+          pass: ['passholderService', '$stateParams', getPassFromStateParams],
+          activeCounter: ['counterService', function (counterService) {
+            return counterService.getActive();
+          }]
         },
-        onEnter : ['pass', '$state', '$modal', function(pass, $state, $modal) {
+        onEnter : ['pass', 'activeCounter', '$state', '$modal', function(pass, activeCounter, $state, $modal) {
           registrationModalInstance = $modal.open({
             animation: true,
             templateUrl: 'views/registration/multi-step-form.html',
@@ -74,6 +77,9 @@ angular
             resolve: {
               pass: function() {
                 return pass;
+              },
+              activeCounter: function() {
+                return activeCounter;
               }
             },
             controller: 'RegistrationModalController',

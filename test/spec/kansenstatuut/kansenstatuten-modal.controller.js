@@ -5,18 +5,10 @@ describe('Controller: KansenstatutenModalController', function () {
   // load the controller's module
   beforeEach(module('ubr.kansenstatuut'));
 
-  var controller, activeCounter, modalInstance, passholderService, $q, scope;
+  var controller, activeCounter, modalInstance, passholderService, $q, scope, Counter;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, Passholder, $injector, $rootScope) {
-    activeCounter = {
-      cardSystems: {
-        1: {
-          'permissions': ['registratie', 'kansenstatuut toekennen']
-        }
-      }
-    };
-
     modalInstance = {
       close: jasmine.createSpy('modalInstance.close'),
       dismiss: jasmine.createSpy('modalInstance.dismiss'),
@@ -28,6 +20,27 @@ describe('Controller: KansenstatutenModalController', function () {
     passholderService = jasmine.createSpyObj('passholderService', ['renewKansenstatuut']);
     $q = $injector.get('$q');
     scope = $rootScope.$new();
+    Counter = $injector.get('Counter');
+
+    activeCounter = new Counter({
+      'id': '452',
+      'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+      'name': 'Vierdewereldgroep Mensen voor Mensen',
+      'role': 'admin',
+      'actorId': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+      'cardSystems': {
+        '1': {
+          'permissions': ['registratie', 'kansenstatuut toekennen'],
+          'groups': ['Geauthorizeerde registratie balies'],
+          'id': 1,
+          'name': 'UiTPAS Regio Aalst',
+          'distributionKeys': []
+        }
+      },
+      'permissions': ['registratie', 'kansenstatuut toekennen'],
+      'groups': ['Geauthorizeerde registratie balies']
+    });
+
 
     controller = $controller('KansenstatutenModalController', {
       passholder: new Passholder({ passNumber: '01234567891234' }),
