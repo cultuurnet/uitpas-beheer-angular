@@ -1,0 +1,89 @@
+<form name="passholderNewCard" ng-submit="rcc.submitForm(passholderNewCard)" novalidate ng-class="{'form-submiting': rcc.formSubmitBusy}">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="rcc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Kaart vervangen</h4>
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid">
+
+      <p class="direction">
+        Scan de nieuwe UiTPAS of vul het kaartnummer manueel in.
+      </p>
+
+      <div class="grid">
+        <div class="grid__12 grid--bp-xsm__10">
+          <div class="form-group">
+            <label for="UiTPASnummer" class="label-nummer">UiTPAS-nummer</label>
+            <input type="text" class="form-control input-nummer" id="UiTPASnummer" autofocus="" ng-required="true" ng-model="rcc.card.id">
+          </div>
+        </div>
+        <div class="grid__12 grid--bp-xsm__2">
+          <span class="icon icon--small icon--card-scan"></span>
+        </div>
+      </div>
+      <hr>
+      <label>Reden</label>
+      <div class="radio">
+        <label>
+          <input type="radio" name="optradio" ng-model="rcc.card.reason" value="REMOVAL" ng-required="true">
+          Verhuis
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="optradio" ng-model="rcc.card.reason" value="LOSS_THEFT" ng-required="true">
+          Kaart verloren of gestolen
+        </label>
+      </div>
+      <div class="radio" ng-if="rcc.hasKansenStatuut">
+        <label>
+          <input type="radio" name="optradio" ng-model="rcc.card.reason" value="LOSS_KANSENSTATUUT" ng-required="true">
+          Verlies kansenstatuut
+        </label>
+      </div>
+      <div class="radio" ng-if="!rcc.hasKansenStatuut">
+        <label>
+          <input type="radio" name="optradio" ng-model="rcc.card.reason" value="OBTAIN_KANSENSTATUUT" ng-required="true">
+          Kansenstatuut verkrijgen
+        </label>
+      </div>
+      <hr>
+        <div ng-if="rcc.card.reason == 'OBTAIN_KANSENSTATUUT'">
+        <ubr-datepicker 
+          ng-model="rcc.kansenstatuut.endDate" 
+          ubr-label="Kansenstatuut geldig tot" 
+          ubr-id="geldig-tot"
+          ubr-name="endDate"></ubr-datepicker>
+        <hr>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" class="gebruik-voucher" ng-model="_useVoucher"> Gebruik voucher
+        </label>
+      </div>
+      <div class="panel voucher" ng-if="_useVoucher">
+        <div class="panel-body">
+          <div class="form-group">
+            <label>Voucher-nummer</label>
+            <input class="form-control voucher-nummer" ng-model="rcc.card.voucher" autofocus="autofocus" ng-required="true">
+          </div>
+        </div>
+      </div>
+      <!-- @TODO: No clue where to get this info from, since it also depends on the voucher.
+      <label>Prijs</label>
+      <p><span class="price">5,00 euro</span></p>
+      -->
+
+    </div>
+  </div><!-- end modal-body -->
+  <div class="modal-footer">
+    <a ng-click="rcc.cancelModal()">Annuleren</a>
+    <button type="button" class="btn btn-primary" ng-disabled="rcc.formSubmitBusy || passholderNewCard.$invalid" ng-click="rcc.submitForm(passholderNewCard)">
+      <span ng-hide="rcc.formSubmitBusy">Bewaren</span>
+      <span ng-show="rcc.formSubmitBusy">
+        <span class="fa fa-refresh loading small"></span>
+        Formulier wordt verzonden
+      </span>
+    </button>
+  </div>
+</form>

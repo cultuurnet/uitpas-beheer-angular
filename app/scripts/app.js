@@ -289,6 +289,41 @@ angular
             });
         }]
       })
+      .state('counter.main.passholder.replaceCard', {
+        resolve: {
+          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          identification: ['$stateParams', function($stateParams) {
+            return $stateParams.identification;
+          }]
+        },
+        onEnter: ['passholder', 'identification', '$state', '$modal', function(passholder, identification, $state, $modal) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-passholder-replace-card.html',
+              params: {
+                'identification': null,
+                'passholder': null,
+                'activity': null
+              },
+              size: 'lg',
+              resolve: {
+                passholder: function() {
+                  return passholder;
+                },
+                identification: function() {
+                  return identification;
+                }
+              },
+              controller: 'PassholderReplaceCardController',
+              controllerAs: 'rcc'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
+      })
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html'
