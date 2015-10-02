@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .controller('PassholderBlockPassController', PassholderBlockPassController);
 
 /* @ngInject */
-function PassholderBlockPassController(pass, passholder, passholderService, $modalInstance, $q, $state, $scope) {
+function PassholderBlockPassController(pass, passholder, passholderService, $modalInstance, $q, $state) {
   /* jshint validthis: true */
   var controller = this;
 
