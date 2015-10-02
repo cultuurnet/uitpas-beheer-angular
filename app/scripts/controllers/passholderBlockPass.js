@@ -34,7 +34,7 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
     if (!controller.busyBlocking) {
       controller.busyBlocking = true;
       passholderService
-        .blockPass(pass)
+        .blockPass(pass.number)
         .then(
           function(pass) {
             controller.busyBlocking = false;

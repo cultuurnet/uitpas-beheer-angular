@@ -65,10 +65,10 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   /**
-   * @param pass
+   * @param {string} passNumber
    * @returns {deferred.promise|{then}}
    */
-  service.blockPass = function(pass) {
+  service.blockPass = function(passNumber) {
     var deferred = $q.defer();
 
     var returnAsErrorCode = function(error) {
@@ -81,19 +81,15 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       deferred.resolve(pass);
     };
 
-    if (pass.number) {
-      $http
-        .delete(
-          apiUrl + 'uitpas/' + pass.number,
-          {
-            withCredentials: true
-          }
-        )
-        .success(returnPass)
-        .error(returnAsErrorCode);
-    } else {
-      deferred.reject('UNKNOWN_UITPASNUMBER');
-    }
+    $http
+      .delete(
+        apiUrl + 'uitpas/' + passNumber,
+        {
+          withCredentials: true
+        }
+      )
+      .success(returnPass)
+      .error(returnAsErrorCode);
 
     return deferred.promise;
   };
