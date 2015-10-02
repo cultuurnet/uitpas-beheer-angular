@@ -3,7 +3,7 @@
 </div>
 <div class="passholder passholder-number">
   <label>NR.</label> <span ng-bind="pdc.passholder.passNumber"></span>
-  <a ng-hide="pdc.pass.isBlocked()" ui-sref="counter.main.passholder.blockPass()">Blokkeren</a>
+  <a ng-hide="pdc.pass.isBlocked()" ui-sref="counter.main.passholder.blockPass()" class="pull-right">Blokkeren</a>
   <span class="label label-danger" ng-show="pdc.pass.isBlocked()">Kaart geblokkeerd</span>
 </div>
 <div class="passholder passholder-data">
