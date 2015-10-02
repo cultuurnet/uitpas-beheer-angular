@@ -45,7 +45,6 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
           function(errorCode) {
             controller.busyBlocking = false;
             controller.asyncError = errors[errorCode] || errors.UNKNOWN;
-            $modalInstance.close();
             deferred.reject();
           }
       );
