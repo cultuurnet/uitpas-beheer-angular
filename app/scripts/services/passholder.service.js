@@ -64,6 +64,40 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     return deferredPassholder.promise;
   };
 
+  /**
+   * @param pass
+   * @returns {deferred.promise|{then}}
+   */
+  service.blockPass = function(pass) {
+    var deferred = $q.defer();
+
+    var returnAsErrorCode = function(error) {
+      deferred.reject(error.code);
+    };
+
+    var returnPass = function(pass) {
+      passholderCache.remove(pass.number);
+      passholderIdCache.remove(pass.number);
+      deferred.resolve(pass);
+    };
+
+    if (pass.number) {
+      $http
+        .delete(
+          apiUrl + 'uitpas/' + pass.number,
+          {
+            withCredentials: true
+          }
+        )
+        .success(returnPass)
+        .error(returnAsErrorCode);
+    } else {
+      deferred.reject('UNKNOWN_UITPASNUMBER');
+    }
+
+    return deferred.promise;
+  };
+
   service.findPassholder = function(identification) {
     var deferredPassholder = $q.defer();
     var passholderPromise = deferredPassholder.promise;
