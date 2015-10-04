@@ -59,11 +59,13 @@ function passFactory(Passholder, $http, appConfig) {
     },
     getPrice: function(reason, passholder, voucher) {
       var params = {
-        reason: reason,
-        date_of_birth: moment(passholder.birth.date).format('YYYY-MM-DD')
+        'reason': reason,
+        'date_of_birth': moment(passholder.birth.date).format('YYYY-MM-DD')
       };
 
-      if (voucher) params['voucher_number'] = voucher;
+      if (voucher) {
+        params['voucher_number'] = voucher;
+      }
 
       return $http.get(appConfig.apiUrl + 'uitpas/' + this.number + '/price', {
         params: params

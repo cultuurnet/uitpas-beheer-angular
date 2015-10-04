@@ -78,8 +78,12 @@ function PassholderReplaceCardController (passholder, identification, $modalInst
 
   // Get price for new UitPAS
   controller.getPassPrice = function(form){
-    if (!controller.newPass) return;
-    if (!controller.card.reason) return;
+    if (!controller.newPass) {
+      return;
+    }
+    if (!controller.card.reason) {
+      return;
+    }
     controller.gettingPrice = true;
     controller.newPass.getPrice(controller.card.reason, passholder, controller.card.voucher)
     .then(function(res){
@@ -100,7 +104,7 @@ function PassholderReplaceCardController (passholder, identification, $modalInst
         }
       }
       controller.gettingPrice = false;
-    }, function(errorResponse){
+    }, function(errorResponse) {
       if (errorResponse.data.code === 'PARSE_INVALID_VOUCHERNUMBER') {
         form.voucher.$invalid = true;
         // TODO: doesn't work, it doesn't mark the field as invalid
@@ -109,11 +113,15 @@ function PassholderReplaceCardController (passholder, identification, $modalInst
     });
   };
 
-  controller.submitForm = function(form) { // jshint ignore:line
-    if (controller.formSubmitBusy) return;
+  controller.submitForm = function(form) {
+    if (controller.formSubmitBusy) {
+      return;
+    }
     controller.formSubmitBusy = true;
     form.$setSubmitted();
-    if(!form.$valid) return;
+    if(!form.$valid) {
+      return;
+    }
 
     // @TODO: make this work
     var updateFailed = function(errorResponse) {
@@ -123,10 +131,16 @@ function PassholderReplaceCardController (passholder, identification, $modalInst
 
       // @TODO: check the possible errorcodes
       if (errorCode === 'errorcode') {
-        editForm.veld.$error.isUsed = true;
-        editForm.veld.$invalid = true;
+        form.veld.$error.isUsed = true;
+        form.veld.$invalid = true;
       }
     };
+    var updateOk = function(updatedPassholder) { // jshint ignore:line
+    };
+    // @TODO: create the updatePass-method
+    passholderService
+      .updatePass(controller.newPass, identification)
+      .then(updateOk, updateFailed);
 
     controller.formSubmitBusy = false;
   };
