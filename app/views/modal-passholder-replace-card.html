@@ -12,9 +12,18 @@
 
       <div class="grid">
         <div class="grid__12 grid--bp-xsm__10">
-          <div class="form-group">
+          <!-- @TODO: input field stays red after it has been invalid, even with a correct value -->
+          <div class="form-group" ng-class="{ 'has-error': (passholderNewCard.$submitted || passholderNewCard.UitpasNr.$dirty) && passholderNewCard.UitpasNr.$invalid }">
             <label for="UiTPASnummer" class="label-nummer">UiTPAS-nummer</label>
-            <input type="text" class="form-control input-nummer" id="UiTPASnummer" autofocus="" ng-required="true" ng-model="rcc.card.id">
+            <input type="text" class="form-control input-nummer" name="UitpasNr"
+            id="UiTPASnummer" autofocus="" ng-required="true"
+            ng-model="rcc.card.id" ng-blur="rcc.checkUiTPAS(passholderNewCard)">
+            <div ng-if="(passholderNewCard.$submitted || passholderNewCard.UitpasNr.$touched || passholderNewCard.UitpasNr.$dirty) && passholderNewCard.UitpasNr.$invalid" class="text-danger small">
+              <div ng-if="passholderNewCard.UitpasNr.$error.isNotFound">Deze kaart zit niet in de locale stock van kaarten.</div>
+              <div ng-if="passholderNewCard.UitpasNr.$error.isUsed">Deze kaart zit niet in de locale stock van kaarten.</div>
+              <div ng-if="passholderNewCard.UitpasNr.$error.notKansStatuut">Deze kaart heeft niet het KansStatuut.</div>
+              <div ng-if="passholderNewCard.UitpasNr.$error.isKansStatuut">Deze kaart heeft het KansStatuut.</div>
+            </div>
           </div>
         </div>
         <div class="grid__12 grid--bp-xsm__2">
@@ -23,35 +32,19 @@
       </div>
       <hr>
       <label>Reden</label>
-      <div class="radio">
+      <div ng-repeat="reason in rcc.reasons" class="radio">
         <label>
-          <input type="radio" name="optradio" ng-model="rcc.card.reason" value="REMOVAL" ng-required="true">
-          Verhuis
-        </label>
-      </div>
-      <div class="radio">
-        <label>
-          <input type="radio" name="optradio" ng-model="rcc.card.reason" value="LOSS_THEFT" ng-required="true">
-          Kaart verloren of gestolen
-        </label>
-      </div>
-      <div class="radio" ng-if="rcc.hasKansenStatuut">
-        <label>
-          <input type="radio" name="optradio" ng-model="rcc.card.reason" value="LOSS_KANSENSTATUUT" ng-required="true">
-          Verlies kansenstatuut
-        </label>
-      </div>
-      <div class="radio" ng-if="!rcc.hasKansenStatuut">
-        <label>
-          <input type="radio" name="optradio" ng-model="rcc.card.reason" value="OBTAIN_KANSENSTATUUT" ng-required="true">
-          Kansenstatuut verkrijgen
+          <input type="radio" name="optradio" ng-model="rcc.card.reason"
+          value="{{reason.code}}" ng-required="true"
+          ng-change="rcc.getPassPrice(passholderNewCard)">
+          {{reason.description}}
         </label>
       </div>
       <hr>
         <div ng-if="rcc.card.reason == 'OBTAIN_KANSENSTATUUT'">
-        <ubr-datepicker 
-          ng-model="rcc.kansenstatuut.endDate" 
-          ubr-label="Kansenstatuut geldig tot" 
+        <ubr-datepicker
+          ng-model="rcc.kansenstatuut.endDate"
+          ubr-label="Kansenstatuut geldig tot"
           ubr-id="geldig-tot"
           ubr-name="endDate"></ubr-datepicker>
         <hr>
@@ -63,16 +56,23 @@
       </div>
       <div class="panel voucher" ng-if="_useVoucher">
         <div class="panel-body">
-          <div class="form-group">
+          <div class="form-group" ng-class="{ 'has-error': (passholderNewCard.$submitted || passholderNewCard.voucher.$dirty) && passholderNewCard.voucher.$invalid }">
             <label>Voucher-nummer</label>
-            <input class="form-control voucher-nummer" ng-model="rcc.card.voucher" autofocus="autofocus" ng-required="true">
+            <input class="form-control voucher-nummer"  name="voucher"
+            ng-model="rcc.card.voucher" autofocus="autofocus" ng-required="true"
+            ng-blur="rcc.getPassPrice(passholderNewCard)">
+            <!-- @TODO: ng-blur isn't a great way, ng-change is even worse -->
           </div>
         </div>
+        <p ng-if="rcc.voucherType"><strong>Voucher Type:</strong><br>{{rcc.voucherType}}</p>
       </div>
-      <!-- @TODO: No clue where to get this info from, since it also depends on the voucher.
-      <label>Prijs</label>
-      <p><span class="price">5,00 euro</span></p>
-      -->
+      <div ng-show="rcc.price || rcc.price === 0">
+        <label>Prijs</label>
+        <p>
+          <span ng-if="rcc.price>0" class="price">{{rcc.price|number:2}} euro</span>
+          <span ng-if="rcc.price==0" class="price">Gratis!</span>
+        </p>
+      </div>
 
     </div>
   </div><!-- end modal-body -->
