@@ -30,47 +30,40 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
 
   controller.block = function() {
     var deferred = $q.defer();
+    var unlockFormAndResolveBlockedPass = function (pass) {
+      controller.busyBlocking = false;
+      controller.asyncError = false;
+      $modalInstance.close();
+      deferred.resolve(pass);
+    };
+    var showBlockingError = function (errorCode) {
+      controller.busyBlocking = false;
+      controller.asyncError = errors[errorCode] || errors.UNKNOWN;
+      deferred.reject();
+    };
 
     if (!controller.busyBlocking) {
       controller.busyBlocking = true;
       passholderService
         .blockPass(pass.number)
-        .then(
-          function(pass) {
-            controller.busyBlocking = false;
-            controller.asyncError = false;
-            $modalInstance.close();
-            deferred.resolve(pass);
-          },
-          function(errorCode) {
-            controller.busyBlocking = false;
-            controller.asyncError = errors[errorCode] || errors.UNKNOWN;
-            deferred.reject();
-          }
-      );
+        .then(unlockFormAndResolveBlockedPass, showBlockingError);
     } else {
-      deferred.reject();
+      deferred.reject('Busy blocking!');
     }
 
     return deferred.promise;
   };
 
   controller.blockAndRefresh = function() {
-    controller
-      .block()
-      .then(
-        function(pass) {
-          $state.go(
-            'counter.main.passholder',
-            {
-              identification: pass.number
-            },
-            {
-              reload: true
-            }
-          );
-        }
-    );
+    var showBlockedPass = function (pass) {
+      $state.go(
+        'counter.main.passholder',
+        {identification: pass.number},
+        {reload: true}
+      );
+    };
+
+    controller.block().then(showBlockedPass);
   };
 
   controller.blockAndReplace = function() {
