@@ -19,7 +19,8 @@ function ubrDatepicker() {
     scope: {
       name: '@ubrName',
       label: '@ubrLabel',
-      id: '@ubrId'
+      id: '@ubrId',
+      past: '@?ubrPast'
     },
     link: function postLink(scope, element, attrs, ngModel) {
 
@@ -53,11 +54,10 @@ function ubrDatepicker() {
         ngModel.$setViewValue(date);
       };
 
-      dateInputElement.datetimepicker({
+      var datetimePickerConfig = {
         locale: 'nl',
         format: 'DD/MM/YYYY',
         useCurrent: false,
-        minDate: new Date(),
         icons: {
           time: 'fa fa-clock-o',
           date: 'fa fa-calendar',
@@ -69,7 +69,17 @@ function ubrDatepicker() {
           clear: 'fa fa-trash',
           close: 'fa fa-times'
         }
-      }).on('dp.change', datepicker.updateModel);
+      };
+
+      if (scope.past) {
+        datetimePickerConfig.maxDate = new Date();
+      } else {
+        datetimePickerConfig.minDate = new Date();
+      }
+
+      dateInputElement
+        .datetimepicker(datetimePickerConfig)
+        .on('dp.change', datepicker.updateModel);
 
       ngModel.$render = function () {
         dateInputElement.data('DateTimePicker').date(ngModel.$viewValue);

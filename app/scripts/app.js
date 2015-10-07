@@ -25,7 +25,8 @@ angular
     'ubr.registration',
     'ubr.kansenstatuut',
     'ubr.group',
-    'ubr.checkindevices'
+    'ubr.checkindevices',
+    'ubr.expense-report'
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
