@@ -120,6 +120,60 @@ describe('Service: passholderService', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
+  it('should block a pass', function() {
+    var pass = identityData.uitPas;
+
+    var expectedPass = angular.copy(pass);
+    expectedPass.status = 'BLOCKED';
+
+    // Fill the cache so we can check later that it's empty again.
+    var passholderCache = $cacheFactory.get('passholderCache');
+    var passholderIdCache = $cacheFactory.get('passholderIdCache');
+    passholderCache.put(pass.number, pass);
+    passholderIdCache.put(pass.number, pass.number);
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectDELETE(apiUrl + 'uitpas/' + pass.number)
+      .respond(200, JSON.stringify(expectedPass));
+
+    var assertPass = function(pass) {
+      expect(pass).toEqual(expectedPass);
+      expect(passholderCache.get(pass.number)).toEqual(undefined);
+      expect(passholderIdCache.get(pass.number)).toEqual(undefined);
+    };
+
+    var failed = function(error) {
+      expect(error).toBeUndefined();
+    };
+
+    passholderService.blockPass(pass.number).then(assertPass, failed);
+
+    $httpBackend.flush();
+  });
+
+  it('throws an error when the block request returns an error', function() {
+    var pass = identityData.uitPas;
+    var httpError = {
+      code: 'INVALID_STATUS',
+      message: 'The uitpas is already blocked.'
+    };
+    var expectedErrorCode = httpError.code;
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectDELETE(apiUrl + 'uitpas/' + pass.number)
+      .respond(400, JSON.stringify(httpError));
+
+    var failed = function(errorCode) {
+      expect(errorCode).toEqual(expectedErrorCode);
+    };
+
+    passholderService.blockPass(pass.number).catch(failed);
+
+    $httpBackend.flush();
+  });
+
   it('returns a passholder from the server and keeps it cached', function() {
     var uitpasNumber = '0930000422202';
     var expectedPassholder = new Passholder(identityData.passHolder);

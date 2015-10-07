@@ -132,6 +132,14 @@ function passholderFactory(moment, day) {
       serializedPassholder.birth.date = (this.birth.date ? moment(this.birth.date).format('YYYY-MM-DD') : null);
 
       return serializedPassholder;
+    },
+    getFullName: function() {
+      var name = this.name.first;
+      if (this.name.middle) {
+        name += ' ' + this.name.middle;
+      }
+      name += ' ' + this.name.last;
+      return name;
     }
   };
 

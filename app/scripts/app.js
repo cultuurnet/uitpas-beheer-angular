@@ -289,6 +289,7 @@ angular
             });
         }]
       })
+
       .state('counter.main.passholder.replaceCard', {
         resolve: {
           passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
@@ -316,6 +317,43 @@ angular
               },
               controller: 'PassholderReplaceCardController',
               controllerAs: 'rcc'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }]
+      })
+
+      .state('counter.main.passholder.blockPass', {
+        params: {
+          pass: null,
+          passholder: null
+        },
+        resolve: {
+          pass: ['passholderService', '$stateParams', getPassFromStateParams],
+          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams]
+        },
+        onEnter: ['pass', 'passholder', '$state', '$modal', function(pass, passholder, $state, $modal) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-passholder-block-pass.html',
+              params: {
+                identification: null,
+                passholder: null
+              },
+              size: 'sm',
+              resolve: {
+                pass: function() {
+                  return pass;
+                },
+                passholder: function() {
+                  return passholder;
+                }
+              },
+              controller: 'PassholderBlockPassController',
+              controllerAs: 'pbp'
             })
             .result
             .finally(function() {

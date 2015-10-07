@@ -1,0 +1,22 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="pbp.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title">Kaart blokkeren</h4>
+</div>
+
+<div class="modal-body">
+  <div class="alert alert-danger" ng-show="pbp.asyncError" ng-bind="pbp.asyncError"></div>
+  <p>Wil je de UiTPAS met nummer {{ pbp.pass.number }} van {{ pbp.passholder.getFullName() }} blokkeren? Deze actie kan je niet ongedaan maken.</p>
+</div>
+
+<div class="modal-footer">
+  <a ng-click="pbp.cancelModal()">Annuleren</a>
+  <span ng-hide="pbp.busyBlocking">
+    <button type="button" class="btn btn-default" ng-click="pbp.blockAndReplace()">Blokkeren en vervangen</button>
+    <button type="button" class="btn btn-danger" ng-click="pbp.blockAndRefresh()">Definitief blokkeren</button>
+  </span>
+  <span ng-show="pbp.busyBlocking">
+      <button type="button" class="btn btn-disabled" >
+        <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+      </button>
+  </span>
+</div>
