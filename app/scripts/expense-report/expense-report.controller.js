@@ -92,5 +92,11 @@ function ExpenseReportController ($http, $filter, $interval, appConfig, $scope) 
     return erc.requestingReport || erc.generatingReport;
   };
 
-  $scope.$watchGroup([erc.reportFrom, erc.reportTo], erc.resetReport);
+  $scope.$watch(function () {
+    return erc.reportFrom.getTime();
+  }, erc.resetReport);
+
+  $scope.$watch(function () {
+    return erc.reportTo.getTime();
+  }, erc.resetReport);
 }
