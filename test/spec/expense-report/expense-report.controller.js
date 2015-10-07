@@ -22,6 +22,22 @@ describe('Controller: expenseReportController', function () {
     });
   }));
 
+  it('should use the right date range when requesting a report', function () {
+    controller.reportFrom = new Date('2010-09-09');
+    controller.reportTo = new Date('2015-09-09');
+    var expectedData = {
+      from: '2010-09-09',
+      to: '2015-09-09'
+    };
+
+    $httpBackend
+      .expectPOST(apiUrl + 'counters/active/expense-reports', expectedData)
+      .respond(200, '');
+
+    controller.generateReport();
+    $httpBackend.flush();
+  });
+
   it('should display an error when a request to generate a response fails', function () {
     controller.reportFrom = new Date();
     controller.reportTo = new Date();
