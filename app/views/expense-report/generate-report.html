@@ -21,7 +21,9 @@
 
   <div class="row">
     <div ng-show="erc.reportLocation" class="grid__12 grid--bp-lrg__6">
-      <a ng-href="erc.reportLocation" target="_blank">Onkostennota downloaden</a>
+      <a class="btn btn-primary"  ng-href="{{erc.reportLocation}}" target="_blank">
+        <span class="fa fa-download"></span> Onkostennota downloaden
+      </a>
     </div>
 
     <div ng-hide="erc.reportLocation" class="grid__12 grid--bp-lrg__6">
