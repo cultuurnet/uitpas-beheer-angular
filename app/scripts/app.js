@@ -292,11 +292,10 @@ angular
       .state('counter.main.passholder.replaceCard', {
         resolve: {
           passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
-          identification: ['$stateParams', function($stateParams) {
-            return $stateParams.identification;
-          }]
+          pass: ['passholderService', '$stateParams', getPassFromStateParams]
         },
-        onEnter: ['passholder', 'identification', '$state', '$modal', function(passholder, identification, $state, $modal) {
+        url: '/replace-card',
+        onEnter: ['passholder', 'pass', '$state', '$modal', function(passholder, pass, $state, $modal) {
           $modal
             .open({
               animation: true,
@@ -311,8 +310,8 @@ angular
                 passholder: function() {
                   return passholder;
                 },
-                identification: function() {
-                  return identification;
+                pass: function() {
+                  return pass;
                 }
               },
               controller: 'PassholderReplaceCardController',

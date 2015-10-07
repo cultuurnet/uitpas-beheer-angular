@@ -5,24 +5,23 @@
   </div>
   <div class="modal-body">
     <div class="container-fluid">
-
       <p class="direction">
         Scan de nieuwe UiTPAS of vul het kaartnummer manueel in.
       </p>
-
+      KS: 0930000816718
+      NKS: 0930000817708
       <div class="grid">
         <div class="grid__12 grid--bp-xsm__10">
-          <!-- @TODO: input field stays red after it has been invalid, even with a correct value -->
-          <div class="form-group" ng-class="{ 'has-error': (passholderNewCard.$submitted || passholderNewCard.UitpasNr.$dirty) && passholderNewCard.UitpasNr.$invalid }">
-            <label for="UiTPASnummer" class="label-nummer">UiTPAS-nummer</label>
-            <input type="text" class="form-control input-nummer" name="UitpasNr"
-            id="UiTPASnummer" autofocus="" ng-required="true"
-            ng-model="rcc.card.id" ng-blur="rcc.checkUiTPAS(passholderNewCard)">
-            <div ng-if="(passholderNewCard.$submitted || passholderNewCard.UitpasNr.$touched || passholderNewCard.UitpasNr.$dirty) && passholderNewCard.UitpasNr.$invalid" class="text-danger small">
-              <div ng-if="passholderNewCard.UitpasNr.$error.isNotFound">Deze kaart zit niet in de locale stock van kaarten.</div>
-              <div ng-if="passholderNewCard.UitpasNr.$error.isUsed">Deze kaart zit niet in de locale stock van kaarten.</div>
-              <div ng-if="passholderNewCard.UitpasNr.$error.notKansStatuut">Deze kaart heeft niet het KansStatuut.</div>
-              <div ng-if="passholderNewCard.UitpasNr.$error.isKansStatuut">Deze kaart heeft het KansStatuut.</div>
+          <div class="form-group" ng-class="{ 'has-error': (passholderNewCard.$submitted || passholderNewCard.UiTPASNumber.$dirty) && passholderNewCard.UiTPASNumber.$invalid }">
+            <label for="UiTPASNumber" class="label-number">UiTPAS-nummer</label>
+            <input ubr-uitpas-number-async-validation ng-pattern="/^\d{13}$/" type="text" class="form-control input-number" name="UiTPASNumber"
+            id="UiTPASNumber" autofocus="" ng-required="true"
+            ng-model="rcc.card.id">
+            <div ng-if="(passholderNewCard.$submitted || passholderNewCard.UiTPASNumber.$touched || passholderNewCard.UiTPASNumber.$dirty) && passholderNewCard.UiTPASNumber.$invalid" class="text-danger small">
+              <div ng-if="passholderNewCard.UiTPASNumber.$error.pattern">Het nummer heeft een verkeerd formaat, 13 cijfers worden verwacht.</div>
+              <div ng-if="passholderNewCard.UiTPASNumber.$error.notFound">Deze kaart kan niet gevonden worden in het systeem.</div>
+              <div ng-if="passholderNewCard.UiTPASNumber.$error.notLocalStock">Deze kaart zit niet in de locale stock van kaarten.</div>
+              <div ng-if="passholderNewCard.UiTPASNumber.$error.required">Het UiTPAS-nummer veld is verplicht.</div>
             </div>
           </div>
         </div>
@@ -31,54 +30,52 @@
         </div>
       </div>
       <hr>
-      <label>Reden</label>
-      <div ng-repeat="reason in rcc.reasons" class="radio">
-        <label>
-          <input type="radio" name="optradio" ng-model="rcc.card.reason"
-          value="{{reason.code}}" ng-required="true"
-          ng-change="rcc.getPassPrice(passholderNewCard)">
-          {{reason.description}}
-        </label>
-      </div>
-      <hr>
-        <div ng-if="rcc.card.reason == 'OBTAIN_KANSENSTATUUT'">
-        <ubr-datepicker
-          ng-model="rcc.kansenstatuut.endDate"
-          ubr-label="Kansenstatuut geldig tot"
-          ubr-id="geldig-tot"
-          ubr-name="endDate"></ubr-datepicker>
+      <div class="grid" ng-show="passholderNewCard.UiTPASNumber.$valid">
+        <pre>{{rcc.newPass|json}}</pre>
+        <label>Reden</label>
+        <div ng-repeat="(code, description) in rcc.reasons" class="radio">
+          <label>
+            <input type="radio" name="reason" ng-model="rcc.card.reason"
+                   value="{{code}}" ng-required="true">
+            {{description}}
+          </label>
+        </div>
         <hr>
+        <div ng-show="rcc.card.reason == 'OBTAIN_KANSENSTATUUT'">
+          <ubr-datepicker
+              ng-model="rcc.kansenstatuut.endDate"
+              ubr-label="Kansenstatuut geldig tot"
+              ubr-id="valid-until"
+              ubr-name="endDate"></ubr-datepicker>
+          <hr>
+        </div>
       </div>
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" class="gebruik-voucher" ng-model="_useVoucher"> Gebruik voucher
-        </label>
-      </div>
-      <div class="panel voucher" ng-if="_useVoucher">
-        <div class="panel-body">
-          <div class="form-group" ng-class="{ 'has-error': (passholderNewCard.$submitted || passholderNewCard.voucher.$dirty) && passholderNewCard.voucher.$invalid }">
-            <label>Voucher-nummer</label>
-            <input class="form-control voucher-nummer"  name="voucher"
-            ng-model="rcc.card.voucher" autofocus="autofocus" ng-required="true"
-            ng-blur="rcc.getPassPrice(passholderNewCard)">
-            <!-- @TODO: ng-blur isn't a great way, ng-change is even worse -->
+      <div class="grid__12 grid--bp-lrg__12" ng-show="rcc.card.reason">
+        <div class="form-group" ng-class="{ 'has-error': (passholderNewCard.$submitted || passholderNewCard.voucherNumber.$dirty) && passholderNewCard.voucherNumber.$invalid }">
+          <label>Voucher-nummer</label>
+          <input class="form-control voucher-number" name="voucherNumber"
+                 ng-model="rcc.card.voucherNumber" autofocus="autofocus">
+          <div ng-if="(passholderNewCard.$submitted || passholderNewCard.voucherNumber.$touched || passholderNewCard.voucherNumber.$dirty) && passholderNewCard.voucherNumber.$invalid" class="text-danger small">
+            <div ng-if="passholderNewCard.voucherNumber.$error.isNotFound">Deze kaart kan niet gevonden worden in het systeem.</div>
+            <div ng-if="passholderNewCard.voucherNumber.$error.isUsed">Deze kaart zit niet in de locale stock van kaarten.</div>
+            <div ng-if="passholderNewCard.voucherNumber.$error.notKansStatuut">Deze kaart heeft niet het KansStatuut.</div>
+            <div ng-if="passholderNewCard.voucherNumber.$error.isKansStatuut">Deze kaart heeft het KansStatuut.</div>
           </div>
         </div>
         <p ng-if="rcc.voucherType"><strong>Voucher Type:</strong><br>{{rcc.voucherType}}</p>
+        <div ng-hide="rcc.price === -1">
+          <label>Prijs</label>
+          <p>
+            <span ng-if="rcc.price > 0" class="price">{{rcc.price|number:2}} euro</span>
+            <span ng-if="rcc.price === 0" class="price">Gratis!</span>
+          </p>
+        </div>
       </div>
-      <div ng-show="rcc.price || rcc.price === 0">
-        <label>Prijs</label>
-        <p>
-          <span ng-if="rcc.price>0" class="price">{{rcc.price|number:2}} euro</span>
-          <span ng-if="rcc.price==0" class="price">Gratis!</span>
-        </p>
-      </div>
-
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="rcc.cancelModal()">Annuleren</a>
-    <button type="button" class="btn btn-primary" ng-disabled="rcc.formSubmitBusy || passholderNewCard.$invalid" ng-click="rcc.submitForm(passholderNewCard)">
+    <button type="button" class="btn btn-primary" ng-disabled="rcc.formSubmitBusy || passholderNewCard.$invalid || passholderNewCard.$pending" ng-click="rcc.submitForm(passholderNewCard)">
       <span ng-hide="rcc.formSubmitBusy">Bewaren</span>
       <span ng-show="rcc.formSubmitBusy">
         <span class="fa fa-refresh loading small"></span>

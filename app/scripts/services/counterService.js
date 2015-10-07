@@ -222,6 +222,12 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
   /**
    * @param {Pass} pass
    *   The pass that's going to be registered with the active counter.
+   * @param {Passholder} passholder
+   *   The passholder that's going to be registered with the active counter.
+   * @param {string} voucherNumber
+   *   The voucher number to use with the registration.
+   * @param {string} reason
+   *   The reason of the registration.
    */
   service.getRegistrationPriceInfo = function (pass, passholder, voucherNumber, reason) {
     var url = appConfig.apiUrl + 'uitpas/' + pass.number + '/price',
