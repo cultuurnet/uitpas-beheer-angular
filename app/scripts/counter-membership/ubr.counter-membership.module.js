@@ -16,6 +16,20 @@ angular
   /* @ngInject */
   .config(function ($stateProvider) {
 
+    /* @ngInject */
+    function showCreateMembershipModal($modal, $state) {
+      $modal
+        .open({
+          animation: true,
+          templateUrl: 'views/counter-membership/create-membership.html',
+          size: 'sm'
+        })
+        .result
+        .finally(function () {
+          $state.go('^');
+        });
+    }
+
     $stateProvider
       .state('counter.memberships', {
         url: '/counter-memberships',
@@ -33,5 +47,8 @@ angular
             templateUrl: 'views/header.html'
           }
         }
+      })
+      .state('counter.memberships.create', {
+        onEnter: showCreateMembershipModal
       });
   });

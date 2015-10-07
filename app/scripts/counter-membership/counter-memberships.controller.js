@@ -12,7 +12,7 @@ angular
   .controller('CounterMembershipsController', CounterMembershipsController);
 
 /* @ngInject */
-function CounterMembershipsController(CounterMembershipService) {
+function CounterMembershipsController(CounterMembershipService, $state) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -28,6 +28,10 @@ function CounterMembershipsController(CounterMembershipService) {
     CounterMembershipService
       .getMemberships()
       .then(showMembers);
+  };
+
+  controller.createMembership = function () {
+    $state.go('counter.memberships.create');
   };
 
   controller.init();
