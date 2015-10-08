@@ -6,6 +6,14 @@
   &-lg {
     max-width: 1200px;
   }
+  &-body {
+    > *:first-child {
+      margin-top: 0;
+    }
+    > *:last-child {
+      margin-bottom: 0;
+    }
+  }
   &-footer {
     a {
       vertical-align: middle;
