@@ -43,7 +43,7 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
     $modalInstance.dismiss();
   };
 
-  $scope.$watch(function () {return $scope.passholderNewCard.UiTPASNumber.$valid;}, function (nv, ov) {
+  $scope.$watch(function () {return $scope.passholderNewPass.UiTPASNumber.$valid;}, function (nv, ov) {
     if (nv !== ov && nv === true) {
       var setNewPassAndReasonOptions = function (newPass) {
         controller.newPass = newPass;

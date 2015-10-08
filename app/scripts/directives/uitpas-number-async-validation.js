@@ -25,20 +25,15 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService) {
         return $q.when(true);
       }
 
-      var deferred = $q.defer();
-
-      passholderService.findPass(viewValue).then(deferred.resolve(), deferred.reject());
-
-      return deferred.promise;
+      return passholderService.findPass(viewValue);
     };
     ngModel.$asyncValidators.notLocalStock = function (modelValue, viewValue) {
       if (!viewValue || viewValue < 13) {
         return $q.when(true);
       }
-
       var deferred = $q.defer();
 
-      var validateLocalStock = function(pass){
+      var validateLocalStock = function (pass) {
         if (pass.isLocalStock()) {
           deferred.resolve();
         }
@@ -47,7 +42,11 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService) {
         }
       };
 
-      passholderService.findPass(viewValue).then(validateLocalStock);
+      var ignoreNotFound = function () {
+        deferred.resolve();
+      };
+
+      passholderService.findPass(viewValue).then(validateLocalStock, ignoreNotFound);
 
       return deferred.promise;
     };
