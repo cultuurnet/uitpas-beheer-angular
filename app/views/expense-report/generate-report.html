@@ -1,9 +1,10 @@
 <section style="margin: 24px 0;">
-  <p>Vul hier de start- en einddatum in van de periode waarbinnen je de gewenste kortingstarieven registreerde.</p>
-
-  <p ng-show="erc.asyncError" class="alert alert-danger" ng-bind="erc.asyncError.message"></p>
-
   <div class="row">
+    <div class="grid__12 grid--bp-lrg-12-col">
+      <p>Vul hier de start- en einddatum in van de periode waarbinnen je de gewenste kortingstarieven registreerde.</p>
+      <p ng-show="erc.asyncError" class="alert alert-danger" ng-bind="erc.asyncError.message"></p>
+    </div>
+
     <div class="grid__12 grid--bp-lrg__4">
       <div class="form-group">
         <ubr-datepicker ng-model="erc.reportFrom" ubr-label="Startdatum" ubr-id="report-from"
@@ -21,19 +22,23 @@
 
   <div class="row">
     <div ng-show="erc.reportLocation" class="grid__12 grid--bp-lrg__6">
-      <a class="btn btn-primary"  ng-href="{{erc.reportLocation}}" target="_blank">
-        <span class="fa fa-download"></span> Onkostennota downloaden
-      </a>
+      <p>
+        <a class="btn btn-primary"  ng-href="{{erc.reportLocation}}" target="_blank">
+          <span class="fa fa-download"></span> Onkostennota downloaden
+        </a>
+      </p>
     </div>
 
     <div ng-hide="erc.reportLocation" class="grid__12 grid--bp-lrg__6">
-      <button type="button" class="btn btn-primary" ng-disabled="erc.reportPending()"
-              ng-click="erc.generateReport()">
-        <span ng-hide="erc.reportPending()">Maken</span>
-        <span ng-show="erc.reportPending()">
-          <span class="fa fa-refresh loading small"></span> Onkostennota wordt aangemaakt
-        </span>
-      </button>
+      <p>
+        <button type="button" class="btn btn-primary" ng-disabled="erc.reportPending()"
+                ng-click="erc.generateReport()">
+          <span ng-hide="erc.reportPending()">Maken</span>
+          <span ng-show="erc.reportPending()">
+            <span class="fa fa-refresh loading small"></span> Onkostennota wordt aangemaakt
+          </span>
+        </button>
+      </p>
     </div>
   </div>
 </section>
