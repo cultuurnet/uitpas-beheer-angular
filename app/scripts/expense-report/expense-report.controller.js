@@ -83,6 +83,16 @@ function ExpenseReportController ($http, $filter, $interval, appConfig, $scope) 
 
   erc.displayReportError = function (failedRequest) {
     erc.asyncError = failedRequest.data;
+
+    switch (erc.asyncError.code) {
+      case 'INVALID_DATE_RANGE':
+        erc.asyncError.message = 'Je hebt een ongeldige periode opgegeven. De start-datum moet vóór of gelijk aan de eind-datum zijn.';
+        break;
+      case 'ACTION_FAILED':
+        erc.asyncError.message = 'Er is geen financieel rapport beschikbaar voor de opgegeven periode.';
+        break;
+    }
+
     erc.requestingReport = false;
     erc.generatingReport = false;
     stopMonitor();
