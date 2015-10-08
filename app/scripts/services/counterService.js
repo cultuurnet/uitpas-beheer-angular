@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .service('counterService', counterService);
 
 /* @ngInject */
-function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment, Counter) {
+function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment, Counter, $timeout) {
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
@@ -259,5 +259,61 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       .then(resolvePriceInfo, handleErrorResponse);
 
     return deferredPriceInfo.promise;
+  };
+
+  /**
+   * Return a list of memberships for the active counter
+   *
+   * @return {Promise}
+   */
+  service.getMemberships = function () {
+    var members = [{
+      uid: 'some-made-up-id',
+      nick: 'Dirk Dirkington',
+      role: 'ubermeister'
+    }];
+
+    return $timeout(function () {
+      console.log(apiUrl);
+      return members;
+    }, 1000);
+  };
+
+  /**
+   * Add a member with the given email to the active counter
+   *
+   * @param email
+   */
+  service.createMembership = function (email) {
+    var url = apiUrl + '/active/members';
+    var parameters = {
+      email: email
+    };
+    var config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    var deferredMember = $q.defer();
+
+    var returnMember = function (creationResponse) {
+      var member = {
+        uid: creationResponse.data.uid,
+        nick: creationResponse.data.nick,
+        role: creationResponse.data.role
+      };
+
+      deferredMember.resolve(member);
+    };
+
+    var returnError = function (errorResponse) {
+      deferredMember.reject(errorResponse.data);
+    };
+
+    $http
+      .post(url, parameters, config)
+      .then(returnMember, returnError);
+
+    return deferredMember.promise;
   };
 }

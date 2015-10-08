@@ -1,12 +1,15 @@
-<form name="editForm" ng-submit="ekmc.updateKansenstatuut(editForm)" novalidate ng-class="{'form-submiting': ekmc.updatePending}">
-  <div class="modal-header">
-    <button type="button" class="close" ng-click="ekmc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">Medewerker toevoegen</h4>
-  </div>
-  <div class="modal-body">
+<form name="editForm" novalidate ng-class="{'form-submiting': cmmc.creationPending}">
 
-    <div class="alert alert-danger" ng-show="ekmc.asyncError">
-      <span ng-bind="ekmc.asyncError.message"></span>
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cmmc.cancelCreation()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Medewerker toevoegen</h4>
+  </div><!-- end modal-header -->
+
+  <div class="modal-body">
+    <div class="alert alert-danger" ng-show="cmmc.asyncError">
+      <span ng-bind="cmmc.asyncError.message"></span>
     </div>
 
     <div class="container-fluid">
@@ -23,12 +26,16 @@
       </fieldset>
     </div>
   </div><!-- end modal-body -->
+
   <div class="modal-footer">
-    <a class="btn btn-default" ng-click="cmmc.cancelModal()">sluiten</a>
+    <a class="btn btn-default" ng-click="cmmc.cancelCreation()">sluiten</a>
     <button type="button" class="btn btn-primary" ng-disabled="cmmc.creationPending"
             ng-click="cmmc.createMembership(editForm)">
       <span ng-hide="cmmc.creationPending">Toevoegen</span>
-      <span ng-show="cmmc.creationPending"><span class="fa fa-refresh loading small"></span> Medewerker wordt toegevoegd</span>
+      <span ng-show="cmmc.creationPending">
+        <span class="fa fa-refresh loading small"></span> Medewerker wordt toegevoegd
+      </span>
     </button>
-  </div>
+  </div><!-- end modal-footer -->
+
 </form>
