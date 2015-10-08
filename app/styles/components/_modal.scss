@@ -14,6 +14,14 @@
       margin-bottom: 0;
     }
   }
+  &-body-sticky {
+    padding: 0;
+
+    > * {
+      margin: 0;
+      padding: 15px;
+    }
+  }
   &-footer {
     a {
       vertical-align: middle;

@@ -2,50 +2,48 @@
   <button type="button" class="close" ng-click="pksc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <h4 class="modal-title">Kansenstatuut</h4>
 </div>
-<div class="modal-body">
-  <section class="container-fluid">
-    <table>
-      <thead>
-        <tr>
-          <th>Kaart systeem</th>
-          <th>Status</th>
-          <th>Vervaldatum</th>
-          <th>Acties</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="kansenStatuut in pksc.passholder.kansenStatuten" ng-class="kansenStatuut.status">
-          <td class="uitpas-cardsystem">
-            {{kansenStatuut.cardSystem.name}}
-          </td>
-          <td ng-switch="kansenStatuut.status" class="uitpas-status">
-            <span class="label label-success" ng-switch-when="ACTIVE">Actief</span>
-            <span class="label label-warning" ng-switch-when="IN_GRACE_PERIOD">Komt te vervallen</span>
-            <span class="label label-danger" ng-switch-when="EXPIRED">Vervallen</span>
-          </td>
-          <td class="expiration-date">
-            {{kansenStatuut.endDate | date : 'dd/MM/yyyy'}}
-          </td>
-          <td>
-            <input type="button" class="btn btn-default btn-small" ng-show="pksc.counterCanAlterKansenStatuut(kansenStatuut)"
-                   ui-sref="counter.main.passholder.kansenStatuut.edit({ cardSystemId: kansenStatuut.cardSystem.id })"
-                   value="Bewerken">
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="modal-body modal-body-sticky">
+  <table>
+    <thead>
+      <tr>
+        <th>Kaart systeem</th>
+        <th>Status</th>
+        <th>Vervaldatum</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="kansenStatuut in pksc.passholder.kansenStatuten" ng-class="kansenStatuut.status">
+        <td class="uitpas-cardsystem">
+          {{kansenStatuut.cardSystem.name}}
+        </td>
+        <td ng-switch="kansenStatuut.status" class="uitpas-status">
+          <span class="label label-success" ng-switch-when="ACTIVE">Actief</span>
+          <span class="label label-warning" ng-switch-when="IN_GRACE_PERIOD">Komt te vervallen</span>
+          <span class="label label-danger" ng-switch-when="EXPIRED">Vervallen</span>
+        </td>
+        <td class="expiration-date">
+          {{kansenStatuut.endDate | date : 'dd/MM/yyyy'}}
+        </td>
+        <td>
+          <input type="button" class="btn btn-default btn-small" ng-show="pksc.counterCanAlterKansenStatuut(kansenStatuut)"
+                 ui-sref="counter.main.passholder.kansenStatuut.edit({ cardSystemId: kansenStatuut.cardSystem.id })"
+                 value="Bewerken">
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <section class="more-info well well-sm">
-      <h5>Meer info</h5>
-      <div ng-if="!pksc.passholder.remarks" class="alert alert-info" role="alert">
-        Geen extra informatie ingevoerd.
-      </div>
-      <p style="white-space: pre" ng-if="pksc.passholder.remarks" ng-bind="pksc.passholder.remarks | characters:300"></p>
-      <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editRemarks" class="btn btn-primary btn-small"
-             value="Bewerken">
-    </section>
+  <section class="more-info well well-sm">
+    <h5>Meer info</h5>
+    <div ng-if="!pksc.passholder.remarks" class="alert alert-info" role="alert">
+      Geen extra informatie ingevoerd.
+    </div>
+    <p style="white-space: pre" ng-if="pksc.passholder.remarks" ng-bind="pksc.passholder.remarks | characters:300"></p>
+    <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editRemarks" class="btn btn-primary btn-small"
+           value="Bewerken">
+  </section>
 
-  </div>
 </div><!-- end modal-body -->
 <div class="modal-footer">
   <a ng-click="pksc.cancelModal()">Sluiten</a>
