@@ -21,6 +21,7 @@ describe('Service: passholderService', function () {
       'status': 'ACTIVE'
     },
     'passHolder': {
+      'uid': 'iewydej',
       'name': {
         'first': 'Cassandra Ama',
         'last': 'Boadu'
@@ -498,6 +499,44 @@ describe('Service: passholderService', function () {
       .updateRemarks(passholder, remarks)
       .then(done);
 
+    $httpBackend.flush();
+  });
+
+  it('should update and cache both pass and passholder when replacing a pass and return the new pass', function (done) {
+    var pass = new Pass(getPassData());
+    var expectedPassholder = pass.passholder;
+    var reason = 'SELF_DESTRUCTED';
+    var kansenStatuutEndDate = new Date('1955-05-05');
+    var voucherNumber = 'v-o-u-c-h-e-r';
+
+    var expectedPostParameters = {
+      reason: 'SELF_DESTRUCTED',
+      voucherNumber: 'v-o-u-c-h-e-r',
+      kansenStatuut: {
+        endDate: '1955-05-05'
+      },
+      passholderUid: 'iewydej'
+    };
+
+    var assertNewPassholder = function (assignedPass) {
+      expect(assignedPass.passholder).toEqual(expectedPassholder);
+      done();
+    };
+
+    $httpBackend
+      .expectPUT(apiUrl + 'uitpas/0930000422202', expectedPostParameters)
+      .respond(200, 'all good bro');
+
+    $httpBackend
+      .expectGET(apiUrl + 'identities/0930000422202')
+      .respond(200, getPassData());
+
+    passholderService.newPass(pass, 'iewydej', reason, kansenStatuutEndDate, voucherNumber);
+    passholderService
+      .findPass(pass.number)
+      .then(assertNewPassholder);
+
+    $scope.$apply();
     $httpBackend.flush();
   });
 });
