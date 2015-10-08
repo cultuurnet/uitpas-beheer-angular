@@ -171,6 +171,48 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     });
   };
 
+  service.newPass = function(pass, passholderUid, reason, kansenStatuutEndDate, voucherNumber) {
+    var deferredPass = $q.defer();
+    var parameters = {
+      passholderUid: passholderUid,
+      reason: reason
+    };
+
+    var requestOptions = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    if (voucherNumber !== null) {
+      parameters.voucherNumber = voucherNumber;
+    }
+
+    if (kansenStatuutEndDate !== null) {
+      parameters.kansenStatuut = {
+        endDate: moment(kansenStatuutEndDate).format('YYYY-MM-DD')
+      };
+    }
+
+    var resolveNewPass = function (newPassResponse) {
+      // TODO: Clean up this cache mess...
+      passholderIdCache.remove(newPassResponse.data.number);
+      passholderCache.remove(newPassResponse.data.number);
+
+      deferredPass.resolve(newPassResponse.data);
+    };
+
+    var reportError =function (errorResponse) {
+      deferredPass.reject(errorResponse.data);
+    };
+
+    $http
+      .put(apiUrl + 'uitpas/' + pass.number, parameters, requestOptions)
+      .then(resolveNewPass, reportError);
+
+    return deferredPass.promise;
+  };
+
   $rootScope.$on('advantageExchanged', service.updatePoints);
 
   service.register = function(pass, passholder, voucherNumber, kansenstatuutInfo){

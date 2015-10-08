@@ -309,7 +309,10 @@ angular
               controllerAs: 'rpc'
             })
             .result
-            .finally(function() {
+            .then(function (newPassNumber) {
+              console.log(newPassNumber);
+              $state.go('counter.main.passholder', {identification: newPassNumber}, {reload: true});
+            }, function () {
               if ($stateParams.justBlocked) {
                 $state.go('^', {}, {reload: true});
               } else {

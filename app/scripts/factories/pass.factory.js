@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .factory('Pass', passFactory);
 
 /* @ngInject */
-function passFactory(Passholder, $http, appConfig) {
+function passFactory(Passholder) {
   /**
    * @class Pass
    * @constructor
@@ -56,20 +56,6 @@ function passFactory(Passholder, $http, appConfig) {
     },
     isLocalStock: function() {
       return this.status === 'LOCAL_STOCK';
-    },
-    getPrice: function(reason, passholder, voucher) {
-      var params = {
-        'reason': reason,
-        'date_of_birth': moment(passholder.birth.date).format('YYYY-MM-DD')
-      };
-
-      if (voucher) {
-        params['voucher_number'] = voucher;
-      }
-
-      return $http.get(appConfig.apiUrl + 'uitpas/' + this.number + '/price', {
-        params: params
-      });
     }
   };
 

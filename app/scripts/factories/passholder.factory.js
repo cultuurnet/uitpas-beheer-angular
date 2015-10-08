@@ -112,6 +112,7 @@ function passholderFactory(moment, day) {
       parseJsonContact(this, jsonPassholder.contact);
       parseJsonKansenStatuten(this, jsonPassholder.kansenStatuten);
       this.points = jsonPassholder.points;
+      this.uid = jsonPassholder.uid;
       this.remarks = jsonPassholder.remarks || '';
     },
     getKansenstatuutByCardSystemID: function (cardSystemID) {

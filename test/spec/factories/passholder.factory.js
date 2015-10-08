@@ -37,7 +37,8 @@ describe('Factory: Passholder', function () {
     }],
     'points': 309,
     'picture': 'picture-in-base64-format',
-    'remarks': 'remarks'
+    'remarks': 'remarks',
+    'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
   };
 
   var Passholder, day;
@@ -90,7 +91,8 @@ describe('Factory: Passholder', function () {
       points: 309,
       picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
       inszNumber: '',
-      remarks: 'remarks'
+      remarks: 'remarks',
+      uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
     };
 
     var passholder = new Passholder(jsonPassholder);

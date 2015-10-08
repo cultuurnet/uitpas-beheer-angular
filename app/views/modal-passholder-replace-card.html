@@ -1,4 +1,4 @@
-<form name="passholderNewPass" ng-submit="rpc.submitForm(passholderNewPass)" novalidate ng-class="{'form-submiting': rpc.formSubmitBusy}">
+<form name="passholderNewPass" ng-submit="rpc.submitForm()" ubr-replace-uitpas-form-validation novalidate ng-class="{'form-submiting': rpc.formSubmitBusy}">
   <div class="modal-header">
     <button type="button" class="close" ng-click="rpc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">Kaart vervangen</h4>
@@ -8,13 +8,10 @@
       <p class="direction">
         Scan de nieuwe UiTPAS of vul het kaartnummer manueel in.
       </p>
-      <dl>
-        <dt>KansenStatuut</dt><dd>0930000816718</dd>
-        <dt>Not KansenStatuut</dt><dd>0930000817708</dd>
-        <dt>Not Local Stock</dt><dd>0930000731701</dd>
-        <dt>Not Found</dt><dd>0930000816719</dd>
-      </dl>
       <div class="grid">
+        <div class="grid__12 grid--bp-lrg__12">
+          <div class="alert alert-danger" type="{{rpc.formAlert.type}}" ng-show="rpc.formAlert" ng-bind="rpc.formAlert.message"></div>
+        </div>
         <div class="grid__12 grid--bp-xsm__10">
           <div class="form-group" ng-class="{ 'has-error': (passholderNewPass.$submitted || passholderNewPass.UiTPASNumber.$dirty) && passholderNewPass.UiTPASNumber.$invalid }">
             <label for="UiTPASNumber" class="label-number">UiTPAS-nummer</label>
@@ -27,6 +24,7 @@
               <div ng-if="passholderNewPass.UiTPASNumber.$error.notLocalStock">Deze kaart zit niet in de locale stock van kaarten.</div>
               <div ng-if="passholderNewPass.UiTPASNumber.$error.required">Het UiTPAS-nummer veld is verplicht.</div>
             </div>
+            <div ng-if="passholderNewPass.UiTPASNumber.$pending" class="text-warning small">UiTPAS-nummer wordt gevalideerd.</div>
           </div>
         </div>
         <div class="grid__12 grid--bp-xsm__2">
@@ -41,7 +39,7 @@
           <div ng-repeat="(code, description) in rpc.reasons" class="radio">
             <label>
               <input type="radio" name="reason" ng-model="rpc.card.reason"
-                     value="{{code}}" ng-required="true">
+                     value="{{code}}" ng-required="true" ng-change="rpc.updatePriceInfo(passholderNewPass)">
               {{description}}
             </label>
           </div>
@@ -57,23 +55,31 @@
           <div class="grid__12 grid--bp-lrg__12">
             <div class="form-group" ng-class="{ 'has-error': (passholderNewPass.$submitted || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid }">
               <label>Voucher-nummer</label>
-              <input class="form-control voucher-number" name="voucherNumber"
+              <input class="form-control voucher-number" name="voucherNumber" ng-change="rpc.updatePriceInfo(passholderNewPass)"
                      ng-model="rpc.card.voucherNumber" autofocus="autofocus">
               <div ng-if="(passholderNewPass.$submitted || passholderNewPass.voucherNumber.$touched || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid" class="text-danger small">
-                <div ng-if="passholderNewPass.voucherNumber.$error.isNotFound">Deze kaart kan niet gevonden worden in het systeem.</div>
-                <div ng-if="passholderNewPass.voucherNumber.$error.isUsed">Deze kaart zit niet in de locale stock van kaarten.</div>
-                <div ng-if="passholderNewPass.voucherNumber.$error.notKansStatuut">Deze kaart heeft niet het KansStatuut.</div>
-                <div ng-if="passholderNewPass.voucherNumber.$error.isKansStatuut">Deze kaart heeft het KansStatuut.</div>
+                <div ng-if="passholderNewPass.voucherNumber.$error.invalidVoucherNumber">Het voucher nummer is niet correct.</div>
+                <div ng-if="passholderNewPass.voucherNumber.$error.unknownVoucherNumber">Het voucher nummer is niet gekend in het systeem.</div>
               </div>
             </div>
             <p ng-if="rpc.voucherType"><strong>Voucher Type:</strong><br>{{rpc.voucherType}}</p>
-            <div ng-hide="rpc.price === -1">
-              <label>Prijs</label>
-              <p>
-                <span ng-if="rpc.price > 0" class="price">{{rpc.price|number:2}} euro</span>
-                <span ng-if="rpc.price === 0" class="price">Gratis!</span>
-              </p>
+            <label>Prijs</label>
+            <div ng-hide="rpc.price === -1 || rpc.gettingPrice">
+              <div ng-show="rpc.price > 0" class="price"><span ng-bind="rpc.price | number: 2"></span> euro</div>
+              <div ng-if="rpc.price === 0" class="price">Gratis!</div>
             </div>
+            <span ng-show="rpc.price === -1">
+              <div ng-if="!rpc.card.reason" class="text-warning">Selecteer een reden om de prijs te zien.</div>
+              <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$invalid" class="text-danger">
+                De prijs kan niet bepaald worden met een foutief voucher nummer.
+              </div>
+              <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$valid">
+                <p class="text-info">De prijs wordt opgevraagd.</p>
+                <div class="spinner spinner-xsmall">
+                  <circle-spinner></circle-spinner>
+                </div>
+              </div>
+            </span>
           </div>
         </div>
       </div>
@@ -81,7 +87,7 @@
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="rpc.cancelModal()">Annuleren</a>
-    <button type="button" class="btn btn-primary" ng-disabled="rpc.formSubmitBusy || passholderNewPass.$invalid || passholderNewPass.$pending" ng-click="rpc.submitForm(passholderNewPass)">
+    <button type="button" class="btn btn-primary" ng-disabled="rpc.formSubmitBusy || passholderNewPass.$invalid || passholderNewPass.$pending" ng-click="rpc.submitForm()">
       <span ng-hide="rpc.formSubmitBusy">Bewaren</span>
       <span ng-show="rpc.formSubmitBusy">
         <span class="fa fa-refresh loading small"></span>

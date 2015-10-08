@@ -32,20 +32,25 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
     endDate: null
   };
   // reasons
-  controller.reasons = {
-    'REMOVAL': 'Verhuis',
-    'LOSS_THEFT': 'Kaart verloren of gestolen',
-    'LOSS_KANSENSTATUUT': 'Verlies kansenstatuut',
-    'OBTAIN_KANSENSTATUUT': 'Kansenstatuut verkrijgen'
+  var setReasons = function () {
+    return {
+      'REMOVAL': 'Verhuis',
+      'LOSS_THEFT': 'Kaart verloren of gestolen',
+      'LOSS_KANSENSTATUUT': 'Verlies kansenstatuut',
+      'OBTAIN_KANSENSTATUUT': 'Kansenstatuut verkrijgen'
+    };
   };
+  controller.reasons = {};
 
-  controller.cancelModal = function() {
+
+  controller.cancelModal = function () {
     $modalInstance.dismiss();
   };
 
   $scope.$watch(function () {return $scope.passholderNewPass.UiTPASNumber.$valid;}, function (nv, ov) {
     if (nv !== ov && nv === true) {
       var setNewPassAndReasonOptions = function (newPass) {
+        controller.reasons = setReasons();
         controller.newPass = newPass;
 
         // Remove options based on the new pass.
@@ -63,56 +68,77 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
         else {
           delete controller.reasons.LOSS_KANSENSTATUUT;
         }
+
+        if (pass.isKansenstatuut() !== newPass.isKansenstatuut()) {
+          delete controller.reasons.REMOVAL;
+          delete controller.reasons.LOSS_THEFT;
+          controller.card.reason = Object.keys(controller.reasons)[0];
+          controller.updatePriceInfo($scope.passholderNewPass);
+        }
       };
 
       passholderService.findPass(controller.card.id).then(setNewPassAndReasonOptions);
     }
   });
 
-  // Get price for new UitPAS
-  controller.getPassPrice = function(form){
-    if (!controller.newPass) {
-      return;
-    }
+  controller.updatePriceInfo = function (form){
     if (!controller.card.reason) {
       return;
     }
-    controller.gettingPrice = true;
+    controller.price = -1;
+
+    var showPriceInfo = function (priceInfo) {
+      controller.price = priceInfo.price;
+    };
+
+    var showNoPriceInfo = function (errorResponse) {
+      if (errorResponse.code === 'PARSE_INVALID_VOUCHERNUMBER') {
+        form.voucherNumber.$setValidity('invalidVoucherNumber', false);
+      }
+      else {
+        form.voucherNumber.$setValidity('invalidVoucherNumber', true);
+      }
+      if (errorResponse.code === 'UNKNOWN_VOUCHER') {
+        form.voucherNumber.$setValidity('unknownVoucherNumber', false);
+      }
+      else {
+        form.voucherNumber.$setValidity('unknownVoucherNumber', true);
+      }
+    };
+
     counterService.getRegistrationPriceInfo(controller.newPass, passholder, controller.card.voucherNumber, controller.card.reason)
-    .then(function(res){
-      var newcard = res.data;
-      controller.price = newcard.price / 100;
-      if (controller.card.reason === 'OBTAIN_KANSENSTATUUT' && !newcard.kansenStatuut) {
-        form.UiTPASNumber.$setValidity('notKansStatuut', false);
-        //form.UiTPASNumber.$error.notKansStatuut = true;
-        //form.UiTPASNumber.$invalid = true;
-      } else {
-        form.UiTPASNumber.$setValidity('notKansStatuut', true);
-      }
-      if (controller.card.reason === 'LOSS_KANSENSTATUUT' && newcard.kansenStatuut) {
-        form.UiTPASNumber.$setValidity('isKansStatuut', false);
-        //form.UiTPASNumber.$error.isKansStatuut = true;
-        //form.UiTPASNumber.$invalid = true;
-      } else {
-        form.UiTPASNumber.$setValidity('isKansStatuut', true);
-      }
-      if (form.voucherNumber) {
-        form.voucherNumber.$invalid = false;
-        if (newcard.voucherType && newcard.voucherType.name) {
-          controller.voucherType = newcard.voucherType.name;
-        }
-      }
-      controller.gettingPrice = false;
-    }, function(errorResponse) {
-        console.log(errorResponse);
-      if (errorResponse.data.code === 'PARSE_INVALID_VOUCHERNUMBER') {
-        form.voucherNumber.$setValidity('invalidVoucher', false);
-        //form.voucher.$invalid = true;
-        // TODO: doesn't work, it doesn't mark the field as invalid
-      } else {
-        form.voucherNumber.$setValidity('invalidVoucher', true);
-      }
-      controller.gettingPrice = false;
-    });
+      .then(showPriceInfo, showNoPriceInfo);
+  };
+
+  controller.submitForm = function () {
+    controller.formSubmitBusy = true;
+
+    // Check if an endDate is provided when obtaining a kansenstatuut.
+    if (controller.card.reason === 'OBTAIN_KANSENSTATUUT' && !controller.kansenstatuut.endDate) {
+      controller.formAlert = {
+        message: 'Een geldigheidsdatum is verplicht bij het toekennen van een kansenstatuut.',
+        type: 'danger'
+      };
+      controller.formSubmitBusy = false;
+      return;
+    }
+
+    // Copy the kansenstatuut endDate if both old and new pass are kansenstatuut.
+    if (controller.newPass.isKansenstatuut() && pass.isKansenstatuut()) {
+      var currentKansenstatuut = passholder.getKansenstatuutByCardSystemID(controller.newPass.cardSystem.id);
+      controller.kansenstatuut.endDate = currentKansenstatuut.endDate;
+    }
+
+    var redirectToPassholder = function (newPass) {
+      $modalInstance.close(newPass.number);
+    };
+
+    var setErrors = function () {
+      controller.formSubmitBusy = false;
+    };
+
+    passholderService
+      .newPass(controller.newPass, controller.passholder.uid, controller.card.reason, controller.kansenstatuut.endDate, controller.card.voucherNumber)
+      .then(redirectToPassholder, setErrors);
   };
 }
