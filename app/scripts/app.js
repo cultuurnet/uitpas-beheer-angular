@@ -34,22 +34,14 @@ angular
 
     ngTouchSpinProvider.arrowControlsEnabled(false);
 
-    var getPassholderFromStateParams = function(passholderService, $stateParams) {
-      if ($stateParams.passholder) {
-        return $stateParams.passholder;
-      }
-      else {
-        return passholderService.findPassholder($stateParams.identification);
-      }
-    };
+    /* @ngInject */
+    function getPassholderFromStateParams(passholderService, $stateParams) {
+      return passholderService.findPassholder($stateParams.identification);
+    }
 
+    /* @ngInject */
     var getPassFromStateParams = function(passholderService, $stateParams) {
-      if ($stateParams.pass) {
-        return $stateParams.pass;
-      }
-      else {
-        return passholderService.findPass($stateParams.identification);
-      }
+      return passholderService.findPass($stateParams.identification);
     };
 
     redirectOnScan.$inject = ['UiTPASRouter'];
@@ -138,8 +130,8 @@ angular
           'activeCounter': null
         },
         resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams],
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          pass: getPassFromStateParams,
+          passholder: getPassholderFromStateParams,
           advantages: ['advantageService', '$stateParams', function(advantageService, $stateParams) {
             return advantageService.list($stateParams.identification);
           }],
@@ -150,7 +142,7 @@ angular
       })
       .state('counter.main.passholder.edit', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          passholder: getPassholderFromStateParams,
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }]
@@ -185,7 +177,7 @@ angular
       })
       .state('counter.main.passholder.editContact', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          passholder: getPassholderFromStateParams,
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }]
@@ -219,7 +211,7 @@ angular
       })
       .state('counter.main.passholder.memberships', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams]
+          passholder: getPassholderFromStateParams
         },
         onEnter: ['passholder', '$state', '$modal', function(passholder, $state, $modal) {
           $modal
@@ -251,7 +243,7 @@ angular
           activity: null
         },
         resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          passholder: getPassholderFromStateParams,
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }],
@@ -296,8 +288,8 @@ angular
           passholder: null
         },
         resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams],
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams]
+          pass: getPassFromStateParams,
+          passholder: getPassholderFromStateParams
         },
         onEnter: ['pass', 'passholder', '$state', '$modal', function(pass, passholder, $state, $modal) {
           $modal
