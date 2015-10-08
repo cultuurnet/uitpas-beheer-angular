@@ -1,6 +1,6 @@
-<form name="passholderNewCard" ng-submit="rcc.submitForm(passholderNewCard)" novalidate ng-class="{'form-submiting': rcc.formSubmitBusy}">
+<form name="passholderNewCard" ng-submit="rpc.submitForm(passholderNewCard)" novalidate ng-class="{'form-submiting': rpc.formSubmitBusy}">
   <div class="modal-header">
-    <button type="button" class="close" ng-click="rcc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" ng-click="rpc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">Kaart vervangen</h4>
   </div>
   <div class="modal-body">
@@ -16,7 +16,7 @@
             <label for="UiTPASNumber" class="label-number">UiTPAS-nummer</label>
             <input ubr-uitpas-number-async-validation ng-pattern="/^\d{13}$/" type="text" class="form-control input-number" name="UiTPASNumber"
             id="UiTPASNumber" autofocus="" ng-required="true"
-            ng-model="rcc.card.id">
+            ng-model="rpc.card.id">
             <div ng-if="(passholderNewCard.$submitted || passholderNewCard.UiTPASNumber.$touched || passholderNewCard.UiTPASNumber.$dirty) && passholderNewCard.UiTPASNumber.$invalid" class="text-danger small">
               <div ng-if="passholderNewCard.UiTPASNumber.$error.pattern">Het nummer heeft een verkeerd formaat, 13 cijfers worden verwacht.</div>
               <div ng-if="passholderNewCard.UiTPASNumber.$error.notFound">Deze kaart kan niet gevonden worden in het systeem.</div>
@@ -31,30 +31,30 @@
       </div>
       <hr>
       <div class="grid" ng-show="passholderNewCard.UiTPASNumber.$valid">
-        <pre>{{rcc.newPass|json}}</pre>
+        <pre>{{rpc.newPass|json}}</pre>
         <label>Reden</label>
-        <div ng-repeat="(code, description) in rcc.reasons" class="radio">
+        <div ng-repeat="(code, description) in rpc.reasons" class="radio">
           <label>
-            <input type="radio" name="reason" ng-model="rcc.card.reason"
+            <input type="radio" name="reason" ng-model="rpc.card.reason"
                    value="{{code}}" ng-required="true">
             {{description}}
           </label>
         </div>
         <hr>
-        <div ng-show="rcc.card.reason == 'OBTAIN_KANSENSTATUUT'">
+        <div ng-show="rpc.card.reason == 'OBTAIN_KANSENSTATUUT'">
           <ubr-datepicker
-              ng-model="rcc.kansenstatuut.endDate"
+              ng-model="rpc.kansenstatuut.endDate"
               ubr-label="Kansenstatuut geldig tot"
               ubr-id="valid-until"
               ubr-name="endDate"></ubr-datepicker>
           <hr>
         </div>
       </div>
-      <div class="grid__12 grid--bp-lrg__12" ng-show="rcc.card.reason">
+      <div class="grid__12 grid--bp-lrg__12" ng-show="rpc.card.reason">
         <div class="form-group" ng-class="{ 'has-error': (passholderNewCard.$submitted || passholderNewCard.voucherNumber.$dirty) && passholderNewCard.voucherNumber.$invalid }">
           <label>Voucher-nummer</label>
           <input class="form-control voucher-number" name="voucherNumber"
-                 ng-model="rcc.card.voucherNumber" autofocus="autofocus">
+                 ng-model="rpc.card.voucherNumber" autofocus="autofocus">
           <div ng-if="(passholderNewCard.$submitted || passholderNewCard.voucherNumber.$touched || passholderNewCard.voucherNumber.$dirty) && passholderNewCard.voucherNumber.$invalid" class="text-danger small">
             <div ng-if="passholderNewCard.voucherNumber.$error.isNotFound">Deze kaart kan niet gevonden worden in het systeem.</div>
             <div ng-if="passholderNewCard.voucherNumber.$error.isUsed">Deze kaart zit niet in de locale stock van kaarten.</div>
@@ -62,22 +62,22 @@
             <div ng-if="passholderNewCard.voucherNumber.$error.isKansStatuut">Deze kaart heeft het KansStatuut.</div>
           </div>
         </div>
-        <p ng-if="rcc.voucherType"><strong>Voucher Type:</strong><br>{{rcc.voucherType}}</p>
-        <div ng-hide="rcc.price === -1">
+        <p ng-if="rpc.voucherType"><strong>Voucher Type:</strong><br>{{rpc.voucherType}}</p>
+        <div ng-hide="rpc.price === -1">
           <label>Prijs</label>
           <p>
-            <span ng-if="rcc.price > 0" class="price">{{rcc.price|number:2}} euro</span>
-            <span ng-if="rcc.price === 0" class="price">Gratis!</span>
+            <span ng-if="rpc.price > 0" class="price">{{rpc.price|number:2}} euro</span>
+            <span ng-if="rpc.price === 0" class="price">Gratis!</span>
           </p>
         </div>
       </div>
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
-    <a ng-click="rcc.cancelModal()">Annuleren</a>
-    <button type="button" class="btn btn-primary" ng-disabled="rcc.formSubmitBusy || passholderNewCard.$invalid || passholderNewCard.$pending" ng-click="rcc.submitForm(passholderNewCard)">
-      <span ng-hide="rcc.formSubmitBusy">Bewaren</span>
-      <span ng-show="rcc.formSubmitBusy">
+    <a ng-click="rpc.cancelModal()">Annuleren</a>
+    <button type="button" class="btn btn-primary" ng-disabled="rpc.formSubmitBusy || passholderNewCard.$invalid || passholderNewCard.$pending" ng-click="rpc.submitForm(passholderNewCard)">
+      <span ng-hide="rpc.formSubmitBusy">Bewaren</span>
+      <span ng-show="rpc.formSubmitBusy">
         <span class="fa fa-refresh loading small"></span>
         Formulier wordt verzonden
       </span>

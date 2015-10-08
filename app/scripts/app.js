@@ -289,13 +289,12 @@ angular
             });
         }]
       })
-
-      .state('counter.main.passholder.replaceCard', {
+      .state('counter.main.passholder.replacePass', {
         resolve: {
           passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
           pass: ['passholderService', '$stateParams', getPassFromStateParams]
         },
-        url: '/replace-card',
+        url: '/replace-pass',
         onEnter: ['passholder', 'pass', '$state', '$modal', function(passholder, pass, $state, $modal) {
           $modal
             .open({
@@ -315,8 +314,8 @@ angular
                   return pass;
                 }
               },
-              controller: 'PassholderReplaceCardController',
-              controllerAs: 'rcc'
+              controller: 'PassholderReplacePassController',
+              controllerAs: 'rpc'
             })
             .result
             .finally(function() {
@@ -324,7 +323,6 @@ angular
             });
         }]
       })
-
       .state('counter.main.passholder.blockPass', {
         params: {
           pass: null,

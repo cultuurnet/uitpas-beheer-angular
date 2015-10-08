@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:PassholderReplaceCardController
+ * @name uitpasbeheerApp.controller:PassholderReplacePassController
  * @description
- * # PassholdereditController
+ * # PassholderReplacePassController
  * Controller of the uitpasbeheerApp
  */
 angular.module('uitpasbeheerApp')
-  .controller('PassholderReplaceCardController', PassholderReplaceCardController);
+  .controller('PassholderReplacePassController', PassholderReplacePassController);
 
 /* @ngInject */
-function PassholderReplaceCardController ($scope, passholder, pass, $modalInstance, passholderService, counterService, isJavaFXBrowser) {
+function PassholderReplacePassController ($scope, passholder, pass, $modalInstance, passholderService, counterService, isJavaFXBrowser) {
   /*jshint validthis: true */
   var controller = this;
 
