@@ -20,15 +20,25 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService) {
   return directive;
 
   function link(scope, element, attrs, ngModel) {
+
+    function resemblesUitpasNumber(value) {
+      return typeof value === 'string' && value.length >= 13;
+    }
+
     ngModel.$asyncValidators.notFound = function (modelValue, viewValue) {
-      if (!viewValue || viewValue < 13) {
-        return $q.when(true);
+      var uitpasFoundPromise;
+
+      if (!resemblesUitpasNumber(viewValue)) {
+        uitpasFoundPromise =  $q.resolve(true);
+      } else {
+        uitpasFoundPromise = passholderService.findPass(viewValue);
       }
 
-      return passholderService.findPass(viewValue);
+      return uitpasFoundPromise;
     };
+
     ngModel.$asyncValidators.notLocalStock = function (modelValue, viewValue) {
-      if (!viewValue || viewValue < 13) {
+      if (!resemblesUitpasNumber(viewValue)) {
         return $q.when(true);
       }
       var deferred = $q.defer();
