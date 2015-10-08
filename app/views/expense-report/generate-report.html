@@ -30,12 +30,9 @@
       <button type="button" class="btn btn-primary" ng-disabled="erc.reportPending()"
               ng-click="erc.generateReport()">
         <span ng-hide="erc.reportPending()">Maken</span>
-    <span ng-show="erc.requestingReport">
-      <span class="fa fa-refresh loading small"></span> Verzoek wordt verzonden
-    </span>
-    <span ng-show="erc.generatingReport">
-      <span class="fa fa-refresh loading small"></span> Onkostennota wordt aangemaakt
-    </span>
+        <span ng-show="erc.reportPending()">
+          <span class="fa fa-refresh loading small"></span> Onkostennota wordt aangemaakt
+        </span>
       </button>
     </div>
   </div>
