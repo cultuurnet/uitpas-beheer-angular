@@ -279,7 +279,7 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-replace-card.html',
-              size: 'lg',
+              size: 'sm',
               resolve: {
                 passholder: function() {
                   return passholder;

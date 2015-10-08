@@ -5,14 +5,14 @@
   </div>
   <div class="modal-body">
     <div class="container-fluid">
-      <p class="direction">
+      <p class="direction text-center">
         Scan de nieuwe UiTPAS of vul het kaartnummer manueel in.
       </p>
       <div class="grid">
         <div class="grid__12 grid--bp-lrg__12">
           <div class="alert alert-danger" type="{{rpc.formAlert.type}}" ng-show="rpc.formAlert" ng-bind="rpc.formAlert.message"></div>
         </div>
-        <div class="grid__12 grid--bp-xsm__10">
+        <div class="grid__12 grid--bp-xsm__8">
           <div class="form-group" ng-class="{ 'has-error': (passholderNewPass.$submitted || passholderNewPass.UiTPASNumber.$dirty) && passholderNewPass.UiTPASNumber.$invalid }">
             <label for="UiTPASNumber" class="label-number">UiTPAS-nummer</label>
             <input ubr-uitpas-number-async-validation ng-pattern="/^\d{13}$/" type="text" class="form-control input-number" name="UiTPASNumber"
@@ -27,60 +27,69 @@
             <div ng-if="passholderNewPass.UiTPASNumber.$pending" class="text-warning small">UiTPAS-nummer wordt gevalideerd.</div>
           </div>
         </div>
-        <div class="grid__12 grid--bp-xsm__2">
-          <span class="icon icon--small icon--card-scan"></span>
+        <div class="grid__12 grid--bp-xsm__4 text-center">
+          <span class="icon icon--card-scan icon--card-scan--medium"></span>
         </div>
       </div>
-      <hr>
+
       <div class="grid" ng-show="passholderNewPass.UiTPASNumber.$valid">
         <div class="grid__12 grid--bp-lrg__12">
-          <!-- -><pre>{{rpc.newPass|json}}</pre><!-- -->
           <label>Reden</label>
           <div ng-repeat="(code, description) in rpc.reasons" class="radio">
-            <label>
               <input type="radio" name="reason" ng-model="rpc.card.reason"
-                     value="{{code}}" ng-required="true" ng-change="rpc.updatePriceInfo(passholderNewPass)">
+                     value="{{code}}" ng-required="true" ng-attr-id="reason-{{code}}" ng-change="rpc.updatePriceInfo(passholderNewPass)">
+            <label ng-attr-for="reason-{{code}}">
               {{description}}
             </label>
           </div>
-          <hr>
+
           <div ng-show="rpc.card.reason == 'OBTAIN_KANSENSTATUUT'">
             <ubr-datepicker
                 ng-model="rpc.kansenstatuut.endDate"
                 ubr-label="Kansenstatuut geldig tot"
                 ubr-id="valid-until"
                 ubr-name="endDate"></ubr-datepicker>
-            <hr>
           </div>
-          <div class="grid__12 grid--bp-lrg__12">
-            <div class="form-group" ng-class="{ 'has-error': (passholderNewPass.$submitted || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid }">
-              <label>Voucher-nummer</label>
-              <input class="form-control voucher-number" name="voucherNumber" ng-change="rpc.updatePriceInfo(passholderNewPass)"
-                     ng-model="rpc.card.voucherNumber" autofocus="autofocus">
-              <div ng-if="(passholderNewPass.$submitted || passholderNewPass.voucherNumber.$touched || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid" class="text-danger small">
-                <div ng-if="passholderNewPass.voucherNumber.$error.invalidVoucherNumber">Het voucher nummer is niet correct.</div>
-                <div ng-if="passholderNewPass.voucherNumber.$error.unknownVoucherNumber">Het voucher nummer is niet gekend in het systeem.</div>
+
+          <div class="form-group" ng-class="{ 'has-error': (passholderNewPass.$submitted || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid }">
+            <label>Voucher-nummer</label>
+            <input class="form-control voucher-number" name="voucherNumber" ng-change="rpc.updatePriceInfo(passholderNewPass)"
+                   ng-model="rpc.card.voucherNumber" autofocus="autofocus">
+            <div ng-if="(passholderNewPass.$submitted || passholderNewPass.voucherNumber.$touched || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid" class="text-danger small">
+              <div ng-if="passholderNewPass.voucherNumber.$error.invalidVoucherNumber">Het voucher nummer is niet correct.</div>
+              <div ng-if="passholderNewPass.voucherNumber.$error.unknownVoucherNumber">Het voucher nummer is niet gekend in het systeem.</div>
+            </div>
+          </div>
+
+          <p ng-if="rpc.voucherType"><strong>Voucher Type:</strong><br>{{rpc.voucherType}}</p>
+
+          <label>Prijs</label>
+
+          <div ng-hide="rpc.price === -1 || rpc.gettingPrice">
+            <div ng-show="rpc.price > 0" class="price"><span ng-bind="rpc.price | number: 2"></span> euro</div>
+            <div ng-if="rpc.price === 0" class="price">Gratis!</div>
+          </div>
+
+          <span ng-show="rpc.price === -1">
+            <div ng-if="!rpc.card.reason" class="text-warning">Selecteer een reden om de prijs te zien.</div>
+            <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$invalid" class="text-danger">
+              De prijs kan niet bepaald worden met een foutief voucher nummer.
+            </div>
+            <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$valid">
+              <p class="text-info">De prijs wordt opgevraagd.</p>
+              <div class="spinner spinner-xsmall">
+                <circle-spinner></circle-spinner>
               </div>
             </div>
-            <p ng-if="rpc.voucherType"><strong>Voucher Type:</strong><br>{{rpc.voucherType}}</p>
-            <label>Prijs</label>
-            <div ng-hide="rpc.price === -1 || rpc.gettingPrice">
-              <div ng-show="rpc.price > 0" class="price"><span ng-bind="rpc.price | number: 2"></span> euro</div>
-              <div ng-if="rpc.price === 0" class="price">Gratis!</div>
-            </div>
-            <span ng-show="rpc.price === -1">
-              <div ng-if="!rpc.card.reason" class="text-warning">Selecteer een reden om de prijs te zien.</div>
-              <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$invalid" class="text-danger">
-                De prijs kan niet bepaald worden met een foutief voucher nummer.
-              </div>
-              <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$valid">
-                <p class="text-info">De prijs wordt opgevraagd.</p>
-                <div class="spinner spinner-xsmall">
-                  <circle-spinner></circle-spinner>
-                </div>
-              </div>
-            </span>
+          </span>
+
+          <div ng-hide="rpc.price === -1">
+            <p>
+              <span ng-if="rpc.price > 0" class="price">{{rpc.price|number:2}} euro</span>
+              <span ng-if="rpc.price === 0" class="price">Gratis!</span>
+            </p>
           </div>
+
         </div>
       </div>
     </div>
