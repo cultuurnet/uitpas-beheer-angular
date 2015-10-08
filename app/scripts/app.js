@@ -151,11 +151,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-edit.html',
-              params: {
-                'identification': null,
-                'passholder': null,
-                'activity': null
-              },
               size: 'lg',
               resolve: {
                 passholder: function() {
@@ -186,10 +181,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-edit-contact.html',
-              params: {
-                'identification': null,
-                'passholder': null
-              },
               size: 'sm',
               resolve: {
                 passholder: function() {
@@ -217,9 +208,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-memberships.html',
-              params: {
-                'passholder': null
-              },
               size: 'sm',
               resolve: {
                 passholder: function() {
@@ -255,11 +243,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-activity-tariffs.html',
-              params: {
-                identification: null,
-                passholder: null,
-                activity: null
-              },
               size: 'sm',
               resolve: {
                 passholder: function () {
@@ -335,10 +318,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-block-pass.html',
-              params: {
-                identification: null,
-                passholder: null
-              },
               size: 'sm',
               resolve: {
                 pass: function() {

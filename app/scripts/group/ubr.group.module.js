@@ -80,11 +80,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-activity-tariffs.html',
-              params: {
-                identification: null,
-                passholder: null,
-                activity: null
-              },
               size: 'sm',
               resolve: {
                 passholder: function () {

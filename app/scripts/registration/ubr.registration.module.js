@@ -69,10 +69,6 @@ angular
           registrationModalInstance = $modal.open({
             animation: true,
             templateUrl: 'views/registration/multi-step-form.html',
-            params: {
-              'pass': null,
-              'kansenstatuut': null
-            },
             size: 'lg',
             resolve: {
               pass: function() {

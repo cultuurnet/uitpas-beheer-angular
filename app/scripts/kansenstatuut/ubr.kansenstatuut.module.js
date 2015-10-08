@@ -27,9 +27,6 @@ angular
         .open({
           animation: true,
           templateUrl: 'views/kansenstatuut/edit-remarks-modal.html',
-          params: {
-            'passholder': null
-          },
           size: 'sm',
           resolve: {
             passholder: function () {
@@ -51,11 +48,6 @@ angular
         .open({
           animation: true,
           templateUrl: 'views/kansenstatuut/edit-kansenstatuut-modal.html',
-          params: {
-            'passholder': null,
-            'activeCounter': null,
-            'cardSystemId': null
-          },
           size: 'sm',
           resolve: {
             passholder: function () {
@@ -94,11 +86,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/kansenstatuut/kansenstatuten-modal.html',
-              params: {
-                'passholder': null,
-                'activeCounter': null,
-                'cardSystemId': null
-              },
               size: 'sm',
               resolve: {
                 passholder: function () {
