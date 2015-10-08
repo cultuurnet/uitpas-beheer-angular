@@ -65,11 +65,6 @@
 
           <label>Prijs</label>
 
-          <div ng-hide="rpc.price === -1 || rpc.gettingPrice">
-            <div ng-show="rpc.price > 0" class="price"><span ng-bind="rpc.price | number: 2"></span> euro</div>
-            <div ng-if="rpc.price === 0" class="price">Gratis!</div>
-          </div>
-
           <span ng-show="rpc.price === -1">
             <div ng-if="!rpc.card.reason" class="text-warning">Selecteer een reden om de prijs te zien.</div>
             <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$invalid" class="text-danger">
