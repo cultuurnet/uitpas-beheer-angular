@@ -70,8 +70,10 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
     var showReplacePass = function (pass) {
       $state.go(
         'counter.main.passholder.replacePass',
-        {identification: pass.number},
-        {reload: true}
+        {
+          identification: pass.number,
+          justBlocked: true
+        }
       );
     };
 

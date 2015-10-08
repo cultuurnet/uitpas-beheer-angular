@@ -57,4 +57,18 @@ describe('Controller: PassholderBlockPassController', function () {
       .catch(done);
     $scope.$digest();
   });
+
+  it('should prompt the user to add a new card when blocking and replacing', function () {
+    var pass = { number: '182' };
+    var expectedReplacementParameters = {
+      identification: '182',
+      justBlocked: true
+    };
+    passholderService.blockPass.and.returnValue($q.resolve(pass));
+
+    blockPassCtrl.blockAndReplace();
+    $scope.$apply();
+
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder.replacePass', expectedReplacementParameters);
+  });
 });

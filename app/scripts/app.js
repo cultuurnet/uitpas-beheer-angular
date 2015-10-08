@@ -33,22 +33,14 @@ angular
 
     ngTouchSpinProvider.arrowControlsEnabled(false);
 
-    var getPassholderFromStateParams = function(passholderService, $stateParams) {
-      if ($stateParams.passholder) {
-        return $stateParams.passholder;
-      }
-      else {
-        return passholderService.findPassholder($stateParams.identification);
-      }
-    };
+    /* @ngInject */
+    function getPassholderFromStateParams(passholderService, $stateParams) {
+      return passholderService.findPassholder($stateParams.identification);
+    }
 
+    /* @ngInject */
     var getPassFromStateParams = function(passholderService, $stateParams) {
-      if ($stateParams.pass) {
-        return $stateParams.pass;
-      }
-      else {
-        return passholderService.findPass($stateParams.identification);
-      }
+      return passholderService.findPass($stateParams.identification);
     };
 
     redirectOnScan.$inject = ['UiTPASRouter'];
@@ -137,8 +129,8 @@ angular
           'activeCounter': null
         },
         resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams],
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          pass: getPassFromStateParams,
+          passholder: getPassholderFromStateParams,
           advantages: ['advantageService', '$stateParams', function(advantageService, $stateParams) {
             return advantageService.list($stateParams.identification);
           }],
@@ -149,7 +141,7 @@ angular
       })
       .state('counter.main.passholder.edit', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          passholder: getPassholderFromStateParams,
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }]
@@ -184,7 +176,7 @@ angular
       })
       .state('counter.main.passholder.editContact', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          passholder: getPassholderFromStateParams,
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }]
@@ -218,7 +210,7 @@ angular
       })
       .state('counter.main.passholder.memberships', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams]
+          passholder: getPassholderFromStateParams
         },
         onEnter: ['passholder', '$state', '$modal', function(passholder, $state, $modal) {
           $modal
@@ -250,7 +242,7 @@ angular
           activity: null
         },
         resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
+          passholder: getPassholderFromStateParams,
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }],
@@ -291,20 +283,19 @@ angular
       })
       .state('counter.main.passholder.replacePass', {
         resolve: {
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
-          pass: ['passholderService', '$stateParams', getPassFromStateParams]
+          passholder: getPassholderFromStateParams,
+          pass: getPassFromStateParams
+        },
+        params: {
+          'justBlocked': false
         },
         url: '/replace-pass',
-        onEnter: ['passholder', 'pass', '$state', '$modal', function(passholder, pass, $state, $modal) {
+        /* @ngInject */
+        onEnter: function(passholder, pass, $state, $modal, $stateParams) {
           $modal
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-replace-card.html',
-              params: {
-                'identification': null,
-                'passholder': null,
-                'activity': null
-              },
               size: 'lg',
               resolve: {
                 passholder: function() {
@@ -319,9 +310,13 @@ angular
             })
             .result
             .finally(function() {
-              $state.go('^');
+              if ($stateParams.justBlocked) {
+                $state.go('^', {}, {reload: true});
+              } else {
+                $state.go('^');
+              }
             });
-        }]
+        }
       })
       .state('counter.main.passholder.blockPass', {
         params: {
@@ -329,8 +324,8 @@ angular
           passholder: null
         },
         resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams],
-          passholder: ['passholderService', '$stateParams', getPassholderFromStateParams]
+          pass: getPassFromStateParams,
+          passholder: getPassholderFromStateParams
         },
         onEnter: ['pass', 'passholder', '$state', '$modal', function(pass, passholder, $state, $modal) {
           $modal

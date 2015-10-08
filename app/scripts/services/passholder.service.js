@@ -66,7 +66,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
   /**
    * @param {string} passNumber
-   * @returns {deferred.promise|{then}}
+   * @returns {Promise}
    */
   service.blockPass = function(passNumber) {
     var deferred = $q.defer();
