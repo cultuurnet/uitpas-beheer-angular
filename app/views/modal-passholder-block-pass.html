@@ -11,7 +11,7 @@
 <div class="modal-footer">
   <span ng-hide="pbp.busyBlocking">
     <a ng-click="pbp.cancelModal()">Annuleren</a>
-    <button style="display:none" type="button" class="btn btn-default" ng-click="pbp.blockAndReplace()">Blokkeren en vervangen</button>
+    <button type="button" class="btn btn-default" ng-click="pbp.blockAndReplace()">Blokkeren en vervangen</button>
     <button type="button" class="btn btn-danger" ng-click="pbp.blockAndRefresh()">Definitief blokkeren</button>
   </span>
   <span ng-show="pbp.busyBlocking">
