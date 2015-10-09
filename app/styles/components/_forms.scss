@@ -95,6 +95,11 @@ a + .btn {
   margin-top: 0;
 }
 
+label.radio, label.checkbox {
+  margin-bottom: 12px;
+  display: block;
+}
+
 .radio {
   margin-top: $padding-base-vertical;
   margin-bottom: $padding-base-vertical;
