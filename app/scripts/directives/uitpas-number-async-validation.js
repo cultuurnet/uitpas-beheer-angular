@@ -11,11 +11,14 @@ angular
   .directive('ubrUitpasNumberAsyncValidation', uitpasNumberAsyncValidationDirective);
 
 /* @ngInject */
-function uitpasNumberAsyncValidationDirective ($q, passholderService) {
+function uitpasNumberAsyncValidationDirective ($q, passholderService, counterService) {
   var directive = {
     restrict: 'A',
     link: link,
-    require: 'ngModel'
+    require: 'ngModel',
+    scope: {
+     cardSystemId: '=?ubrCardSystem'
+    }
   };
   return directive;
 
@@ -29,7 +32,7 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService) {
       var uitpasFoundPromise;
 
       if (!resemblesUitpasNumber(viewValue)) {
-        uitpasFoundPromise =  $q.resolve(true);
+        uitpasFoundPromise = $q.resolve(true);
       } else {
         uitpasFoundPromise = passholderService.findPass(viewValue);
       }
@@ -59,6 +62,58 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService) {
       passholderService.findPass(viewValue).then(validateLocalStock, ignoreNotFound);
 
       return deferred.promise;
+    };
+
+    ngModel.$asyncValidators.unavailableForActiveCounter = function (modelValue, viewValue) {
+      var deferredValidation = $q.defer();
+
+      var compareWithActiveCounter = function (pass) {
+        var matchCounters = function (activeCounter) {
+          if (activeCounter.isRegistrationCounter(pass.cardSystem.id)) {
+            deferredValidation.resolve();
+          } else {
+            deferredValidation.reject('Active and pass counter do not match!');
+          }
+        };
+
+        counterService
+          .getActive()
+          .then(matchCounters, deferredValidation.resolve);
+      };
+
+      if (!resemblesUitpasNumber(viewValue)) {
+        deferredValidation.resolve();
+      } else {
+        passholderService
+          .findPass(viewValue)
+          .then(compareWithActiveCounter, deferredValidation.resolve);
+      }
+
+      return deferredValidation.promise;
+    };
+
+    ngModel.$asyncValidators.cardSystemMismatch = function (modelValue, viewValue) {
+      var deferredValidation = $q.defer();
+      var cardSystemId       = scope.cardSystemId;
+      var uitpasNumber       = viewValue;
+
+      var compareCardSystems = function (pass) {
+        if (pass.cardSystem.id === cardSystemId) {
+          deferredValidation.resolve();
+        } else {
+          deferredValidation.reject('The card system of the pass does not match.');
+        }
+      };
+
+      if (cardSystemId) {
+        passholderService
+          .findPass(uitpasNumber)
+          .then(compareCardSystems, deferredValidation.resolve);
+      } else {
+        deferredValidation.resolve();
+      }
+
+      return deferredValidation.promise;
     };
   }
 }

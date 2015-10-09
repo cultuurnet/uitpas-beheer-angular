@@ -17,9 +17,9 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
 
   // Set default parameters.
   controller.passholder = angular.copy(passholder);
+  controller.pass = pass;
   controller.formSubmitBusy = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
-  controller.asyncError = null;
   controller.price = -1;
   controller.card = {
     id: null,
@@ -41,7 +41,9 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
     };
   };
   controller.reasons = {};
-
+  controller.voucherModelOptions = {
+    debounce: { 'default': 500, 'blur': 0 }
+  };
 
   controller.cancelModal = function () {
     $modalInstance.dismiss();
@@ -92,21 +94,20 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
     };
 
     var showNoPriceInfo = function (errorResponse) {
-      if (errorResponse.code === 'PARSE_INVALID_VOUCHERNUMBER') {
-        form.voucherNumber.$setValidity('invalidVoucherNumber', false);
-      }
-      else {
-        form.voucherNumber.$setValidity('invalidVoucherNumber', true);
-      }
-      if (errorResponse.code === 'UNKNOWN_VOUCHER') {
-        form.voucherNumber.$setValidity('unknownVoucherNumber', false);
-      }
-      else {
-        form.voucherNumber.$setValidity('unknownVoucherNumber', true);
-      }
+      var errors =  {
+        PARSE_INVALID_VOUCHERNUMBER: 'invalidVoucherNumber',
+        UNKNOWN_VOUCHER: 'unknownVoucherNumber',
+        BALIE_NOT_AUTHORIZED: 'balieNotAuthorized',
+        INVALID_VOUCHER_STATUS: 'invalidVoucherStatus'
+      };
+
+      var error = errors[errorResponse.code];
+      form.voucherNumber.$error = {};
+      form.voucherNumber.$setValidity(error, false);
     };
 
-    counterService.getRegistrationPriceInfo(controller.newPass, passholder, controller.card.voucherNumber, controller.card.reason)
+    counterService
+      .getRegistrationPriceInfo(controller.newPass, passholder, controller.card.voucherNumber, controller.card.reason)
       .then(showPriceInfo, showNoPriceInfo);
   };
 

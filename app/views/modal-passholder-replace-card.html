@@ -16,13 +16,15 @@
           <div class="form-group" ng-class="{ 'has-error': (passholderNewPass.$submitted || passholderNewPass.UiTPASNumber.$dirty) && passholderNewPass.UiTPASNumber.$invalid }">
             <label for="UiTPASNumber" class="label-number">UiTPAS-nummer</label>
             <input ubr-uitpas-number-async-validation ng-pattern="/^\d{13}$/" type="text" class="form-control input-number" name="UiTPASNumber"
-            id="UiTPASNumber" autofocus="" ng-disabled="passholderNewPass.UiTPASNumber.$pending" ng-required="true"
+            id="UiTPASNumber" autofocus="" ng-required="true" ubr-card-system="rpc.pass.cardSystem.id"
             ng-model="rpc.card.id">
-            <div ng-if="(passholderNewPass.$submitted || passholderNewPass.UiTPASNumber.$touched || passholderNewPass.UiTPASNumber.$dirty) && passholderNewPass.UiTPASNumber.$invalid" class="text-danger small">
+            <div ng-if="(passholderNewPass.$submitted || passholderNewPass.UiTPASNumber.$dirty) && passholderNewPass.UiTPASNumber.$invalid" class="text-danger small">
               <div ng-if="passholderNewPass.UiTPASNumber.$error.pattern">Het nummer heeft een verkeerd formaat, 13 cijfers worden verwacht.</div>
               <div ng-if="passholderNewPass.UiTPASNumber.$error.notFound">Deze kaart kan niet gevonden worden in het systeem.</div>
               <div ng-if="passholderNewPass.UiTPASNumber.$error.notLocalStock">Deze kaart zit niet in de locale stock van kaarten.</div>
               <div ng-if="passholderNewPass.UiTPASNumber.$error.required">Het UiTPAS-nummer veld is verplicht.</div>
+              <div ng-if="passholderNewPass.UiTPASNumber.$error.cardSystemMismatch">Deze UiTPAS behoort niet tot hetzelfde kaart-systeem</div>
+              <div ng-if="passholderNewPass.UiTPASNumber.$error.unavailableForActiveCounter">De actieve balie heeft onvoldoende rechten om deze UiTPAS te registreren.</div>
             </div>
             <div ng-if="passholderNewPass.UiTPASNumber.$pending" class="text-warning small">UiTPAS-nummer wordt gevalideerd.</div>
           </div>
@@ -32,7 +34,7 @@
         </div>
       </div>
 
-      <div class="grid" ng-show="passholderNewPass.UiTPASNumber.$valid">
+      <div class="grid" ng-if="passholderNewPass.UiTPASNumber.$valid">
         <div class="grid__12 grid--bp-lrg__12">
           <hr />
 
@@ -59,10 +61,13 @@
           <div class="form-group" ng-class="{ 'has-error': (passholderNewPass.$submitted || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid }">
             <label>Voucher-nummer</label>
             <input class="form-control voucher-number" name="voucherNumber" ng-change="rpc.updatePriceInfo(passholderNewPass)"
-                   ng-model="rpc.card.voucherNumber" autofocus="autofocus">
-            <div ng-if="(passholderNewPass.$submitted || passholderNewPass.voucherNumber.$touched || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid" class="text-danger small">
+                   ng-model="rpc.card.voucherNumber" autofocus="autofocus" ng-model-options="rpc.voucherModelOptions">
+            <div ng-if="(passholderNewPass.$submitted || passholderNewPass.voucherNumber.$touched || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid"
+                 class="text-danger small">
               <div ng-if="passholderNewPass.voucherNumber.$error.invalidVoucherNumber">Het voucher nummer is niet correct.</div>
               <div ng-if="passholderNewPass.voucherNumber.$error.unknownVoucherNumber">Het voucher nummer is niet gekend in het systeem.</div>
+              <div ng-if="passholderNewPass.voucherNumber.$error.balieNotAuthorized">De actieve balie kan deze UiTPAS niet registeren.</div>
+              <div ng-if="passholderNewPass.voucherNumber.$error.invalidVoucherStatus">De voucher is niet bruikbaar voor deze kaart.</div>
             </div>
           </div>
 
