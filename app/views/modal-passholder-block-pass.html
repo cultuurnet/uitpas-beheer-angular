@@ -9,12 +9,13 @@
 </div>
 
 <div class="modal-footer">
-  <a ng-click="pbp.cancelModal()">Annuleren</a>
   <span ng-hide="pbp.busyBlocking">
+    <a ng-click="pbp.cancelModal()">Annuleren</a>
     <button type="button" class="btn btn-default" ng-click="pbp.blockAndReplace()">Blokkeren en vervangen</button>
     <button type="button" class="btn btn-danger" ng-click="pbp.blockAndRefresh()">Definitief blokkeren</button>
   </span>
   <span ng-show="pbp.busyBlocking">
+      <a ng-click="pbp.cancelModal()">Annuleren</a>
       <button type="button" class="btn btn-disabled" >
         <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
       </button>
