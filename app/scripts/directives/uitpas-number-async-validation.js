@@ -27,6 +27,17 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
     function resemblesUitpasNumber(value) {
       return typeof value === 'string' && value.length >= 13;
     }
+    
+    var lastSearch = false;
+    function findPass(identification) {
+      if (identification !== lastSearch.identification) {
+        lastSearch = {
+          identification: identification,
+          result: passholderService.findPass(identification)
+        };
+      }
+      return $q.when(lastSearch.result);
+    }
 
     ngModel.$asyncValidators.notFound = function (modelValue, viewValue) {
       var uitpasFoundPromise;
@@ -34,7 +45,7 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
       if (!resemblesUitpasNumber(viewValue)) {
         uitpasFoundPromise = $q.resolve(true);
       } else {
-        uitpasFoundPromise = passholderService.findPass(viewValue);
+        uitpasFoundPromise = findPass(viewValue);
       }
 
       return uitpasFoundPromise;
@@ -59,7 +70,8 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
         deferred.resolve();
       };
 
-      passholderService.findPass(viewValue).then(validateLocalStock, ignoreNotFound);
+      findPass(viewValue)
+        .then(validateLocalStock, ignoreNotFound);
 
       return deferred.promise;
     };
@@ -68,24 +80,16 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
       var deferredValidation = $q.defer();
 
       var compareWithActiveCounter = function (pass) {
-        var matchCounters = function (activeCounter) {
-          if (activeCounter.isRegistrationCounter(pass.cardSystem.id)) {
-            deferredValidation.resolve();
-          } else {
-            deferredValidation.reject('Active and pass counter do not match!');
-          }
-        };
-
         counterService
-          .getActive()
-          .then(matchCounters, deferredValidation.resolve);
+          // TODO: match against the counter of the pass instead of fetching the price
+          .getRegistrationPriceInfo(pass)
+          .then(deferredValidation.resolve, deferredValidation.reject);
       };
 
       if (!resemblesUitpasNumber(viewValue)) {
         deferredValidation.resolve();
       } else {
-        passholderService
-          .findPass(viewValue)
+        findPass(viewValue)
           .then(compareWithActiveCounter, deferredValidation.resolve);
       }
 
@@ -106,8 +110,7 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
       };
 
       if (cardSystemId) {
-        passholderService
-          .findPass(uitpasNumber)
+        findPass(uitpasNumber)
           .then(compareCardSystems, deferredValidation.resolve);
       } else {
         deferredValidation.resolve();

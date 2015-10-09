@@ -7,7 +7,7 @@ describe('Directive: ubrUitpasNumberAsyncValidation', function () {
   // load the directive's module
   beforeEach(module('uitpasbeheerApp', function ($provide) {
     passholderService = jasmine.createSpyObj('passholderService', ['findPass']);
-    counterService = jasmine.createSpyObj('counterService', ['getActive']);
+    counterService = jasmine.createSpyObj('counterService', ['getRegistrationPriceInfo']);
 
     $provide.provider('passholderService', {
       $get: function () {
@@ -33,7 +33,7 @@ describe('Directive: ubrUitpasNumberAsyncValidation', function () {
     scope.cardSystem = {};
     $compile(inputElement)(scope);
     inputController = inputElement.controller('ngModel');
-    counterService.getActive.and.returnValue($q.reject());
+    counterService.getRegistrationPriceInfo.and.returnValue($q.reject());
   }));
 
   it('should not trigger custom errors before enough characters of a pass are entered', function () {
@@ -96,12 +96,7 @@ describe('Directive: ubrUitpasNumberAsyncValidation', function () {
         return true;
       }
     };
-    var counter = {
-      isRegistrationCounter: function () {
-        return false;
-      }
-    };
-    counterService.getActive.and.returnValue($q.resolve(counter));
+    counterService.getRegistrationPriceInfo.and.returnValue($q.reject('BALIE_NOT_AUTHORIZED'));
     passholderService.findPass.and.returnValue($q.resolve(mismatchedPass));
 
     inputElement.val('1234567891234').trigger('input');
@@ -120,12 +115,7 @@ describe('Directive: ubrUitpasNumberAsyncValidation', function () {
         return true;
       }
     };
-    var counter = {
-      isRegistrationCounter: function () {
-        return true;
-      }
-    };
-    counterService.getActive.and.returnValue($q.resolve(counter));
+    counterService.getRegistrationPriceInfo.and.returnValue($q.resolve());
     passholderService.findPass.and.returnValue($q.resolve(mismatchedPass));
 
     inputElement.val('1234567891234').trigger('input');

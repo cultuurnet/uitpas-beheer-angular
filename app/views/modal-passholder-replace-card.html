@@ -23,8 +23,8 @@
               <div ng-if="passholderNewPass.UiTPASNumber.$error.notFound">Deze kaart kan niet gevonden worden in het systeem.</div>
               <div ng-if="passholderNewPass.UiTPASNumber.$error.notLocalStock">Deze kaart zit niet in de locale stock van kaarten.</div>
               <div ng-if="passholderNewPass.UiTPASNumber.$error.required">Het UiTPAS-nummer veld is verplicht.</div>
-              <div ng-if="passholderNewPass.UiTPASNumber.$error.cardSystemMismatch">Deze UiTPAS behoort niet tot hetzelfde kaart-systeem</div>
-              <div ng-if="passholderNewPass.UiTPASNumber.$error.unavailableForActiveCounter">De actieve balie heeft onvoldoende rechten om deze UiTPAS te registreren.</div>
+              <div ng-if="passholderNewPass.UiTPASNumber.$error.cardSystemMismatch">Deze UiTPAS behoort niet tot hetzelfde kaart-systeem.</div>
+              <div ng-if="passholderNewPass.UiTPASNumber.$error.unavailableForActiveCounter">Deze UiTPAS is niet toegekend aan het actieve kaart-systeem.</div>
             </div>
             <div ng-if="passholderNewPass.UiTPASNumber.$pending" class="text-warning small">UiTPAS-nummer wordt gevalideerd.</div>
           </div>
