@@ -1,4 +1,4 @@
-<form name="passholderNewPass" class="form-divided" ng-submit="rpc.submitForm()" ubr-replace-uitpas-form-validation novalidate ng-class="{'form-submiting': rpc.formSubmitBusy}">
+<form name="passholderNewPass" ng-submit="rpc.submitForm()" ubr-replace-uitpas-form-validation novalidate ng-class="{'form-submiting': rpc.formSubmitBusy}">
   <div class="modal-header">
     <button type="button" class="close" ng-click="rpc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">Kaart vervangen</h4>
@@ -33,25 +33,27 @@
       </div>
 
       <div class="grid" ng-show="passholderNewPass.UiTPASNumber.$valid">
-        <div class="grid__12 grid--bp-xsm__8">
-          <div class="form-group">
-            <label>Reden</label>
-            <div ng-repeat="(code, description) in rpc.reasons" class="radio">
-              <label>
-                <input type="radio" name="reason" ng-model="rpc.card.reason"
-                       value="{{code}}" ng-required="true" ng-change="rpc.updatePriceInfo(passholderNewPass)">
-                {{description}}
-              </label>
-            </div>
+        <div class="grid__12 grid--bp-lrg__12">
+          <hr />
 
-            <div ng-show="rpc.card.reason == 'OBTAIN_KANSENSTATUUT'">
-              <ubr-datepicker
-                  ng-model="rpc.kansenstatuut.endDate"
-                  ubr-label="Kansenstatuut geldig tot"
-                  ubr-id="valid-until"
-                  ubr-name="endDate"></ubr-datepicker>
-            </div>
+          <label class="radio">Reden</label>
+          <div ng-repeat="(code, description) in rpc.reasons" class="radio">
+            <label>
+              <input type="radio" name="reason" ng-model="rpc.card.reason"
+                     value="{{code}}" ng-required="true" ng-change="rpc.updatePriceInfo(passholderNewPass)">
+              {{description}}
+            </label>
           </div>
+
+          <div ng-show="rpc.card.reason == 'OBTAIN_KANSENSTATUUT'">
+            <ubr-datepicker
+                ng-model="rpc.kansenstatuut.endDate"
+                ubr-label="Kansenstatuut geldig tot"
+                ubr-id="valid-until"
+                ubr-name="endDate"></ubr-datepicker>
+          </div>
+
+          <hr />
 
           <div class="form-group" ng-class="{ 'has-error': (passholderNewPass.$submitted || passholderNewPass.voucherNumber.$dirty) && passholderNewPass.voucherNumber.$invalid }">
             <label>Voucher-nummer</label>
@@ -63,29 +65,29 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Prijs</label>
+          <hr />
 
-            <span ng-show="rpc.price === -1">
-              <div ng-if="!rpc.card.reason" class="text-warning">Selecteer een reden om de prijs te zien.</div>
-              <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$invalid" class="text-danger">
-                De prijs kan niet bepaald worden met een foutief voucher nummer.
-              </div>
-              <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$valid">
-                <p>
-                <span class="spinner spinner-xsmall">
-                  <circle-spinner></circle-spinner>
-                </span>
-                </p>
-              </div>
-            </span>
+          <label>Prijs</label>
 
-            <div ng-hide="rpc.price === -1">
+          <span ng-show="rpc.price === -1">
+            <div ng-if="!rpc.card.reason" class="text-warning">Selecteer een reden om de prijs te zien.</div>
+            <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$invalid" class="text-danger">
+              De prijs kan niet bepaald worden met een foutief voucher nummer.
+            </div>
+            <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$valid">
               <p>
-                <span ng-if="rpc.price > 0" class="price">{{rpc.price|number:2}} euro</span>
-                <span ng-if="rpc.price === 0" class="price">Gratis!</span>
+              <span class="spinner spinner-xsmall">
+                <circle-spinner></circle-spinner>
+              </span>
               </p>
             </div>
+          </span>
+
+          <div ng-hide="rpc.price === -1">
+            <p>
+              <span ng-if="rpc.price > 0" class="price">{{rpc.price|number:2}} euro</span>
+              <span ng-if="rpc.price === 0" class="price">Gratis!</span>
+            </p>
           </div>
 
         </div>
