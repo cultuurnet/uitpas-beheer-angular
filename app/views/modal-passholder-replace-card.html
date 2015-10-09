@@ -4,14 +4,14 @@
     <h4 class="modal-title">Kaart vervangen</h4>
   </div>
   <div class="modal-body">
+    <div class="alert alert-danger" type="{{rpc.formAlert.type}}" ng-show="rpc.formAlert" ng-bind="rpc.formAlert.message"></div>
+
     <div class="container-fluid">
-      <p class="direction text-center">
-        Scan de nieuwe UiTPAS of vul het kaartnummer manueel in.
-      </p>
       <div class="grid">
-        <div class="grid__12 grid--bp-lrg__12">
-          <div class="alert alert-danger" type="{{rpc.formAlert.type}}" ng-show="rpc.formAlert" ng-bind="rpc.formAlert.message"></div>
-        </div>
+        <p class="direction text-center">
+          Scan de nieuwe UiTPAS of vul het kaartnummer manueel in.
+        </p>
+
         <div class="grid__12 grid--bp-xsm__8">
           <div class="form-group" ng-class="{ 'has-error': (passholderNewPass.$submitted || passholderNewPass.UiTPASNumber.$dirty) && passholderNewPass.UiTPASNumber.$invalid }">
             <label for="UiTPASNumber" class="label-number">UiTPAS-nummer</label>
