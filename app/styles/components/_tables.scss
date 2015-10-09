@@ -64,3 +64,19 @@ td label input + span {
     border: 1px solid $gray-15;
   }
 }
+
+.modal-body-sticky table {
+  th, td {
+    text-align: left;
+    padding: 15px;
+
+    &:last-child {
+      text-align: right;
+    }
+  }
+
+  th {
+    background-color: $navbar-inverse-bg;
+    color: $white;
+  }
+}

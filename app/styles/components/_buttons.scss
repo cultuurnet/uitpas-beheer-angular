@@ -2,18 +2,22 @@
 .btn {
   &.disabled,
   &[disabled],
+  &.disabled .fa,
+  &[disabled] .fa,
   fieldset[disabled] & {
-    background-color: $gray-25;
-    border-color: $gray-25;
-    color: $gray-75;
+    // As a workaround for an obscure bug in Firefox we should not set an opacity lower than 0 on disabled buttons,
+    // but as an alternative we can lower the opacity of the colors.
+    background-color: rgba($gray-25, 0.65);
+    border-color: rgba($gray-25, 0.65);
+    color: rgba($gray-75, 0.65);
     cursor: $cursor-disabled;
-    @include opacity(.65);
+    @include opacity(1);
     @include box-shadow(none);
     &:hover,
     &:focus {
-      background-color: $gray-25;
-      border-color: $gray-25;
-      color: $gray-75;
+      background-color: rgba($gray-25, 0.65);
+      border-color: rgba($gray-25, 0.65);
+      color: rgba($gray-75, 0.65);
     }
   }
 }

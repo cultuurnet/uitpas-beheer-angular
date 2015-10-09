@@ -6,8 +6,24 @@
   &-lg {
     max-width: 1200px;
   }
+  &-body {
+    > *:first-child {
+      margin-top: 0;
+    }
+    > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+  &-body-sticky {
+    padding: 0;
+
+    > * {
+      margin: 0;
+      padding: 15px;
+    }
+  }
   &-footer {
-    a.pull-left {
+    a {
       vertical-align: middle;
     }
   }
