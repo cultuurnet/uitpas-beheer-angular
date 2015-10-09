@@ -105,6 +105,10 @@ label.radio, label.checkbox {
   margin-bottom: $padding-base-vertical;
 }
 
+.radio + .radio {
+  margin-top: 0;
+}
+
 .grid.radios > [class*='grid__'] {
   margin-top: 0;
 }
