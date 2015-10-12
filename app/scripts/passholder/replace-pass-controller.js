@@ -36,12 +36,10 @@ function PassholderReplacePassController (
     reason: null,
     voucherNumber: null
   };
-  controller.newPass = {};
+  controller.newPass = null;
   // for ubr-datepicker
-  var cardSystemId = pass.cardSystem.id;
-  var existingKansenstatuut = passholder.getKansenstatuutByCardSystemID(cardSystemId);
   controller.kansenstatuut = {
-    endDate: existingKansenstatuut ? existingKansenstatuut.endDate : null
+    endDate: null
   };
   // reasons
   var reasons = {
@@ -101,6 +99,12 @@ function PassholderReplacePassController (
     controller.reasons = newOptions;
   };
 
+  controller.obtainingKansenstatuut = function () {
+    var newPass = controller.newPass;
+    var oldPass = controller.pass;
+    return newPass && (!oldPass.isKansenstatuut() && newPass.isKansenstatuut());
+  };
+
   $scope.$watch(function () {return controller.form.UiTPASNumber.$valid;}, function (nv, ov) {
     if (nv !== ov && nv === true) {
       controller.refreshNewPassInfo();
@@ -147,23 +151,31 @@ function PassholderReplacePassController (
     }
   };
 
-  controller.submitForm = function () {
-    controller.formSubmitBusy = true;
+  /**
+   * Make sure an end date is filled out when obtaining a kansenstatuut card
+   * @return {boolean} whether or not the end date was missing
+   */
+  controller.requireEndDate = function () {
+    var endDateMissing = false;
 
-    // Check if an endDate is provided when obtaining a kansenstatuut.
-    if (controller.card.reason === 'OBTAIN_KANSENSTATUUT' && !controller.kansenstatuut.endDate) {
+    if (controller.obtainingKansenstatuut() && !controller.kansenstatuut.endDate) {
       controller.formAlert = {
         message: 'Een geldigheidsdatum is verplicht bij het toekennen van een kansenstatuut.',
         type: 'danger'
       };
-      controller.formSubmitBusy = false;
-      return;
+      endDateMissing = true;
     }
 
-    // Copy the kansenstatuut endDate if both old and new pass are kansenstatuut.
-    if (controller.newPass.isKansenstatuut() && pass.isKansenstatuut()) {
-      var currentKansenstatuut = passholder.getKansenstatuutByCardSystemID(controller.newPass.cardSystem.id);
-      controller.kansenstatuut.endDate = currentKansenstatuut.endDate;
+    return endDateMissing;
+  };
+
+  controller.submitForm = function () {
+    var endDate = controller.kansenstatuut.endDate || null;
+
+    // Check if an endDate is missing when obtaining a kansenstatuut.
+    var endDateMissing = controller.requireEndDate();
+    if (endDateMissing) {
+      return;
     }
 
     var redirectToPassholder = function (newPass) {
@@ -174,8 +186,15 @@ function PassholderReplacePassController (
       controller.formSubmitBusy = false;
     };
 
+    // Copy the kansenstatuut endDate if both old and new pass are kansenstatuut.
+    if (controller.newPass.isKansenstatuut() && pass.isKansenstatuut()) {
+      var currentKansenstatuut = passholder.getKansenstatuutByCardSystemID(controller.newPass.cardSystem.id);
+      endDate = currentKansenstatuut.endDate;
+    }
+
+    controller.formSubmitBusy = true;
     passholderService
-      .newPass(controller.newPass, controller.passholder.uid, controller.card.reason, controller.kansenstatuut.endDate, controller.card.voucherNumber)
+      .newPass(controller.newPass, controller.passholder.uid, controller.card.reason, endDate, controller.card.voucherNumber)
       .then(redirectToPassholder, setErrors);
   };
 

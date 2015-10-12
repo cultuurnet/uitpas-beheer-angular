@@ -5,28 +5,31 @@ describe('Controller: PassholderReplacePassController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var $state, passholderService, $modalInstance, $scope, counterService, controller, $q, kansenstatuutEndDate;
+  var $state, passholderService, $modalInstance, $scope, counterService, controller, $q;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $injector, $rootScope) {
     $state = jasmine.createSpyObj('$state', ['go']);
     $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
-    passholderService = jasmine.createSpyObj('passholderService', ['findPass']);
+    passholderService = jasmine.createSpyObj('passholderService', ['findPass', 'newPass']);
     counterService = jasmine.createSpyObj('counterService', ['getRegistrationPriceInfo']);
     $q = $injector.get('$q');
     $scope = $rootScope.$new();
-    kansenstatuutEndDate = new Date();
     var pass = {
       number: '182',
       cardSystem: {
         id: '1'
+      },
+      isKansenstatuut: function () {
+        return true;
       }
     };
     var passholder =  {
+      uid: '45645612-afs45safd46-asdf545asdf4asdf56-asdf4sdaf546',
       passNumber: '182',
         getKansenstatuutByCardSystemID: function () {
         return {
-          endDate: kansenstatuutEndDate
+          endDate: new Date('2055-05-05')
         };
       }
     };
@@ -175,7 +178,60 @@ describe('Controller: PassholderReplacePassController', function () {
     expect(controller.refreshReasonOptions).toHaveBeenCalled();
   });
 
-  it('should auto-fill the end date if the old card was kansenstatuut', function () {
-    expect(controller.kansenstatuut.endDate).toEqual(kansenstatuutEndDate);
+  it('should know when kansenstatuut is obtained when the new pass is selected', function () {
+    controller.newPass = {
+      isKansenstatuut: function () {
+        return true;
+      }
+    };
+    controller.pass = {
+      isKansenstatuut: function () {
+        return false;
+      }
+    };
+
+    var whenNewPassIsKansenstatuut = controller.obtainingKansenstatuut();
+    expect(whenNewPassIsKansenstatuut).toEqual(true);
+
+
+    controller.newPass = {
+      isKansenstatuut: function () {
+        return false;
+      }
+    };
+    var whenNewPassIsNotKansenstatuut = controller.obtainingKansenstatuut();
+    expect(whenNewPassIsNotKansenstatuut).toEqual(false);
+  });
+
+  it('should use the old end date when both the old and new pass are kansenstatuut', function () {
+    controller.newPass = {
+      isKansenstatuut: function () {
+        return true;
+      },
+      cardSystem: {
+        id: '1'
+      }
+    };
+    controller.card.voucherNumber = 'v-o-u-c-h-e-r';
+    controller.card.reason = 'I_ATE_IT_MY_OTHER_PASS';
+    spyOn(controller, 'requireEndDate').and.returnValue(false);
+    passholderService.newPass.and.returnValue($q.resolve());
+    var expectedEndDate = new Date('2055-05-05');
+
+    controller.submitForm();
+
+    expect(passholderService.newPass).toHaveBeenCalledWith(
+      controller.newPass,
+      '45645612-afs45safd46-asdf545asdf4asdf56-asdf4sdaf546',
+      'I_ATE_IT_MY_OTHER_PASS',
+      expectedEndDate,
+      'v-o-u-c-h-e-r'
+    );
+  });
+
+  it('should make sure an end date is provided when obtaining a kansenstatuut pass', function () {
+    spyOn(controller, 'requireEndDate').and.returnValue(true);
+    controller.submitForm();
+    expect(controller.requireEndDate).toHaveBeenCalled();
   });
 });
