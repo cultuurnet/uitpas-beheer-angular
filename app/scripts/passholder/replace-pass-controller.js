@@ -38,17 +38,29 @@ function PassholderReplacePassController (
   };
   controller.newPass = {};
   // for ubr-datepicker
+  var cardSystemId = pass.cardSystem.id;
+  var existingKansenstatuut = passholder.getKansenstatuutByCardSystemID(cardSystemId);
   controller.kansenstatuut = {
-    endDate: null
+    endDate: existingKansenstatuut ? existingKansenstatuut.endDate : null
   };
   // reasons
-  var setReasons = function () {
-    return {
-      'REMOVAL': 'Verhuis',
-      'LOSS_THEFT': 'Kaart verloren of gestolen',
-      'LOSS_KANSENSTATUUT': 'Verlies kansenstatuut',
-      'OBTAIN_KANSENSTATUUT': 'Kansenstatuut verkrijgen'
-    };
+  var reasons = {
+    'REMOVAL': {
+      description: 'Verhuis',
+      code: 'REMOVAL'
+    },
+    'LOSS_THEFT': {
+      description: 'Kaart verloren of gestolen',
+      code: 'LOSS_THEFT'
+    },
+    'LOSS_KANSENSTATUUT': {
+      description: 'Verlies kansenstatuut',
+      code: 'LOSS_KANSENSTATUUT'
+    },
+    'OBTAIN_KANSENSTATUUT': {
+      description: 'Kansenstatuut verkrijgen',
+      code: 'OBTAIN_KANSENSTATUUT'
+    }
   };
   controller.reasons = {};
   controller.voucherModelOptions = {
@@ -60,37 +72,38 @@ function PassholderReplacePassController (
     $modalInstance.dismiss();
   };
 
+  controller.refreshNewPassInfo = function () {
+    var updatePassAndRefreshOptions = function (newPass) {
+      controller.newPass = newPass;
+      controller.refreshReasonOptions();
+    };
+
+    passholderService.findPass(controller.card.id).then(updatePassAndRefreshOptions);
+  };
+
+  controller.refreshReasonOptions = function () {
+    var newOptions = [];
+    var newPass = controller.newPass;
+    var oldPass = controller.pass;
+    var sameKansenstatuut = (oldPass.isKansenstatuut() === newPass.isKansenstatuut());
+
+    newOptions.push(reasons.LOSS_THEFT);
+    newOptions.push(reasons.REMOVAL);
+
+    if (!sameKansenstatuut) {
+      var reason = oldPass.isKansenstatuut() ? reasons.LOSS_KANSENSTATUUT : reasons.OBTAIN_KANSENSTATUUT;
+      newOptions.push(reason);
+      // when a change in kansenstatuut is detected, automatically select it as the reason and update price
+      controller.card.reason = reason.code;
+      controller.updatePriceInfo(controller.form);
+    }
+
+    controller.reasons = newOptions;
+  };
+
   $scope.$watch(function () {return controller.form.UiTPASNumber.$valid;}, function (nv, ov) {
     if (nv !== ov && nv === true) {
-      var setNewPassAndReasonOptions = function (newPass) {
-        controller.reasons = setReasons();
-        controller.newPass = newPass;
-
-        // Remove options based on the new pass.
-        if (newPass.isKansenstatuut()) {
-          delete controller.reasons.LOSS_KANSENSTATUUT;
-        }
-        else {
-          delete controller.reasons.OBTAIN_KANSENSTATUUT;
-        }
-
-        // Remove options based on the previous pass.
-        if (pass.isKansenstatuut()) {
-          delete controller.reasons.OBTAIN_KANSENSTATUUT;
-        }
-        else {
-          delete controller.reasons.LOSS_KANSENSTATUUT;
-        }
-
-        if (pass.isKansenstatuut() !== newPass.isKansenstatuut()) {
-          delete controller.reasons.REMOVAL;
-          delete controller.reasons.LOSS_THEFT;
-          controller.card.reason = Object.keys(controller.reasons)[0];
-          controller.updatePriceInfo(controller.form);
-        }
-      };
-
-      passholderService.findPass(controller.card.id).then(setNewPassAndReasonOptions);
+      controller.refreshNewPassInfo();
     }
   });
 

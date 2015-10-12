@@ -80,10 +80,19 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
       var deferredValidation = $q.defer();
 
       var compareWithActiveCounter = function (pass) {
+
+        var checkIfBalieError = function (error) {
+          if (error.code === 'BALIE_NOT_AUTHORIZED') {
+            deferredValidation.reject(error);
+          } else {
+            deferredValidation.resolve();
+          }
+        };
+
         counterService
           // TODO: match against the counter of the pass instead of fetching the price
           .getRegistrationPriceInfo(pass)
-          .then(deferredValidation.resolve, deferredValidation.reject);
+          .then(deferredValidation.resolve, checkIfBalieError);
       };
 
       if (!resemblesUitpasNumber(viewValue)) {

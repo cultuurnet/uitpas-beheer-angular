@@ -34,20 +34,20 @@
         </div>
       </div>
 
-      <div class="grid" ng-if="rpc.form.UiTPASNumber.$valid">
+      <div class="grid" ng-show="rpc.form.UiTPASNumber.$valid">
         <div class="grid__12 grid--bp-lrg__12">
           <hr />
 
           <label class="radio">Reden</label>
-          <div ng-repeat="(code, description) in rpc.reasons" class="radio">
+          <div ng-repeat="reason in rpc.reasons" class="radio">
             <label>
               <input type="radio" name="reason" ng-model="rpc.card.reason"
-                     value="{{code}}" ng-required="true" ng-change="rpc.updatePriceInfo(rpc.form)">
-              {{description}}
+                     ng-value="reason.code" ng-required="true" ng-change="rpc.updatePriceInfo(rpc.form)">
+              <span ng-bind="reason.description"></span>
             </label>
           </div>
 
-          <div ng-show="rpc.card.reason == 'OBTAIN_KANSENSTATUUT'">
+          <div ng-if="rpc.newPass.isKansenstatuut()">
             <hr />
             <ubr-datepicker
                 ng-model="rpc.kansenstatuut.endDate"
@@ -62,7 +62,7 @@
             <label>Voucher-nummer</label>
             <input class="form-control voucher-number" name="voucherNumber" ng-change="rpc.updatePriceInfo(rpc.form)"
                    ng-model="rpc.card.voucherNumber" autofocus="autofocus" ng-model-options="rpc.voucherModelOptions">
-            <div ng-if="(rpc.form.$submitted || rpc.form.voucherNumber.$touched || rpc.form.voucherNumber.$dirty) && rpc.form.voucherNumber.$invalid"
+            <div ng-show="(rpc.form.$submitted || rpc.form.voucherNumber.$touched || rpc.form.voucherNumber.$dirty) && rpc.form.voucherNumber.$invalid"
                  class="text-danger small">
               <div ng-if="rpc.form.voucherNumber.$error.invalidVoucherNumber">Het voucher nummer is niet correct.</div>
               <div ng-if="rpc.form.voucherNumber.$error.unknownVoucherNumber">Het voucher nummer is niet gekend in het systeem.</div>

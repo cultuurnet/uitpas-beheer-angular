@@ -33,7 +33,7 @@ describe('Directive: ubrUitpasNumberAsyncValidation', function () {
     scope.cardSystem = {};
     $compile(inputElement)(scope);
     inputController = inputElement.controller('ngModel');
-    counterService.getRegistrationPriceInfo.and.returnValue($q.reject());
+    counterService.getRegistrationPriceInfo.and.returnValue($q.resolve());
   }));
 
   it('should not trigger custom errors before enough characters of a pass are entered', function () {
@@ -96,7 +96,10 @@ describe('Directive: ubrUitpasNumberAsyncValidation', function () {
         return true;
       }
     };
-    counterService.getRegistrationPriceInfo.and.returnValue($q.reject('BALIE_NOT_AUTHORIZED'));
+    var error = {
+      code: 'BALIE_NOT_AUTHORIZED'
+    };
+    counterService.getRegistrationPriceInfo.and.returnValue($q.reject(error));
     passholderService.findPass.and.returnValue($q.resolve(mismatchedPass));
 
     inputElement.val('1234567891234').trigger('input');
