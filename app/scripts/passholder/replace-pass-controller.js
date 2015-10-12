@@ -7,11 +7,21 @@
  * # PassholderReplacePassController
  * Controller of the uitpasbeheerApp
  */
-angular.module('uitpasbeheerApp')
+angular
+  .module('uitpasbeheerApp')
   .controller('PassholderReplacePassController', PassholderReplacePassController);
 
 /* @ngInject */
-function PassholderReplacePassController ($scope, passholder, pass, $modalInstance, passholderService, counterService, isJavaFXBrowser) {
+function PassholderReplacePassController (
+  $scope,
+  passholder,
+  pass,
+  $modalInstance,
+  passholderService,
+  counterService,
+  isJavaFXBrowser,
+  $rootScope
+) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -44,12 +54,13 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
   controller.voucherModelOptions = {
     debounce: { 'default': 500, 'blur': 0 }
   };
+  var scanListener;
 
   controller.cancelModal = function () {
     $modalInstance.dismiss();
   };
 
-  $scope.$watch(function () {return $scope.passholderNewPass.UiTPASNumber.$valid;}, function (nv, ov) {
+  $scope.$watch(function () {return controller.form.UiTPASNumber.$valid;}, function (nv, ov) {
     if (nv !== ov && nv === true) {
       var setNewPassAndReasonOptions = function (newPass) {
         controller.reasons = setReasons();
@@ -75,7 +86,7 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
           delete controller.reasons.REMOVAL;
           delete controller.reasons.LOSS_THEFT;
           controller.card.reason = Object.keys(controller.reasons)[0];
-          controller.updatePriceInfo($scope.passholderNewPass);
+          controller.updatePriceInfo(controller.form);
         }
       };
 
@@ -154,4 +165,18 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
       .newPass(controller.newPass, controller.passholder.uid, controller.card.reason, controller.kansenstatuut.endDate, controller.card.voucherNumber)
       .then(redirectToPassholder, setErrors);
   };
+
+  controller.passScanned = function(event, identification) {
+    controller.card.id = identification;
+    $scope.$apply();
+  };
+
+  controller.listenForScannedPass = function () {
+    if (!scanListener) {
+      scanListener = $rootScope.$on('nfcNumberReceived', controller.passScanned);
+      $scope.$on('$destroy', scanListener);
+    }
+  };
+
+  controller.listenForScannedPass();
 }
