@@ -27,7 +27,10 @@ angular
           controllerAs: 'cmmc'
         })
         .result
-        .finally(function () {
+        .then(function (newMember) {
+          // Provide the new member to the parent state to show info.
+          $state.go('^', {newMember: newMember});
+        }, function () {
           $state.go('^');
         });
     }
@@ -47,6 +50,15 @@ angular
           },
           header: {
             templateUrl: 'views/header.html'
+          }
+        },
+        params: {
+          'newMember': null
+        },
+        resolve: {
+          /* @ngInject */
+          newMember: function($stateParams) {
+              return $stateParams.newMember;
           }
         }
       })

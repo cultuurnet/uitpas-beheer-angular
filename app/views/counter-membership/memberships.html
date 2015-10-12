@@ -7,6 +7,16 @@
     </div>
   </div>
 
+  <div ng-show="cmc.deletedMember && !cmc.loadingMembers" class="alert alert-success">
+    De medewerker <em>{{cmc.deletedMember.nick}}</em> is verwijderd.
+  </div>
+  <div ng-show="cmc.newMember && !cmc.loadingMembers" class="alert alert-success">
+    De medewerker <em>{{cmc.newMember.nick}}</em> is toegevoegd.
+  </div>
+  <div ng-show="cmc.noMembersError" class="alert alert-danger">
+    Er kunnen geen medewerkers opgehaald worden voor deze balie.
+  </div>
+
   <ul class="list-unstyled" ng-if="!cmc.loadingMembers">
     <li class="overview__item overview__item-list overview__item-list-small" ng-repeat="member in cmc.members">
       <div class="row clearfix">
@@ -18,15 +28,18 @@
           <span ng-bind="::member.role"></span>
         </div>
         <div class="grid__2 grid--bp-med__3 grid--bp-lrg__4">
-          <div ng-show="!member.confirmingDelete" class="actions actions-do">
+          <div ng-show="!member.confirmingDelete && !member.deleting && !member.deleteError" class="actions actions-do">
             <button type="button" class="btn btn-default" ng-click="cmc.initiateDelete(member)">Verwijderen</button>
           </div>
-          <div ng-show="member.confirmingDelete && !member.deleting" class="actions actions-confirm">
+          <div ng-show="member.confirmingDelete" class="actions actions-confirm">
             <button class="btn btn-default btn-sm" ng-click="cmc.deleteMember(member)">Bevestigen</button>
             <a class="small" ng-click="cmc.cancelDelete(member)">Annuleren</a>
           </div>
           <div ng-show="member.deleting" class="alert alert-info small">
             <span class="fa fa-refresh loading"></span> Even geduld...
+          </div>
+          <div ng-show="member.deleteError" class="alert alert-danger small">
+            Er is een fout opgetreden bij het verwijderen van deze medewerker. Gelieve later opnieuw te proberen.
           </div>
         </div>
       </div>

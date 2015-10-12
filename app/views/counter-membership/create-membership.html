@@ -9,7 +9,7 @@
 
   <div class="modal-body">
     <div class="alert alert-danger" ng-show="cmmc.asyncError">
-      <span ng-bind="cmmc.asyncError.message"></span>
+      <span ng-bind-html="cmmc.asyncError.message"></span>
     </div>
 
     <div class="container-fluid">
@@ -22,7 +22,7 @@
                ng-class="{ 'has-error': (newMembershipForm.$submitted || newMembershipForm.email.$dirty) && newMembershipForm.email.$invalid }">
             <label for="member-email-address">e-mailadres</label>
             <input type="email" id="member-email-address" ng-model="cmmc.email" name="email" ng-required="true" autofocus=""/>
-            <p ng-show="newMembershipForm.email.$invalid && !newMembershipForm.email.$pristine" class="help-block">Enter a valid email.</p>
+            <p ng-show="newMembershipForm.email.$invalid && !newMembershipForm.email.$pristine" class="help-block">Vul een geldig e-mail adres in.</p>
           </div>
         </div>
       </fieldset>

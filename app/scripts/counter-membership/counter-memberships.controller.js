@@ -12,22 +12,30 @@ angular
   .controller('CounterMembershipsController', CounterMembershipsController);
 
 /* @ngInject */
-function CounterMembershipsController(counterService, $state) {
+function CounterMembershipsController(newMember, counterService, $state) {
   /*jshint validthis: true */
   var controller = this;
+  controller.newMember = newMember;
 
   controller.loadingMembers = true;
   controller.members = [];
+  controller.noMembersError = false;
 
   controller.init = function () {
     var showMembers = function (members) {
       controller.members = members;
       controller.loadingMembers = false;
+      controller.noMembersError = false;
+    };
+
+    var noMembersFound = function () {
+      controller.loadingMembers = false;
+      controller.noMembersError = true;
     };
 
     counterService
       .getMemberships()
-      .then(showMembers);
+      .then(showMembers, noMembersFound);
   };
 
   controller.createMembership = function () {
@@ -44,16 +52,21 @@ function CounterMembershipsController(counterService, $state) {
 
   controller.deleteMember = function(member){
     member.deleting = true;
+    member.confirmingDelete = false;
+
+    var memberDeleted = function(){
+      controller.loadingMembers = true;
+      controller.deletedMember = angular.copy(member);
+      controller.init();
+    };
+    var handleError = function(){
+      member.deleting = false;
+      member.deleteError = true;
+    };
+
     counterService
       .deleteMembership(member.uid)
       .then(memberDeleted, handleError);
-  };
-
-  var memberDeleted = function(response){
-    console.log(response);
-  };
-  var handleError = function(response){
-    console.log(response);
   };
 
   controller.init();

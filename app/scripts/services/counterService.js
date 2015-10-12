@@ -11,7 +11,7 @@ angular.module('uitpasbeheerApp')
   .service('counterService', counterService);
 
 /* @ngInject */
-function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment, Counter, $timeout) {
+function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment, Counter) {
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
@@ -281,8 +281,10 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       .get(url)
       .success(resolveMemberships)
       .error(handleErrorResponse);
-    // @TODO: mockup of members while waiting for backend
-    var members = [
+
+    // @todo remove test code once silex is ready.
+    /*
+    return $q.when([
       {
         uid: 'dirk-dirkington',
         nick: 'Dirk Dirkington',
@@ -303,12 +305,9 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
         nick: 'John Doe',
         role: 'member'
       }
-    ];
-
-    return $timeout(function () {
-      return members;
-    }, 1000);
-    //return deferredMembers.promise;
+    ]);
+    //*/
+    return deferredMembers.promise;
   };
 
   /**
@@ -346,14 +345,17 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       .post(url, parameters, config)
       .then(returnMember, returnError);
 
-    return $timeout(function () {
-      return {
-        uid: 'new-id-for-now-user',
-        nick: email,
-        role: 'member'
-      };
-    }, 2000);
-    //return deferredMember.promise;
+    // @todo remove test code once silex is ready.
+    /*
+    return $q.reject({code: 'ACTION_NOT_ALLOWED'});
+    return $q.when({
+      uid: 'new-id-for-now-user',
+      nick: email,
+      role: 'member'
+    });
+    //*/
+
+    return deferredMember.promise;
   };
 
   /**
@@ -362,6 +364,9 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @param uid
    */
   service.deleteMembership = function (uid) {
+    // @todo remove test code once silex is ready.
+    //return $q.when('done');
+
     var url = apiUrl + '/active/members/' + uid;
     var deferredResponse = $q.defer();
 
