@@ -15,10 +15,19 @@
           <span ng-bind="::member.uid"></span>
         </div>
         <div class="grid__10 grid--bp-med__6 grid--bp-lrg__4">
-          <span ng-bind="member.role"></span>
+          <span ng-bind="::member.role"></span>
         </div>
         <div class="grid__2 grid--bp-med__3 grid--bp-lrg__4">
-          <button type="button" class="btn btn-default">Verwijderen</button>
+          <div ng-show="!member.confirmingDelete" class="actions actions-do">
+            <button type="button" class="btn btn-default" ng-click="cmc.initiateDelete(member)">Verwijderen</button>
+          </div>
+          <div ng-show="member.confirmingDelete && !member.deleting" class="actions actions-confirm">
+            <button class="btn btn-default btn-sm" ng-click="cmc.deleteMember(member)">Bevestigen</button>
+            <a class="small" ng-click="cmc.cancelDelete(member)">Annuleren</a>
+          </div>
+          <div ng-show="member.deleting" class="alert alert-info small">
+            <span class="fa fa-refresh loading"></span> Even geduld...
+          </div>
         </div>
       </div>
     </li>

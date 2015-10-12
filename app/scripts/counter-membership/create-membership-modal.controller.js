@@ -12,7 +12,7 @@ angular
   .controller('CreateMembershipModalController', CreateMembershipModalController);
 
 /* @ngInject */
-function CreateMembershipModalController(CounterMembershipService, $modalInstance) {
+function CreateMembershipModalController(counterService, $modalInstance) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -23,9 +23,27 @@ function CreateMembershipModalController(CounterMembershipService, $modalInstanc
     $modalInstance.dismiss('registration modal closed');
   };
 
-  controller.createMembership = function () {
-
+  controller.createMembership = function (form) {
+    if (form.$invalid) {
+      // @TODO: this shouldn't be set
+      form.$submitted = true;
+      return;
+    }
     controller.creationPending = true;
-    CounterMembershipService.createMembership();
+    counterService
+      .createMembership(controller.email)
+      .then(memberCreated, handleError);
+  };
+
+  var memberCreated = function(response){
+    controller.creationPending = false;
+    $modalInstance.dismiss('new member added');
+    console.log(response);
+    // @TODO: new member is added, update members-overview page
+  };
+  var handleError = function(response){
+    controller.creationPending = false;
+    console.log(response);
+    // @TODO: handle errors
   };
 }

@@ -22,7 +22,9 @@ angular
         .open({
           animation: true,
           templateUrl: 'views/counter-membership/create-membership.html',
-          size: 'sm'
+          size: 'sm',
+          controller: 'CreateMembershipModalController',
+          controllerAs: 'cmmc'
         })
         .result
         .finally(function () {
