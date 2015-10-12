@@ -84,10 +84,18 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
   });
 
   controller.updatePriceInfo = function (form){
-    if (!controller.card.reason) {
-      return;
-    }
-    controller.price = -1;
+    var errors =  {
+      PARSE_INVALID_VOUCHERNUMBER: 'invalidVoucherNumber',
+      UNKNOWN_VOUCHER: 'unknownVoucherNumber',
+      BALIE_NOT_AUTHORIZED: 'balieNotAuthorized',
+      INVALID_VOUCHER_STATUS: 'invalidVoucherStatus'
+    };
+
+    var clearErrors = function () {
+      angular.forEach(errors, function(error) {
+        form.voucherNumber.$setValidity(error, true);
+      });
+    };
 
     var showPriceInfo = function (priceInfo) {
       controller.price = priceInfo.price;
@@ -102,13 +110,17 @@ function PassholderReplacePassController ($scope, passholder, pass, $modalInstan
       };
 
       var error = errors[errorResponse.code];
-      form.voucherNumber.$error = {};
       form.voucherNumber.$setValidity(error, false);
     };
 
-    counterService
-      .getRegistrationPriceInfo(controller.newPass, passholder, controller.card.voucherNumber, controller.card.reason)
-      .then(showPriceInfo, showNoPriceInfo);
+    if (controller.card.reason) {
+      controller.price = -1;
+      clearErrors();
+
+      counterService
+        .getRegistrationPriceInfo(controller.newPass, passholder, controller.card.voucherNumber, controller.card.reason)
+        .then(showPriceInfo, showNoPriceInfo);
+    }
   };
 
   controller.submitForm = function () {

@@ -20,11 +20,11 @@
             ng-model="rpc.card.id">
             <div ng-if="(passholderNewPass.$submitted || passholderNewPass.UiTPASNumber.$dirty) && passholderNewPass.UiTPASNumber.$invalid" class="text-danger small">
               <div ng-if="passholderNewPass.UiTPASNumber.$error.pattern">Het nummer heeft een verkeerd formaat, 13 cijfers worden verwacht.</div>
-              <div ng-if="passholderNewPass.UiTPASNumber.$error.notFound">Deze kaart kan niet gevonden worden in het systeem.</div>
-              <div ng-if="passholderNewPass.UiTPASNumber.$error.notLocalStock">Deze kaart zit niet in de locale stock van kaarten.</div>
+              <div ng-if="passholderNewPass.UiTPASNumber.$error.notFound">Deze UiTPAS kan niet gevonden worden in het systeem.</div>
+              <div ng-if="passholderNewPass.UiTPASNumber.$error.notLocalStock">Deze UiTPAS zit niet in de locale stock van kaarten.</div>
               <div ng-if="passholderNewPass.UiTPASNumber.$error.required">Het UiTPAS-nummer veld is verplicht.</div>
               <div ng-if="passholderNewPass.UiTPASNumber.$error.cardSystemMismatch">Deze UiTPAS behoort niet tot hetzelfde kaart-systeem.</div>
-              <div ng-if="passholderNewPass.UiTPASNumber.$error.unavailableForActiveCounter">Deze UiTPAS is niet toegekend aan het actieve kaart-systeem.</div>
+              <div ng-if="passholderNewPass.UiTPASNumber.$error.unavailableForActiveCounter">Deze UiTPAS is niet toegekend aan de actieve balie.</div>
             </div>
             <div ng-if="passholderNewPass.UiTPASNumber.$pending" class="text-warning small">UiTPAS-nummer wordt gevalideerd.</div>
           </div>
@@ -75,7 +75,7 @@
 
           <label>Prijs</label>
 
-          <span ng-show="rpc.price === -1">
+          <div ng-show="rpc.price === -1">
             <div ng-if="!rpc.card.reason" class="text-warning">Selecteer een reden om de prijs te zien.</div>
             <div ng-if="rpc.card.reason && passholderNewPass.voucherNumber.$invalid" class="text-danger">
               De prijs kan niet bepaald worden met een foutief voucher nummer.
@@ -88,7 +88,7 @@
                 </span>
               </p>
             </div>
-          </span>
+          </div>
 
           <div ng-hide="rpc.price === -1">
             <p>
