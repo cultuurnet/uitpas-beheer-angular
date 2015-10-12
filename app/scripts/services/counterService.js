@@ -267,16 +267,48 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @return {Promise}
    */
   service.getMemberships = function () {
-    var members = [{
-      uid: 'some-made-up-id',
-      nick: 'Dirk Dirkington',
-      role: 'ubermeister'
-    }];
+    var url = apiUrl + '/active/members';
+    var deferredMembers = $q.defer();
+
+    var resolveMemberships = function (responseData) {
+      deferredMembers.resolve(responseData.data);
+    };
+    var handleErrorResponse = function (errorResponse) {
+      deferredMembers.reject(errorResponse.data);
+    };
+
+    $http
+      .get(url)
+      .success(resolveMemberships)
+      .error(handleErrorResponse);
+    // @TODO: mockup of members while waiting for backend
+    var members = [
+      {
+        uid: 'dirk-dirkington',
+        nick: 'Dirk Dirkington',
+        role: 'admin'
+      },
+      {
+        uid: 'foo-bar',
+        nick: 'Foo Bar',
+        role: 'admin'
+      },
+      {
+        uid: 'jane-doe',
+        nick: 'Jane Doe',
+        role: 'member'
+      },
+      {
+        uid: 'some-made-up-id3',
+        nick: 'John Doe',
+        role: 'member'
+      }
+    ];
 
     return $timeout(function () {
-      console.log(apiUrl);
       return members;
     }, 1000);
+    //return deferredMembers.promise;
   };
 
   /**
@@ -314,6 +346,38 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       .post(url, parameters, config)
       .then(returnMember, returnError);
 
-    return deferredMember.promise;
+    return $timeout(function () {
+      return {
+        uid: 'new-id-for-now-user',
+        nick: email,
+        role: 'member'
+      };
+    }, 2000);
+    //return deferredMember.promise;
+  };
+
+  /**
+   * Delete a member with the given uid from the active counter
+   *
+   * @param uid
+   */
+  service.deleteMembership = function (uid) {
+    var url = apiUrl + '/active/members/' + uid;
+    var deferredResponse = $q.defer();
+
+    var returnResponse = function (deletionResponse) {
+      deferredResponse.resolve(deletionResponse);
+    };
+
+    var returnError = function (errorResponse) {
+      deferredResponse.reject(errorResponse.data);
+    };
+
+    $http({
+      method: 'DELETE',
+      url: url
+    }).then(returnResponse, returnError);
+
+    return deferredResponse.promise;
   };
 }
