@@ -30,8 +30,10 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
 
   controller.block = function() {
     var deferred = $q.defer();
-    var unlockFormAndResolveBlockedPass = function (pass) {
-      controller.busyBlocking = false;
+    var resolveBlockedPass = function (pass) {
+      // Note that we do not reset controller.busyBlocking to false here.
+      // Doing so would cause the buttons to block the passholder to appear
+      // again in the view right before the modal closes.
       controller.asyncError = false;
       $modalInstance.close();
       deferred.resolve(pass);
@@ -46,7 +48,7 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
       controller.busyBlocking = true;
       passholderService
         .blockPass(pass.number)
-        .then(unlockFormAndResolveBlockedPass, showBlockingError);
+        .then(resolveBlockedPass, showBlockingError);
     } else {
       deferred.reject('Busy blocking!');
     }

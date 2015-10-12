@@ -72,6 +72,9 @@ a.toggle-down {
 }
 
 .passholder {
+  .label.pull-right {
+    margin-top: 2px;
+  }
   .name {
     font-weight: 700;
   }
@@ -117,6 +120,7 @@ a.toggle-down {
     float: right;
     font-size: 36px;
     padding: 3px 7px;
+    margin: 0;
     font-weight: 700;
     @include label-variant($label-success-bg);
     text-align: center;
