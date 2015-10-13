@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:PassholderActivityTariffsController
+ * @name ubr.activity.controller:PassholderActivityTariffsController
  * @description
  * # ActivityTariffsController
- * Controller of the uitpasbeheerApp
+ * Controller of the ubr.activity module.
  */
 angular
   .module('ubr.activity')

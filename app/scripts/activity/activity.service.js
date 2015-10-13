@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.activityService
+ * @name ubr.activity.activityService
  * @description
  * # Activity service
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.activity module.
  */
 angular
   .module('ubr.activity')

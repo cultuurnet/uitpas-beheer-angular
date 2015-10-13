@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:CountersController
+ * @name ubr.counter.controller:CountersController
  * @description
  * # CountersController
- * Controller of the uitpasbeheerApp
+ * Controller of the ubr.counter module.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.counter')
   .controller('CountersController', countersController);
 
 /* @ngInject */

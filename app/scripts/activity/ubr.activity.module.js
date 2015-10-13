@@ -6,7 +6,7 @@
  * @description
  * # ubr.activity
  *
- * activity module UiTPAS Beheer
+ * activity module UiTPAS Beheer.
  */
 angular
   .module('ubr.activity', [

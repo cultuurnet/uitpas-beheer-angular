@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.counterService
+ * @name ubr.counter.counterService
  * @description
  * # counterService
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.counter module.
  */
-angular.module('uitpasbeheerApp')
+angular.module('ubr.counter')
   .service('counterService', counterService);
 
 /* @ngInject */

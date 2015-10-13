@@ -22,6 +22,7 @@ angular
     'ngTouch',
     'ubr.activity',
     'ubr.checkindevices',
+    'ubr.counter',
     'ubr.expense-report',
     'ubr.group',
     'ubr.kansenstatuut',
@@ -300,34 +301,6 @@ angular
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html'
-      })
-      .state('counters', {
-        url: '/counters',
-        templateUrl:'views/counters.html',
-        controller: 'CountersController',
-        controllerAs: 'counters',
-        resolve: {
-          list: ['counterService', function(counterService) {
-            return counterService.getList().then(
-              function (list) {
-                return list;
-              },
-              function () {
-                return {};
-              }
-            );
-          }],
-          lastActiveId: ['counterService', function(counterService) {
-            return counterService.getLastActiveId().then(
-              function (activeId) {
-                return activeId;
-              },
-              function () {
-                return null;
-              }
-            );
-          }]
-        }
       });
 
     $locationProvider.html5Mode(true);
