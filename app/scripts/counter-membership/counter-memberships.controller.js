@@ -33,6 +33,7 @@ function CounterMembershipsController(newMember, counterService, $state) {
       controller.noMembersError = true;
     };
 
+    controller.loadingMembers = true;
     counterService
       .getMemberships()
       .then(showMembers, noMembersFound);
@@ -54,19 +55,18 @@ function CounterMembershipsController(newMember, counterService, $state) {
     member.deleting = true;
     member.confirmingDelete = false;
 
-    var memberDeleted = function(){
-      controller.loadingMembers = true;
+    var updateMemberships = function(){
       controller.deletedMember = angular.copy(member);
       controller.loadMemberships();
     };
-    var handleError = function(){
+    var displayError = function(){
       member.deleting = false;
       member.deleteError = true;
     };
 
     counterService
       .deleteMembership(member.uid)
-      .then(memberDeleted, handleError);
+      .then(updateMemberships, displayError);
   };
 
   controller.loadMemberships();
