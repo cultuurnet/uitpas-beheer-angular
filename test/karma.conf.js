@@ -50,6 +50,7 @@ module.exports = function(config) {
       'bower_components/ngTouchSpin/src/js/ngTouchSpin.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
+      "app/scripts/app.js",
       "app/scripts/registration/ubr.registration.module.js",
       "app/scripts/kansenstatuut/ubr.kansenstatuut.module.js",
       "app/scripts/group/ubr.group.module.js",
