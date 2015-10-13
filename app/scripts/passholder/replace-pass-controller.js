@@ -85,15 +85,16 @@ function PassholderReplacePassController (
     var oldPass = controller.pass;
     var sameKansenstatuut = (oldPass.isKansenstatuut() === newPass.isKansenstatuut());
 
-    newOptions.push(reasons.LOSS_THEFT);
-    newOptions.push(reasons.REMOVAL);
-
     if (!sameKansenstatuut) {
       var reason = oldPass.isKansenstatuut() ? reasons.LOSS_KANSENSTATUUT : reasons.OBTAIN_KANSENSTATUUT;
       newOptions.push(reason);
-      // when a change in kansenstatuut is detected, automatically select it as the reason and update price
+      // When a change in kansenstatuut is detected, automatically select it as the reason and update price.
       controller.card.reason = reason.code;
       controller.updatePriceInfo(controller.form);
+    }
+    else {
+      newOptions.push(reasons.LOSS_THEFT);
+      newOptions.push(reasons.REMOVAL);
     }
 
     controller.reasons = newOptions;

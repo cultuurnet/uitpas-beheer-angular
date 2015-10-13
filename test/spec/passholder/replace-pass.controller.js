@@ -48,7 +48,7 @@ describe('Controller: PassholderReplacePassController', function () {
       UiTPASNumber: {
         $valid: true
       },
-      voucherNumber: {}
+      voucherNumber: jasmine.createSpyObj('voucherNumber', ['$setValidity'])
     };
   }));
 
@@ -57,7 +57,7 @@ describe('Controller: PassholderReplacePassController', function () {
     expect(controller.card.id).toEqual('1234567891234');
   });
 
-  it('should always allow "loss" or "removal" as a reason for replacing an UiTPAS', function () {
+  it('should allow "loss" or "removal" as a reason for replacing an UiTPAS when kansenstatuut remains the same', function () {
     var expectedReasons = [
       {
         description: 'Kaart verloren of gestolen',
@@ -86,14 +86,6 @@ describe('Controller: PassholderReplacePassController', function () {
   it('should include the "loss of kansenstatuut" reason when kansenstatuut is no longer set for the new pass', function () {
     var expectedReasons = [
       {
-        description: 'Kaart verloren of gestolen',
-        code: 'LOSS_THEFT'
-      },
-      {
-        description: 'Verhuis',
-        code: 'REMOVAL'
-      },
-      {
         description: 'Verlies kansenstatuut',
         code: 'LOSS_KANSENSTATUUT'
       }
@@ -116,14 +108,6 @@ describe('Controller: PassholderReplacePassController', function () {
 
   it('should include "obtaining kansenstatuut" as a reason when kansenstatuut changes for the new pass', function () {
     var expectedReasons = [
-      {
-        description: 'Kaart verloren of gestolen',
-        code: 'LOSS_THEFT'
-      },
-      {
-        description: 'Verhuis',
-        code: 'REMOVAL'
-      },
       {
         description: 'Kansenstatuut verkrijgen',
         code: 'OBTAIN_KANSENSTATUUT'
@@ -336,7 +320,7 @@ describe('Controller: PassholderReplacePassController', function () {
 
   it('can handle errors when updating the price info', function () {
     var form = {
-      voucherNumber: jasmine.createSpyObj('voucherNumber', ['$setValidity', 'newPass'])
+      voucherNumber: jasmine.createSpyObj('voucherNumber', ['$setValidity'])
     };
     controller.card.reason = 'I_AM_GROOT';
     counterService.getRegistrationPriceInfo.and.returnValue($q.reject({code: 'UNKNOWN_VOUCHER'}));
