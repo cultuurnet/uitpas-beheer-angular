@@ -130,13 +130,6 @@ function PassholderReplacePassController (
     };
 
     var showNoPriceInfo = function (errorResponse) {
-      var errors =  {
-        PARSE_INVALID_VOUCHERNUMBER: 'invalidVoucherNumber',
-        UNKNOWN_VOUCHER: 'unknownVoucherNumber',
-        BALIE_NOT_AUTHORIZED: 'balieNotAuthorized',
-        INVALID_VOUCHER_STATUS: 'invalidVoucherStatus'
-      };
-
       var error = errors[errorResponse.code];
       form.voucherNumber.$setValidity(error, false);
     };

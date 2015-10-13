@@ -84,6 +84,5 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
 
   controller.cancelModal = function() {
     $modalInstance.dismiss();
-    $state.go('^');
   };
 }

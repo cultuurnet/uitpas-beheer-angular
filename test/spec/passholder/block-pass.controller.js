@@ -71,4 +71,9 @@ describe('Controller: PassholderBlockPassController', function () {
 
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder.replacePass', expectedReplacementParameters);
   });
+
+  it('can close the modal', function () {
+    blockPassCtrl.cancelModal();
+    expect($modalInstance.dismiss).toHaveBeenCalled();
+  });
 });

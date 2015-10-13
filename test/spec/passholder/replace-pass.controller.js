@@ -229,9 +229,137 @@ describe('Controller: PassholderReplacePassController', function () {
     );
   });
 
+  it('should redirect to the new pass page after replacement', function () {
+    controller.newPass = {
+      isKansenstatuut: function () {
+        return true;
+      },
+      cardSystem: {
+        id: '1'
+      }
+    };
+    controller.card.voucherNumber = 'v-o-u-c-h-e-r';
+    controller.card.reason = 'I_ATE_IT_MY_OTHER_PASS';
+    var newPassResponse = {
+      number: '1234567890'
+    };
+
+    spyOn(controller, 'requireEndDate').and.returnValue(false);
+    passholderService.newPass.and.returnValue($q.when(newPassResponse));
+    var expectedEndDate = new Date('2055-05-05');
+
+    controller.submitForm();
+    $scope.$digest();
+
+    expect(passholderService.newPass).toHaveBeenCalledWith(
+      controller.newPass,
+      '45645612-afs45safd46-asdf545asdf4asdf56-asdf4sdaf546',
+      'I_ATE_IT_MY_OTHER_PASS',
+      expectedEndDate,
+      'v-o-u-c-h-e-r'
+    );
+    expect($modalInstance.close).toHaveBeenCalledWith(newPassResponse.number);
+  });
+
+  it('should set an error when it can not replace a pass', function () {
+    controller.newPass = {
+      isKansenstatuut: function () {
+        return true;
+      },
+      cardSystem: {
+        id: '1'
+      }
+    };
+    controller.card.voucherNumber = 'v-o-u-c-h-e-r';
+    controller.card.reason = 'I_ATE_IT_MY_OTHER_PASS';
+
+    spyOn(controller, 'requireEndDate').and.returnValue(false);
+    passholderService.newPass.and.returnValue($q.reject());
+    var expectedEndDate = new Date('2055-05-05');
+
+    controller.submitForm();
+    $scope.$digest();
+
+    expect(passholderService.newPass).toHaveBeenCalledWith(
+      controller.newPass,
+      '45645612-afs45safd46-asdf545asdf4asdf56-asdf4sdaf546',
+      'I_ATE_IT_MY_OTHER_PASS',
+      expectedEndDate,
+      'v-o-u-c-h-e-r'
+    );
+    expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
   it('should make sure an end date is provided when obtaining a kansenstatuut pass', function () {
     spyOn(controller, 'requireEndDate').and.returnValue(true);
     controller.submitForm();
     expect(controller.requireEndDate).toHaveBeenCalled();
+  });
+
+  it('should be able to tell if the end date is required', function () {
+    spyOn(controller, 'obtainingKansenstatuut').and.returnValue(true);
+    controller.kansenstatuut.endDate = false;
+
+    var checkResponse = controller.requireEndDate();
+    var formAlert = {
+      message: 'Een geldigheidsdatum is verplicht bij het toekennen van een kansenstatuut.',
+      type: 'danger'
+    };
+
+    expect(checkResponse).toBeTruthy();
+    expect(controller.formAlert).toEqual(formAlert);
+  });
+
+  it('should be able to tell if the end date is not required', function () {
+    spyOn(controller, 'obtainingKansenstatuut').and.returnValue(true);
+    controller.kansenstatuut.endDate = true;
+
+    var checkResponse = controller.requireEndDate();
+
+    expect(checkResponse).toBeFalsy();
+    expect(controller.formAlert).toBeUndefined();
+  });
+
+  it('can update the price info', function () {
+    var form = {
+      voucherNumber: jasmine.createSpyObj('voucherNumber', ['$setValidity', 'newPass'])
+    };
+    controller.card.reason = 'I_AM_GROOT';
+    counterService.getRegistrationPriceInfo.and.returnValue($q.when({price: 10}));
+
+    controller.updatePriceInfo(form);
+    $scope.$digest();
+
+    expect(form.voucherNumber.$setValidity).toHaveBeenCalled();
+    expect(controller.price).toEqual(10);
+  });
+
+  it('can handle errors when updating the price info', function () {
+    var form = {
+      voucherNumber: jasmine.createSpyObj('voucherNumber', ['$setValidity', 'newPass'])
+    };
+    controller.card.reason = 'I_AM_GROOT';
+    counterService.getRegistrationPriceInfo.and.returnValue($q.reject({code: 'UNKNOWN_VOUCHER'}));
+
+    controller.updatePriceInfo(form);
+    $scope.$digest();
+
+    expect(form.voucherNumber.$setValidity).toHaveBeenCalled();
+    expect(controller.price).toEqual(-1);
+  });
+
+  it('watches the change of the UiTPAS number', function () {
+    controller.form.UiTPASNumber.$valid = false;
+    $scope.$digest();
+    spyOn(controller, 'refreshNewPassInfo');
+    controller.form.UiTPASNumber.$valid = true;
+    $scope.$digest();
+
+    expect(controller.refreshNewPassInfo).toHaveBeenCalled();
+  });
+
+  it('can close the modal', function () {
+    controller.cancelModal();
+    expect($modalInstance.dismiss).toHaveBeenCalled();
   });
 });
