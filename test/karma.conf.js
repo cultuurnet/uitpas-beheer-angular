@@ -56,11 +56,13 @@ module.exports = function(config) {
       "app/scripts/checkindevices/ubr.checkindevices.module.js",
       "app/scripts/expense-report/ubr.expense-report.module.js",
       "app/scripts/**/*.js",
+      "app/scripts/**/*.*.js",
       "app/views/*.html",
       "app/views/registration/*.html",
       "app/views/checkindevices/*.html",
       //"test/mock/**/*.js",
-      "test/spec/**/*.js"
+      "test/spec/**/*.js",
+      "test/spec/**/*.spec.js"
     ],
 
     // list of files / patterns to exclude
