@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.membershipService
+ * @name ubr.membership.membershipService
  * @description
  * # membershipService
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.membership module.
  */
-angular.module('uitpasbeheerApp')
+angular.module('ubr.membership')
   .service('membershipService', membershipService);
 
 /* @ngInject */

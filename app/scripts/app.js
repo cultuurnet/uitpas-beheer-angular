@@ -26,6 +26,7 @@ angular
     'ubr.expense-report',
     'ubr.group',
     'ubr.kansenstatuut',
+    'ubr.membership',
     'ubr.registration',
     'ui.router',
     'ui.bootstrap'
@@ -194,30 +195,6 @@ angular
                 }
               },
               controller: 'PassholderEditController',
-              controllerAs: 'pec'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }]
-      })
-      .state('counter.main.passholder.memberships', {
-        resolve: {
-          passholder: getPassholderFromStateParams
-        },
-        onEnter: ['passholder', '$state', '$modal', function(passholder, $state, $modal) {
-          $modal
-            .open({
-              animation: true,
-              templateUrl: 'views/modal-passholder-memberships.html',
-              size: 'sm',
-              resolve: {
-                passholder: function() {
-                  return passholder;
-                }
-              },
-              controller: 'PassholderMembershipController',
               controllerAs: 'pec'
             })
             .result

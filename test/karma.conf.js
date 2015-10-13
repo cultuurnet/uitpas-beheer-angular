@@ -57,6 +57,7 @@ module.exports = function(config) {
       "app/scripts/expense-report/ubr.expense-report.module.js",
       "app/scripts/group/ubr.group.module.js",
       "app/scripts/kansenstatuut/ubr.kansenstatuut.module.js",
+      "app/scripts/membership/ubr.membership.module.js",
       "app/scripts/registration/ubr.registration.module.js",
 
       "app/scripts/**/*.js",

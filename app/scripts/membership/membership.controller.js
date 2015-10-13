@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:PassholderMembershipController
+ * @name ubr.membership.controller:PassholderMembershipController
  * @description
  * # PassholderMembershipController
- * Controller of the uitpasbeheerApp
+ * Controller of the ubr.membership module.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.membership')
   .controller('PassholderMembershipController', PassholderMembershipController);
 
 /* @ngInject */
