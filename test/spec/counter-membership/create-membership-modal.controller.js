@@ -37,7 +37,7 @@ describe('Controller: CreateMembershipModalController', function () {
   }));
 
   it('can create a new membership', function () {
-    spyOn(counterService, 'createMembership').and.returnValue($q.when(membership));
+    spyOn(counterService, 'createMembership').and.returnValue($q.resolve(membership));
 
     controller.createMembership(form);
     $scope.$digest();
@@ -47,23 +47,23 @@ describe('Controller: CreateMembershipModalController', function () {
   });
 
   it('does not create a new membership when the form is invalid', function () {
-    spyOn(counterService, 'createMembership').and.returnValue($q.when(membership));
+    spyOn(counterService, 'createMembership').and.returnValue($q.resolve(membership));
     form.$invalid = true;
 
     controller.createMembership(form);
     $scope.$digest();
 
-    expect(counterService.createMembership).not.toHaveBeenCalledWith('e@mail');
+    expect(counterService.createMembership).not.toHaveBeenCalled();
     expect(controller.creationPending).toBeFalsy();
   });
 
-  it('can dismiss the modal', function () {
+  it('should dismiss the modal when canceling membership creation', function () {
     controller.cancelCreation();
 
     expect(modalInstance.dismiss).toHaveBeenCalled();
   });
 
-  it('can return an error message when the API does not know the user when creating a new membership', function () {
+  it('should return an error message when the API does not know the user when creating a new membership', function () {
     var apiErrorResponse = {code: 'UNKNOWN_USER'};
     var errorResponse = {message: 'De gebruiker met email <em>e@mail</em> kan niet gevonden worden in het systeem.'};
     spyOn(counterService, 'createMembership').and.returnValue($q.reject(apiErrorResponse));
@@ -76,7 +76,7 @@ describe('Controller: CreateMembershipModalController', function () {
     expect(controller.asyncError).toEqual(errorResponse);
   });
 
-  it('can return an error message when the API returns an error when creating a new membership', function () {
+  it('should return an error message when the API returns an error when creating a new membership', function () {
     var apiErrorResponse = {};
     var errorResponse = {message: 'De gebruiker met email <em>e@mail</em> kan niet aangemaakt worden.'};
     spyOn(counterService, 'createMembership').and.returnValue($q.reject(apiErrorResponse));
