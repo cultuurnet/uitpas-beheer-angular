@@ -152,11 +152,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-edit.html',
-              params: {
-                'identification': null,
-                'passholder': null,
-                'activity': null
-              },
               size: 'lg',
               resolve: {
                 passholder: function() {
@@ -187,10 +182,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-edit-contact.html',
-              params: {
-                'identification': null,
-                'passholder': null
-              },
               size: 'sm',
               resolve: {
                 passholder: function() {
@@ -218,9 +209,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-memberships.html',
-              params: {
-                'passholder': null
-              },
               size: 'sm',
               resolve: {
                 passholder: function() {
@@ -256,11 +244,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-activity-tariffs.html',
-              params: {
-                identification: null,
-                passholder: null,
-                activity: null
-              },
               size: 'sm',
               resolve: {
                 passholder: function () {
@@ -282,6 +265,46 @@ angular
             });
         }]
       })
+      .state('counter.main.passholder.replacePass', {
+        resolve: {
+          passholder: getPassholderFromStateParams,
+          pass: getPassFromStateParams
+        },
+        params: {
+          'justBlocked': false
+        },
+        url: '/replace-pass',
+        /* @ngInject */
+        onEnter: function(passholder, pass, $state, $modal, $stateParams) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-passholder-replace-card.html',
+              size: 'sm',
+              resolve: {
+                passholder: function() {
+                  return passholder;
+                },
+                pass: function() {
+                  return pass;
+                }
+              },
+              controller: 'PassholderReplacePassController',
+              controllerAs: 'rpc'
+            })
+            .result
+            .then(function (newPassNumber) {
+              console.log(newPassNumber);
+              $state.go('counter.main.passholder', {identification: newPassNumber}, {reload: true});
+            }, function () {
+              if ($stateParams.justBlocked) {
+                $state.go('^', {}, {reload: true});
+              } else {
+                $state.go('^');
+              }
+            });
+        }
+      })
       .state('counter.main.passholder.blockPass', {
         params: {
           pass: null,
@@ -296,10 +319,6 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/modal-passholder-block-pass.html',
-              params: {
-                identification: null,
-                passholder: null
-              },
               size: 'sm',
               resolve: {
                 pass: function() {
@@ -311,6 +330,10 @@ angular
               },
               controller: 'PassholderBlockPassController',
               controllerAs: 'pbp'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
             });
         }]
       })

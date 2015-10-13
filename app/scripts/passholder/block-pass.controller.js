@@ -69,12 +69,20 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
   };
 
   controller.blockAndReplace = function() {
-    // @todo Implement correctly in UBR-145.
-    controller.blockAndRefresh();
+    var showReplacePass = function (pass) {
+      $state.go(
+        'counter.main.passholder.replacePass',
+        {
+          identification: pass.number,
+          justBlocked: true
+        }
+      );
+    };
+
+    controller.block().then(showReplacePass);
   };
 
   controller.cancelModal = function() {
     $modalInstance.dismiss();
-    $state.go('^');
   };
 }

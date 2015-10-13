@@ -1,0 +1,114 @@
+<form name="rpc.form" ng-submit="rpc.submitForm()" ubr-replace-uitpas-form-validation novalidate ng-class="{'form-submiting': rpc.formSubmitBusy}">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="rpc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">UiTPAS vervangen</h4>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-danger" type="{{rpc.formAlert.type}}" ng-show="rpc.formAlert" ng-bind="rpc.formAlert.message"></div>
+
+    <div class="container-fluid">
+      <div class="grid">
+        <p class="direction text-center" ng-if="::rpc.isJavaFXBrowser">
+          Scan de nieuwe UiTPAS of vul het nummer manueel in.
+        </p>
+
+        <div class="grid__12 grid--bp-xsm__8">
+          <div class="form-group" ng-class="{ 'has-error': (rpc.form.$submitted || rpc.form.UiTPASNumber.$dirty) && rpc.form.UiTPASNumber.$invalid }">
+            <label for="UiTPASNumber" class="label-number">Nieuw UiTPAS-nummer</label>
+            <input ubr-uitpas-number-async-validation ng-pattern="/^\d{13}$/" type="text" class="form-control input-number" name="UiTPASNumber"
+            id="UiTPASNumber" autofocus="" ng-required="true" ubr-card-system="rpc.pass.cardSystem.id"
+            ng-model="rpc.card.id">
+            <div ng-if="(rpc.form.$submitted || rpc.form.UiTPASNumber.$dirty) && rpc.form.UiTPASNumber.$invalid" class="text-danger small">
+              <div ng-if="rpc.form.UiTPASNumber.$error.pattern">Het nummer heeft een verkeerd formaat, 13 cijfers worden verwacht.</div>
+              <div ng-if="rpc.form.UiTPASNumber.$error.notFound">Deze UiTPAS kan niet gevonden worden in het systeem.</div>
+              <div ng-if="rpc.form.UiTPASNumber.$error.notLocalStock">Deze UiTPAS zit niet in de locale stock.</div>
+              <div ng-if="rpc.form.UiTPASNumber.$error.required">Het UiTPAS-nummer veld is verplicht.</div>
+              <div ng-if="rpc.form.UiTPASNumber.$error.cardSystemMismatch">Deze UiTPAS behoort niet tot hetzelfde kaart-systeem.</div>
+              <div ng-if="rpc.form.UiTPASNumber.$error.unavailableForActiveCounter">Deze UiTPAS is niet toegekend aan de actieve balie.</div>
+            </div>
+            <div ng-if="rpc.form.UiTPASNumber.$pending" class="text-warning small">UiTPAS-nummer wordt gevalideerd.</div>
+          </div>
+        </div>
+        <div class="grid__12 grid--bp-xsm__4 text-center">
+          <span class="icon icon--card-scan icon--card-scan--medium"></span>
+        </div>
+      </div>
+
+      <div class="grid" ng-show="rpc.form.UiTPASNumber.$valid">
+        <div class="grid__12 grid--bp-lrg__12">
+          <hr />
+
+          <label class="radio">Reden</label>
+          <div ng-repeat="reason in rpc.reasons" class="radio">
+            <label>
+              <input type="radio" name="reason" ng-model="rpc.card.reason"
+                     ng-value="reason.code" ng-required="true" ng-change="rpc.updatePriceInfo(rpc.form)">
+              <span ng-bind="reason.description"></span>
+            </label>
+          </div>
+
+          <div ng-if="rpc.obtainingKansenstatuut()">
+            <hr />
+            <ubr-datepicker
+                ng-model="rpc.kansenstatuut.endDate"
+                ubr-label="Kansenstatuut geldig tot"
+                ubr-id="valid-until"
+                ubr-name="endDate"></ubr-datepicker>
+          </div>
+
+          <hr />
+
+          <div class="form-group" ng-class="{ 'has-error': (rpc.form.$submitted || rpc.form.voucherNumber.$dirty) && rpc.form.voucherNumber.$invalid }">
+            <label>Voucher-nummer</label>
+            <input class="form-control voucher-number" name="voucherNumber" ng-change="rpc.updatePriceInfo(rpc.form)"
+                   ng-model="rpc.card.voucherNumber" autofocus="autofocus" ng-model-options="rpc.voucherModelOptions">
+            <div ng-show="(rpc.form.$submitted || rpc.form.voucherNumber.$touched || rpc.form.voucherNumber.$dirty) && rpc.form.voucherNumber.$invalid"
+                 class="text-danger small">
+              <div ng-if="rpc.form.voucherNumber.$error.invalidVoucherNumber">Het voucher nummer is niet correct.</div>
+              <div ng-if="rpc.form.voucherNumber.$error.unknownVoucherNumber">Het voucher nummer is niet gekend in het systeem.</div>
+              <div ng-if="rpc.form.voucherNumber.$error.balieNotAuthorized">De actieve balie kan deze UiTPAS niet registeren.</div>
+              <div ng-if="rpc.form.voucherNumber.$error.invalidVoucherStatus">De voucher is niet bruikbaar voor deze UiTPAS.</div>
+            </div>
+          </div>
+
+          <hr />
+
+          <label>Prijs</label>
+
+          <div ng-show="rpc.price === -1">
+            <div ng-if="!rpc.card.reason" class="text-warning">Selecteer een reden om de prijs te zien.</div>
+            <div ng-if="rpc.card.reason && rpc.form.voucherNumber.$invalid" class="text-danger">
+              De prijs kan niet bepaald worden met een foutief voucher nummer.
+            </div>
+            <div ng-if="rpc.card.reason && rpc.form.voucherNumber.$valid">
+              <p>
+                Prijs wordt bepaald...
+                <span class="spinner spinner-xsmall spinner-inline">
+                  <circle-spinner></circle-spinner>
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div ng-hide="rpc.price === -1">
+            <p>
+              <span ng-if="rpc.price > 0" class="price">{{rpc.price|number:2}} euro</span>
+              <span ng-if="rpc.price === 0" class="price">Gratis!</span>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div><!-- end modal-body -->
+  <div class="modal-footer">
+    <a ng-click="rpc.cancelModal()">Annuleren</a>
+    <button type="button" class="btn btn-primary" ng-disabled="rpc.formSubmitBusy || rpc.form.$invalid || rpc.form.$pending" ng-click="rpc.submitForm()">
+      <span ng-hide="rpc.formSubmitBusy">Bewaren</span>
+      <span ng-show="rpc.formSubmitBusy">
+        <span class="fa fa-refresh loading small"></span>
+        Formulier wordt verzonden
+      </span>
+    </button>
+  </div>
+</form>

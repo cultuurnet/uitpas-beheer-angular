@@ -30,6 +30,11 @@ form label {
   margin-bottom: $rh-xsm;
 }
 
+form hr {
+  margin: 21px 0;
+  border-top: 1px solid #ccc;
+}
+
 label em {
   display: block;
   font-weight: 400;
@@ -90,9 +95,18 @@ a + .btn {
   margin-top: 0;
 }
 
+label.radio, label.checkbox {
+  margin-bottom: 12px;
+  display: block;
+}
+
 .radio {
   margin-top: $padding-base-vertical;
   margin-bottom: $padding-base-vertical;
+}
+
+.radio + .radio {
+  margin-top: 0;
 }
 
 .grid.radios > [class*='grid__'] {

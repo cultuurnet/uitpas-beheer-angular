@@ -53,6 +53,9 @@ function passFactory(Passholder) {
     },
     isBlocked: function() {
       return this.status === 'BLOCKED';
+    },
+    isLocalStock: function() {
+      return this.status === 'LOCAL_STOCK';
     }
   };
 
