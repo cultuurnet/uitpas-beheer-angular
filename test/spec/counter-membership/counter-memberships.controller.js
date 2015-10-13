@@ -28,6 +28,16 @@ describe('Controller: CounterMembershipsController', function () {
     }
   ];
 
+  function getController() {
+    controller = $controller('CounterMembershipsController', {
+      newMember: null,
+      counterService: counterService,
+      $state: $state
+    });
+
+    return controller;
+  }
+
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($injector, $rootScope) {
@@ -40,11 +50,7 @@ describe('Controller: CounterMembershipsController', function () {
 
   it('should have a members collection after initialisation', function () {
     counterService.getMemberships.and.returnValue($q.when(memberships));
-    controller = $controller('CounterMembershipsController', {
-      newMember: null,
-      counterService: counterService,
-      $state: $state
-    });
+    controller = getController();
 
     $scope.$digest();
 
@@ -54,11 +60,7 @@ describe('Controller: CounterMembershipsController', function () {
 
   it('should be able to handle errors when getting memberships', function () {
     counterService.getMemberships.and.returnValue($q.reject());
-    controller = $controller('CounterMembershipsController', {
-      newMember: null,
-      counterService: counterService,
-      $state: $state
-    });
+    controller = getController();
 
     controller.init();
     $scope.$digest();
@@ -70,11 +72,7 @@ describe('Controller: CounterMembershipsController', function () {
   it('should delete a member and refresh the members list', function () {
     counterService.deleteMembership.and.returnValue($q.when());
     counterService.getMemberships.and.returnValue($q.when(memberships));
-    controller = $controller('CounterMembershipsController', {
-      newMember: null,
-      counterService: counterService,
-      $state: $state
-    });
+    controller = getController();
 
     controller.deleteMember(memberships[0]);
     $scope.$digest();
@@ -87,11 +85,7 @@ describe('Controller: CounterMembershipsController', function () {
     var memberToDelete = memberships[0];
     counterService.getMemberships.and.returnValue($q.when(memberships));
     counterService.deleteMembership.and.returnValue($q.reject());
-    controller = $controller('CounterMembershipsController', {
-      newMember: null,
-      counterService: counterService,
-      $state: $state
-    });
+    controller = getController();
 
     controller.deleteMember(memberToDelete);
     $scope.$digest();
@@ -102,11 +96,7 @@ describe('Controller: CounterMembershipsController', function () {
 
   it('should redirect to th state to create a member', function () {
     counterService.getMemberships.and.returnValue($q.when(memberships));
-    controller = $controller('CounterMembershipsController', {
-      newMember: null,
-      counterService: counterService,
-      $state: $state
-    });
+    controller = getController();
 
     controller.createMembership();
     $scope.$digest();
@@ -117,11 +107,7 @@ describe('Controller: CounterMembershipsController', function () {
   it('should guide the user throught a member delete confirmation', function () {
     var memberToDelete = memberships[0];
     counterService.getMemberships.and.returnValue($q.when(memberships));
-    controller = $controller('CounterMembershipsController', {
-      newMember: null,
-      counterService: counterService,
-      $state: $state
-    });
+    controller = getController();
 
     controller.initiateDelete(memberToDelete);
     expect(memberToDelete.confirmingDelete).toBeTruthy();
