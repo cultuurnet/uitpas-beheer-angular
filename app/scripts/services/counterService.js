@@ -281,32 +281,6 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       .get(url)
       .success(resolveMemberships)
       .error(handleErrorResponse);
-
-    // @todo remove test code once silex is ready.
-    /*
-    return $q.when([
-      {
-        uid: 'dirk-dirkington',
-        nick: 'Dirk Dirkington',
-        role: 'admin'
-      },
-      {
-        uid: 'foo-bar',
-        nick: 'Foo Bar',
-        role: 'admin'
-      },
-      {
-        uid: 'jane-doe',
-        nick: 'Jane Doe',
-        role: 'member'
-      },
-      {
-        uid: 'some-made-up-id3',
-        nick: 'John Doe',
-        role: 'member'
-      }
-    ]);
-    //*/
     return deferredMembers.promise;
   };
 
@@ -345,16 +319,6 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       .post(url, parameters, config)
       .then(returnMember, returnError);
 
-    // @todo remove test code once silex is ready.
-    /*
-    return $q.reject({code: 'ACTION_NOT_ALLOWED'});
-    return $q.when({
-      uid: 'new-id-for-now-user',
-      nick: email,
-      role: 'member'
-    });
-    //*/
-
     return deferredMember.promise;
   };
 
@@ -364,9 +328,6 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @param uid
    */
   service.deleteMembership = function (uid) {
-    // @todo remove test code once silex is ready.
-    //return $q.when('done');
-
     var url = apiUrl + '/active/members/' + uid;
     var deferredResponse = $q.defer();
 
