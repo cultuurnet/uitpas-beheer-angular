@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.advantage
+ * @name ubr.advantage.advantage
  * @description
  * # advantage
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.advantage module.
  */
-angular.module('uitpasbeheerApp')
+angular.module('ubr.advantage')
   .service('advantageService', advantageService);
 
 /* @ngInject */

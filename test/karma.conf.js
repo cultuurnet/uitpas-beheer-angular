@@ -52,6 +52,7 @@ module.exports = function(config) {
       // endbower
       "app/scripts/app.js",
       "app/scripts/activity/ubr.activity.module.js",
+      "app/scripts/advantage/ubr.advantage.module.js",
       "app/scripts/checkindevices/ubr.checkindevices.module.js",
       "app/scripts/counter/ubr.counter.module.js",
       "app/scripts/expense-report/ubr.expense-report.module.js",

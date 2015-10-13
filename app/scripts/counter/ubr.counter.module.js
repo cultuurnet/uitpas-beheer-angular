@@ -19,7 +19,7 @@ angular
 
     $stateProvider.state('counters', {
       url: '/counters',
-      templateUrl:'views/counters.html',
+      templateUrl:'views/counter/counters.html',
       controller: 'CountersController',
       controllerAs: 'counters',
       resolve: {

@@ -21,6 +21,7 @@ angular
     'ngSanitize',
     'ngTouch',
     'ubr.activity',
+    'ubr.advantage',
     'ubr.checkindevices',
     'ubr.counter',
     'ubr.expense-report',
@@ -56,12 +57,12 @@ angular
         redirectOnScan: true,
         views: {
           content: {
-            templateUrl: 'views/content-passholder-search.html',
+            templateUrl: 'views/content-search.html',
             controller: 'PassholderSearchController',
             controllerAs: 'psc'
           },
           sidebar: {
-            templateUrl: 'views/sidebar-passholder-search.html',
+            templateUrl: 'views/sidebar-search.html',
             controller: 'PassholderSearchController',
             controllerAs: 'psc'
           },

@@ -29,7 +29,7 @@ angular
         $modal
           .open({
             animation: true,
-            templateUrl: 'views/modal-passholder-memberships.html',
+            templateUrl: 'views/membership/modal-passholder-memberships.html',
             size: 'sm',
             resolve: {
               passholder: function() {

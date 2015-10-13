@@ -74,7 +74,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     var now = moment();
 
     if (endDate.fixed && moment(endDate.date).isBefore(now)) {
-      return 'Pashouder is te oud';
+      return 'De pashouder is te oud';
     }
 
     return undefined;
@@ -113,7 +113,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
 
   $scope.openMembershipRegistrationModal = function (association, recentlyExpired) {
     var modalInstance = $modal.open({
-      templateUrl: 'views/modal-passholder-membership-registration.html',
+      templateUrl: 'views/membership/modal-passholder-membership-registration.html',
       controller: 'PassholderMembershipRegisterController',
       size: 'sm',
       resolve: {
@@ -136,7 +136,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
 
   $scope.openMembershipRenewalModal = function (membership) {
     var modalInstance = $modal.open({
-      templateUrl: 'views/modal-passholder-membership-renew.html',
+      templateUrl: 'views/membership/modal-passholder-membership-renew.html',
       controller: 'PassholderMembershipRenewController',
       size: 'sm',
       resolve: {
@@ -159,7 +159,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
 
   $scope.openMembershipStopModal = function (membership) {
     var modalInstance = $modal.open({
-      templateUrl: 'views/modal-passholder-membership-stop.html',
+      templateUrl: 'views/membership/modal-passholder-membership-stop.html',
       controller: 'PassholderMembershipStopController',
       size: 'sm',
       resolve: {

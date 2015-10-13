@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name ubr.passholder.controller:PassholderAdvantageController
+ * @name ubr.advantage.controller:PassholderAdvantageController
  * @description
  * # PassholderAdvantageController
- * Controller of the ubr.passholder module.
+ * Controller of the ubr.advantage module.
  */
-angular.module('ubr.passholder')
+angular.module('ubr.advantage')
   .controller('PassholderAdvantageController', passholderAdvantageController);
 
 /* @ngInject */

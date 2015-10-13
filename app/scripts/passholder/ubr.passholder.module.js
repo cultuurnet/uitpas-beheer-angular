@@ -37,7 +37,7 @@ angular
           templateProvider: function ($templateFactory, pass) {
             var templatePath = 'views/split-content.html';
             if (pass.isBlocked()) {
-              templatePath = 'views/content-passholder-blocked.html';
+              templatePath = 'views/passholder/content-passholder-blocked.html';
             }
             return $templateFactory.fromUrl(templatePath);
           },
@@ -45,17 +45,17 @@ angular
           controllerAs: 'pdc'
         },
         'sidebar@counter': {
-          templateUrl: 'views/sidebar-passholder-details.html',
+          templateUrl: 'views/passholder/sidebar-passholder-details.html',
           controller: 'PassholderDetailController',
           controllerAs: 'pdc'
         },
         'top@counter.main.passholder': {
-          templateUrl: 'views/content-passholder-activities.html',
+          templateUrl: 'views/activity/content-passholder-activities.html',
           controller: 'ActivityController',
           controllerAs: 'ac'
         },
         'bottom@counter.main.passholder': {
-          templateUrl: 'views/content-passholder-advantages.html',
+          templateUrl: 'views/advantage/content-passholder-advantages.html',
           controller: 'PassholderAdvantageController',
           controllerAs: 'pac'
         }
@@ -89,7 +89,7 @@ angular
           $modal
             .open({
               animation: true,
-              templateUrl: 'views/modal-passholder-edit.html',
+              templateUrl: 'views/passholder/modal-passholder-edit.html',
               size: 'lg',
               resolve: {
                 passholder: function() {
@@ -119,7 +119,7 @@ angular
           $modal
             .open({
               animation: true,
-              templateUrl: 'views/modal-passholder-edit-contact.html',
+              templateUrl: 'views/passholder/modal-passholder-edit-contact.html',
               size: 'sm',
               resolve: {
                 passholder: function() {
@@ -152,7 +152,7 @@ angular
           $modal
             .open({
               animation: true,
-              templateUrl: 'views/modal-passholder-replace-card.html',
+              templateUrl: 'views/passholder/modal-passholder-replace-card.html',
               size: 'sm',
               resolve: {
                 passholder: function() {
@@ -191,7 +191,7 @@ angular
           $modal
             .open({
               animation: true,
-              templateUrl: 'views/modal-passholder-block-pass.html',
+              templateUrl: 'views/passholder/modal-passholder-block-pass.html',
               size: 'sm',
               resolve: {
                 pass: function() {
