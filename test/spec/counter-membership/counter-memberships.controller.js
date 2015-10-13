@@ -38,7 +38,6 @@ describe('Controller: CounterMembershipsController', function () {
     return controller;
   }
 
-
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($injector, $rootScope) {
     $controller = $injector.get('$controller');
@@ -104,7 +103,7 @@ describe('Controller: CounterMembershipsController', function () {
     expect($state.go).toHaveBeenCalledWith('counter.memberships.create');
   });
 
-  it('should guide the user throught a member delete confirmation', function () {
+  it('should guide the user through a member delete confirmation', function () {
     var memberToDelete = memberships[0];
     counterService.getMemberships.and.returnValue($q.when(memberships));
     controller = getController();
