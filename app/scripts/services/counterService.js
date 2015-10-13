@@ -271,10 +271,10 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
     var deferredMembers = $q.defer();
 
     var resolveMemberships = function (responseData) {
-      deferredMembers.resolve(responseData.data);
+      deferredMembers.resolve(responseData);
     };
     var handleErrorResponse = function (errorResponse) {
-      deferredMembers.reject(errorResponse.data);
+      deferredMembers.reject(errorResponse);
     };
 
     $http
