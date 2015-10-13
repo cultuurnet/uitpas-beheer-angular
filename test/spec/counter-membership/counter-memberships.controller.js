@@ -61,7 +61,7 @@ describe('Controller: CounterMembershipsController', function () {
     counterService.getMemberships.and.returnValue($q.reject());
     controller = getController();
 
-    controller.init();
+    controller.loadMemberships();
     $scope.$digest();
 
     expect(counterService.getMemberships).toHaveBeenCalled();
@@ -93,7 +93,7 @@ describe('Controller: CounterMembershipsController', function () {
     expect(memberToDelete.deleteError).toBeTruthy();
   });
 
-  it('should redirect to th state to create a member', function () {
+  it('should navigate to the right state when creating a member', function () {
     counterService.getMemberships.and.returnValue($q.when(memberships));
     controller = getController();
 
