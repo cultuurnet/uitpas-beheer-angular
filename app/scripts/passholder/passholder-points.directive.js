@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc directive
- * @name uitpasbeheerApp.directive:ubrPassholderPoints
+ * @name ubr.passholder.directive:ubrPassholderPoints
  * @description
  * # Passholder points directive.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.passholder')
   .directive('ubrPassholderPoints', ubrPassholderPoints);
 
 /* @ngInject */

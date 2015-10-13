@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:PassholderReplacePassController
+ * @name ubr.passholder.controller:PassholderReplacePassController
  * @description
  * # PassholderReplacePassController
- * Controller of the uitpasbeheerApp
+ * Controller of the ubr.passholder module.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.passholder')
   .controller('PassholderReplacePassController', PassholderReplacePassController);
 
 /* @ngInject */

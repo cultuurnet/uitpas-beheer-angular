@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.passholder
+ * @name ubr.passholder.passholder
  * @description
  * # passholder
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.passholder module.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.passholder')
   .service('passholderService', passholderService);
 
 /* @ngInject */

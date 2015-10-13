@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:PassholderAdvantageController
+ * @name ubr.passholder.controller:PassholderAdvantageController
  * @description
  * # PassholderAdvantageController
- * Controller of the uitpasbeheerApp
+ * Controller of the ubr.passholder module.
  */
-angular.module('uitpasbeheerApp')
+angular.module('ubr.passholder')
   .controller('PassholderAdvantageController', passholderAdvantageController);
 
 /* @ngInject */
@@ -60,7 +60,7 @@ function passholderAdvantageController(passholder, advantages, advantageService,
 
       return advantage;
     });
-    
+
     controller.updateExchangeability(updatedPointCount);
   }
 
@@ -72,7 +72,7 @@ function passholderAdvantageController(passholder, advantages, advantageService,
       } else {
         advantage.insufficientPoints = false;
       }
-      
+
       return advantage;
     });
   };
@@ -80,7 +80,7 @@ function passholderAdvantageController(passholder, advantages, advantageService,
   function activityCheckedIn(event, activity) {
     var updatedPointCount = controller.availablePoints + activity.points;
     controller.availablePoints = updatedPointCount;
-    
+
     controller.updateExchangeability(updatedPointCount);
   }
 
