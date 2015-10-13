@@ -8,7 +8,7 @@
  * Service in the uitpasbeheerApp.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.activity')
   .service('activityService', activityService);
 
 /* @ngInject */

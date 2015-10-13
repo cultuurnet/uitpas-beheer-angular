@@ -8,7 +8,7 @@
  * Controller of the uitpasbeheerApp
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.activity')
   .controller('PassholderActivityTariffsController', PassholderActivityTariffsController);
 
 /* @ngInject */

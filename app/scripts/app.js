@@ -10,23 +10,24 @@
  */
 angular
   .module('uitpasbeheerApp', [
+    'angular-spinkit',
+    'config',
+    'http-auth-interceptor',
+    'jkuri.touchspin',
+    'mp.autoFocus',
     'ngAnimate',
     'ngCookies',
     'ngResource',
-    'http-auth-interceptor',
     'ngSanitize',
     'ngTouch',
-    'config',
-    'angular-spinkit',
-    'ui.router',
-    'ui.bootstrap',
-    'mp.autoFocus',
-    'jkuri.touchspin',
-    'ubr.registration',
-    'ubr.kansenstatuut',
-    'ubr.group',
+    'ubr.activity',
     'ubr.checkindevices',
-    'ubr.expense-report'
+    'ubr.expense-report',
+    'ubr.group',
+    'ubr.kansenstatuut',
+    'ubr.registration',
+    'ui.router',
+    'ui.bootstrap'
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
@@ -217,47 +218,6 @@ angular
               },
               controller: 'PassholderMembershipController',
               controllerAs: 'pec'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }]
-      })
-      .state('counter.main.passholder.activityTariffs', {
-        params: {
-          identification: null,
-          passholder: null,
-          activity: null
-        },
-        resolve: {
-          passholder: getPassholderFromStateParams,
-          identification: ['$stateParams', function($stateParams) {
-            return $stateParams.identification;
-          }],
-          activity: ['$stateParams', function($stateParams) {
-            return $stateParams.activity;
-          }]
-        },
-        onEnter: ['passholder', 'identification', 'activity', '$state', '$modal', function(passholder, identification, activity, $state, $modal) {
-          $modal
-            .open({
-              animation: true,
-              templateUrl: 'views/modal-passholder-activity-tariffs.html',
-              size: 'sm',
-              resolve: {
-                passholder: function () {
-                  return passholder;
-                },
-                identification: function () {
-                  return identification;
-                },
-                activity: function () {
-                  return activity;
-                }
-              },
-              controller: 'PassholderActivityTariffsController',
-              controllerAs: 'pat'
             })
             .result
             .finally(function() {
