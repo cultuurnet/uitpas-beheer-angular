@@ -14,7 +14,7 @@ describe('Controller: CreateMembershipModalController', function () {
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($injector, $rootScope) {
-    counterService = $injector.get('counterService');
+    counterService = jasmine.createSpyObj('counterService', ['createMembership']);
     $scope = $rootScope;
     $controller = $injector.get('$controller');
     $q = $injector.get('$q');
@@ -37,7 +37,7 @@ describe('Controller: CreateMembershipModalController', function () {
   }));
 
   it('can create a new membership', function () {
-    spyOn(counterService, 'createMembership').and.returnValue($q.resolve(membership));
+    counterService.createMembership.and.returnValue($q.resolve(membership));
 
     controller.createMembership(form);
     $scope.$digest();
@@ -47,7 +47,7 @@ describe('Controller: CreateMembershipModalController', function () {
   });
 
   it('does not create a new membership when the form is invalid', function () {
-    spyOn(counterService, 'createMembership').and.returnValue($q.resolve(membership));
+    counterService.createMembership.and.returnValue($q.resolve(membership));
     form.$invalid = true;
 
     controller.createMembership(form);
@@ -66,7 +66,7 @@ describe('Controller: CreateMembershipModalController', function () {
   it('should return an error message when the API does not know the user when creating a new membership', function () {
     var apiErrorResponse = {code: 'UNKNOWN_USER'};
     var errorResponse = {message: 'De gebruiker met email <em>e@mail</em> kan niet gevonden worden in het systeem.'};
-    spyOn(counterService, 'createMembership').and.returnValue($q.reject(apiErrorResponse));
+    counterService.createMembership.and.returnValue($q.reject(apiErrorResponse));
 
     controller.createMembership(form);
     $scope.$digest();
@@ -79,7 +79,7 @@ describe('Controller: CreateMembershipModalController', function () {
   it('should return an error message when the API returns an error when creating a new membership', function () {
     var apiErrorResponse = {};
     var errorResponse = {message: 'De gebruiker met email <em>e@mail</em> kan niet aangemaakt worden.'};
-    spyOn(counterService, 'createMembership').and.returnValue($q.reject(apiErrorResponse));
+    counterService.createMembership.and.returnValue($q.reject(apiErrorResponse));
 
     controller.createMembership(form);
     $scope.$digest();

@@ -32,14 +32,14 @@ describe('Controller: CounterMembershipsController', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($injector, $rootScope) {
     $controller = $injector.get('$controller');
-    counterService = $injector.get('counterService');
+    counterService = jasmine.createSpyObj('counterService', ['getMemberships', 'deleteMembership']);
     $state = jasmine.createSpyObj('$state', ['go']);
     $q = $injector.get('$q');
     $scope = $rootScope;
   }));
 
   it('should have a members collection after initialisation', function () {
-    spyOn(counterService, 'getMemberships').and.returnValue($q.when(memberships));
+    counterService.getMemberships.and.returnValue($q.when(memberships));
     controller = $controller('CounterMembershipsController', {
       newMember: null,
       counterService: counterService,
@@ -53,7 +53,7 @@ describe('Controller: CounterMembershipsController', function () {
   });
 
   it('should be able to handle errors when getting memberships', function () {
-    spyOn(counterService, 'getMemberships').and.returnValue($q.reject());
+    counterService.getMemberships.and.returnValue($q.reject());
     controller = $controller('CounterMembershipsController', {
       newMember: null,
       counterService: counterService,
@@ -68,8 +68,8 @@ describe('Controller: CounterMembershipsController', function () {
   });
 
   it('should delete a member and refresh the members list', function () {
-    spyOn(counterService, 'deleteMembership').and.returnValue($q.when());
-    spyOn(counterService, 'getMemberships').and.returnValue($q.when(memberships));
+    counterService.deleteMembership.and.returnValue($q.when());
+    counterService.getMemberships.and.returnValue($q.when(memberships));
     controller = $controller('CounterMembershipsController', {
       newMember: null,
       counterService: counterService,
@@ -85,8 +85,8 @@ describe('Controller: CounterMembershipsController', function () {
 
   it('should be able to handle an error when deleting a member', function () {
     var memberToDelete = memberships[0];
-    spyOn(counterService, 'getMemberships').and.returnValue($q.when(memberships));
-    spyOn(counterService, 'deleteMembership').and.returnValue($q.reject());
+    counterService.getMemberships.and.returnValue($q.when(memberships));
+    counterService.deleteMembership.and.returnValue($q.reject());
     controller = $controller('CounterMembershipsController', {
       newMember: null,
       counterService: counterService,
@@ -101,7 +101,7 @@ describe('Controller: CounterMembershipsController', function () {
   });
 
   it('should redirect to th state to create a member', function () {
-    spyOn(counterService, 'getMemberships').and.returnValue($q.when(memberships));
+    counterService.getMemberships.and.returnValue($q.when(memberships));
     controller = $controller('CounterMembershipsController', {
       newMember: null,
       counterService: counterService,
@@ -116,7 +116,7 @@ describe('Controller: CounterMembershipsController', function () {
 
   it('should guide the user throught a member delete confirmation', function () {
     var memberToDelete = memberships[0];
-    spyOn(counterService, 'getMemberships').and.returnValue($q.when(memberships));
+    counterService.getMemberships.and.returnValue($q.when(memberships));
     controller = $controller('CounterMembershipsController', {
       newMember: null,
       counterService: counterService,
