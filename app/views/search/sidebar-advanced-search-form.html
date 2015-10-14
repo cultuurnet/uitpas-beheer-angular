@@ -7,20 +7,20 @@
 </ul>
 <div>
   <p>Geef de kaartnummers van de aanwezige UiTPAShouders in: alle kaartnummers achter elkaar gescheiden door een spatie.</p>
-  <form name="searchPassholderNumbers">
-    <textarea ng-model="pasc.uitpasNumbers" required  name="passholderNumbers" ubr-search-uitpas-numbers-validation rows="8" id="passholder-numbers" placeholder="bv 0987654321012 0987654321013"></textarea>
+  <form name="searchPassholderNumbers" ng-submit="pec.submitForm(passholderEdit)" novalidate ng-class="{'form-submiting': pasc.formSubmitBusy}">
+    <textarea ng-model="pasc.passNumbers" required  name="passholderNumbers" ubr-search-uitpas-numbers-validation rows="8" id="passholder-numbers" placeholder="bv 0987654321012 0987654321013"></textarea>
     <div ng-if="(searchPassholderNumbers.$submitted || searchPassholderNumbers.passholderNumbers.$touched || searchPassholderNumbers.passholderNumbers.$dirty) && searchPassholderNumbers.passholderNumbers.$invalid" class="text-danger small">
-      <div ng-if="searchPassholderNumbers.passholderNumbers.$error.required">Het geslacht afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>
+      <div ng-if="searchPassholderNumbers.passholderNumbers.$error.required">Gelieve minstens 1 pahouder nummer in te geven.</div>
       <div ng-if="searchPassholderNumbers.passholderNumbers.$error.invalidCharacters">Enkel getallen (0-9) en spaties zijn toegelaten.</div>
-      <div ng-if="searchPassholderNumbers.passholderNumbers.$error.invalidNumber">
-        Enkele opgegeven getallen zijn niet correct.
-        <ul>
-          <li ng-repeat="number in pasc.invalidNumbers">{{number}}</li>
-        </ul>
-      </div>
+    </div>
+    <div ng-show="pasc.invalidNumbers.length" class="text-danger small">
+      Enkele opgegeven getallen zijn niet correct:
+      <ul>
+        <li ng-repeat="number in pasc.invalidNumbers">{{number}}</li>
+      </ul>
     </div>
     <button type="button" class="btn btn-primary" ng-disabled="pasc.formSubmitBusy || searchPassholderNumbers.$invalid" ng-click="pasc.submitPassholderNumbersForm(searchPassholderNumbers)">
-      <span ng-hide="pasc.formSubmitBusy">Bewaren</span> <span ng-show="pasc.formSubmitBusy"><span class="fa fa-refresh loading small"></span> Formulier wordt verzonden</span>
+      <span ng-hide="pasc.formSubmitBusy">Doorgaan</span> <span ng-show="pasc.formSubmitBusy"><span class="fa fa-refresh loading small"></span> Formulier wordt verzonden</span>
     </button>
   </form>
 </div>

@@ -31,34 +31,12 @@ function ubrSearchUitpasNumbersValidation () {
       return !(regexResult);
     }
 
-    function resemblesUitpasNumber(value) {
-      /**
-       * Matches strings containing exactly 13 digits.
-       * @type {RegExp}
-       */
-      var resembleUitpasNumberRegex = /^\d{13}$/;
-      return (resembleUitpasNumberRegex.exec(value));
-    }
-
     ngModel.$validators.invalidCharacters = function (modelValue, viewValue) {
-      return !containsOnlyNumbersAndSpaces(viewValue);
-    };
-
-    ngModel.$validators.invalidNumber = function (modelValue, viewValue) {
-      var invalidNumbers = [];
+      var valid = true;
       if (viewValue) {
-        var givenNumbers = viewValue.split(' ');
-        angular.forEach(givenNumbers, function (number) {
-          if (!resemblesUitpasNumber(number)) {
-            invalidNumbers.push(number);
-          }
-        });
+        valid = !containsOnlyNumbersAndSpaces(viewValue);
       }
-
-      scope.pasc.invalidNumbers = invalidNumbers;
-      return (invalidNumbers.length === 0);
+      return valid;
     };
   }
 }
-
-
