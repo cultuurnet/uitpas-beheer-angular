@@ -26,6 +26,7 @@ angular
     'ubr.kansenstatuut',
     'ubr.group',
     'ubr.checkindevices',
+    'ubr.counter-membership',
     'ubr.expense-report'
   ])
   .constant('moment', moment) // jshint ignore:line

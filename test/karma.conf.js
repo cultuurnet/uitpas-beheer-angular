@@ -50,17 +50,14 @@ module.exports = function(config) {
       'bower_components/ngTouchSpin/src/js/ngTouchSpin.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
-      "app/scripts/registration/ubr.registration.module.js",
-      "app/scripts/kansenstatuut/ubr.kansenstatuut.module.js",
-      "app/scripts/group/ubr.group.module.js",
-      "app/scripts/checkindevices/ubr.checkindevices.module.js",
-      "app/scripts/expense-report/ubr.expense-report.module.js",
+      "app/scripts/**/*.module.js",
       "app/scripts/**/*.js",
       "app/views/*.html",
       "app/views/registration/*.html",
       "app/views/checkindevices/*.html",
       //"test/mock/**/*.js",
-      "test/spec/**/*.js"
+      "test/spec/**/*.js",
+      "test/spec/**/*/*.js"
     ],
 
     // list of files / patterns to exclude

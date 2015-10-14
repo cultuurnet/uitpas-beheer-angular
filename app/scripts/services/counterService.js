@@ -1,6 +1,23 @@
 'use strict';
 
 /**
+ * An error object return by the UiTPAS app API.
+ * @typedef {Object} ApiError
+ * @property {string} code      - An error code, eg: YOU_BROKE_IT.
+ * @property {string} message   - A mostly readable error message.
+ * @property {string} exception - The actual exception that occurred.
+ * @property {string} type      - The type of the error.
+ */
+
+/**
+ * Counter membership
+ * @typedef {Object} CounterMembership
+ * @property {string} uid      - Unique identifier, eg: 465a4sd-5as4df-asd65f4-asd45f6as5d4
+ * @property {string} nick     - Member nickname
+ * @property {string} role     - Membership role
+ */
+
+/**
  * @ngdoc service
  * @name uitpasbeheerApp.counterService
  * @description
@@ -265,5 +282,82 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       .then(resolvePriceInfo, handleErrorResponse);
 
     return deferredPriceInfo.promise;
+  };
+
+  /**
+   * Return a list of memberships for the active counter
+   *
+   * @return {Promise<CounterMembership[]|ApiError>} A list of memberships or an error response.
+   */
+  service.getMemberships = function () {
+    var url = apiUrl + '/active/members';
+    var deferredMembers = $q.defer();
+
+    $http
+      .get(url)
+      .success(deferredMembers.resolve)
+      .error(deferredMembers.reject);
+
+    return deferredMembers.promise;
+  };
+
+  /**
+   * Add a member with the given email to the active counter
+   *
+   * @param {string} email
+   *
+   * @return {Promise.<CounterMembership|ApiError>}
+   */
+  service.createMembership = function (email) {
+    var url = apiUrl + '/active/members';
+    var parameters = {
+      email: email
+    };
+    var config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    var deferredMember = $q.defer();
+
+    var returnMember = function (creationResponse) {
+      var member = {
+        uid: creationResponse.data.uid,
+        nick: creationResponse.data.nick,
+        role: creationResponse.data.role
+      };
+
+      deferredMember.resolve(member);
+    };
+
+    var returnError = function (errorResponse) {
+      deferredMember.reject(errorResponse.data);
+    };
+
+    $http
+      .post(url, parameters, config)
+      .then(returnMember, returnError);
+
+    return deferredMember.promise;
+  };
+
+  /**
+   * Delete a member with the given uid from the active counter.
+   *
+   * @param {string} uid
+   *
+   * @return {Promise.<null|ApiError>} Resolves with null if successfully deleted or an error
+   */
+  service.deleteMembership = function (uid) {
+    var url = apiUrl + '/active/members/' + uid;
+    var deferredResponse = $q.defer();
+
+    var returnError = function (errorResponse) {
+      deferredResponse.reject(errorResponse.data);
+    };
+
+    $http.delete(url).then(deferredResponse.resolve, returnError);
+
+    return deferredResponse.promise;
   };
 }
