@@ -11,7 +11,8 @@
 angular
   .module('ubr.counter', [
     'ui.router',
-    'uitpasbeheerApp',
+    'ubr.counter.checkin-devices',
+    'ubr.counter.expense-report',
     'truncate'
   ])
   /* @ngInject */

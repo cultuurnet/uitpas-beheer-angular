@@ -2,14 +2,14 @@
 
 /**
  * @ngdoc overview
- * @name ubr.search
+ * @name ubr.passholder.search
  * @description
  * # ubr.search
  *
  * counter module UiTPAS Beheer
  */
 angular
-  .module('ubr.search', [
+  .module('ubr.passholder.search', [
     'ui.router',
     'uitpasbeheerApp',
     'truncate'

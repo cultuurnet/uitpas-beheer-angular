@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name ubr.group.controller:GroupActivityController
+ * @name ubr.counter.checkin-devices.service:CheckInDevicesConnections
  * @description
  * # GroupActivityController
- * Controller of the ubr group module.
+ * Controller of the ubr counter checkin devices module.
  */
 angular
-  .module('ubr.checkindevices')
+  .module('ubr.counter.checkin-devices')
   .controller('CheckInDevicesConnectionsController', CheckInDevicesConnectionsController);
 
 /* @ngInject */

@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc overview
- * @name ubr.checkindevices
+ * @name ubr.counter.checkin-devices
  * @description
- * # ubr.checkindevices
+ * # ubr.counter.checkin-devices
  *
- * checkindevices module UiTPAS Beheer
+ * checkin-devices module UiTPAS Beheer
  */
 angular
-  .module('ubr.checkindevices', [
+  .module('ubr.counter.checkin-devices', [
     'ui.router',
-    'uitpasbeheerApp',
+    'ubr.counter',
     'truncate'
   ])
   /* @ngInject */

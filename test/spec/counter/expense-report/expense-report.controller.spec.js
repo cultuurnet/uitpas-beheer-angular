@@ -5,7 +5,7 @@ describe('Controller: expenseReportController', function () {
   var $controller, $scope, $httpBackend, $interval, controller;
   var apiUrl = 'http://tett.en/';
 
-  beforeEach(module('ubr.expense-report', function($provide) {
+  beforeEach(module('ubr.counter.expense-report', function($provide) {
     $provide.constant('appConfig', {
       apiUrl: apiUrl
     });

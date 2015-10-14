@@ -10,6 +10,7 @@
  */
 angular
   .module('ubr.passholder', [
+    'ubr.passholder.search',
     'ui.router',
     'uitpasbeheerApp',
     'truncate'
