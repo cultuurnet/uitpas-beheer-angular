@@ -30,6 +30,7 @@ angular
     'ubr.membership',
     'ubr.passholder',
     'ubr.registration',
+    'ubr.search',
     'ubr.utilities',
     'ui.router',
     'ui.bootstrap'
@@ -58,12 +59,12 @@ angular
         redirectOnScan: true,
         views: {
           content: {
-            templateUrl: 'views/content-search.html',
+            templateUrl: 'views/search/content-search.html',
             controller: 'PassholderSearchController',
             controllerAs: 'psc'
           },
           sidebar: {
-            templateUrl: 'views/sidebar-search.html',
+            templateUrl: 'views/search/sidebar-search.html',
             controller: 'PassholderSearchController',
             controllerAs: 'psc'
           },

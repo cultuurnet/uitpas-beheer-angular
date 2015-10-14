@@ -29,55 +29,57 @@ angular
 
     $stateProvider
       .state('counter.main.passholder', {
-      url: 'passholder/:identification',
-      requiresCounter: true,
-      redirectOnScan: true,
-      views: {
-        'content@counter': {
-          templateProvider: function ($templateFactory, pass) {
-            var templatePath = 'views/split-content.html';
-            if (pass.isBlocked()) {
-              templatePath = 'views/passholder/content-passholder-blocked.html';
-            }
-            return $templateFactory.fromUrl(templatePath);
+        url: 'passholder/:identification',
+        requiresCounter: true,
+        redirectOnScan: true,
+        views: {
+          'content@counter': {
+            templateProvider: function ($templateFactory, pass) {
+              var templatePath = 'views/split-content.html';
+              if (pass.isBlocked()) {
+                templatePath = 'views/passholder/content-passholder-blocked.html';
+              }
+              return $templateFactory.fromUrl(templatePath);
+            },
+            controller: 'PassholderDetailController',
+            controllerAs: 'pdc'
           },
-          controller: 'PassholderDetailController',
-          controllerAs: 'pdc'
+          'sidebar@counter': {
+            templateUrl: 'views/passholder/sidebar-passholder-details.html',
+            controller: 'PassholderDetailController',
+            controllerAs: 'pdc'
+          },
+          'top@counter.main.passholder': {
+            templateUrl: 'views/activity/content-passholder-activities.html',
+            controller: 'ActivityController',
+            controllerAs: 'ac'
+          },
+          'bottom@counter.main.passholder': {
+            templateUrl: 'views/advantage/content-passholder-advantages.html',
+            controller: 'PassholderAdvantageController',
+            controllerAs: 'pac'
+          }
         },
-        'sidebar@counter': {
-          templateUrl: 'views/passholder/sidebar-passholder-details.html',
-          controller: 'PassholderDetailController',
-          controllerAs: 'pdc'
+        params: {
+          'identification': null,
+          'pass': null,
+          'passholder': null,
+          'advantages': null,
+          'activeCounter': null
         },
-        'top@counter.main.passholder': {
-          templateUrl: 'views/activity/content-passholder-activities.html',
-          controller: 'ActivityController',
-          controllerAs: 'ac'
-        },
-        'bottom@counter.main.passholder': {
-          templateUrl: 'views/advantage/content-passholder-advantages.html',
-          controller: 'PassholderAdvantageController',
-          controllerAs: 'pac'
+        resolve: {
+          pass: getPassFromStateParams,
+          passholder: getPassholderFromStateParams,
+          /* @ngInject */
+          advantages: function(advantageService, $stateParams) {
+            return advantageService.list($stateParams.identification);
+          },
+          /* @ngInject */
+          activeCounter: function (counterService) {
+            return counterService.getActive();
+          }
         }
-      },
-      params: {
-        'identification': null,
-        'pass': null,
-        'passholder': null,
-        'advantages': null,
-        'activeCounter': null
-      },
-      resolve: {
-        pass: getPassFromStateParams,
-        passholder: getPassholderFromStateParams,
-        advantages: ['advantageService', '$stateParams', function(advantageService, $stateParams) {
-          return advantageService.list($stateParams.identification);
-        }],
-        activeCounter: ['counterService', function (counterService) {
-          return counterService.getActive();
-        }]
-      }
-    })
+      })
       .state('counter.main.passholder.edit', {
         resolve: {
           passholder: getPassholderFromStateParams,
@@ -85,7 +87,8 @@ angular
             return $stateParams.identification;
           }]
         },
-        onEnter: ['passholder', 'identification', '$state', '$modal', function(passholder, identification, $state, $modal) {
+        /* @ngInject */
+        onEnter: function(passholder, identification, $state, $modal) {
           $modal
             .open({
               animation: true,
@@ -106,7 +109,7 @@ angular
             .finally(function() {
               $state.go('^');
             });
-        }]
+        }
       })
       .state('counter.main.passholder.editContact', {
         resolve: {
@@ -115,7 +118,8 @@ angular
             return $stateParams.identification;
           }]
         },
-        onEnter: ['passholder', 'identification', '$state', '$modal', function(passholder, identification, $state, $modal) {
+        /* @ngInject */
+        onEnter: function(passholder, identification, $state, $modal) {
           $modal
             .open({
               animation: true,
@@ -136,7 +140,7 @@ angular
             .finally(function() {
               $state.go('^');
             });
-        }]
+        }
       })
       .state('counter.main.passholder.replacePass', {
         resolve: {
@@ -187,7 +191,8 @@ angular
           pass: getPassFromStateParams,
           passholder: getPassholderFromStateParams
         },
-        onEnter: ['pass', 'passholder', '$state', '$modal', function(pass, passholder, $state, $modal) {
+        /* @ngInject */
+        onEnter: function(pass, passholder, $state, $modal) {
           $modal
             .open({
               animation: true,
@@ -208,6 +213,6 @@ angular
             .finally(function() {
               $state.go('^');
             });
-        }]
+        }
       });
   });

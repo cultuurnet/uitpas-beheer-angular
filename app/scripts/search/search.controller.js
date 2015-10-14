@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name ubr.passholder.controller:PassholderSearchController
+ * @name ubr.search.controller:PassholderSearchController
  * @description
- * # PassholderSearchController
- * Controller of the ubr.passholder module.
+ * # SearchController
+ * Controller of the ubr.search module.
  */
 angular
-  .module('ubr.passholder')
+  .module('ubr.search')
   .controller('PassholderSearchController', PassholderSearchController);
 
 /* @ngInject */
