@@ -2,7 +2,7 @@
 
 describe('Factory: Activity', function () {
 
-  beforeEach(module('uitpasbeheerApp'));
+  beforeEach(module('ubr.activity'));
 
   var Activity, CheckinState;
 

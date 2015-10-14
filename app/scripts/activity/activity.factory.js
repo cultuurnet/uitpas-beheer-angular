@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc service
- * @name ubr.utilities.Activity
+ * @name ubr.activity.Activity
  * @description
  * # Activity factory
- * Factory in the ubr.utilities module.
+ * Factory in the ubr.activity module.
  */
 angular
-  .module('ubr.utilities')
+  .module('ubr.activity')
   .factory('Activity', activityFactory);
 
 /* @ngInject */
