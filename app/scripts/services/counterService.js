@@ -10,6 +10,14 @@
  */
 
 /**
+ * Counter membership
+ * @typedef {Object} CounterMembership
+ * @property {string} uid      - Unique identifier, eg: 465a4sd-5as4df-asd65f4-asd45f6as5d4
+ * @property {string} nick     - Member nickname
+ * @property {string} role     - Membership role
+ */
+
+/**
  * @ngdoc service
  * @name uitpasbeheerApp.counterService
  * @description
@@ -273,7 +281,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
   /**
    * Return a list of memberships for the active counter
    *
-   * @return {Promise<Object|ApiError>} A list of memberships or an error response.
+   * @return {Promise<CounterMembership[]|ApiError>} A list of memberships or an error response.
    */
   service.getMemberships = function () {
     var url = apiUrl + '/active/members';
@@ -290,7 +298,9 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
   /**
    * Add a member with the given email to the active counter
    *
-   * @param email
+   * @param {string} email
+   *
+   * @return {Promise.<CounterMembership|ApiError>}
    */
   service.createMembership = function (email) {
     var url = apiUrl + '/active/members';
@@ -326,26 +336,21 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
   };
 
   /**
-   * Delete a member with the given uid from the active counter
+   * Delete a member with the given uid from the active counter.
    *
-   * @param uid
+   * @param {string} uid
+   *
+   * @return {Promise.<null|ApiError>} Resolves with null if successfully deleted or an error
    */
   service.deleteMembership = function (uid) {
     var url = apiUrl + '/active/members/' + uid;
     var deferredResponse = $q.defer();
 
-    var returnResponse = function (deletionResponse) {
-      deferredResponse.resolve(deletionResponse);
-    };
-
     var returnError = function (errorResponse) {
       deferredResponse.reject(errorResponse.data);
     };
 
-    $http({
-      method: 'DELETE',
-      url: url
-    }).then(returnResponse, returnError);
+    $http.delete(url).then(deferredResponse.resolve, returnError);
 
     return deferredResponse.promise;
   };
