@@ -524,4 +524,128 @@ describe('Service: counterService', function () {
 
     $httpBackend.flush();
   });
+
+  it('can get memberships from the API', function (done) {
+    var memberships = [
+      {
+        uid: 'dirk-dirkington',
+        nick: 'Dirk Dirkington',
+        role: 'admin'
+      },
+      {
+        uid: 'foo-bar',
+        nick: 'Foo Bar',
+        role: 'admin'
+      }
+    ];
+    $httpBackend
+      .expectGET(apiUrl + 'counters/active/members')
+      .respond(200, memberships);
+
+    var assertMemberships = function (receivedMemberships) {
+      expect(receivedMemberships).toEqual(memberships);
+      done();
+    };
+
+    var assertNoFailure = function (error) {
+      expect(error).toBeUndefined();
+      done();
+    };
+
+    counterService
+      .getMemberships()
+      .then(assertMemberships, assertNoFailure);
+    $httpBackend.flush();
+  });
+
+  it('can handle an error when it gets memberships from the API', function (done) {
+    $httpBackend
+      .expectGET(apiUrl + 'counters/active/members')
+      .respond(400, {code: 'Wunderbar'});
+
+    var assertError = function (error) {
+      expect(error).toEqual({'code': 'Wunderbar'});
+      done();
+    };
+
+    counterService
+      .getMemberships()
+      .catch(assertError);
+    $httpBackend.flush();
+  });
+
+  it('can create a new membership', function (done) {
+    var creationResponse = {
+      uid: 'new-id-for-now-user',
+      nick: 'e@mail',
+      role: 'member'
+    };
+    $httpBackend
+      .expectPOST(apiUrl + 'counters/active/members')
+      .respond(200, creationResponse);
+
+    var assertMemberResponse = function (member) {
+      expect(member).toEqual(creationResponse);
+      done();
+    };
+
+    counterService
+      .createMembership(creationResponse.nick)
+      .then(assertMemberResponse);
+    $httpBackend.flush();
+  });
+
+  it('can handle an error when it creates an new membership', function(done) {
+    $httpBackend
+      .expectPOST(apiUrl + 'counters/active/members')
+      .respond(400, 'error');
+
+    var assertError = function (error) {
+      expect(error).toBeDefined();
+      done();
+    };
+
+    counterService
+      .createMembership('e@mail')
+      .catch(assertError);
+    $httpBackend.flush();
+  });
+
+  it('can delete a membership', function (done) {
+    var uid = 'new-id-for-now-user';
+    $httpBackend
+      .expectDELETE(apiUrl + 'counters/active/members/' + uid)
+      .respond(200);
+
+    var assertMemberDeleted = function () {
+      done();
+    };
+
+    var assertNoErrors = function (error) {
+      expect(error).toBeUndefined();
+      done();
+    };
+
+    counterService
+      .deleteMembership(uid)
+      .then(assertMemberDeleted, assertNoErrors);
+    $httpBackend.flush();
+  });
+
+  it('can handle an error when it deletes a membership', function(done) {
+    var uid = 'new-id-for-now-user';
+    $httpBackend
+      .expectDELETE(apiUrl + 'counters/active/members/' + uid)
+      .respond(400, 'error');
+
+    var assertError = function (error) {
+      expect(error).toBeDefined();
+      done();
+    };
+
+    counterService
+      .deleteMembership(uid)
+      .catch(assertError);
+    $httpBackend.flush();
+  });
 });

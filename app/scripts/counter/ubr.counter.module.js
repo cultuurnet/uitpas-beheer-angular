@@ -13,6 +13,7 @@ angular
     'ui.router',
     'ubr.counter.checkin-devices',
     'ubr.counter.expense-report',
+    'ubr.counter.membership',
     'truncate'
   ])
   /* @ngInject */
