@@ -2,12 +2,13 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.advantage
+ * @name ubr.counter.checkin-devices.service:CheckInDevices
  * @description
  * # advantage
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.counter.checkin-devices.
  */
-angular.module('ubr.checkindevices')
+angular
+  .module('ubr.counter.checkin-devices')
   .service('CheckInDevices', CheckInDevices);
 
 /* @ngInject */

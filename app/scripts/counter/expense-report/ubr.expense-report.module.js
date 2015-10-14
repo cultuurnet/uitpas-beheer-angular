@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc overview
- * @name ubr.kansenstatuut
+ * @name ubr.counter.expense-report
  * @description
- * # ubr.kansenstatuut
+ * # ubr.counter.expense-report
  *
- * kansenstatuut module UiTPAS Beheer
+ * Counter expense report module UiTPAS Beheer
  */
 angular
-  .module('ubr.expense-report', [
+  .module('ubr.counter.expense-report', [
     'ui.router',
-    'uitpasbeheerApp'
+    'ubr.counter'
   ])
   /* @ngInject */
   .config(function ($stateProvider) {

@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name ubr.expense-report.controller:ExpenseReportController
+ * @name ubr.counter.expense-report.controller:ExpenseReportController
  * @description
  * # ExpenseReportController
  * Controller of the ubr expense report module.
  */
 angular
-  .module('ubr.expense-report')
+  .module('ubr.counter.expense-report')
   .controller('ExpenseReportController', ExpenseReportController);
 
 /* @ngInject */

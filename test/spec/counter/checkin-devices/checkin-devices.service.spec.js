@@ -5,16 +5,12 @@ describe('Service: CheckInDevices', function () {
   var apiUrl = 'http://example.com/';
   var $scope, $q, $httpBackend, CheckInDevices;
 
-  beforeEach(module('ubr.checkindevices'));
-
   // load the service's module
-  beforeEach(module('ubr.checkindevices', function($provide) {
+  beforeEach(module('ubr.counter.checkin-devices', function($provide) {
     $provide.constant('appConfig', {
       apiUrl: apiUrl
     });
   }));
-
-
 
   beforeEach(inject(function ($injector, $rootScope) {
     $httpBackend = $injector.get('$httpBackend');

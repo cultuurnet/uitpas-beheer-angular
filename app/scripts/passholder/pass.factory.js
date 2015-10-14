@@ -2,12 +2,13 @@
 
 /**
  * @ngdoc service
- * @name ubr.utilities.Pass
+ * @name ubr.passholder.Pass
  * @description
  * # Pass factory
- * Factory in the ubr.utilities module.
+ * Factory in the ubr.passholder module.
  */
-angular.module('ubr.utilities')
+angular
+  .module('ubr.passholder')
   .factory('Pass', passFactory);
 
 /* @ngInject */
