@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.UiTPASRouter
+ * @name ubr.utilities.UiTPASRouter
  * @description
  * # UiTPAS router service
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.utilities module.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .service('UiTPASRouter', UiTPASRouterService);
 
 /* @ngInject */

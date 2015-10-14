@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.Pass
+ * @name ubr.utilities.Pass
  * @description
  * # MembershipEndDateCalculator factory
- * Factory in the passbeheerApp.
+ * Factory in the ubr.utilities module.
  */
-angular.module('uitpasbeheerApp')
+angular.module('ubr.utilities')
   .factory('MembershipEndDateCalculator', membershipEndDateCalculatorFactory);
 
 /* @ngInject */

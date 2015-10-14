@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc directive
- * @name uitpasbeheerApp.directive:ubrAppLoading
+ * @name ubr.utilities.directive:ubrAppLoading
  * @description
  * # App loading directive.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .directive('ubrAppLoading', appLoadingDirective);
 
 /* @ngInject */

@@ -30,6 +30,7 @@ angular
     'ubr.membership',
     'ubr.passholder',
     'ubr.registration',
+    'ubr.utilities',
     'ui.router',
     'ui.bootstrap'
   ])

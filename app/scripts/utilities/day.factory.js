@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.day
+ * @name ubr.utilities.day
  * @description
  * # day factory
  * Creates moment objects from date strings.
@@ -10,7 +10,8 @@
  * The best workaround so far is to regex match the year, month and date and pass.
  * Then pass them along as an ISO date string to the native Date class.
  */
-angular.module('uitpasbeheerApp')
+angular
+  .module('ubr.utilities')
   .factory('day', dayFactory);
 
 /* @ngInject */

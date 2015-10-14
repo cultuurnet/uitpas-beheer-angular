@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.Passholder
+ * @name ubr.utilities.Passholder
  * @description
  * # Passholder factory
- * Factory in the uitpasbeheerApp.
+ * Factory in the ubr.utilities module.
  */
-angular.module('uitpasbeheerApp')
+angular.module('ubr.utilities')
   .factory('Passholder', passholderFactory);
 
 /* @ngInject */

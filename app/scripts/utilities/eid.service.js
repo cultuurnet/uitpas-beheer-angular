@@ -2,12 +2,13 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.eIDService
+ * @name ubr.utilities.eIDService
  * @description
  * # eIDService
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.utilities module.
  */
-angular.module('uitpasbeheerApp')
+angular
+  .module('ubr.utilities')
   .service('eIDService', eIDService);
 
 /* @ngInject */

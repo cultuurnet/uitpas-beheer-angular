@@ -2,11 +2,11 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:LoginCtrl
+ * @name ubr.utilities.controller:LoginCtrl
  * @description
  * # LoginCtrl
- * Controller of the uitpasbeheerApp
+ * Controller of the ubr.utilities module.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .controller('LoginCtrl', function () {});

@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc directive
- * @name uitpasbeheerApp.directive:ubrUitpasNumberAsyncValidation
+ * @name ubr.utilities.directive:ubrUitpasNumberAsyncValidation
  * @description
  * # Async validation of an UiTPAS number field.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .directive('ubrUitpasNumberAsyncValidation', uitpasNumberAsyncValidationDirective);
 
 /* @ngInject */
@@ -27,7 +27,7 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
     function resemblesUitpasNumber(value) {
       return typeof value === 'string' && value.length >= 13;
     }
-    
+
     var lastSearch = false;
     function findPass(identification) {
       if (identification !== lastSearch.identification) {

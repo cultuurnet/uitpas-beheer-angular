@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:AppController
+ * @name ubr.utilities.controller:AppController
  * @description
  * # AppController
- * Controller of the uitpasbeheerApp
+ * Controller of the ubr.utilities module.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .controller('AppController', appController);
 
 /* @ngInject */

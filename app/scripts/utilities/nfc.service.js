@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.nfcService
+ * @name ubr.utilities.nfcService
  * @description
  * # nfcService
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.utilities module.
  */
-angular.module('uitpasbeheerApp')
+angular.module('ubr.utilities')
   .service('nfcService', nfcService);
 
 /* @ngInject */

@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.Activity
+ * @name ubr.utilities.Activity
  * @description
  * # Activity factory
- * Factory in the passbeheerApp.
+ * Factory in the ubr.utilities module.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .factory('Activity', activityFactory);
 
 /* @ngInject */

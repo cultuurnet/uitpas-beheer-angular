@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc directive
- * @name uitpasbeheerApp.directive:ubrIgnoreField
+ * @name ubr.utilities.directive:ubrIgnoreField
  * @description
  * # ignore field directive.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .directive('ubrIgnoreField', ignoreFieldDirective);
 
 /* @ngInject */

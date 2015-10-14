@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.uitid
+ * @name ubr.utilities.uitid
  * @description
  * # uitid
- * Service in the uitpasbeheerApp.
+ * Service in the ubr.utilities module.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .service('uitid', uitidService);
 
 /* @ngInject */

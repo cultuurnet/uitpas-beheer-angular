@@ -4,13 +4,13 @@
 
 /**
  * @ngdoc constant
- * @name uitpasbeheerApp.DateRange
+ * @name ubr.utilities.DateRange
  * @description
  * # DateRange
  * Date ranges used for searching activities
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .constant('DateRange',
   /**
    * Enum for date range

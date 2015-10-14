@@ -4,13 +4,13 @@
 
 /**
  * @ngdoc constant
- * @name uitpasbeheerApp.TicketSaleAPIError
+ * @name ubr.utilities.TicketSaleAPIError
  * @description
  * # APIError
  * Possible API Errors that can happen when buying tickets.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .constant('TicketSaleAPIError',
   /**
    * Enum for ticket sale API errors

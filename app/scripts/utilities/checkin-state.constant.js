@@ -4,13 +4,13 @@
 
 /**
  * @ngdoc constant
- * @name uitpasbeheerApp.CheckinState
+ * @name ubr.utilities.CheckinState
  * @description
  * # CheckinState
  * Checkin state used by activities
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .constant('CheckinState',
   /**
    * Enum for checkin state

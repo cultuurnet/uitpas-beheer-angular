@@ -4,13 +4,13 @@
 
 /**
  * @ngdoc constant
- * @name uitpasbeheerApp.APIError
+ * @name ubr.utilities.APIError
  * @description
  * # APIError
  * API Error that can happen when registering a passholder.
  */
 angular
-  .module('uitpasbeheerApp')
+  .module('ubr.utilities')
   .constant('APIError',
   /**
    * Enum for API errors

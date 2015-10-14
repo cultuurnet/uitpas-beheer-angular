@@ -2,12 +2,13 @@
 
 /**
  * @ngdoc service
- * @name uitpasbeheerApp.Counter
+ * @name ubr.utilities.Counter
  * @description
  * # Pass factory
- * Factory in the passbeheerApp.
+ * Factory in the ubr.utilities module.
  */
-angular.module('uitpasbeheerApp')
+angular
+  .module('ubr.utilities')
   .factory('Counter', counterFactory);
 
 /* @ngInject */

@@ -61,13 +61,13 @@ module.exports = function(config) {
       "app/scripts/membership/ubr.membership.module.js",
       "app/scripts/passholder/ubr.passholder.module.js",
       "app/scripts/registration/ubr.registration.module.js",
+      "app/scripts/utilities/ubr.utilities.module.js",
 
       "app/scripts/**/*.js",
       "app/scripts/**/*.*.js",
 
       "app/views/*.html",
-      "app/views/registration/*.html",
-      "app/views/checkindevices/*.html",
+      "app/views/*/*.html",
       //"test/mock/**/*.js",
       "test/spec/**/*.js",
       "test/spec/**/*.spec.js"
