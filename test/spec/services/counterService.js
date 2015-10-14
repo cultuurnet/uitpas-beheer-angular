@@ -540,7 +540,7 @@ describe('Service: counterService', function () {
     ];
     $httpBackend
       .expectGET(apiUrl + 'counters/active/members')
-      .respond(200, {data: memberships});
+      .respond(200, memberships);
 
     var assertMemberships = function (receivedMemberships) {
       expect(receivedMemberships).toEqual(memberships);
@@ -561,10 +561,10 @@ describe('Service: counterService', function () {
   it('can handle an error when it gets memberships from the API', function (done) {
     $httpBackend
       .expectGET(apiUrl + 'counters/active/members')
-      .respond(400, {data: 'error'});
+      .respond(400, {code: 'Wunderbar'});
 
     var assertError = function (error) {
-      expect(error).toBeDefined();
+      expect(error).toEqual({'code': 'Wunderbar'});
       done();
     };
 

@@ -1,6 +1,15 @@
 'use strict';
 
 /**
+ * An error object return by the UiTPAS app API.
+ * @typedef {Object} ApiError
+ * @property {string} code      - An error code, eg: YOU_BROKE_IT.
+ * @property {string} message   - A mostly readable error message.
+ * @property {string} exception - The actual exception that occurred.
+ * @property {string} type      - The type of the error.
+ */
+
+/**
  * @ngdoc service
  * @name uitpasbeheerApp.counterService
  * @description
@@ -264,23 +273,17 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
   /**
    * Return a list of memberships for the active counter
    *
-   * @return {Promise}
+   * @return {Promise<Object|ApiError>} A list of memberships or an error response.
    */
   service.getMemberships = function () {
     var url = apiUrl + '/active/members';
     var deferredMembers = $q.defer();
 
-    var resolveMemberships = function (responseData) {
-      deferredMembers.resolve(responseData);
-    };
-    var handleErrorResponse = function (errorResponse) {
-      deferredMembers.reject(errorResponse);
-    };
-
     $http
       .get(url)
-      .success(resolveMemberships)
-      .error(handleErrorResponse);
+      .success(deferredMembers.resolve)
+      .error(deferredMembers.reject);
+
     return deferredMembers.promise;
   };
 
