@@ -51,7 +51,7 @@ angular
             controllerAs: 'prc'
           },
           'sidebar@counter': {
-            templateUrl: 'views/sidebar-passholder-register.html',
+            templateUrl: 'views/registration/sidebar-passholder-register.html',
             controller: 'PassholderRegisterController',
             controllerAs: 'prc'
           }

@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:PassholderBlockPassController
+ * @name ubr.passholder.controller:PassholderBlockPassController
  * @description
  * # PassholderBlockPassController
- * Controller of the uitpasbeheerApp
+ * Controller of the ubr.passholder module.
  */
-angular.module('uitpasbeheerApp')
+angular.module('ubr.passholder')
   .controller('PassholderBlockPassController', PassholderBlockPassController);
 
 /* @ngInject */
