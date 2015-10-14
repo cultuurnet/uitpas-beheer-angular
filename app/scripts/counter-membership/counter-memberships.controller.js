@@ -16,6 +16,7 @@ function CounterMembershipsController(newMember, counterService, $state) {
   /*jshint validthis: true */
   var controller = this;
   controller.newMember = newMember;
+  controller.deletedMember = null;
 
   controller.loadingMembers = true;
   controller.members = [];
@@ -56,7 +57,7 @@ function CounterMembershipsController(newMember, counterService, $state) {
     member.confirmingDelete = false;
 
     var updateMemberships = function(){
-      controller.deletedMember = angular.copy(member);
+      controller.showDeletedMembership(member);
       controller.loadMemberships();
     };
     var displayError = function(){
@@ -67,6 +68,14 @@ function CounterMembershipsController(newMember, counterService, $state) {
     counterService
       .deleteMembership(member.uid)
       .then(updateMemberships, displayError);
+  };
+
+  /**
+   * @param {CounterMembership} membership
+   */
+  controller.showDeletedMembership = function (membership) {
+    controller.newMember = null;
+    controller.deletedMember = angular.copy(membership);
   };
 
   controller.loadMemberships();
