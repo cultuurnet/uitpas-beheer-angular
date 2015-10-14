@@ -94,6 +94,13 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     return deferred.promise;
   };
 
+  /**
+   * @param {string} identification
+   *   The identification number. This can be either an UiTPAS number, chip-number, INSZ-number, or INSZ-barcode.
+   *
+   * @returns {Promise}
+   *   A passholder promise.
+   */
   service.findPassholder = function(identification) {
     var deferredPassholder = $q.defer();
     var passholderPromise = deferredPassholder.promise;
@@ -171,6 +178,17 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     });
   };
 
+  /**
+   * Attach a new pass to a passholder
+   *
+   * @param {Pass} pass
+   * @param {string} passholderUid
+   * @param {string} reason
+   * @param {Date} kansenStatuutEndDate
+   * @param {string} voucherNumber
+   *
+   * @returns {Promise}
+   */
   service.newPass = function(pass, passholderUid, reason, kansenStatuutEndDate, voucherNumber) {
     var deferredPass = $q.defer();
     var parameters = {
@@ -338,6 +356,33 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       .then(updateLocalPassholder, deferredUpdate.reject);
 
     return deferredUpdate.promise;
+  };
+
+  /**
+   * @param {SearchParameters} searchParameters
+   *
+   * @returns {Promise<PassholderCollection[]|ApiError>}
+   */
+  service.searchPassholders = function (searchParameters) {
+    var deferredSearch = $q.defer();
+
+    var processSearchResults = function (searchResults) {
+      console.log(searchResults);
+      deferredSearch.resolve(searchResults);
+    };
+
+    var setSearchError = function (apiErrors) {
+      console.log(apiErrors);
+      deferredSearch.reject(apiErrors);
+    };
+
+    $http
+      .get(apiUrl + 'passholders', {
+        params: searchParameters.serialize()
+      })
+      .then(processSearchResults, setSearchError);
+
+    return deferredSearch.promise;
   };
 
   /**
