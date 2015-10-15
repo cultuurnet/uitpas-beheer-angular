@@ -1,7 +1,10 @@
-<div class="direction text-center">
+<div ng-hide="pasc.informedAboutUnfoundUitpasNumbers" class="direction text-center">
   <img class="logo" src="images/svg/card-search.svg" width="150" height="150" alt="search card">
   <p>
     Tip: Met een * zoek je op één of meerdere karakters, zo vind je met Lu* zowel Luk, Luc als Lucien terug.
   </p>
 </div>
-
+<div ng-show="pasc.informedAboutUnfoundUitpasNumbers">
+  The results are:
+  <pre>{{pasc.passCollection|json}}</pre>
+</div>

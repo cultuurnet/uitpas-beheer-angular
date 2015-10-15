@@ -59,15 +59,14 @@ function PassholderAdvancedSearchController (passholderService, SearchParameters
     }
 
     var searchParameters = new SearchParameters(jsonSearchParameters);
-    console.log(searchParameters);
+    //console.log(searchParameters);
 
     var doSomethingWithTheResults = function (resultResponse) {
-      console.log(resultResponse);
-
-      // Show the unknown uitpas numbers and ask to procede.
-
-      // Show the result set.
-
+      controller.formSubmitBusy = false;
+      if (resultResponse.unfoundUitpasNumbers || true) {
+        controller.showUnfoundUitpasNumbers(resultResponse.unfoundUitpasNumbers);
+        controller.passCollection = resultResponse;
+      }
     };
 
     var handleTheErrors = function (apiErrors) {
@@ -77,7 +76,14 @@ function PassholderAdvancedSearchController (passholderService, SearchParameters
     passholderService
       .searchPassholders(searchParameters)
       .then(doSomethingWithTheResults, handleTheErrors);
-
-    console.log(form);
   };
+
+  controller.showUnfoundUitpasNumbers = function (unfoundUitpasNumbers) {
+    controller.unfoundNumbers = unfoundUitpasNumbers;
+    controller.unfoundNumbers = ['0930000802619', '0930000801207'];
+  };
+
+  controller.showResults = function () {
+    controller.informedAboutUnfoundUitpasNumbers = true;
+  }
 }

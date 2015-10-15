@@ -23,4 +23,11 @@
       <span ng-hide="pasc.formSubmitBusy">Doorgaan</span> <span ng-show="pasc.formSubmitBusy"><span class="fa fa-refresh loading small"></span> Formulier wordt verzonden</span>
     </button>
   </form>
+  <div ng-show="pasc.unfoundNumbers.length && !pasc.informedAboutUnfoundUitpasNumbers" class="alert alert-info small">
+    Geen pashouders gevonden voor de kaartnummers:
+    <ul>
+      <li ng-repeat="number in pasc.unfoundNumbers">{{number}}</li>
+    </ul>
+    <a ng-click="pasc.showResults()">Doorgaan</a>
+  </div>
 </div>

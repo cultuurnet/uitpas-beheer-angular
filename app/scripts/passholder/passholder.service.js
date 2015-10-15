@@ -374,7 +374,9 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     };
 
     var setSearchError = function (apiError) {
-      console.log(new PassCollection());
+      if (apiError.data) {
+        apiError = apiError.data;
+      }
       if (apiError) {
         var knownAPIError = PassholderAPIError[apiError.code];
 
@@ -386,7 +388,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
           apiError.cleanMessage = 'Er is een fout opgetreden tijdens de communicatie met de server.';
         }
       }
-      console.log(apiError, 'apen fout');
+
       deferredSearch.reject(apiError);
     };
 
