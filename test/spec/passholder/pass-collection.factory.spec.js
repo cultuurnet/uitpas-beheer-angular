@@ -105,7 +105,26 @@ describe('Factory: PassCollection', function () {
     ];
 
     var passCollection = new PassCollection(jsonPassCollection);
-
     expect(passCollection).toEqual(expectedPassCollection);
+
+    jsonPassCollection.member = null;
+    expectedPassCollection.member = [];
+    passCollection = new PassCollection(jsonPassCollection);
+    expect(passCollection).toEqual(expectedPassCollection);
+  });
+
+  it('returns an empty object when no parameters are provided', function () {
+    var expectedEmptyObject = {
+      itemsPerPage: '',
+      totalItems: '',
+      member: [],
+      invalidUitpasNumbers: [],
+      firstPage: '',
+      lastPage: '',
+      previousPage: '',
+      nextPage: ''
+    };
+
+    expect(new PassCollection()).toEqual(expectedEmptyObject);
   });
 });
