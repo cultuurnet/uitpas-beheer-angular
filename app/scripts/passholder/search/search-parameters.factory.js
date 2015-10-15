@@ -12,7 +12,7 @@ angular
   .factory('SearchParameters', searchParametersFactory);
 
 /* @ngInject */
-function searchParametersFactory() {
+function searchParametersFactory(moment, day) {
 
   /**
    * @class SearchParameters
@@ -57,7 +57,7 @@ function searchParametersFactory() {
       serializedSearchParameters.dateOfBirth = (this.dateOfBirth ? moment(this.dateOfBirth).format('YYYY-MM-DD') : null);
 
       return serializedSearchParameters;
-    },
+    }
   };
 
   return (SearchParameters);
