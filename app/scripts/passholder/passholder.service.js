@@ -12,7 +12,7 @@ angular
   .service('passholderService', passholderService);
 
 /* @ngInject */
-function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope) {
+function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassCollection) {
   var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
@@ -361,20 +361,109 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   /**
    * @param {SearchParameters} searchParameters
    *
-   * @returns {Promise<PassholderCollection[]|ApiError>}
+   * @returns {Promise<PassCollection[]|ApiError>}
    */
   service.searchPassholders = function (searchParameters) {
     var deferredSearch = $q.defer();
 
     var processSearchResults = function (searchResults) {
       console.log(searchResults);
-      deferredSearch.resolve(searchResults);
+      var passCollection = new PassCollection(searchResults);
+      console.log(passCollection);
+      deferredSearch.resolve(passCollection);
     };
 
-    var setSearchError = function (apiErrors) {
-      console.log(apiErrors);
-      deferredSearch.reject(apiErrors);
+    var setSearchError = function (apiError) {
+      console.log(new PassCollection());
+      if (apiError) {
+        var knownAPIError = PassholderAPIError[apiError.code];
+
+        if (knownAPIError) {
+          apiError.cleanMessage = knownAPIError.message;
+        } else if(apiError.message) {
+          apiError.cleanMessage = apiError.message.split('URL CALLED')[0];
+        } else {
+          apiError.cleanMessage = 'Er is een fout opgetreden tijdens de communicatie met de server.';
+        }
+      }
+      console.log(apiError, 'apen fout');
+      deferredSearch.reject(apiError);
     };
+
+    /* @todo Clean up this fake response data.
+    var identityJson = {
+      'uitPas': {
+        'number': '0930000422202',
+        'kansenStatuut': false,
+        'status': 'ACTIVE'
+      },
+      'passHolder': {
+        'name': {
+          'first': 'Victor',
+          'last': 'D\'Hooghe'
+        },
+        'address': {
+          'street': 'Baanweg 60',
+          'postalCode': '9308',
+          'city': 'Aalst'
+        },
+        'birth': {
+          'date': '2007-11-15',
+          'place': 'Aalst'
+        },
+        'gender': 'MALE',
+        'nationality': 'belg',
+        'privacy': {
+          'email': false,
+          'sms': false
+        },
+        'contact': {
+          'email': 'email@email.com'
+        },
+        kansenStatuten: [{
+          status: 'ACTIVE',
+          endDate: '2015-12-06',
+          cardSystem: {
+            name: 'UiTPAS Regio Aalst',
+            id: '1'
+          }
+        }],
+        'points': 309,
+        'picture': 'picture-in-base64-format',
+        'remarks': 'remarks',
+        'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
+      }
+    };
+    var resultCollection = {
+      itemsPerPage: 10,
+      totalItems: 50,
+      member: [
+        identityJson,
+        identityJson,
+        identityJson,
+        identityJson,
+        identityJson,
+        identityJson,
+        identityJson,
+        identityJson,
+        identityJson,
+        identityJson
+      ],
+      invalidUitpasNumbers: [
+        '0987654321012',
+        '0987654321013',
+        '0987654321014',
+        '0987654321015',
+        '0987654321016'
+      ],
+      firstPage: 'http://culpas-silex.dev/passholders?page=1',
+      lastPage: 'http://culpas-silex.dev/passholders?page=5',
+      previousPage: 'http://culpas-silex.dev/passholders?page=1',
+      nextPage: 'http://culpas-silex.dev/passholders?page=2'
+    };
+
+    $q.when(processSearchResults(resultCollection));
+    //*/
 
     $http
       .get(apiUrl + 'passholders', {

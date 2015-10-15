@@ -12,12 +12,14 @@ angular
   .controller('PassholderAdvancedSearchController', PassholderAdvancedSearchController);
 
 /* @ngInject */
-function PassholderAdvancedSearchController () {
+function PassholderAdvancedSearchController (passholderService, SearchParameters) {
   /*jshint validthis: true */
   var controller = this;
   controller.invalidNumbers = [];
+  controller.unfoundNumbers = [];
   controller.formSubmitBusy = false;
-  controller.passNumbers = '';
+  controller.passNumbers = '0987654321012 0987654321013 0987654321014 0987654321015';
+  controller.informedAboutUnfoundUitpasNumbers = false;
 
   function resemblesUitpasNumber(value) {
     /**
@@ -51,10 +53,31 @@ function PassholderAdvancedSearchController () {
       return;
     }
 
-    // Check passholder numbers on the server.
+    var jsonSearchParameters = {};
+    if (controller.passNumbers) {
+      jsonSearchParameters.uitpasNumber = controller.passNumbers.split(' ');
+    }
 
-    // Show result set.
-    
+    var searchParameters = new SearchParameters(jsonSearchParameters);
+    console.log(searchParameters);
+
+    var doSomethingWithTheResults = function (resultResponse) {
+      console.log(resultResponse);
+
+      // Show the unknown uitpas numbers and ask to procede.
+
+      // Show the result set.
+
+    };
+
+    var handleTheErrors = function (apiErrors) {
+      console.log(apiErrors);
+    };
+
+    passholderService
+      .searchPassholders(searchParameters)
+      .then(doSomethingWithTheResults, handleTheErrors);
+
     console.log(form);
   };
 }
