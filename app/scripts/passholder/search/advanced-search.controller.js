@@ -18,7 +18,7 @@ function PassholderAdvancedSearchController (passholderService, SearchParameters
   controller.invalidNumbers = [];
   controller.unfoundNumbers = [];
   controller.formSubmitBusy = false;
-  controller.passNumbers = '0987654321012 0987654321013 0987654321014 0987654321015';
+  controller.passNumbers = '0930000804615 0930000807113 0930000802619 0930000801207';
   controller.informedAboutUnfoundUitpasNumbers = false;
 
   function resemblesUitpasNumber(value) {

@@ -55,6 +55,8 @@ function searchParametersFactory(moment, day) {
       var serializedSearchParameters = angular.copy(this);
 
       serializedSearchParameters.dateOfBirth = (this.dateOfBirth ? moment(this.dateOfBirth).format('YYYY-MM-DD') : null);
+      serializedSearchParameters['uitpasNumber[]'] = serializedSearchParameters.uitpasNumber;
+      delete serializedSearchParameters.uitpasNumber;
 
       return serializedSearchParameters;
     }

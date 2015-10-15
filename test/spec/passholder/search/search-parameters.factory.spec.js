@@ -5,6 +5,8 @@ describe('Factory: PassCollection', function () {
   beforeEach(module('uitpasbeheerApp'));
 
   var jsonSearchParametersUitpasNumbers = {
+    page: 2,
+    limit: 15,
     uitpasNumber: [
       '0987654321012',
       '0987654321013',
@@ -15,9 +17,7 @@ describe('Factory: PassCollection', function () {
       '0987654321018',
       '0987654321019',
       '0987654321020'
-    ],
-    page: 2,
-    limit: 15
+    ]
   };
   var jsonSearchParametersFields = {
     dateOfBirth: '2004-08-16',
@@ -65,27 +65,46 @@ describe('Factory: PassCollection', function () {
   it('should correctly parse a fields parameter set', function () {
     var jsonSearchParametersFields = getJsonSearchParametersFields();
     var expectedSearchParametersFields = getJsonSearchParametersFields();
-    expectedSearchParametersFields.uitpasNumber = [];
     expectedSearchParametersFields.page = null;
     expectedSearchParametersFields.limit = null;
+    expectedSearchParametersFields['uitpasNumber[]'] = [];
+
+    var searchParametersFields = new SearchParameters(jsonSearchParametersFields);
+    expect(searchParametersFields.serialize()).toEqual(expectedSearchParametersFields);
+  });
+
+  it('should correctly parse a fields parameter set without birth date', function () {
+    var jsonSearchParametersFields = getJsonSearchParametersFields();
+    var expectedSearchParametersFields = getJsonSearchParametersFields();
+    expectedSearchParametersFields.page = null;
+    expectedSearchParametersFields.limit = null;
+    expectedSearchParametersFields.dateOfBirth = null;
+    expectedSearchParametersFields['uitpasNumber[]'] = [];
+
+    var searchParametersFields = new SearchParameters(jsonSearchParametersFields);
+    searchParametersFields.dateOfBirth = null;
+
+    expect(searchParametersFields.serialize()).toEqual(expectedSearchParametersFields);
+  });
+
+  it('should correctly parse a fields parameter set whenn ot serialized', function () {
+    var jsonSearchParametersFields = getJsonSearchParametersFields();
+    var expectedSearchParametersFields = getJsonSearchParametersFields();
+    expectedSearchParametersFields.page = null;
+    expectedSearchParametersFields.limit = null;
+    expectedSearchParametersFields.uitpasNumber = [];
 
     var searchParametersFields = new SearchParameters(jsonSearchParametersFields);
 
-    expect(searchParametersFields.serialize()).toEqual(expectedSearchParametersFields);
-
-    expectedSearchParametersFields.dateOfBirth = day(expectedSearchParametersFields.dateOfBirth, 'YYYY-MM-DD').toDate();
+    expectedSearchParametersFields.dateOfBirth = day('2004-08-16', 'YYYY-MM-DD').toDate();
     expect(searchParametersFields).toEqual(expectedSearchParametersFields);
-
-    searchParametersFields.dateOfBirth = null;
-    expectedSearchParametersFields.dateOfBirth = null;
-    expect(searchParametersFields.serialize()).toEqual(expectedSearchParametersFields);
   });
 
   it('returns an empty object when no parameters are provided', function () {
     var expectedEmptyObject = {
-      uitpasNumber: [],
       page: null,
       limit: null,
+      uitpasNumber: [],
       dateOfBirth: null,
       firstName: null,
       name: null,

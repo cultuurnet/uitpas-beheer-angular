@@ -368,7 +368,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     var processSearchResults = function (searchResults) {
       console.log(searchResults);
-      var passCollection = new PassCollection(searchResults);
+      var passCollection = new PassCollection(searchResults.data);
       console.log(passCollection);
       deferredSearch.resolve(passCollection);
     };
@@ -389,81 +389,6 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       console.log(apiError, 'apen fout');
       deferredSearch.reject(apiError);
     };
-
-    /* @todo Clean up this fake response data.
-    var identityJson = {
-      'uitPas': {
-        'number': '0930000422202',
-        'kansenStatuut': false,
-        'status': 'ACTIVE'
-      },
-      'passHolder': {
-        'name': {
-          'first': 'Victor',
-          'last': 'D\'Hooghe'
-        },
-        'address': {
-          'street': 'Baanweg 60',
-          'postalCode': '9308',
-          'city': 'Aalst'
-        },
-        'birth': {
-          'date': '2007-11-15',
-          'place': 'Aalst'
-        },
-        'gender': 'MALE',
-        'nationality': 'belg',
-        'privacy': {
-          'email': false,
-          'sms': false
-        },
-        'contact': {
-          'email': 'email@email.com'
-        },
-        kansenStatuten: [{
-          status: 'ACTIVE',
-          endDate: '2015-12-06',
-          cardSystem: {
-            name: 'UiTPAS Regio Aalst',
-            id: '1'
-          }
-        }],
-        'points': 309,
-        'picture': 'picture-in-base64-format',
-        'remarks': 'remarks',
-        'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
-      }
-    };
-    var resultCollection = {
-      itemsPerPage: 10,
-      totalItems: 50,
-      member: [
-        identityJson,
-        identityJson,
-        identityJson,
-        identityJson,
-        identityJson,
-        identityJson,
-        identityJson,
-        identityJson,
-        identityJson,
-        identityJson
-      ],
-      invalidUitpasNumbers: [
-        '0987654321012',
-        '0987654321013',
-        '0987654321014',
-        '0987654321015',
-        '0987654321016'
-      ],
-      firstPage: 'http://culpas-silex.dev/passholders?page=1',
-      lastPage: 'http://culpas-silex.dev/passholders?page=5',
-      previousPage: 'http://culpas-silex.dev/passholders?page=1',
-      nextPage: 'http://culpas-silex.dev/passholders?page=2'
-    };
-
-    $q.when(processSearchResults(resultCollection));
-    //*/
 
     $http
       .get(apiUrl + 'passholders', {
