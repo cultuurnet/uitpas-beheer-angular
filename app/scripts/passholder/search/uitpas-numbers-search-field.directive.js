@@ -11,7 +11,7 @@ angular
   .directive('ubrUitpasNumbersSearchField', ubrUitpasNumbersSearchField);
 
 /* @ngInject */
-function ubrUitpasNumbersSearchField () {
+function ubrUitpasNumbersSearchField ($rootScope) {
   var directive = {
     restrict: 'A',
     link: link,
@@ -38,5 +38,21 @@ function ubrUitpasNumbersSearchField () {
       }
       return valid;
     };
+
+    function passScanned(event, passNumber) {
+      var alreadyHasPassnumber = ngModel.$viewValue.indexOf(passNumber) > -1;
+
+      if (!alreadyHasPassnumber) {
+        var concatThis = ngModel.$viewValue ? ' ' + passNumber : passNumber;
+        var concatenatedNumbers = ngModel.$viewValue + concatThis;
+        ngModel.$setViewValue(concatenatedNumbers);
+        element.val(concatenatedNumbers);
+        scope.$apply();
+      }
+    }
+
+    var scanListener = $rootScope.$on('nfcNumberReceived', passScanned);
+
+    scope.$on('$destroy', scanListener);
   }
 }
