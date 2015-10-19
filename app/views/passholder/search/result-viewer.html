@@ -16,7 +16,7 @@
     </div>
 
     <ul ng-show="!rvc.loading">
-      <li ng-repeat="pass in rvc.results.passen">
+      <li ng-repeat="pass in rvc.results.passen" ng-click="rvc.showPassholderDetails(pass.number)">
         <div class="grid display-table">
 
           <div class="grid__12 grid--bp-med__4 first">
