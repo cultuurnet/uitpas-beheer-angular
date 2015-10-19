@@ -56,14 +56,7 @@ function advancedSearchService(passholderService, $q, $rootScope) {
 
       service.findPassholders(searchParameters);
     } else {
-      throw 'There is no active search for which we can show a specific page.';
+      throw new Error('There is no active search for which we can show a specific page.');
     }
-  };
-
-  /**
-   * @return {PassholderSearchResults}
-   */
-  service.getSearchResults = function () {
-    return service.searchResults;
   };
 }
