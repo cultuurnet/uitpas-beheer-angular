@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc directive
- * @name ubr.passholder.search.directive:ubrSearchUitpasNumbersValidation
+ * @name ubr.passholder.search.directive:ubrUitpasNumbersSearchField
  * @description
  * # Validation of the search UiTPAS numbers field.
  */
 angular
   .module('ubr.passholder.search')
-  .directive('ubrSearchUitpasNumbersValidation', ubrSearchUitpasNumbersValidation);
+  .directive('ubrUitpasNumbersSearchField', ubrUitpasNumbersSearchField);
 
 /* @ngInject */
-function ubrSearchUitpasNumbersValidation () {
+function ubrUitpasNumbersSearchField () {
   var directive = {
     restrict: 'A',
     link: link,

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Factory: PassCollection', function () {
+describe('Factory: PassholderSearchResults', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
@@ -41,6 +41,7 @@ describe('Factory: PassCollection', function () {
           id: '1'
         }
       }],
+      uitPassen: [],
       'points': 309,
       'picture': 'picture-in-base64-format',
       'remarks': 'remarks',
@@ -75,56 +76,75 @@ describe('Factory: PassCollection', function () {
     nextPage: 'http://culpas-silex.dev/passholders?page=2'
   };
 
-  var PassCollection, Pass;
+  var PassholderSearchResults, Pass;
 
-  beforeEach(inject(function (_PassCollection_, _Pass_) {
-    PassCollection = _PassCollection_;
+  beforeEach(inject(function (_PassholderSearchResults_, _Pass_) {
+    PassholderSearchResults = _PassholderSearchResults_;
     Pass = _Pass_;
   }));
 
-  function getJsonPassCollection() {
+  function getJsonPassholderSearchResults() {
     return angular.copy(jsonResultCollection);
   }
 
   it('should correctly parse a search result set', function () {
-    var jsonPassCollection = getJsonPassCollection();
-
-    var expectedPassCollection = angular.copy(jsonResultCollection);
+    var jsonPassholderSearchResults = getJsonPassholderSearchResults();
     var memberPass = new Pass(jsonIdentity);
-    expectedPassCollection.member = [
-      memberPass,
-      memberPass,
-      memberPass,
-      memberPass,
-      memberPass,
-      memberPass,
-      memberPass,
-      memberPass,
-      memberPass,
-      memberPass
-    ];
+    var expectedPassholderSearchResults = {
+      passen: [
+        memberPass,
+        memberPass,
+        memberPass,
+        memberPass,
+        memberPass,
+        memberPass,
+        memberPass,
+        memberPass,
+        memberPass,
+        memberPass
+      ],
+      itemsPerPage: 10,
+      totalItems: 50,
+      invalidUitpasNumbers: [
+        '0987654321012',
+        '0987654321013',
+        '0987654321014',
+        '0987654321015',
+        '0987654321016'
+      ],
+      firstPage: 'http://culpas-silex.dev/passholders?page=1',
+      lastPage: 'http://culpas-silex.dev/passholders?page=5',
+      previousPage: 'http://culpas-silex.dev/passholders?page=1',
+      nextPage: 'http://culpas-silex.dev/passholders?page=2',
+      unknownNumbersConfirmed: false,
+      page: 1
+    };
 
-    var passCollection = new PassCollection(jsonPassCollection);
-    expect(passCollection).toEqual(expectedPassCollection);
+    var searchResults = new PassholderSearchResults(jsonPassholderSearchResults);
+    expect(searchResults).toEqual(expectedPassholderSearchResults);
 
-    jsonPassCollection.member = null;
-    expectedPassCollection.member = [];
-    passCollection = new PassCollection(jsonPassCollection);
-    expect(passCollection).toEqual(expectedPassCollection);
+    jsonPassholderSearchResults.member = null;
+    expectedPassholderSearchResults.passen = [];
+    searchResults = new PassholderSearchResults(jsonPassholderSearchResults);
+    expect(searchResults).toEqual(expectedPassholderSearchResults);
   });
 
   it('returns an empty object when no parameters are provided', function () {
-    var expectedEmptyObject = {
-      itemsPerPage: '',
-      totalItems: '',
-      member: [],
+    var expectedSearchResults = {
+      itemsPerPage: 0,
+      totalItems: 0,
+      passen: [],
       invalidUitpasNumbers: [],
       firstPage: '',
       lastPage: '',
       previousPage: '',
-      nextPage: ''
+      nextPage: '',
+      unknownNumbersConfirmed: false,
+      page: 1
     };
 
-    expect(new PassCollection()).toEqual(expectedEmptyObject);
+    var passholderSearchResults = new PassholderSearchResults();
+
+    expect(passholderSearchResults).toEqual(expectedSearchResults);
   });
 });

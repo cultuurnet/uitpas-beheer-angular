@@ -28,12 +28,12 @@ angular
         },
         views: {
           'content@counter': {
-            templateUrl: 'views/search/content-advanced-search-intro.html',
-            controller: 'PassholderAdvancedSearchController',
-            controllerAs: 'pasc'
+            templateUrl: 'views/passholder/search/result-viewer.html',
+            controller: 'ResultsViewerController',
+            controllerAs: 'rvc'
           },
           'sidebar@counter': {
-            templateUrl: 'views/search/sidebar-advanced-search-form.html',
+            templateUrl: 'views/passholder/search/sidebar-advanced-search-form.html',
             controller: 'PassholderAdvancedSearchController',
             controllerAs: 'pasc'
           }

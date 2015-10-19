@@ -12,7 +12,7 @@ angular
   .service('passholderService', passholderService);
 
 /* @ngInject */
-function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassCollection) {
+function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassholderSearchResults) {
   var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
@@ -359,44 +359,48 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   /**
+   * @param {Deferred} deferred
+   * @param {ApiError} error
+   */
+  function rejectWithReadableApiError(deferred, error){
+    var knownAPIError = PassholderAPIError[error.code];
+
+    if (knownAPIError) {
+      error.cleanMessage = knownAPIError.message;
+    } else if(error.message) {
+      error.cleanMessage = error.message.split('URL CALLED')[0];
+    } else {
+      error.cleanMessage = 'Er is een fout opgetreden tijdens de communicatie met de server.';
+    }
+
+    deferred.reject(error);
+  }
+  
+  /**
    * @param {SearchParameters} searchParameters
    *
-   * @returns {Promise<PassCollection[]|ApiError>}
+   * @returns {Promise<PassholderSearchResults[]|ApiError>}
    */
-  service.searchPassholders = function (searchParameters) {
+  service.findPassholders = function (searchParameters) {
     var deferredSearch = $q.defer();
 
-    var processSearchResults = function (searchResults) {
-      console.log(searchResults);
-      var passCollection = new PassCollection(searchResults.data);
-      console.log(passCollection);
-      deferredSearch.resolve(passCollection);
+    var cacheAndReturnResults = function (searchResponse) {
+      var searchResults = new PassholderSearchResults(searchResponse.data);
+      // TODO: cache all the pass data before returning it
+      deferredSearch.resolve(searchResults);
     };
-
-    var setSearchError = function (apiError) {
-      if (apiError.data) {
-        apiError = apiError.data;
-      }
-      if (apiError) {
-        var knownAPIError = PassholderAPIError[apiError.code];
-
-        if (knownAPIError) {
-          apiError.cleanMessage = knownAPIError.message;
-        } else if(apiError.message) {
-          apiError.cleanMessage = apiError.message.split('URL CALLED')[0];
-        } else {
-          apiError.cleanMessage = 'Er is een fout opgetreden tijdens de communicatie met de server.';
-        }
-      }
-
-      deferredSearch.reject(apiError);
+    
+    function reject(errorResponse) {
+      rejectWithReadableApiError(deferredSearch, errorResponse.data);
+    }
+    
+    var requestOptions = {
+      params: searchParameters.serialize()
     };
 
     $http
-      .get(apiUrl + 'passholders', {
-        params: searchParameters.serialize()
-      })
-      .then(processSearchResults, setSearchError);
+      .get(apiUrl + 'passholders', requestOptions)
+      .then(cacheAndReturnResults, reject);
 
     return deferredSearch.promise;
   };

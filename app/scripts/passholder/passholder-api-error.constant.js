@@ -36,7 +36,7 @@ angular
     UNKNOWN_BALIE_NAME: {
       message: 'De gebruikte balie is niet gekend.'
     },
-    UITPAS_NUMBER_INVALID: {
-      message: 'Enkele UitPas nummers hebben een foutief checknummer.'
+    INVALID_UITPAS_NUMBER: {
+      message: 'Eén of meerdere UiTPAS-nummers zijn ongeldig: '
     }
   });

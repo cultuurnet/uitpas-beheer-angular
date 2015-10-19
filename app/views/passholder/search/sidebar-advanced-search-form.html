@@ -1,0 +1,53 @@
+<div class="back-nav">
+  <a ui-sref="counter.main">Terug</a>
+</div>
+<h2>Pashouder zoeken</h2>
+<ul>
+  <li>Via kaartnummer</li>
+</ul>
+<div>
+  <p>Geef de kaartnummers van de aanwezige UiTPAShouders in: alle kaartnummers achter elkaar gescheiden door een spatie.</p>
+  <form name="searchPassholderNumbers" ng-submit="pec.submitForm(passholderEdit)" novalidate
+        ng-class="{'form-submiting': pasc.formSubmitBusy}">
+    <textarea ng-model="pasc.passNumbers" required  name="passholderNumbers" ubr-uitpas-numbers-search-field
+              rows="8" id="passholder-numbers" placeholder="bv 0987654321012 0987654321013"
+              ng-change="pasc.clearAsyncError()"></textarea>
+    <div ng-if="(searchPassholderNumbers.$submitted || searchPassholderNumbers.passholderNumbers.$touched || searchPassholderNumbers.passholderNumbers.$dirty) && searchPassholderNumbers.passholderNumbers.$invalid"
+         class="text-danger small">
+      <div ng-if="searchPassholderNumbers.passholderNumbers.$error.required">
+        Gelieve minstens 1 pahouder nummer in te geven.
+      </div>
+      <div ng-if="searchPassholderNumbers.passholderNumbers.$error.invalidCharacters">
+        Enkel getallen (0-9) en spaties zijn toegelaten.
+      </div>
+    </div>
+    <div ng-show="pasc.invalidNumbers.length" class="text-danger small">
+      Enkele opgegeven getallen zijn niet correct:
+      <ul>
+        <li ng-repeat="number in pasc.invalidNumbers">{{number}}</li>
+      </ul>
+    </div>
+    <button type="button" class="btn btn-primary" ng-disabled="pasc.formSubmitBusy || searchPassholderNumbers.$invalid"
+            ng-click="pasc.findPassholders()">
+      <span ng-hide="pasc.formSubmitBusy">Doorgaan</span>
+      <span ng-show="pasc.formSubmitBusy">
+        <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+    </span>
+    </button>
+  </form>
+
+  <div ng-show="pasc.asyncError" class="alert alert-danger small">
+    <span ng-bind="pasc.asyncError.cleanMessage"></span>
+    <ul ng-if="pasc.asyncError.context && pasc.asyncError.context.length">
+      <li ng-repeat="errorItem in pasc.asyncError.context" ng-bind="errorItem"></li>
+    </ul>
+  </div>
+
+  <div ng-show="pasc.results.hasUnknownNumbers() && !pasc.results.hasConfirmedUnknownNumbers()" class="alert alert-info small">
+    Geen pashouders gevonden voor de kaartnummers:
+    <ul>
+      <li ng-repeat="number in pasc.results.invalidUitpasNumbers" ng-bind="::number"></li>
+    </ul>
+    <a ng-click="pasc.results.confirmUnknownNumbers()">Doorgaan</a>
+  </div>
+</div>

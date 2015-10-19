@@ -9,17 +9,16 @@
  */
 angular
   .module('ubr.passholder.search')
-  .controller('PassholderAdvancedSearchController', PassholderAdvancedSearchController);
+  .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function PassholderAdvancedSearchController (passholderService, SearchParameters) {
+function AdvancedSearchController (passholderService, SearchParameters, Pass, advancedSearchService) {
   /*jshint validthis: true */
   var controller = this;
-  controller.invalidNumbers = [];
-  controller.unfoundNumbers = [];
   controller.formSubmitBusy = false;
   controller.passNumbers = '0930000804615 0930000807113 0930000802619 0930000801207';
-  controller.informedAboutUnfoundUitpasNumbers = false;
+  controller.results = null;
+  controller.asyncError = null;
 
   function resemblesUitpasNumber(value) {
     /**
@@ -45,8 +44,9 @@ function PassholderAdvancedSearchController (passholderService, SearchParameters
     return (controller.invalidNumbers.length === 0);
   };
 
-  controller.submitPassholderNumbersForm = function (form) {
+  controller.findPassholders = function () {
     controller.formSubmitBusy = true;
+
     // Check if all provided numbers are in valid format.
     if (!controller.validateUitpasNumbers(controller.passNumbers)) {
       controller.formSubmitBusy = false;
@@ -59,31 +59,29 @@ function PassholderAdvancedSearchController (passholderService, SearchParameters
     }
 
     var searchParameters = new SearchParameters(jsonSearchParameters);
-    //console.log(searchParameters);
 
-    var doSomethingWithTheResults = function (resultResponse) {
+    var showSearchResults = function (searchResults) {
+      controller.results = searchResults;
+    };
+
+    /**
+     * @param {ApiError} apiError
+     */
+    function showAsyncError(apiError) {
+      controller.asyncError = apiError;
+    }
+
+    var unlockSearch = function () {
       controller.formSubmitBusy = false;
-      if (resultResponse.unfoundUitpasNumbers || true) {
-        controller.showUnfoundUitpasNumbers(resultResponse.unfoundUitpasNumbers);
-        controller.passCollection = resultResponse;
-      }
     };
 
-    var handleTheErrors = function (apiErrors) {
-      console.log(apiErrors);
-    };
-
-    passholderService
-      .searchPassholders(searchParameters)
-      .then(doSomethingWithTheResults, handleTheErrors);
+    advancedSearchService
+      .findPassholders(searchParameters)
+      .then(showSearchResults, showAsyncError)
+      .finally(unlockSearch);
   };
 
-  controller.showUnfoundUitpasNumbers = function (unfoundUitpasNumbers) {
-    controller.unfoundNumbers = unfoundUitpasNumbers;
-    controller.unfoundNumbers = ['0930000802619', '0930000801207'];
+  controller.clearAsyncError = function () {
+    controller.asyncError = null;
   };
-
-  controller.showResults = function () {
-    controller.informedAboutUnfoundUitpasNumbers = true;
-  }
 }

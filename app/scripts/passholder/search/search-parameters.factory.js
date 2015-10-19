@@ -59,6 +59,23 @@ function searchParametersFactory(moment, day) {
       delete serializedSearchParameters.uitpasNumber;
 
       return serializedSearchParameters;
+    },
+
+    /**
+     * Check if the given parameters should yield the same result set.
+     * This means the total result set is the same but the page can be different.
+     *
+     * @param {SearchParameters} searchParameters
+     */
+    yieldsSameResultSetAs: function (searchParameters) {
+      var theseParameters = this.serialize();
+      var thoseParameters = searchParameters.serialize();
+
+      // normalize the parameters by zeroing their page
+      theseParameters.page = 0;
+      thoseParameters.page = 0;
+
+      return angular.equals(theseParameters, thoseParameters);
     }
   };
 
