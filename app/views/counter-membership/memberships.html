@@ -29,7 +29,7 @@
           <span ng-bind="::member.role"></span>
         </div>
         <div class="grid__2 grid--bp-med__3 grid--bp-lrg__4">
-          <div ng-show="!member.confirmingDelete && !member.deleting && !member.deleteError" class="actions actions-do">
+          <div ng-show="::member.role == 'MEMBER' && !member.confirmingDelete && !member.deleting && !member.deleteError" class="actions actions-do">
             <button type="button" class="btn btn-default" ng-click="cmc.initiateDelete(member)">Verwijderen</button>
           </div>
           <div ng-show="member.confirmingDelete" class="actions actions-confirm">
