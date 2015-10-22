@@ -12,11 +12,11 @@ angular
   .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function AdvancedSearchController (passholderService, SearchParameters, Pass, advancedSearchService) {
+function AdvancedSearchController (SearchParameters, advancedSearchService) {
   /*jshint validthis: true */
   var controller = this;
   controller.formSubmitBusy = false;
-  controller.passNumbers = '0930000804615 0930000807113 0930000802619 0930000801207';
+  controller.passNumbers = null;
   controller.results = null;
   controller.asyncError = null;
 

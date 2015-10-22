@@ -375,7 +375,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     deferred.reject(error);
   }
-  
+
   /**
    * @param {SearchParameters} searchParameters
    *
@@ -389,11 +389,11 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       // TODO: cache all the pass data before returning it
       deferredSearch.resolve(searchResults);
     };
-    
+
     function reject(errorResponse) {
       rejectWithReadableApiError(deferredSearch, errorResponse.data);
     }
-    
+
     var requestOptions = {
       params: searchParameters.serialize()
     };
