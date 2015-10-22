@@ -21,20 +21,20 @@
   <ul class="list-unstyled" ng-if="!cmc.loadingMembers">
     <li class="overview__item overview__item-list overview__item-list-small" ng-repeat="member in cmc.members">
       <div class="row clearfix">
-        <div class="grid__12 grid--bp-med__3 grid--bp-lrg__4">
+        <div class="grid__12 grid--bp-med__4">
           <strong ng-bind="::member.nick"></strong><br>
           <span ng-bind="::member.uid"></span>
         </div>
-        <div class="grid__10 grid--bp-med__6 grid--bp-lrg__4">
+        <div class="grid__6 grid--bp-med__5 grid--bp-lrg__4">
           <span ng-bind="::member.role"></span>
         </div>
-        <div class="grid__2 grid--bp-med__3 grid--bp-lrg__4">
-          <div ng-show="::member.role == 'MEMBER' && !member.confirmingDelete && !member.deleting && !member.deleteError" class="actions actions-do">
+        <div class="grid__6 grid--bp-med__3 grid--bp-lrg__4">
+          <div ng-hide="member.confirmingDelete" ng-show="::member.role == 'MEMBER' && !member.confirmingDelete && !member.deleting && !member.deleteError" class="actions actions-do">
             <button type="button" class="btn btn-default" ng-click="cmc.initiateDelete(member)">Verwijderen</button>
           </div>
           <div ng-show="member.confirmingDelete" class="actions actions-confirm">
-            <button class="btn btn-default btn-sm" ng-click="cmc.deleteMember(member)">Bevestigen</button>
-            <a class="small" ng-click="cmc.cancelDelete(member)">Annuleren</a>
+            <button class="btn btn-default" ng-click="cmc.deleteMember(member)">Bevestigen</button>
+            <a ng-click="cmc.cancelDelete(member)">Annuleren</a>
           </div>
           <div ng-show="member.deleting" class="alert alert-info small">
             <span class="fa fa-refresh loading"></span> Even geduld...

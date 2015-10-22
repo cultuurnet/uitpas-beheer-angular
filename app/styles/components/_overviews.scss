@@ -67,9 +67,10 @@
     opacity: .6;
   }
   &__title {
-    text-transform: uppercase;
-    padding-bottom: $rh-xsm;
     border-bottom: 1px solid;
+    margin-bottom: $rh-xsm;
+    padding-bottom: $rh-xsm;
+    text-transform: uppercase;
   }
   &__search {
     clear: both;
@@ -184,6 +185,7 @@
       }
     }
   }
+  // Memberships
   &-memberships {
     .first {
       padding-left: 15px;
@@ -214,9 +216,44 @@
       }
     }
   }
+  // Counter Memberships
+  &-counter-memberships {
+    .grid__12 {
+      margin-bottom: $rh-xsm;
+      @include breakpoint(map-get($breakpoints, med)) {
+        margin-bottom: 0;
+      }
+    }
+    .grid__6 > span {
+      display: inline-block;
+      margin-top: $padding-base-vertical;
+      @include breakpoint(map-get($breakpoints, med)) {
+        margin-top: 0;
+      }
+    }
+    .alert.ng-hide + .list-unstyled {
+      margin-top: -$rh-xsm;
+      li:first-child {
+        border-top-color: $white;
+      }
+    }
+    .btn {
+      min-width: 110px;
+    }
+    .actions .btn + a {
+      margin-left: 10px;
+    }
+  }
+  // Devices
   &-devices {
     .status {
       padding-top: $padding-base-vertical;
+    }
+    .list-unstyled {
+      margin-top: -$rh-xsm;
+      li:first-child {
+        border-top-color: $white;
+      }
     }
   }
   .points {

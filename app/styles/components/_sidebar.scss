@@ -19,6 +19,9 @@
     + form {
       border-top: 1px solid lighten($gray-0, 3%);
     }
+    &.back-nav {
+      padding-top: $rh-sml;
+    }
   }
   h1 {
     font-size: 1.6em; //24px
