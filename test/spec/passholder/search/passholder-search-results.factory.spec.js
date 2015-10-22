@@ -147,4 +147,18 @@ describe('Factory: PassholderSearchResults', function () {
 
     expect(passholderSearchResults).toEqual(expectedSearchResults);
   });
+
+  it('should keep track of unkown numbers and their confirmation', function () {
+    var searchResults = new PassholderSearchResults();
+
+    expect(searchResults.hasUnknownNumbers()).toEqual(false);
+
+    searchResults.invalidUitpasNumbers = ['123132465465'];
+    expect(searchResults.hasUnknownNumbers()).toEqual(true);
+    expect(searchResults.hasConfirmedUnknownNumbers()).toEqual(false);
+
+    searchResults.confirmUnknownNumbers();
+    expect(searchResults.hasUnknownNumbers()).toEqual(true);
+    expect(searchResults.hasConfirmedUnknownNumbers()).toEqual(true);
+  });
 });
