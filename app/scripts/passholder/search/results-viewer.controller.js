@@ -46,11 +46,18 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
     }
   };
 
+  /**
+   * @param {Object} event
+   * @param {PassholderSearchResults} searchResults
+   */
   controller.updateResults = function (event, searchResults) {
     controller.results = searchResults;
     controller.loading = false;
   };
 
+  /**
+   * @param {String} identification
+   */
   controller.showPassholderDetails = function (identification) {
     $state.go('counter.main.passholder', {identification: identification});
   };
