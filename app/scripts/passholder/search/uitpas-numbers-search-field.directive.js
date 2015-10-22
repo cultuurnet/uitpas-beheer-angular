@@ -11,7 +11,7 @@ angular
   .directive('ubrUitpasNumbersSearchField', ubrUitpasNumbersSearchField);
 
 /* @ngInject */
-function ubrUitpasNumbersSearchField ($rootScope) {
+function ubrUitpasNumbersSearchField ($rootScope, isJavaFXBrowser) {
   var directive = {
     restrict: 'A',
     link: link,
@@ -21,12 +21,15 @@ function ubrUitpasNumbersSearchField ($rootScope) {
 
   function link(scope, element, attrs, ngModel) {
 
+    // multi-line placeholder hack
+    element[0].placeholder = element[0].placeholder.replace(/\\n/g, '\n');
+
     function containsOnlyNumbersAndSpaces(value) {
       /**
        * Matches strings containing only numbers and spaces.
        * @type {RegExp}
        */
-      var numbersSpacesRegex = /^[\d ]+$/;
+      var numbersSpacesRegex = /^[\d\s]+$/;
       var regexResult = numbersSpacesRegex.exec(value);
       return !(regexResult);
     }

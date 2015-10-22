@@ -21,19 +21,31 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
   controller.asyncError = null;
   controller.invalidNumbers = [];
 
+  /**
+   * Check if a string resembles an UiTPAS number.
+   *
+   * @param {string} value
+   * @return {boolean}
+   */
   function resemblesUitpasNumber(value) {
     /**
      * Matches strings containing exactly 13 digits.
      * @type {RegExp}
      */
     var resembleUitpasNumberRegex = /^\d{13}$/;
-    return (resembleUitpasNumberRegex.exec(value));
+    return !!(resembleUitpasNumberRegex.exec(value));
   }
 
+  /**
+   * Validate a string containing UiTPAS numbers and add invalid numbers to a controller variable.
+   *
+   * @param {string} givenUitpasNumbers
+   * @return {boolean}
+   */
   controller.validateUitpasNumbers = function (givenUitpasNumbers) {
     var invalidNumbers = [];
     if (givenUitpasNumbers) {
-      var givenNumbers = givenUitpasNumbers.split(' ');
+      var givenNumbers = givenUitpasNumbers.split(/[\s]+/);
       angular.forEach(givenNumbers, function (number) {
         if (!resemblesUitpasNumber(number)) {
           invalidNumbers.push(number);
@@ -45,6 +57,9 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
     return (controller.invalidNumbers.length === 0);
   };
 
+  /**
+   * Use the string of UiTPAS numbers available on the controller to find and show passholders.
+   */
   controller.findPassholders = function () {
     controller.formSubmitBusy = true;
 
@@ -82,6 +97,9 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
       .finally(unlockSearch);
   };
 
+  /**
+   * Clear the async error set on the controller
+   */
   controller.clearAsyncError = function () {
     controller.asyncError = null;
   };

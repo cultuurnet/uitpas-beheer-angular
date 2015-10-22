@@ -44,4 +44,22 @@ describe('Directive: Uitpas numbers search field', function () {
     $rootScope.$emit('nfcNumberReceived', scannedPassNumber);
     expect($scope.passNumbers).toEqual(expectedPassNumbers);
   });
+
+  it('should mark search input that contains anything other than numbers or whitespace as invalid', function () {
+    var modelController = searchField.controller('ngModel');
+    $scope.passNumbers = '$B$E$E$P$B$O$O$B$';
+    $scope.$apply();
+
+    expect(modelController.$valid).toEqual(false);
+    expect(modelController.$error.invalidCharacters).toEqual(true);
+  });
+
+  it('should allow numbers and whitespaces characters as valid search field input', function () {
+    var modelController = searchField.controller('ngModel');
+    $scope.passNumbers = '1234567898521 1234567898521\n1234567898521';
+    $scope.$apply();
+
+    expect(modelController.$valid).toEqual(true);
+    expect(modelController.$error.invalidCharacters).not.toBeDefined();
+  });
 });
