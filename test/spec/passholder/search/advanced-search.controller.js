@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('Controller: PassholderAdvancedSearchController', function () {
+describe('Controller: PassholderAdvancedSearchController', function () {
 
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
@@ -105,6 +105,31 @@ fdescribe('Controller: PassholderAdvancedSearchController', function () {
     expect(controller.invalidNumbers).toEqual(['09300008026197', '093000080120']);
   });
 
+  it('should validate passnumbers before searching passholders', function () {
+    controller.passNumbers = '0930000804615 0930000807113 09300008026197 093000080120';
+    spyOn(controller, 'validateUitpasNumbers').and.returnValue(false);
+
+    controller.findPassholders();
+
+    expect(controller.validateUitpasNumbers).toHaveBeenCalledWith('0930000804615 0930000807113 09300008026197 093000080120');
+    expect(controller.invalidNumbers).toEqual([]);
+    expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
+  it('should display a list of invalid pass numbers before trying to search for them', function () {
+    var expectInvalidNumbers = [
+      '093000080461',
+      '09300008071',
+      '0930000802'
+    ];
+    controller.passNumbers = '093000080461 09300008071 0930000802 0930000801207';
+
+    controller.findPassholders();
+
+    expect(controller.invalidNumbers).toEqual(expectInvalidNumbers);
+    expect(advancedSearchService.findPassholders).not.toHaveBeenCalled();
+  });
+
   it('can find passholders', function () {
     var searchResponse = {
       'itemsPerPage': 10,
@@ -150,32 +175,6 @@ fdescribe('Controller: PassholderAdvancedSearchController', function () {
     $scope.$digest();
 
     expect(controller.results).toEqual(new PassholderSearchResults(searchResponse));
-    expect(controller.formSubmitBusy).toBeFalsy();
-  });
-
-  it('should validate passnumbers before searching passholders', function () {
-    var searchResponse = {
-      'itemsPerPage': 10,
-      'totalItems': 2,
-      'member': [
-        jsonPass,
-        jsonPass
-      ],
-      'invalidUitpasNumbers': [
-        '0930000804615',
-        '0930000807113'
-      ],
-      'firstPage': 'http://culpas-silex.dev/passholders?page=1',
-      'lastPage': 'http://culpas-silex.dev/passholders?page=1',
-      'previousPage': 'http://culpas-silex.dev/passholders?page=1',
-      'nextPage': 'http://culpas-silex.dev/passholders?page=1'
-    };
-    controller.passNumbers = '0930000804615 0930000807113 09300008026197 093000080120';
-
-    controller.findPassholders();
-    $scope.$digest();
-
-    expect(controller.results).toBeNull();
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 

@@ -19,6 +19,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
   controller.passNumbers = null;
   controller.results = null;
   controller.asyncError = null;
+  controller.invalidNumbers = [];
 
   function resemblesUitpasNumber(value) {
     /**
