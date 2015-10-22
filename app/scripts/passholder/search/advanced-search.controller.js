@@ -12,7 +12,7 @@ angular
   .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function AdvancedSearchController (SearchParameters, advancedSearchService) {
+function AdvancedSearchController (SearchParameters, advancedSearchService, membershipService) {
   /*jshint validthis: true */
   var controller = this;
   controller.formSubmitBusy = false;
@@ -20,6 +20,21 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
   controller.results = null;
   controller.asyncError = null;
   controller.invalidNumbers = [];
+  controller.searchFields = getDefaultSearchFields();
+  controller.associationOptions = {};
+
+  function getDefaultSearchFields () {
+    return {
+      dateOfBirth: '',
+      firstName: '',
+      lastName: '',
+      street: '',
+      city: '',
+      association: '',
+      associatioMembership: '',
+      email: ''
+    };
+  }
 
   function resemblesUitpasNumber(value) {
     /**
@@ -43,6 +58,10 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
 
     controller.invalidNumbers = invalidNumbers;
     return (controller.invalidNumbers.length === 0);
+  };
+
+  controller.resetSearchFields = function () {
+    controller.searchFields = getDefaultSearchFields();
   };
 
   controller.findPassholders = function () {

@@ -1,0 +1,76 @@
+
+<form name="advancedSearchFields" ng-submit="pasc.findPassholders()" class="clearfix" novalidate ng-class="{'form-submiting': pasc.formSubmitBusy}">
+  <div class="grid">
+    <div class="grid__12 field-group" ng-class="{ 'has-error': (advancedSearchFields.$submitted || advancedSearchFields.dateOfBirth.$touched || advancedSearchFields.dateOfBirth.$dirty) && advancedSearchFields.dateOfBirth.$invalid }">
+      <label class="control-label" for="date-of-birth">
+        Geboortedatum
+      </label>
+      <input type="text" class="form-control" id="date-of-birth" name="dateOfBirth"
+             ng-model="pasc.searchFields.dateOfBirth" ubr-date-field placeholder="dd/mm/jjjj">
+      <div ng-if="(advancedSearchFields.$submitted || advancedSearchFields.dateOfBirth.$touched || advancedSearchFields.dateOfBirth.$dirty) && advancedSearchFields.dateOfBirth.$invalid" class="text-danger small">
+        <div ng-if="advancedSearchFields.dateOfBirth.$error.parse">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
+      </div>
+    </div>
+    <div class="grid__12 field-group">
+      <label class="control-label" for="lastName">
+        Naam
+      </label>
+      <input type="text" class="form-control" id="lastName" name="lastName"ng-model="pasc.searchFields.lastName">
+    </div>
+    <div class="grid__12 field-group">
+      <label class="control-label" for="firstName">
+        Voornamen
+      </label>
+      <input type="text" class="form-control" id="firstName" name="firstName" ng-model="pasc.searchFields.firstName">
+    </div>
+    <div class="grid__12 field-group">
+      <label class="control-label" for="street">
+        Straat
+      </label>
+      <input type="text" class="form-control" id="street" name="street" ng-model="pasc.searchFields.street">
+    </div>
+    <div class="grid__12 field-group">
+      <label class="control-label" for="city">
+        Gemeente
+      </label>
+      <input type="text" class="form-control" id="city" name="city" ng-model="pasc.searchFields.city">
+    </div>
+    <div class="grid__12 field-group">
+      <label class="control-label" for="city">
+        Vereniging
+      </label>
+      <select id="association" name="association" ng-model="pasc.searchFields.association">
+        <option value="">--Kies--</option>
+      </select>
+    </div>
+    <div class="grid__12 field-group">
+      <label class="control-label" for="city">
+        Lidmaatschap
+      </label>
+      <select id="association-membership" name="associationMembership" ng-model="pasc.searchFields.associationMembership">
+        <option value="">--Kies--</option>
+        <option value="active">Actief</option>
+        <option value="expired">Vervallen</option>
+      </select>
+    </div>
+    <div class="grid__12 field-group">
+      <label class="control-label" for="email">
+        E-mailadres
+      </label>
+      <input type="email" class="form-control" id="email" name="email" ng-model="pasc.searchFields.contact.email">
+      <div ng-if="(advancedSearchFields.$submitted || advancedSearchFields.email.$touched) && advancedSearchFields.email.$invalid" class="text-danger small">
+        <div ng-if="advancedSearchFields.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+      </div>
+    </div>
+    <div class="grid__12 field-group">
+      <button type="reset" class="btn btn-default pull-left" ng-click="pasc.resetSearchFields()" ng-disabled="pasc.formSubmitBusy">Leegmaken</button>
+      <button type="button" class="btn btn-primary pull-right" ng-disabled="pasc.formSubmitBusy || advancedSearchFields.$invalid"
+              ng-click="pasc.findPassholders()">
+        <span ng-hide="pasc.formSubmitBusy">Zoeken</span>
+      <span ng-show="pasc.formSubmitBusy">
+        <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+    </span>
+      </button>
+    </div>
+  </div>
+</form>
