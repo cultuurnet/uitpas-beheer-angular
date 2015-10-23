@@ -47,7 +47,11 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
         deferredPassholder.resolve(pass);
       };
 
-      var rejectPassHolder = function () {
+      var rejectPassHolder = function (res) {
+        if (res.status === 403) {
+          // @TODO: this is an ugly fix, backend api should return 401 Unauthorized instead
+          return;
+        }
         deferredPassholder.reject(
           {
             code: 'PASSHOLDER_NOT_FOUND',
@@ -57,8 +61,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
         );
       };
 
-      passholderRequest.success(cacheAndResolvePassHolder);
-      passholderRequest.error(rejectPassHolder);
+      passholderRequest.then(cacheAndResolvePassHolder, rejectPassHolder);
     }
 
     return deferredPassholder.promise;
