@@ -71,7 +71,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
 
     var jsonSearchParameters = {};
     if (controller.passNumbers) {
-      jsonSearchParameters.uitpasNumber = controller.passNumbers.split(' ');
+      jsonSearchParameters.uitpasNumber = controller.passNumbers.split(/[\s]+/);
     }
 
     var searchParameters = new SearchParameters(jsonSearchParameters);
