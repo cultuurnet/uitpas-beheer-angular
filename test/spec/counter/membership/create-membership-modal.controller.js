@@ -78,7 +78,10 @@ describe('Controller: CreateMembershipModalController', function () {
 
   it('should return an error message when the API returns an error when creating a new membership', function () {
     var apiErrorResponse = {};
-    var errorResponse = {message: 'De gebruiker met email <em>e@mail</em> kan niet aangemaakt worden.'};
+    var errorResponse = {
+      message: 'Er werd niemand gevonden met het e-mail adres <em>e@mail</em>.<br>'+
+        'Gelieve de persoon die je wenst toe te voegen te vragen om zich eerst te registeren op UiTinVlaanderen.be.'
+    };
     counterService.createMembership.and.returnValue($q.reject(apiErrorResponse));
 
     controller.createMembership(form);
