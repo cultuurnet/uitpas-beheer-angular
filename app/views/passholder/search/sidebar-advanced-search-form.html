@@ -11,11 +11,11 @@
     <ubr-passholder-advanced-search-fields></ubr-passholder-advanced-search-fields>
   </div>
   <div role="tabpanel" class="tab-pane fade" id="search-passnumbers">
-    <p>Geef de kaartnummers van de aanwezige UiTPAShouders in: alle kaartnummers achter elkaar gescheiden door een spatie.</p>
+    <p>Geef de kaartnummers van de aanwezige UiTPAShouders in: alle kaartnummers onder elkaar zonder scheidingstekens.</p>
     <form name="searchPassholderNumbers" ng-submit="pasc.findPassholders()" novalidate
           ng-class="{'form-submiting': pasc.formSubmitBusy}">
     <textarea ng-model="pasc.passNumbers" required  name="passholderNumbers" ubr-uitpas-numbers-search-field
-              rows="8" id="passholder-numbers" placeholder="bv 0987654321012 0987654321013"
+              rows="8" id="passholder-numbers" placeholder="bv 0987654321012 \n0987654321013"
               ng-change="pasc.clearAsyncError()"></textarea>
       <div ng-if="(searchPassholderNumbers.$submitted || searchPassholderNumbers.passholderNumbers.$touched || searchPassholderNumbers.passholderNumbers.$dirty) && searchPassholderNumbers.passholderNumbers.$invalid"
            class="text-danger small">

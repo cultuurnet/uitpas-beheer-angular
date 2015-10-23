@@ -12,7 +12,7 @@ angular
   .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function AdvancedSearchController (SearchParameters, advancedSearchService, membershipService) {
+function AdvancedSearchController (SearchParameters, advancedSearchService) {
   /*jshint validthis: true */
   var controller = this;
   controller.formSubmitBusy = false;
@@ -23,6 +23,12 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, memb
   controller.searchFields = getDefaultSearchFields();
   controller.associationOptions = {};
 
+  /**
+   * Check if a string resembles an UiTPAS number.
+   *
+   * @param {string} value
+   * @return {boolean}
+   */
   function getDefaultSearchFields () {
     return {
       dateOfBirth: '',
@@ -42,13 +48,19 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, memb
      * @type {RegExp}
      */
     var resembleUitpasNumberRegex = /^\d{13}$/;
-    return (resembleUitpasNumberRegex.exec(value));
+    return !!(resembleUitpasNumberRegex.exec(value));
   }
 
+  /**
+   * Validate a string containing UiTPAS numbers and add invalid numbers to a controller variable.
+   *
+   * @param {string} givenUitpasNumbers
+   * @return {boolean}
+   */
   controller.validateUitpasNumbers = function (givenUitpasNumbers) {
     var invalidNumbers = [];
     if (givenUitpasNumbers) {
-      var givenNumbers = givenUitpasNumbers.split(' ');
+      var givenNumbers = givenUitpasNumbers.split(/[\s]+/);
       angular.forEach(givenNumbers, function (number) {
         if (!resemblesUitpasNumber(number)) {
           invalidNumbers.push(number);
@@ -64,6 +76,9 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, memb
     controller.searchFields = getDefaultSearchFields();
   };
 
+  /**
+   * Use the string of UiTPAS numbers available on the controller to find and show passholders.
+   */
   controller.findPassholders = function () {
     controller.formSubmitBusy = true;
 
@@ -101,6 +116,9 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, memb
       .finally(unlockSearch);
   };
 
+  /**
+   * Clear the async error set on the controller
+   */
   controller.clearAsyncError = function () {
     controller.asyncError = null;
   };

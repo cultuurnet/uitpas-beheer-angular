@@ -117,4 +117,16 @@ describe('Factory: PassCollection', function () {
 
     expect(new SearchParameters()).toEqual(expectedEmptyObject);
   });
+
+  it('should consider the results set for search parameters the same when only their page is different', function (){
+    var searchParametersPageOne = new SearchParameters(getJsonSearchParametersFields());
+    searchParametersPageOne.page = 1;
+    var searchParametersPageTwo = angular.copy(searchParametersPageOne);
+    searchParametersPageTwo.page = 2;
+
+    expect(searchParametersPageOne.yieldsSameResultSetAs(searchParametersPageTwo)).toEqual(true);
+
+    searchParametersPageTwo.name = 'Dirk';
+    expect(searchParametersPageOne.yieldsSameResultSetAs(searchParametersPageTwo)).toEqual(false);
+  });
 });
