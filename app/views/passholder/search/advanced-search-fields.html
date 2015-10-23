@@ -1,4 +1,3 @@
-
 <form name="advancedSearchFields" ng-submit="pasc.findPassholders()" class="clearfix" novalidate ng-class="{'form-submiting': pasc.formSubmitBusy}">
   <div class="grid">
     <div class="grid__12 field-group" ng-class="{ 'has-error': (advancedSearchFields.$submitted || advancedSearchFields.dateOfBirth.$touched || advancedSearchFields.dateOfBirth.$dirty) && advancedSearchFields.dateOfBirth.$invalid }">
@@ -12,13 +11,13 @@
       </div>
     </div>
     <div class="grid__12 field-group">
-      <label class="control-label" for="lastName">
+      <label class="control-label" for="name">
         Naam
       </label>
-      <input type="text" class="form-control" id="lastName" name="lastName"ng-model="pasc.searchFields.lastName">
+      <input type="text" class="form-control" id="name" name="name" ng-model="pasc.searchFields.name">
     </div>
     <div class="grid__12 field-group">
-      <label class="control-label" for="firstName">
+      <label class="control-label" for="name">
         Voornamen
       </label>
       <input type="text" class="form-control" id="firstName" name="firstName" ng-model="pasc.searchFields.firstName">
@@ -36,28 +35,30 @@
       <input type="text" class="form-control" id="city" name="city" ng-model="pasc.searchFields.city">
     </div>
     <div class="grid__12 field-group">
-      <label class="control-label" for="city">
+      <label class="control-label" for="association-id">
         Vereniging
       </label>
-      <select id="association" name="association" ng-model="pasc.searchFields.association">
+      <select id="association-id" name="membershipAssociationId" ng-model="pasc.searchFields.membershipAssociationId">
         <option value="">--Kies--</option>
+        <option value="1">Outlaws</option>
+        <option value="2">Hells Angels</option>
       </select>
     </div>
     <div class="grid__12 field-group">
-      <label class="control-label" for="city">
+      <label class="control-label" for="membership-status">
         Lidmaatschap
       </label>
-      <select id="association-membership" name="associationMembership" ng-model="pasc.searchFields.associationMembership">
+      <select id="membership-status" name="membershipStatus" ng-model="pasc.searchFields.membershipStatus">
         <option value="">--Kies--</option>
-        <option value="active">Actief</option>
-        <option value="expired">Vervallen</option>
+        <option value="ACTIVE">Actief</option>
+        <option value="EXPIRED">Vervallen</option>
       </select>
     </div>
     <div class="grid__12 field-group">
       <label class="control-label" for="email">
         E-mailadres
       </label>
-      <input type="email" class="form-control" id="email" name="email" ng-model="pasc.searchFields.contact.email">
+      <input type="email" class="form-control" id="email" name="email" ng-model="pasc.searchFields.email">
       <div ng-if="(advancedSearchFields.$submitted || advancedSearchFields.email.$touched) && advancedSearchFields.email.$invalid" class="text-danger small">
         <div ng-if="advancedSearchFields.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
       </div>
@@ -65,11 +66,11 @@
     <div class="grid__12 field-group">
       <button type="reset" class="btn btn-default pull-left" ng-click="pasc.resetSearchFields()" ng-disabled="pasc.formSubmitBusy">Leegmaken</button>
       <button type="button" class="btn btn-primary pull-right" ng-disabled="pasc.formSubmitBusy || advancedSearchFields.$invalid"
-              ng-click="pasc.findPassholders()">
+              ng-click="pasc.findPassholdersByDetails()">
         <span ng-hide="pasc.formSubmitBusy">Zoeken</span>
-      <span ng-show="pasc.formSubmitBusy">
-        <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
-    </span>
+        <span ng-show="pasc.formSubmitBusy">
+          <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+        </span>
       </button>
     </div>
   </div>

@@ -105,11 +105,11 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     expect(controller.invalidNumbers).toEqual(['09300008026197', '093000080120']);
   });
 
-  it('should validate passnumbers before searching passholders', function () {
+  it('should validate passnumbers before searching passholders by number', function () {
     controller.passNumbers = '0930000804615 0930000807113 09300008026197 093000080120';
     spyOn(controller, 'validateUitpasNumbers').and.returnValue(false);
 
-    controller.findPassholders();
+    controller.findPassholdersByNumbers();
 
     expect(controller.validateUitpasNumbers).toHaveBeenCalledWith('0930000804615 0930000807113 09300008026197 093000080120');
     expect(controller.invalidNumbers).toEqual([]);
@@ -124,7 +124,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     ];
     controller.passNumbers = '093000080461 09300008071 0930000802 0930000801207';
 
-    controller.findPassholders();
+    controller.findPassholdersByNumbers();
 
     expect(controller.invalidNumbers).toEqual(expectInvalidNumbers);
     expect(advancedSearchService.findPassholders).not.toHaveBeenCalled();
@@ -150,7 +150,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     controller.passNumbers = '0930000804615 0930000807113 0930000802619 0930000801207';
     advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
 
-    controller.findPassholders();
+    controller.findPassholdersByNumbers();
     $scope.$digest();
 
     expect(controller.results).toEqual(new PassholderSearchResults(searchResponse));
@@ -171,7 +171,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
 
     advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
 
-    controller.findPassholders();
+    controller.findPassholdersByNumbers();
     $scope.$digest();
 
     expect(controller.results).toEqual(new PassholderSearchResults(searchResponse));
@@ -184,7 +184,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
 
     advancedSearchService.findPassholders.and.returnValue($q.reject(searchApiError));
 
-    controller.findPassholders();
+    controller.findPassholdersByNumbers();
     $scope.$digest();
     expect(controller.asyncError).toEqual({});
   });
@@ -195,11 +195,32 @@ describe('Controller: PassholderAdvancedSearchController', function () {
 
     advancedSearchService.findPassholders.and.returnValue($q.reject(searchApiError));
 
-    controller.findPassholders();
+    controller.findPassholdersByNumbers();
     $scope.$digest();
     expect(controller.asyncError).toEqual({});
 
     controller.clearAsyncError();
     expect(controller.asyncError).toBeNull();
+  });
+
+  it('should find passholders filtered with the details available on the side', function () {
+    var serializedSearchParameters = {
+      page: 1,
+      dateOfBirth: '1988-02-03',
+      firstName: 'Dirk',
+      name: 'Dirkington',
+      street: 'Driklane',
+      city: 'Dirktown',
+      email: 'dirk@e-dirk.de',
+      membershipAssociationId: 'some-id',
+      membershipStatus: 'some-status'
+    };
+
+    controller.searchFields = new SearchParameters(serializedSearchParameters);
+    var expectedSearchParameters = new SearchParameters(serializedSearchParameters);
+    spyOn(controller, 'findPassholders');
+
+    controller.findPassholdersByDetails();
+    expect(controller.findPassholders).toHaveBeenCalledWith(expectedSearchParameters);
   });
 });

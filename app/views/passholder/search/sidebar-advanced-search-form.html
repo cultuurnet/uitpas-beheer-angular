@@ -2,19 +2,19 @@
   <a ui-sref="counter.main">Terug</a>
 </div>
 <h2>Pashouder zoeken</h2>
-<ul class="nav nav-tabs" role="tablist">
-  <li role="presentation" class="active"><a href="#search-fields" data-toggle="tab" role="tab">Zoeken</a></li>
-  <li role="presentation"><a href="#search-passnumbers" data-toggle="tab" role="tab">Via kaartnummer</a></li>
-</ul>
-<div class="tab-content">
-  <div role="tabpanel" class="tab-pane active fade in" id="search-fields">
+
+<uib-tabset>
+  <uib-tab heading="{{::pasc.searchModes.DETAIL.title}}" select="pasc.activeSearchMode(pasc.searchModes.DETAIL)"
+           active="pasc.searchModes.DETAIL.active">
     <ubr-passholder-advanced-search-fields></ubr-passholder-advanced-search-fields>
-  </div>
-  <div role="tabpanel" class="tab-pane fade" id="search-passnumbers">
+  </uib-tab>
+
+  <uib-tab heading="{{::pasc.searchModes.NUMBER.title}}" select="pasc.activeSearchMode(pasc.searchModes.NUMBER)"
+           active="pasc.searchModes.NUMBER.active">
     <p>Geef de kaartnummers van de aanwezige UiTPAShouders in: alle kaartnummers onder elkaar zonder scheidingstekens.</p>
-    <form name="searchPassholderNumbers" ng-submit="pasc.findPassholders()" novalidate
+    <form name="searchPassholderNumbers" ng-submit="pasc.findPassholdersByNumbers()" novalidate
           ng-class="{'form-submiting': pasc.formSubmitBusy}">
-    <textarea ng-model="pasc.passNumbers" required  name="passholderNumbers" ubr-uitpas-numbers-search-field
+    <textarea ng-model="pasc.passNumbers" required name="passholderNumbers" ubr-uitpas-numbers-search-field
               rows="8" id="passholder-numbers" placeholder="bv 0987654321012 \n0987654321013"
               ng-change="pasc.clearAsyncError()"></textarea>
       <div ng-if="(searchPassholderNumbers.$submitted || searchPassholderNumbers.passholderNumbers.$touched || searchPassholderNumbers.passholderNumbers.$dirty) && searchPassholderNumbers.passholderNumbers.$invalid"
@@ -33,7 +33,7 @@
         </ul>
       </div>
       <button type="button" class="btn btn-primary" ng-disabled="pasc.formSubmitBusy || searchPassholderNumbers.$invalid"
-              ng-click="pasc.findPassholders()">
+              ng-click="pasc.findPassholdersByNumbers()">
         <span ng-hide="pasc.formSubmitBusy">Doorgaan</span>
       <span ng-show="pasc.formSubmitBusy">
         <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
@@ -49,11 +49,11 @@
     </div>
 
     <div ng-show="pasc.results.hasUnknownNumbers() && !pasc.results.hasConfirmedUnknownNumbers()" class="alert alert-info small">
-      Geen pashouders gevonden voor de kaartnummers:
+      Geen UiTPAS gevonden voor deze nummers:
       <ul>
         <li ng-repeat="number in pasc.results.invalidUitpasNumbers" ng-bind="::number"></li>
       </ul>
       <a ng-click="pasc.results.confirmUnknownNumbers()">Doorgaan</a>
     </div>
-  </div>
-</div>
+  </uib-tab>
+</uib-tabset>

@@ -15,13 +15,29 @@ angular
 function AdvancedSearchController (SearchParameters, advancedSearchService) {
   /*jshint validthis: true */
   var controller = this;
+
+  var SearchModes = {
+    DETAIL: { title:'Zoeken', name:'detail' },
+    NUMBER: { title:'Via kaartnummer', name:'number' }
+  };
+
   controller.formSubmitBusy = false;
-  controller.passNumbers = null;
+  controller.passNumbers = '';
   controller.results = null;
   controller.asyncError = null;
   controller.invalidNumbers = [];
-  controller.searchFields = getDefaultSearchFields();
+  controller.searchFields = new SearchParameters();
   controller.associationOptions = {};
+
+  controller.searchModes = angular.copy(SearchModes);
+
+  controller.activateSearchMode = function (searchMode) {
+    Object.keys(controller.searchModes).forEach(function (modeKey) {
+      var mode = controller.searchModes[modeKey];
+      mode.active = mode.name === searchMode.name;
+    });
+  };
+  controller.activateSearchMode(controller.searchModes.DETAIL);
 
   /**
    * Check if a string resembles an UiTPAS number.
@@ -29,19 +45,6 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
    * @param {string} value
    * @return {boolean}
    */
-  function getDefaultSearchFields () {
-    return {
-      dateOfBirth: '',
-      firstName: '',
-      lastName: '',
-      street: '',
-      city: '',
-      association: '',
-      associatioMembership: '',
-      email: ''
-    };
-  }
-
   function resemblesUitpasNumber(value) {
     /**
      * Matches strings containing exactly 13 digits.
@@ -73,15 +76,52 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
   };
 
   controller.resetSearchFields = function () {
-    controller.searchFields = getDefaultSearchFields();
+    controller.searchFields = new SearchParameters();
+  };
+
+  /**
+   * @param {PassholderSearchResults} searchResults
+   */
+  controller.showSearchResults = function (searchResults) {
+    controller.results = searchResults;
+  };
+
+  /**
+   * @param {ApiError} apiError
+   */
+  controller.showAsyncError = function (apiError) {
+    controller.asyncError = apiError;
+  };
+
+  controller.unlockSearch = function () {
+    controller.formSubmitBusy = false;
+  };
+
+  /**
+   * Find passholders for the given searchParameters.
+   * You probably don't want to call this directly from the UI instead search by details or numbers.
+   *
+   * @param {SearchParameters} searchParameters
+   */
+  controller.findPassholders = function (searchParameters) {
+    controller.formSubmitBusy = true;
+    advancedSearchService
+      .findPassholders(searchParameters)
+      .then(controller.showSearchResults, controller.showAsyncError)
+      .finally(controller.unlockSearch);
+  };
+
+  /**
+   * Find passholders based on the details set on the controller.
+   */
+  controller.findPassholdersByDetails = function () {
+    controller.findPassholders(controller.searchFields);
   };
 
   /**
    * Use the string of UiTPAS numbers available on the controller to find and show passholders.
    */
-  controller.findPassholders = function () {
-    controller.formSubmitBusy = true;
-
+  controller.findPassholdersByNumbers = function () {
     // Check if all provided numbers are in valid format.
     if (!controller.validateUitpasNumbers(controller.passNumbers)) {
       controller.formSubmitBusy = false;
@@ -90,30 +130,12 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
 
     var jsonSearchParameters = {};
     if (controller.passNumbers) {
-      jsonSearchParameters.uitpasNumber = controller.passNumbers.split(' ');
+      jsonSearchParameters.uitpasNumbers = controller.passNumbers.split(/[\s]+/);
     }
 
     var searchParameters = new SearchParameters(jsonSearchParameters);
 
-    var showSearchResults = function (searchResults) {
-      controller.results = searchResults;
-    };
-
-    /**
-     * @param {ApiError} apiError
-     */
-    function showAsyncError(apiError) {
-      controller.asyncError = apiError;
-    }
-
-    var unlockSearch = function () {
-      controller.formSubmitBusy = false;
-    };
-
-    advancedSearchService
-      .findPassholders(searchParameters)
-      .then(showSearchResults, showAsyncError)
-      .finally(unlockSearch);
+    controller.findPassholders(searchParameters);
   };
 
   /**

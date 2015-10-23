@@ -15,7 +15,11 @@
       </div>
     </div>
 
-    <ul ng-show="!rvc.loading">
+    <p ng-show="!rvc.loading && rvc.results.totalItems === 0">
+      Geen Pashouders gevonden!
+    </p>
+
+    <ul ng-show="!rvc.loading && rvc.results.totalItems > 0">
       <li ng-repeat="pass in rvc.results.passen" ng-click="rvc.showPassholderDetails(pass.number)">
         <div class="grid display-table">
 
@@ -52,7 +56,7 @@
       </li>
     </ul>
 
-    <pagination class="pagination"
+    <uib-pagination class="pagination"
                 total-items="rvc.results.totalItems"
                 ng-model="rvc.activePage"
                 items-per-page="rvc.results.itemsPerPage"
@@ -61,6 +65,6 @@
                 previous-text="&lsaquo; Vorige"
                 next-text="Volgende &rsaquo;"
                 ng-show="rvc.results.totalItems > rvc.results.itemsPerPage">
-    </pagination>
+    </uib-pagination>
   </div>
 </section>
