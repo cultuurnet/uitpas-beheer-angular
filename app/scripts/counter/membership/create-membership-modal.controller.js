@@ -41,7 +41,7 @@ function CreateMembershipModalController(counterService, $modalInstance) {
       }
       else {
         controller.asyncError = {
-          message: 'De gebruiker met email <em>' + controller.email + '</em> kan niet aangemaakt worden.'
+          message: 'Er werd niemand gevonden met het e-mail adres <em>' + controller.email + '</em>.<br>Gelieve de persoon die je wenst toe te voegen te vragen om zich eerst te registeren op UiTinVlaanderen.be.'
         };
       }
       controller.creationPending = false;
