@@ -223,4 +223,32 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     controller.findPassholdersByDetails();
     expect(controller.findPassholders).toHaveBeenCalledWith(expectedSearchParameters);
   });
+
+  it('can disable the association membership status field', function () {
+    expect(controller.disableAssociationMembershipStatus()).toBeTruthy();
+    controller.searchFields.membershipAssociationId = 'something else';
+    expect(controller.disableAssociationMembershipStatus()).toBeFalsy();
+    controller.searchFields.membershipAssociationId = '';
+    expect(controller.disableAssociationMembershipStatus()).toBeTruthy();
+  });
+
+  it('can reset the searchfields', function () {
+    var serializedSearchParameters = {
+      page: 1,
+      dateOfBirth: '1988-02-03',
+      firstName: 'Dirk',
+      name: 'Dirkington',
+      street: 'Driklane',
+      city: 'Dirktown',
+      email: 'dirk@e-dirk.de',
+      membershipAssociationId: 'some-id',
+      membershipStatus: 'some-status'
+    };
+
+    controller.searchFields = new SearchParameters(serializedSearchParameters);
+    expect(controller.searchFields.firstName).toBe('Dirk');
+
+    controller.resetSearchFields();
+    expect(controller.searchFields).toEqual(new SearchParameters());
+  });
 });

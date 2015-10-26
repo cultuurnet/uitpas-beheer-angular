@@ -101,20 +101,6 @@ describe('Factory: PassCollection', function () {
     expect(searchParametersFields.serialize()).toEqual(expectedSearchParametersFields);
   });
 
-  xit('should correctly parse a fields parameter set when not serialized', function () {
-    var jsonSearchParametersFields = getJsonSearchParametersFields();
-    var expectedSearchParametersFields = getJsonSearchParametersFields();
-    expectedSearchParametersFields.page = null;
-    expectedSearchParametersFields.limit = null;
-    expectedSearchParametersFields.uitpasNumber = [];
-    expectedSearchParametersFields.dateOfBirth = day('2004-08-16', 'YYYY-MM-DD').toDate();
-
-
-    var searchParametersFields = new SearchParameters(jsonSearchParametersFields);
-
-    expect(searchParametersFields).toEqual(expectedSearchParametersFields);
-  });
-
   it('returns an empty object when no parameters are provided', function () {
     var expectedEmptyObject = {
       page: 1,
