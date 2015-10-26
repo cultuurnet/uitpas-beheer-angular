@@ -12,7 +12,7 @@ angular
   .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function AdvancedSearchController (SearchParameters, advancedSearchService) {
+function AdvancedSearchController (SearchParameters, advancedSearchService, $state) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -77,6 +77,8 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
 
   controller.resetSearchFields = function () {
     controller.searchFields = new SearchParameters();
+    // .serialize() doesn't return the params with null, this way however it works
+    $state.go('counter.main.advancedSearch', controller.searchFields, { notify: false });
   };
 
   /**
@@ -116,6 +118,9 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
    */
   controller.findPassholdersByDetails = function () {
     controller.findPassholders(controller.searchFields);
+    // needed to clear uitpasNumber-parameter from search after a findPassholdersByNumbers was executed.
+    controller.searchFields.uitpasNumber = null;
+    $state.go('counter.main.advancedSearch', controller.searchFields, { notify: false });
   };
 
   /**
@@ -134,6 +139,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
     }
 
     var searchParameters = new SearchParameters(jsonSearchParameters);
+    $state.go('counter.main.advancedSearch', searchParameters.serialize(), { notify: false });
 
     controller.findPassholders(searchParameters);
   };
@@ -144,4 +150,24 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
   controller.clearAsyncError = function () {
     controller.asyncError = null;
   };
+
+  // check if there's a search filled in the url, probably not best way to do it
+  if (location.search.length > 1) {
+    if (typeof $state.params.uitpasNumber === 'string') {
+      // only one UiTPAS-number was entered
+      controller.passNumbers = $state.params.uitpasNumber;
+      controller.findPassholdersByNumbers();
+    }
+    else if (typeof $state.params.uitpasNumber === 'object') {
+      // multiple were entered
+      controller.passNumbers = $state.params.uitpasNumber.join('\n');
+      controller.findPassholdersByNumbers();
+    }
+    else {
+      // regular search, set searchFields from $state params
+      controller.searchFields.parseJson($state.params);
+      // execute search
+      controller.findPassholders(controller.searchFields);
+    }
+  }
 }

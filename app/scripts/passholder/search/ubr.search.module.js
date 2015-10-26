@@ -18,7 +18,7 @@ angular
   .config(function ($stateProvider) {
     $stateProvider
       .state('counter.main.advancedSearch', {
-        url: 'search',
+        url: 'search?name&firstName&street&city&membershipAssociationId&membershipStatus&email&uitpasNumber',
         requiresCounter: true,
         resolve: {
           /* @ngInject */
