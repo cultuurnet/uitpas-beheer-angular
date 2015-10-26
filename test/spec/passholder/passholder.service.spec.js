@@ -93,7 +93,7 @@ describe('Service: passholderService', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('throws an error when the pass request returns an error', function() {
+  it('throws an error when the pass request returns an error', function(done) {
     var uitpasNumber = 'this-is-a-number';
     var expectedError = {
       type: 'error',
@@ -106,13 +106,8 @@ describe('Service: passholderService', function () {
     $httpBackend
       .expectGET(apiUrl + 'identities/' + uitpasNumber)
       .respond(404, JSON.stringify(expectedError));
-
-    var failed = function(error) {
-      expect(error).toEqual({ code: 'PASSHOLDER_NOT_FOUND', title: 'Not found', message: 'Passholder not found for identification number: this-is-a-number' });
-    };
-
     // Request the passholder data and assert it when its returned.
-    passholderService.findPass(uitpasNumber).catch(failed);
+    passholderService.findPass(uitpasNumber).catch(done);
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
@@ -208,7 +203,7 @@ describe('Service: passholderService', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('throws an error when the passholder request returns an error', function() {
+  it('throws an error when the passholder request returns an error', function(done) {
     var uitpasNumber = 'this-is-a-number';
     var expectedError = {
       type: 'error',
@@ -222,12 +217,8 @@ describe('Service: passholderService', function () {
       .expectGET(apiUrl + 'identities/' + uitpasNumber)
       .respond(404, JSON.stringify(expectedError));
 
-    var failed = function(error) {
-      expect(error).toEqual({ code: 'PASSHOLDER_NOT_FOUND', title: 'Not found', message: 'Passholder not found for identification number: this-is-a-number' });
-    };
-
     // Request the passholder data and assert it when its returned.
-    passholderService.findPassholder(uitpasNumber).catch(failed);
+    passholderService.findPassholder(uitpasNumber).catch(done);
 
     // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
