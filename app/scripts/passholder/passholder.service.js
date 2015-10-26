@@ -40,8 +40,8 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
           withCredentials: true
         });
 
-      var cacheAndResolvePassHolder = function (passData) {
-        var pass = new Pass(passData);
+      var cacheAndResolvePassHolder = function (response) {
+        var pass = new Pass(response.data);
         passholderIdCache.put(identification, pass.number);
         passholderCache.put(pass.number, pass);
         deferredPassholder.resolve(pass);
