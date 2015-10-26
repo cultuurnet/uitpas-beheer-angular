@@ -51,7 +51,10 @@
   }
   &__btn {
     margin-bottom: .5em;
-  } 
+  }
+  .list-unstyled {
+    margin-top: 0;
+  }
 }
 
 .no-svg .site-login__logo {
