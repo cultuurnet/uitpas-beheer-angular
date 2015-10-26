@@ -56,12 +56,12 @@ angular
         redirectOnScan: true,
         views: {
           content: {
-            templateUrl: 'views/content-search.html',
+            templateUrl: 'views/passholder/search/content-search.html',
             controller: 'PassholderSearchController',
             controllerAs: 'psc'
           },
           sidebar: {
-            templateUrl: 'views/sidebar-search.html',
+            templateUrl: 'views/passholder/search/sidebar-search.html',
             controller: 'PassholderSearchController',
             controllerAs: 'psc'
           },

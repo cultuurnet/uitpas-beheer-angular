@@ -92,7 +92,8 @@ describe('Factory: Passholder', function () {
       picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
       inszNumber: '',
       remarks: 'remarks',
-      uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
+      uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
+      uitPassen: []
     };
 
     var passholder = new Passholder(jsonPassholder);

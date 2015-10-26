@@ -61,17 +61,24 @@ module.exports = function(config) {
       "app/scripts/kansenstatuut/ubr.kansenstatuut.module.js",
       "app/scripts/membership/ubr.membership.module.js",
       "app/scripts/passholder/ubr.passholder.module.js",
+      "app/scripts/passholder/search/ubr.search.module.js",
       "app/scripts/registration/ubr.registration.module.js",
       "app/scripts/utilities/ubr.utilities.module.js",
 
       "app/scripts/**/*.js",
       "app/scripts/**/*.*.js",
+      "app/scripts/**/**/*.js",
+      "app/scripts/**/**/*.*.js",
 
       "app/views/*.html",
       "app/views/*/*.html",
       //"test/mock/**/*.js",
       "test/spec/**/*.js",
-      "test/spec/**/*.spec.js"
+      "test/spec/**/*.*.js",
+      "test/spec/**/*.spec.js",
+      "test/spec/**/*.*.spec.js",
+      "test/spec/**/*/*.spec.js",
+      "test/spec/**/*/*.*.spec.js"
     ],
 
     // list of files / patterns to exclude

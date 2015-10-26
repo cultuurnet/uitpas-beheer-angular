@@ -12,7 +12,7 @@ angular
   .service('passholderService', passholderService);
 
 /* @ngInject */
-function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope) {
+function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassholderSearchResults) {
   var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
@@ -94,6 +94,13 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     return deferred.promise;
   };
 
+  /**
+   * @param {string} identification
+   *   The identification number. This can be either an UiTPAS number, chip-number, INSZ-number, or INSZ-barcode.
+   *
+   * @returns {Promise}
+   *   A passholder promise.
+   */
   service.findPassholder = function(identification) {
     var deferredPassholder = $q.defer();
     var passholderPromise = deferredPassholder.promise;
@@ -171,6 +178,17 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     });
   };
 
+  /**
+   * Attach a new pass to a passholder
+   *
+   * @param {Pass} pass
+   * @param {string} passholderUid
+   * @param {string} reason
+   * @param {Date} kansenStatuutEndDate
+   * @param {string} voucherNumber
+   *
+   * @returns {Promise}
+   */
   service.newPass = function(pass, passholderUid, reason, kansenStatuutEndDate, voucherNumber) {
     var deferredPass = $q.defer();
     var parameters = {
@@ -338,6 +356,53 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       .then(updateLocalPassholder, deferredUpdate.reject);
 
     return deferredUpdate.promise;
+  };
+
+  /**
+   * @param {Deferred} deferred
+   * @param {ApiError} error
+   */
+  function rejectWithReadableApiError(deferred, error){
+    var knownAPIError = PassholderAPIError[error.code];
+
+    if (knownAPIError) {
+      error.cleanMessage = knownAPIError.message;
+    } else if(error.message) {
+      error.cleanMessage = error.message.split('URL CALLED')[0];
+    } else {
+      error.cleanMessage = 'Er is een fout opgetreden tijdens de communicatie met de server.';
+    }
+
+    deferred.reject(error);
+  }
+
+  /**
+   * @param {SearchParameters} searchParameters
+   *
+   * @returns {Promise<PassholderSearchResults[]|ApiError>}
+   */
+  service.findPassholders = function (searchParameters) {
+    var deferredSearch = $q.defer();
+
+    var cacheAndReturnResults = function (searchResponse) {
+      var searchResults = new PassholderSearchResults(searchResponse.data);
+      // TODO: cache all the pass data before returning it
+      deferredSearch.resolve(searchResults);
+    };
+
+    function reject(errorResponse) {
+      rejectWithReadableApiError(deferredSearch, errorResponse.data);
+    }
+
+    var requestOptions = {
+      params: searchParameters.serialize()
+    };
+
+    $http
+      .get(apiUrl + 'passholders', requestOptions)
+      .then(cacheAndReturnResults, reject);
+
+    return deferredSearch.promise;
   };
 
   /**

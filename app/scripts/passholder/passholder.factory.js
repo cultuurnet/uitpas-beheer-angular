@@ -51,6 +51,24 @@ function passholderFactory(moment, day) {
   }
 
   /**
+   * @param {Object} jsonPassen
+   * @return {Pass[]}
+   */
+  function parseJsonUitPassen(jsonPassen) {
+    var passen = [];
+
+    if(jsonPassen) {
+      angular.forEach(jsonPassen, function (jsonPass) {
+        // TODO: I'm just passing a copy of the json data here, can't inject Pass without creating a circular reference.
+        var pas = angular.copy(jsonPass);
+        passen.push(pas);
+      });
+    }
+
+    return passen;
+  }
+
+  /**
    * @class Passholder
    * @constructor
    * @param {object}  [jsonPassholder]
@@ -84,6 +102,7 @@ function passholderFactory(moment, day) {
     };
     this.points = 0;
     this.kansenStatuten = [];
+    this.uitPassen = [];
     this.remarks = '';
 
     if (jsonPassholder) {
@@ -115,6 +134,7 @@ function passholderFactory(moment, day) {
       this.points = jsonPassholder.points;
       this.uid = jsonPassholder.uid;
       this.remarks = jsonPassholder.remarks || '';
+      this.uitPassen = parseJsonUitPassen(jsonPassholder.uitpassen);
     },
     getKansenstatuutByCardSystemID: function (cardSystemID) {
       var passholder = this,
@@ -132,6 +152,7 @@ function passholderFactory(moment, day) {
       var serializedPassholder = angular.copy(this);
 
       serializedPassholder.birth.date = (this.birth.date ? moment(this.birth.date).format('YYYY-MM-DD') : null);
+      delete serializedPassholder.uitPassen;
 
       return serializedPassholder;
     },
