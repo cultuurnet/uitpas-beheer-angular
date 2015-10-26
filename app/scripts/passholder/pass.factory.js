@@ -22,6 +22,29 @@ function passFactory(Passholder) {
     this.parseJson(jsonPass);
   };
 
+  function parseAdditionalPasses(additionalPasses) {
+    var processedPasses = [];
+
+    angular.forEach(additionalPasses, function (additionalPass) {
+      processedPasses.push(new Pass({uitPas: additionalPass}));
+    });
+
+    return processedPasses;
+  }
+
+  function kansenstatuutExpired(passholder) {
+    var isExpired = false;
+    /*jshint validthis: true */
+    var kansenStatuut = passholder.getKansenstatuutByCardSystemID(this.cardSystem.id);
+    console.log(kansenStatuut);
+
+    if (kansenStatuut && kansenStatuut.status === 'EXPIRED') {
+      isExpired = true;
+    }
+
+    return isExpired;
+  }
+
   Pass.prototype = {
     parseJson: function (jsonPass) {
       this.number = jsonPass.uitPas.number;
@@ -32,6 +55,9 @@ function passFactory(Passholder) {
       if (jsonPass.passHolder) {
         this.passholder = new Passholder(jsonPass.passHolder);
         this.passholder.passNumber = this.number;
+        if (this.passholder.uitPassen) {
+          this.passholder.uitPassen = parseAdditionalPasses(this.passholder.uitPassen);
+        }
       }
 
       if(jsonPass.group) {
@@ -52,6 +78,7 @@ function passFactory(Passholder) {
     isKansenstatuut: function () {
       return this.kansenStatuut ? true : false;
     },
+    kansenstatuutExpired: kansenstatuutExpired,
     isBlocked: function() {
       return this.status === 'BLOCKED';
     },

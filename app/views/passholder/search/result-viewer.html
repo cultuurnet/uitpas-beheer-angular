@@ -19,52 +19,57 @@
       Geen Pashouders gevonden!
     </p>
 
-    <ul ng-show="!rvc.loading && rvc.results.totalItems > 0">
-      <li ng-repeat="pass in rvc.results.passen" ng-click="rvc.showPassholderDetails(pass.number)">
-        <div class="grid display-table">
+    <div ng-show="!rvc.loading && rvc.results.totalItems > 0">
+      {{rvc.results.totalItems}} resultaten gevonden
 
-          <div class="grid__12 grid--bp-med__4 first">
-            <p>
-              <strong class="ch-name" ng-bind="::pass.passholder.getFullName()"></strong><br>
-              <em class="ch-address">
-                <span ng-bind="::pass.passholder.address.street"></span><br>
-                <span ng-bind="::pass.passholder.address.postalCode"></span>
-                <span ng-bind="::pass.passholder.address.city"></span>
-              </em>
-            </p>
+      <ul>
+        <li ng-repeat="pass in rvc.results.passen" ng-click="rvc.showPassholderDetails(pass.number)">
+          <div class="grid display-table">
+
+            <div class="grid__12 grid--bp-med__4 first">
+              <p>
+                <strong class="ch-name" ng-bind="::pass.passholder.getFullName()"></strong><br>
+                <em class="ch-address">
+                  <span ng-bind="::pass.passholder.address.street"></span><br>
+                  <span ng-bind="::pass.passholder.address.postalCode"></span>
+                  <span ng-bind="::pass.passholder.address.city"></span>
+                </em>
+              </p>
+            </div>
+
+            <div class="grid__12 grid--bp-med__8">
+              <ul class="grid">
+                <li ng-repeat="otherPass in ::pass.passholder.uitPassen">
+                  <div class="grid__12 grid--bp-med__4">
+                    <span ng-bind="::otherPass.number"></span>
+                  </div>
+
+                  <div class="grid__12 grid--bp-med__4">
+                    <span ng-bind="::otherPass.cardSystem.name"></span>
+                  </div>
+
+                  <div class="grid__12 grid--bp-med__4">
+                    <span class="label label-danger" ng-show="otherPass.isKansenstatuut() && otherPass.kansenstatuutExpired(pass.passholder)">Kansenstatuut vervallen</span>
+                    <span class="label label-success" ng-show="otherPass.isKansenstatuut() && !otherPass.kansenstatuutExpired(pass.passholder)">Kansenstatuut geldig</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
           </div>
+        </li>
+      </ul>
 
-          <div class="grid__12 grid--bp-med__8">
-            <ul class="grid">
-              <li ng-repeat="otherPass in ::pass.passholder.uitPassen">
-                <div class="grid__12 grid--bp-med__4">
-                  <span ng-bind="::otherPass.number"></span>
-                </div>
-
-                <div class="grid__12 grid--bp-med__4">
-                  <span ng-bind="::otherPass.cardSystem.name"></span>
-                </div>
-
-                <div class="grid__12 grid--bp-med__4">
-                  <span ng-bind="::otherPass.status"></span>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-      </li>
-    </ul>
-
-    <uib-pagination class="pagination"
-                total-items="rvc.results.totalItems"
-                ng-model="rvc.activePage"
-                items-per-page="rvc.results.itemsPerPage"
-                ng-change="rvc.updateActivePage()"
-                max-size="10"
-                previous-text="&lsaquo; Vorige"
-                next-text="Volgende &rsaquo;"
-                ng-show="rvc.results.totalItems > rvc.results.itemsPerPage">
-    </uib-pagination>
+      <uib-pagination class="pagination"
+                      total-items="rvc.results.totalItems"
+                      ng-model="rvc.activePage"
+                      items-per-page="rvc.results.itemsPerPage"
+                      ng-change="rvc.updateActivePage()"
+                      max-size="10"
+                      previous-text="&lsaquo; Vorige"
+                      next-text="Volgende &rsaquo;"
+                      ng-show="rvc.results.totalItems > rvc.results.itemsPerPage">
+      </uib-pagination>
+    </div>
   </div>
 </section>

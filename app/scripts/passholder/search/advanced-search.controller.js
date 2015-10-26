@@ -54,6 +54,19 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
     return !!(resembleUitpasNumberRegex.exec(value));
   }
 
+  controller.disableAssociationMembershipStatus = function () {
+    if (controller.searchFields.membershipAssociationId === null) {
+      return true;
+    }
+    else if (controller.searchFields.membershipAssociationId === '') {
+      controller.searchFields.membershipStatus = '';
+      return true;
+    }
+    else {
+      return false;
+    }
+  };
+
   /**
    * Validate a string containing UiTPAS numbers and add invalid numbers to a controller variable.
    *

@@ -17,10 +17,10 @@
       <input type="text" class="form-control" id="name" name="name" ng-model="pasc.searchFields.name">
     </div>
     <div class="grid__12 field-group">
-      <label class="control-label" for="name">
+      <label class="control-label" for="first-name">
         Voornamen
       </label>
-      <input type="text" class="form-control" id="firstName" name="firstName" ng-model="pasc.searchFields.firstName">
+      <input type="text" class="form-control" id="first-name" name="firstName" ng-model="pasc.searchFields.firstName">
     </div>
     <div class="grid__12 field-group">
       <label class="control-label" for="street">
@@ -48,7 +48,7 @@
       <label class="control-label" for="membership-status">
         Lidmaatschap
       </label>
-      <select id="membership-status" name="membershipStatus" ng-model="pasc.searchFields.membershipStatus">
+      <select id="membership-status" name="membershipStatus" ng-model="pasc.searchFields.membershipStatus" ng-disabled="(pasc.disableAssociationMembershipStatus())">
         <option value="">--Kies--</option>
         <option value="ACTIVE">Actief</option>
         <option value="EXPIRED">Vervallen</option>
