@@ -116,9 +116,6 @@ function appController($rootScope, $location, uitid, counterService, $state) {
 
   // check for any unauthenticated requests and redirect to login
   $rootScope.$on('event:auth-loginRequired', app.redirectToLogin);
-  // TODO: The API currently sends a 403 (authorization) when not authenticated
-  // also try to login on any unauthorized requests.
-  $rootScope.$on('event:auth-forbidden', app.redirectToLogin);
 
   // make sure the user is still authenticated when navigating to a new route
   $rootScope.$on('$stateChangeStart', app.authenticateStateChange);
