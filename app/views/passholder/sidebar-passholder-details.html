@@ -18,7 +18,12 @@
   <div class="birthdate">{{pdc.passholder.birth.date | date : 'dd/MM/yyyy'}}</div>
   <div class="contact-data">
     <a class="edit" ng-show="!pdc.passholder.contact.telephoneNumber && !pdc.passholder.contact.email && !pdc.passholder.contact.mobileNumber" ui-sref="counter.main.passholder.editContact()">Contactgegevens toevoegen</a>
-    <a ng-show="pdc.passholder.contact.telephoneNumber || pdc.passholder.contact.email || pdc.passholder.contact.mobileNumber"  data-target="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="false">Contactinformatie<i></i></a>
+    <span>
+      <span ng-show="!pdc.passholder.contact.email" class="label label-danger no-mail"><i class="fa fa-exclamation-triangle"></i></span>
+      <a ng-show="pdc.passholder.contact.telephoneNumber || pdc.passholder.contact.email || pdc.passholder.contact.mobileNumber"  data-target="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="false">
+        Contactinformatie<i></i>
+      </a>
+    </span>
     <div class="panel panel-default panel-collapse collapse" id="contact-data-container">
       <div class="panel-body vcard">
         <div class="tel" ng-show="pdc.passholder.contact.telephoneNumber">
@@ -29,6 +34,9 @@
         </div>
         <div class="email" ng-show="pdc.passholder.contact.email">
             <span ng-bind="pdc.passholder.contact.email"></span>
+        </div>
+        <div class="email" ng-show="!pdc.passholder.contact.email">
+            <span class="text-danger">Geen e-mailadres gekend</span>
         </div>
         <a class="edit" ui-sref="counter.main.passholder.editContact()">Aanpassen</a>
       </div>
