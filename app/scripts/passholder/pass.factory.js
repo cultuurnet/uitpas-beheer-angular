@@ -36,7 +36,6 @@ function passFactory(Passholder) {
     var isExpired = false;
     /*jshint validthis: true */
     var kansenStatuut = passholder.getKansenstatuutByCardSystemID(this.cardSystem.id);
-    console.log(kansenStatuut);
 
     if (kansenStatuut && kansenStatuut.status === 'EXPIRED') {
       isExpired = true;
