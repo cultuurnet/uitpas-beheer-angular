@@ -360,4 +360,16 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
 
     return deferredResponse.promise;
   };
+
+  service.getAssociations = function () {
+    var url = apiUrl + '/active/associations';
+    var deferredAssociations = $q.defer();
+
+    $http
+      .get(url)
+      .success(deferredAssociations.resolve)
+      .error(deferredAssociations.reject);
+
+    return deferredAssociations.promise;
+  };
 }

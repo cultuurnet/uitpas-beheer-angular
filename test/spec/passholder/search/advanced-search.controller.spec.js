@@ -77,6 +77,38 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       'availableTickets': 0
     }
   };
+  var activeCounterAssociations = [
+    {
+      id: 1,
+      name:'Chiro Jongens',
+      enddateCalculation: 'FREE',
+      enddateCalculationFreeDate: 1451602799,
+      enddateCalculationValidityTime: 30,
+      permissionRead: true,
+      permissionRegister: false,
+      cardSystems: []
+    },
+    {
+      id: 2,
+      name:'Boyscouts from hell',
+      enddateCalculation: 'BASED_ON_DATE_OF_BIRTH',
+      enddateCalculationFreeDate: 1451602799,
+      enddateCalculationValidityTime: 30,
+      permissionRead: true,
+      permissionRegister: false,
+      cardSystems: []
+    },
+    {
+      id: 3,
+      name:'Karel & Jos gaan er op los',
+      enddateCalculation: 'BASED_ON_REGISTRATION_DATE',
+      enddateCalculationFreeDate: 1451602799,
+      enddateCalculationValidityTime: 30,
+      permissionRead: true,
+      permissionRegister: false,
+      cardSystems: []
+    }
+  ];
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $injector, $rootScope) {
@@ -88,7 +120,8 @@ describe('Controller: PassholderAdvancedSearchController', function () {
 
     controller = $controller('PassholderAdvancedSearchController', {
       SearchParameters: SearchParameters,
-      advancedSearchService: advancedSearchService
+      advancedSearchService: advancedSearchService,
+      activeCounterAssociations: activeCounterAssociations
     });
   }));
 

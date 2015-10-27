@@ -40,8 +40,7 @@
       </label>
       <select id="association-id" name="membershipAssociationId" ng-model="pasc.searchFields.membershipAssociationId">
         <option value="">--Kies--</option>
-        <option value="1">Outlaws</option>
-        <option value="2">Hells Angels</option>
+        <option ng-repeat="association in pasc.associationOptions" value="{{association.id}}">{{association.name}}</option>
       </select>
     </div>
     <div class="grid__12 field-group">

@@ -12,7 +12,7 @@ angular
   .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function AdvancedSearchController (SearchParameters, advancedSearchService) {
+function AdvancedSearchController (SearchParameters, advancedSearchService, activeCounterAssociations) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -27,7 +27,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService) {
   controller.asyncError = null;
   controller.invalidNumbers = [];
   controller.searchFields = new SearchParameters();
-  controller.associationOptions = {};
+  controller.associationOptions = activeCounterAssociations;
 
   controller.searchModes = angular.copy(SearchModes);
 
