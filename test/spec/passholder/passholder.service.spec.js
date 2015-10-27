@@ -12,7 +12,7 @@ describe('Service: passholderService', function () {
   }));
 
   // Instantiate service.
-  var passholderService, $httpBackend, $q, $scope, Passholder, Pass, $cacheFactory;
+  var passholderService, $httpBackend, $q, $scope, Passholder, Pass, $cacheFactory, SearchParameters, PassholderSearchResults;
 
   var identityData = {
     'uitPas': {
@@ -59,6 +59,8 @@ describe('Service: passholderService', function () {
     Passholder = $injector.get('Passholder');
     Pass = $injector.get('Pass');
     $cacheFactory = $injector.get('$cacheFactory');
+    SearchParameters = $injector.get('SearchParameters');
+    PassholderSearchResults = $injector.get('PassholderSearchResults');
   }));
 
   it('returns a pass from the server and keeps it cached', function() {
@@ -539,4 +541,199 @@ describe('Service: passholderService', function () {
     $scope.$apply();
     $httpBackend.flush();
   });
+
+  it('should find passholders by pass numbers', function (done) {
+    var jsonSearchParametersUitpasNumbers = {
+      page: 2,
+      limit: 15,
+      uitpasNumbers: [
+        '0987654321012',
+        '0987654321013',
+        '0987654321014',
+        '0987654321015',
+        '0987654321016',
+        '0987654321017',
+        '0987654321018',
+        '0987654321019',
+        '0987654321020'
+      ]
+    };
+    var searchParametersUitpasNumbers = new SearchParameters(jsonSearchParametersUitpasNumbers);
+
+    var jsonIdentity = {
+      'uitPas': {
+        'number': '0930000422202',
+        'kansenStatuut': false,
+        'status': 'ACTIVE'
+      },
+      'passHolder': {
+        'name': {
+          'first': 'Victor',
+          'last': 'D\'Hooghe'
+        },
+        'address': {
+          'street': 'Baanweg 60',
+          'postalCode': '9308',
+          'city': 'Aalst'
+        },
+        'birth': {
+          'date': '2007-11-15',
+          'place': 'Aalst'
+        },
+        'gender': 'MALE',
+        'nationality': 'belg',
+        'privacy': {
+          'email': false,
+          'sms': false
+        },
+        'contact': {
+          'email': 'email@email.com'
+        },
+        kansenStatuten: [{
+          status: 'ACTIVE',
+          endDate: '2015-12-06',
+          cardSystem: {
+            name: 'UiTPAS Regio Aalst',
+            id: '1'
+          }
+        }],
+        uitPassen: [],
+        'points': 309,
+        'picture': 'picture-in-base64-format',
+        'remarks': 'remarks',
+        'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
+      }
+    };
+    var jsonResultCollection = {
+      itemsPerPage: 10,
+      totalItems: 50,
+      member: [
+        jsonIdentity,
+        jsonIdentity,
+        jsonIdentity,
+        jsonIdentity,
+        jsonIdentity,
+        jsonIdentity,
+        jsonIdentity,
+        jsonIdentity,
+        jsonIdentity,
+        jsonIdentity
+      ],
+      invalidUitpasNumbers: [
+        '0987654321012',
+        '0987654321013',
+        '0987654321014',
+        '0987654321015',
+        '0987654321016'
+      ],
+      firstPage: 'http://culpas-silex.dev/passholders?page=1',
+      lastPage: 'http://culpas-silex.dev/passholders?page=5',
+      previousPage: 'http://culpas-silex.dev/passholders?page=1',
+      nextPage: 'http://culpas-silex.dev/passholders?page=2'
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholders?limit=15&page=2&uitpasNumber=0987654321012&uitpasNumber=0987654321013&uitpasNumber=0987654321014&uitpasNumber=0987654321015&uitpasNumber=0987654321016&uitpasNumber=0987654321017&uitpasNumber=0987654321018&uitpasNumber=0987654321019&uitpasNumber=0987654321020')
+      .respond(200, JSON.stringify(jsonResultCollection));
+
+    var assertCorrectSearchResultData = function (data) {
+      expect(data).toEqual(new PassholderSearchResults(jsonResultCollection));
+      done();
+    };
+
+    var assertNoError = function (error) {
+      expect(error).toBeUndefined();
+    };
+
+    passholderService
+      .findPassholders(searchParametersUitpasNumbers)
+      .then(assertCorrectSearchResultData, assertNoError);
+
+    $httpBackend.flush();
+  });
+
+  it('should reject with a known API error when it can not find passholders by pass numbers', function (done) {
+    var jsonSearchParametersUitpasNumbers = {
+      page: 2,
+      limit: 15,
+      uitpasNumbers: []
+    };
+    var searchParametersUitpasNumbers = new SearchParameters(jsonSearchParametersUitpasNumbers);
+
+    var error = {
+      code: 'PARSE_INVALID_UITPASNUMBER'
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholders?limit=15&page=2')
+      .respond(404, JSON.stringify(error));
+
+    var validateKnownErrorResponse = function (errorResponse) {
+      expect(errorResponse).toEqual({
+        code: 'PARSE_INVALID_UITPASNUMBER',
+        cleanMessage: 'Alle opgegeven UiTPAS nummers zijn foutief.'
+      });
+      done();
+    };
+
+    passholderService.findPassholders(searchParametersUitpasNumbers).catch(validateKnownErrorResponse);
+
+    $httpBackend.flush();
+  });
+
+  it('should reject with an unknown API error when it can not find passholders by pass numbers', function (done) {
+    var jsonSearchParametersUitpasNumbers = {
+      page: 2,
+      limit: 15,
+      uitpasNumbers: []
+    };
+    var searchParametersUitpasNumbers = new SearchParameters(jsonSearchParametersUitpasNumbers);
+
+    var error = {
+      message: 'I want only this. URL CALLED I do not want this'
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholders?limit=15&page=2')
+      .respond(404, JSON.stringify(error));
+
+    var validateUnknownErrorResponse = function (errorResponse) {
+      expect(errorResponse).toEqual({
+        message: 'I want only this. URL CALLED I do not want this',
+        cleanMessage: 'I want only this. '
+      });
+      done();
+    };
+
+    passholderService.findPassholders(searchParametersUitpasNumbers).catch(validateUnknownErrorResponse);
+
+    $httpBackend.flush();
+  });
+
+  it('should reject with a fallback error when it can not find passholders by pass numbers', function (done) {
+    var jsonSearchParametersUitpasNumbers = {
+      page: 2,
+      limit: 15,
+      uitpasNumbers: []
+    };
+    var searchParametersUitpasNumbers = new SearchParameters(jsonSearchParametersUitpasNumbers);
+
+    var error = {};
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholders?limit=15&page=2')
+      .respond(404, JSON.stringify(error));
+
+    var validateFallbackErrorResponse = function (errorResponse) {
+      expect(errorResponse).toEqual({
+        cleanMessage: 'Er is een fout opgetreden tijdens de communicatie met de server.'
+      });
+      done();
+    };
+
+    passholderService.findPassholders(searchParametersUitpasNumbers).catch(validateFallbackErrorResponse);
+
+    $httpBackend.flush();
+  });
+
 });
