@@ -12,7 +12,7 @@ angular
   .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function AdvancedSearchController (SearchParameters, advancedSearchService, activeCounterAssociations) {
+function AdvancedSearchController (SearchParameters, advancedSearchService, activeCounterAssociations, activeCounter) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -28,6 +28,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
   controller.invalidNumbers = [];
   controller.searchFields = new SearchParameters();
   controller.associationOptions = activeCounterAssociations;
+  controller.activeCounter = activeCounter;
 
   controller.searchModes = angular.copy(SearchModes);
 
@@ -37,7 +38,30 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
       mode.active = mode.name === searchMode.name;
     });
   };
-  controller.activateSearchMode(controller.searchModes.DETAIL);
+
+  /**
+   * Check if the active counter has the registration permission for any of it's cardsystems.
+   *
+   * @returns {boolean}
+   */
+  controller.checkCounterCardSystemRegistrationPermissions = function() {
+    var canRegister = false;
+    angular.forEach(activeCounter.cardSystems, function (cardSystem, id) {
+      if (activeCounter.isRegistrationCounter(id)) {
+        canRegister = true;
+      }
+    });
+
+    return canRegister;
+  };
+
+  if (controller.checkCounterCardSystemRegistrationPermissions() || Object.keys(controller.associationOptions).length > 0) {
+    controller.activateSearchMode(controller.searchModes.DETAIL);
+  }
+  else {
+    controller.activateSearchMode(controller.searchModes.NUMBER);
+    delete controller.searchModes.DETAIL;
+  }
 
   /**
    * Check if a string resembles an UiTPAS number.

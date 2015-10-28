@@ -23,44 +23,16 @@ angular
         resolve: {
           /* @ngInject */
           activeCounterAssociations: function (counterService) {
-            //return counterService.getAssociations();
-            // @todo: Use the service to get real data once the silex callback is iin place.
-            return [
-              {
-                id: 1,
-                name:'Chiro Jongens',
-                enddateCalculation: 'FREE',
-                enddateCalculationFreeDate: 1451602799,
-                enddateCalculationValidityTime: 30,
-                permissionRead: true,
-                permissionRegister: false,
-                cardSystems: []
-              },
-              {
-                id: 2,
-                name:'Boyscouts from hell',
-                enddateCalculation: 'BASED_ON_DATE_OF_BIRTH',
-                enddateCalculationFreeDate: 1451602799,
-                enddateCalculationValidityTime: 30,
-                permissionRead: true,
-                permissionRegister: false,
-                cardSystems: []
-              },
-              {
-                id: 3,
-                name:'Karel & Jos gaan er op los',
-                enddateCalculation: 'BASED_ON_REGISTRATION_DATE',
-                enddateCalculationFreeDate: 1451602799,
-                enddateCalculationValidityTime: 30,
-                permissionRead: true,
-                permissionRegister: false,
-                cardSystems: []
-              }
-            ];
+            return counterService.getAssociations();
+          },
+          /* @ngInject */
+          activeCounter: function (counterService) {
+            return counterService.getActive();
           }
         },
         params: {
-          'activeCounterAssociations': null
+          'activeCounterAssociations': null,
+          'activeCounter': null
         },
         views: {
           'content@counter': {
