@@ -11,7 +11,7 @@ describe('Filter: passNumberFilter', function () {
 
   describe('passNumberFilter', function() {
 
-    fit('should convert a string into a formatted passnumber format',
+    it('should convert a string into a formatted passnumber format',
       inject(function(passNumberFilter) {
         expect(passNumberFilter('0930000800118')).toBe('09300 00800 118');
       }));
