@@ -633,7 +633,7 @@ describe('Service: passholderService', function () {
     };
 
     $httpBackend
-      .expectGET(apiUrl + 'passholders?limit=15&page=2&uitpasNumber=0987654321012&uitpasNumber=0987654321013&uitpasNumber=0987654321014&uitpasNumber=0987654321015&uitpasNumber=0987654321016&uitpasNumber=0987654321017&uitpasNumber=0987654321018&uitpasNumber=0987654321019&uitpasNumber=0987654321020')
+      .expectGET(apiUrl + 'passholders?limit=15&page=2&uitpasNumber%5B%5D=0987654321012&uitpasNumber%5B%5D=0987654321013&uitpasNumber%5B%5D=0987654321014&uitpasNumber%5B%5D=0987654321015&uitpasNumber%5B%5D=0987654321016&uitpasNumber%5B%5D=0987654321017&uitpasNumber%5B%5D=0987654321018&uitpasNumber%5B%5D=0987654321019&uitpasNumber%5B%5D=0987654321020')
       .respond(200, JSON.stringify(jsonResultCollection));
 
     var assertCorrectSearchResultData = function (data) {

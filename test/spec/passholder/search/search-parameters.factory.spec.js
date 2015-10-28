@@ -141,7 +141,7 @@ describe('Factory: PassCollection', function () {
       email: '',
       membershipAssociationId: null,
       membershipStatus: null,
-      uitpasNumber: []
+      'uitpasNumber[]': []
     };
     var expectedSerializedSearchParameters = {
       page: 1,
@@ -159,7 +159,7 @@ describe('Factory: PassCollection', function () {
     var expectedParameters = {
       page: 1,
       limit: 10,
-      uitpasNumber: ['123465798654', '123465798852']
+      'uitpasNumber[]': ['123465798654', '123465798852']
     };
 
     expect(searchParameters.serialize()).toEqual(expectedParameters);

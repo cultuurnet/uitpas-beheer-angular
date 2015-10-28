@@ -87,7 +87,7 @@ function searchParametersFactory(moment, day) {
       }
 
       if (this.uitpasNumbers.length > 0) {
-        serializedSearchParameters.uitpasNumber = this.uitpasNumbers;
+        serializedSearchParameters['uitpasNumber[]'] = this.uitpasNumbers;
       }
 
       return serializedSearchParameters;
