@@ -62,6 +62,12 @@
         <div ng-if="advancedSearchFields.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
       </div>
     </div>
+    <div ng-show="pasc.asyncError" class="alert alert-danger small">
+      <span ng-bind="pasc.asyncError.cleanMessage"></span>
+      <ul ng-if="pasc.asyncError.context && pasc.asyncError.context.length">
+        <li ng-repeat="errorItem in pasc.asyncError.context" ng-bind="errorItem"></li>
+      </ul>
+    </div>
     <div class="grid__12 field-group">
       <button type="reset" class="btn btn-default pull-left" ng-click="pasc.resetSearchFields()" ng-disabled="pasc.formSubmitBusy">Leegmaken</button>
       <button type="button" class="btn btn-primary pull-right" ng-disabled="pasc.formSubmitBusy || advancedSearchFields.$invalid"

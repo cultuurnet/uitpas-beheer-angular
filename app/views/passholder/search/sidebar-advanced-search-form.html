@@ -47,12 +47,5 @@
       </button>
     </form>
 
-    <div ng-show="pasc.results.hasUnknownNumbers() && !pasc.results.hasConfirmedUnknownNumbers()" class="alert alert-info small">
-      Geen UiTPAS gevonden voor deze nummers:
-      <ul>
-        <li ng-repeat="number in pasc.results.invalidUitpasNumbers" ng-bind="::number"></li>
-      </ul>
-      <a ng-click="pasc.results.confirmUnknownNumbers()">Doorgaan</a>
-    </div>
   </uib-tab>
 </uib-tabset>

@@ -54,6 +54,40 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
     return !!(resembleUitpasNumberRegex.exec(value));
   }
 
+  /**
+   * Check if specified fields are empty or a certain pattern.
+   * @return {boolean}
+   */
+  function searchFielsHaveValidPattern() {
+    controller.clearAsyncError();
+    // Validate name, firstName, street, city
+    var moreThanOneCharacterRegex = /(?!\*)./;
+    var fieldPatternErrors = {
+      cleanMessage: '',
+      context: []
+    };
+    var fieldsToValidateForPattern = {
+      name: 'Naam',
+      firstName: 'Voornamen',
+      street: 'Straat',
+      city: 'Gemeente'
+    };
+    angular.forEach(fieldsToValidateForPattern, function (errorContext, fieldName) {
+      var fieldValue = controller.searchFields[fieldName];
+      if (fieldValue && !moreThanOneCharacterRegex.exec(fieldValue)) {
+        fieldPatternErrors.context.push(errorContext);
+      }
+    });
+    if (fieldPatternErrors.context.length !== 0) {
+      fieldPatternErrors.cleanMessage = 'Gebruik minstens 1 teken behalve * bij de velden:';
+      controller.showAsyncError(fieldPatternErrors);
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
   controller.disableAssociationMembershipStatus = function () {
     if (controller.searchFields.membershipAssociationId === null) {
       return true;
@@ -128,7 +162,9 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
    * Find passholders based on the details set on the controller.
    */
   controller.findPassholdersByDetails = function () {
-    controller.findPassholders(controller.searchFields);
+    if (searchFielsHaveValidPattern()) {
+      controller.findPassholders(controller.searchFields);
+    }
   };
 
   /**
