@@ -27,7 +27,7 @@ label {
 }
 
 form label {
-  margin-bottom: $rh-xsm;
+  margin-bottom: $rh-xxs;
 }
 
 form hr {
@@ -82,9 +82,6 @@ a + .btn {
 .field-group {
   margin-bottom: $rh-xsm;
   margin-top: 0;
-  @include breakpoint(map-get($breakpoints, xsm)) {
-    min-height: 85px; // to provide space for alert
-  }
 }
 
 .field-group .alert {

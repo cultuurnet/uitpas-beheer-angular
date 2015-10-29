@@ -27,6 +27,11 @@
       vertical-align: middle;
     }
   }
+  .field-group {
+    @include breakpoint(map-get($breakpoints, xsm)) {
+      min-height: 85px;
+    }
+  }
 }
 
 .modal-sm {

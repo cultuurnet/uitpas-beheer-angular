@@ -13,8 +13,9 @@ p {
 ol,
 ul {
   margin: $rh-sml 0;
-  .alert & {
-    margin: $rh-xxs 0;
+  .alert &,
+  .sidebar & {
+    margin: $rh-xsm 0;
   }
 }
 

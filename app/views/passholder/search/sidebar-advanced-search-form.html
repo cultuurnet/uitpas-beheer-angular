@@ -1,14 +1,12 @@
 <div class="back-nav">
   <a ui-sref="counter.main">Terug</a>
 </div>
-<h2>Pashouder zoeken</h2>
-
 <uib-tabset>
+  <h2 class="overview__title">Pashouder zoeken</h2>
   <uib-tab ng-show="(pasc.searchModes.DETAIL)" heading="{{::pasc.searchModes.DETAIL.title}}" select="pasc.activeSearchMode(pasc.searchModes.DETAIL)"
            active="pasc.searchModes.DETAIL.active">
-    <ubr-passholder-advanced-search-fields></ubr-passholder-advanced-search-fields>
-  </uib-tab>
-
+  <ubr-passholder-advanced-search-fields></ubr-passholder-advanced-search-fields>
+</uib-tab>
   <uib-tab heading="{{::pasc.searchModes.NUMBER.title}}" select="pasc.activeSearchMode(pasc.searchModes.NUMBER)"
            active="pasc.searchModes.NUMBER.active">
     <p>Geef de kaartnummers van de aanwezige UiTPAShouders in: alle kaartnummers onder elkaar zonder scheidingstekens.</p>
@@ -38,13 +36,15 @@
           <li ng-repeat="errorItem in pasc.asyncError.context" ng-bind="errorItem"></li>
         </ul>
       </div>
-      <button type="button" class="btn btn-primary" ng-disabled="pasc.formSubmitBusy || searchPassholderNumbers.$invalid"
-              ng-click="pasc.findPassholdersByNumbers()">
-        <span ng-hide="pasc.formSubmitBusy">Doorgaan</span>
-      <span ng-show="pasc.formSubmitBusy">
-        <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
-    </span>
-      </button>
+      <div class="actions">
+        <button type="button" class="btn btn-primary pull-right" ng-disabled="pasc.formSubmitBusy || searchPassholderNumbers.$invalid"
+                ng-click="pasc.findPassholdersByNumbers()">
+          <span ng-hide="pasc.formSubmitBusy">Doorgaan</span>
+        <span ng-show="pasc.formSubmitBusy">
+          <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+      </span>
+        </button>
+      </div>
     </form>
 
   </uib-tab>
