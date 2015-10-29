@@ -32,6 +32,9 @@
       min-height: 85px;
     }
   }
+  .grid + hr {
+    margin: 0 0 $rh-xsm;
+  }
 }
 
 .modal-sm {
