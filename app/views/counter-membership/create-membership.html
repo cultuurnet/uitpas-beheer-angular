@@ -30,7 +30,7 @@
   </div><!-- end modal-body -->
 
   <div class="modal-footer">
-    <a class="btn btn-link" ng-click="cmmc.cancelCreation()">Annuleren</a>
+    <a ng-click="cmmc.cancelCreation()">Annuleren</a>
     <button type="button" class="btn btn-primary" ng-disabled="cmmc.creationPending || newMembershipForm.$invalid"
             ng-click="cmmc.createMembership(newMembershipForm)">
       <span ng-hide="cmmc.creationPending">Toevoegen</span>
