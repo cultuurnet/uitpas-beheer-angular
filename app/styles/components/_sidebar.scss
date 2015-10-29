@@ -33,6 +33,9 @@
     font-weight: 400;
     text-shadow: 1px 1px $white;
   }
+  p {
+    margin: 0 0 1em;
+  }
   .panel {
     margin-bottom: 0;
     + .panel {
@@ -47,6 +50,17 @@
   }
   .list-group-item a {
     text-decoration: none;
+  }
+  // Nav tabs in sidebar
+  .nav-tabs {
+    > li a {
+      color: $brand-primary;
+    }
+    > li.active > a {
+      background-color: $white;
+      color: $text-color;
+      text-decoration: none;
+    }
   }
 }
 

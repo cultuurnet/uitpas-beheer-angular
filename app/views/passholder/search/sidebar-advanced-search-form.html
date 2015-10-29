@@ -2,8 +2,8 @@
   <a ui-sref="counter.main">Terug</a>
 </div>
 <h2>Pashouder zoeken</h2>
-<ul>
-  <li>Via kaartnummer</li>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#" class="small">Via kaartnummer</a></li>
 </ul>
 <div>
   <p>Geef de kaartnummers van de aanwezige UiTPAShouders in: alle kaartnummers onder elkaar zonder scheidingstekens.</p>
@@ -27,13 +27,15 @@
         <li ng-repeat="number in pasc.invalidNumbers">{{number}}</li>
       </ul>
     </div>
-    <button type="button" class="btn btn-primary" ng-disabled="pasc.formSubmitBusy || searchPassholderNumbers.$invalid"
-            ng-click="pasc.findPassholders()">
-      <span ng-hide="pasc.formSubmitBusy">Doorgaan</span>
-      <span ng-show="pasc.formSubmitBusy">
-        <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
-    </span>
-    </button>
+    <div class="actions clearfix">
+      <button type="button" class="btn btn-primary pull-right" ng-disabled="pasc.formSubmitBusy || searchPassholderNumbers.$invalid"
+              ng-click="pasc.findPassholders()">
+        <span ng-hide="pasc.formSubmitBusy">Doorgaan</span>
+        <span ng-show="pasc.formSubmitBusy">
+          <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+      </span>
+      </button>
+    </div>
   </form>
 
   <div ng-show="pasc.asyncError" class="alert alert-danger small">
