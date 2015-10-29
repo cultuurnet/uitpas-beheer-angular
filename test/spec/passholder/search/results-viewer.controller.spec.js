@@ -25,6 +25,7 @@ describe('Controller: Results Viewer', function () {
     controller.results.hasUnknownNumbers.and.returnValue(false);
 
     expect(controller.isShowingResults()).toEqual(true);
+    expect(controller.noSearchDone()).toBeFalsy();
   });
 
   it('should not show results without confirmation when there are unknown numbers', function () {
@@ -87,4 +88,8 @@ describe('Controller: Results Viewer', function () {
     expect(controller.results).toEqual(searchResults);
     expect(controller.loading).toEqual(false);
   }));
+
+  it('can tell when no search has been done', function () {
+    expect(controller.noSearchDone()).toBeTruthy();
+  });
 });

@@ -22,9 +22,17 @@ angular
         requiresCounter: true,
         resolve: {
           /* @ngInject */
+          activeCounterAssociations: function (counterService) {
+            return counterService.getAssociations();
+          },
+          /* @ngInject */
           activeCounter: function (counterService) {
             return counterService.getActive();
           }
+        },
+        params: {
+          'activeCounterAssociations': null,
+          'activeCounter': null
         },
         views: {
           'content@counter': {

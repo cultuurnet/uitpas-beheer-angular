@@ -59,9 +59,8 @@ function passholderFactory(moment, day) {
 
     if(jsonPassen) {
       angular.forEach(jsonPassen, function (jsonPass) {
-        // TODO: I'm just passing a copy of the json data here, can't inject Pass without creating a circular reference.
-        var pas = angular.copy(jsonPass);
-        passen.push(pas);
+        var pass = angular.copy(jsonPass);
+        passen.push(pass);
       });
     }
 
@@ -152,6 +151,11 @@ function passholderFactory(moment, day) {
       var serializedPassholder = angular.copy(this);
 
       serializedPassholder.birth.date = (this.birth.date ? moment(this.birth.date).format('YYYY-MM-DD') : null);
+
+      angular.forEach(this.kansenStatuten, function (kansenStatuut, key) {
+        serializedPassholder.kansenStatuten[key].endDate = (kansenStatuut.endDate ? moment(kansenStatuut.endDate).format('YYYY-MM-DD') : null);
+      });
+
       delete serializedPassholder.uitPassen;
 
       return serializedPassholder;
