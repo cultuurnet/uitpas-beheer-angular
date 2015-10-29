@@ -79,7 +79,7 @@ angular
           $modal
             .open({
               animation: true,
-              templateUrl: 'views/modal-passholder-activity-tariffs.html',
+              templateUrl: 'views/activity/modal-passholder-activity-tariffs.html',
               size: 'sm',
               resolve: {
                 passholder: function () {
