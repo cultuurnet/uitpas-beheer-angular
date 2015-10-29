@@ -11,7 +11,7 @@
  * Filter to format a phone number.
  */
 angular
-  .module('ubr.passholder')
+  .module('ubr.utilities')
   .filter('phoneNumber', phoneNumberFilter);
 
 function phoneNumberFilter() {
