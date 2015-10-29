@@ -46,7 +46,7 @@
   <div ng-show="pasc.results.hasUnknownNumbers() && !pasc.results.hasConfirmedUnknownNumbers()" class="alert alert-info small">
     Geen pashouders gevonden voor de kaartnummers:
     <ul>
-      <li ng-repeat="number in pasc.results.invalidUitpasNumbers" ng-bind="::number"></li>
+      <li ng-repeat="number in pasc.results.invalidUitpasNumbers" ng-bind="::number | passNumber"></li>
     </ul>
     <a ng-click="pasc.results.confirmUnknownNumbers()">Doorgaan</a>
   </div>

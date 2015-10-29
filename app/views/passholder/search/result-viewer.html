@@ -34,7 +34,7 @@
             <ul class="grid">
               <li ng-repeat="otherPass in ::pass.passholder.uitPassen">
                 <div class="grid__12 grid--bp-med__4">
-                  <span ng-bind="::otherPass.number"></span>
+                  <span ng-bind="::otherPass.number | passNumber"></span>
                 </div>
 
                 <div class="grid__12 grid--bp-med__4">
