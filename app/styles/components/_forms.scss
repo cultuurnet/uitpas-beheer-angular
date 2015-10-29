@@ -41,6 +41,10 @@ label em {
   color: $gray-50;
 }
 
+select[disabled='disabled']{
+  opacity: .5;
+}
+
 .btn {
   @include transitions((color, background, border));
 }
