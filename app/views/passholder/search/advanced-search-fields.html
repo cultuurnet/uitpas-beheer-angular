@@ -1,6 +1,6 @@
 <form name="advancedSearchFields" ng-submit="pasc.findPassholders()" class="clearfix" novalidate ng-class="{'form-submiting': pasc.formSubmitBusy}">
   <div class="grid">
-    <div class="grid__12 field-group" ng-class="{ 'has-error': (advancedSearchFields.$submitted || advancedSearchFields.dateOfBirth.$touched || advancedSearchFields.dateOfBirth.$dirty) && advancedSearchFields.dateOfBirth.$invalid }" ng-show="pasc.checkCounterCardSystemRegistrationPermissions()">
+    <div class="grid__12 field-group" ng-class="{ 'has-error': (advancedSearchFields.$submitted || advancedSearchFields.dateOfBirth.$touched || advancedSearchFields.dateOfBirth.$dirty) && advancedSearchFields.dateOfBirth.$invalid }" ng-show="pasc.activeCounter.isRegistrationCounter()">
       <label class="control-label" for="date-of-birth">
         Geboortedatum
       </label>
@@ -10,25 +10,25 @@
         <div ng-if="advancedSearchFields.dateOfBirth.$error.parse">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
       </div>
     </div>
-    <div class="grid__12 field-group" ng-show="pasc.checkCounterCardSystemRegistrationPermissions()">
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
       <label class="control-label" for="name">
         Naam
       </label>
       <input type="text" class="form-control" id="name" name="name" ng-model="pasc.searchFields.name">
     </div>
-    <div class="grid__12 field-group" ng-show="pasc.checkCounterCardSystemRegistrationPermissions()">
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
       <label class="control-label" for="first-name">
         Voornamen
       </label>
       <input type="text" class="form-control" id="first-name" name="firstName" ng-model="pasc.searchFields.firstName">
     </div>
-    <div class="grid__12 field-group" ng-show="pasc.checkCounterCardSystemRegistrationPermissions()">
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
       <label class="control-label" for="street">
         Straat
       </label>
       <input type="text" class="form-control" id="street" name="street" ng-model="pasc.searchFields.street">
     </div>
-    <div class="grid__12 field-group" ng-show="pasc.checkCounterCardSystemRegistrationPermissions()">
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
       <label class="control-label" for="city">
         Gemeente
       </label>
@@ -53,7 +53,7 @@
         <option value="EXPIRED">Vervallen</option>
       </select>
     </div>
-    <div class="grid__12 field-group" ng-show="pasc.checkCounterCardSystemRegistrationPermissions()">
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
       <label class="control-label" for="email">
         E-mailadres
       </label>

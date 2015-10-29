@@ -319,13 +319,6 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     expect(controller.asyncError).toEqual(expectedError);
   });
 
-  it('can check the card system registration permissions', function () {
-    expect(controller.checkCounterCardSystemRegistrationPermissions()).toBeFalsy();
-
-    controller.activeCounter.cardSystems[1].permissions.push('registratie');
-    expect(controller.checkCounterCardSystemRegistrationPermissions()).toBeTruthy();
-  });
-
   it('should show the correct tabs when when the page is loaded', function () {
     var withoutDetailsController = $controller('PassholderAdvancedSearchController', {
       SearchParameters: SearchParameters,
