@@ -20,9 +20,9 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     var endDate = moment.unix(membership.endDate);
     var formattedDate = $filter('date')(endDate.toDate(), 'dd/MM/yyyy');
     if (moment().isAfter(endDate)) {
-      return $sce.trustAsHtml('<strong>Vervallen op</strong> ' + formattedDate);
+      return $sce.trustAsHtml('<strong>vervallen op</strong> ' + formattedDate);
     } else {
-      return $sce.trustAsHtml('<strong>Vervalt op</strong> ' + formattedDate);
+      return $sce.trustAsHtml('<strong>vervalt op</strong> ' + formattedDate);
     }
   };
 
