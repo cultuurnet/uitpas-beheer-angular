@@ -7,6 +7,7 @@ textarea {
   @include transitions((background, border));
   border: 1px solid $gray-25;
   box-shadow: none;
+  line-height: normal;
   padding: $padding-base-vertical $padding-base-horizontal;
   width: 100%;
   &:focus {
@@ -120,4 +121,8 @@ input[type=text].input-small {
 
 .modal label[for=expirationDate] {
   display: block;
+}
+
+.input-group-btn  .btn {
+  height: 37px;
 }
