@@ -12,7 +12,7 @@ describe('Filter: phoneNumberFilter', function () {
 
   describe('phoneNumberFilter', function() {
 
-    fit('should convert a valid phone number into a formatted phone number format',
+    it('should convert a valid phone number into a formatted phone number format',
       inject(function(phoneNumberFilter) {
         expect(phoneNumberFilter('0930000800118')).toBe('0930000800118');
         expect(phoneNumberFilter('0479234567')).toBe('0479 23 45 67');
