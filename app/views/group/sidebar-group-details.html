@@ -2,7 +2,7 @@
   <a ui-sref="counter.main">Terug</a>
 </div>
 <div class="passholder passholder-number">
-  <label>NR.</label> <span ng-bind="::gdc.group.passNumber"></span>
+  <label>NR.</label> <span ng-bind="::gdc.group.passNumber | passNumber"></span>
 </div>
 <div class="passholder passholder-data passholder-group">
   <h3>Gegevens</h3>
