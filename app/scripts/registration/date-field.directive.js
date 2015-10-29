@@ -18,7 +18,6 @@ function ubrDateField(day) {
 
       function dateParser(dayString) {
         if (dayString) {
-          console.log(dayString);
           var moment = day(dayString, 'D/M/YYYY');
 
           if (moment.isValid()) {
