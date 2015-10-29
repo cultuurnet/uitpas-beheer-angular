@@ -16,8 +16,8 @@ angular
 
 function phoneNumberFilter() {
   return function(input) {
-    if (isValidNumber(input, 'BE')) {
-      return formatLocal('BE', input);
+    if (PhoneFormat.isValidNumber(input, 'BE')) {
+      return PhoneFormat.formatLocal('BE', input);
     }
     else {
       return input;
