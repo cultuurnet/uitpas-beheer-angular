@@ -24,7 +24,7 @@ function CounterMembershipsController(newMember, counterService, $state) {
 
   controller.loadMemberships = function () {
     var showMembers = function (members) {
-      controller.members = readAbleRoles(members)
+      controller.members = members;
       controller.loadingMembers = false;
       controller.noMembersError = false;
     };
@@ -79,17 +79,4 @@ function CounterMembershipsController(newMember, counterService, $state) {
   };
 
   controller.loadMemberships();
-}
-
-function readAbleRoles(members) {
-  for (var key in members) {
-    var member = members[key];
-    if (member['role'] == 'ADMIN') {
-      members[key]['role'] = 'Beheerder';
-    }
-    else if (member['role'] == 'MEMBER') {
-      members[key]['role'] = 'Medewerker';
-    }
-  }
-  return members;
 }
