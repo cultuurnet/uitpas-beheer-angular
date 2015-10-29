@@ -27,10 +27,10 @@
     <div class="panel panel-default panel-collapse collapse" id="contact-data-container">
       <div class="panel-body vcard">
         <div class="tel" ng-show="pdc.passholder.contact.telephoneNumber">
-            <span ng-bind="pdc.passholder.contact.telephoneNumber"></span>
+            <span ng-bind="pdc.passholder.contact.telephoneNumber | phoneNumber"></span>
         </div>
         <div class="tel mobile" ng-show="pdc.passholder.contact.mobileNumber">
-            <span ng-bind="pdc.passholder.contact.mobileNumber"></span>
+            <span ng-bind="pdc.passholder.contact.mobileNumber | phoneNumber"></span>
         </div>
         <div class="email" ng-show="pdc.passholder.contact.email">
             <span ng-bind="pdc.passholder.contact.email"></span>

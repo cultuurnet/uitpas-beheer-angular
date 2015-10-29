@@ -221,6 +221,11 @@ module.exports = function (grunt) {
                 'dist/jquery.bootstrap-touchspin.js',
                 'dist/jquery.bootstrap-touchspin.css'
               ]
+            },
+            'phoneformat': {
+              main: [
+                'dist/phone-format-global.js'
+              ]
             }
           }
         }
@@ -246,6 +251,11 @@ module.exports = function (grunt) {
               'main': [
                 'moment.js',
                 'locale/nl.js'
+              ]
+            },
+            'phoneformat': {
+              main: [
+                'dist/phone-format-global.js'
               ]
             }
           }
