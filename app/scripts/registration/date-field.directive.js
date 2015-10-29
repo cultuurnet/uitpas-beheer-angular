@@ -25,12 +25,16 @@ function ubrDateField(day) {
           } else {
             return undefined;
           }
+        } else {
+          return null;
         }
       }
 
       function dateFormatter(date) {
         if (date) {
           return moment(date).format('DD/MM/YYYY');
+        } else {
+          return '';
         }
       }
 

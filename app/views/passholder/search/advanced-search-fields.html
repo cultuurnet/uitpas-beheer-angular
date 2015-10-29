@@ -1,0 +1,82 @@
+<form name="advancedSearchFields" ng-submit="pasc.findPassholders()" class="clearfix" novalidate ng-class="{'form-submiting': pasc.formSubmitBusy}">
+  <div class="grid">
+    <div class="grid__12 field-group" ng-class="{ 'has-error': (advancedSearchFields.$submitted || advancedSearchFields.dateOfBirth.$touched || advancedSearchFields.dateOfBirth.$dirty) && advancedSearchFields.dateOfBirth.$invalid }" ng-show="pasc.activeCounter.isRegistrationCounter()">
+      <label class="control-label" for="date-of-birth">
+        Geboortedatum
+      </label>
+      <input type="text" class="form-control" id="date-of-birth" name="dateOfBirth"
+             ng-model="pasc.searchFields.dateOfBirth" ubr-date-field placeholder="dd/mm/jjjj">
+      <div ng-if="(advancedSearchFields.$submitted || advancedSearchFields.dateOfBirth.$touched || advancedSearchFields.dateOfBirth.$dirty) && advancedSearchFields.dateOfBirth.$invalid" class="text-danger small">
+        <div ng-if="advancedSearchFields.dateOfBirth.$error.parse">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
+      </div>
+    </div>
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
+      <label class="control-label" for="name">
+        Naam
+      </label>
+      <input type="text" class="form-control" id="name" name="name" ng-model="pasc.searchFields.name">
+    </div>
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
+      <label class="control-label" for="first-name">
+        Voornamen
+      </label>
+      <input type="text" class="form-control" id="first-name" name="firstName" ng-model="pasc.searchFields.firstName">
+    </div>
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
+      <label class="control-label" for="street">
+        Straat
+      </label>
+      <input type="text" class="form-control" id="street" name="street" ng-model="pasc.searchFields.street">
+    </div>
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
+      <label class="control-label" for="city">
+        Gemeente
+      </label>
+      <input type="text" class="form-control" id="city" name="city" ng-model="pasc.searchFields.city">
+    </div>
+    <div class="grid__12 field-group">
+      <label class="control-label" for="association-id">
+        Vereniging
+      </label>
+      <select id="association-id" name="membershipAssociationId" ng-model="pasc.searchFields.membershipAssociationId">
+        <option value="">--Kies--</option>
+        <option ng-repeat="association in pasc.associationOptions" value="{{association.id}}">{{association.name}}</option>
+      </select>
+    </div>
+    <div class="grid__12 field-group">
+      <label class="control-label" for="membership-status">
+        Lidmaatschap
+      </label>
+      <select id="membership-status" name="membershipStatus" ng-model="pasc.searchFields.membershipStatus" ng-disabled="(pasc.disableAssociationMembershipStatus())">
+        <option value="">--Kies--</option>
+        <option value="ACTIVE">Actief</option>
+        <option value="EXPIRED">Vervallen</option>
+      </select>
+    </div>
+    <div class="grid__12 field-group" ng-show="pasc.activeCounter.isRegistrationCounter()">
+      <label class="control-label" for="email">
+        E-mailadres
+      </label>
+      <input type="email" class="form-control" id="email" name="email" ng-model="pasc.searchFields.email">
+      <div ng-if="(advancedSearchFields.$submitted || advancedSearchFields.email.$touched) && advancedSearchFields.email.$invalid" class="text-danger small">
+        <div ng-if="advancedSearchFields.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+      </div>
+    </div>
+    <div ng-show="pasc.asyncError" class="alert alert-danger small">
+      <span ng-bind="pasc.asyncError.cleanMessage"></span>
+      <ul ng-if="pasc.asyncError.context && pasc.asyncError.context.length">
+        <li ng-repeat="errorItem in pasc.asyncError.context" ng-bind="errorItem"></li>
+      </ul>
+    </div>
+    <div class="grid__12 field-group">
+      <button type="reset" class="btn btn-default pull-left" ng-click="pasc.resetSearchFields()" ng-disabled="pasc.formSubmitBusy">Leegmaken</button>
+      <button type="button" class="btn btn-primary pull-right" ng-disabled="pasc.formSubmitBusy || advancedSearchFields.$invalid"
+              ng-click="pasc.findPassholdersByDetails()">
+        <span ng-hide="pasc.formSubmitBusy">Zoeken</span>
+        <span ng-show="pasc.formSubmitBusy">
+          <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+        </span>
+      </button>
+    </div>
+  </div>
+</form>

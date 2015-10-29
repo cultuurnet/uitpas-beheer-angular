@@ -21,10 +21,14 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   /** @type {PassholderSearchResults} */
   controller.results = null;
 
+  controller.noSearchDone = function () {
+    return !controller.results;
+  };
+
   controller.isShowingResults = function () {
     var results = controller.results;
     var showResults = false;
-    if (results) {
+    if (results && results.totalItems !== 0) {
       showResults = !results.hasUnknownNumbers() || results.hasConfirmedUnknownNumbers();
     }
 

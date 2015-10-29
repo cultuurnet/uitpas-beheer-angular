@@ -14,15 +14,20 @@ angular
 /* @ngInject */
 function searchParametersFactory(moment, day) {
 
+  var MembershipStatus = {
+    ACTIVE: 'ACTIVE',
+    EXPIRED: 'EXPIRED'
+  };
+
   /**
    * @class SearchParameters
    * @constructor
    * @param {object}  [jsonSearchParameters]
    */
   var SearchParameters = function (jsonSearchParameters) {
-    this.uitpasNumber = [];
-    this.page = null;
-    this.limit = null;
+    this.uitpasNumbers = [];
+    this.page = 1;
+    this.limit = 10;
     this.dateOfBirth = null;
     this.firstName = null;
     this.name = null;
@@ -39,9 +44,9 @@ function searchParametersFactory(moment, day) {
 
   SearchParameters.prototype = {
     parseJson: function (jsonSearchParameters) {
-      this.uitpasNumber = jsonSearchParameters.uitpasNumber || [];
-      this.page = jsonSearchParameters.page || null;
-      this.limit = jsonSearchParameters.limit || null;
+      this.uitpasNumbers = jsonSearchParameters.uitpasNumbers || [];
+      this.page = jsonSearchParameters.page || 1;
+      this.limit = jsonSearchParameters.limit || 10;
       this.dateOfBirth = (jsonSearchParameters.dateOfBirth ? day(jsonSearchParameters.dateOfBirth, 'YYYY-MM-DD').toDate() : null);
       this.firstName = jsonSearchParameters.firstName || null;
       this.name = jsonSearchParameters.name || null;
@@ -49,14 +54,41 @@ function searchParametersFactory(moment, day) {
       this.city = jsonSearchParameters.city || null;
       this.email = jsonSearchParameters.email || null;
       this.membershipAssociationId = jsonSearchParameters.membershipAssociationId || null;
-      this.membershipStatus = jsonSearchParameters.membershipStatus || null;
+      this.membershipStatus = MembershipStatus[jsonSearchParameters.membershipStatus] || null;
     },
     serialize: function () {
-      var serializedSearchParameters = angular.copy(this);
+      var serializedSearchParameters = {
+        page: this.page || 1,
+        limit: this.limit || 10
+      };
+      var searchParameters = this;
 
-      serializedSearchParameters.dateOfBirth = (this.dateOfBirth ? moment(this.dateOfBirth).format('YYYY-MM-DD') : null);
-      serializedSearchParameters['uitpasNumber[]'] = serializedSearchParameters.uitpasNumber;
-      delete serializedSearchParameters.uitpasNumber;
+      function includeParameters(parameters, parameterNames) {
+        angular.forEach(parameterNames, function (parameterName) {
+          var value = searchParameters[parameterName];
+          if (value !== null && value !== '') {
+            parameters[parameterName] = value;
+          }
+        });
+      }
+
+      includeParameters(serializedSearchParameters, [
+        'firstName',
+        'name',
+        'street',
+        'city',
+        'email',
+        'membershipAssociationId',
+        'membershipStatus'
+      ]);
+
+      if (this.dateOfBirth) {
+        serializedSearchParameters.dateOfBirth = moment(this.dateOfBirth).format('YYYY-MM-DD');
+      }
+
+      if (this.uitpasNumbers.length > 0) {
+        serializedSearchParameters['uitpasNumber[]'] = this.uitpasNumbers;
+      }
 
       return serializedSearchParameters;
     },

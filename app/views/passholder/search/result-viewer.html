@@ -1,9 +1,22 @@
 <section class="advanced-search-results">
-  <div ng-hide="rvc.isShowingResults()" class="direction text-center">
+  <div ng-show="rvc.noSearchDone()" class="direction text-center">
     <img class="logo" src="images/svg/card-search.svg" width="150" height="150" alt="search card">
     <p>
       Tip: Met een * zoek je op één of meerdere karakters, zo vind je met Lu* zowel Luk, Luc als Lucien terug.
     </p>
+  </div>
+
+  <div ng-hide="rvc.noSearchDone()">
+    <div ng-show="rvc.results.totalItems == 0" class="alert alert-info small">
+      Er zijn geen resultaten gevonden voor de gebruikte zoekcriteria.
+    </div>
+    <div ng-show="rvc.results.hasUnknownNumbers() && !rvc.results.hasConfirmedUnknownNumbers() && rvc.results.totalItems > 0" class="alert alert-info small">
+      Geen UiTPAS gevonden voor deze nummers:
+      <ul>
+        <li ng-repeat="number in rvc.results.invalidUitpasNumbers" ng-bind="::number"></li>
+      </ul>
+      <a ng-click="rvc.results.confirmUnknownNumbers()">Doorgaan</a>
+    </div>
   </div>
 
   <div ng-show="rvc.isShowingResults()">
@@ -15,52 +28,63 @@
       </div>
     </div>
 
-    <ul ng-show="!rvc.loading">
-      <li ng-repeat="pass in rvc.results.passen" ng-click="rvc.showPassholderDetails(pass.number)">
-        <div class="grid display-table">
+    <p ng-show="!rvc.loading && rvc.results.totalItems === 0">
+      Geen Pashouders gevonden!
+    </p>
 
-          <div class="grid__12 grid--bp-med__4 first">
-            <p>
-              <strong class="ch-name" ng-bind="::pass.passholder.getFullName()"></strong><br>
-              <em class="ch-address">
-                <span ng-bind="::pass.passholder.address.street"></span><br>
-                <span ng-bind="::pass.passholder.address.postalCode"></span>
-                <span ng-bind="::pass.passholder.address.city"></span>
-              </em>
-            </p>
+    <div ng-show="!rvc.loading && rvc.results.totalItems > 0">
+      {{rvc.results.totalItems}} resultaten gevonden
+
+      <ul class="passholder-list">
+        <li class="passholder-item" ng-repeat="pass in rvc.results.passen" ng-click="rvc.showPassholderDetails(pass.number)">
+          <div class="grid display-table">
+            <div class="grid__12 grid--bp-med__4 first">
+              <img ng-if="pass.passholder.picture" class="pull-left" style="width: 47px; height: 64px"
+                   ng-src="{{pass.passholder.picture}}" />
+              <p>
+                <strong class="ch-name" ng-bind="::pass.passholder.getFullName()"></strong><br>
+                <em class="ch-address">
+                  <span ng-bind="::pass.passholder.address.street"></span><br>
+                  <span ng-bind="::pass.passholder.address.postalCode"></span>
+                  <span ng-bind="::pass.passholder.address.city"></span>
+                </em>
+              </p>
+            </div>
+
+            <div class="grid__12 grid--bp-med__8">
+              <ul class="grid">
+                <li class="passholder-passes" ng-repeat="otherPass in ::pass.passholder.uitPassen">
+                  <div class="grid__12 grid--bp-med__3">
+                    <span ng-bind="::otherPass.number"></span>
+                  </div>
+
+                  <div class="grid__12 grid--bp-med__3">
+                    <span ng-bind="::otherPass.cardSystem.name"></span>
+                  </div>
+
+                  <div class="grid__12 grid--bp-med__2">
+                    <span class="label label-danger" ng-show="otherPass.isKansenstatuut() && otherPass.kansenstatuutExpired(pass.passholder)">Kansenstatuut vervallen</span>
+                    <span class="label label-success" ng-show="otherPass.isKansenstatuut() && !otherPass.kansenstatuutExpired(pass.passholder)">Kansenstatuut geldig</span>
+                    <span class="label label-danger" ng-show="otherPass.isBlocked()">Kaart geblokeerd</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
           </div>
+        </li>
+      </ul>
 
-          <div class="grid__12 grid--bp-med__8">
-            <ul class="grid">
-              <li ng-repeat="otherPass in ::pass.passholder.uitPassen">
-                <div class="grid__12 grid--bp-med__4">
-                  <span ng-bind="::otherPass.number | passNumber"></span>
-                </div>
-
-                <div class="grid__12 grid--bp-med__4">
-                  <span ng-bind="::otherPass.cardSystem.name"></span>
-                </div>
-
-                <div class="grid__12 grid--bp-med__4">
-                  <span ng-bind="::otherPass.status"></span>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-      </li>
-    </ul>
-
-    <pagination class="pagination"
-                total-items="rvc.results.totalItems"
-                ng-model="rvc.activePage"
-                items-per-page="rvc.results.itemsPerPage"
-                ng-change="rvc.updateActivePage()"
-                max-size="10"
-                previous-text="&lsaquo; Vorige"
-                next-text="Volgende &rsaquo;"
-                ng-show="rvc.results.totalItems > rvc.results.itemsPerPage">
-    </pagination>
+      <uib-pagination class="pagination"
+                      total-items="rvc.results.totalItems"
+                      ng-model="rvc.activePage"
+                      items-per-page="rvc.results.itemsPerPage"
+                      ng-change="rvc.updateActivePage()"
+                      max-size="10"
+                      previous-text="&lsaquo; Vorige"
+                      next-text="Volgende &rsaquo;"
+                      ng-show="rvc.results.totalItems > rvc.results.itemsPerPage">
+      </uib-pagination>
+    </div>
   </div>
 </section>
