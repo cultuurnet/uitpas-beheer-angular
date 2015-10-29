@@ -313,6 +313,9 @@
     margin-right: 0;
     min-height: 90px;
     width: 100%;
+    .overview__item-list-extra-small & {
+      min-height: 60px;
+    }
     > div {
       display: table-cell;
       float: none;
@@ -320,6 +323,9 @@
       padding-top: 0;
       padding-bottom: 0;
       vertical-align: middle;
+      .overview__item-list-extra-small & {
+        min-height: 60px;
+      }
     }
   }
 }
