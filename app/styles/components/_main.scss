@@ -12,7 +12,11 @@ p {
 
 ol,
 ul {
-  margin: $rh-sml 0;
+  margin: $rh-xsm 0;
+  .alert &,
+  .sidebar & {
+    margin: $rh-xsm 0;
+  }
 }
 
 // Links
@@ -32,7 +36,7 @@ hr {
 
 .direction {
   font-style: italic;
-  color: $gray-75;
+  color: $gray-50;
 }
 
 .pull-right {

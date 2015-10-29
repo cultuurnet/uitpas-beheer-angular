@@ -20,7 +20,8 @@ body {
     > .sidebar {
       position: fixed;
       height: 100%;
-      top: 50px;
+      top: 0;
+      padding-top: 50px;
       left: 0;
       z-index: 700;
     }
@@ -35,7 +36,7 @@ body {
   }
   @include breakpoint(768px) {
     > .sidebar {
-      top: 60px;
+      padding-top: 60px;
     }
   }
 }

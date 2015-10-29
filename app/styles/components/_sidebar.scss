@@ -1,11 +1,13 @@
 // Sidebar
 .sidebar {
   background-color: $gray-0;
-  padding: 0 15px;
+  padding-left: 0;
+  padding-right: 0;
   @include transitions((width));
   .inside {
     overflow-x: hidden;
     overflow-y: auto;
+    padding: 0 15px;
     height: 100%;
     width: 100%;
   }
@@ -33,6 +35,9 @@
     font-weight: 400;
     text-shadow: 1px 1px $white;
   }
+  p {
+    margin: 0 0 1em;
+  }
   .panel {
     margin-bottom: 0;
     + .panel {
@@ -47,6 +52,18 @@
   }
   .list-group-item a {
     text-decoration: none;
+  }
+  // Nav tabs in sidebar
+  .nav-tabs {
+    margin-top: 0;
+    > li a {
+      color: $brand-primary;
+    }
+    > li.active > a {
+      background-color: $white;
+      color: $text-color;
+      text-decoration: none;
+    }
   }
 }
 
