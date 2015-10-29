@@ -1,6 +1,3 @@
-/**
- * Created by stijnswaanen on 28/10/15.
- */
 'use strict';
 
 /**
