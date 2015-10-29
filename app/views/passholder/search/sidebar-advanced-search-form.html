@@ -33,7 +33,7 @@
       <div ng-show="pasc.asyncError" class="alert alert-danger small">
         <span ng-bind="pasc.asyncError.cleanMessage"></span>
         <ul ng-if="pasc.asyncError.context && pasc.asyncError.context.length">
-          <li ng-repeat="errorItem in pasc.asyncError.context" ng-bind="errorItem"></li>
+          <li ng-repeat="errorItem in pasc.asyncError.context track by $index" ng-bind="errorItem"></li>
         </ul>
       </div>
       <div class="actions">
