@@ -18,6 +18,7 @@ function ubrDateField(day) {
 
       function dateParser(dayString) {
         if (dayString) {
+          console.log(dayString);
           var moment = day(dayString, 'D/M/YYYY');
 
           if (moment.isValid()) {
@@ -25,12 +26,16 @@ function ubrDateField(day) {
           } else {
             return undefined;
           }
+        } else {
+          return null;
         }
       }
 
       function dateFormatter(date) {
         if (date) {
           return moment(date).format('DD/MM/YYYY');
+        } else {
+          return '';
         }
       }
 
