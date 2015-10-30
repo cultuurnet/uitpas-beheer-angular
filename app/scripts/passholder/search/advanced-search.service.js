@@ -12,7 +12,7 @@ angular
   .service('advancedSearchService', advancedSearchService);
 
 /* @ngInject */
-function advancedSearchService(passholderService, $q, $rootScope) {
+function advancedSearchService(passholderService, $q, $rootScope, $state) {
 
   /*jshint validthis: true */
   var service = this;
@@ -32,6 +32,8 @@ function advancedSearchService(passholderService, $q, $rootScope) {
       searchResults.page = searchParameters.page;
       service.searchResults = searchResults;
       deferredSearchResults.resolve(searchResults);
+      var params = searchParameters.toParams();
+      $state.go('counter.main.advancedSearch', params, { notify: false });
       $rootScope.$emit('passholdersFound', searchResults);
     }
 

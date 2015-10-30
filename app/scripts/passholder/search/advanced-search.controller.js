@@ -21,8 +21,16 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
     NUMBER: { title:'Via kaartnummer', name:'number' }
   };
 
+  function getSearchParametersFromState() {
+    var params = new SearchParameters();
+    params.fromParams($state.params);
+
+    return params;
+  }
+
+  controller.searchFields = getSearchParametersFromState();
   controller.formSubmitBusy = false;
-  controller.passNumbers = '';
+  controller.passNumbers = controller.searchFields.uitpasNumbers ? controller.searchFields.uitpasNumbers.join('\n') : '';
   controller.results = null;
   controller.asyncError = null;
   controller.invalidNumbers = [];
@@ -32,12 +40,15 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
 
   controller.searchModes = angular.copy(SearchModes);
 
-  controller.activateSearchMode = function (searchMode) {
+  controller.activateSearchMode = function (searchModeName) {
     Object.keys(controller.searchModes).forEach(function (modeKey) {
       var mode = controller.searchModes[modeKey];
-      mode.active = mode.name === searchMode.name;
+      mode.active = mode.name === searchModeName;
+      controller.searchFields.mode = modeKey;
+      $state.go('counter.main.advancedSearch', controller.searchFields.toParams(), { notify: false });
     });
   };
+  controller.activateSearchMode(controller.searchModes.DETAIL);
 
   if (controller.activeCounter.isRegistrationCounter() || Object.keys(controller.associationOptions).length > 0) {
     controller.activateSearchMode(controller.searchModes.DETAIL);
@@ -132,8 +143,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
 
   controller.resetSearchFields = function () {
     controller.searchFields = new SearchParameters();
-    // .serialize() doesn't return the params with null, this way however it works
-    $state.go('counter.main.advancedSearch', controller.searchFields, { notify: false });
+    $state.go('counter.main.advancedSearch', controller.searchFields.toParams(), { notify: false });
   };
 
   /**
@@ -162,6 +172,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
    */
   controller.findPassholders = function (searchParameters) {
     controller.formSubmitBusy = true;
+    var params = searchParameters.toParams();
     advancedSearchService
       .findPassholders(searchParameters)
       .then(controller.showSearchResults, controller.showAsyncError)
@@ -174,8 +185,6 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
   controller.findPassholdersByDetails = function () {
     if (searchFielsHaveValidPattern()) {
       controller.findPassholders(controller.searchFields);
-      // needed to clear uitpasNumber-parameter from search after a findPassholdersByNumbers was executed.
-      $state.go('counter.main.advancedSearch', controller.searchFields, { notify: false });
     }
   };
 
@@ -194,10 +203,8 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
       jsonSearchParameters.uitpasNumbers = controller.passNumbers.split(/[\s]+/);
     }
 
-    var searchParameters = new SearchParameters(jsonSearchParameters);
-    $state.go('counter.main.advancedSearch', searchParameters.serialize(), { notify: false });
-
-    controller.findPassholders(searchParameters);
+    controller.searchFields = new SearchParameters(jsonSearchParameters);
+    controller.findPassholders(controller.searchFields);
   };
 
   /**

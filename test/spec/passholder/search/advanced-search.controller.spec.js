@@ -140,6 +140,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     Counter = $injector.get('Counter');
     activeCounter = new Counter(angular.copy(activeCounterJson));
     $state = jasmine.createSpyObj('$state', ['go']);
+    $state.params = {};
 
     controller = $controller('PassholderAdvancedSearchController', {
       SearchParameters: SearchParameters,

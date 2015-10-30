@@ -2,9 +2,9 @@
 
 describe('Service: Advanced Search', function () {
 
-  var searchService, passholderService, $q, $rootScope;
+  var searchService, passholderService, $q, $rootScope, $state;
 
-
+  beforeEach(module('uitpasbeheerAppViews'));
   beforeEach(module('ubr.passholder.search', function($provide) {
     passholderService = jasmine.createSpyObj('passholderService', ['findPassholders']);
     $provide.provider('passholderService', {
@@ -14,10 +14,11 @@ describe('Service: Advanced Search', function () {
     });
   }));
 
-  beforeEach(inject(function (advancedSearchService, _$q_, _$rootScope_) {
+  beforeEach(inject(function (advancedSearchService, _$q_, _$rootScope_, _$state_) {
     searchService = advancedSearchService;
     $q = _$q_;
     $rootScope = _$rootScope_;
+    $state = _$state_;
   }));
 
   it('should find the next page off the previous passholders search when going to the next page', function () {
@@ -51,9 +52,13 @@ describe('Service: Advanced Search', function () {
       awww: 'yeeah!'
     };
     passholderService.findPassholders.and.returnValue($q.resolve(expectedSearchResults));
+    spyOn($state, 'go');
     spyOn($rootScope, '$emit');
     var searchParameters = {
-      beep: 'boop'
+      beep: 'boop',
+      toParams: function () {
+        return {};
+      }
     };
     searchService.findPassholders(searchParameters);
     $rootScope.$digest();
