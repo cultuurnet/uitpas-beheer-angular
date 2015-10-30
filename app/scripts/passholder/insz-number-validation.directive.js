@@ -55,7 +55,7 @@ function inszNumberValidation() {
     }
 
     /**
-     * Returns the month from the regex result. Takes into that it might have been adjusted with 20 or 40.
+     * Returns the month from the regex result. Takes into account that it might have been adjusted with 20 or 40.
      *
      * @param inszNumberRegexResult
      * @returns {int}
