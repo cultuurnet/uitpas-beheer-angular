@@ -98,4 +98,75 @@ describe('Directive: inszNumberValidation', function () {
     expect(form.inszNumber.$error.checkDigit).toBeUndefined();
     expect(form.$valid).toBeTruthy();
   });
+
+  it('should correctly validate numbers for people with unknown birth date or gender', function () {
+    // Valid, normal
+    scope.inszNumber = '830203-313-93';
+    scope.dateOfBirth = new Date('1983-02-03');
+    scope.gender = 'MALE';
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, no known gender
+    scope.inszNumber = '832203-313-39';
+    scope.gender = 'FEMALE';
+    scope.$digest();
+    expect(form.inszNumber.$error.dateOfBirth).toBeUndefined();
+    expect(form.inszNumber.$error.gender).toBeUndefined();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, known gender
+    scope.inszNumber = '834203-313-82';
+    scope.gender = 'MALE';
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, no known birth month & day
+    scope.inszNumber = '830000-313-72';
+    scope.dateOfBirth = new Date('1991-01-01');
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, no known birth day
+    scope.inszNumber = '830200-313-86';
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, no known birth month
+    scope.inszNumber = '830003-313-79';
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, no known gender, no known birth month & day
+    scope.inszNumber = '832000-313-18';
+    scope.gender = 'FEMALE';
+    scope.$digest();
+    //expect(form.$valid).toBeTruthy();
+
+    // Valid, no known gender, no known birth day
+    scope.inszNumber = '832200-313-32';
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, no known gender, no known birth month
+    scope.inszNumber = '832003-313-25';
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, known gender, no known birth month & day
+    scope.inszNumber = '834000-313-61';
+    scope.gender = 'MALE';
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, known gender, no known birth day
+    scope.inszNumber = '834200-313-75';
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+
+    // Valid, known gender, no known birth month
+    scope.inszNumber = '834003-313-68';
+    scope.$digest();
+    expect(form.$valid).toBeTruthy();
+  });
 });

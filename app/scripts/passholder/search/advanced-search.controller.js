@@ -39,23 +39,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
     });
   };
 
-  /**
-   * Check if the active counter has the registration permission for any of it's cardsystems.
-   *
-   * @returns {boolean}
-   */
-  controller.checkCounterCardSystemRegistrationPermissions = function() {
-    var canRegister = false;
-    angular.forEach(activeCounter.cardSystems, function (cardSystem, id) {
-      if (activeCounter.isRegistrationCounter(id)) {
-        canRegister = true;
-      }
-    });
-
-    return canRegister;
-  };
-
-  if (controller.checkCounterCardSystemRegistrationPermissions() || Object.keys(controller.associationOptions).length > 0) {
+  if (controller.activeCounter.isRegistrationCounter() || Object.keys(controller.associationOptions).length > 0) {
     controller.activateSearchMode(controller.searchModes.DETAIL);
   }
   else {

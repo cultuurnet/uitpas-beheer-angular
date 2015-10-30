@@ -28,7 +28,7 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   controller.isShowingResults = function () {
     var results = controller.results;
     var showResults = false;
-    if (results && results.totalItems != 0) {
+    if (results && results.totalItems !== 0) {
       showResults = !results.hasUnknownNumbers() || results.hasConfirmedUnknownNumbers();
     }
 

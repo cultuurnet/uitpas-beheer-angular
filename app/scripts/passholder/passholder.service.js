@@ -40,25 +40,18 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
           withCredentials: true
         });
 
-      var cacheAndResolvePassHolder = function (passData) {
-        var pass = new Pass(passData);
+      var cacheAndResolvePassHolder = function (response) {
+        var pass = new Pass(response.data);
         passholderIdCache.put(identification, pass.number);
         passholderCache.put(pass.number, pass);
         deferredPassholder.resolve(pass);
       };
 
-      var rejectPassHolder = function () {
-        deferredPassholder.reject(
-          {
-            code: 'PASSHOLDER_NOT_FOUND',
-            title: 'Not found',
-            message: 'Passholder not found for identification number: ' + identification
-          }
-        );
+      var rejectPassHolder = function (errorResponse) {
+        deferredPassholder.reject(errorResponse.data);
       };
 
-      passholderRequest.success(cacheAndResolvePassHolder);
-      passholderRequest.error(rejectPassHolder);
+      passholderRequest.then(cacheAndResolvePassHolder, rejectPassHolder);
     }
 
     return deferredPassholder.promise;

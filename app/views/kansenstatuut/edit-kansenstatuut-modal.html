@@ -18,7 +18,7 @@
             <ubr-datepicker ng-model="ekmc.kansenstatuut.endDate" ubr-label="Geldig tot" ubr-id="geldig-tot"
                             ubr-name="endDate"></ubr-datepicker>
             <div ng-if="(editForm.$submitted || editForm.endDate.$touched || editForm.endDate.$dirty) && editForm.endDate.$invalid" class="text-danger small">
-              <div ng-if="editForm.endDate.$error.gender">Het geslacht afgeleid van het rijksregisternummer verschilt van de opgegeven geboortedatum.</div>
+              De opgegeven eind-datum is ongeldig.
             </div>
           </div>
         </div>
