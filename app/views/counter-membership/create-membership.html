@@ -20,7 +20,7 @@
           </div>
           <div class="grid__12 grid--bp-lrg__6 field-group"
                ng-class="{ 'has-error': (newMembershipForm.$submitted || newMembershipForm.email.$dirty) && newMembershipForm.email.$invalid }">
-            <label for="member-email-address">e-mailadres</label>
+            <label for="member-email-address">E-mailadres</label>
             <input type="email" id="member-email-address" ng-model="cmmc.email" name="email" ng-required="true" autofocus=""/>
             <p ng-show="newMembershipForm.email.$invalid && !newMembershipForm.email.$pristine" class="help-block">Vul een geldig e-mail adres in.</p>
           </div>
@@ -30,7 +30,7 @@
   </div><!-- end modal-body -->
 
   <div class="modal-footer">
-    <a class="btn btn-default" ng-click="cmmc.cancelCreation()">sluiten</a>
+    <a ng-click="cmmc.cancelCreation()">Annuleren</a>
     <button type="button" class="btn btn-primary" ng-disabled="cmmc.creationPending || newMembershipForm.$invalid"
             ng-click="cmmc.createMembership(newMembershipForm)">
       <span ng-hide="cmmc.creationPending">Toevoegen</span>
