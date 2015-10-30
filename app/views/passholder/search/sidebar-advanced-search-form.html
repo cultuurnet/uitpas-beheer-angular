@@ -4,7 +4,7 @@
 <h2>Pashouder zoeken</h2>
 
 <uib-tabset>
-  <uib-tab heading="{{::pasc.searchModes.DETAIL.title}}" select="pasc.activeSearchMode(pasc.searchModes.DETAIL)"
+  <uib-tab ng-show="(pasc.searchModes.DETAIL)" heading="{{::pasc.searchModes.DETAIL.title}}" select="pasc.activeSearchMode(pasc.searchModes.DETAIL)"
            active="pasc.searchModes.DETAIL.active">
     <ubr-passholder-advanced-search-fields></ubr-passholder-advanced-search-fields>
   </uib-tab>
@@ -18,7 +18,7 @@
               rows="8" id="passholder-numbers" placeholder="bv 0987654321012 \n0987654321013"
               ng-change="pasc.clearAsyncError()"></textarea>
       <div ng-if="(searchPassholderNumbers.$submitted || searchPassholderNumbers.passholderNumbers.$touched || searchPassholderNumbers.passholderNumbers.$dirty) && searchPassholderNumbers.passholderNumbers.$invalid"
-           class="text-danger small">
+           class="alert alert-danger small">
         <div ng-if="searchPassholderNumbers.passholderNumbers.$error.required">
           Gelieve minstens 1 pashouder nummer in te geven.
         </div>
@@ -26,10 +26,16 @@
           Enkel getallen (0-9), nieuwe regels en spaties zijn toegelaten.
         </div>
       </div>
-      <div ng-show="pasc.invalidNumbers.length" class="text-danger small">
-        Enkele opgegeven getallen zijn niet correct:
+      <div ng-show="pasc.invalidNumbers.length" class="alert alert-danger small">
+        Enkele opgegeven UiTPAS-nummers zijn niet correct:
         <ul>
           <li ng-repeat="number in pasc.invalidNumbers">{{number}}</li>
+        </ul>
+      </div>
+      <div ng-show="pasc.asyncError" class="alert alert-danger small">
+        <span ng-bind="pasc.asyncError.cleanMessage"></span>
+        <ul ng-if="pasc.asyncError.context && pasc.asyncError.context.length">
+          <li ng-repeat="errorItem in pasc.asyncError.context track by $index" ng-bind="errorItem"></li>
         </ul>
       </div>
       <button type="button" class="btn btn-primary" ng-disabled="pasc.formSubmitBusy || searchPassholderNumbers.$invalid"
@@ -41,19 +47,5 @@
       </button>
     </form>
 
-    <div ng-show="pasc.asyncError" class="alert alert-danger small">
-      <span ng-bind="pasc.asyncError.cleanMessage"></span>
-      <ul ng-if="pasc.asyncError.context && pasc.asyncError.context.length">
-        <li ng-repeat="errorItem in pasc.asyncError.context" ng-bind="errorItem"></li>
-      </ul>
-    </div>
-
-    <div ng-show="pasc.results.hasUnknownNumbers() && !pasc.results.hasConfirmedUnknownNumbers()" class="alert alert-info small">
-      Geen UiTPAS gevonden voor deze nummers:
-      <ul>
-        <li ng-repeat="number in pasc.results.invalidUitpasNumbers" ng-bind="::number"></li>
-      </ul>
-      <a ng-click="pasc.results.confirmUnknownNumbers()">Doorgaan</a>
-    </div>
   </uib-tab>
 </uib-tabset>

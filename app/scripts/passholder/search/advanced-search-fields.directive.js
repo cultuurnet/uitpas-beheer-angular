@@ -15,10 +15,5 @@ function ubrPassholderAdvancedSearchFields () {
   return {
     restrict: 'E',
     templateUrl: 'views/passholder/search/advanced-search-fields.html',
-    link: link
   };
-
-  function link (scope, element, attrs) {
-    console.log(scope, element, attrs);
-  }
 }

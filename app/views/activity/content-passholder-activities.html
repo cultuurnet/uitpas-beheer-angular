@@ -30,10 +30,12 @@
     </div>
     <div class="grid__12 grid--bp-med__6 text-right">
       <div class="search">
-        <input class="form-control" type="text" ng-model="ac.query" />
-        <button class="btn btn-ghost-dark" ng-click="ac.searchParametersChanged()" ng-disabled="!!ac.activitiesLoading">
-          Zoeken
-        </button>
+        <form ng-submit="ac.searchParametersChanged()">
+            <input class="form-control" type="text" ng-model="ac.query" />
+            <button class="btn btn-ghost-dark" ng-click="ac.searchParametersChanged()" ng-disabled="!!ac.activitiesLoading">
+              Zoeken
+            </button>
+        </form>
       </div>
     </div>
   </div>

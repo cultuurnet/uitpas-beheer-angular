@@ -48,6 +48,7 @@ module.exports = function(config) {
       'bower_components/moment/locale/nl.js',
       'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
       'bower_components/ngTouchSpin/src/js/ngTouchSpin.js',
+      'bower_components/phoneformat/dist/phone-format-global.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/app.js",
@@ -70,8 +71,7 @@ module.exports = function(config) {
       "app/scripts/**/**/*.js",
       "app/scripts/**/**/*.*.js",
 
-      "app/views/*.html",
-      "app/views/*/*.html",
+      "app/views/**/*.html",
       //"test/mock/**/*.js",
       "test/spec/**/*.js",
       "test/spec/**/*.*.js",
@@ -126,8 +126,7 @@ module.exports = function(config) {
     // urlRoot: '_karma_'
 
     preprocessors: {
-      'app/views/*.html': 'ng-html2js',
-      'app/views/registration/*.html': 'ng-html2js',
+      'app/views/**/*.html': 'ng-html2js',
       'app/scripts/*/**/*.js': ['coverage']
     },
 

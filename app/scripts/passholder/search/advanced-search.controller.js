@@ -12,7 +12,7 @@ angular
   .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function AdvancedSearchController (SearchParameters, advancedSearchService, $state) {
+function AdvancedSearchController (SearchParameters, advancedSearchService, activeCounterAssociations, activeCounter, $state) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -27,7 +27,8 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, $sta
   controller.asyncError = null;
   controller.invalidNumbers = [];
   controller.searchFields = new SearchParameters();
-  controller.associationOptions = {};
+  controller.associationOptions = activeCounterAssociations;
+  controller.activeCounter = activeCounter;
 
   controller.searchModes = angular.copy(SearchModes);
 
@@ -37,7 +38,14 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, $sta
       mode.active = mode.name === searchMode.name;
     });
   };
-  controller.activateSearchMode(controller.searchModes.DETAIL);
+
+  if (controller.activeCounter.isRegistrationCounter() || Object.keys(controller.associationOptions).length > 0) {
+    controller.activateSearchMode(controller.searchModes.DETAIL);
+  }
+  else {
+    controller.activateSearchMode(controller.searchModes.NUMBER);
+    delete controller.searchModes.DETAIL;
+  }
 
   /**
    * Check if a string resembles an UiTPAS number.
@@ -53,6 +61,53 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, $sta
     var resembleUitpasNumberRegex = /^\d{13}$/;
     return !!(resembleUitpasNumberRegex.exec(value));
   }
+
+  /**
+   * Check if specified fields are empty or a certain pattern.
+   * @return {boolean}
+   */
+  function searchFielsHaveValidPattern() {
+    controller.clearAsyncError();
+    // Validate name, firstName, street, city
+    var moreThanOneCharacterRegex = /(?!\*)./;
+    var fieldPatternErrors = {
+      cleanMessage: '',
+      context: []
+    };
+    var fieldsToValidateForPattern = {
+      name: 'Naam',
+      firstName: 'Voornamen',
+      street: 'Straat',
+      city: 'Gemeente'
+    };
+    angular.forEach(fieldsToValidateForPattern, function (errorContext, fieldName) {
+      var fieldValue = controller.searchFields[fieldName];
+      if (fieldValue && !moreThanOneCharacterRegex.exec(fieldValue)) {
+        fieldPatternErrors.context.push(errorContext);
+      }
+    });
+    if (fieldPatternErrors.context.length !== 0) {
+      fieldPatternErrors.cleanMessage = 'Gebruik minstens 1 teken behalve * bij de velden:';
+      controller.showAsyncError(fieldPatternErrors);
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
+  controller.disableAssociationMembershipStatus = function () {
+    if (controller.searchFields.membershipAssociationId === null) {
+      return true;
+    }
+    else if (controller.searchFields.membershipAssociationId === '') {
+      controller.searchFields.membershipStatus = '';
+      return true;
+    }
+    else {
+      return false;
+    }
+  };
 
   /**
    * Validate a string containing UiTPAS numbers and add invalid numbers to a controller variable.
@@ -117,10 +172,11 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, $sta
    * Find passholders based on the details set on the controller.
    */
   controller.findPassholdersByDetails = function () {
-    controller.findPassholders(controller.searchFields);
-    // needed to clear uitpasNumber-parameter from search after a findPassholdersByNumbers was executed.
-    controller.searchFields.uitpasNumber = null;
-    $state.go('counter.main.advancedSearch', controller.searchFields, { notify: false });
+    if (searchFielsHaveValidPattern()) {
+      controller.findPassholders(controller.searchFields);
+      // needed to clear uitpasNumber-parameter from search after a findPassholdersByNumbers was executed.
+      $state.go('counter.main.advancedSearch', controller.searchFields, { notify: false });
+    }
   };
 
   /**

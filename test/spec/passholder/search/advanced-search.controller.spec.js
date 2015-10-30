@@ -5,7 +5,8 @@ describe('Controller: PassholderAdvancedSearchController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var advancedSearchService, $q, controller, SearchParameters, PassholderSearchResults, $scope;
+  var advancedSearchService, $q, controller, SearchParameters, PassholderSearchResults, $scope, activeCounter, Counter,
+      $controller, $state;
 
   var jsonPass = {
     'uitPas': {
@@ -77,18 +78,75 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       'availableTickets': 0
     }
   };
+  var activeCounterAssociations = [
+    {
+      id: 1,
+      name:'Chiro Jongens',
+      enddateCalculation: 'FREE',
+      enddateCalculationFreeDate: 1451602799,
+      enddateCalculationValidityTime: 30,
+      permissionRead: true,
+      permissionRegister: true,
+      cardSystems: []
+    },
+    {
+      id: 2,
+      name:'Boyscouts from hell',
+      enddateCalculation: 'BASED_ON_DATE_OF_BIRTH',
+      enddateCalculationFreeDate: 1451602799,
+      enddateCalculationValidityTime: 30,
+      permissionRead: true,
+      permissionRegister: true,
+      cardSystems: []
+    },
+    {
+      id: 3,
+      name:'Karel & Jos gaan er op los',
+      enddateCalculation: 'BASED_ON_REGISTRATION_DATE',
+      enddateCalculationFreeDate: 1451602799,
+      enddateCalculationValidityTime: 30,
+      permissionRead: true,
+      permissionRegister: true,
+      cardSystems: []
+    }
+  ];
+  var activeCounterJson = {
+    'id': '452',
+    'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+    'name': 'Vierdewereldgroep Mensen voor Mensen',
+    'role': 'admin',
+    'actorId': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+    'cardSystems': {
+      '1': {
+        'permissions': ['kansenstatuut toekennen'],
+        'groups': ['Geauthorizeerde registratie balies'],
+        'id': 1,
+        'name': 'UiTPAS Regio Aalst',
+        'distributionKeys': []
+      }
+    },
+    'permissions': ['kansenstatuut toekennen'],
+    'groups': ['Geauthorizeerde registratie balies']
+  };
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $injector, $rootScope) {
+  beforeEach(inject(function (_$controller_, $injector, $rootScope) {
+    $controller = _$controller_;
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders']);
     $q = $injector.get('$q');
     SearchParameters = $injector.get('SearchParameters');
     PassholderSearchResults = $injector.get('PassholderSearchResults');
     $scope = $rootScope;
+    Counter = $injector.get('Counter');
+    activeCounter = new Counter(angular.copy(activeCounterJson));
+    $state = jasmine.createSpyObj('$state', ['go']);
 
     controller = $controller('PassholderAdvancedSearchController', {
       SearchParameters: SearchParameters,
-      advancedSearchService: advancedSearchService
+      advancedSearchService: advancedSearchService,
+      activeCounterAssociations: activeCounterAssociations,
+      activeCounter: activeCounter,
+      $state: $state
     });
   }));
 
@@ -209,7 +267,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       dateOfBirth: '1988-02-03',
       firstName: 'Dirk',
       name: 'Dirkington',
-      street: 'Driklane',
+      street: 'Dirklane',
       city: 'Dirktown',
       email: 'dirk@e-dirk.de',
       membershipAssociationId: 'some-id',
@@ -222,5 +280,67 @@ describe('Controller: PassholderAdvancedSearchController', function () {
 
     controller.findPassholdersByDetails();
     expect(controller.findPassholders).toHaveBeenCalledWith(expectedSearchParameters);
+  });
+
+  it('can disable the association membership status field', function () {
+    expect(controller.disableAssociationMembershipStatus()).toBeTruthy();
+    controller.searchFields.membershipAssociationId = 'something else';
+    expect(controller.disableAssociationMembershipStatus()).toBeFalsy();
+    controller.searchFields.membershipAssociationId = '';
+    expect(controller.disableAssociationMembershipStatus()).toBeTruthy();
+  });
+
+  it('can reset the searchfields', function () {
+    var serializedSearchParameters = {
+      page: 1,
+      dateOfBirth: '1988-02-03',
+      firstName: 'Dirk',
+      name: 'Dirkington',
+      street: 'Driklane',
+      city: 'Dirktown',
+      email: 'dirk@e-dirk.de',
+      membershipAssociationId: 'some-id',
+      membershipStatus: 'some-status'
+    };
+
+    controller.searchFields = new SearchParameters(serializedSearchParameters);
+    expect(controller.searchFields.firstName).toBe('Dirk');
+
+    controller.resetSearchFields();
+    expect(controller.searchFields).toEqual(new SearchParameters());
+  });
+
+  it('can validate search field patterns', function () {
+    controller.searchFields.name = '*';
+    controller.findPassholdersByDetails();
+
+    var expectedError = {
+      cleanMessage: 'Gebruik minstens 1 teken behalve * bij de velden:',
+      context: [ 'Naam' ]
+    };
+
+    expect(controller.asyncError).toEqual(expectedError);
+  });
+
+  it('should show the correct tabs when when the page is loaded', function () {
+    var withoutDetailsController = $controller('PassholderAdvancedSearchController', {
+      SearchParameters: SearchParameters,
+      advancedSearchService: advancedSearchService,
+      activeCounterAssociations: [],
+      activeCounter: new Counter(angular.copy(activeCounterJson))
+    });
+
+    expect(withoutDetailsController.searchModes.DETAIL).toBeUndefined();
+
+    var newCounter = new Counter(angular.copy(activeCounterJson));
+    newCounter.cardSystems[1].permissions.push('registratie');
+    var withDetailsController = $controller('PassholderAdvancedSearchController', {
+      SearchParameters: SearchParameters,
+      advancedSearchService: advancedSearchService,
+      activeCounterAssociations: [],
+      activeCounter: newCounter
+    });
+
+    expect(withDetailsController.searchModes.DETAIL).toBeDefined();
   });
 });

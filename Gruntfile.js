@@ -221,6 +221,11 @@ module.exports = function (grunt) {
                 'dist/jquery.bootstrap-touchspin.js',
                 'dist/jquery.bootstrap-touchspin.css'
               ]
+            },
+            'phoneformat': {
+              main: [
+                'dist/phone-format-global.js'
+              ]
             }
           }
         }
@@ -246,6 +251,11 @@ module.exports = function (grunt) {
               'main': [
                 'moment.js',
                 'locale/nl.js'
+              ]
+            },
+            'phoneformat': {
+              main: [
+                'dist/phone-format-global.js'
               ]
             }
           }
@@ -425,7 +435,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/{,*/}*.html'],
+          src: ['*.html', 'views/**/*.html'],
           dest: '<%= yeoman.dist %>'
         }]
       }
@@ -474,7 +484,7 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'views/{,*/}*.html',
+            'views/**/*.html',
             'images/{,*/}*.{webp}',
             'styles/fonts/{,*/}*.*'
           ]

@@ -94,4 +94,13 @@ describe('Factory: Counter', function () {
     expect(counter.isAuthorisedRegistrationCounter(passCardSystemId)).toBeTruthy();
     expect(counter.isAllowedToLeaveInszNumberEmpty(passCardSystemId)).toBeTruthy();
   });
+
+  it('should be a registration counter if it has registration rights on any of tits card-systems', function () {
+    var counter = new Counter(getJsonCounter());
+
+    counter.cardSystems[1].permissions = [];
+    expect(counter.isRegistrationCounter()).toBeFalsy();
+
+    expect(counter.isRegistrationCounter()).toBeFalsy();
+  });
 });
