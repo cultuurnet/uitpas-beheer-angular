@@ -20,11 +20,11 @@ angular
    */
   {
     ADMIN: {
-      name: 'Admin',
+      name: 'ADMIN',
       human: 'Beheerder'
     },
     MEMBER: {
-      name: 'Member',
+      name: 'MEMBER',
       human: 'Medewerker'
     }
   });

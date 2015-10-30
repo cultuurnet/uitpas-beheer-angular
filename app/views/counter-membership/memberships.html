@@ -26,11 +26,11 @@
           <span ng-bind="::member.uid"></span>
         </div>
         <div class="grid__6 grid--bp-med__5 grid--bp-lrg__4">
-          <span ng-bind="::member.role"></span>
+          <span ng-bind="::member.role.human"></span>
         </div>
         <div class="grid__6 grid--bp-med__3 grid--bp-lrg__4">
           <div class="actions actions-do"
-               ng-hide="member.deleting || member.confirmingDelete || member.deleteError || member.role !== 'MEMBER'">
+               ng-hide="member.deleting || member.confirmingDelete || member.deleteError || member.role.name !== 'MEMBER'">
             <button type="button" class="btn btn-default" ng-click="cmc.initiateDelete(member)">Verwijderen</button>
           </div>
           <div ng-show="member.confirmingDelete" class="actions actions-confirm">
