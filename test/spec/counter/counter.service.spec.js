@@ -526,24 +526,44 @@ describe('Service: counterService', function () {
   });
 
   it('can get memberships from the API', function (done) {
-    var memberships = [
+    var membershipsData = [
       {
         uid: 'dirk-dirkington',
         nick: 'Dirk Dirkington',
-        role: 'admin'
+        role: 'ADMIN'
       },
       {
         uid: 'foo-bar',
         nick: 'Foo Bar',
-        role: 'admin'
+        role: 'MEMBER'
       }
     ];
+
+    var expectedMemberships = [
+      {
+        uid: 'dirk-dirkington',
+        nick: 'Dirk Dirkington',
+        role: {
+          name: 'ADMIN',
+          human: 'Beheerder'
+        }
+      },
+      {
+        uid: 'foo-bar',
+        nick: 'Foo Bar',
+        role: {
+          name: 'MEMBER',
+          human: 'Medewerker'
+        }
+      }
+    ];
+
     $httpBackend
       .expectGET(apiUrl + 'counters/active/members')
-      .respond(200, memberships);
+      .respond(200, membershipsData);
 
     var assertMemberships = function (receivedMemberships) {
-      expect(receivedMemberships).toEqual(memberships);
+      expect(receivedMemberships).toEqual(expectedMemberships);
       done();
     };
 
