@@ -59,18 +59,23 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
     $state.go('counter.main.advancedSearch', controller.searchFields.toParams(), { notify: false });
   };
 
-  if (controller.activeCounter.isRegistrationCounter() || Object.keys(controller.associationOptions).length > 0) {
-    controller.detailModeEnabled = true;
-    controller.activateSearchMode(controller.searchFields.mode);
-  }
-  else {
-    controller.activateSearchMode(SearchModes.NUMBER);
+  function enableDetailMode() {
+    if (controller.activeCounter.isRegistrationCounter() || Object.keys(controller.associationOptions).length > 0) {
+      controller.detailModeEnabled = true;
+      controller.searchFields.setSearchMode(controller.searchFields.mode);
+    }
+    else {
+      controller.searchFields.setSearchMode(SearchModes.NUMBER);
+    }
   }
 
   /**
    * @param {SearchParameters} searchParameters
    */
   function initializeSearchMode(searchParameters) {
+    enableDetailMode();
+    controller.activateSearchMode(controller.searchFields.mode);
+
     if (!searchParameters.hasDefaultParameters()) {
       if (angular.equals(searchParameters.mode, SearchModes.DETAIL) && controller.detailModeEnabled) {
         controller.findPassholdersByDetails();

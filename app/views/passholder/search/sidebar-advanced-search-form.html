@@ -4,7 +4,7 @@
 <uib-tabset>
   <h1>Pashouder zoeken</h1>
   <uib-tab heading="{{::pasc.searchModes.DETAIL.title}}" select="pasc.activateSearchMode(pasc.searchModes.DETAIL)"
-           active="pasc.searchModes.DETAIL.$active" ng-if="controller.detailModeEnabled">
+           active="pasc.searchModes.DETAIL.$active" ng-if="pasc.detailModeEnabled">
     <ubr-passholder-advanced-search-fields></ubr-passholder-advanced-search-fields>
   </uib-tab>
 

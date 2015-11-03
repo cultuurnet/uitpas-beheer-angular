@@ -9,6 +9,7 @@ describe('Controller: Results Viewer', function () {
   beforeEach(inject(function (_$controller_, _$rootScope_) {
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders', 'goToPage']);
     $state = jasmine.createSpyObj('$state', ['go']);
+    $state.params = {};
     $controller = _$controller_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();

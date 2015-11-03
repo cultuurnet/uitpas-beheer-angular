@@ -37,6 +37,10 @@ function advancedSearchService(passholderService, $q, $rootScope, $state) {
       $rootScope.$emit('passholdersFound', searchResults);
     }
 
+    if (service.searchParameters && !service.searchParameters.yieldsSameResultSetAs(searchParameters)) {
+      searchParameters.page = 1;
+    }
+
     service.searchParameters = searchParameters;
     $rootScope.$emit('findingPassholders', searchParameters);
     passholderService
