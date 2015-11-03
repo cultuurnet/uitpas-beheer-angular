@@ -4,6 +4,8 @@ describe('Service: counterService', function () {
 
   var apiUrl = 'http://example.com/';
 
+  beforeEach(module('ubr.utilities'));
+
   // load the service's module
   beforeEach(module('uitpasbeheerApp', function($provide) {
     $provide.constant('appConfig', {
@@ -12,22 +14,14 @@ describe('Service: counterService', function () {
   }));
 
   // instantiate service
-  var counterService, scope, $cookies, $httpBackend, $q, uitid, Pass, Passholder, Counter;
+  var counterService, scope, $cookies, $httpBackend, $q, uitid, Pass, Passholder, Counter, Role;
 
   var fakeCookieKey = function (cookieKey) {
-    spyOn(counterService, 'determineLastActiveCookieKey').and.callFake(function() {
-      return {
-        then: function(callback) { return callback(cookieKey); }
-      };
-    });
+    spyOn(counterService, 'determineLastActiveCookieKey').and.returnValue($q.resolve(cookieKey));
   };
 
   function fakeCounters(counters) {
-    spyOn(counterService, 'getList').and.callFake(function () {
-      return {
-        then: function(callback) { return callback(counters); }
-      };
-    });
+    spyOn(counterService, 'getList').and.returnValue($q.resolve(counters));
   }
 
   var counters = {
@@ -61,26 +55,20 @@ describe('Service: counterService', function () {
     $httpBackend = $injector.get('$httpBackend');
     $q = $injector.get('$q');
     Counter = $injector.get('Counter');
+    Role = $injector.get('Role');
   }));
 
   it('should remember the last active counter', function (done) {
     var cookieKey = 'lastActiveCounter-xyz';
     var counterId = 'counter-xyz';
 
-    //var failed = function(reason) {
-    //  expect(reason).toBe('there is no last active counter');
-    //};
-
     var failed = jasmine.createSpy('failed');
 
     var assertCounter = function (counter) {
       expect(counter).toBe(counterId);
-    };
-
-    var finished = function () {
       expect(counterService.determineLastActiveCookieKey).toHaveBeenCalled();
-      expect(failed).not.toHaveBeenCalled();
       expect($cookies.get).toHaveBeenCalledWith(cookieKey);
+      expect($cookies.put).toHaveBeenCalledWith(cookieKey, counterId);
       done();
     };
 
@@ -90,11 +78,10 @@ describe('Service: counterService', function () {
 
     // Set the last active counter id
     var activeCounterSet = counterService.setLastActiveId(counterId);
-    expect($cookies.put).toHaveBeenCalledWith(cookieKey, counterId);
 
     // Try to retrieve the last counter id
     var counterRetrieved = activeCounterSet.then(counterService.getLastActiveId, failed);
-    counterRetrieved.then(assertCounter, failed).finally(finished);
+    counterRetrieved.then(assertCounter);
     scope.$digest();
   });
 
@@ -175,16 +162,10 @@ describe('Service: counterService', function () {
         expect(counterService.setActive.calls.count()).toEqual(1);
         expect(counterService.getActiveFromServer.calls.count()).toEqual(1);
       });
-    };
-
-    var failed = jasmine.createSpy('failed');
-
-    var finished = function () {
-      expect(failed).not.toHaveBeenCalled();
       done();
     };
 
-    counterService.getActive().then(activeCounterFetchedFromAPI, failed).finally(finished);
+    counterService.getActive().then(activeCounterFetchedFromAPI);
     deferredRequest.reject();
     scope.$digest();
   });
@@ -194,22 +175,20 @@ describe('Service: counterService', function () {
     var counterRequest = deferredRequest.promise;
     var multipleCounters = {};
     var success = jasmine.createSpy('success');
-    var failed = function(reason) {
+    var assertFailure = function(reason) {
       expect(reason).toBe('can\'t activate only counter when there are none or multiple');
-    };
-    var finished = function () {
       expect(counterService.setActive).not.toHaveBeenCalled();
       expect(success).not.toHaveBeenCalled();
       done();
     };
+
     multipleCounters['1149'] = counters['1149'];
     multipleCounters['1234'] = counters['1149'];
     fakeCounters(multipleCounters);
     spyOn(counterService, 'getActiveFromServer').and.returnValue(counterRequest);
     spyOn(counterService, 'setActive');
 
-    counterService.getActive().then(success, failed).finally(finished);
-
+    counterService.getActive().catch(assertFailure);
     deferredRequest.reject();
     scope.$digest();
   });
@@ -525,36 +504,46 @@ describe('Service: counterService', function () {
     $httpBackend.flush();
   });
 
-  it('can get memberships from the API', function (done) {
-    var memberships = [
+  it('can get memberships from the API', function(done) {
+    var membershipsData = [
       {
         uid: 'dirk-dirkington',
         nick: 'Dirk Dirkington',
-        role: 'admin'
+        role: 'ADMIN'
       },
       {
         uid: 'foo-bar',
         nick: 'Foo Bar',
-        role: 'admin'
+        role: 'MEMBER'
       }
     ];
+
+    var expectedMemberships = [
+      {
+        uid: 'dirk-dirkington',
+        nick: 'Dirk Dirkington',
+        role: Role.ADMIN
+      },
+      {
+        uid: 'foo-bar',
+        nick: 'Foo Bar',
+        role: Role.MEMBER
+      }
+    ];
+
     $httpBackend
       .expectGET(apiUrl + 'counters/active/members')
-      .respond(200, memberships);
+      .respond(200, membershipsData);
 
     var assertMemberships = function (receivedMemberships) {
-      expect(receivedMemberships).toEqual(memberships);
-      done();
-    };
-
-    var assertNoFailure = function (error) {
-      expect(error).toBeUndefined();
+      expect(receivedMemberships).toEqual(expectedMemberships);
       done();
     };
 
     counterService
       .getMemberships()
-      .then(assertMemberships, assertNoFailure);
+      .then(assertMemberships);
+
     $httpBackend.flush();
   });
 
@@ -621,14 +610,9 @@ describe('Service: counterService', function () {
       done();
     };
 
-    var assertNoErrors = function (error) {
-      expect(error).toBeUndefined();
-      done();
-    };
-
     counterService
       .deleteMembership(uid)
-      .then(assertMemberDeleted, assertNoErrors);
+      .then(assertMemberDeleted);
     $httpBackend.flush();
   });
 

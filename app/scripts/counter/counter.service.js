@@ -28,7 +28,7 @@ angular.module('ubr.counter')
   .service('counterService', counterService);
 
 /* @ngInject */
-function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment, Counter) {
+function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment, Counter, CounterMembership) {
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
@@ -293,9 +293,19 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
     var url = apiUrl + '/active/members';
     var deferredMembers = $q.defer();
 
+    var handleMembershipData = function(membershipData) {
+      var memberships = [];
+
+      membershipData.forEach(function (membershipJson) {
+        memberships.push(new CounterMembership(membershipJson));
+      });
+
+      deferredMembers.resolve(memberships);
+    };
+
     $http
       .get(url)
-      .success(deferredMembers.resolve)
+      .success(handleMembershipData)
       .error(deferredMembers.reject);
 
     return deferredMembers.promise;

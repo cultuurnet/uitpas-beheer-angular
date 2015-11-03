@@ -62,6 +62,9 @@
     &-small {
       padding: $rh-xsm $rh-xxs;
     }
+    &-extra-small {
+      padding: $rh-xxs;
+    }
   }
   &__item.unavailable {
     opacity: .6;
@@ -97,6 +100,21 @@
     }
   }
   // Variants
+  &-search-results {
+    .grid__2.first {
+      float: right;
+      @include breakpoint(map-get($breakpoints, med)) {
+        float: left;
+      }
+    }
+    .grid__12 {
+      margin-top: $rh-xxs;
+      @include breakpoint(map-get($breakpoints, med)) {
+        margin-top: 0;
+      }
+    }
+  }
+  // Passholder aadvantages
   &-advantages {
     .actions {
       padding-bottom: $rh-xsm;
@@ -125,6 +143,7 @@
       }
     }
   }
+  // Passholder activities
   &-activities {
     .date {
       color: $gray-50;
@@ -294,11 +313,19 @@
     margin-right: 0;
     min-height: 90px;
     width: 100%;
+    .overview__item-list-extra-small & {
+      min-height: 60px;
+    }
     > div {
       display: table-cell;
       float: none;
       min-height: 90px;
+      padding-top: 0;
+      padding-bottom: 0;
       vertical-align: middle;
+      .overview__item-list-extra-small & {
+        min-height: 60px;
+      }
     }
   }
 }

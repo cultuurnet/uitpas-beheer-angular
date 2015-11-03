@@ -30,6 +30,50 @@ function inszNumberValidation() {
      */
     var regex = /([\d]{2})[-.\s]?([\d]{2})[-.\s]?([\d]{2})[-.\s]?([\d]{3})[-.\s]?([\d]{2}$)/;
 
+    /**
+     * Check if the insz number indicates the birth date as unknown.
+     * The month or day is 0.
+     *
+     * @param inszNumberRegexResult
+     * @returns {boolean}
+     */
+    function shouldCheckInszNumberWithBirthDate(inszNumberRegexResult) {
+      var inszMonth = parseInt(getMonthFromInszNumberRegexResult(inszNumberRegexResult));
+      return (inszMonth !== 0 && parseInt(inszNumberRegexResult[3]) !== 0);
+    }
+
+    /**
+     * Check if the insz number indicates the gender as unknown.
+     * The month has 20 added to it.
+     *
+     * @param inszNumberRegexResult
+     * @returns {boolean}
+     */
+    function shouldCheckInszNumberWithGender(inszNumberRegexResult) {
+      // Don't check the gender if the month has 20 added to it.
+      return !(inszNumberRegexResult[2] >= 20 && inszNumberRegexResult[2] <= 32);
+    }
+
+    /**
+     * Returns the month from the regex result. Takes into account that it might have been adjusted with 20 or 40.
+     *
+     * @param inszNumberRegexResult
+     * @returns {int}
+     */
+    function getMonthFromInszNumberRegexResult(inszNumberRegexResult) {
+      var correctedMonth = inszNumberRegexResult[2];
+
+      var correctMonth = function (month) {
+        return month - 20;
+      };
+
+      while (correctedMonth > 12) {
+        correctedMonth = correctMonth(correctedMonth);
+      }
+
+      return correctedMonth;
+    }
+
     function isEven(x) {
       return (x%2) === 0;
     }
@@ -47,7 +91,7 @@ function inszNumberValidation() {
     }
 
     function validateInszNumberGender(inszNumberRegexResult, gender, errorMessages) {
-      if (gender && inszNumberRegexResult) {
+      if (gender && inszNumberRegexResult && shouldCheckInszNumberWithGender(inszNumberRegexResult)) {
         if (gender === 'FEMALE' && !isEven(inszNumberRegexResult[4])) {
           errorMessages.gender = 'INSZNUMBER_GENDER_NOT_FEMALE';
         }
@@ -58,8 +102,9 @@ function inszNumberValidation() {
     }
 
     function validateInszNumberBirthDate(inszNumberRegexResult, birthDate, errorMessages) {
-      if (inszNumberRegexResult && birthDate) {
-        if (getYearFromDate(birthDate) !== inszNumberRegexResult[1] || (getMonthFromDate(birthDate) !== inszNumberRegexResult[2] || getDayFromDate(birthDate) !== inszNumberRegexResult[3])) {
+      if (inszNumberRegexResult && birthDate && shouldCheckInszNumberWithBirthDate(inszNumberRegexResult)) {
+        var inzsMonth = getMonthFromInszNumberRegexResult(inszNumberRegexResult);
+        if (getYearFromDate(birthDate) !== inszNumberRegexResult[1] || (parseInt(getMonthFromDate(birthDate)) !== parseInt(inzsMonth) || getDayFromDate(birthDate) !== inszNumberRegexResult[3])) {
           errorMessages.dateOfBirth = 'INSZNUMBER_DATE_MISMATCH';
         }
       }

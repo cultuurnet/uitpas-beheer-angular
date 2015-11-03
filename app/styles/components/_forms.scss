@@ -7,6 +7,7 @@ textarea {
   @include transitions((background, border));
   border: 1px solid $gray-25;
   box-shadow: none;
+  line-height: normal;
   padding: $padding-base-vertical $padding-base-horizontal;
   width: 100%;
   &:focus {
@@ -27,7 +28,7 @@ label {
 }
 
 form label {
-  margin-bottom: $rh-xsm;
+  margin-bottom: $rh-xxs;
 }
 
 form hr {
@@ -39,6 +40,10 @@ label em {
   display: block;
   font-weight: 400;
   color: $gray-50;
+}
+
+select[disabled='disabled']{
+  opacity: .5;
 }
 
 .btn {
@@ -65,7 +70,7 @@ label em {
     color: $gray-25;
     display: inline-block;
     position: absolute;
-    left: $grid-gutter-width;
+    left: 10px;
     top: 11px;
   }
 }
@@ -82,9 +87,6 @@ a + .btn {
 .field-group {
   margin-bottom: $rh-xsm;
   margin-top: 0;
-  @include breakpoint(map-get($breakpoints, xsm)) {
-    min-height: 85px; // to provide space for alert
-  }
 }
 
 .field-group .alert {
@@ -119,4 +121,8 @@ input[type=text].input-small {
 
 .modal label[for=expirationDate] {
   display: block;
+}
+
+.input-group-btn  .btn {
+  height: 37px;
 }
