@@ -556,7 +556,8 @@ describe('Service: passholderService', function () {
         '0987654321018',
         '0987654321019',
         '0987654321020'
-      ]
+      ],
+      mode: 'NUMBER'
     };
     var searchParametersUitpasNumbers = new SearchParameters(jsonSearchParametersUitpasNumbers);
 

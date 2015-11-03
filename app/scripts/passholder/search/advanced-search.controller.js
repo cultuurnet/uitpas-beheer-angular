@@ -16,9 +16,14 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
   /*jshint validthis: true */
   var controller = this;
 
+  /**
+   * Search mode enum.
+   * @readonly
+   * @enum {object}
+   */
   var SearchModes = {
-    DETAIL: { title:'Zoeken', name:'detail' },
-    NUMBER: { title:'Via kaartnummer', name:'number' }
+    DETAIL: { title:'Zoeken', name:'DETAIL' },
+    NUMBER: { title:'Via kaartnummer', name:'NUMBER' }
   };
 
   function getSearchParametersFromState() {
@@ -34,28 +39,47 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
   controller.results = null;
   controller.asyncError = null;
   controller.invalidNumbers = [];
-  controller.searchFields = new SearchParameters();
   controller.associationOptions = activeCounterAssociations;
   controller.activeCounter = activeCounter;
+  controller.detailModeEnabled = false;
 
   controller.searchModes = angular.copy(SearchModes);
 
-  controller.activateSearchMode = function (searchModeName) {
+  /**
+   * @param {SearchModes} searchMode
+   */
+  controller.activateSearchMode = function (searchMode) {
+    // Iterate over all the search modes and set an active state
     Object.keys(controller.searchModes).forEach(function (modeKey) {
       var mode = controller.searchModes[modeKey];
-      mode.active = mode.name === searchModeName;
-      controller.searchFields.mode = modeKey;
-      $state.go('counter.main.advancedSearch', controller.searchFields.toParams(), { notify: false });
+      mode.$active = mode.name === searchMode.name;
     });
+
+    controller.searchFields.setSearchMode(searchMode);
+    $state.go('counter.main.advancedSearch', controller.searchFields.toParams(), { notify: false });
   };
-  controller.activateSearchMode(controller.searchModes.DETAIL);
 
   if (controller.activeCounter.isRegistrationCounter() || Object.keys(controller.associationOptions).length > 0) {
-    controller.activateSearchMode(controller.searchModes.DETAIL);
+    controller.detailModeEnabled = true;
+    controller.activateSearchMode(controller.searchFields.mode);
   }
   else {
-    controller.activateSearchMode(controller.searchModes.NUMBER);
-    delete controller.searchModes.DETAIL;
+    controller.activateSearchMode(SearchModes.NUMBER);
+  }
+
+  /**
+   * @param {SearchParameters} searchParameters
+   */
+  function initializeSearchMode(searchParameters) {
+    if (!searchParameters.hasDefaultParameters()) {
+      if (angular.equals(searchParameters.mode, SearchModes.DETAIL) && controller.detailModeEnabled) {
+        controller.findPassholdersByDetails();
+      }
+
+      if (angular.equals(searchParameters.mode, SearchModes.NUMBER)) {
+        controller.findPassholdersByNumbers();
+      }
+    }
   }
 
   /**
@@ -172,7 +196,6 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
    */
   controller.findPassholders = function (searchParameters) {
     controller.formSubmitBusy = true;
-    var params = searchParameters.toParams();
     advancedSearchService
       .findPassholders(searchParameters)
       .then(controller.showSearchResults, controller.showAsyncError)
@@ -198,12 +221,10 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
       return;
     }
 
-    var jsonSearchParameters = {};
     if (controller.passNumbers) {
-      jsonSearchParameters.uitpasNumbers = controller.passNumbers.split(/[\s]+/);
+      controller.searchFields.uitpasNumbers = controller.passNumbers.split(/[\s]+/);
     }
 
-    controller.searchFields = new SearchParameters(jsonSearchParameters);
     controller.findPassholders(controller.searchFields);
   };
 
@@ -214,23 +235,5 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
     controller.asyncError = null;
   };
 
-  // check if there's a search filled in the url, probably not best way to do it
-  if (location.search.length > 1) {
-    if (typeof $state.params.uitpasNumber === 'string') {
-      // only one UiTPAS-number was entered
-      controller.passNumbers = $state.params.uitpasNumber;
-      controller.findPassholdersByNumbers();
-    }
-    else if (typeof $state.params.uitpasNumber === 'object') {
-      // multiple were entered
-      controller.passNumbers = $state.params.uitpasNumber.join('\n');
-      controller.findPassholdersByNumbers();
-    }
-    else {
-      // regular search, set searchFields from $state params
-      controller.searchFields.parseJson($state.params);
-      // execute search
-      controller.findPassholders(controller.searchFields);
-    }
-  }
+  initializeSearchMode(controller.searchFields);
 }

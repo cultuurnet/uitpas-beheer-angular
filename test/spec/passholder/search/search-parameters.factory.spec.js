@@ -4,6 +4,16 @@ describe('Factory: PassCollection', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
+  /**
+   * Search mode enum.
+   * @readonly
+   * @enum {object}
+   */
+  var SearchModes = {
+    DETAIL: { title:'Zoeken', name:'DETAIL' },
+    NUMBER: { title:'Via kaartnummer', name:'NUMBER' }
+  };
+
   var jsonSearchParametersUitpasNumbers = {
     page: 1,
     limit: 10,
@@ -78,7 +88,7 @@ describe('Factory: PassCollection', function () {
       name: 'Het debiele ei',
       page: 1,
       street: 'Harensesteenweg',
-      mode: 'detail',
+      mode: SearchModes.DETAIL,
       uitpasNumbers: []
     };
 
@@ -119,7 +129,7 @@ describe('Factory: PassCollection', function () {
       email: null,
       membershipAssociationId: null,
       membershipStatus: null,
-      mode: 'detail'
+      mode: SearchModes.DETAIL
     };
     var actualParameters = new SearchParameters();
 

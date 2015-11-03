@@ -395,7 +395,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     }
 
     var requestOptions = {
-      params: searchParameters.serialize()
+      params: searchParameters.toQueryParameters()
     };
 
     $http

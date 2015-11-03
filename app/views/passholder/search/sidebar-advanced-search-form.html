@@ -4,13 +4,13 @@
 <h2>Pashouder zoeken</h2>
 
 <uib-tabset>
-  <uib-tab heading="{{::pasc.searchModes.DETAIL.title}}" select="pasc.activeSearchMode(pasc.searchModes.DETAIL.name)"
-           active="pasc.searchModes.DETAIL.active">
+  <uib-tab heading="{{::pasc.searchModes.DETAIL.title}}" select="pasc.activateSearchMode(pasc.searchModes.DETAIL)"
+           active="pasc.searchModes.DETAIL.$active" ng-if="controller.detailModeEnabled">
     <ubr-passholder-advanced-search-fields></ubr-passholder-advanced-search-fields>
   </uib-tab>
 
-  <uib-tab heading="{{::pasc.searchModes.NUMBER.title}}" select="pasc.activeSearchMode(pasc.searchModes.NUMBER.name)"
-           active="pasc.searchModes.NUMBER.active">
+  <uib-tab heading="{{::pasc.searchModes.NUMBER.title}}" select="pasc.activateSearchMode(pasc.searchModes.NUMBER)"
+           active="pasc.searchModes.NUMBER.$active">
     <p>Geef de kaartnummers van de aanwezige UiTPAShouders in: alle kaartnummers onder elkaar zonder scheidingstekens.</p>
     <form name="searchPassholderNumbers" ng-submit="pasc.findPassholdersByNumbers()" novalidate
           ng-class="{'form-submiting': pasc.formSubmitBusy}">

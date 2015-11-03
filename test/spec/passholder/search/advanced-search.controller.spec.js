@@ -331,7 +331,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       activeCounter: new Counter(angular.copy(activeCounterJson))
     });
 
-    expect(withoutDetailsController.searchModes.DETAIL).toBeUndefined();
+    expect(withoutDetailsController.detailModeEnabled).toEqual(false);
 
     var newCounter = new Counter(angular.copy(activeCounterJson));
     newCounter.cardSystems[1].permissions.push('registratie');
@@ -342,6 +342,6 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       activeCounter: newCounter
     });
 
-    expect(withDetailsController.searchModes.DETAIL).toBeDefined();
+    expect(withDetailsController.detailModeEnabled).toEqual(true);
   });
 });
