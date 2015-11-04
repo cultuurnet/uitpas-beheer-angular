@@ -47,6 +47,11 @@ function searchParametersFactory(moment, day) {
     return parameters;
   }
 
+  /**
+   * Takes a list of numbers or a whitespace-separated string and returns a list of UiTPAS numbers
+   * @param {String|String[]} uitpasSomething
+   * @return {String[]}
+   */
   function parseUitpasNumbers (uitpasSomething) {
     var uitpasNumbers = [];
 
@@ -210,7 +215,7 @@ function searchParametersFactory(moment, day) {
       return params;
     },
     fromParams: function (params) {
-      this.uitpasNumbers = params.uitpasNumbers ? params.uitpasNumbers.split('-') : [];
+      this.uitpasNumbers = params.uitpasNumbers ? parseUitpasNumbers(params.uitpasNumbers) : [];
       this.page = params.page ? parseInt(params.page) : 1;
       this.dateOfBirth = (params.dateOfBirth ? day(params.dateOfBirth, 'YYYY-MM-DD').toDate() : null);
       this.firstName = params.firstName || null;

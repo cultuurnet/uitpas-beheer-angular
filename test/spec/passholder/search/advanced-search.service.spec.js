@@ -67,4 +67,47 @@ describe('Service: Advanced Search', function () {
     expect($rootScope.$emit).toHaveBeenCalledWith('findingPassholders', searchParameters);
     expect($rootScope.$emit).toHaveBeenCalledWith('passholdersFound', expectedSearchResults);
   });
+
+  it('should reset the active page when searching with parameters that return a different result set', inject(function (SearchParameters) {
+    var oldSearchParameters = new SearchParameters({
+      page: 4,
+      name: 'Danny'
+    });
+
+    var newSearchParameters = new SearchParameters({
+      page: 4,
+      name: 'Dirk'
+    });
+
+    var expectedSearchParameters = new SearchParameters({
+      page: 1,
+      name: 'Dirk'
+    });
+
+    passholderService.findPassholders.and.returnValue($q.resolve());
+
+    searchService.findPassholders(oldSearchParameters);
+    searchService.findPassholders(newSearchParameters);
+
+    expect(passholderService.findPassholders.calls.mostRecent().args[0]).toEqual(expectedSearchParameters);
+  }));
+
+  it('should not reset the active page when searching with parameters that return the same result set', inject(function (SearchParameters) {
+    var oldSearchParameters = new SearchParameters({
+      page: 4,
+      name: 'Danny'
+    });
+
+    var newSearchParameters = new SearchParameters({
+      page: 10,
+      name: 'Danny'
+    });
+
+    passholderService.findPassholders.and.returnValue($q.resolve());
+
+    searchService.findPassholders(oldSearchParameters);
+    searchService.findPassholders(newSearchParameters);
+
+    expect(passholderService.findPassholders.calls.mostRecent().args[0]).toEqual(newSearchParameters);
+  }));
 });

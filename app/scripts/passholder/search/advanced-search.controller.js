@@ -72,7 +72,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
   /**
    * @param {SearchParameters} searchParameters
    */
-  function initializeSearchMode(searchParameters) {
+  controller.initializeSearchMode = function (searchParameters) {
     enableDetailMode();
     controller.activateSearchMode(controller.searchFields.mode);
 
@@ -85,7 +85,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
         controller.findPassholdersByNumbers();
       }
     }
-  }
+  };
 
   /**
    * Check if a string resembles an UiTPAS number.
@@ -240,5 +240,5 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
     controller.asyncError = null;
   };
 
-  initializeSearchMode(controller.searchFields);
+  controller.initializeSearchMode(controller.searchFields);
 }

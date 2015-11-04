@@ -8,6 +8,11 @@ describe('Controller: PassholderAdvancedSearchController', function () {
   var advancedSearchService, $q, controller, SearchParameters, PassholderSearchResults, $scope, activeCounter, Counter,
       $controller, $state;
 
+  var SearchModes = {
+    DETAIL: { title:'Zoeken', name:'DETAIL' },
+    NUMBER: { title:'Via kaartnummer', name:'NUMBER' }
+  };
+
   var jsonPass = {
     'uitPas': {
       'number': '0930000422202',
@@ -343,5 +348,22 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     });
 
     expect(withDetailsController.detailModeEnabled).toEqual(true);
+  });
+
+  it('should fire off a search when search params are not default on initialization', function () {
+    var searchParameters = jasmine.createSpyObj(searchParameters, ['hasDefaultParameters']);
+    spyOn(controller, 'findPassholdersByDetails');
+    spyOn(controller, 'findPassholdersByNumbers');
+    searchParameters.hasDefaultParameters.and.returnValue(false);
+    searchParameters.mode = SearchModes.DETAIL;
+
+    controller.initializeSearchMode(searchParameters);
+    expect(controller.findPassholdersByDetails).toHaveBeenCalled();
+
+    // when detail mode is not enabled you can only find by number
+    controller.detailModeEnabled = false;
+    searchParameters.mode = SearchModes.NUMBER;
+    controller.initializeSearchMode(searchParameters);
+    expect(controller.findPassholdersByNumbers).toHaveBeenCalled();
   });
 });

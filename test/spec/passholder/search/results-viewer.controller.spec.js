@@ -6,6 +6,7 @@ describe('Controller: Results Viewer', function () {
 
   beforeEach(module('ubr.passholder.search'));
 
+
   beforeEach(inject(function (_$controller_, _$rootScope_) {
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders', 'goToPage']);
     $state = jasmine.createSpyObj('$state', ['go']);
@@ -14,14 +15,18 @@ describe('Controller: Results Viewer', function () {
     $controller = _$controller_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
-    controller = $controller('ResultsViewerController', {
+    controller = getController();
+  }));
+
+  function getController() {
+    return $controller('ResultsViewerController', {
       $scope: $scope,
       $rootScope: $rootScope,
       $state: $state,
       advancedSearchService: advancedSearchService,
       UiTPASRouter: UiTPASRouter
     });
-  }));
+  }
 
   it('should show results immediately when there are no unknown numbers', function () {
     controller.results = jasmine.createSpyObj('results', ['hasUnknownNumbers', 'hasConfirmedUnknownNumbers']);
@@ -39,6 +44,14 @@ describe('Controller: Results Viewer', function () {
     expect(controller.isShowingResults()).toEqual(false);
 
     controller.results.hasConfirmedUnknownNumbers.and.returnValue(true);
+    expect(controller.isShowingResults()).toEqual(true);
+  });
+
+  it('should show the passholder list view immediately before loading results from previous search parameters', function () {
+    $state.params = {
+      page: 2
+    };
+    var controller = getController();
     expect(controller.isShowingResults()).toEqual(true);
   });
 

@@ -181,4 +181,98 @@ describe('Factory: PassCollection', function () {
 
     expect(searchParameters.serialize()).toEqual(expectedParameters);
   });
+
+  it('should url encode dob, uitpas-numbers and email when getting params', function () {
+    var searchParameters = new SearchParameters({
+      uitpasNumbers: ['123465798654', '123465798852'],
+      email: 'dirk@iDirk.de',
+      dateOfBirth: '1955-05-05'
+    });
+
+    var params = searchParameters.toParams();
+    var expectedParams = {
+      uitpasNumbers: '123465798654-123465798852',
+      email: 'dirk%40iDirk%2Ede',
+      dateOfBirth: '1955-05-05',
+      page: 1,
+      mode: 'DETAIL'
+    };
+
+    expect(params).toEqual(expectedParams);
+  });
+
+  it('should include all the relevant parameters when searching by passholder details', function () {
+    var serializedParameters = {
+      city: 'Vilvoorde',
+      dateOfBirth: '2004-08-16',
+      email: 'jos@humo.be',
+      firstName: 'Jos',
+      limit: 10,
+      membershipAssociationId: 5,
+      membershipStatus: 'ACTIVE',
+      name: 'Het debiele ei',
+      page: 1,
+      street: 'Harensesteenweg',
+      mode: 'DETAIL'
+    };
+
+    var expectedParameters = {
+      city: 'Vilvoorde',
+      dateOfBirth: '2004-08-16',
+      email: 'jos@humo.be',
+      firstName: 'Jos',
+      limit: 10,
+      membershipAssociationId: 5,
+      membershipStatus: 'ACTIVE',
+      name: 'Het debiele ei',
+      page: 1,
+      street: 'Harensesteenweg'
+    };
+
+    var searchParameters = new SearchParameters(serializedParameters);
+    var queryParameters = searchParameters.toQueryParameters();
+
+    expect(queryParameters).toEqual(expectedParameters);
+  });
+
+  it('should include all the relevant parameters when searching by passholder numbers', function () {
+    var serializedParameters = {
+      city: 'Vilvoorde',
+      dateOfBirth: '2004-08-16',
+      email: 'jos@humo.be',
+      firstName: 'Jos',
+      limit: 10,
+      membershipAssociationId: 5,
+      membershipStatus: 'ACTIVE',
+      name: 'Het debiele ei',
+      page: 1,
+      street: 'Harensesteenweg',
+      mode: 'NUMBER',
+      uitpasNumbers: ['123465798654', '123465798852']
+    };
+
+    var expectedParameters = {
+      limit: 10,
+      page: 1,
+      'uitpasNumber[]': ['123465798654', '123465798852']
+    };
+
+    var searchParameters = new SearchParameters(serializedParameters);
+    var queryParameters = searchParameters.toQueryParameters();
+
+    expect(queryParameters).toEqual(expectedParameters);
+  });
+
+  it('should set properties when passed a whitespace-separated UiTPAS numbers', function () {
+    var searchParameters = new SearchParameters();
+    searchParameters.fromParams({
+      uitpasNumbers: '123465798654 123465798852\n123465798654'
+    });
+
+    var expectedParameters = new SearchParameters({
+      uitpasNumbers: ['123465798654', '123465798852', '123465798654']
+    });
+
+    expect(searchParameters).toEqual(expectedParameters);
+  });
 });
