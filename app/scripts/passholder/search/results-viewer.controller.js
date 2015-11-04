@@ -12,7 +12,7 @@ angular
   .controller('ResultsViewerController', ResultsViewerController);
 
 /* @ngInject */
-function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters) {
+function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter) {
   /*jshint validthis: true */
   var controller = this;
   controller.activePage = 1;
@@ -79,7 +79,7 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
    * @param {String} identification
    */
   controller.showPassholderDetails = function (identification) {
-    $state.go('counter.main.passholder', {identification: identification});
+    UiTPASRouter.go(identification);
   };
 
   var lastSearchParameters = null;

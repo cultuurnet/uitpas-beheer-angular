@@ -2,13 +2,14 @@
 
 describe('Controller: Results Viewer', function () {
 
-  var $controller, controller, $scope, $rootScope, advancedSearchService, $state;
+  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter;
 
   beforeEach(module('ubr.passholder.search'));
 
   beforeEach(inject(function (_$controller_, _$rootScope_) {
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders', 'goToPage']);
     $state = jasmine.createSpyObj('$state', ['go']);
+    UiTPASRouter = jasmine.createSpyObj('UiTPASRouter', ['go']);
     $state.params = {};
     $controller = _$controller_;
     $rootScope = _$rootScope_;
@@ -17,7 +18,8 @@ describe('Controller: Results Viewer', function () {
       $scope: $scope,
       $rootScope: $rootScope,
       $state: $state,
-      advancedSearchService: advancedSearchService
+      advancedSearchService: advancedSearchService,
+      UiTPASRouter: UiTPASRouter
     });
   }));
 
@@ -42,7 +44,7 @@ describe('Controller: Results Viewer', function () {
 
   it('should load the passholder to show details', function () {
     controller.showPassholderDetails('1234567894561');
-    expect($state.go).toHaveBeenCalledWith('counter.main.passholder', {identification: '1234567894561'});
+    expect(UiTPASRouter.go).toHaveBeenCalledWith('1234567894561');
   });
 
   it('should enter a loading state when finding search results', function () {

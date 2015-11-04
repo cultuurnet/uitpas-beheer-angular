@@ -36,8 +36,8 @@
       {{rvc.results.totalItems}} resultaten gevonden
 
       <ul class="list-unstyled passholder-list">
-        <li class="overview__item overview__item-list overview__item-list-extra-small" ng-repeat="pass in rvc.results.passen" ng-click="rvc.showPassholderDetails(pass.number)">
-          <div class="grid display-table">
+        <li class="overview__item overview__item-list overview__item-list-extra-small" ng-repeat="pass in rvc.results.passen">
+          <div class="grid display-table" ng-click="rvc.showPassholderDetails(pass.number)">
             <div class="grid__2 grid--bp-med__1 first">
               <!-- image -->
               <img ng-if="pass.passholder.picture" style="width: 47px; height: 64px"
