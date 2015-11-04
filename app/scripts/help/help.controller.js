@@ -12,15 +12,16 @@ angular
   .controller('HelpController', HelpController);
 
 /* @ngInject */
-function HelpController (helpService, $q, uitid) {
+function HelpController (helpService, $q, uitid, $state) {
   /*jshint validthis: true */
   var controller = this;
 
   // Set default parameters.
-  controller.helpLoading = 0;
   controller.helpMarkdown = '';
   controller.userCanEdit = false;
   controller.uitid = uitid;
+  controller.formSubmitBusy = false;
+  controller.showUpdateError = false;
 
   function init () {
     $q.all([
@@ -33,4 +34,22 @@ function HelpController (helpService, $q, uitid) {
   }
 
   init();
+
+  controller.submitForm = function () {
+    controller.formSubmitBusy = true;
+
+    var updateHelpOnPage = function () {
+      $state.go('counter.main.help');
+    };
+
+    var setErrorMessage = function () {
+      controller.showUpdateError = true;
+    };
+
+    helpService
+      .updateHelpOnServer(controller.helpMarkdown)
+      .then(updateHelpOnPage, setErrorMessage);
+
+    controller.formSubmitBusy = false;
+  };
 }

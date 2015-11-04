@@ -17,8 +17,8 @@ angular
   /* @ngInject */
   .config(function ($stateProvider) {
 
-    $stateProvider.state(
-      'counter.main.help', {
+    $stateProvider
+      .state('counter.main.help', {
         url: 'help',
         requiresCounter: true,
         redirectOnScan: true,
@@ -39,6 +39,21 @@ angular
           },
           'sidebar@counter': {
             templateUrl: 'views/help/sidebar-help.html',
+            controller: 'HelpController',
+            controllerAs: 'hc'
+          }
+        }
+      })
+      .state('counter.main.help.edit', {
+        url: '/edit',
+        views: {
+          'content@counter': {
+            templateUrl: 'views/help/content-help-edit.html',
+            controller: 'HelpController',
+            controllerAs: 'hc'
+          },
+          'sidebar@counter': {
+            templateUrl: 'views/help/sidebar-help-edit.html',
             controller: 'HelpController',
             controllerAs: 'hc'
           }

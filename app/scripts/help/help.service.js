@@ -18,17 +18,17 @@ function helpService($q, $http, appConfig) {
   /*jshint validthis: true */
   var service = this;
   service.text = null;
-  service.editors = null;
+  service.canUpdate = null;
 
   service.apiUrl = apiUrl;
 
   /**
-   * Search for a list of activities based on a list of query parameters for a given passholder
+   * Get the help text in markdown format.
    *
    * @returns {Promise}
    *   The help text markdown string.
    */
-  service.getHelpText = function() {
+  service.getHelpText = function () {
     var deferredHelpText = $q.defer();
 
     var returnHelpText = function () {
@@ -50,27 +50,22 @@ function helpService($q, $http, appConfig) {
   };
 
   /**
+   * Checks if the current user is allowed to edit the help markdown.
    *
-   * @param {string} userUitidId
    * @returns {Promise}
    */
-  service.checkEditPermissionCurrentUser = function(userUitidId) {
+  service.checkEditPermission = function () {
     var deferredPermissionCheck = $q.defer();
 
     var checkPermission = function () {
-      if (service.editors.indexOf(userUitidId) > -1) {
-        deferredPermissionCheck.resolve(true);
-      }
-      else {
-        deferredPermissionCheck.resolve(false);
-      }
+      deferredPermissionCheck.resolve(service.canUpdate);
     };
 
     var rejectWithError = function (error) {
       deferredPermissionCheck.reject(error);
     };
 
-    if (service.editors !== null) {
+    if (service.canUpdate !== null) {
       checkPermission();
     }
     else {
@@ -81,15 +76,16 @@ function helpService($q, $http, appConfig) {
   };
 
   /**
+   * Gets the help information from the server and stores it in the service.
    *
    * @returns {Promise}
    */
-  service.getHelpFromServer = function() {
+  service.getHelpFromServer = function () {
     var deferredHelpObject = $q.defer();
 
     var storeResponseDataInService = function (response) {
       service.text = response.text;
-      service.editors = response.editors;
+      service.canUpdate = response.canUpdate;
 
       deferredHelpObject.resolve();
     };
@@ -98,19 +94,50 @@ function helpService($q, $http, appConfig) {
       deferredHelpObject.reject(error);
     };
 
-    /*
+    //*
     var helpRequest = $http.get(
       apiUrl + 'help',
       {
         withCredentials: true
       }
-    );//*/
-
-    var helpRequest = $http.get('scripts/help/fakedata.json');
+    );//*/var helpRequest = $http.get('scripts/help/fakedata.json');
 
     helpRequest.success(storeResponseDataInService);
     helpRequest.error(rejectWithError);
 
     return deferredHelpObject.promise;
+  };
+
+  /**
+   * Update the markdown text on the server.
+   *
+   * @param {string} newMarkdown
+   *   The new markdown string to save on the server.
+   * @returns {*}
+   */
+  service.updateHelpOnServer = function (newMarkdown) {
+    var deferredUpdate = $q.defer();
+
+    var parameters = {
+      text: newMarkdown
+    };
+
+    var requestOptions = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    //*
+    var updateRequest = $http.post(
+      apiUrl + 'help',
+      parameters,
+      requestOptions
+    );//*/var updateRequest = $http.get('scripts/help/fakedata.json');
+
+    updateRequest.success(deferredUpdate.resolve);
+    updateRequest.error(deferredUpdate.resolve);
+
+    return deferredUpdate.promise;
   };
 }
