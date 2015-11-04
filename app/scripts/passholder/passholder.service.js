@@ -453,21 +453,21 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
         {
           'id': '0',
           'name': 'Cultuurbon',
-          'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
+          'description': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
           'date': '2015-12-26',
           'remainingTotal': 4
         },
         {
           'id': '1',
           'name': 'Cultuurbon2',
-          'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
+          'description': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
           'date': '2015-11-26',
           'remainingTotal': 5
         },
         {
           'id': '2',
           'name': 'Cultuurbon3',
-          'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
+          'description': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
           'date': '2016-01-26',
           'remainingTotal': 3
         }
