@@ -444,7 +444,8 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
   $rootScope.$on('ticketsSold', updateAvailableTickets);
 
-  service.getCoupons = function(uitpasNumber) {
+  // TODO: add uitpasNumber as an argument in this service.
+  service.getCoupons = function() {
     var deferredCoupons = $q.defer();
 
     var returnCoupons = function () {

@@ -378,6 +378,43 @@ describe('Service: passholderService', function () {
     $httpBackend.flush();
   });
 
+  it('should find coupons by pass numbers', function () {
+    var pass = new Pass(identityData);
+
+    var expectedCoupons = [
+      {
+        'id': '0',
+        'name': 'Cultuurbon',
+        'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
+        'date': '2015-12-26',
+        'remainingTotal': 4
+      },
+      {
+        'id': '1',
+        'name': 'Cultuurbon2',
+        'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
+        'date': '2015-11-26',
+        'remainingTotal': 5
+      },
+      {
+        'id': '2',
+        'name': 'Cultuurbon3',
+        'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
+        'date': '2016-01-26',
+        'remainingTotal': 3
+      }
+    ];
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholder/' + pass.number + '/coupon')
+      .respond(200);
+
+    passholderService.getCoupons();
+    expect(passholderService.getCoupons()).toEqual(expectedCoupons);
+
+    $httpBackend.flush();
+  });
+
   it('throws an error when it fails to register a passholder', function (done) {
     var pass = new Pass(identityData);
 

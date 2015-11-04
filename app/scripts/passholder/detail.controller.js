@@ -51,7 +51,8 @@ function PassholderDetailController (pass, membershipService, $rootScope, moment
 
   var loadCoupons = function() {
     controller.couponsLoading = true;
-    passholderService.getCoupons(pass.number)
+    // TODO: add uitpasNumber as an argument in this service.
+    passholderService.getCoupons()
       .then(couponsRetrieved)
       .finally(function() {
         controller.couponsLoading = false;
