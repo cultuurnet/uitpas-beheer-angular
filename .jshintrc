@@ -21,6 +21,7 @@
   "globals": {
     "angular": false,
     "moment": false,
-    "PhoneFormat": false
+    "PhoneFormat": false,
+    "showdown": false
   }
 }

@@ -1,0 +1,15 @@
+<div class="back-nav">
+  <a ui-sref="counter.main">Terug</a>
+</div>
+<div class="help">
+  <h1>Help</h1>
+  <h3>Snel naar</h3>
+  <div ubr-showdown-markdown-to-html="hc.helpMarkdown" md-filters="getOnlyTitles"></div>
+  <h3>Helpdesk</h3>
+  <ul class="helpdesk-list">
+    <li>voor regio Aalst: aalst@uitpas.be</li>
+    <li>voor Paspartoe: paspartoe@vgc.be</li>
+    <li>voor Gent: uitpas@gent.be</li>
+  </ul>
+</div>
+<a class="btn btn-primary" ng-show="hc.userCanEdit">Help tekst aanpassen</a>

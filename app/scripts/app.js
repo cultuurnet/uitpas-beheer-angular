@@ -24,6 +24,7 @@ angular
     'ubr.advantage',
     'ubr.counter',
     'ubr.group',
+    'ubr.help',
     'ubr.kansenstatuut',
     'ubr.membership',
     'ubr.passholder',

@@ -49,6 +49,7 @@ module.exports = function(config) {
       'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
       'bower_components/ngTouchSpin/src/js/ngTouchSpin.js',
       'bower_components/phoneformat/dist/phone-format-global.js',
+      'bower_components/showdown/dist/showdown.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/app.js",
@@ -63,6 +64,7 @@ module.exports = function(config) {
       "app/scripts/membership/ubr.membership.module.js",
       "app/scripts/passholder/ubr.passholder.module.js",
       "app/scripts/passholder/search/ubr.search.module.js",
+      "app/scripts/help/ubr.help.module.js",
       "app/scripts/registration/ubr.registration.module.js",
       "app/scripts/utilities/ubr.utilities.module.js",
 
