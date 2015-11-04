@@ -1,6 +1,16 @@
 'use strict';
 
 /**
+ * Coupon
+ * @typedef {Object}    Coupon
+ * @property {String}   id
+ * @property {String}   name
+ * @property {String}   description
+ * @property {Date}     expirationDate
+ * @property {Integer}  remainingTotal
+ */
+
+/**
  * @ngdoc service
  * @name ubr.passholder.passholder
  * @description
@@ -444,42 +454,21 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
   $rootScope.$on('ticketsSold', updateAvailableTickets);
 
-  // TODO: add uitpasNumber as an argument in this service.
-  service.getCoupons = function() {
+  /**
+   * Get all the available coupons for a given UiTPAS-number
+   * @param {String} uitpasNumber
+   * @return {Coupon[]}
+   */
+  service.getCoupons = function(uitpasNumber) {
     var deferredCoupons = $q.defer();
 
-    var returnCoupons = function () {
-      var coupons = [
-        {
-          'id': '0',
-          'name': 'Cultuurbon',
-          'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
-          'date': '2015-12-26',
-          'remainingTotal': 4
-        },
-        {
-          'id': '1',
-          'name': 'Cultuurbon2',
-          'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
-          'date': '2015-11-26',
-          'remainingTotal': 5
-        },
-        {
-          'id': '2',
-          'name': 'Cultuurbon3',
-          'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
-          'date': '2016-01-26',
-          'remainingTotal': 3
-        }
-      ];
+    function returnCoupons (couponsResponse) {
+      deferredCoupons.resolve(couponsResponse.data);
+    }
 
-      deferredCoupons.resolve(coupons);
-    };
-
-    /*$http
-      .get(apiUrl + 'passholder/' + uitpasNumber + '/coupon')
-      .then(returnCoupons);*/
-    returnCoupons();
+    $http
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/coupons')
+      .then(returnCoupons, deferredCoupons.reject);
 
     return deferredCoupons.promise;
   };

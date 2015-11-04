@@ -5,10 +5,11 @@ describe('Controller: PassholderDetailController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var detailController, $rootScope, advantage, $q, moment, $scope, passholderService, deferredPassholder;
+  var detailController, $rootScope, advantage, $q, moment, $scope, passholderService, deferredPassholder,
+      membershipService, $controller;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $injector, _$rootScope_) {
+  beforeEach(inject(function (_$controller_, $injector, _$rootScope_) {
     advantage = {
       exchangeable: true,
       id: 'advantage-id',
@@ -17,39 +18,41 @@ describe('Controller: PassholderDetailController', function () {
     };
 
     $scope = _$rootScope_.$new();
+    $controller = _$controller_;
     $rootScope = _$rootScope_;
 
     $q = $injector.get('$q');
     moment = $injector.get('moment');
 
     passholderService = $injector.get('passholderService');
+    membershipService = jasmine.createSpyObj('membershipService', ['list']);
+    membershipService.list.and.returnValue($q.reject());
 
+    spyOn(passholderService, 'getCoupons').and.returnValue($q.reject());
 
-    detailController = $controller('PassholderDetailController', {
-      pass: { passholder: { passNumber: '01234567891234', points: 123, name: {first: 'Fred'} } },
-      $rootScope: $rootScope,
-      membershipService: {
-        list: function () {
-          var deferred = $q.defer();
+    detailController = getController();
 
-          deferred.reject({});
+    deferredPassholder = $q.defer();
+    deferredPassholder.resolve(angular.copy(detailController.passholder));
+    spyOn(passholderService, 'findPassholder').and.returnValue(
+      deferredPassholder.promise
+    );
+  }));
 
-          return deferred.promise;
-        }
+  function getController() {
+    return $controller('PassholderDetailController', {
+      pass: {
+        number: '01234567891234',
+        passholder: { passNumber: '01234567891234', points: 123, name: {first: 'Fred'} }
       },
+      $rootScope: $rootScope,
+      membershipService: membershipService,
       $scope: $scope,
       moment: moment,
       passholderService: passholderService,
       activeCounter: {}
     });
-
-    deferredPassholder = $q.defer();
-    deferredPassholder.resolve(angular.copy(detailController.passholder));
-
-    spyOn(passholderService, 'findPassholder').and.returnValue(
-      deferredPassholder.promise
-    );
-  }));
+  }
 
   it('should update passholder points when an advantage is exchanged', function () {
     $rootScope.$emit('advantageExchanged', advantage, detailController.passholder.passNumber);
@@ -104,8 +107,13 @@ describe('Controller: PassholderDetailController', function () {
         'remainingTotal': 3
       }
     ];
-    jasmine.spyOn(passholderService, 'getCoupons').and.returnValue($q.resolve(expectedCoupons));
-    expect(detailController.coupons).toEqual(expectedCoupons);
-    expect(detailController.couponsLoading).toEqual(false);
+    passholderService.getCoupons.and.returnValue($q.resolve(expectedCoupons));
+
+    var controller = getController();
+    $scope.$digest();
+
+    expect(passholderService.getCoupons).toHaveBeenCalledWith('01234567891234');
+    expect(controller.coupons).toEqual(expectedCoupons);
+    expect(controller.couponsLoading).toEqual(false);
   });
 });

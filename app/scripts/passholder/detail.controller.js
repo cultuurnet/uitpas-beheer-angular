@@ -45,18 +45,21 @@ function PassholderDetailController (pass, membershipService, $rootScope, moment
     return moment().isAfter(endDate);
   }
 
-  var couponsRetrieved = function(coupons) {
+  var displayCoupons = function(coupons) {
     controller.coupons = coupons;
   };
 
   var loadCoupons = function() {
     controller.couponsLoading = true;
-    // TODO: add uitpasNumber as an argument in this service.
-    passholderService.getCoupons()
-      .then(couponsRetrieved)
-      .finally(function() {
-        controller.couponsLoading = false;
-      });
+
+    function removeLoadingState() {
+      controller.couponsLoading = false;
+    }
+
+    passholderService
+      .getCoupons(pass.number)
+      .then(displayCoupons)
+      .finally(removeLoadingState);
   };
 
   loadCoupons();
