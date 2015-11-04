@@ -13,9 +13,9 @@ angular
 
 /* @ngInject */
 function CouponDetailController (coupon, $scope, $modalInstance) {
-  $scope.coupon = coupon;
+  this.coupon = coupon;
 
-  $scope.cancel = function () {
+  this.cancel = function () {
     $modalInstance.dismiss('canceled');
   };
 }
