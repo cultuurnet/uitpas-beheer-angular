@@ -22,15 +22,6 @@ angular
         url: 'help',
         requiresCounter: true,
         redirectOnScan: true,
-        params: {
-          uitid: null
-        },
-        resolve: {
-          /* @ngInject */
-          uitid: function (uitid) {
-            return uitid.getUser();
-          }
-        },
         views: {
           'content@counter': {
             templateUrl: 'views/help/content-help.html',

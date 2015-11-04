@@ -12,21 +12,20 @@ angular
   .controller('HelpController', HelpController);
 
 /* @ngInject */
-function HelpController (helpService, $q, uitid, $state) {
+function HelpController (helpService, $q, $state) {
   /*jshint validthis: true */
   var controller = this;
 
   // Set default parameters.
   controller.helpMarkdown = '';
   controller.userCanEdit = false;
-  controller.uitid = uitid;
   controller.formSubmitBusy = false;
   controller.showUpdateError = false;
 
   function init () {
     $q.all([
       helpService.getHelpText(),
-      helpService.checkEditPermission(controller.uitid.id)
+      helpService.checkEditPermission()
     ]).then(function (data) {
       controller.helpMarkdown = data[0];
       controller.userCanEdit = data[1];
