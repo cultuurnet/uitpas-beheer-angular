@@ -21,6 +21,7 @@ function PassholderDetailController (pass, membershipService, $rootScope, moment
   controller.activeCounter = activeCounter;
 
   controller.membershipsLoading = false;
+  controller.couponsLoading = false;
 
   var listRetrieved = function(data) {
     controller.memberships = data.passholder.memberships;
@@ -43,6 +44,21 @@ function PassholderDetailController (pass, membershipService, $rootScope, moment
     var endDate = moment.unix(membership.endDate);
     return moment().isAfter(endDate);
   }
+
+  var couponsRetrieved = function(coupons) {
+    controller.coupons = coupons;
+  };
+
+  var loadCoupons = function() {
+    controller.couponsLoading = true;
+    passholderService.getCoupons(pass.number)
+      .then(couponsRetrieved)
+      .finally(function() {
+        controller.couponsLoading = false;
+      });
+  };
+
+  loadCoupons();
 
   function subtractAdvantagePoints(event, exchangedAdvantage) {
     var newPointCount = controller.passholder.points - exchangedAdvantage.points;
