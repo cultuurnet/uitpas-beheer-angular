@@ -26,7 +26,7 @@ function HelpController (helpService, $q, uitid, $state) {
   function init () {
     $q.all([
       helpService.getHelpText(),
-      helpService.checkEditPermissionCurrentUser(controller.uitid.id)
+      helpService.checkEditPermission(controller.uitid.id)
     ]).then(function (data) {
       controller.helpMarkdown = data[0];
       controller.userCanEdit = data[1];
