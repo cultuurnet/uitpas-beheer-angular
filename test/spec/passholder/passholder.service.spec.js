@@ -378,8 +378,8 @@ describe('Service: passholderService', function () {
     $httpBackend.flush();
   });
 
-  it('should find coupons by pass numbers', function () {
-    var pass = new Pass(identityData);
+  it('should find coupons by pass numbers', function (done) {
+    var uitpasNumber = '123456789';
 
     var expectedCoupons = [
       {
@@ -395,22 +395,21 @@ describe('Service: passholderService', function () {
         'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
         'date': '2015-11-26',
         'remainingTotal': 5
-      },
-      {
-        'id': '2',
-        'name': 'Cultuurbon3',
-        'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
-        'date': '2016-01-26',
-        'remainingTotal': 3
       }
     ];
 
-    $httpBackend
-      .expectGET(apiUrl + 'passholder/' + pass.number + '/coupon')
-      .respond(200);
+    function assertCoupons(coupons) {
+      expect(coupons).toEqual(expectedCoupons);
+      done();
+    }
 
-    passholderService.getCoupons();
-    expect(passholderService.getCoupons()).toEqual(expectedCoupons);
+    $httpBackend
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/coupons')
+      .respond(200, expectedCoupons);
+
+    passholderService
+      .getCoupons(uitpasNumber)
+      .then(assertCoupons);
 
     $httpBackend.flush();
   });
