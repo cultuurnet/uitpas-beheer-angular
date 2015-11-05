@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('Service: service', function (){
+describe('Service: service', function (){
 
   beforeEach(module('uitpasbeheerApp'));
 

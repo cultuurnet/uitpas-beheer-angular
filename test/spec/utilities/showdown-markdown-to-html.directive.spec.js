@@ -5,7 +5,7 @@ describe('Directive: ubrShowdownMarkdownToHtml', function () {
   var markdownElement, scope, compile;
 
   // load the directive's module
-  beforeEach(module('ubrUtilities'));
+  beforeEach(module('ubr.utilities'));
 
   beforeEach(inject(function ($rootScope, $compile) {
     scope = $rootScope;
