@@ -228,7 +228,10 @@ module.exports = function (grunt) {
               ]
             }
           }
-        }
+        },
+        exclude: [
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js'
+        ]
       },
       test: {
         devDependencies: true,
@@ -259,7 +262,10 @@ module.exports = function (grunt) {
               ]
             }
           }
-        }
+        },
+        exclude: [
+          'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js'
+        ]
       },
       sass: {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
