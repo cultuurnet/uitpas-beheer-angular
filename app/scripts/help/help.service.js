@@ -108,6 +108,14 @@ function helpService($q, $http, appConfig) {
   };
 
   /**
+   * Clears the help data that is stored in the service.
+   */
+  service.clearHelpData = function () {
+    service.text = null;
+    service.canUpdate = null;
+  };
+
+  /**
    * Update the markdown text on the server.
    *
    * @param {string} newMarkdown
@@ -127,13 +135,18 @@ function helpService($q, $http, appConfig) {
       }
     };
 
+    var clearServiceStorageAndResolve = function () {
+      service.clearHelpData();
+      deferredUpdate.resolve();
+    };
+
     var updateRequest = $http.post(
       apiUrl + 'help',
       parameters,
       requestOptions
     );
 
-    updateRequest.success(deferredUpdate.resolve);
+    updateRequest.success(clearServiceStorageAndResolve);
     updateRequest.error(deferredUpdate.reject);
 
     return deferredUpdate.promise;
