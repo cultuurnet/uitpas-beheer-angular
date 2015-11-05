@@ -19,7 +19,7 @@
             <tr ng-repeat="(tKey, tariff) in ::pat.activity.sales.tariffs.list"
                 ng-class="tariff.type === 'COUPON' ? 'coupon' :'kansen-tariff'" >
               <th>{{tariff.name}}</th>
-              <td ng-repeat="priceInfo in ::tariff.prices" ng-class="{'lowest': (priceInfo.price === pat.activity.sales.tariffs.lowestAvailable)}">
+              <td ng-repeat="priceInfo in ::tariff.prices" ng-class="{'lowest': (priceInfo.price === pat.activity.sales.tariffs.lowestAvailable && !tariff.maximumReached)}">
                 <label for="price-{{::tKey}}-{{::priceInfo.priceClass}}" ng-if="!tariff.maximumReached">
                   <input type="radio" name="tariff" id="price-{{::tKey}}-{{::priceInfo.priceClass}}" ng-model="pat.selectedTariff"
                          required ng-value="priceInfo" ng-change="pat.clearAsyncError()">
