@@ -11,12 +11,20 @@ describe('Directive: ubrShowdownMarkdownToHtml', function () {
     scope = $rootScope;
     scope.helpMarkdown = '# huppel';
     compile = $compile;
+
+    jasmine.clock().install();
   }));
+
+  afterEach(function() {
+    jasmine.clock().uninstall();
+  });
 
   var compileMarkdownElement = function (elementMarkup) {
     markdownElement = angular.element(elementMarkup);
     compile(markdownElement)(scope);
     scope.$digest();
+    jasmine.clock().tick(60);
+
     return markdownElement;
   };
 
@@ -27,15 +35,19 @@ describe('Directive: ubrShowdownMarkdownToHtml', function () {
 
     scope.helpMarkdown = '*hi*';
     scope.$apply();
+    jasmine.clock().tick(60);
     expect(markdownElement.html()).toBe('<p><em>hi</em></p>');
   });
 
-  it('should render provided markdown as html with a specified filter', function () {
+  it('should render provided markdown as html with the addAnchorsToTitles filter', function () {
+    markdownElement = compileMarkdownElement('<div ubr-showdown-markdown-to-html="helpMarkdown" md-filters="addAnchorsToTitles"></div>');
 
+    expect(markdownElement.html()).toBe('<a name="huppel"></a><h1 id="huppel">huppel</h1>');
   });
 
-  it('should change the html when the markdown changes', function () {
+  it('should render provided markdown as html with the getOnlyTitles filter', function () {
+    markdownElement = compileMarkdownElement('<div ubr-showdown-markdown-to-html="helpMarkdown" md-filters="getOnlyTitles"></div>');
 
+    expect(markdownElement.html()).toBe('<ul><li><a href="#huppel">huppel</a></li></ul>');
   });
-
 });
