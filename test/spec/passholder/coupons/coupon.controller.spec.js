@@ -31,7 +31,6 @@ describe('Controller: CouponDetailController', function () {
 
   it('should display a coupon object', function () {
     expect(couponDetailController.coupon).toEqual(coupon);
-    expect(couponDetailController).toEqual('asdfadsf');
   });
 
 });
