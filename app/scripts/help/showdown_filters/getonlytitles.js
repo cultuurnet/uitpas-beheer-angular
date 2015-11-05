@@ -12,7 +12,7 @@
       {
         type: 'output',
         filter: function (source) {
-          var regex = /<h1[a-zA-Z\=\"\" ]+>(.+)<\/h1>/gm;
+          var regex = /<h1[a-zA-Z\d\=\"\" ]+>(.+)<\/h1>/gm;
 
           var matches, markup = '';
           while (!!(matches = regex.exec(source))) {

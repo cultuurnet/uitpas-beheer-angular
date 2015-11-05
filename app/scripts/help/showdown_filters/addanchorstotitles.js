@@ -12,7 +12,7 @@
       {
         type: 'output',
         filter: function (source) {
-          return source.replace(/<h1[a-zA-Z\=\"\" ]+>(.+)<\/h1>/gmi, function (fullTitle, titleText) {
+          return source.replace(/<h1[a-zA-Z\d\=\"\" ]+>(.+)<\/h1>/gmi, function (fullTitle, titleText) {
             if (titleText) {
               return '<a name="' + getSafeTitleString(titleText) + '"></a>' + fullTitle;
             }
