@@ -94,13 +94,12 @@ function helpService($q, $http, appConfig) {
       deferredHelpObject.reject(error);
     };
 
-    //*
     var helpRequest = $http.get(
       apiUrl + 'help',
       {
         withCredentials: true
       }
-    );//*/var helpRequest = $http.get('scripts/help/fakedata.json');
+    );
 
     helpRequest.success(storeResponseDataInService);
     helpRequest.error(rejectWithError);
@@ -128,15 +127,14 @@ function helpService($q, $http, appConfig) {
       }
     };
 
-    //*
     var updateRequest = $http.post(
       apiUrl + 'help',
       parameters,
       requestOptions
-    );//*/var updateRequest = $http.get('scripts/help/fakedata.json');
+    );
 
     updateRequest.success(deferredUpdate.resolve);
-    updateRequest.error(deferredUpdate.resolve);
+    updateRequest.error(deferredUpdate.reject);
 
     return deferredUpdate.promise;
   };
