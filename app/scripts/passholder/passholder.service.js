@@ -472,4 +472,18 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     return deferredCoupons.promise;
   };
+
+  service.getTicketSales = function(uitpasNumber) {
+    var deferredTicketsSales = $q.defer();
+
+    function returnTicketSales (ticketSalesResponse) {
+      deferredTicketsSales.resolve(ticketSalesResponse.data);
+    }
+
+    $http
+      .get(apiUrl + 'passholder/' + uitpasNumber + 'ticetsales')
+      .then(returnTicketSales, deferredTicketsSales.reject);
+
+    return deferredTicketsSales.promise;
+  }
 }

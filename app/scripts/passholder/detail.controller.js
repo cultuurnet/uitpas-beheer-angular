@@ -64,6 +64,18 @@ function PassholderDetailController (pass, membershipService, $rootScope, moment
 
   loadCoupons();
 
+  var displayTicketSales = function(ticketSales) {
+    controller.ticketSales = ticketSales;
+  };
+
+  var loadTicketSales = function() {
+    passholderService
+      .getTicketSales(pass.number)
+      .then(displayTicketSales);
+  };
+
+  loadTicketSales();
+
   function subtractAdvantagePoints(event, exchangedAdvantage) {
     var newPointCount = controller.passholder.points - exchangedAdvantage.points;
 
