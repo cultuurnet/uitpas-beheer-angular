@@ -31,7 +31,7 @@ describe('Controller: HelpController', function () {
   }));
 
   it('should initiate with getting the help data', function () {
-    $scope.$digest();
+    $scope.$apply();
 
     expect(helpService.getHelpText).toHaveBeenCalled();
     expect(helpService.checkEditPermission).toHaveBeenCalled();
@@ -46,7 +46,7 @@ describe('Controller: HelpController', function () {
 
     helpController.submitForm();
 
-    $scope.$digest();
+    $scope.$apply();
 
     expect(helpService.updateHelpOnServer).toHaveBeenCalledWith('submit this');
     expect($state.go).toHaveBeenCalled();
@@ -58,7 +58,7 @@ describe('Controller: HelpController', function () {
 
     helpController.submitForm();
 
-    $scope.$digest();
+    $scope.$apply();
 
     expect(helpService.updateHelpOnServer).toHaveBeenCalledWith('submit this');
     expect(helpController.showUpdateError).toBeTruthy();

@@ -13,17 +13,18 @@ describe('Service: service', function (){
     });
   }));
 
-  var $q, $httpBackend, service;
+  var $q, $httpBackend, service, $scope;
 
   var helpResponse = {
     text: '# Aanmelden\r## Ik kan niet aanmelden?\rHeb je de juiste gegevens gebruikt om je aan te melden? Je kan enkel aanmelden met je UiTID. Ga naar ‘Ik ben mijn paswoord vergeten’ om een nieuw paswoord aan te vragen.',
     canUpdate: true
   };
 
-  beforeEach(inject(function ($injector, helpService) {
+  beforeEach(inject(function ($injector, helpService, $rootScope) {
     $q = $injector.get('$q');
     $httpBackend = $injector.get('$httpBackend');
     service = helpService;
+    $scope = $rootScope.$new();
   }));
 
   it('can get the help data from the server', function (done) {
@@ -110,7 +111,7 @@ describe('Service: service', function (){
       .checkEditPermission()
       .then(assertAllowed);
 
-    $httpBackend.flush();
+    $scope.$apply();
   });
 
   it('rejects when no permission are available', function (done) {
@@ -124,7 +125,7 @@ describe('Service: service', function (){
       .checkEditPermission()
       .catch(rejectNoData);
 
-    $httpBackend.flush();
+    $scope.$apply();
   });
 
   it('can check the edit permission with known help data', function (done) {
@@ -140,7 +141,7 @@ describe('Service: service', function (){
       .checkEditPermission()
       .then(assertAllowed);
 
-    $httpBackend.flush();
+    $scope.$apply();
   });
 
   it('can get the help text with no known help data', function (done) {
@@ -154,29 +155,29 @@ describe('Service: service', function (){
       .getHelpText()
       .then(assertText);
 
-    $httpBackend.flush();
+    $scope.$apply();
   });
 
   it('rejects when no help text is available', function (done) {
-    spyOn(service, 'getHelpFromServer').and.returnValue($q.reject());
-    function rejectNoData (response) {
-      expect(response).toBeUndefined();
+    spyOn(service, 'getHelpFromServer').and.returnValue($q.reject('there is no help text'));
+    function assertTextNotFound (notFoundMessage) {
+      expect(notFoundMessage).toEqual('there is no help text');
       expect(service.getHelpFromServer).toHaveBeenCalled();
       done();
     }
     service
       .getHelpText()
-      .catch(rejectNoData);
+      .catch(assertTextNotFound);
 
-    $httpBackend.flush();
+    $scope.$apply();
   });
 
   it('can get the help text with known help data', function (done) {
-    service.text = 'text';
+    service.text = 'green';
 
-    spyOn(service, 'getHelpFromServer').and.returnValue($q.when({text: 'fred', canUpdate: true}));
-    function assertAllowed (response) {
-      expect(response).toBeTruthy();
+    spyOn(service, 'getHelpFromServer').and.returnValue($q.resolve({text: 'fred', canUpdate: true}));
+    function assertAllowed (helpText) {
+      expect(helpText).toEqual('green');
       expect(service.getHelpFromServer).not.toHaveBeenCalled();
       done();
     }
@@ -184,6 +185,6 @@ describe('Service: service', function (){
       .getHelpText()
       .then(assertAllowed);
 
-    $httpBackend.flush();
+    $scope.$apply();
   });
 });
