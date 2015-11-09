@@ -22,7 +22,7 @@ angular
   .service('passholderService', passholderService);
 
 /* @ngInject */
-function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassholderSearchResults) {
+function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassholderSearchResults, Coupon) {
   var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
@@ -463,7 +463,11 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     var deferredCoupons = $q.defer();
 
     function returnCoupons (couponsResponse) {
-      deferredCoupons.resolve(couponsResponse.data);
+      var couponObjects = [];
+      angular.forEach(couponsResponse.data, function (jsonCoupon) {
+        couponObjects.push(new Coupon(jsonCoupon));
+      });
+      deferredCoupons.resolve(couponObjects);
     }
 
     $http

@@ -12,7 +12,7 @@ angular
   .controller('CouponDetailController', CouponDetailController);
 
 /* @ngInject */
-function CouponDetailController (coupon, $scope, $modalInstance) {
+function CouponDetailController (coupon, $modalInstance) {
   this.coupon = coupon;
 
   this.cancel = function () {

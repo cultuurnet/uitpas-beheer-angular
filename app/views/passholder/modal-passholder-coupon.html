@@ -6,8 +6,8 @@
     <strong>Omschrijving</strong>
     <p>{{cdc.coupon.description}}</p>
 
-    <p><strong>Geldig tot:</strong> {{cdc.coupon.date}}</p><p>
-</p><p><strong>Nog beschikbaar:</strong>	<ng-pluralize count="{{cdc.coupon.remainingTotal}}" when="{'0': '0 beurten', 'one': '1 beurt', 'other': '{} beurten'}"></ng-pluralize></p>
+    <p><strong>Geldig tot:</strong> {{cdc.coupon.expirationDate | date : 'dd/MM/yyyy'}}</p>
+    <p><strong>Nog beschikbaar:</strong> <ng-pluralize count="{{cdc.coupon.remainingTotal}}" when="{'0': '0 beurten', 'one': '1 beurt', 'other': '{} beurten'}"></ng-pluralize></p>
 
 </div>
 <div class="modal-footer">
