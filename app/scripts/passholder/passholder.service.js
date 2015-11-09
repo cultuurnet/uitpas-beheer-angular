@@ -1,6 +1,16 @@
 'use strict';
 
 /**
+ * Coupon
+ * @typedef {Object}    Coupon
+ * @property {String}   id
+ * @property {String}   name
+ * @property {String}   description
+ * @property {Date}     expirationDate
+ * @property {Integer}  remainingTotal
+ */
+
+/**
  * @ngdoc service
  * @name ubr.passholder.passholder
  * @description
@@ -443,4 +453,23 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   }
 
   $rootScope.$on('ticketsSold', updateAvailableTickets);
+
+  /**
+   * Get all the available coupons for a given UiTPAS-number
+   * @param {String} uitpasNumber
+   * @return {Coupon[]}
+   */
+  service.getCoupons = function(uitpasNumber) {
+    var deferredCoupons = $q.defer();
+
+    function returnCoupons (couponsResponse) {
+      deferredCoupons.resolve(couponsResponse.data);
+    }
+
+    $http
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/coupons')
+      .then(returnCoupons, deferredCoupons.reject);
+
+    return deferredCoupons.promise;
+  };
 }
