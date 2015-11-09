@@ -478,7 +478,8 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    * @param {String} uitpasNumber
    * @return {TicketSales[]}
    */
-  service.getTicketSales = function(uitpasNumber) {
+  //service.getTicketSales = function(uitpasNumber) {
+  service.getTicketSales = function() {
     var deferredTicketSales = $q.defer();
 
     function returnTicketSales (ticketSalesResponse) {
