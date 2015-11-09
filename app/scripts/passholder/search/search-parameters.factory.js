@@ -56,7 +56,7 @@ function searchParametersFactory(moment, day) {
     var uitpasNumbers = [];
 
     if (typeof uitpasSomething === 'string') {
-      uitpasNumbers = uitpasSomething.split(/[\s]+/);
+      uitpasNumbers = uitpasSomething.split(/[\s-]+/);
     } else if (Array.isArray(uitpasSomething)) {
       uitpasNumbers = uitpasSomething;
     } else {

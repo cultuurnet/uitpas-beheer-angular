@@ -275,4 +275,17 @@ describe('Factory: PassCollection', function () {
 
     expect(searchParameters).toEqual(expectedParameters);
   });
+
+  it('should parse uitpas numbers seperated with - ', function () {
+    var searchParameters = new SearchParameters();
+    searchParameters.fromParams({
+      uitpasNumbers: '123465798654 123465798852\n123465798654-0930000805208'
+    });
+
+    var expectedParameters = new SearchParameters({
+      uitpasNumbers: ['123465798654', '123465798852', '123465798654', '0930000805208']
+    });
+
+    expect(searchParameters).toEqual(expectedParameters);
+  });
 });
