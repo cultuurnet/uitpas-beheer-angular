@@ -12,7 +12,7 @@ angular
   .controller('PassholderDetailController', PassholderDetailController);
 
 /* @ngInject */
-function PassholderDetailController (pass, membershipService, $rootScope, moment, $scope, passholderService, activeCounter) {
+function PassholderDetailController (pass, membershipService, $rootScope, moment, $scope, passholderService, activeCounter, $window) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -63,6 +63,10 @@ function PassholderDetailController (pass, membershipService, $rootScope, moment
   };
 
   loadCoupons();
+
+  controller.goBack = function () {
+    $window.history.back();
+  };
 
   function subtractAdvantagePoints(event, exchangedAdvantage) {
     var newPointCount = controller.passholder.points - exchangedAdvantage.points;
