@@ -1,0 +1,12 @@
+<div class="help-edit" ng-show="hc.userCanEdit">
+  <form name="helpEdit" ng-submit="hc.submitForm()" ng-class="{'form-submiting': hc.formSubmitBusy}">
+    <div class="alert alert-danger" ng-show="hc.showUpdateError">
+      Het is helemaal om zeep. Kapot.
+    </div>
+    <textarea rows="30" ng-model="hc.helpMarkdown"></textarea>
+    <button type="button" class="btn btn-primary" ng-click="hc.submitForm()"><span ng-hide="hc.formSubmitBusy">Bewaren</span> <span ng-show="hc.formSubmitBusy"><span class="fa fa-refresh loading small"></span> Formulier wordt verzonden</span></button>
+  </form>
+</div>
+<div class="alert alert-danger" ng-hide="hc.userCanEdit">
+  Je hebt geen toestemming om de help tekst aan te passen.
+</div>
