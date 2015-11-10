@@ -12,7 +12,7 @@ angular
   .controller('TicketSalesController', TicketSalesController);
 
 /* @ngInject */
-function TicketSalesController (pass, passholder, $scope, $modalInstance, passholderService) {
+function TicketSalesController (pass, passholder, $modalInstance, passholderService) {
   /*jshint validthis: true */
   var controller = this;
   controller.passholder = passholder;
@@ -29,7 +29,7 @@ function TicketSalesController (pass, passholder, $scope, $modalInstance, passho
 
   loadTicketSales();
 
-  $scope.cancel = function () {
+  controller.cancel = function () {
     $modalInstance.dismiss('canceled');
   };
 }

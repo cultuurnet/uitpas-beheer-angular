@@ -476,24 +476,60 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   /**
    * Get all the available ticketsales for a given UiTPAS-number
    * @param {String} uitpasNumber
-   * @return {TicketSales[]}
+   * @returns {Promise<Object[]|ApiError>}
    */
   //service.getTicketSales = function(uitpasNumber) {
   service.getTicketSales = function() {
-    var deferredTicketSales = $q.defer();
+    //var deferredTicketSales = $q.defer();
+    var fakeTicketSales = [
+      {
+        id: '30788',
+        creationDate: '2014-07-14',
+        eventTitle: 'Tentoonstelling: Aalst in de Middeleeuwen',
+        tariff: 15
+      },
+      {
+        id: '30789',
+        creationDate: '2013-12-06',
+        eventTitle: 'Eddy Wally in Concert',
+        tariff: 7.5
+      },
+      {
+        id: '30790',
+        creationDate: '2012-05-11',
+        eventTitle: 'Gratis zwembeurt',
+        tariff: 0,
+        coupon: {
+          id: '1',
+          name: 'Cultuurwaardebon',
+          description: 'dit is de description van Cultuurwaardebon',
+          expirationDate: '2015-12-26',
+          remainingTotal: 1
+        }
+      },
+      {
+        id: '30791',
+        creationDate: '2015-05-09',
+        eventTitle: 'Cursus foto\'s maken met je smartphone',
+        tariff: 7.5
+      },
+      {
+        id: '30792',
+        creationDate: '2010-06-09',
+        eventTitle: 'Nacht van de poëzie',
+        tariff: 5
+      }
+    ];
 
-    function returnTicketSales (ticketSalesResponse) {
+    /*function returnTicketSales (ticketSalesResponse) {
       deferredTicketSales.resolve(ticketSalesResponse.data);
-    }
+    }*/
 
+    // TODO remove fakeTicketSales var and replace with API-call.
     /*$http
       .get(apiUrl + 'passholder/' + uitpasNumber + '/activities/ticket-sales')
       .then(returnTicketSales, deferredTicketSales.reject);*/
-    $http
-     .get('scripts/passholder/fakeTicketSales.json')
-     .then(returnTicketSales, deferredTicketSales.reject);
 
-
-    return deferredTicketSales.promise;
+    return $q.resolve(fakeTicketSales);
   };
 }
