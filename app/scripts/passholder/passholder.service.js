@@ -532,4 +532,21 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     return $q.resolve(fakeTicketSales);
   };
+
+  /**
+   *
+   * @param {Passholder} passholder
+   * @param {object} ticketSale
+   * @returns {Promise}
+   */
+  service.removeTicketSale = function (passholder, ticketSale) {
+    var deferredRemove = $q.defer();
+
+    var removeRequest = $http.delete(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales/' + ticketSale.id);
+
+    removeRequest.success(deferredRemove.resolve);
+    removeRequest.error(deferredRemove.reject);
+
+    return deferredRemove.promise;
+  };
 }

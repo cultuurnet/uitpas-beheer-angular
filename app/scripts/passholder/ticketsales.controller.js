@@ -32,4 +32,21 @@ function TicketSalesController (pass, passholder, $modalInstance, passholderServ
   controller.cancel = function () {
     $modalInstance.dismiss('canceled');
   };
+
+  /**
+   * Request to remove a ticket sale and update the list accordingly.
+   * @param ticketSale
+   */
+  controller.removeTicketSale = function (ticketSale) {
+    ticketSale.removing = true;
+
+    var displayRemoveError = function () {
+      ticketSale.removing = false;
+      ticketSale.removingFailed = true;
+    };
+
+    passholderService
+      .removeTicketSale(passholder, ticketSale)
+      .then(loadTicketSales, displayRemoveError);
+  };
 }

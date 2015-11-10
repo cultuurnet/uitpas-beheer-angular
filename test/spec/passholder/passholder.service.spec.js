@@ -823,4 +823,56 @@ describe('Service: passholderService', function () {
     $httpBackend.flush();
   });
 
+  it('resolves when removing a ticketsale for a passholder', function (done) {
+    var passholder = {
+      passNumber: '0123456789012'
+    };
+    var ticketSale = {
+      id: '30788',
+      creationDate: '2014-07-14',
+      eventTitle: 'Tentoonstelling: Aalst in de Middeleeuwen',
+      tariff: 15
+    };
+
+    function expectResolved () {
+      done();
+    }
+
+    $httpBackend
+      .expectDELETE(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales/' + ticketSale.id)
+      .respond(200);
+
+    passholderService
+      .removeTicketSale(passholder, ticketSale)
+      .then(expectResolved);
+
+    $httpBackend.flush();
+  });
+
+  it('rejects when it can not remove a ticketsale for a passholder', function (done) {
+    var passholder = {
+      passNumber: '0123456789012'
+    };
+    var ticketSale = {
+      id: '30788',
+      creationDate: '2014-07-14',
+      eventTitle: 'Tentoonstelling: Aalst in de Middeleeuwen',
+      tariff: 15
+    };
+
+    function expectRejected () {
+      done();
+    }
+
+    $httpBackend
+      .expectDELETE(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales/' + ticketSale.id)
+      .respond(400);
+
+    passholderService
+      .removeTicketSale(passholder, ticketSale)
+      .catch(expectRejected);
+
+    $httpBackend.flush();
+  });
+
 });
