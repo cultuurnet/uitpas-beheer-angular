@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 describe('Controller: TicketSalesController', function(){
   var TicketSalesController, expectedTicketSales, pass, $controller, $modalInstance, $scope, passholderService, $q;
@@ -77,5 +77,5 @@ describe('Controller: TicketSalesController', function(){
   it('can close the modal', function () {
     TicketSalesController.cancel();
     expect($modalInstance.dismiss).toHaveBeenCalled();
-  })
+  });
 });
