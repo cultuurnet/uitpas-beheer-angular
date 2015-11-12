@@ -38,6 +38,11 @@
   p {
     margin: 0 0 1em;
   }
+  ul, ol {
+    li {
+      margin-bottom: 0;
+    }
+  }
   .panel {
     margin-bottom: 0;
     + .panel {
