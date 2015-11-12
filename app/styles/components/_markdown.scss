@@ -1,14 +1,13 @@
 // markdown styles
-.ng-binding-markdown {
+.main .ng-binding-markdown {
   @include breakpoint(map-get($breakpoints, med)) {
     max-width: 70%;
-    padding-top: 4px;
   }
   h1 {
     border-bottom: 1px solid $gray-25;
     font-size: 1.466em;
     margin-bottom: $rh-xsm;
-    margin-top: $rh-sml;
+    padding-top: 4px;
     padding-bottom: $rh-xsm;
   }
   h2 {
