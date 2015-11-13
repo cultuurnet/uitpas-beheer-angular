@@ -7,8 +7,15 @@
     border-bottom: 1px solid $gray-25;
     font-size: 1.466em;
     margin-bottom: $rh-xsm;
-    padding-top: 4px;
     padding-bottom: $rh-xsm;
+    position: relative;
+    &:before {
+      display: block;
+      content: " ";
+      margin-top: -74px;
+      height: 78px;
+      visibility: hidden;
+    }
   }
   h2 {
     font-weight: 400;
