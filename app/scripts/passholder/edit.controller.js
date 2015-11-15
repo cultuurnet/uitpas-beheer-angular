@@ -11,7 +11,7 @@ angular.module('ubr.passholder')
   .controller('PassholderEditController', PassholderEditController);
 
 /* @ngInject */
-function PassholderEditController (passholder, identification, $modalInstance, passholderService, eIDService, isJavaFXBrowser, $rootScope, $scope) {
+function PassholderEditController (passholder, identification, $uibModalInstance, passholderService, eIDService, isJavaFXBrowser, $rootScope, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -34,7 +34,7 @@ function PassholderEditController (passholder, identification, $modalInstance, p
 
         var updateOk = function(updatedPassholder) {
           $rootScope.$emit('passholderUpdated', updatedPassholder);
-          $modalInstance.close();
+          $uibModalInstance.close();
         };
 
         var updateFailed = function(errorResponse) {
@@ -86,7 +86,7 @@ function PassholderEditController (passholder, identification, $modalInstance, p
   };
 
   controller.cancelModal = function() {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 
 

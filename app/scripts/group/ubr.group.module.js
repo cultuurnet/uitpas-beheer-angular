@@ -75,8 +75,8 @@ angular
             return $stateParams.activity;
           }]
         },
-        onEnter: ['passholder', 'identification', 'activity', '$state', '$modal', function(passholder, identification, activity, $state, $modal) {
-          $modal
+        onEnter: ['passholder', 'identification', 'activity', '$state', '$uibModal', function(passholder, identification, activity, $state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/activity/modal-passholder-activity-tariffs.html',

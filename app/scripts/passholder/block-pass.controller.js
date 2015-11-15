@@ -11,7 +11,7 @@ angular.module('ubr.passholder')
   .controller('PassholderBlockPassController', PassholderBlockPassController);
 
 /* @ngInject */
-function PassholderBlockPassController(pass, passholder, passholderService, $modalInstance, $q, $state) {
+function PassholderBlockPassController(pass, passholder, passholderService, $uibModalInstance, $q, $state) {
   /* jshint validthis: true */
   var controller = this;
 
@@ -35,7 +35,7 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
       // Doing so would cause the buttons to block the passholder to appear
       // again in the view right before the modal closes.
       controller.asyncError = false;
-      $modalInstance.close();
+      $uibModalInstance.close();
       deferred.resolve(pass);
     };
     var showBlockingError = function (errorCode) {
@@ -83,6 +83,6 @@ function PassholderBlockPassController(pass, passholder, passholderService, $mod
   };
 
   controller.cancelModal = function() {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 }

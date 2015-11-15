@@ -5,12 +5,12 @@ describe('Controller: PassholderBlockPassController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var $state, passholderService, $modalInstance, $q, blockPassCtrl, $scope;
+  var $state, passholderService, $uibModalInstance, $q, blockPassCtrl, $scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $injector, $rootScope) {
     $state = jasmine.createSpyObj('$state', ['go']);
-    $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+    $uibModalInstance = jasmine.createSpyObj('$uibModalInstance', ['close', 'dismiss']);
     passholderService = jasmine.createSpyObj('passholderService', ['blockPass']);
     $q = $injector.get('$q');
     $scope = $rootScope.$new();
@@ -19,7 +19,7 @@ describe('Controller: PassholderBlockPassController', function () {
       pass: { number: '182' },
       passholder: { passNumber: '182' },
       passholderService: passholderService,
-      $modalInstance: $modalInstance,
+      $uibModalInstance: $uibModalInstance,
       $q: $q,
       $state: $state
     });
@@ -74,6 +74,6 @@ describe('Controller: PassholderBlockPassController', function () {
 
   it('can close the modal', function () {
     blockPassCtrl.cancelModal();
-    expect($modalInstance.dismiss).toHaveBeenCalled();
+    expect($uibModalInstance.dismiss).toHaveBeenCalled();
   });
 });

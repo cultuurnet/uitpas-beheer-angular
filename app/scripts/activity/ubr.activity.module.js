@@ -38,8 +38,8 @@ angular
           }]
         },
         /* @ngInject */
-        onEnter: function(passholder, identification, activity, $state, $modal) {
-          $modal
+        onEnter: function(passholder, identification, activity, $state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/activity/modal-passholder-activity-tariffs.html',
@@ -65,4 +65,3 @@ angular
         }
       });
   });
-
