@@ -2,22 +2,22 @@
   <div class="container-fluid">
     <div class="row">
       <div class="grid__12 grid--bp-sml__12 grid--bp-med__10 grid--bp-xlr__6">
-        <form>
+        <form name="feedbackForm" novalidate>
           <div class="form-group">
             <label for="name" class="control-label">Naam</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="" value="">
+            <input type="text" class="form-control" id="name" name="name" ng-model="fc.name" placeholder="">
           </div>
           <div class="form-group">
-            <label for="balie" class="ccontrol-label">Balie</label>
-            <input type="text" class="form-control" id="balie" name="balie" placeholder="" value="">
+            <label for="balie" class="control-label">Balie</label>
+            <input type="text" class="form-control" id="balie" name="balie" ng-model="fc.counter" placeholder="" value="">
           </div>
           <div class="form-group">
-            <label for="email" class="ccontrol-label">E-mail</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="" value="">
+            <label for="email" class="control-label">E-mail</label>
+            <input type="email" class="form-control" id="email" name="email" ng-model="fc.email" placeholder="" value="">
           </div>
           <div class="form-group">
             <label for="message" class="control-label">Boodschap</label>
-            <textarea class="form-control" rows="4" id="message" name="message"></textarea>
+            <textarea class="form-control" rows="4" id="message" ng-model="fc.message" name="message"></textarea>
           </div>
           <div class="form-group">
             <input id="submit" name="submit" type="submit" value="Versturen" class="btn btn-primary">
