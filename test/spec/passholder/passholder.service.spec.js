@@ -763,4 +763,63 @@ describe('Service: passholderService', function () {
     $httpBackend.flush();
   });
 
+  it('should find ticketsales by pass numbers', function (done) {
+    var uitpasNumber = '123456789';
+
+    var expectedTicketSales = [
+      {
+        id: '30788',
+        creationDate: '2014-07-14',
+        eventTitle: 'Tentoonstelling: Aalst in de Middeleeuwen',
+        tariff: 15
+      },
+      {
+        id: '30789',
+        creationDate: '2013-12-06',
+        eventTitle: 'Eddy Wally in Concert',
+        tariff: 7.5
+      },
+      {
+        id: '30790',
+        creationDate: '2012-05-11',
+        eventTitle: 'Gratis zwembeurt',
+        tariff: 0,
+        coupon: {
+          id: '1',
+          name: 'Cultuurwaardebon',
+          description: 'dit is de description van Cultuurwaardebon',
+          expirationDate: '2015-12-26',
+          remainingTotal: 1
+        }
+      },
+      {
+        id: '30791',
+        creationDate: '2015-05-09',
+        eventTitle: 'Cursus foto\'s maken met je smartphone',
+        tariff: 7.5
+      },
+      {
+        id: '30792',
+        creationDate: '2010-06-09',
+        eventTitle: 'Nacht van de poëzie',
+        tariff: 5
+      }
+    ];
+
+    function assertTicketSales(ticketSales) {
+      expect(ticketSales).toEqual(expectedTicketSales);
+      done();
+    }
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/activities/ticket-sales')
+      .respond(200, expectedTicketSales);
+
+    passholderService
+      .getTicketSales(uitpasNumber)
+      .then(assertTicketSales);
+
+    $httpBackend.flush();
+  });
+
 });
