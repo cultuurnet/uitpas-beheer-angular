@@ -27,24 +27,26 @@ function feedbackService($q, $http, appConfig) {
   service.sendFeedback = function(feedbackParameters) {
     var deferredFeedback = $q.defer();
 
-    var successSendingFeedback = function() {
-      deferredFeedback.resolve();
-    };
 
-    var errorSendingFeedback = function(e) {
+    var errorSendingFeedback = function(apiError) {
+      var errorObject = {
+        code: 'FEEDBACK_NOT_SENT',
+        title: 'Feedback could not be sent'
+      };
       var message = 'The feedback could not be updated on the server';
-      if (!angular.isUndefined(e) && e.code) {
-        message += ': ' + e.code;
+      if (!angular.isUndefined(apiError)) {
+        errorObject.apiError = apiError;
+
+        if (apiError.code) {
+          message += ': ' + apiError.code;
+        }
       }
       else {
         message += '.';
       }
-      deferredFeedback.reject({
-        code: 'FEEDBACK_NOT_SENT',
-        title: 'feedback couldn\'t be sent.',
-        message: message,
-        apiError: e
-      });
+      errorObject.message = message;
+
+      deferredFeedback.reject(errorObject);
     };
 
     var config = {
@@ -55,7 +57,7 @@ function feedbackService($q, $http, appConfig) {
 
     $http
       .post(apiUrl + 'feedback', feedbackParameters, config)
-      .success(successSendingFeedback)
+      .success(deferredFeedback.resolve)
       .error(errorSendingFeedback);
 
     return deferredFeedback.promise;
