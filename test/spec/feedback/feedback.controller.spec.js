@@ -5,11 +5,10 @@ describe('Controller: FeedbackController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var controller, feedbackService, $q, $scope, $rootScope;
+  var controller, feedbackService, $q, $scope, moment;
 
   // Setup mocking data
   var feedbackParameters = {
-    date: '2015-12-26',
     name: 'John Doe',
     counter: 'cc De Werf',
     email: 'mail@info.com',
@@ -35,17 +34,15 @@ describe('Controller: FeedbackController', function () {
     feedbackService = $injector.get('feedbackService');
     $q = $injector.get('$q');
     $scope = _$rootScope_.$new();
-    $rootScope = _$rootScope_;
+    moment = $injector.get('moment');
 
-    controller = $controller('PassholderEditController', {
-      feedbackService: feedbackService,
-      $rootScope: $rootScope,
-      $scope: $scope
+    controller = $controller('FeedbackController', {
+      feedbackService: feedbackService
     });
   }));
 
   it('should lock down the form while submitting', function () {
-    controller.submitForm(getSpyForm());
+    controller.submitForm();
     expect(controller.formSubmitBusy).toBeTruthy();
   });
 
@@ -55,9 +52,9 @@ describe('Controller: FeedbackController', function () {
         code: 'SOME_ERROR'
       }
     };
-    spyOn(feedbackService, 'update').and.returnValue($q.reject(apiError));
+    spyOn(feedbackService, 'sendFeedback').and.returnValue($q.reject(apiError));
 
-    controller.submitForm(getSpyForm());
+    controller.submitForm();
     expect(controller.formSubmitBusy).toBeTruthy();
 
     $scope.$digest();
@@ -65,17 +62,12 @@ describe('Controller: FeedbackController', function () {
   });
 
   it('should submit feedback parameters using the feedbackService', function () {
-    var feedbackForm = {
-      email: {
-        $valid: true
-      },
-      message: {
-        $valid: true
-      }
-    };
-    controller.feedback = feedbackParameters;
+    spyOn(feedbackService, 'sendFeedback').and.returnValue($q.when());
 
-    controller.sendFeedback(feedbackForm);
+    controller.feedback = feedbackParameters;
+    controller.feedback.date = moment(new Date()).format('YYYY-MM-DD');
+
+    controller.submitForm();
     $scope.$digest();
 
     expect(feedbackService.sendFeedback)

@@ -30,15 +30,15 @@ describe('Service: FeedbackService', function () {
     $scope = $rootScope;
   }));
 
-  it('should send feedback to the api', function() {
+  it('should send feedback to the api', function(done) {
     // Mock an HTTP response.
     $httpBackend
       .expectPOST(apiUrl + 'feedback')
       .respond(200, JSON.stringify(feedbackParameters));
 
     // Assertion method.
-    var assertResponse = function(response) {
-      expect(response).toEqual(feedbackParameters);
+    var assertResponse = function() {
+      done();
     };
 
     var failed = function(error) {
