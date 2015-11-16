@@ -25,9 +25,10 @@ function feedbackService($q, $http, appConfig) {
    *   A feedback promise.
    */
   service.sendFeedback = function(feedbackParameters) {
-    var deferred = $q.defer();
+    var deferredFeedback = $q.defer();
 
     var successSendingFeedback = function() {
+      deferredFeedback.resolve();
     };
 
     var errorSendingFeedback = function(e) {
@@ -38,7 +39,7 @@ function feedbackService($q, $http, appConfig) {
       else {
         message += '.';
       }
-      deferred.reject({
+      deferredFeedback.reject({
         code: 'FEEDBACK_NOT_SENT',
         title: 'feedback couldn\'t be sent.',
         message: message,
@@ -57,6 +58,6 @@ function feedbackService($q, $http, appConfig) {
       .success(successSendingFeedback)
       .error(errorSendingFeedback);
 
-    return deferred.promise;
+    return deferredFeedback.promise;
   };
 }
