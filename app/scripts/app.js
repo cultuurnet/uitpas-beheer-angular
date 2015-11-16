@@ -88,6 +88,21 @@ angular
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html'
+      })
+      .state('login.moreInfo', {
+        /* @ngInject */
+        onEnter: function($state, $modal) {
+          $modal
+            .open({
+              animation: true,
+              templateUrl: 'views/modal-more-info.html',
+              size: 'sm'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }
       });
 
     $locationProvider.html5Mode(true);

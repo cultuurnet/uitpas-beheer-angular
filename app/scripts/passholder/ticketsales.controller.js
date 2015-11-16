@@ -16,12 +16,15 @@ function TicketSalesController (pass, passholder, $modalInstance, passholderServ
   /*jshint validthis: true */
   var controller = this;
   controller.passholder = passholder;
+  controller.ticketSalesLoading = true;
 
   var displayTicketSales = function(ticketSales) {
     controller.ticketSales = ticketSales;
+    controller.ticketSalesLoading = false;
   };
 
   var loadTicketSales = function() {
+    controller.ticketSalesLoading = true;
     passholderService
       .getTicketSales(pass.number)
       .then(displayTicketSales);

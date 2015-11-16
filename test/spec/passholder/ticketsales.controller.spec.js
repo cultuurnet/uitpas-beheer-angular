@@ -78,7 +78,6 @@ describe('Controller: TicketSalesController', function(){
   it('should display all ticketsales', function () {
     spyOn(passholderService, 'getTicketSales').and.returnValue($q.resolve(expectedTicketSales));
     TicketSalesController = getController();
-    //passholderService.getTicketSales.and.returnValue($q.resolve(expectedTicketSales));
     $scope.$apply();
     expect(TicketSalesController.ticketSales).toEqual(expectedTicketSales);
   });
@@ -99,7 +98,8 @@ describe('Controller: TicketSalesController', function(){
   });
 
   it('displays an error when it can not remove a ticket sale', function () {
-    spyOn(passholderService, 'removeTicketSale').and.returnValue($q.reject());
+    spyOn(passholderService, 'getTicketSales').and.returnValue($q.resolve(expectedTicketSales));
+    spyOn(passholderService, 'removeTicketSale').and.returnValue($q.reject(''));
     TicketSalesController = getController();
 
     var ticketSale = expectedTicketSales[0];

@@ -816,8 +816,7 @@ describe('Service: passholderService', function () {
       .respond(200, expectedTicketSales);
 
     passholderService
-      //.getTicketSales(uitpasNumber)
-      .getTicketSales()
+      .getTicketSales(uitpasNumber)
       .then(assertTicketSales);
 
     $httpBackend.flush();
