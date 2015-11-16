@@ -10,7 +10,7 @@ describe('Controller: TicketSalesController', function(){
     $modalInstance = jasmine.createSpyObj('$modalInstance', ['dismiss']);
     $scope = $rootScope.$new();
     $q = $injector.get('$q');
-    passholderService = jasmine.createSpyObj('passholderService', ['getTicketSales']);
+    passholderService = $injector.get('passholderService');
     expectedTicketSales = [
       {
         id: '30788',
@@ -51,30 +51,39 @@ describe('Controller: TicketSalesController', function(){
       }
     ];
 
-    pass = {pass: {
+    pass = {
+      pass: {
         number: '01234567891234',
-        passholder: { passNumber: '01234567891234', points: 123, name: {first: 'Fred'} }
-    }};
+        passholder: {
+          passNumber: '01234567891234',
+          points: 123,
+          name: {
+            first: 'Fred'
+          }
+        }
+      }
+    };
 
-    TicketSalesController = getController();
   }));
 
   function getController() {
     return $controller('TicketSalesController', {
       pass: pass,
       passholder: pass.passholder,
-      ticketSales: passholderService.getTicketSales(),
-      $modalInstance: $modalInstance
+      $modalInstance: $modalInstance,
+      passholderService: passholderService
     });
   }
 
   it('should display all ticketsales', function () {
-    passholderService.getTicketSales.and.returnValue($q.resolve(expectedTicketSales));
+    spyOn(passholderService, 'getTicketSales').and.returnValue($q.resolve(expectedTicketSales));
+    TicketSalesController = getController();
     $scope.$apply();
     expect(TicketSalesController.ticketSales).toEqual(expectedTicketSales);
   });
 
   it('can close the modal', function () {
+    TicketSalesController = getController();
     TicketSalesController.cancel();
     expect($modalInstance.dismiss).toHaveBeenCalled();
   });
