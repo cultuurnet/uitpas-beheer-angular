@@ -9,38 +9,42 @@
   </div>
   <div class="panel scroll-area">
     <div class="panel-body">
-        <div ng-if="!tsc.ticketSales">
-            <p>Deze gebruiker heeft nog geen tickets gekocht aan kansentarief.</p>
+      <div ng-if="tsc.ticketSalesLoading">
+        <div class="spinner spinner-xsmall">
+          <circle-spinner></circle-spinner>
         </div>
-        <div ng-if="tsc.ticketSales">
-            <div class="slats">
-                <div class="slats-item" ng-repeat="ticketsale in tsc.ticketSales">
-                    <div class="grid display-table">
-                        <div class="grid__12 grid--bp-xsm__3"><p>{{ticketsale.creationDate | date: 'dd/MM/yyyy'}}</p></div>
-                        <div class="grid__12 grid--bp-xsm__7">
-                            <p><strong>{{ticketsale.eventTitle}}</strong></p>
-                            <p>
-                                <span ng-if="ticketsale.price > 0">€ {{ticketsale.price}}</span>
-                                <span ng-if="ticketsale.price == 0">gratis</span>
-
-                                <span ng-if="!ticketsale.coupon">
-                                    <em>aan kansentarief</em>
-                                </span>
-                                <span ng-if="ticketsale.coupon">
-                                    <em>met <i class="fa fa-ticket"></i> {{ticketsale.coupon.name}}</em>
-                                </span>
-                            </p>
-                        </div>
-                        <div class="grid__12 grid--bp-xsm__2">
-                            <p><a class="btn btn-link">Annuleren</a></p>
-                        </div>
-                    </div>
-                </div>
+      </div>
+      <div ng-if="(tsc.ticketSales.length === 0)">
+        <p>Deze gebruiker heeft nog geen tickets gekocht aan kansentarief.</p>
+      </div>
+      <div ng-if="(tsc.ticketSales.length > 0)">
+        <div class="slats">
+          <div class="slats-item" ng-repeat="ticketsale in tsc.ticketSales">
+            <div class="grid display-table">
+              <div class="grid__12 grid--bp-xsm__3"><p>{{ticketsale.creationDate | date: 'dd/MM/yyyy'}}</p></div>
+              <div class="grid__12 grid--bp-xsm__7">
+                <p><strong>{{ticketsale.eventTitle}}</strong></p>
+                <p>
+                  <span ng-if="ticketsale.price > 0">€ {{ticketsale.price}}</span>
+                  <span ng-if="ticketsale.price == 0">gratis</span>
+                  <span ng-if="!ticketsale.coupon">
+                    <em>aan kansentarief</em>
+                  </span>
+                  <span ng-if="ticketsale.coupon">
+                    <em>met <i class="fa fa-ticket"></i> {{ticketsale.coupon.name}}</em>
+                  </span>
+                </p>
+              </div>
+              <div class="grid__12 grid--bp-xsm__2">
+                <p><a class="btn btn-link">Annuleren</a></p>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
   </div>
 </div>
 <div class="modal-footer">
-    <a ng-click="tsc.cancel()">Sluiten</a>
+  <a ng-click="tsc.cancel()">Sluiten</a>
 </div>
