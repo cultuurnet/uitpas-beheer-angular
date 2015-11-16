@@ -1,15 +1,19 @@
 <div class="modal-header">
-    <button type="button" class="close" ng-click="cdc.cancel()" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-    <h4 class="modal-title">{{cdc.coupon.name}}</h4>
+  <button type="button" class="close" ng-click="cdc.cancel()" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+  <h4 class="modal-title">{{cdc.coupon.name}}</h4>
 </div>
 <div class="modal-body">
+  <div ng-if="cdc.coupon.description">
     <strong>Omschrijving</strong>
     <p>{{cdc.coupon.description}}</p>
-
+  </div>
+  <div ng-if="cdc.coupon.expirationDate">
     <p><strong>Geldig tot:</strong> {{cdc.coupon.expirationDate | date : 'dd/MM/yyyy'}}</p>
+  </div>
+  <div ng-if="cdc.coupon.remainingTotal">
     <p><strong>Nog beschikbaar:</strong> <ng-pluralize count="{{cdc.coupon.remainingTotal}}" when="{'0': '0 beurten', 'one': '1 beurt', 'other': '{} beurten'}"></ng-pluralize></p>
-
+  </div>
 </div>
 <div class="modal-footer">
-    <a ng-click="cdc.cancel()" class="btn btn-default">Sluiten</a>
+  <a ng-click="cdc.cancel()" class="btn btn-default">Sluiten</a>
 </div>
