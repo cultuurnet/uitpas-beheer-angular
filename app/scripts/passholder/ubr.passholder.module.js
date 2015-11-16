@@ -177,7 +177,6 @@ angular
             })
             .result
             .then(function (newPassNumber) {
-              console.log(newPassNumber);
               $state.go('counter.main.passholder', {identification: newPassNumber}, {reload: true});
             }, function () {
               if ($stateParams.justBlocked) {
@@ -248,5 +247,38 @@ angular
               $state.go('^');
             });
         }
-      });
+      })
+    .state('counter.main.passholder.ticketSales', {
+      params: {
+        pass: null,
+        passholder: null
+      },
+      resolve: {
+        pass: getPassFromStateParams,
+        passholder: getPassholderFromStateParams
+      },
+      /* @ngInject */
+      onEnter: function(pass, passholder, $state, $modal) {
+        $modal
+          .open({
+            animation: true,
+            templateUrl: 'views/passholder/modal-passholder-ticket-sales.html',
+            size: 'sm',
+            resolve: {
+              pass: function() {
+                return pass;
+              },
+              passholder: function() {
+                return passholder;
+              }
+            },
+            controller: 'TicketSalesController',
+            controllerAs: 'tsc'
+          })
+          .result
+          .finally(function() {
+            $state.go('^');
+          });
+      }
+    });
   });

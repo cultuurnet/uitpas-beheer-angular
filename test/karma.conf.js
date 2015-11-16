@@ -43,12 +43,12 @@ module.exports = function(config) {
       'bower_components/angular-touch/angular-touch.js',
       'bower_components/angular-truncate/src/truncate.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
-      'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
       'bower_components/moment/moment.js',
       'bower_components/moment/locale/nl.js',
       'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
       'bower_components/ngTouchSpin/src/js/ngTouchSpin.js',
       'bower_components/phoneformat/dist/phone-format-global.js',
+      'bower_components/showdown/dist/showdown.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/app.js",
@@ -63,6 +63,7 @@ module.exports = function(config) {
       "app/scripts/membership/ubr.membership.module.js",
       "app/scripts/passholder/ubr.passholder.module.js",
       "app/scripts/passholder/search/ubr.search.module.js",
+      "app/scripts/help/ubr.help.module.js",
       "app/scripts/registration/ubr.registration.module.js",
       "app/scripts/utilities/ubr.utilities.module.js",
 

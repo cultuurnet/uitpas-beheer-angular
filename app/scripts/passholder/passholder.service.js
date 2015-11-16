@@ -476,4 +476,23 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     return deferredCoupons.promise;
   };
+
+  /**
+   * Get all the available ticketsales for a given UiTPAS-number
+   * @param {String} uitpasNumber
+   * @returns {Promise<Object[]|ApiError>}
+   */
+  service.getTicketSales = function(uitpasNumber) {
+    var deferredTicketSales = $q.defer();
+
+    function returnTicketSales (ticketSalesResponse) {
+      deferredTicketSales.resolve(ticketSalesResponse.data);
+    }
+
+    $http
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/activities/ticket-sales')
+      .then(returnTicketSales, deferredTicketSales.reject);
+
+    return deferredTicketSales.promise;
+  };
 }
