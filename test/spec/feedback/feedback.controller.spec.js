@@ -47,12 +47,7 @@ describe('Controller: FeedbackController', function () {
   });
 
   it('should unlock the form after a submit is rejected', function () {
-    var apiError = {
-      apiError: {
-        code: 'SOME_ERROR'
-      }
-    };
-    spyOn(feedbackService, 'sendFeedback').and.returnValue($q.reject(apiError));
+    spyOn(feedbackService, 'sendFeedback').and.returnValue($q.reject());
 
     controller.submitForm();
     expect(controller.formSubmitBusy).toBeTruthy();

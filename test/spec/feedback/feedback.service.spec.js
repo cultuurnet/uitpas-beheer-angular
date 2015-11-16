@@ -41,12 +41,64 @@ describe('Service: FeedbackService', function () {
       done();
     };
 
-    var failed = function(error) {
-      expect(error).toBeUndefined();
+    // Send feedback data and assert it when its returned.
+    feedbackService.sendFeedback(feedbackParameters).then(assertResponse);
+
+    // Deliver the HTTP response so the feedback data is asserted.
+    $httpBackend.flush();
+  });
+
+  it('should return an error when it can not send the feedback to the api', function(done) {
+    var expectedError = {
+      code: 'FEEDBACK_NOT_SENT',
+      title: 'Feedback could not be sent',
+      message: 'The feedback could not be updated on the server.'
+    };
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectPOST(apiUrl + 'feedback')
+      .respond(400);
+
+    // Assertion method.
+    var assertResponse = function(error) {
+      expect(error).toEqual(expectedError);
+      done();
     };
 
     // Send feedback data and assert it when its returned.
-    feedbackService.sendFeedback(feedbackParameters).then(assertResponse, failed);
+    feedbackService.sendFeedback(feedbackParameters).catch(assertResponse);
+
+    // Deliver the HTTP response so the feedback data is asserted.
+    $httpBackend.flush();
+  });
+
+  it('should return an error when it can not send the feedback to the api', function(done) {
+    var apiError = {
+      code: 'ERROR_CODE'
+    };
+    var expectedError = {
+      code: 'FEEDBACK_NOT_SENT',
+      title: 'Feedback could not be sent',
+      apiError: {
+        code: 'ERROR_CODE'
+      },
+      message: 'The feedback could not be updated on the server: ERROR_CODE'
+    };
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectPOST(apiUrl + 'feedback')
+      .respond(400, JSON.stringify(apiError));
+
+    // Assertion method.
+    var assertResponse = function(error) {
+      expect(error).toEqual(expectedError);
+      done();
+    };
+
+    // Send feedback data and assert it when its returned.
+    feedbackService.sendFeedback(feedbackParameters).catch(assertResponse);
 
     // Deliver the HTTP response so the feedback data is asserted.
     $httpBackend.flush();
