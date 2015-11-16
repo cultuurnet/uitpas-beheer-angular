@@ -17,7 +17,10 @@ describe('Factory: Coupon', function () {
     'name': 'Cultuurbon',
     'description': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
     'expirationDate': '2015-12-26',
-    'remainingTotal': 1
+    'remainingTotal': {
+      'period': 'QUARTER',
+      'volume': 3
+    }
   };
 
   function getJsonCoupon() {
@@ -31,7 +34,10 @@ describe('Factory: Coupon', function () {
       id: '1',
       name: 'Cultuurbon',
       description: 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
-      remainingTotal: 1,
+      remainingTotal: {
+        'period': 'QUARTER',
+        'volume': 3
+      },
       expirationDate: day('2015-12-26', 'YYYY-MM-DD').toDate()
     };
 
@@ -45,5 +51,15 @@ describe('Factory: Coupon', function () {
     var coupon = new Coupon(jsonCoupon);
 
     expect(coupon.serialize()).toEqual(jsonCoupon);
+  });
+
+  it('can the remaining period suffix text', function () {
+    var jsonCoupon = getJsonCoupon();
+
+    var expectedSuffix = ' dit kwartaal';
+
+    var coupon = new Coupon(jsonCoupon);
+
+    expect(coupon.getRemainingTotalPeriodTypeSuffix()).toEqual(expectedSuffix);
   });
 });

@@ -12,7 +12,7 @@ angular
   .factory('Coupon', couponFactory);
 
 /* @ngInject */
-function couponFactory(moment, day) {
+function couponFactory(moment, day, PeriodType) {
   /**
    * @class Coupon
    * @constructor
@@ -36,6 +36,9 @@ function couponFactory(moment, day) {
       serializedCoupon.expirationDate = (this.expirationDate ? moment(this.expirationDate).format('YYYY-MM-DD') : null);
 
       return serializedCoupon;
+    },
+    getRemainingTotalPeriodTypeSuffix: function () {
+      return PeriodType[this.remainingTotal.period].remainingSuffix;
     }
   };
 

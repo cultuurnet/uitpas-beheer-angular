@@ -10,8 +10,8 @@
   <div ng-if="cdc.coupon.expirationDate">
     <p><strong>Geldig tot:</strong> {{cdc.coupon.expirationDate | date : 'dd/MM/yyyy'}}</p>
   </div>
-  <div ng-if="cdc.coupon.remainingTotal">
-    <p><strong>Nog beschikbaar:</strong> <ng-pluralize count="{{cdc.coupon.remainingTotal}}" when="{'0': '0 beurten', 'one': '1 beurt', 'other': '{} beurten'}"></ng-pluralize></p>
+  <div ng-if="cdc.coupon.remainingTotal && cdc.coupon.remainingTotal.volume">
+    <p><strong>Nog beschikbaar:</strong> <ng-pluralize count="{{cdc.coupon.remainingTotal.volume}}" when="{'0': '0 beurten', 'one': '1 beurt', 'other': '{} beurten'}"></ng-pluralize> {{cdc.coupon.getRemainingTotalPeriodTypeSuffix()}}</p>
   </div>
 </div>
 <div class="modal-footer">
