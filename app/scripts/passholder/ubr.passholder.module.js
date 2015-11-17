@@ -216,37 +216,37 @@ angular
             });
         }
       })
-    .state('counter.main.passholder.ticketSales', {
-      params: {
-        pass: null,
-        passholder: null
-      },
-      resolve: {
-        pass: getPassFromStateParams,
-        passholder: getPassholderFromStateParams
-      },
-      /* @ngInject */
-      onEnter: function(pass, passholder, $state, $modal) {
-        $modal
-          .open({
-            animation: true,
-            templateUrl: 'views/passholder/modal-passholder-ticket-sales.html',
-            size: 'sm',
-            resolve: {
-              pass: function() {
-                return pass;
+      .state('counter.main.passholder.ticketSales', {
+        params: {
+          pass: null,
+          passholder: null
+        },
+        resolve: {
+          pass: getPassFromStateParams,
+          passholder: getPassholderFromStateParams
+        },
+        /* @ngInject */
+        onEnter: function(pass, passholder, $state, $uibModal) {
+          $uibModal
+            .open({
+              animation: true,
+              templateUrl: 'views/passholder/modal-passholder-ticket-sales.html',
+              size: 'sm',
+              resolve: {
+                pass: function() {
+                  return pass;
+                },
+                passholder: function() {
+                  return passholder;
+                }
               },
-              passholder: function() {
-                return passholder;
-              }
-            },
-            controller: 'TicketSalesController',
-            controllerAs: 'tsc'
-          })
-          .result
-          .finally(function() {
-            $state.go('^');
-          });
-      }
-    });
+              controller: 'TicketSalesController',
+              controllerAs: 'tsc'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }
+      });
   });

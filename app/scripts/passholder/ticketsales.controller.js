@@ -12,7 +12,7 @@ angular
   .controller('TicketSalesController', TicketSalesController);
 
 /* @ngInject */
-function TicketSalesController (pass, passholder, $modalInstance, passholderService) {
+function TicketSalesController (pass, passholder, $uibModalInstance, passholderService) {
   /*jshint validthis: true */
   var controller = this;
   controller.passholder = passholder;
@@ -33,6 +33,6 @@ function TicketSalesController (pass, passholder, $modalInstance, passholderServ
   loadTicketSales();
 
   controller.cancel = function () {
-    $modalInstance.dismiss('canceled');
+    $uibModalInstance.dismiss('canceled');
   };
 }
