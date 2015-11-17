@@ -12,13 +12,13 @@ angular
   .controller('PassholderMembershipStopController', PassholderMembershipStopController);
 
 /* @ngInject */
-function PassholderMembershipStopController ($scope, $modalInstance, membership, membershipService, passholder) {
+function PassholderMembershipStopController ($scope, $uibModalInstance, membership, membershipService, passholder) {
   $scope.membership = membership;
 
   $scope.errors = [];
 
   $scope.cancel = function () {
-    $modalInstance.dismiss('canceled');
+    $uibModalInstance.dismiss('canceled');
   };
 
   $scope.waiting = false;
@@ -34,7 +34,7 @@ function PassholderMembershipStopController ($scope, $modalInstance, membership,
     deferredStop
       .then(
         function(data) {
-          $modalInstance.close(data);
+          $uibModalInstance.close(data);
         },
         function (data) {
           $scope.errors = [];

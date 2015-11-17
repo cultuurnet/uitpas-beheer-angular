@@ -17,8 +17,8 @@ angular
   .config(function ($stateProvider) {
 
     /* @ngInject */
-    function showCreateMembershipModal($modal, $state) {
-      $modal
+    function showCreateMembershipModal($uibModal, $state) {
+      $uibModal
         .open({
           animation: true,
           templateUrl: 'views/counter-membership/create-membership.html',

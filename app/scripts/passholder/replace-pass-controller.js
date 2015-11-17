@@ -16,7 +16,7 @@ function PassholderReplacePassController (
   $scope,
   passholder,
   pass,
-  $modalInstance,
+  $uibModalInstance,
   passholderService,
   counterService,
   isJavaFXBrowser,
@@ -67,7 +67,7 @@ function PassholderReplacePassController (
   var scanListener;
 
   controller.cancelModal = function () {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 
   controller.refreshNewPassInfo = function () {
@@ -173,7 +173,7 @@ function PassholderReplacePassController (
     }
 
     var redirectToPassholder = function (newPass) {
-      $modalInstance.close(newPass.number);
+      $uibModalInstance.close(newPass.number);
     };
 
     var setErrors = function () {
