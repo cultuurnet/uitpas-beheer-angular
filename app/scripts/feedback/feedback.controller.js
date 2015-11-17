@@ -24,6 +24,7 @@ function FeedbackController (feedbackService, moment) {
   };
 
   controller.formSubmitBusy = false;
+  controller.feedbackStatus = null;
 
   controller.submitForm = function () {
     controller.formSubmitBusy = true;
@@ -32,11 +33,12 @@ function FeedbackController (feedbackService, moment) {
     feedbackParameters.date = moment(new Date()).format('YYYY-MM-DD');
 
     var showSuccessMessage = function () {
+      controller.feedbackStatus = 'SUCCESS';
       controller.formSubmitBusy = false;
     };
 
     var showErrorMessage = function () {
-
+      controller.feedbackStatus = 'FAILED';
       controller.formSubmitBusy = false;
     };
 

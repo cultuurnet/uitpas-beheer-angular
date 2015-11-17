@@ -41,9 +41,14 @@ describe('Controller: FeedbackController', function () {
     });
   }));
 
-  it('should lock down the form while submitting', function () {
+  it('should lock down the form while submitting and unlock after a submit is successful', function () {
+    spyOn(feedbackService, 'sendFeedback').and.returnValue($q.when());
     controller.submitForm();
     expect(controller.formSubmitBusy).toBeTruthy();
+
+    $scope.$digest();
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect(controller.feedbackStatus).toBe('SUCCESS');
   });
 
   it('should unlock the form after a submit is rejected', function () {
@@ -54,6 +59,7 @@ describe('Controller: FeedbackController', function () {
 
     $scope.$digest();
     expect(controller.formSubmitBusy).toBeFalsy();
+    expect(controller.feedbackStatus).toBe('FAILED');
   });
 
   it('should submit feedback parameters using the feedbackService', function () {
