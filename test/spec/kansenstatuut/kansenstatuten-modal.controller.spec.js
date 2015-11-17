@@ -45,7 +45,7 @@ describe('Controller: KansenstatutenModalController', function () {
     controller = $controller('KansenstatutenModalController', {
       passholder: new Passholder({ passNumber: '01234567891234' }),
       activeCounter: activeCounter,
-      $modalInstance: modalInstance,
+      $uibModalInstance: modalInstance,
       cardSystemId: 1,
       passholderService: passholderService,
       $scope: scope

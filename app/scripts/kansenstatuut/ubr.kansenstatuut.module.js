@@ -21,9 +21,9 @@ angular
         return passholderService.findPassholder($stateParams.identification);
     };
 
-    editRemarksModal.$inject = ['passholder', '$state', '$modal'];
-    function editRemarksModal (passholder, $state, $modal) {
-      $modal
+    editRemarksModal.$inject = ['passholder', '$state', '$uibModal'];
+    function editRemarksModal (passholder, $state, $uibModal) {
+      $uibModal
         .open({
           animation: true,
           templateUrl: 'views/kansenstatuut/edit-remarks-modal.html',
@@ -42,9 +42,9 @@ angular
         });
     }
 
-    editKansenstatuutModal.inject = ['passholder', 'activeCounter', 'cardSystemId', '$state', '$modal'];
-    function editKansenstatuutModal(passholder, activeCounter, cardSystemId, $state, $modal) {
-      $modal
+    editKansenstatuutModal.inject = ['passholder', 'activeCounter', 'cardSystemId', '$state', '$uibModal'];
+    function editKansenstatuutModal(passholder, activeCounter, cardSystemId, $state, $uibModal) {
+      $uibModal
         .open({
           animation: true,
           templateUrl: 'views/kansenstatuut/edit-kansenstatuut-modal.html',
@@ -81,8 +81,8 @@ angular
             return counterService.getActive();
           }]
         },
-        onEnter: ['passholder', 'activeCounter', '$state', '$modal', function (passholder, activeCounter, $state, $modal) {
-          $modal
+        onEnter: ['passholder', 'activeCounter', '$state', '$uibModal', function (passholder, activeCounter, $state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/kansenstatuut/kansenstatuten-modal.html',

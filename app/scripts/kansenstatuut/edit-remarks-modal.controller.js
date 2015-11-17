@@ -12,7 +12,7 @@ angular
   .controller('EditRemarksModalController', EditRemarksModalController);
 
 /* @ngInject */
-function EditRemarksModalController (passholder, $modalInstance, passholderService, $scope) {
+function EditRemarksModalController (passholder, $uibModalInstance, passholderService, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -22,7 +22,7 @@ function EditRemarksModalController (passholder, $modalInstance, passholderServi
   controller.remarks = passholder.remarks;
 
   controller.cancelModal = function () {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 
   function clearAsyncError (newVal, oldVal) {
@@ -37,7 +37,7 @@ function EditRemarksModalController (passholder, $modalInstance, passholderServi
 
   controller.updateRemarks = function (editForm) {
     var stopEditing = function() {
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
 
     var showUpdateErrors = function (errorResponse) {

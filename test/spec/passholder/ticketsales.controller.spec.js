@@ -1,13 +1,13 @@
 'use strict';
 
 describe('Controller: TicketSalesController', function(){
-  var TicketSalesController, expectedTicketSales, pass, $controller, $modalInstance, $scope, passholderService, $q;
+  var TicketSalesController, expectedTicketSales, pass, $controller, $uibModalInstance, $scope, passholderService, $q;
   beforeEach(module('ubr.passholder'));
   beforeEach(module('uitpasbeheerApp'));
 
   beforeEach(inject(function (_$controller_, $rootScope, $injector) {
     $controller = _$controller_;
-    $modalInstance = jasmine.createSpyObj('$modalInstance', ['dismiss']);
+    $uibModalInstance = jasmine.createSpyObj('$uibModalInstance', ['dismiss']);
     $scope = $rootScope.$new();
     $q = $injector.get('$q');
     passholderService = $injector.get('passholderService');
@@ -70,7 +70,7 @@ describe('Controller: TicketSalesController', function(){
     return $controller('TicketSalesController', {
       pass: pass,
       passholder: pass.passholder,
-      $modalInstance: $modalInstance,
+      $uibModalInstance: $uibModalInstance,
       passholderService: passholderService
     });
   }
@@ -85,6 +85,6 @@ describe('Controller: TicketSalesController', function(){
   it('can close the modal', function () {
     TicketSalesController = getController();
     TicketSalesController.cancel();
-    expect($modalInstance.dismiss).toHaveBeenCalled();
+    expect($uibModalInstance.dismiss).toHaveBeenCalled();
   });
 });

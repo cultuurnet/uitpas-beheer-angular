@@ -15,7 +15,7 @@ angular
 function PassholderActivityTariffsController (
   passholder,
   activity,
-  $modalInstance,
+  $uibModalInstance,
   activityService,
   $rootScope,
   TicketSaleAPIError
@@ -49,7 +49,7 @@ function PassholderActivityTariffsController (
   init();
 
   controller.cancelModal = function () {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 
   controller.clearAsyncError = function () {
@@ -77,7 +77,7 @@ function PassholderActivityTariffsController (
       tariff.assigned = true;
       $rootScope.$emit('activityTariffClaimed', activity);
       controller.formSubmitBusy = false;
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
 
     var tariffNotClaimed = function (error) {
