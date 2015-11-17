@@ -12,7 +12,7 @@ describe('Service: passholderService', function () {
   }));
 
   // Instantiate service.
-  var passholderService, $httpBackend, $q, $scope, Passholder, Pass, $cacheFactory, SearchParameters, PassholderSearchResults;
+  var passholderService, $httpBackend, $q, $scope, Passholder, Pass, $cacheFactory, SearchParameters, PassholderSearchResults, Coupon;
 
   var identityData = {
     'uitPas': {
@@ -61,6 +61,7 @@ describe('Service: passholderService', function () {
     $cacheFactory = $injector.get('$cacheFactory');
     SearchParameters = $injector.get('SearchParameters');
     PassholderSearchResults = $injector.get('PassholderSearchResults');
+    Coupon = $injector.get('Coupon');
   }));
 
   it('returns a pass from the server and keeps it cached', function() {
@@ -382,20 +383,20 @@ describe('Service: passholderService', function () {
     var uitpasNumber = '123456789';
 
     var expectedCoupons = [
-      {
+      new Coupon({
         'id': '0',
         'name': 'Cultuurbon',
         'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
         'date': '2015-12-26',
         'remainingTotal': 4
-      },
-      {
+      }),
+      new Coupon({
         'id': '1',
         'name': 'Cultuurbon2',
         'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
         'date': '2015-11-26',
         'remainingTotal': 5
-      }
+      })
     ];
 
     function assertCoupons(coupons) {
