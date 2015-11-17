@@ -27,7 +27,7 @@ describe('Controller: PassholderReplacePassController', function () {
     var passholder =  {
       uid: '45645612-afs45safd46-asdf545asdf4asdf56-asdf4sdaf546',
       passNumber: '182',
-        getKansenstatuutByCardSystemID: function () {
+      getKansenstatuutByCardSystemID: function () {
         return {
           endDate: new Date('2055-05-05')
         };
@@ -46,14 +46,27 @@ describe('Controller: PassholderReplacePassController', function () {
 
     controller.form = {
       UiTPASNumber: {
-        $valid: true
+        $valid: true,
+        $setDirty:  jasmine.createSpy('$setDirty')
       },
       voucherNumber: jasmine.createSpyObj('voucherNumber', ['$setValidity'])
     };
   }));
 
   it('should auto-fill the UiTPAS number field when a pass is scanned', function () {
-    controller.passScanned({}, '1234567891234');
+    passholderService.findPass.and.returnValue($q.reject());
+    controller.passScanned({}, 'chipnumber');
+    expect(controller.card.id).toBeNull();
+    expect(controller.formAlert).toEqual({
+      message: 'De gescande UiTPAS kan niet gevonden worden.',
+      type: 'danger'
+    });
+
+    var somePass = {
+      number: '1234567891234'
+    };
+    passholderService.findPass.and.returnValue($q.resolve(somePass));
+    controller.passScanned({}, 'chipnumber');
     expect(controller.card.id).toEqual('1234567891234');
   });
 
