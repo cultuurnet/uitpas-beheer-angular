@@ -19,19 +19,19 @@ angular
    */
   {
     'DAY': {
-      remainingSuffix: ' vandaag'
+      remainingSuffix: 'vandaag'
     },
     'WEEK': {
-      remainingSuffix: ' deze week'
+      remainingSuffix: 'deze week'
     },
     'MONTH': {
-      remainingSuffix: ' deze maand'
+      remainingSuffix: 'deze maand'
     },
     'QUARTER': {
-      remainingSuffix: ' dit kwartaal'
+      remainingSuffix: 'dit kwartaal'
     },
     'YEAR': {
-      remainingSuffix: ' dit jaar'
+      remainingSuffix: 'dit jaar'
     },
     'ABSOLUTE': {
       remainingSuffix: ''

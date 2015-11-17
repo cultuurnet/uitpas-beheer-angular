@@ -28,7 +28,7 @@ function couponFactory(moment, day, PeriodType) {
       this.name = jsonCoupon.name;
       this.description = jsonCoupon.description;
       this.remainingTotal = jsonCoupon.remainingTotal;
-      this.expirationDate = (jsonCoupon.expirationDate ? day(jsonCoupon.expirationDate, 'YYYY-MM-DD').toDate() : null)
+      this.expirationDate = (jsonCoupon.expirationDate ? day(jsonCoupon.expirationDate, 'YYYY-MM-DD').toDate() : null);
     },
     serialize: function () {
       var serializedCoupon = angular.copy(this);
@@ -37,8 +37,8 @@ function couponFactory(moment, day, PeriodType) {
 
       return serializedCoupon;
     },
-    getRemainingTotalPeriodTypeSuffix: function () {
-      return PeriodType[this.remainingTotal.period].remainingSuffix;
+    getReadablePeriod: function () {
+      return this.remainingTotal ? PeriodType[this.remainingTotal.period].remainingSuffix : '';
     }
   };
 
