@@ -5,7 +5,7 @@ describe('Controller: FeedbackController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var controller, feedbackService, $q, $scope, moment;
+  var controller, feedbackService, $q, $scope, moment, uitIdUser, activeCounter;
 
   // Setup mocking data
   var feedbackParameters = {
@@ -35,11 +35,27 @@ describe('Controller: FeedbackController', function () {
     $q = $injector.get('$q');
     $scope = _$rootScope_.$new();
     moment = $injector.get('moment');
+    uitIdUser = {
+      mbox: 'email@email.be',
+      displayName: 'email'
+    };
+    activeCounter = {
+      name: 'Counter name'
+    };
 
     controller = $controller('FeedbackController', {
-      feedbackService: feedbackService
+      feedbackService: feedbackService,
+      moment: moment,
+      uitIdUser: uitIdUser,
+      activeCounter: activeCounter
     });
   }));
+
+  it('should set some variables from the uitIdUser and activeCounter', function () {
+    expect(controller.feedback.name).toBe(uitIdUser.displayName);
+    expect(controller.feedback.email).toBe(uitIdUser.mbox);
+    expect(controller.feedback.counter).toBe(activeCounter.name);
+  });
 
   it('should lock down the form while submitting and unlock after a submit is successful', function () {
     spyOn(feedbackService, 'sendFeedback').and.returnValue($q.when());

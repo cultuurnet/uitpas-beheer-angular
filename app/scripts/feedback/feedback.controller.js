@@ -12,14 +12,14 @@ angular
   .controller('FeedbackController', FeedbackController);
 
 /* @ngInject */
-function FeedbackController (feedbackService, moment) {
+function FeedbackController (feedbackService, moment, uitIdUser, activeCounter) {
   /*jshint validthis: true */
   var controller = this;
 
   controller.feedback = {
-    name: '',
-    counter: '',
-    email: '',
+    name: uitIdUser.displayName,
+    counter: (activeCounter.name) ? activeCounter.name : '',
+    email: uitIdUser.mbox,
     message: ''
   };
 

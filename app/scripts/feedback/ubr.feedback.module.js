@@ -21,6 +21,20 @@ angular
       .state('counter.main.feedback', {
         url: 'feedback',
         requiresCounter: true,
+        params: {
+          'uitIdUser': null,
+          'activeCounter': null
+        },
+        resolve: {
+          /* @ngInject */
+          uitIdUser: function(uitid) {
+            return uitid.getUser();
+          },
+          /* @ngInject */
+          activeCounter: function(counterService) {
+            return counterService.getActive();
+          }
+        },
         views: {
           'content@counter': {
             templateUrl: 'views/feedback/content-feedback.html',
