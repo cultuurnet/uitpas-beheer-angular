@@ -89,8 +89,8 @@ angular
           }]
         },
         /* @ngInject */
-        onEnter: function(passholder, identification, $state, $modal) {
-          $modal
+        onEnter: function(passholder, identification, $state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/passholder/modal-passholder-edit.html',
@@ -120,8 +120,8 @@ angular
           }]
         },
         /* @ngInject */
-        onEnter: function(passholder, identification, $state, $modal) {
-          $modal
+        onEnter: function(passholder, identification, $state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/passholder/modal-passholder-edit-contact.html',
@@ -153,8 +153,8 @@ angular
         },
         url: '/replace-pass',
         /* @ngInject */
-        onEnter: function(passholder, pass, $state, $modal, $stateParams) {
-          $modal
+        onEnter: function(passholder, pass, $state, $uibModal, $stateParams) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/passholder/modal-passholder-replace-card.html',
@@ -192,8 +192,8 @@ angular
           passholder: getPassholderFromStateParams
         },
         /* @ngInject */
-        onEnter: function(pass, passholder, $state, $modal) {
-          $modal
+        onEnter: function(pass, passholder, $state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/passholder/modal-passholder-block-pass.html',
@@ -225,8 +225,8 @@ angular
         passholder: getPassholderFromStateParams
       },
       /* @ngInject */
-      onEnter: function(pass, passholder, $state, $modal) {
-        $modal
+      onEnter: function(pass, passholder, $state, $uibModal) {
+        $uibModal
           .open({
             animation: true,
             templateUrl: 'views/passholder/modal-passholder-ticket-sales.html',
