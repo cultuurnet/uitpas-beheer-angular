@@ -474,9 +474,9 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   /**
-   * Get all the available ticketsales for a given UiTPAS-number
+   * Get all the available ticket sales for a given UiTPAS-number
    * @param {String} uitpasNumber
-   * @returns {Promise<Object[]|ApiError>}
+   * @returns {Promise<TicketSale[]|ApiError>}
    */
   service.getTicketSales = function(uitpasNumber) {
     var deferredTicketSales = $q.defer();
@@ -493,9 +493,9 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   /**
-   *
+   * Remove a ticket sale.
    * @param {Passholder} passholder
-   * @param {object} ticketSale
+   * @param {TicketSale} ticketSale
    * @returns {Promise}
    */
   service.removeTicketSale = function (passholder, ticketSale) {

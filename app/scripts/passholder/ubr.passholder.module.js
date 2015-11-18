@@ -13,8 +13,7 @@ angular
     'ubr.passholder.search',
     'ui.router',
     'uitpasbeheerApp',
-    'truncate',
-
+    'truncate'
   ])
   /* @ngInject */
   .config(function ($stateProvider) {
