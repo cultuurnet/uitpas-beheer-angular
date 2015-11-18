@@ -3,16 +3,16 @@
 /**
  * Coupon
  * @typedef {Object}    Coupon
- * @property {String}   id
- * @property {String}   name
- * @property {String}   description
+ * @property {string}   id
+ * @property {string}   name
+ * @property {string}   description
  * @property {Date}     expirationDate
- * @property {Integer}  remainingTotal
+ * @property {number}   remainingTotal
  */
 
 /**
  * @ngdoc service
- * @name ubr.passholder.passholder
+ * @name ubr.passholder.passholderService
  * @description
  * # passholder
  * Service in the ubr.passholder module.
@@ -21,7 +21,10 @@ angular
   .module('ubr.passholder')
   .service('passholderService', passholderService);
 
-/* @ngInject */
+/**
+ * @ngInject
+ * @name passholderService
+ */
 function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassholderSearchResults) {
   var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');

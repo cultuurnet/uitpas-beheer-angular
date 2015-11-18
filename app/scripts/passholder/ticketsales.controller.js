@@ -10,8 +10,8 @@
  * @property {Object}   [coupon]      - An optional coupon used when making the sale.
  *
  * Some additional properties used to track removal
- * @property {boolean}   [removing]        - Flag set when the sale is being removed.
- * @property {boolean}   [removingFailed]  - Flag set when removal of a sale has failed.
+ * @property {boolean}  [removing]        - Flag set when the sale is being removed.
+ * @property {boolean}  [removingFailed]  - Flag set when removal of a sale has failed.
  */
 
 /**
@@ -26,7 +26,14 @@ angular
   .module('ubr.passholder')
   .controller('TicketSalesController', TicketSalesController);
 
-/* @ngInject */
+/**
+ * @ngInject
+ * @param {passholderService} passholderService
+ * @param {Pass} pass
+ * @param {Passholder} passholder
+ * @param $modalInstance
+ * @constructor
+ */
 function TicketSalesController (pass, passholder, $modalInstance, passholderService) {
   /*jshint validthis: true */
   var controller = this;
