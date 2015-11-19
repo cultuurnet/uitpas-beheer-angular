@@ -57,16 +57,22 @@
     h3 {
       color: $brand-primary;
     }
+    p {
+      margin-bottom: 0;
+      + p {
+        margin-top: 5px;
+      }
+    }
     .btn {
       white-space: normal;
     }
-    &-small {
-      padding: $rh-xsm $rh-xxs;
-    }
-    &-extra-small {
+  }
+  &-small &__item-list {
+    padding: $rh-xsm $rh-xxs;
+  }
+  &-extra-small &__item-list {
       padding: $rh-xxs;
     }
-  }
   &__item.unavailable {
     opacity: .6;
   }
@@ -275,6 +281,10 @@
         border-top-color: $white;
       }
     }
+  }
+  // History sales modal
+  &-slats {
+    margin: 0;
   }
   .points {
     color: $brand-success;
