@@ -34,7 +34,7 @@ angular
  * @param $uibModalInstance
  * @constructor
  */
-function TicketSalesController (pass, passholder, $uibModalInstance, passholderService) {
+function TicketSalesController (pass, passholder, $uibModalInstance, passholderService, $rootScope) {
   /*jshint validthis: true */
   var controller = this;
   controller.passholder = passholder;
@@ -86,8 +86,13 @@ function TicketSalesController (pass, passholder, $uibModalInstance, passholderS
       ticketSale.confirmingRemoval = false;
     };
 
+    var ticketRemoved = function() {
+      $rootScope.$emit('ticketRemoved', ticketSale);
+      loadTicketSales();
+    };
+
     passholderService
       .removeTicketSale(passholder, ticketSale)
-      .then(loadTicketSales, displayRemoveError);
+      .then(ticketRemoved, displayRemoveError);
   };
 }
