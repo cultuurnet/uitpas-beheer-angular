@@ -87,4 +87,42 @@ describe('Controller: TicketSalesController', function(){
     TicketSalesController.cancel();
     expect($uibModalInstance.dismiss).toHaveBeenCalled();
   });
+
+  it('can set removal status on a ticketSale', function () {
+    var ticketSale = {};
+    TicketSalesController = getController();
+    TicketSalesController.initiateRemoval(ticketSale);
+    expect(ticketSale.confirmingRemoval).toBeTruthy();
+
+    TicketSalesController.cancelRemoval(ticketSale);
+    expect(ticketSale.confirmingRemoval).toBeFalsy();
+  });
+
+  it('can remove a ticketSale', function () {
+    var ticketSale = {};
+    spyOn(passholderService, 'removeTicketSale').and.returnValue($q.resolve());
+    spyOn(passholderService, 'getTicketSales').and.returnValue($q.resolve(expectedTicketSales));
+    TicketSalesController = getController();
+    TicketSalesController.removeTicketSale(ticketSale);
+
+    expect(ticketSale.removing).toBeTruthy();
+    $scope.$apply();
+
+    expect(passholderService.getTicketSales).toHaveBeenCalled();
+  });
+
+  it('can set an error when removing a ticketSale fails', function () {
+    var ticketSale = {};
+    spyOn(passholderService, 'getTicketSales').and.returnValue($q.resolve(expectedTicketSales));
+    spyOn(passholderService, 'removeTicketSale').and.returnValue($q.reject());
+    TicketSalesController = getController();
+    TicketSalesController.removeTicketSale(ticketSale);
+
+    expect(ticketSale.removing).toBeTruthy();
+    $scope.$apply();
+
+    expect(ticketSale.removing).toBeFalsy();
+    expect(ticketSale.removingFailed).toBeTruthy();
+    expect(ticketSale.confirmingRemoval).toBeFalsy();
+  });
 });

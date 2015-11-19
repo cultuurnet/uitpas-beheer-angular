@@ -69,6 +69,7 @@ function TicketSalesController (pass, passholder, $uibModalInstance, passholderS
   controller.initiateRemoval = function (ticketSale) {
     ticketSale.confirmingRemoval = true;
   };
+
   controller.cancelRemoval = function (ticketSale) {
     ticketSale.confirmingRemoval = false;
   };
