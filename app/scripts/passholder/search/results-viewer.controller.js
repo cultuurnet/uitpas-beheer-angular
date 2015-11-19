@@ -12,24 +12,39 @@ angular
   .controller('ResultsViewerController', ResultsViewerController);
 
 /* @ngInject */
-function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state) {
+function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter) {
   /*jshint validthis: true */
   var controller = this;
   controller.activePage = 1;
-  controller.loading = false;
+  controller.loading = true;
 
   /** @type {PassholderSearchResults} */
   controller.results = null;
 
+  controller.hasDefaultParameters = function () {
+    var searchParameters = new SearchParameters();
+    searchParameters.fromParams($state.params);
+    return searchParameters.hasDefaultParameters();
+  };
+
+  if (controller.hasDefaultParameters()) {
+    controller.loading = false;
+  }
+
   controller.noSearchDone = function () {
-    return !controller.results;
+    return !controller.results && controller.hasDefaultParameters();
   };
 
   controller.isShowingResults = function () {
     var results = controller.results;
     var showResults = false;
+
     if (results && results.totalItems !== 0) {
       showResults = !results.hasUnknownNumbers() || results.hasConfirmedUnknownNumbers();
+    }
+
+    if (!results && !controller.hasDefaultParameters()) {
+      showResults = true;
     }
 
     return showResults;
@@ -56,6 +71,7 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
    */
   controller.updateResults = function (event, searchResults) {
     controller.results = searchResults;
+    controller.updateActivePage(searchResults.page);
     controller.loading = false;
   };
 
@@ -63,7 +79,7 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
    * @param {String} identification
    */
   controller.showPassholderDetails = function (identification) {
-    $state.go('counter.main.passholder', {identification: identification});
+    UiTPASRouter.go(identification);
   };
 
   var lastSearchParameters = null;

@@ -6,7 +6,7 @@ describe('Controller: PassholderDetailController', function () {
   beforeEach(module('uitpasbeheerApp'));
 
   var detailController, $rootScope, advantage, $q, moment, $scope, passholderService, deferredPassholder,
-      membershipService, $controller;
+      membershipService, $controller, $window;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$controller_, $injector, _$rootScope_) {
@@ -20,6 +20,7 @@ describe('Controller: PassholderDetailController', function () {
     $scope = _$rootScope_.$new();
     $controller = _$controller_;
     $rootScope = _$rootScope_;
+    $window = {history: jasmine.createSpyObj('history', ['back'])};
 
     $q = $injector.get('$q');
     moment = $injector.get('moment');
@@ -50,7 +51,8 @@ describe('Controller: PassholderDetailController', function () {
       $scope: $scope,
       moment: moment,
       passholderService: passholderService,
-      activeCounter: {}
+      activeCounter: {},
+      $window: $window
     });
   }
 
@@ -115,5 +117,13 @@ describe('Controller: PassholderDetailController', function () {
     expect(passholderService.getCoupons).toHaveBeenCalledWith('01234567891234');
     expect(controller.coupons).toEqual(expectedCoupons);
     expect(controller.couponsLoading).toEqual(false);
+  });
+
+  it('can go back in browser history', function () {
+    detailController = getController();
+
+    detailController.goBack();
+
+    expect($window.history.back).toHaveBeenCalled();
   });
 });

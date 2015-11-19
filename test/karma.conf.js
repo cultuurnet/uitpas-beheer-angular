@@ -72,8 +72,7 @@ module.exports = function(config) {
       "app/scripts/**/**/*.js",
       "app/scripts/**/**/*.*.js",
 
-      "app/views/*.html",
-      "app/views/*/*.html",
+      "app/views/**/*.html",
       //"test/mock/**/*.js",
       "test/spec/**/*.js",
       "test/spec/**/*.*.js",
@@ -128,8 +127,7 @@ module.exports = function(config) {
     // urlRoot: '_karma_'
 
     preprocessors: {
-      'app/views/*.html': 'ng-html2js',
-      'app/views/registration/*.html': 'ng-html2js',
+      'app/views/**/*.html': 'ng-html2js',
       'app/scripts/*/**/*.js': ['coverage']
     },
 
