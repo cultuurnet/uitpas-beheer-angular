@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Controller: CouponDetailController', function () {
-  var couponDetailController, coupon, $controller, $modalInstance, $scope, Coupon;
+  var couponDetailController, coupon, $controller, $uibModalInstance, $scope, Coupon;
 
   // load the controller's module
   beforeEach(module('ubr.passholder'));
@@ -9,7 +9,7 @@ describe('Controller: CouponDetailController', function () {
 
   beforeEach(inject(function (_$controller_, $rootScope, $injector) {
     $controller = _$controller_;
-    $modalInstance = jasmine.createSpyObj('$modalInstance', ['dismiss']);
+    $uibModalInstance = jasmine.createSpyObj('$uibModalInstance', ['dismiss']);
     $scope = $rootScope.$new();
     Coupon = $injector.get('Coupon');
     coupon = new Coupon({
@@ -26,7 +26,7 @@ describe('Controller: CouponDetailController', function () {
   function getController() {
     return $controller('CouponDetailController', {
       coupon: coupon,
-      $modalInstance: $modalInstance,
+      $uibModalInstance: $uibModalInstance,
       $scope: $scope
     });
   }
@@ -37,6 +37,6 @@ describe('Controller: CouponDetailController', function () {
 
   it('can close the modal', function () {
     couponDetailController.cancel();
-    expect($modalInstance.dismiss).toHaveBeenCalled();
+    expect($uibModalInstance.dismiss).toHaveBeenCalled();
   })
 });
