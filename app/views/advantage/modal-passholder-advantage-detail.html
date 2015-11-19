@@ -1,21 +1,29 @@
 <div class="modal-header">
   <button type="button" class="close" ng-click="padc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-  <h4 class="modal-title">{{padc.advantage.title}}</h4>
+  <h4 class="modal-title" ng-bind="::padc.advantage.title"></h4>
 </div>
 <div class="modal-body modal-body-sticky">
-  <dl>
-    <dt>Nodige punten</dt>
-    <dd></dd>
-    <dt>Omruilperiode</dt>
-    <dd></dd>
-    <dt>Aangeboden door</dt>
-    <dd></dd>
-    <dt>Beschrijving & Voorwaarden</dt>
-    <dd></dd>
-  </dl>
-
-
+  <div class="points-wrapper">
+    <span>Nodige punten</span>
+    <div><span ng-bind="::padc.advantage.points"></span> punten</div>
+  </div>
+  <div class="exchange-period-wrapper">
+    <span>Omruilperiode</span>
+    <div>Tot <span ng-bind="::padc.advantage.endDate | date : 'dd/MM/yyyy'"></span></div>
+  </div>
+  <div class="offered-by-wrapper" ng-show="padc.advantage.validForCounters.length > 0">
+    <span>Aangeboden door</span>
+    <div><span ng-repeat="counter in ::padc.advantage.validForCounters">{{counter.name}}{{$last ? '' : ', '}}</span></div>
+  </div>
+  <div class="descriptions-wrapper" ng-show="padc.advantage.validForCities.length > 0">
+    <span>Beschrijving & Voorwaarden</span>
+    <div>
+      <div ng-bind="padc.advantage.description1"></div>
+      <div ng-bind="padc.advantage.description2"></div>
+      <div ng-show="padc.advantage.validForCities.length > 1">Geldig voor inwoners van <span ng-repeat="city in ::padc.advantage.validForCities">{{city}}{{$last ? '' : ', '}}</span></div>
+    </div>
+  </div>
 </div><!-- end modal-body -->
 <div class="modal-footer">
-  <a ng-click="padc.cancelModal()">Sluiten</a>
+  <a class="btn btn-primary" ng-click="padc.cancelModal()">Sluiten</a>
 </div>

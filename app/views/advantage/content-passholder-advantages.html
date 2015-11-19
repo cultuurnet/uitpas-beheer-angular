@@ -4,7 +4,7 @@
     <div ng-repeat="advantage in pac.advantages"
        ng-class="{unavailable: (!advantage.exchangeable), insufficient: (advantage.insufficientPoints)}" class="overview__item overview__item-panel grid__12 grid--bp-xsm__6 grid--bp-sml__12 grid--bp-med__6 grid--bp-lrg__4">
       <div class="box">
-        <a ui-sref="counter.main.passholder.advantageDetail({advantage: advantage})"><h3 ng-bind="::advantage.title"></h3></a>
+        <a ui-sref="counter.main.passholder.advantageDetail({advantage: advantage.serialize()})"><h3 ng-bind="::advantage.title"></h3></a>
         <div ng-show="advantage.points > 0" class="points">
           -<span ng-bind="::advantage.points"></span>
         </div>

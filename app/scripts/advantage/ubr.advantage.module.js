@@ -35,7 +35,7 @@ angular
           }
         },
         /* @ngInject */
-        onEnter: function(passholder, identification, activity, $state, $uibModal) {
+        onEnter: function(passholder, advantage, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
@@ -45,8 +45,8 @@ angular
                 passholder: function () {
                   return passholder;
                 },
-                activity: function () {
-                  return activity;
+                advantage: function () {
+                  return advantage;
                 }
               },
               controller: 'PassholderAdvantageDetailController',

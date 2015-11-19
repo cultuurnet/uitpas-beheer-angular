@@ -11,11 +11,14 @@ angular.module('ubr.advantage')
   .controller('PassholderAdvantageDetailController', passholderAdvantageDetailController);
 
 /* @ngInject */
-function passholderAdvantageDetailController(passholder, advantage) {
+function passholderAdvantageDetailController(passholder, advantage, $uibModalInstance, Advantage) {
   /*jshint validthis: true */
   var controller = this;
 
-  controller.advantage = advantage;
+  controller.advantage = new Advantage(advantage);
   controller.passholder = passholder;
 
+  controller.cancelModal = function() {
+    $uibModalInstance.dismiss();
+  };
 }
