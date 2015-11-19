@@ -12,10 +12,10 @@ angular
   .controller('CouponDetailController', CouponDetailController);
 
 /* @ngInject */
-function CouponDetailController (coupon, $modalInstance) {
+function CouponDetailController (coupon, $uibModalInstance) {
   this.coupon = coupon;
 
   this.cancel = function () {
-    $modalInstance.dismiss('canceled');
+    $uibModalInstance.dismiss('canceled');
   };
 }
