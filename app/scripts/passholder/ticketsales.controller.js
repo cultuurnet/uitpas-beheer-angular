@@ -66,6 +66,13 @@ function TicketSalesController (pass, passholder, $uibModalInstance, passholderS
     $uibModalInstance.dismiss('canceled');
   };
 
+  controller.initiateRemoval = function (ticketSale) {
+    ticketSale.confirmingRemoval = true;
+  };
+  controller.cancelRemoval = function (ticketSale) {
+    ticketSale.confirmingRemoval = false;
+  };
+
   /**
    * Request to remove a ticket sale and update the list accordingly.
    * @param {TicketSale} ticketSale
@@ -76,6 +83,7 @@ function TicketSalesController (pass, passholder, $uibModalInstance, passholderS
     var displayRemoveError = function () {
       ticketSale.removing = false;
       ticketSale.removingFailed = true;
+      ticketSale.confirmingRemoval = false;
     };
 
     passholderService
