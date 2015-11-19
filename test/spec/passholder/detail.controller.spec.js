@@ -85,6 +85,11 @@ describe('Controller: PassholderDetailController', function () {
     expect(detailController.passholder.name.first).toEqual('Karel');
   });
 
+  it('should update the coupons in the sidebar after an activity tariff is claimed', function () {
+    $rootScope.$emit('activityTariffClaimed', { activity: 'is fake' });
+    expect(passholderService.getCoupons).toHaveBeenCalled();
+  });
+
   it('should get a list of coupons for the passholder', function () {
     var expectedCoupons = [
       {

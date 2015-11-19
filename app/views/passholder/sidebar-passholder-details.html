@@ -76,7 +76,7 @@
     </div>
   </div>
 
-  <ul class="list-group">
+  <ul class="list-group" ng-hide="pdc.couponsLoading">
     <li class="list-group-item" ng-repeat="coupon in pdc.coupons"><a ui-sref="counter.main.passholder.coupon({ coupon: coupon })">{{coupon.name}}</a></li>
   </ul>
 </div>

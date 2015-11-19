@@ -840,7 +840,7 @@ describe('Service: passholderService', function () {
     }
 
     $httpBackend
-      .expectDELETE(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales/' + ticketSale.id)
+      .expectDELETE(apiUrl + 'passholders/activities/ticket-sales/' + ticketSale.id + '/cancel')
       .respond(200);
 
     passholderService
@@ -866,7 +866,7 @@ describe('Service: passholderService', function () {
     }
 
     $httpBackend
-      .expectDELETE(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales/' + ticketSale.id)
+      .expectDELETE(apiUrl + 'passholders/activities/ticket-sales/' + ticketSale.id + '/cancel')
       .respond(400);
 
     passholderService
