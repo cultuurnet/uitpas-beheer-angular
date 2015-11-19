@@ -508,7 +508,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   service.removeTicketSale = function (passholder, ticketSale) {
     var deferredRemove = $q.defer();
 
-    var removeRequest = $http.delete(apiUrl + 'passholders/activities/ticket-sales/' + ticketSale.id + '/cancel');
+    var removeRequest = $http.delete(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales/' + ticketSale.id);
 
     removeRequest.success(deferredRemove.resolve);
     removeRequest.error(deferredRemove.reject);
