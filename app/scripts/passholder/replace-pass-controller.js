@@ -193,7 +193,22 @@ function PassholderReplacePassController (
   };
 
   controller.passScanned = function(event, identification) {
-    controller.card.id = identification;
+    var useScannedPassNumber = function (newPass) {
+      controller.formAlert = null;
+      controller.card.id = newPass.number;
+      controller.form.UiTPASNumber.$setDirty();
+    };
+
+    var warnUserNoPassFound = function () {
+      controller.formAlert = {
+        message: 'De gescande UiTPAS kan niet gevonden worden.',
+        type: 'danger'
+      };
+    };
+
+    passholderService
+      .findPass(identification)
+      .then(useScannedPassNumber, warnUserNoPassFound);
     $scope.$apply();
   };
 
