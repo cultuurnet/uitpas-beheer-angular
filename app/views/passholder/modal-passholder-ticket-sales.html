@@ -22,7 +22,7 @@
       </div>
       <div ng-if="(tsc.ticketSales.length > 0)">
         <div class="slats">
-          <div class="slats-item" ng-repeat="ticketSale in tsc.ticketSales">
+          <div class="slats-item" ng-repeat="ticketSale in tsc.ticketSales | orderBy: '-creationDate'">
             <div class="grid display-table">
               <div class="grid__12 grid--bp-xsm__3">
                 <p ng-bind="::ticketSale.creationDate | date: 'dd/MM/yyyy'"></p>
