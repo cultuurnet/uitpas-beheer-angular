@@ -42,14 +42,15 @@
               </div>
               <div class="grid__12 grid--bp-xsm__3">
                 <p ng-hide="ticketSale.confirmingRemoval || ticketSale.removing || ticketSale.removingFailed">
-                  <a class="btn btn-link" ng-click="tsc.initiateRemoval(ticketSale)">Annuleren</a>
-                  </p>
-                  <div ng-show="ticketSale.confirmingRemoval && !ticketSale.removing" class="actions actions-confirm">
-                    <button class="btn btn-default btn-sm" ng-click="tsc.removeTicketSale(ticketSale)">Bevestigen</button>
-                    <a class="small" ng-click="tsc.cancelRemoval(ticketSale)">Niet Annuleren</a>
-                  </div>
-                  <div ng-show="ticketSale.removing" class="spinner spinner-small">
-                    <circle-spinner></circle-spinner>
+                  <a class="btn btn-link" ng-click="tsc.initiateRemoval(ticketSale)">Ongedaan maken</a>
+                </p>
+                <div ng-show="ticketSale.confirmingRemoval && !ticketSale.removing" class="actions actions-confirm">
+                  <label>Ongedaan maken?</label>
+                  <button class="btn btn-default btn-sm" ng-click="tsc.removeTicketSale(ticketSale)">Bevestigen</button>
+                  <a class="small" ng-click="tsc.cancelRemoval(ticketSale)">Annuleren</a>
+                </div>
+                <div ng-show="ticketSale.removing" class="spinner spinner-small">
+                  <circle-spinner></circle-spinner>
                 </div>
                 <p ng-show="ticketSale.removingFailed" class="alert alert-danger">
                   <span ng-bind="::ticketSale.eventTitle"></span> kon niet verwijderd worden van de historiek.
