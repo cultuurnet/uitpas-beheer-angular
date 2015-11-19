@@ -87,27 +87,4 @@ describe('Controller: TicketSalesController', function(){
     TicketSalesController.cancel();
     expect($uibModalInstance.dismiss).toHaveBeenCalled();
   });
-
-  it('reloads the ticket sales after removing a ticket sale', function () {
-    spyOn(passholderService, 'getTicketSales').and.returnValue($q.resolve(expectedTicketSales));
-    spyOn(passholderService, 'removeTicketSale').and.returnValue($q.resolve());
-    TicketSalesController = getController();
-
-    TicketSalesController.removeTicketSale(expectedTicketSales[0]);
-    expect(passholderService.getTicketSales).toHaveBeenCalled();
-  });
-
-  it('displays an error when it can not remove a ticket sale', function () {
-    spyOn(passholderService, 'getTicketSales').and.returnValue($q.resolve(expectedTicketSales));
-    spyOn(passholderService, 'removeTicketSale').and.returnValue($q.reject(''));
-    TicketSalesController = getController();
-
-    var ticketSale = expectedTicketSales[0];
-
-    TicketSalesController.removeTicketSale(ticketSale);
-    expect(ticketSale.removing).toBeTruthy();
-    $scope.$apply();
-    expect(ticketSale.removingFailed).toBeTruthy();
-    expect(ticketSale.removing).toBeFalsy();
-  });
 });

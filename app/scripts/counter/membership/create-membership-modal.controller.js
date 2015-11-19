@@ -12,7 +12,7 @@ angular
   .controller('CreateMembershipModalController', CreateMembershipModalController);
 
 /* @ngInject */
-function CreateMembershipModalController(counterService, $modalInstance) {
+function CreateMembershipModalController(counterService, $uibModalInstance) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -20,7 +20,7 @@ function CreateMembershipModalController(counterService, $modalInstance) {
   controller.creationPending = false;
 
   controller.cancelCreation = function () {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 
   controller.createMembership = function (form) {
@@ -31,7 +31,7 @@ function CreateMembershipModalController(counterService, $modalInstance) {
 
     var memberCreated = function(newMemberResponse){
       controller.creationPending = false;
-      $modalInstance.close(newMemberResponse);
+      $uibModalInstance.close(newMemberResponse);
     };
     var handleError = function(response){
       if (response.code === 'UNKNOWN_USER') {

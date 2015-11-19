@@ -12,7 +12,7 @@ angular
   .controller('PassholderMembershipRegisterController', PassholderMembershipRegisterController);
 
 /* @ngInject */
-function PassholderMembershipRegisterController ($scope, $modalInstance, association, passholder, recentlyExpired, membershipService, MembershipEndDateCalculator) {
+function PassholderMembershipRegisterController ($scope, $uibModalInstance, association, passholder, recentlyExpired, membershipService, MembershipEndDateCalculator) {
   $scope.association = association;
 
   var membershipEndDateCalculator = new MembershipEndDateCalculator(association);
@@ -26,7 +26,7 @@ function PassholderMembershipRegisterController ($scope, $modalInstance, associa
   $scope.errors = [];
 
   $scope.cancel = function () {
-    $modalInstance.dismiss('canceled');
+    $uibModalInstance.dismiss('canceled');
   };
 
   $scope.register = function (endDate) {
@@ -41,7 +41,7 @@ function PassholderMembershipRegisterController ($scope, $modalInstance, associa
     deferredMembershipRegistration
       .then(
         function (data) {
-          $modalInstance.close(data);
+          $uibModalInstance.close(data);
         },
         function (data) {
           $scope.errors = [];

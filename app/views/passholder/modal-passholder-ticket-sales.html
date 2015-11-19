@@ -27,7 +27,7 @@
               <div class="grid__12 grid--bp-xsm__3">
                 <p ng-bind="::ticketSale.creationDate | date: 'dd/MM/yyyy'"></p>
               </div>
-              <div class="grid__12 grid--bp-xsm__7">
+              <div class="grid__12 grid--bp-xsm__6">
                 <p><strong ng-bind="::ticketSale.eventTitle"></strong></p>
                 <p>
                   <span ng-if="ticketSale.price > 0">€ <span ng-bind="::ticketSale.price"></span></span>
@@ -40,7 +40,7 @@
                   </span>
                 </p>
               </div>
-              <div class="grid__12 grid--bp-xsm__2">
+              <div class="grid__12 grid--bp-xsm__3">
                 <p ng-hide="ticketSale.confirmingRemoval || ticketSale.removing || ticketSale.removingFailed">
                   <a class="btn btn-link" ng-click="tsc.initiateRemoval(ticketSale)">Annuleren</a>
                   </p>

@@ -12,7 +12,7 @@ angular
   .controller('KansenstatutenModalController', KansenstatutenModalController);
 
 /* @ngInject */
-function KansenstatutenModalController (passholder, activeCounter, cardSystemId, $modalInstance, $rootScope, passholderService, $scope) {
+function KansenstatutenModalController (passholder, activeCounter, cardSystemId, $uibModalInstance, $rootScope, passholderService, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -22,7 +22,7 @@ function KansenstatutenModalController (passholder, activeCounter, cardSystemId,
   controller.cardSystemid = cardSystemId;
 
   controller.cancelModal = function () {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 
   controller.counterCanAlterKansenStatuut = function (kansenStatuut) {

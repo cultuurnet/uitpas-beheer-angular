@@ -12,7 +12,7 @@ angular
   .controller('EditKansenstatuutModalController', EditKansenstatuutModalController);
 
 /* @ngInject */
-function EditKansenstatuutModalController (passholder, cardSystemId, $modalInstance, passholderService, $scope) {
+function EditKansenstatuutModalController (passholder, cardSystemId, $uibModalInstance, passholderService, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -23,7 +23,7 @@ function EditKansenstatuutModalController (passholder, cardSystemId, $modalInsta
   controller.asyncError = null;
 
   controller.cancelModal = function () {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 
   function clearAsyncError (newVal, oldVal) {
@@ -38,7 +38,7 @@ function EditKansenstatuutModalController (passholder, cardSystemId, $modalInsta
 
   controller.updateKansenstatuut = function (editForm) {
     var stopEditing = function() {
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
 
     var showUpdateErrors = function (errorResponse) {

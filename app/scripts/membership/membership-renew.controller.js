@@ -12,7 +12,7 @@ angular
   .controller('PassholderMembershipRenewController', PassholderMembershipRenewController);
 
 /* @ngInject */
-function PassholderMembershipRenewController ($scope, $modalInstance, moment, membership, membershipService, association, passholder) {
+function PassholderMembershipRenewController ($scope, $uibModalInstance, moment, membership, membershipService, association, passholder) {
   $scope.association = association;
 
   $scope.endDate = {
@@ -23,7 +23,7 @@ function PassholderMembershipRenewController ($scope, $modalInstance, moment, me
   $scope.errors = [];
 
   $scope.cancel = function () {
-    $modalInstance.dismiss('canceled');
+    $uibModalInstance.dismiss('canceled');
   };
 
   $scope.waiting = false;
@@ -36,7 +36,7 @@ function PassholderMembershipRenewController ($scope, $modalInstance, moment, me
     deferredRenew
       .then(
         function(data) {
-          $modalInstance.close(data);
+          $uibModalInstance.close(data);
         },
         function (data) {
           $scope.errors = [];

@@ -3,16 +3,16 @@
 /**
  * Coupon
  * @typedef {Object}    Coupon
- * @property {string}   id
- * @property {string}   name
- * @property {string}   description
+ * @property {String}   id
+ * @property {String}   name
+ * @property {String}   description
  * @property {Date}     expirationDate
- * @property {number}   remainingTotal
+ * @property {Integer}  remainingTotal
  */
 
 /**
  * @ngdoc service
- * @name ubr.passholder.passholderService
+ * @name ubr.passholder.passholder
  * @description
  * # passholder
  * Service in the ubr.passholder module.
@@ -25,7 +25,7 @@ angular
  * @ngInject
  * @name passholderService
  */
-function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassholderSearchResults) {
+function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassholderSearchResults, Coupon) {
   var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
@@ -401,7 +401,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     }
 
     var requestOptions = {
-      params: searchParameters.serialize()
+      params: searchParameters.toQueryParameters()
     };
 
     $http
@@ -466,7 +466,11 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     var deferredCoupons = $q.defer();
 
     function returnCoupons (couponsResponse) {
-      deferredCoupons.resolve(couponsResponse.data);
+      var couponObjects = [];
+      angular.forEach(couponsResponse.data, function (jsonCoupon) {
+        couponObjects.push(new Coupon(jsonCoupon));
+      });
+      deferredCoupons.resolve(couponObjects);
     }
 
     $http

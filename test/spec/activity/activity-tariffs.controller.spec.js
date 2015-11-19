@@ -72,7 +72,7 @@ describe('Controller: PassholderActivityTariffsController', function () {
     var controller = $controller('PassholderActivityTariffsController', {
       passholder: passholder,
       activity: activity,
-      $modalInstance: modalInstance,
+      $uibModalInstance: modalInstance,
       activityService: activityService,
       $rootScope: $scope,
       TicketSaleAPIError: TicketSaleAPIError
@@ -92,7 +92,7 @@ describe('Controller: PassholderActivityTariffsController', function () {
     controller.cancelModal();
     expect(modalInstance.dismiss).toHaveBeenCalled();
   });
-  
+
 
   it('can submit the activity tariffs form', function () {
     var controller = getControllerForPassholder(passholder);

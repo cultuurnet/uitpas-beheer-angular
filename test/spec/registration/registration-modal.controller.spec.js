@@ -78,7 +78,7 @@ describe('Controller: RegistrationModalController', function () {
       $state: $state,
       Passholder: Passholder,
       passholderService: passholderService,
-      $modalInstance: modalInstance,
+      $uibModalInstance: modalInstance,
       counterService: counterService,
       RegistrationAPIError: RegistrationAPIError,
       $rootScope: $rootScope,
