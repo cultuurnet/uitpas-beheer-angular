@@ -33,7 +33,7 @@ function advancedSearchService(passholderService, $q, $rootScope, $state) {
       service.searchResults = searchResults;
       deferredSearchResults.resolve(searchResults);
       var params = searchParameters.toParams();
-      $state.go('counter.main.advancedSearch', params, { notify: false, inherit: false });
+      $state.go('counter.main.advancedSearch', params);
       $rootScope.$emit('passholdersFound', searchResults);
     }
 

@@ -20,6 +20,7 @@ angular
       .state('counter.main.advancedSearch', {
         url: 'search?name&firstName&street&email&city&dateOfBirth&membershipAssociationId&membershipStatus&uitpasNumbers&page&mode',
         requiresCounter: true,
+        reloadOnSearch: false,
         resolve: {
           /* @ngInject */
           activeCounterAssociations: function (counterService) {
