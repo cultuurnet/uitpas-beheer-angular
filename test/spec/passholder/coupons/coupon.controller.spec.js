@@ -38,5 +38,5 @@ describe('Controller: CouponDetailController', function () {
   it('can close the modal', function () {
     couponDetailController.cancel();
     expect($uibModalInstance.dismiss).toHaveBeenCalled();
-  })
+  });
 });

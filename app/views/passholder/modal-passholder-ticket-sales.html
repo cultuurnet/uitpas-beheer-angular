@@ -1,11 +1,14 @@
 <div class="modal-header">
-    <button type="button" class="close" ng-click="tsc.cancel()" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    <button type="button" class="close" ng-click="tsc.cancel()" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
   <h4 class="modal-title">Historiek verkochte tickets aan UiTPAS-tarief</h4>
 </div>
 <div class="modal-body">
   <div class="alert alert-info">
-    Hier vind je een chronologisch overzicht van de verkochte tickets van {{tsc.passholder.getFullName()}} aan deze balie.
-      Voor een volledig overzicht bij alle balies kan de pashouder terecht op uitinvlaanderen.be.
+    Hier vind je een chronologisch overzicht van de verkochte tickets van
+    <span ng-bind="::tsc.passholder.getFullName()"></span> aan deze balie. Voor een volledig overzicht bij alle balies
+    kan de pashouder terecht op uitinvlaanderen.be.
   </div>
   <div class="panel scroll-area">
     <div class="panel-body">
@@ -19,25 +22,40 @@
       </div>
       <div ng-if="(tsc.ticketSales.length > 0)">
         <div class="slats">
-          <div class="slats-item" ng-repeat="ticketsale in tsc.ticketSales">
+          <div class="slats-item" ng-repeat="ticketSale in tsc.ticketSales | orderBy: '-creationDate'">
             <div class="grid display-table">
-              <div class="grid__12 grid--bp-xsm__3"><p>{{ticketsale.creationDate | date: 'dd/MM/yyyy'}}</p></div>
-              <div class="grid__12 grid--bp-xsm__7">
-                <p><strong>{{ticketsale.eventTitle}}</strong></p>
+              <div class="grid__12 grid--bp-xsm__3">
+                <p ng-bind="::ticketSale.creationDate | date: 'dd/MM/yyyy'"></p>
+              </div>
+              <div class="grid__12 grid--bp-xsm__6">
+                <p><strong ng-bind="::ticketSale.eventTitle"></strong></p>
                 <p>
-                  <span ng-if="ticketsale.price > 0">€ {{ticketsale.price}}</span>
-                  <span ng-if="ticketsale.price == 0">gratis</span>
-                  <span ng-if="!ticketsale.coupon">
+                  <span ng-if="ticketSale.price > 0">€ <span ng-bind="::ticketSale.price"></span></span>
+                  <span ng-if="ticketSale.price == 0">gratis</span>
+                  <span ng-if="!ticketSale.coupon">
                     <em>aan kansentarief</em>
                   </span>
-                  <span ng-if="ticketsale.coupon">
-                    <em>met <i class="fa fa-ticket"></i> {{ticketsale.coupon.name}}</em>
+                  <span ng-if="ticketSale.coupon">
+                    <em>met <i class="fa fa-ticket"></i> <span ng-bind="::ticketSale.coupon.name"></span></em>
                   </span>
                 </p>
               </div>
-              <!--<div class="grid__12 grid--bp-xsm__2">
-                <p><a class="btn btn-link">Annuleren</a></p>
-              </div>-->
+              <div class="grid__12 grid--bp-xsm__3">
+                <p ng-hide="ticketSale.confirmingRemoval || ticketSale.removing || ticketSale.removingFailed">
+                  <a class="btn btn-link" ng-click="tsc.initiateRemoval(ticketSale)">Ongedaan maken</a>
+                </p>
+                <div ng-show="ticketSale.confirmingRemoval && !ticketSale.removing" class="actions actions-confirm">
+                  <label>Ongedaan maken?</label>
+                  <button class="btn btn-default btn-sm" ng-click="tsc.removeTicketSale(ticketSale)">Bevestigen</button>
+                  <a class="small" ng-click="tsc.cancelRemoval(ticketSale)">Annuleren</a>
+                </div>
+                <div ng-show="ticketSale.removing" class="spinner spinner-small">
+                  <circle-spinner></circle-spinner>
+                </div>
+                <p ng-show="ticketSale.removingFailed" class="alert alert-danger">
+                  <span ng-bind="::ticketSale.eventTitle"></span> kon niet verwijderd worden van de historiek.
+                </p>
+              </div>
             </div>
           </div>
         </div>
