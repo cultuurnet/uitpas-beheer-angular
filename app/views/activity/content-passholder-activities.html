@@ -2,13 +2,13 @@
   <h2 class="overview__title">Activiteiten</h2>
   <div class="grid overview__search">
     <div class="grid__12 grid--bp-med__6">
-      <div class="btn-group" dropdown>
+      <div class="btn-group" uib-dropdown>
         <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
-        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="!!ac.activitiesLoading">
+        <button type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="!!ac.activitiesLoading">
           <span class="caret"></span>
           <span class="sr-only">Split button!</span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+        <ul class="uib-dropdown-menu" role="menu" aria-labelledby="split-button">
           <li role="menuitem">
             <a href ng-click="ac.updateDateRange(ac.dateRanges.TODAY)">Vandaag</a>
           </li>
@@ -117,7 +117,7 @@
     </li>
   </ul>
 
-  <pagination class="pagination"
+  <uib-pagination class="pagination"
               total-items="ac.totalActivities"
               ng-model="ac.page"
               items-per-page="ac.limit"
@@ -126,6 +126,6 @@
               previous-text="&lsaquo; Vorige"
               next-text="Volgende &rsaquo;"
               ng-show="ac.totalActivities > ac.limit">
-  </pagination>
+  </uib-pagination>
 
 </section>

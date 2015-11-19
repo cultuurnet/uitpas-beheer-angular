@@ -59,7 +59,7 @@ describe('Controller: PassholderEditController', function () {
     controller = $controller('PassholderEditController', {
       passholder: new Passholder({ inszNumber: '07111571331' }),
       identification: '07111571331',
-      $modalInstance: modalInstance,
+      $uibModalInstance: modalInstance,
       passholderService: passholderService,
       eIDService: eIDService,
       isJavaFXBrowser: isJavaFXBrowser,

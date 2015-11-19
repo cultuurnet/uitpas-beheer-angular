@@ -2,23 +2,31 @@
 
 describe('Controller: Results Viewer', function () {
 
-  var $controller, controller, $scope, $rootScope, advancedSearchService, $state;
+  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter;
 
   beforeEach(module('ubr.passholder.search'));
+
 
   beforeEach(inject(function (_$controller_, _$rootScope_) {
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders', 'goToPage']);
     $state = jasmine.createSpyObj('$state', ['go']);
+    UiTPASRouter = jasmine.createSpyObj('UiTPASRouter', ['go']);
+    $state.params = {};
     $controller = _$controller_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
-    controller = $controller('ResultsViewerController', {
+    controller = getController();
+  }));
+
+  function getController() {
+    return $controller('ResultsViewerController', {
       $scope: $scope,
       $rootScope: $rootScope,
       $state: $state,
-      advancedSearchService: advancedSearchService
+      advancedSearchService: advancedSearchService,
+      UiTPASRouter: UiTPASRouter
     });
-  }));
+  }
 
   it('should show results immediately when there are no unknown numbers', function () {
     controller.results = jasmine.createSpyObj('results', ['hasUnknownNumbers', 'hasConfirmedUnknownNumbers']);
@@ -39,9 +47,17 @@ describe('Controller: Results Viewer', function () {
     expect(controller.isShowingResults()).toEqual(true);
   });
 
+  it('should show the passholder list view immediately before loading results from previous search parameters', function () {
+    $state.params = {
+      page: 2
+    };
+    var controller = getController();
+    expect(controller.isShowingResults()).toEqual(true);
+  });
+
   it('should load the passholder to show details', function () {
     controller.showPassholderDetails('1234567894561');
-    expect($state.go).toHaveBeenCalledWith('counter.main.passholder', {identification: '1234567894561'});
+    expect(UiTPASRouter.go).toHaveBeenCalledWith('1234567894561');
   });
 
   it('should enter a loading state when finding search results', function () {

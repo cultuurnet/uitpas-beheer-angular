@@ -13,8 +13,7 @@ angular
     'ubr.passholder.search',
     'ui.router',
     'uitpasbeheerApp',
-    'truncate',
-
+    'truncate'
   ])
   /* @ngInject */
   .config(function ($stateProvider) {
@@ -27,6 +26,11 @@ angular
     /* @ngInject */
     var getPassFromStateParams = function(passholderService, $stateParams) {
       return passholderService.findPass($stateParams.identification);
+    };
+
+    /* @ngInject */
+    var getCouponsFromStateParams = function($stateParams) {
+      return $stateParams.coupon;
     };
 
     $stateProvider
@@ -90,8 +94,8 @@ angular
           }]
         },
         /* @ngInject */
-        onEnter: function(passholder, identification, $state, $modal) {
-          $modal
+        onEnter: function(passholder, identification, $state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/passholder/modal-passholder-edit.html',
@@ -121,8 +125,8 @@ angular
           }]
         },
         /* @ngInject */
-        onEnter: function(passholder, identification, $state, $modal) {
-          $modal
+        onEnter: function(passholder, identification, $state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/passholder/modal-passholder-edit-contact.html',
@@ -154,8 +158,8 @@ angular
         },
         url: '/replace-pass',
         /* @ngInject */
-        onEnter: function(passholder, pass, $state, $modal, $stateParams) {
-          $modal
+        onEnter: function(passholder, pass, $state, $uibModal, $stateParams) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/passholder/modal-passholder-replace-card.html',
@@ -193,8 +197,8 @@ angular
           passholder: getPassholderFromStateParams
         },
         /* @ngInject */
-        onEnter: function(pass, passholder, $state, $modal) {
-          $modal
+        onEnter: function(pass, passholder, $state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/passholder/modal-passholder-block-pass.html',
@@ -216,37 +220,65 @@ angular
             });
         }
       })
-    .state('counter.main.passholder.ticketSales', {
-      params: {
-        pass: null,
-        passholder: null
-      },
-      resolve: {
-        pass: getPassFromStateParams,
-        passholder: getPassholderFromStateParams
-      },
-      /* @ngInject */
-      onEnter: function(pass, passholder, $state, $modal) {
-        $modal
-          .open({
-            animation: true,
-            templateUrl: 'views/passholder/modal-passholder-ticket-sales.html',
-            size: 'sm',
-            resolve: {
-              pass: function() {
-                return pass;
+      .state('counter.main.passholder.coupon', {
+        params: {
+          coupon: null
+        },
+        resolve: {
+          coupon: getCouponsFromStateParams
+        },
+        /* @ngInject */
+        onEnter: function(coupon, $state, $uibModal) {
+          $uibModal
+            .open({
+              animation: true,
+              templateUrl: 'views/passholder/modal-passholder-coupon.html',
+              size: 'sm',
+              resolve: {
+                coupon: function() {
+                  return coupon;
+                }
               },
-              passholder: function() {
-                return passholder;
-              }
-            },
-            controller: 'TicketSalesController',
-            controllerAs: 'tsc'
-          })
-          .result
-          .finally(function() {
-            $state.go('^');
-          });
-      }
-    });
+              controller: 'CouponDetailController',
+              controllerAs: 'cdc'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }
+      })
+      .state('counter.main.passholder.ticketSales', {
+        params: {
+          pass: null,
+          passholder: null
+        },
+        resolve: {
+          pass: getPassFromStateParams,
+          passholder: getPassholderFromStateParams
+        },
+        /* @ngInject */
+        onEnter: function(pass, passholder, $state, $uibModal) {
+          $uibModal
+            .open({
+              animation: true,
+              templateUrl: 'views/passholder/modal-passholder-ticket-sales.html',
+              size: 'sm',
+              resolve: {
+                pass: function() {
+                  return pass;
+                },
+                passholder: function() {
+                  return passholder;
+                }
+              },
+              controller: 'TicketSalesController',
+              controllerAs: 'tsc'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }
+      });
   });

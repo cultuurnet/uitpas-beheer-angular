@@ -25,8 +25,8 @@ angular
       resolve: {
         passholder: getPassholderFromStateParams
       },
-      onEnter: ['passholder', '$state', '$modal', function(passholder, $state, $modal) {
-        $modal
+      onEnter: ['passholder', '$state', '$uibModal', function(passholder, $state, $uibModal) {
+        $uibModal
           .open({
             animation: true,
             templateUrl: 'views/membership/modal-passholder-memberships.html',

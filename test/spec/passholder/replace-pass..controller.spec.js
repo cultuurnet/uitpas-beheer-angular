@@ -5,12 +5,12 @@ describe('Controller: PassholderReplacePassController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var $state, passholderService, $modalInstance, $scope, counterService, controller, $q;
+  var $state, passholderService, $uibModalInstance, $scope, counterService, controller, $q;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $injector, $rootScope) {
     $state = jasmine.createSpyObj('$state', ['go']);
-    $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+    $uibModalInstance = jasmine.createSpyObj('$uibModalInstance', ['close', 'dismiss']);
     passholderService = jasmine.createSpyObj('passholderService', ['findPass', 'newPass']);
     counterService = jasmine.createSpyObj('counterService', ['getRegistrationPriceInfo']);
     $q = $injector.get('$q');
@@ -39,7 +39,7 @@ describe('Controller: PassholderReplacePassController', function () {
       pass: pass,
       passholder: passholder,
       passholderService: passholderService,
-      $modalInstance: $modalInstance,
+      $uibModalInstance: $uibModalInstance,
       counterService: counterService,
       $rootScope: $rootScope
     });
@@ -255,7 +255,7 @@ describe('Controller: PassholderReplacePassController', function () {
       expectedEndDate,
       'v-o-u-c-h-e-r'
     );
-    expect($modalInstance.close).toHaveBeenCalledWith(newPassResponse.number);
+    expect($uibModalInstance.close).toHaveBeenCalledWith(newPassResponse.number);
   });
 
   it('should set an error when it can not replace a pass', function () {
@@ -357,6 +357,6 @@ describe('Controller: PassholderReplacePassController', function () {
 
   it('can close the modal', function () {
     controller.cancelModal();
-    expect($modalInstance.dismiss).toHaveBeenCalled();
+    expect($uibModalInstance.dismiss).toHaveBeenCalled();
   });
 });

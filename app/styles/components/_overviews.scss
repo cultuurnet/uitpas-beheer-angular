@@ -2,6 +2,7 @@
 .overview {
   margin: $rh-sml 0;
   &__item {
+    cursor: pointer;
     margin-top: 0;
     + .overview__item {
       margin-top: 0;

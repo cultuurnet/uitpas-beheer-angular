@@ -12,40 +12,80 @@ angular
   .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function AdvancedSearchController (SearchParameters, advancedSearchService, activeCounterAssociations, activeCounter) {
+function AdvancedSearchController (SearchParameters, advancedSearchService, activeCounterAssociations, activeCounter, $state) {
   /*jshint validthis: true */
   var controller = this;
 
+  /**
+   * Search mode enum.
+   * @readonly
+   * @enum {object}
+   */
   var SearchModes = {
-    DETAIL: { title:'Zoeken', name:'detail' },
-    NUMBER: { title:'Via kaartnummer', name:'number' }
+    DETAIL: { title:'Zoeken', name:'DETAIL' },
+    NUMBER: { title:'Via kaartnummer', name:'NUMBER' }
   };
 
+  function getSearchParametersFromState() {
+    var params = new SearchParameters();
+    params.fromParams($state.params);
+
+    return params;
+  }
+
+  controller.searchFields = getSearchParametersFromState();
   controller.formSubmitBusy = false;
-  controller.passNumbers = '';
+  controller.passNumbers = controller.searchFields.uitpasNumbers ? controller.searchFields.uitpasNumbers.join('\n') : '';
   controller.results = null;
   controller.asyncError = null;
   controller.invalidNumbers = [];
-  controller.searchFields = new SearchParameters();
   controller.associationOptions = activeCounterAssociations;
   controller.activeCounter = activeCounter;
+  controller.detailModeEnabled = false;
 
   controller.searchModes = angular.copy(SearchModes);
 
+  /**
+   * @param {SearchModes} searchMode
+   */
   controller.activateSearchMode = function (searchMode) {
+    // Iterate over all the search modes and set an active state
     Object.keys(controller.searchModes).forEach(function (modeKey) {
       var mode = controller.searchModes[modeKey];
-      mode.active = mode.name === searchMode.name;
+      mode.$active = mode.name === searchMode.name;
     });
+
+    controller.searchFields.setSearchMode(searchMode);
+    $state.go('counter.main.advancedSearch', controller.searchFields.toParams(), { notify: false });
   };
 
-  if (controller.activeCounter.isRegistrationCounter() || Object.keys(controller.associationOptions).length > 0) {
-    controller.activateSearchMode(controller.searchModes.DETAIL);
+  function enableDetailMode() {
+    if (controller.activeCounter.isRegistrationCounter() || Object.keys(controller.associationOptions).length > 0) {
+      controller.detailModeEnabled = true;
+      controller.searchFields.setSearchMode(controller.searchFields.mode);
+    }
+    else {
+      controller.searchFields.setSearchMode(SearchModes.NUMBER);
+    }
   }
-  else {
-    controller.activateSearchMode(controller.searchModes.NUMBER);
-    delete controller.searchModes.DETAIL;
-  }
+
+  /**
+   * @param {SearchParameters} searchParameters
+   */
+  controller.initializeSearchMode = function (searchParameters) {
+    enableDetailMode();
+    controller.activateSearchMode(controller.searchFields.mode);
+
+    if (!searchParameters.hasDefaultParameters()) {
+      if (angular.equals(searchParameters.mode, SearchModes.DETAIL) && controller.detailModeEnabled) {
+        controller.findPassholdersByDetails();
+      }
+
+      if (angular.equals(searchParameters.mode, SearchModes.NUMBER)) {
+        controller.findPassholdersByNumbers();
+      }
+    }
+  };
 
   /**
    * Check if a string resembles an UiTPAS number.
@@ -132,6 +172,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
 
   controller.resetSearchFields = function () {
     controller.searchFields = new SearchParameters();
+    $state.go('counter.main.advancedSearch', controller.searchFields.toParams(), { notify: false });
   };
 
   /**
@@ -185,14 +226,11 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
       return;
     }
 
-    var jsonSearchParameters = {};
     if (controller.passNumbers) {
-      jsonSearchParameters.uitpasNumbers = controller.passNumbers.split(/[\s]+/);
+      controller.searchFields.uitpasNumbers = controller.passNumbers.split(/[\s]+/);
     }
 
-    var searchParameters = new SearchParameters(jsonSearchParameters);
-
-    controller.findPassholders(searchParameters);
+    controller.findPassholders(controller.searchFields);
   };
 
   /**
@@ -201,4 +239,6 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
   controller.clearAsyncError = function () {
     controller.asyncError = null;
   };
+
+  controller.initializeSearchMode(controller.searchFields);
 }

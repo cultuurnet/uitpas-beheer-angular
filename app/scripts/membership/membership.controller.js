@@ -12,7 +12,7 @@ angular
   .controller('PassholderMembershipController', PassholderMembershipController);
 
 /* @ngInject */
-function PassholderMembershipController (passholder, moment, $rootScope, $scope, MembershipEndDateCalculator, membershipService, $filter, $sce, $modal, $modalInstance) {
+function PassholderMembershipController (passholder, moment, $rootScope, $scope, MembershipEndDateCalculator, membershipService, $filter, $sce, $uibModal, $uibModalInstance) {
   var cardNumber = passholder.passNumber;
   var legacyPassholder;
 
@@ -112,7 +112,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
   };
 
   $scope.openMembershipRegistrationModal = function (association, recentlyExpired) {
-    var modalInstance = $modal.open({
+    var modalInstance = $uibModal.open({
       templateUrl: 'views/membership/modal-passholder-membership-registration.html',
       controller: 'PassholderMembershipRegisterController',
       size: 'sm',
@@ -135,7 +135,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
   };
 
   $scope.openMembershipRenewalModal = function (membership) {
-    var modalInstance = $modal.open({
+    var modalInstance = $uibModal.open({
       templateUrl: 'views/membership/modal-passholder-membership-renew.html',
       controller: 'PassholderMembershipRenewController',
       size: 'sm',
@@ -158,7 +158,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
   };
 
   $scope.openMembershipStopModal = function (membership) {
-    var modalInstance = $modal.open({
+    var modalInstance = $uibModal.open({
       templateUrl: 'views/membership/modal-passholder-membership-stop.html',
       controller: 'PassholderMembershipStopController',
       size: 'sm',
@@ -178,7 +178,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
   };
 
   $scope.closeModal = function() {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 
   $rootScope.$on('membershipModified', loadMemberships);

@@ -27,7 +27,7 @@ describe('Controller: CreateMembershipModalController', function () {
     };
     controller = $controller('CreateMembershipModalController', {
       counterService: counterService,
-      $modalInstance: modalInstance
+      $uibModalInstance: modalInstance
     });
     controller.email = 'e@mail';
 

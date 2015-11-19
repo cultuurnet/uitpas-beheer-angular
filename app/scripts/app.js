@@ -15,7 +15,6 @@ angular
     'http-auth-interceptor',
     'jkuri.touchspin',
     'mp.autoFocus',
-    'ngAnimate',
     'ngCookies',
     'ngResource',
     'ngSanitize',
@@ -91,8 +90,8 @@ angular
       })
       .state('login.moreInfo', {
         /* @ngInject */
-        onEnter: function($state, $modal) {
-          $modal
+        onEnter: function($state, $uibModal) {
+          $uibModal
             .open({
               animation: true,
               templateUrl: 'views/modal-more-info.html',

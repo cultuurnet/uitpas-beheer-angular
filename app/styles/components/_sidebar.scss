@@ -38,6 +38,13 @@
   p {
     margin: 0 0 1em;
   }
+  ul:not(.list-group),
+  ol:not(.list-group) {
+    margin-bottom: $rh-sml;
+    li {
+      margin-bottom: 0;
+    }
+  }
   .panel {
     margin-bottom: 0;
     + .panel {
