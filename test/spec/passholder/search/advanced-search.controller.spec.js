@@ -5,7 +5,13 @@ describe('Controller: PassholderAdvancedSearchController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var advancedSearchService, $q, controller, SearchParameters, PassholderSearchResults, $scope, activeCounter, Counter, $controller;
+  var advancedSearchService, $q, controller, SearchParameters, PassholderSearchResults, $scope, activeCounter, Counter,
+      $controller, $state;
+
+  var SearchModes = {
+    DETAIL: { title:'Zoeken', name:'DETAIL' },
+    NUMBER: { title:'Via kaartnummer', name:'NUMBER' }
+  };
 
   var jsonPass = {
     'uitPas': {
@@ -138,12 +144,15 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     $scope = $rootScope;
     Counter = $injector.get('Counter');
     activeCounter = new Counter(angular.copy(activeCounterJson));
+    $state = jasmine.createSpyObj('$state', ['go']);
+    $state.params = {};
 
     controller = $controller('PassholderAdvancedSearchController', {
       SearchParameters: SearchParameters,
       advancedSearchService: advancedSearchService,
       activeCounterAssociations: activeCounterAssociations,
-      activeCounter: activeCounter
+      activeCounter: activeCounter,
+      $state: $state
     });
   }));
 
@@ -264,7 +273,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       dateOfBirth: '1988-02-03',
       firstName: 'Dirk',
       name: 'Dirkington',
-      street: 'Driklane',
+      street: 'Dirklane',
       city: 'Dirktown',
       email: 'dirk@e-dirk.de',
       membershipAssociationId: 'some-id',
@@ -327,7 +336,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       activeCounter: new Counter(angular.copy(activeCounterJson))
     });
 
-    expect(withoutDetailsController.searchModes.DETAIL).toBeUndefined();
+    expect(withoutDetailsController.detailModeEnabled).toEqual(false);
 
     var newCounter = new Counter(angular.copy(activeCounterJson));
     newCounter.cardSystems[1].permissions.push('registratie');
@@ -338,6 +347,23 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       activeCounter: newCounter
     });
 
-    expect(withDetailsController.searchModes.DETAIL).toBeDefined();
+    expect(withDetailsController.detailModeEnabled).toEqual(true);
+  });
+
+  it('should fire off a search when search params are not default on initialization', function () {
+    var searchParameters = jasmine.createSpyObj(searchParameters, ['hasDefaultParameters']);
+    spyOn(controller, 'findPassholdersByDetails');
+    spyOn(controller, 'findPassholdersByNumbers');
+    searchParameters.hasDefaultParameters.and.returnValue(false);
+    searchParameters.mode = SearchModes.DETAIL;
+
+    controller.initializeSearchMode(searchParameters);
+    expect(controller.findPassholdersByDetails).toHaveBeenCalled();
+
+    // when detail mode is not enabled you can only find by number
+    controller.detailModeEnabled = false;
+    searchParameters.mode = SearchModes.NUMBER;
+    controller.initializeSearchMode(searchParameters);
+    expect(controller.findPassholdersByNumbers).toHaveBeenCalled();
   });
 });

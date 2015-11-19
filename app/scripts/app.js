@@ -15,7 +15,6 @@ angular
     'http-auth-interceptor',
     'jkuri.touchspin',
     'mp.autoFocus',
-    'ngAnimate',
     'ngCookies',
     'ngResource',
     'ngSanitize',
