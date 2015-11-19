@@ -285,6 +285,15 @@
   // History sales modal
   &-slats {
     margin: 0;
+    .actions-confirm {
+      label {
+        margin-bottom: 5px;
+      }
+      .btn + a {
+        margin-left: 5px;
+      }
+    }
+
   }
   .points {
     color: $brand-success;
