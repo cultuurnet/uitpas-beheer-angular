@@ -106,6 +106,9 @@
       height: 37px;
     }
   }
+  .content-holder {
+    margin-top: $rh-xxs;
+  }
   // Variants
   &-search-results {
     .grid__2.first {
@@ -183,6 +186,10 @@
     }
     li .btn-default {
       min-width: 118px;  
+    }
+    .tariff-applied a {
+      color: $text-color;
+      margin-top: 5px;
     }
     @include breakpoint(map-get($breakpoints, med)) {
       .first {
