@@ -14,6 +14,7 @@
 }
 
 .panel {
+  box-shadow: none;
   &__title {
     border-bottom: 1px solid $gray-50;
     padding-bottom: .5em;

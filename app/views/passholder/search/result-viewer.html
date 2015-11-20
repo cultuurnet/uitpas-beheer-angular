@@ -1,4 +1,4 @@
-<section class="overview overview-search-results">
+<section class="overview overview-extra-small overview-search-results">
   <div ng-show="rvc.noSearchDone()" class="direction text-center">
     <img class="logo" src="images/svg/card-search.svg" width="150" height="150" alt="search card">
     <p>
@@ -36,7 +36,7 @@
       {{rvc.results.totalItems}} resultaten gevonden
 
       <ul class="list-unstyled passholder-list">
-        <li class="overview__item overview__item-list overview__item-list-extra-small" ng-repeat="pass in rvc.results.passen">
+        <li class="overview__item overview__item-list" ng-repeat="pass in rvc.results.passen">
           <div class="grid display-table" ng-click="rvc.showPassholderDetails(pass.number)">
             <div class="grid__2 grid--bp-med__1 first">
               <!-- image -->

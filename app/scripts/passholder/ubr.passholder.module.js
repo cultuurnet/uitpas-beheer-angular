@@ -263,7 +263,7 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/passholder/modal-passholder-ticket-sales.html',
-              size: 'lg',
+              size: 'sm',
               resolve: {
                 pass: function() {
                   return pass;

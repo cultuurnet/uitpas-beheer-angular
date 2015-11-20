@@ -10,27 +10,27 @@
     <span ng-bind="::tsc.passholder.getFullName()"></span> aan deze balie. Voor een volledig overzicht bij alle balies
     kan de pashouder terecht op uitinvlaanderen.be.
   </div>
-  <div class="panel scroll-area">
+  <div class="panel panel-default scroll-area">
     <div class="panel-body">
+      <div ng-if="(tsc.ticketSales.length === 0)">
+        <p>Deze gebruiker heeft nog geen tickets gekocht aan kansentarief.</p>
+      </div>
       <div ng-if="tsc.ticketSalesLoading">
         <div class="spinner spinner-xsmall">
           <circle-spinner></circle-spinner>
         </div>
       </div>
-      <div ng-if="(tsc.ticketSales.length === 0)">
-        <p>Deze gebruiker heeft nog geen tickets gekocht aan kansentarief.</p>
-      </div>
-      <div ng-if="(tsc.ticketSales.length > 0)">
+      
+      <div class="overview overview-small overview-slats" ng-if="(tsc.ticketSales.length > 0)">
         <div class="slats">
-          <div class="slats-item" ng-repeat="ticketSale in tsc.ticketSales | orderBy: '-creationDate'">
-            <div class="grid display-table">
-              <div class="grid__12 grid--bp-xsm__3">
+          <div class="overview__item overview__item-list" ng-repeat="ticketSale in tsc.ticketSales | orderBy: '-creationDate'">
+            <div class="grid">
+              <div class="grid__12 grid--bp-sml__3 grid--bp-med__3">
                 <p ng-bind="::ticketSale.creationDate | date: 'dd/MM/yyyy'"></p>
               </div>
-              <div class="grid__12 grid--bp-xsm__6">
-                <p><strong ng-bind="::ticketSale.eventTitle"></strong></p>
-                <p>
-                  <span ng-if="ticketSale.price > 0">€ <span ng-bind="::ticketSale.price"></span></span>
+              <div class="grid__12 grid--bp-sml__6 grid--bp-med__5">
+                <p><strong ng-bind="::ticketSale.eventTitle"></strong><br></p>
+                <p><span ng-if="ticketSale.price > 0">€ <span ng-bind="::ticketSale.price"></span></span>
                   <span ng-if="ticketSale.price == 0">gratis</span>
                   <span ng-if="!ticketSale.coupon">
                     <em>aan kansentarief</em>
@@ -40,7 +40,7 @@
                   </span>
                 </p>
               </div>
-              <div class="grid__12 grid--bp-xsm__3">
+              <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
                 <p ng-hide="ticketSale.confirmingRemoval || ticketSale.removing || ticketSale.removingFailed">
                   <a class="btn btn-link" ng-click="tsc.initiateRemoval(ticketSale)">Ongedaan maken</a>
                 </p>
@@ -64,5 +64,5 @@
   </div>
 </div>
 <div class="modal-footer">
-  <a ng-click="tsc.cancel()">Sluiten</a>
+  <a ng-click="tsc.cancel()" class="btn btn-primary">Sluiten</a>
 </div>
