@@ -1,6 +1,15 @@
 'use strict';
 
 /**
+ * User feedback
+ * @typedef {Object} Feedback
+ * @property {string} name      - The name of the user.
+ * @property {string} counter   - A counter name.
+ * @property {string} email     - The email address where we can contact the reporting user.
+ * @property {string} message   - The actual message containing the feedback.
+ */
+
+/**
  * @ngdoc service
  * @name ubr.feedback.feedbackService
  * @description
@@ -19,7 +28,7 @@ function feedbackService($q, $http, appConfig) {
   var service = this;
 
   /**
-   * @param {feedbackParameters} feedbackParameters
+   * @param {Feedback} feedbackParameters
    *
    * @returns {Promise}
    *   A feedback promise.

@@ -16,6 +16,9 @@ function FeedbackController (feedbackService, moment, uitIdUser, activeCounter) 
   /*jshint validthis: true */
   var controller = this;
 
+  /**
+   * @type {Feedback}
+   */
   controller.feedback = {
     name: uitIdUser.displayName,
     counter: (activeCounter.name) ? activeCounter.name : '',
