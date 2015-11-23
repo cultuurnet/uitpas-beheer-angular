@@ -30,66 +30,31 @@ describe('Service: FeedbackService', function () {
     $scope = $rootScope;
   }));
 
-  it('should send feedback to the api', function(done) {
+  it('should return and resolve a promise when sending feedback', function(done) {
     // Mock an HTTP response.
     $httpBackend
       .expectPOST(apiUrl + 'feedback')
       .respond(200, JSON.stringify(feedbackParameters));
 
-    // Assertion method.
-    var assertResponse = function() {
-      done();
-    };
-
     // Send feedback data and assert it when its returned.
-    feedbackService.sendFeedback(feedbackParameters).then(assertResponse);
+    feedbackService.sendFeedback(feedbackParameters).then(done);
 
     // Deliver the HTTP response so the feedback data is asserted.
     $httpBackend.flush();
   });
 
-  it('should return an error when it can not send the feedback to the api', function(done) {
+  it('should return an error when failing to send feedback', function(done) {
     var expectedError = {
       code: 'FEEDBACK_NOT_SENT',
       title: 'Feedback could not be sent',
-      message: 'The feedback could not be updated on the server.'
-    };
-
-    // Mock an HTTP response.
-    $httpBackend
-      .expectPOST(apiUrl + 'feedback')
-      .respond(400);
-
-    // Assertion method.
-    var assertResponse = function(error) {
-      expect(error).toEqual(expectedError);
-      done();
-    };
-
-    // Send feedback data and assert it when its returned.
-    feedbackService.sendFeedback(feedbackParameters).catch(assertResponse);
-
-    // Deliver the HTTP response so the feedback data is asserted.
-    $httpBackend.flush();
-  });
-
-  it('should return an error when it can not send the feedback to the api', function(done) {
-    var apiError = {
-      code: 'ERROR_CODE'
-    };
-    var expectedError = {
-      code: 'FEEDBACK_NOT_SENT',
-      title: 'Feedback could not be sent',
-      apiError: {
-        code: 'ERROR_CODE'
-      },
       message: 'The feedback could not be updated on the server: ERROR_CODE'
     };
+    var errorResponse = JSON.stringify(expectedError);
 
     // Mock an HTTP response.
     $httpBackend
       .expectPOST(apiUrl + 'feedback')
-      .respond(400, JSON.stringify(apiError));
+      .respond(400, errorResponse);
 
     // Assertion method.
     var assertResponse = function(error) {
