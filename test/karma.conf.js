@@ -64,6 +64,7 @@ module.exports = function(config) {
       "app/scripts/passholder/ubr.passholder.module.js",
       "app/scripts/passholder/search/ubr.search.module.js",
       "app/scripts/help/ubr.help.module.js",
+      "app/scripts/feedback/ubr.feedback.module.js",
       "app/scripts/registration/ubr.registration.module.js",
       "app/scripts/utilities/ubr.utilities.module.js",
 
