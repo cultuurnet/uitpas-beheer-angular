@@ -74,4 +74,16 @@ describe('Controller: FeedbackController', function () {
     expect(feedbackService.sendFeedback)
       .toHaveBeenCalledWith(feedbackParameters);
   });
+
+  it('can remove the error feedback', function () {
+    controller.feedbackStatus = 'SUCCESS';
+
+    controller.inputListener();
+    expect(controller.feedbackStatus).toBe('SUCCESS');
+
+    controller.feedbackStatus = 'FAILED';
+
+    controller.inputListener();
+    expect(controller.feedbackStatus).toBeNull();
+  })
 });

@@ -29,6 +29,12 @@ function FeedbackController (feedbackService, uitIdUser, activeCounter) {
   controller.formSubmitBusy = false;
   controller.feedbackStatus = null;
 
+  controller.inputListener = function () {
+    if (controller.feedbackStatus === 'FAILED') {
+      controller.feedbackStatus = null;
+    }
+  };
+
   controller.submitForm = function () {
     controller.formSubmitBusy = true;
 
