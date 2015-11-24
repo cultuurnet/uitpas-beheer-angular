@@ -2,6 +2,7 @@
 .overview {
   margin: $rh-sml 0;
   &__item {
+    cursor: pointer;
     margin-top: 0;
     + .overview__item {
       margin-top: 0;
@@ -56,16 +57,22 @@
     h3 {
       color: $brand-primary;
     }
+    p {
+      margin-bottom: 0;
+      + p {
+        margin-top: 5px;
+      }
+    }
     .btn {
       white-space: normal;
     }
-    &-small {
-      padding: $rh-xsm $rh-xxs;
-    }
-    &-extra-small {
+  }
+  &-small &__item-list {
+    padding: $rh-xsm $rh-xxs;
+  }
+  &-extra-small &__item-list {
       padding: $rh-xxs;
     }
-  }
   &__item.unavailable {
     opacity: .6;
   }
@@ -98,6 +105,9 @@
       top: 0;
       height: 37px;
     }
+  }
+  .content-holder {
+    margin-top: $rh-xxs;
   }
   // Variants
   &-search-results {
@@ -176,6 +186,10 @@
     }
     li .btn-default {
       min-width: 118px;  
+    }
+    .tariff-applied a {
+      color: $text-color;
+      margin-top: 5px;
     }
     @include breakpoint(map-get($breakpoints, med)) {
       .first {
@@ -272,6 +286,18 @@
       margin-top: -$rh-xsm;
       li:first-child {
         border-top-color: $white;
+      }
+    }
+  }
+  // History sales modal
+  &-slats {
+    margin: 0;
+    .actions-confirm {
+      label {
+        margin-bottom: 5px;
+      }
+      .btn + a {
+        margin-left: 5px;
       }
     }
   }

@@ -65,8 +65,8 @@ angular
             return counterService.getActive();
           }]
         },
-        onEnter : ['pass', 'activeCounter', '$state', '$modal', function(pass, activeCounter, $state, $modal) {
-          registrationModalInstance = $modal.open({
+        onEnter : ['pass', 'activeCounter', '$state', '$uibModal', function(pass, activeCounter, $state, $uibModal) {
+          registrationModalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'views/registration/multi-step-form.html',
             size: 'lg',

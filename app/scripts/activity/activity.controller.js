@@ -163,6 +163,8 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
   };
 
   var activityTariffClaimedListener = $rootScope.$on('activityTariffClaimed', controller.updateClaimedTariffActivity);
+  var activityTicketRemovedListener = $rootScope.$on('ticketRemoved', controller.updateClaimedTariffActivity);
 
   $scope.$on('$destroy', activityTariffClaimedListener);
+  $scope.$on('$destroy', activityTicketRemovedListener);
 }

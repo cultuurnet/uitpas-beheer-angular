@@ -12,7 +12,7 @@ angular
   .controller('PassholderDetailController', PassholderDetailController);
 
 /* @ngInject */
-function PassholderDetailController (pass, membershipService, $rootScope, moment, $scope, passholderService, activeCounter) {
+function PassholderDetailController (pass, membershipService, $rootScope, moment, $scope, passholderService, activeCounter, $window) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -64,6 +64,10 @@ function PassholderDetailController (pass, membershipService, $rootScope, moment
 
   loadCoupons();
 
+  controller.goBack = function () {
+    $window.history.back();
+  };
+
   function subtractAdvantagePoints(event, exchangedAdvantage) {
     var newPointCount = controller.passholder.points - exchangedAdvantage.points;
 
@@ -96,10 +100,14 @@ function PassholderDetailController (pass, membershipService, $rootScope, moment
   var cleanupActivityCheckedInListener = $rootScope.$on('activityCheckedIn', addCheckinPoint);
   var cleanupPassholderUpdatedListener = $rootScope.$on('passholderUpdated', setPassholderForSidebar);
   var cleanupKansenStatuutRenewalListener = $rootScope.$on('kansenStatuutRenewed', refreshPassholder);
+  var cleanupTicketRemovedListener = $rootScope.$on('ticketRemoved', loadCoupons);
+  var cleanupActivityTariffClaimedListener = $rootScope.$on('activityTariffClaimed', loadCoupons);
 
   $scope.$on('$destroy', cleanupMembershipModifiedListener);
   $scope.$on('$destroy', cleanupAdvantageExchangedListener);
   $scope.$on('$destroy', cleanupActivityCheckedInListener);
   $scope.$on('$destroy', cleanupPassholderUpdatedListener);
   $scope.$on('$destroy', cleanupKansenStatuutRenewalListener);
+  $scope.$on('$destroy', cleanupTicketRemovedListener);
+  $scope.$on('$destroy', cleanupActivityTariffClaimedListener);
 }

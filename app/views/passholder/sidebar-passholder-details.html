@@ -1,5 +1,5 @@
 <div class="back-nav">
-  <a ui-sref="counter.main">Terug</a>
+  <a ng-click="pdc.goBack()">Terug</a>
 </div>
 <div class="passholder passholder-number">
   <label>NR.</label> <span ng-bind="pdc.passholder.passNumber | passNumber"></span>
@@ -16,15 +16,15 @@
     {{pdc.passholder.address.postalCode}} {{pdc.passholder.address.city}}
   </div>
   <div class="birthdate">{{pdc.passholder.birth.date | date : 'dd/MM/yyyy'}}</div>
-  <div class="contact-data">
+  <div class="contact-data" ng-init="isCollapsedContactData=true">
     <span ng-show="!pdc.passholder.contact.email" class="label label-danger no-mail"><i class="fa fa-exclamation-triangle"></i></span>
     <a class="edit" ng-show="!pdc.passholder.contact.telephoneNumber && !pdc.passholder.contact.email && !pdc.passholder.contact.mobileNumber" ui-sref="counter.main.passholder.editContact()">Contactgegevens toevoegen</a>
     <span>
-      <a ng-show="pdc.passholder.contact.telephoneNumber || pdc.passholder.contact.email || pdc.passholder.contact.mobileNumber"  data-target="#contact-data-container" class="toggle-down" data-toggle="collapse" aria-expanded="false">
+      <a ng-show="pdc.passholder.contact.telephoneNumber || pdc.passholder.contact.email || pdc.passholder.contact.mobileNumber"  ng-click="isCollapsedContactData=!isCollapsedContactData" class="toggle-down" aria-expanded="false">
         Contactinformatie<i></i>
       </a>
     </span>
-    <div class="panel panel-default panel-collapse collapse" id="contact-data-container">
+    <div class="panel panel-default" uib-collapse="isCollapsedContactData">
       <div class="panel-body vcard">
         <div class="tel" ng-show="pdc.passholder.contact.telephoneNumber">
             <span ng-bind="pdc.passholder.contact.telephoneNumber | phoneNumber"></span>
@@ -69,14 +69,19 @@
   </ul>
 </div>
 <div class="passholder passholder-coupons">
-  <h3><i class="fa fa-ticket"> Bonnen</i></h3>
+  <h3><i class="fa fa-ticket"></i> Bonnen</h3>
   <div class="overview__loading" ng-show="pdc.couponsLoading">
     <div class="spinner spinner-small">
       <circle-spinner></circle-spinner>
     </div>
   </div>
 
-  <ul class="list-group">
-    <li class="list-group-item" ng-repeat="coupon in pdc.coupons">{{coupon.name}}</li>
+  <ul class="list-group" ng-hide="pdc.couponsLoading">
+    <li class="list-group-item" ng-repeat="coupon in pdc.coupons"><a ui-sref="counter.main.passholder.coupon({ coupon: coupon })">{{coupon.name}}</a></li>
+  </ul>
+</div>
+<div class="passholder passholder-extra-actions">
+  <ul class="text-muted list-unstyled small">
+    <li><a ui-sref="counter.main.passholder.ticketSales()">Historiek korting &amp; bonnen</a></li>
   </ul>
 </div>

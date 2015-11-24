@@ -12,7 +12,7 @@ describe('Service: passholderService', function () {
   }));
 
   // Instantiate service.
-  var passholderService, $httpBackend, $q, $scope, Passholder, Pass, $cacheFactory, SearchParameters, PassholderSearchResults;
+  var passholderService, $httpBackend, $q, $scope, Passholder, Pass, $cacheFactory, SearchParameters, PassholderSearchResults, Coupon;
 
   var identityData = {
     'uitPas': {
@@ -61,6 +61,7 @@ describe('Service: passholderService', function () {
     $cacheFactory = $injector.get('$cacheFactory');
     SearchParameters = $injector.get('SearchParameters');
     PassholderSearchResults = $injector.get('PassholderSearchResults');
+    Coupon = $injector.get('Coupon');
   }));
 
   it('returns a pass from the server and keeps it cached', function() {
@@ -382,20 +383,20 @@ describe('Service: passholderService', function () {
     var uitpasNumber = '123456789';
 
     var expectedCoupons = [
-      {
+      new Coupon({
         'id': '0',
         'name': 'Cultuurbon',
         'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
         'date': '2015-12-26',
         'remainingTotal': 4
-      },
-      {
+      }),
+      new Coupon({
         'id': '1',
         'name': 'Cultuurbon2',
         'conditions': 'Dit aanbod is geldig voor elke pashouder met een Paspartoe aan reductieprijs.',
         'date': '2015-11-26',
         'remainingTotal': 5
-      }
+      })
     ];
 
     function assertCoupons(coupons) {
@@ -583,7 +584,8 @@ describe('Service: passholderService', function () {
         '0987654321018',
         '0987654321019',
         '0987654321020'
-      ]
+      ],
+      mode: 'NUMBER'
     };
     var searchParametersUitpasNumbers = new SearchParameters(jsonSearchParametersUitpasNumbers);
 
@@ -759,6 +761,117 @@ describe('Service: passholderService', function () {
     };
 
     passholderService.findPassholders(searchParametersUitpasNumbers).catch(validateFallbackErrorResponse);
+
+    $httpBackend.flush();
+  });
+
+  it('should find ticketsales by pass numbers', function (done) {
+    var uitpasNumber = '123456789';
+
+    var expectedTicketSales = [
+      {
+        id: '30788',
+        creationDate: '2014-07-14',
+        eventTitle: 'Tentoonstelling: Aalst in de Middeleeuwen',
+        tariff: 15
+      },
+      {
+        id: '30789',
+        creationDate: '2013-12-06',
+        eventTitle: 'Eddy Wally in Concert',
+        tariff: 7.5
+      },
+      {
+        id: '30790',
+        creationDate: '2012-05-11',
+        eventTitle: 'Gratis zwembeurt',
+        tariff: 0,
+        coupon: {
+          id: '1',
+          name: 'Cultuurwaardebon',
+          description: 'dit is de description van Cultuurwaardebon',
+          expirationDate: '2015-12-26',
+          remainingTotal: 1
+        }
+      },
+      {
+        id: '30791',
+        creationDate: '2015-05-09',
+        eventTitle: 'Cursus foto\'s maken met je smartphone',
+        tariff: 7.5
+      },
+      {
+        id: '30792',
+        creationDate: '2010-06-09',
+        eventTitle: 'Nacht van de poëzie',
+        tariff: 5
+      }
+    ];
+
+    function assertTicketSales(ticketSales) {
+      expect(ticketSales).toEqual(expectedTicketSales);
+      done();
+    }
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/activities/ticket-sales')
+      .respond(200, expectedTicketSales);
+
+    passholderService
+      .getTicketSales(uitpasNumber)
+      .then(assertTicketSales);
+
+    $httpBackend.flush();
+  });
+
+  it('resolves when removing a ticketsale for a passholder', function (done) {
+    var passholder = {
+      passNumber: '0123456789012'
+    };
+    var ticketSale = {
+      id: '30788',
+      creationDate: '2014-07-14',
+      eventTitle: 'Tentoonstelling: Aalst in de Middeleeuwen',
+      tariff: 15
+    };
+
+    function expectResolved () {
+      done();
+    }
+
+    $httpBackend
+      .expectDELETE(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales/' + ticketSale.id)
+      .respond(200);
+
+    passholderService
+      .removeTicketSale(passholder, ticketSale)
+      .then(expectResolved);
+
+    $httpBackend.flush();
+  });
+
+  it('rejects when it can not remove a ticketsale for a passholder', function (done) {
+    var passholder = {
+      passNumber: '0123456789012'
+    };
+    var ticketSale = {
+      id: '30788',
+      creationDate: '2014-07-14',
+      eventTitle: 'Tentoonstelling: Aalst in de Middeleeuwen',
+      tariff: 15
+    };
+
+    function expectRejected () {
+      done();
+    }
+
+    $httpBackend
+      .expectDELETE(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales/' + ticketSale.id)
+      .respond(400);
+
+    passholderService
+      .removeTicketSale(passholder, ticketSale)
+      .catch(expectRejected);
 
     $httpBackend.flush();
   });

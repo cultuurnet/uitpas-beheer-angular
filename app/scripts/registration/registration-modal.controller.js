@@ -17,7 +17,7 @@ function RegistrationModalController (
   $state,
   Passholder,
   passholderService,
-  $modalInstance,
+  $uibModalInstance,
   counterService,
   $stateParams,
   RegistrationAPIError,
@@ -203,7 +203,7 @@ function RegistrationModalController (
 
   controller.submitRegistration = function () {
     var showRegisteredPassholder = function (passholder) {
-      $modalInstance.close(passholder);
+      $uibModalInstance.close(passholder);
     };
 
     var passholderData = angular.copy(controller.passholder);
@@ -235,7 +235,7 @@ function RegistrationModalController (
   };
 
   controller.close = function () {
-    $modalInstance.dismiss('registration modal closed');
+    $uibModalInstance.dismiss('registration modal closed');
   };
 
   controller.getDataFromEID = function() {

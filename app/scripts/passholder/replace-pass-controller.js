@@ -16,7 +16,7 @@ function PassholderReplacePassController (
   $scope,
   passholder,
   pass,
-  $modalInstance,
+  $uibModalInstance,
   passholderService,
   counterService,
   isJavaFXBrowser,
@@ -67,7 +67,7 @@ function PassholderReplacePassController (
   var scanListener;
 
   controller.cancelModal = function () {
-    $modalInstance.dismiss();
+    $uibModalInstance.dismiss();
   };
 
   controller.refreshNewPassInfo = function () {
@@ -173,7 +173,7 @@ function PassholderReplacePassController (
     }
 
     var redirectToPassholder = function (newPass) {
-      $modalInstance.close(newPass.number);
+      $uibModalInstance.close(newPass.number);
     };
 
     var setErrors = function () {
@@ -193,7 +193,22 @@ function PassholderReplacePassController (
   };
 
   controller.passScanned = function(event, identification) {
-    controller.card.id = identification;
+    var useScannedPassNumber = function (newPass) {
+      controller.formAlert = null;
+      controller.card.id = newPass.number;
+      controller.form.UiTPASNumber.$setDirty();
+    };
+
+    var warnUserNoPassFound = function () {
+      controller.formAlert = {
+        message: 'De gescande UiTPAS kan niet gevonden worden.',
+        type: 'danger'
+      };
+    };
+
+    passholderService
+      .findPass(identification)
+      .then(useScannedPassNumber, warnUserNoPassFound);
     $scope.$apply();
   };
 

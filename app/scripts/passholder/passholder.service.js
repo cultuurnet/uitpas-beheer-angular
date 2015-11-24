@@ -21,8 +21,11 @@ angular
   .module('ubr.passholder')
   .service('passholderService', passholderService);
 
-/* @ngInject */
-function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassholderSearchResults) {
+/**
+ * @ngInject
+ * @name passholderService
+ */
+function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope, PassholderAPIError, PassholderSearchResults, Coupon) {
   var apiUrl = appConfig.apiUrl;
   var passholderIdCache = $cacheFactory('passholderIdCache');
   var passholderCache = $cacheFactory('passholderCache');
@@ -398,7 +401,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     }
 
     var requestOptions = {
-      params: searchParameters.serialize()
+      params: searchParameters.toQueryParameters()
     };
 
     $http
@@ -463,7 +466,11 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     var deferredCoupons = $q.defer();
 
     function returnCoupons (couponsResponse) {
-      deferredCoupons.resolve(couponsResponse.data);
+      var couponObjects = [];
+      angular.forEach(couponsResponse.data, function (jsonCoupon) {
+        couponObjects.push(new Coupon(jsonCoupon));
+      });
+      deferredCoupons.resolve(couponObjects);
     }
 
     $http
@@ -471,5 +478,41 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       .then(returnCoupons, deferredCoupons.reject);
 
     return deferredCoupons.promise;
+  };
+
+  /**
+   * Get all the available ticket sales for a given UiTPAS-number
+   * @param {String} uitpasNumber
+   * @returns {Promise<TicketSale[]|ApiError>}
+   */
+  service.getTicketSales = function(uitpasNumber) {
+    var deferredTicketSales = $q.defer();
+
+    function returnTicketSales (ticketSalesResponse) {
+      deferredTicketSales.resolve(ticketSalesResponse.data);
+    }
+
+    $http
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/activities/ticket-sales')
+      .then(returnTicketSales, deferredTicketSales.reject);
+
+    return deferredTicketSales.promise;
+  };
+
+  /**
+   * Remove a ticket sale.
+   * @param {Passholder} passholder
+   * @param {TicketSale} ticketSale
+   * @returns {Promise}
+   */
+  service.removeTicketSale = function (passholder, ticketSale) {
+    var deferredRemove = $q.defer();
+
+    var removeRequest = $http.delete(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales/' + ticketSale.id);
+
+    removeRequest.success(deferredRemove.resolve);
+    removeRequest.error(deferredRemove.reject);
+
+    return deferredRemove.promise;
   };
 }

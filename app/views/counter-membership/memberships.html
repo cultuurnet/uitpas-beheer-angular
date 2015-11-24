@@ -1,4 +1,4 @@
-<section class="overview overview-counter-memberships">
+<section class="overview overview-small overview-counter-memberships">
   <h2 class="overview__title">Actieve Gebruikers</h2>
 
   <div class="overview__loading" ng-if="cmc.loadingMembers">
@@ -19,7 +19,7 @@
   </div>
 
   <ul class="list-unstyled" ng-if="!cmc.loadingMembers">
-    <li class="overview__item overview__item-list overview__item-list-small" ng-repeat="member in cmc.members">
+    <li class="overview__item overview__item-list" ng-repeat="member in cmc.members">
       <div class="row clearfix">
         <div class="grid__12 grid--bp-med__4">
           <strong ng-bind="::member.nick"></strong><br>
@@ -34,8 +34,8 @@
             <button type="button" class="btn btn-default" ng-click="cmc.initiateDelete(member)">Verwijderen</button>
           </div>
           <div ng-show="member.confirmingDelete" class="actions actions-confirm">
-            <a ng-click="cmc.cancelDelete(member)">Annuleren</a>
             <button class="btn btn-default" ng-click="cmc.deleteMember(member)">Bevestigen</button>
+            <a ng-click="cmc.cancelDelete(member)">Annuleren</a>
           </div>
           <div ng-show="member.deleting" class="alert alert-info small">
             <span class="fa fa-refresh loading"></span> Even geduld...
