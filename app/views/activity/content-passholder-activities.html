@@ -95,7 +95,7 @@
           <!--status start-->
           <div class="content-holder" ng-switch="activity.getTariff()" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
             <i class="free-event" ng-switch-when="free">Gratis</i>
-            <i class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<span><a class="history-modal" ui-sref="counter.main.passholder.ticketSales()">Historiek</a></span></i>
+            <i class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<br><a class="history-modal small" ui-sref="counter.main.passholder.ticketSales()">Historiek</a></i>
             <div class="price-differentiation" ng-switch-when="priceDifferentiation">
               <small>vanaf</small><br><strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong>
               <a class="btn btn-default btn-sm tariff-modal" ui-sref="counter.main.passholder.activityTariffs({ activity: activity })">Tarief kiezen</a>

@@ -1,4 +1,4 @@
-<section class="overview overview-devices">
+<section class="overview overview-small overview-devices">
   <h2 class="overview__title">Toestellen</h2>
 
   <div class="overview__loading" ng-if="cidc.loadingData">
@@ -8,7 +8,7 @@
   </div>
 
   <ul class="list-unstyled" ng-if="!cidc.loadingData">
-    <li class="overview__item overview__item-list overview__item-list-small" ng-repeat="device in cidc.devices">
+    <li class="overview__item overview__item-list" ng-repeat="device in cidc.devices">
       <div class="row clearfix">
         <div class="grid__12 grid--bp-med__3 grid--bp-lrg__4">
           <strong ng-bind="device.name"></strong>

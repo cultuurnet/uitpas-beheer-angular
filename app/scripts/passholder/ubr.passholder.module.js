@@ -279,6 +279,6 @@ angular
             .finally(function() {
               $state.go('^');
             });
-        }
-      });
+      }
+    });
   });

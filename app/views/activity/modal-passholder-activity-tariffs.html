@@ -17,7 +17,7 @@
               <td ng-repeat="value in ::pat.activity.sales.base">&euro; {{::value}}</td>
             </tr>
             <tr ng-repeat="(tKey, tariff) in ::pat.activity.sales.tariffs.list"
-                ng-class="tariff.type === 'COUPON' ? 'coupon' :'kansen-tariff'" >
+                ng-class="tariff.type === 'COUPON' ? 'coupon' : 'kansen-tariff'">
               <th>{{tariff.name}}</th>
               <td ng-repeat="priceInfo in ::tariff.prices" ng-class="{'lowest': (priceInfo.price === pat.activity.sales.tariffs.lowestAvailable && !tariff.maximumReached)}">
                 <label for="price-{{::tKey}}-{{::priceInfo.priceClass}}" ng-if="!tariff.maximumReached">
@@ -29,7 +29,6 @@
             </tr>
           </tbody>
         </table>
-        <!--<pre>{{passholderActivityTariffs|json}}</pre>-->
         <div class="grid">
           <div class="grid__12 grid--bp-lrg__4">
             <div class="lowest-legend small"><em>Laagste tarief</em></div>
