@@ -12,7 +12,7 @@ angular
   .controller('FeedbackController', FeedbackController);
 
 /* @ngInject */
-function FeedbackController (feedbackService, moment, uitIdUser, activeCounter) {
+function FeedbackController (feedbackService, uitIdUser, activeCounter) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -33,7 +33,6 @@ function FeedbackController (feedbackService, moment, uitIdUser, activeCounter) 
     controller.formSubmitBusy = true;
 
     var feedbackParameters = angular.copy(controller.feedback);
-    feedbackParameters.date = moment(new Date()).format('YYYY-MM-DD');
 
     var showSuccessMessage = function () {
       controller.feedbackStatus = 'SUCCESS';

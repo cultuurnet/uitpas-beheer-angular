@@ -5,7 +5,7 @@ describe('Controller: FeedbackController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var controller, feedbackService, $q, $scope, moment, uitIdUser, activeCounter;
+  var controller, feedbackService, $q, $scope, uitIdUser, activeCounter;
 
   // Setup mocking data
   var feedbackParameters = {
@@ -15,26 +15,12 @@ describe('Controller: FeedbackController', function () {
     message: 'This is a fake feedback message.'
   };
 
-  var getSpyForm = function (formData) {
-    var spyForm = {
-      $valid: true,
-      $setSubmitted: jasmine.createSpy('$setSubmitted')
-    };
-
-    if (formData) {
-      angular.merge(spyForm, formData);
-    }
-
-    return spyForm;
-  };
-
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $injector, _$rootScope_) {
 
     feedbackService = $injector.get('feedbackService');
     $q = $injector.get('$q');
     $scope = _$rootScope_.$new();
-    moment = $injector.get('moment');
     uitIdUser = {
       mbox: 'email@email.be',
       displayName: 'email'
@@ -45,7 +31,6 @@ describe('Controller: FeedbackController', function () {
 
     controller = $controller('FeedbackController', {
       feedbackService: feedbackService,
-      moment: moment,
       uitIdUser: uitIdUser,
       activeCounter: activeCounter
     });
@@ -82,7 +67,6 @@ describe('Controller: FeedbackController', function () {
     spyOn(feedbackService, 'sendFeedback').and.returnValue($q.when());
 
     controller.feedback = feedbackParameters;
-    controller.feedback.date = moment(new Date()).format('YYYY-MM-DD');
 
     controller.submitForm();
     $scope.$digest();
