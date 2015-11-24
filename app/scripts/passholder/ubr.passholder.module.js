@@ -45,6 +45,13 @@ angular
               if (pass.isBlocked()) {
                 templatePath = 'views/passholder/content-passholder-blocked.html';
               }
+              else {
+                var kansenstatuutFromPassCardSystem = pass.passholder.getKansenstatuutByCardSystemID(pass.cardSystem.id);
+
+                if (kansenstatuutFromPassCardSystem && kansenstatuutFromPassCardSystem.status === 'EXPIRED') {
+                  templatePath = 'views/passholder/content-passholder-kansenstatuut-expired.html';
+                }
+              }
               return $templateFactory.fromUrl(templatePath);
             },
             controller: 'PassholderDetailController',
