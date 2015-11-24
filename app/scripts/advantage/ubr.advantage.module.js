@@ -15,36 +15,25 @@ angular
     'truncate'
   ])/* @ngInject */
   .config(function ($stateProvider) {
-    /* @ngInject */
-    function getPassholderFromStateParams(passholderService, $stateParams) {
-      return passholderService.findPassholder($stateParams.identification);
-    }
-
     $stateProvider.state(
       'counter.main.passholder.advantageDetail', {
         params: {
-          identification: null,
-          passholder: null,
           advantage: null
         },
         resolve: {
-          passholder: getPassholderFromStateParams,
           /* @ngInject */
           advantage: function($stateParams) {
             return $stateParams.advantage;
           }
         },
         /* @ngInject */
-        onEnter: function(passholder, advantage, $state, $uibModal) {
+        onEnter: function(advantage, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
               templateUrl: 'views/advantage/modal-passholder-advantage-detail.html',
               size: 'sm',
               resolve: {
-                passholder: function () {
-                  return passholder;
-                },
                 advantage: function () {
                   return advantage;
                 }
