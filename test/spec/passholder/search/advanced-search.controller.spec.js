@@ -6,7 +6,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
   beforeEach(module('uitpasbeheerApp'));
 
   var advancedSearchService, $q, controller, SearchParameters, PassholderSearchResults, $scope, activeCounter, Counter,
-      $controller, $state;
+      $controller, $state, $rootScope;
 
   var SearchModes = {
     DETAIL: { title:'Zoeken', name:'DETAIL' },
@@ -135,13 +135,14 @@ describe('Controller: PassholderAdvancedSearchController', function () {
   };
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$controller_, $injector, $rootScope) {
+  beforeEach(inject(function (_$controller_, $injector, _$rootScope_) {
     $controller = _$controller_;
+    $rootScope = _$rootScope_;
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders']);
     $q = $injector.get('$q');
     SearchParameters = $injector.get('SearchParameters');
     PassholderSearchResults = $injector.get('PassholderSearchResults');
-    $scope = $rootScope;
+    $scope = $rootScope.$new();
     Counter = $injector.get('Counter');
     activeCounter = new Counter(angular.copy(activeCounterJson));
     $state = jasmine.createSpyObj('$state', ['go']);
@@ -152,7 +153,9 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       advancedSearchService: advancedSearchService,
       activeCounterAssociations: activeCounterAssociations,
       activeCounter: activeCounter,
-      $state: $state
+      $state: $state,
+      $rootScope: $rootScope,
+      $scope: $scope
     });
   }));
 
@@ -333,7 +336,10 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       SearchParameters: SearchParameters,
       advancedSearchService: advancedSearchService,
       activeCounterAssociations: [],
-      activeCounter: new Counter(angular.copy(activeCounterJson))
+      activeCounter: new Counter(angular.copy(activeCounterJson)),
+      $state: $state,
+      $rootScope: $rootScope,
+      $scope: $scope
     });
 
     expect(withoutDetailsController.detailModeEnabled).toEqual(false);
@@ -344,7 +350,10 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       SearchParameters: SearchParameters,
       advancedSearchService: advancedSearchService,
       activeCounterAssociations: [],
-      activeCounter: newCounter
+      activeCounter: newCounter,
+      $state: $state,
+      $rootScope: $rootScope,
+      $scope: $scope
     });
 
     expect(withDetailsController.detailModeEnabled).toEqual(true);
