@@ -45,6 +45,9 @@ angular
               if (pass.isBlocked()) {
                 templatePath = 'views/passholder/content-passholder-blocked.html';
               }
+              else if (pass.kansenstatuutExpired(pass.passholder)) {
+                templatePath = 'views/passholder/content-passholder-kansenstatuut-expired.html';
+              }
               return $templateFactory.fromUrl(templatePath);
             },
             controller: 'PassholderDetailController',
