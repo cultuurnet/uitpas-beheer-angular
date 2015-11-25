@@ -133,6 +133,16 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     'permissions': ['kansenstatuut toekennen'],
     'groups': ['Geauthorizeerde registratie balies']
   };
+  var searchResponse = {
+    'itemsPerPage': 10,
+    'totalItems': 0,
+    'member': [],
+    'invalidUitpasNumbers': [],
+    'firstPage': 'http://culpas-silex.dev/passholders?page=1',
+    'lastPage': 'http://culpas-silex.dev/passholders?page=1',
+    'previousPage': 'http://culpas-silex.dev/passholders?page=1',
+    'nextPage': 'http://culpas-silex.dev/passholders?page=1'
+  };
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$controller_, $injector, _$rootScope_) {
@@ -225,17 +235,6 @@ describe('Controller: PassholderAdvancedSearchController', function () {
   });
 
   it('can find passholders without passNumbers', function () {
-    var searchResponse = {
-      'itemsPerPage': 10,
-      'totalItems': 0,
-      'member': [],
-      'invalidUitpasNumbers': [],
-      'firstPage': 'http://culpas-silex.dev/passholders?page=1',
-      'lastPage': 'http://culpas-silex.dev/passholders?page=1',
-      'previousPage': 'http://culpas-silex.dev/passholders?page=1',
-      'nextPage': 'http://culpas-silex.dev/passholders?page=1'
-    };
-
     advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
 
     controller.findPassholdersByNumbers();
@@ -377,6 +376,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
   });
 
   it('reloads the parameters from the url on state change success', function () {
+    advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
     $state.params = {firstName: 'Jos'};
     $rootScope.$emit('$locationChangeSuccess');
     var expectedSearchFields = {
@@ -385,6 +385,31 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       limit: 10,
       dateOfBirth: null,
       firstName: 'Jos',
+      name: null,
+      street: null,
+      city: null,
+      email: null,
+      membershipAssociationId: null,
+      membershipStatus:
+        null,
+      mode: {
+        title: 'Zoeken',
+        name: 'DETAIL'
+      }
+    };
+    expect(controller.searchFields).toEqual(expectedSearchFields);
+  });
+
+  it('clears the parameters from the url on state change success with empty state params', function () {
+    advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
+    $state.params = {};
+    $rootScope.$emit('$locationChangeSuccess');
+    var expectedSearchFields = {
+      uitpasNumbers: [],
+      page: 1,
+      limit: 10,
+      dateOfBirth: null,
+      firstName: null,
       name: null,
       street: null,
       city: null,

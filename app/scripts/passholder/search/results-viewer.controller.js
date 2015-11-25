@@ -96,9 +96,16 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
     lastSearchParameters = searchParameters;
   };
 
+  controller.resetSearch = function () {
+    controller.loading = false;
+    controller.results = null;
+  };
+
   var searchResultsListener = $rootScope.$on('passholdersFound', controller.updateResults);
   var searchListener = $rootScope.$on('findingPassholders', controller.finding);
+  var cleanupResetSearchListenerListener = $rootScope.$on('resetSearch', controller.resetSearch);
 
   $scope.$on('$destroy', searchResultsListener);
   $scope.$on('$destroy', searchListener);
+  $scope.$on('$destroy', cleanupResetSearchListenerListener);
 }

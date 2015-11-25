@@ -12,7 +12,8 @@ angular
   .controller('PassholderAdvancedSearchController', AdvancedSearchController);
 
 /* @ngInject */
-function AdvancedSearchController (SearchParameters, advancedSearchService, activeCounterAssociations, activeCounter, $state, $rootScope, $scope) {
+function AdvancedSearchController (SearchParameters, advancedSearchService, activeCounterAssociations, activeCounter,
+                                   $state, $rootScope, $scope, $location) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -172,7 +173,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
 
   controller.resetSearchFields = function () {
     controller.searchFields = new SearchParameters();
-    $state.go('counter.main.advancedSearch', controller.searchFields.toParams(), { notify: false });
+    $location.search(controller.searchFields.toParams());
   };
 
   /**
@@ -244,9 +245,17 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
 
   var locationChangeSuccess = function() {
     controller.searchFields = getSearchParametersFromState();
-  }
+    var emptySearchParams = new SearchParameters();
+    if (controller.searchFields.yieldsSameResultSetAs(emptySearchParams)) {
+      $state.params = {};
+      $rootScope.$emit('resetSearch');
+    }
+    else {
+      controller.findPassholdersByDetails();
+    }
+  };
 
-  var cleanuplocationChangeSuccessListener = $rootScope.$on('$locationChangeSuccess', locationChangeSuccess);
+  var cleanupLocationChangeSuccessListener = $rootScope.$on('$locationChangeSuccess', locationChangeSuccess);
 
-  $scope.$on('$destroy', cleanuplocationChangeSuccessListener);
+  $scope.$on('$destroy', cleanupLocationChangeSuccessListener);
 }
