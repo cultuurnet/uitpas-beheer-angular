@@ -17,4 +17,5 @@ function ErrorController ($stateParams) {
 
   controller.title = $stateParams.title;
   controller.description = $stateParams.description;
+  controller.type = $stateParams.type;
 }

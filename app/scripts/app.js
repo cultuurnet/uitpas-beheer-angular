@@ -81,7 +81,8 @@ angular
         },
         params: {
           'title': null,
-          'description': null
+          'description': null,
+          'type': null
         }
       })
       .state('login', {
