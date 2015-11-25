@@ -34,6 +34,12 @@ describe('Controller: FeedbackController', function () {
       uitIdUser: uitIdUser,
       activeCounter: activeCounter
     });
+    controller.feedbackForm = {
+      message: {
+        '$setUntouched': jasmine.createSpy('$setUntouched'),
+        '$setPristine': jasmine.createSpy('$setPristine')
+      }
+    }
   }));
 
   it('should set some variables from the uitIdUser and activeCounter', function () {
@@ -67,12 +73,13 @@ describe('Controller: FeedbackController', function () {
     spyOn(feedbackService, 'sendFeedback').and.returnValue($q.when());
 
     controller.feedback = feedbackParameters;
+    var expectedFeedbackParameters = angular.copy(feedbackParameters);
 
     controller.submitForm();
     $scope.$digest();
 
     expect(feedbackService.sendFeedback)
-      .toHaveBeenCalledWith(feedbackParameters);
+      .toHaveBeenCalledWith(expectedFeedbackParameters);
   });
 
   it('can remove the error feedback', function () {

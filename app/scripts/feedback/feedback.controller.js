@@ -42,6 +42,9 @@ function FeedbackController (feedbackService, uitIdUser, activeCounter) {
 
     var showSuccessMessage = function () {
       controller.feedbackStatus = 'SUCCESS';
+      controller.feedback.message = '';
+      controller.feedbackForm.message.$setUntouched();
+      controller.feedbackForm.message.$setPristine();
       controller.formSubmitBusy = false;
     };
 
