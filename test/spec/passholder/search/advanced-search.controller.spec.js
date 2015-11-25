@@ -375,4 +375,28 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     controller.initializeSearchMode(searchParameters);
     expect(controller.findPassholdersByNumbers).toHaveBeenCalled();
   });
+
+  it('reloads the parameters from the url on state change success', function () {
+    $state.params = {firstName: 'Jos'};
+    $rootScope.$emit('$locationChangeSuccess');
+    var expectedSearchFields = {
+      uitpasNumbers: [],
+      page: 1,
+      limit: 10,
+      dateOfBirth: null,
+      firstName: 'Jos',
+      name: null,
+      street: null,
+      city: null,
+      email: null,
+      membershipAssociationId: null,
+      membershipStatus:
+        null,
+      mode: {
+        title: 'Zoeken',
+        name: 'DETAIL'
+      }
+    };
+    expect(controller.searchFields).toEqual(expectedSearchFields);
+  });
 });
