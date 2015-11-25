@@ -5,11 +5,11 @@
     <h4 class="modal-title">Prijzen</h4>
   </div>
   <div class="modal-body">
-    <div class="container-fluid">
+    <div class="container-fluid table-responsive">
       <div class="activity-title" ng-bind="::pat.activity.title"></div>
       <div class="alert alert-danger" ng-show="pat.asyncError" ng-bind="pat.asyncError.cleanMessage"></div>
       <fieldset ng-disabled="pat.formSubmitBusy">
-        <table>
+        <table class="table">
           <thead><th></th><th ng-repeat="(rank, value) in ::pat.activity.sales.base" ng-bind="::rank | characters:33" ng-attr-title="{{::rank}}"></th></thead>
           <tbody>
             <tr class="base">
