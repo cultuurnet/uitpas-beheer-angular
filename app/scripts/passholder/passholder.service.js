@@ -60,8 +60,13 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
         deferredPassholder.resolve(pass);
       };
 
-      var rejectPassHolder = function (errorResponse) {
-        deferredPassholder.reject(errorResponse.data);
+      var rejectPassHolder = function () {
+        var error = {
+        code: 'PASS_NOT_FOUND',
+          title: 'Geen pas gevonden',
+          message: 'Er kan geen pas gevonden worden voor het nummer: ' + identification
+        };
+        deferredPassholder.reject(error);
       };
 
       passholderRequest.then(cacheAndResolvePassHolder, rejectPassHolder);
