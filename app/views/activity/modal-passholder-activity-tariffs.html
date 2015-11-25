@@ -5,20 +5,20 @@
     <h4 class="modal-title">Prijzen</h4>
   </div>
   <div class="modal-body">
-    <div class="container-fluid">
+    <div class="container-fluid table-responsive">
       <div class="activity-title" ng-bind="::pat.activity.title"></div>
       <div class="alert alert-danger" ng-show="pat.asyncError" ng-bind="pat.asyncError.cleanMessage"></div>
       <fieldset ng-disabled="pat.formSubmitBusy">
-        <table>
-          <thead><th></th><th ng-repeat="(rank, value) in ::pat.activity.sales.base" ng-bind="::rank"></th></thead>
+        <table class="table">
+          <thead><th></th><th ng-repeat="(rank, value) in ::pat.activity.sales.base" ng-bind="::rank | characters:33" ng-attr-title="{{::rank}}"></th></thead>
           <tbody>
             <tr class="base">
-              <th>Basistarief</th>
+              <th title="Basistarief">Basistarief</th>
               <td ng-repeat="value in ::pat.activity.sales.base">&euro; {{::value}}</td>
             </tr>
             <tr ng-repeat="(tKey, tariff) in ::pat.activity.sales.tariffs.list"
                 ng-class="tariff.type === 'COUPON' ? 'coupon' : 'kansen-tariff'">
-              <th>{{tariff.name}}</th>
+              <th ng-attr-title="{{::tariff.name}}">{{::tariff.name}}</th>
               <td ng-repeat="priceInfo in ::tariff.prices" ng-class="{'lowest': (priceInfo.price === pat.activity.sales.tariffs.lowestAvailable && !tariff.maximumReached)}">
                 <label for="price-{{::tKey}}-{{::priceInfo.priceClass}}" ng-if="!tariff.maximumReached">
                   <input type="radio" name="tariff" id="price-{{::tKey}}-{{::priceInfo.priceClass}}" ng-model="pat.selectedTariff"
