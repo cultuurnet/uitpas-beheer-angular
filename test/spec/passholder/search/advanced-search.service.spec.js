@@ -110,4 +110,21 @@ describe('Service: Advanced Search', function () {
 
     expect(passholderService.findPassholders.calls.mostRecent().args[0]).toEqual(newSearchParameters);
   }));
+
+  it('should not inherit the state parameters from the current page when doing a new search', function () {
+    var expectedSearchResults = {
+      awww: 'yeeah!'
+    };
+    passholderService.findPassholders.and.returnValue($q.resolve(expectedSearchResults));
+    spyOn($state, 'go');
+    var searchParameters1 = {
+      beep: 'boop',
+      toParams: function () {
+        return {beep: 'boop'};
+      }
+    };
+    searchService.findPassholders(searchParameters1);
+    $rootScope.$digest();
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch', { beep: 'boop' }, { inherit: false });
+  });
 });
