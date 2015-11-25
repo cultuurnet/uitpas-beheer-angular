@@ -1,0 +1,48 @@
+<section class="feedback">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="grid__12 grid--bp-sml__12 grid--bp-med__10 grid--bp-xlr__6">
+        <div class="alert alert-success" role="alert" ng-show="fc.feedbackStatus === 'SUCCESS'">
+          De feedback is verstuurd naar Cultuurnet. We nemen dit zo snel mogelijk op.
+        </div>
+        <div class="alert alert-danger" role="alert" ng-show="fc.feedbackStatus === 'FAILED'">
+          De feedback kon niet verstuurd worden. Probeer later opnieuw of verstuur een mail naar <a href="mailto:info@uitpas.be?subject=Feedback balie app">info@uitpas.be</a>.
+        </div>
+        <form name="fc.feedbackForm" novalidate ng-submit="fc.submitForm()" ng-class="{'form-submiting': fc.formSubmitBusy}">
+          <div class="field-group required">
+            <label for="name" class="control-label">Naam</label>
+            <input type="text" class="form-control" id="name" name="name" ng-model="fc.feedback.name" ng-required="true" ng-change="fc.inputListener()">
+            <div ng-if="(fc.feedbackForm.$submitted || fc.feedbackForm.name.$touched) && fc.feedbackForm.name.$invalid" class="text-danger small">
+              <div ng-if="fc.feedbackForm.name.$error.required">De naam is verplicht.</div>
+            </div>
+          </div>
+          <div class="field-group required">
+            <label for="counter" class="control-label">Balie</label>
+            <input type="text" class="form-control" id="counter" name="counter" ng-model="fc.feedback.counter" ng-required="true" ng-change="fc.inputListener()">
+            <div ng-if="(fc.feedbackForm.$submitted || fc.feedbackForm.counter.$touched) && fc.feedbackForm.counter.$invalid" class="text-danger small">
+              <div ng-if="fc.feedbackForm.counter.$error.required">De balie is verplicht.</div>
+            </div>
+          </div>
+          <div class="field-group required">
+            <label for="email" class="control-label">E-mail</label>
+            <input type="email" class="form-control" id="email" name="email" ng-model="fc.feedback.email" ng-required="true" ng-change="fc.inputListener()">
+            <div ng-if="(fc.feedbackForm.$submitted || fc.feedbackForm.email.$touched) && fc.feedbackForm.email.$invalid" class="text-danger small">
+              <div ng-if="fc.feedbackForm.email.$error.required">Het e-mailadres is verplicht.</div>
+              <div ng-if="fc.feedbackForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+            </div>
+          </div>
+          <div class="field-group required">
+            <label for="message" class="control-label">Boodschap</label>
+            <textarea class="form-control" rows="4" id="message" ng-model="fc.feedback.message" name="message" ng-required="true" ng-change="fc.inputListener()"></textarea>
+            <div ng-if="(fc.feedbackForm.$submitted || fc.feedbackForm.message.$touched) && fc.feedbackForm.message.$invalid" class="text-danger small">
+              <div ng-if="fc.feedbackForm.message.$error.required">De boodschap is verplicht.</div>
+            </div>
+          </div>
+          <div class="field-group">
+            <button type="button" class="btn btn-primary" ng-disabled="fc.formSubmitBusy || fc.feedbackForm.$invalid" ng-click="fc.submitForm()"><span ng-hide="fc.formSubmitBusy">Versturen</span> <span ng-show="fc.formSubmitBusy"><span class="fa fa-refresh loading small"></span> Formulier wordt verzonden</span></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
