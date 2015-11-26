@@ -82,7 +82,7 @@ angular
         params: {
           'title': null,
           'description': null,
-          'type': null
+          'code': null
         }
       })
       .state('login', {

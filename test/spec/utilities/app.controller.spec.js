@@ -83,7 +83,7 @@ describe('Controller: AppController', function () {
       {
         title: 'Not found',
         description: 'Passholder not found for identification number: identification',
-        type: 'PASSHOLDER_NOT_FOUND'
+        code: 'PASSHOLDER_NOT_FOUND'
       },
       {
         location: false

@@ -12,10 +12,11 @@ angular
   .controller('ErrorController', ErrorController);
 
 /* @ngInject */
-function ErrorController ($stateParams) {
+function ErrorController ($stateParams, errorClasses) {
   var controller = this;
 
   controller.title = $stateParams.title;
   controller.description = $stateParams.description;
-  controller.type = $stateParams.type;
+  controller.code = $stateParams.code;
+  controller.class = (errorClasses[$stateParams.code]) ? errorClasses[$stateParams.code].class : 'unknown-error';
 }
