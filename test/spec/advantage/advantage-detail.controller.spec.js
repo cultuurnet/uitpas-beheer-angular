@@ -56,7 +56,7 @@ describe('Controller: PassholderAdvantageDetailController', function () {
       result: {
         then: jasmine.createSpy('$uibModalInstance.result.then')
       }
-    };;
+    };
     Advantage = $injector.get('Advantage');
 
     advantageDetailController = $controller('PassholderAdvantageDetailController', {
