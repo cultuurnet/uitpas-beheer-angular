@@ -121,12 +121,13 @@ describe('Factory: Advantage', function () {
         ]
       }
     ];
+    delete jsonAdvantage.endDate;
 
     var expectedAdvantage = angular.copy(jsonAdvantage);
     angular.forEach(expectedAdvantage.validForCounters, function (jsonCounter, key) {
       expectedAdvantage.validForCounters[key] = new Counter(jsonCounter);
     });
-    expectedAdvantage.endDate = day('2016/09/10', 'YYYY-MM-DD').toDate();
+    expectedAdvantage.endDate = null;
 
     var advantage = new Advantage(jsonAdvantage);
     expect(advantage).toEqual(expectedAdvantage);

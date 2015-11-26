@@ -41,7 +41,7 @@ function advantageFactory(Counter, moment, day) {
       this.exchangeable = jsonAdvantage.exchangeable;
       this.validForCities = jsonAdvantage.validForCities;
       this.validForCounters = parseJsonCounters(jsonAdvantage.validForCounters);
-      this.endDate= day(jsonAdvantage.endDate, 'YYYY-MM-DD').toDate();
+      this.endDate = (jsonAdvantage.endDate) ? day(jsonAdvantage.endDate, 'YYYY-MM-DD').toDate() : null;
     },
     serialize: function () {
       var serializedAdvantage = angular.copy(this);

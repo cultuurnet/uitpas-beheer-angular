@@ -7,7 +7,7 @@
     <span>Nodige punten</span>
     <div><span ng-bind="::padc.advantage.points"></span> punten</div>
   </div>
-  <div class="exchange-period-wrapper">
+  <div class="exchange-period-wrapper" ng-show="padc.advantage.endDate">
     <span>Omruilperiode</span>
     <div>Tot <span ng-bind="::padc.advantage.endDate | date : 'dd/MM/yyyy'"></span></div>
   </div>
