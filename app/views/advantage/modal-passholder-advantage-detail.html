@@ -15,12 +15,12 @@
     <span>Aangeboden door</span>
     <div><span ng-repeat="counter in ::padc.advantage.validForCounters">{{counter.name}}{{$last ? '' : ', '}}</span></div>
   </div>
-  <div class="descriptions-wrapper" ng-show="padc.advantage.validForCities.length > 0">
+  <div class="descriptions-wrapper" ng-show="padc.advantage.validForCities.length > 0 || padc.advantage.description1 || padc.advantage.description2">
     <span>Beschrijving & Voorwaarden</span>
     <div>
-      <div ng-bind="padc.advantage.description1"></div>
-      <div ng-bind="padc.advantage.description2"></div>
-      <div ng-show="padc.advantage.validForCities.length > 1">Geldig voor inwoners van <span ng-repeat="city in ::padc.advantage.validForCities">{{city}}{{$last ? '' : ', '}}</span></div>
+      <div ng-bind-html="padc.advantage.description1"></div>
+      <div ng-bind-html="padc.advantage.description2"></div>
+      <div ng-show="padc.advantage.validForCities.length > 0">Geldig voor inwoners van <span ng-repeat="city in ::padc.advantage.validForCities">{{city}}{{$last ? '' : ', '}}</span></div>
     </div>
   </div>
 </div><!-- end modal-body -->
