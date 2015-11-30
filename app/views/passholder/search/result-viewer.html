@@ -7,7 +7,7 @@
   </div>
 
   <div ng-hide="rvc.noSearchDone()">
-    <div ng-show="rvc.results.totalItems == 0" class="alert alert-info small">
+    <div ng-show="rvc.results.totalItems == 0 && !rvc.loading" class="alert alert-info small">
       Er zijn geen resultaten gevonden voor de gebruikte zoekcriteria.
     </div>
     <div ng-show="rvc.results.hasUnknownNumbers() && !rvc.results.hasConfirmedUnknownNumbers() && rvc.results.totalItems > 0" class="alert alert-info small">
@@ -33,10 +33,29 @@
     </p>
 
     <div ng-show="!rvc.loading && rvc.results.totalItems > 0">
-      {{rvc.results.totalItems}} resultaten gevonden
+      <input type="checkbox" ng-model="rvc.bulk.selection.selectAll" ng-click="rvc.bulkSelectAll()">
+      <!-- No items selected -->
+      <span ng-hide="rvc.bulk.selection.selectAll || rvc.bulk.selection.uitpasNumberSelection.length > 0">{{rvc.results.totalItems}} resultaten gevonden</span>
+      <!-- Items selected -->
+      <span ng-show="rvc.bulk.selection.selectAll || rvc.bulk.selection.uitpasNumberSelection.length > 0">
+        <!-- Some items selected -->
+        <span ng-hide="rvc.bulk.selection.selectAll" ng-bind="rvc.bulk.selection.uitpasNumberSelection.length"></span>
+        <!-- All items selected -->
+        <span ng-show="rvc.bulk.selection.selectAll" ng-bind="rvc.bulk.selection.searchResults.totalItems"></span> geselecteerde pashouder(s)
+        <select ng-model="rvc.bulk.action">
+          <option value="export">Exporteren</option>
+        </select>
+        <button type="button" ng-disabled="rvc.bulk.submitBusy" class="btn btn-primary" ng-click="rvc.doBulkAction()">
+          <span ng-hide="rvc.bulk.submitBusy">Doorgaan</span>
+          <span ng-show="rvc.bulk.submitBusy"><span class="fa fa-refresh loading small"></span> Actie wordt uitgevoerd</span>
+        </button>
+      </span>
 
       <ul class="list-unstyled passholder-list">
         <li class="overview__item overview__item-list" ng-repeat="pass in rvc.results.passen">
+          <div>
+            <input type="checkbox" ng-click="rvc.togglePassBulkSelection(pass)" ng-checked="rvc.bulk.selection.selectAll || rvc.bulk.selection.numberInSelection(pass.number)">
+          </div>
           <div class="grid display-table" ng-click="rvc.showPassholderDetails(pass.number)">
             <div class="grid__2 grid--bp-med__1 first">
               <!-- image -->
@@ -71,7 +90,6 @@
                   </div>
                 </li>
               </ul>
-
 
             </div>
 
