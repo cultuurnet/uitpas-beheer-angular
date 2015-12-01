@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc service
- * @name ubr.utilities.BulkSelection
+ * @name ubr.passholder.bulkActions.BulkSelection
  * @description
  * # Pass factory
- * Factory in the ubr.utilities module.
+ * Factory in the ubr.passholder.bulkActions module.
  */
 angular
-  .module('ubr.utilities')
+  .module('ubr.passholder.bulkActions')
   .factory('BulkSelection', bulkSelectionFactory);
 
 /* @ngInject */
