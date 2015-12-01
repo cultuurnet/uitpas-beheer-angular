@@ -2,7 +2,7 @@
 
 describe('Controller: Results Viewer', function () {
 
-  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter;
+  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter, BulkSelection;
 
   beforeEach(module('ubr.passholder.search'));
 
@@ -107,5 +107,46 @@ describe('Controller: Results Viewer', function () {
 
   it('can tell when no search has been done', function () {
     expect(controller.noSearchDone()).toBeTruthy();
+  });
+
+  it('can deselect all items for the bulk actions', function () {
+    controller.bulk.selection.uitpasNumberSelection = ['0123456789012', '0123456789013'];
+    controller.bulk.selection.selectAll = false;
+    controller.bulkSelectAll();
+    expect(controller.bulk.selection.uitpasNumberSelection).toEqual([]);
+  });
+
+  it('can remove a pass from the select all bulk selection', function () {
+    var pass = {
+      number: '0132456789012'
+    };
+
+    controller.bulk.selection.selectAll = true;
+    spyOn(controller.bulk.selection, 'removeUitpasNumberFromSelection');
+    controller.togglePassBulkSelection(pass);
+    expect(controller.bulk.selection.removeUitpasNumberFromSelection).toHaveBeenCalledWith(pass.number);
+  });
+
+  it('can remove a pass from an items bulk selection', function () {
+    var pass = {
+      number: '0132456789012'
+    };
+
+    controller.bulk.selection.selectAll = false;
+    controller.bulk.selection.uitpasNumberSelection = ['0123456789012', '0132456789013'];
+    spyOn(controller.bulk.selection, 'removeUitpasNumberFromSelection');
+    spyOn(controller.bulk.selection, 'numberInSelection').and.returnValue(true);
+    controller.togglePassBulkSelection(pass);
+    expect(controller.bulk.selection.removeUitpasNumberFromSelection).toHaveBeenCalledWith(pass.number);
+  });
+
+  it('can add a pass to the bulk selection', function () {
+    var pass = {
+      number: '0132456789012'
+    };
+
+    spyOn(controller.bulk.selection, 'addUitpasNumberToSelection');
+    controller.togglePassBulkSelection(pass);
+    expect(controller.bulk.selection.addUitpasNumberToSelection).toHaveBeenCalledWith(pass.number);
   });
 });
