@@ -66,6 +66,17 @@ describe('Factory: BulkSelection', function () {
   };
   jsonSearchResultsWithPassen.member[1].uitPas.number = '0930000422203';
 
+  var jsonSearchParameters = {
+    dateOfBirth: '2004-08-16',
+    firstName: 'Jos',
+    name: 'Het debiele ei',
+    street: 'Harensesteenweg',
+    city: 'Vilvoorde',
+    email: 'jos@humo.be',
+    membershipAssociationId: 5,
+    membershipStatus: 'ACTIVE'
+  };
+
   beforeEach(inject(function (_BulkSelection_, _PassholderSearchResults_, _SearchParameters_, _Pass_) {
     BulkSelection = _BulkSelection_;
     PassholderSearchResults = _PassholderSearchResults_;
@@ -116,16 +127,7 @@ describe('Factory: BulkSelection', function () {
   });
 
   it('can receive new searchParameters', function () {
-    var newSearchparamaters = new SearchParameters({
-      dateOfBirth: '2004-08-16',
-      firstName: 'Jos',
-      name: 'Het debiele ei',
-      street: 'Harensesteenweg',
-      city: 'Vilvoorde',
-      email: 'jos@humo.be',
-      membershipAssociationId: 5,
-      membershipStatus: 'ACTIVE'
-    });
+    var newSearchparamaters = new SearchParameters(jsonSearchParameters);
     bulkSelection.updateSearchParameters(newSearchparamaters);
 
     var expectedBulkSelection = {
@@ -240,5 +242,60 @@ describe('Factory: BulkSelection', function () {
 
     expect(bulkSelection.uitpasNumberSelection).toEqual(['0930000422203']);
     expect(bulkSelection.selectAll).toBeFalsy();
+  });
+
+  it('can remove all the uitpas numbers from the selection', function () {
+    bulkSelection.uitpasNumberSelection = [
+      '0987654321013',
+      '0987654321014',
+      '0987654321015'
+    ];
+
+    bulkSelection.removeAllUitpasNumbers();
+    expect(bulkSelection.uitpasNumberSelection).toEqual([]);
+  });
+
+  it('can check if a number is in the selection', function () {
+    bulkSelection.uitpasNumberSelection = [
+      '0987654321013',
+      '0987654321014',
+      '0987654321015'
+    ];
+
+    expect(bulkSelection.numberInSelection('0987654321013')).toBeTruthy();
+    expect(bulkSelection.numberInSelection('0987654321012')).toBeFalsy();
+  });
+
+  it('can convert its internal data to information for the request', function () {
+    var newSearchparamaters = new SearchParameters(jsonSearchParameters);
+    bulkSelection.updateSearchParameters(newSearchparamaters);
+
+    var expectedBulkSelection = {
+      searchParameters: {
+        firstName: 'Jos',
+        name: 'Het debiele ei',
+        street: 'Harensesteenweg',
+        city: 'Vilvoorde',
+        email: 'jos@humo.be',
+        membershipAssociationId: 5,
+        membershipStatus: 'ACTIVE',
+        dateOfBirth: '2004-08-16'
+      }
+    };
+
+    expect(bulkSelection.toBulkSelection()).toEqual(expectedBulkSelection);
+
+    bulkSelection.uitpasNumberSelection = [
+      '0987654321013',
+      '0987654321014',
+      '0987654321015'
+    ];
+    expectedBulkSelection.selection = [
+      '0987654321013',
+      '0987654321014',
+      '0987654321015'
+    ];
+    expect(bulkSelection.toBulkSelection()).toEqual(expectedBulkSelection);
+
   });
 });
