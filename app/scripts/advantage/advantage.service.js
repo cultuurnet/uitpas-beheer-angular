@@ -31,8 +31,8 @@ function advantageService($q, $http, $rootScope, $cacheFactory, appConfig) {
       deferredAdvantages.reject(
         {
           code: 'ADVANTAGES_NOT_FOUND',
-          title: 'Advantages not found',
-          message: 'No advantages found for passholder with identification number: ' + passholderIdentification
+          title: 'Geen voordelen gevonden',
+          message: 'Er kunnen geen voordelen gevonden worden voor de pashouder met nummer: ' + passholderIdentification
         }
       );
     };

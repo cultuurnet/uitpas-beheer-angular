@@ -100,7 +100,8 @@ describe('Service: UiTPAS router', function () {
       'counter.main.error',
       {
         title: 'A useful title',
-        description: 'A useful description'
+        description: 'A useful description',
+        type: 'WHATEVER_CODE'
       },
       {
         reload: true

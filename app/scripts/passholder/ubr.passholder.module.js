@@ -80,8 +80,8 @@ angular
           pass: getPassFromStateParams,
           passholder: getPassholderFromStateParams,
           /* @ngInject */
-          advantages: function(advantageService, $stateParams) {
-            return advantageService.list($stateParams.identification);
+          advantages: function(advantageService, $stateParams, passholder) {
+            return advantageService.list(passholder.passNumber);
           },
           /* @ngInject */
           activeCounter: function (counterService) {
