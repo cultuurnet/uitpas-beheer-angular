@@ -6,7 +6,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
   beforeEach(module('uitpasbeheerApp'));
 
   var advancedSearchService, $q, controller, SearchParameters, PassholderSearchResults, $scope, activeCounter, Counter,
-      $controller, $state;
+      $controller, $state, $rootScope;
 
   var SearchModes = {
     DETAIL: { title:'Zoeken', name:'DETAIL' },
@@ -133,15 +133,26 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     'permissions': ['kansenstatuut toekennen'],
     'groups': ['Geauthorizeerde registratie balies']
   };
+  var searchResponse = {
+    'itemsPerPage': 10,
+    'totalItems': 0,
+    'member': [],
+    'invalidUitpasNumbers': [],
+    'firstPage': 'http://culpas-silex.dev/passholders?page=1',
+    'lastPage': 'http://culpas-silex.dev/passholders?page=1',
+    'previousPage': 'http://culpas-silex.dev/passholders?page=1',
+    'nextPage': 'http://culpas-silex.dev/passholders?page=1'
+  };
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$controller_, $injector, $rootScope) {
+  beforeEach(inject(function (_$controller_, $injector, _$rootScope_) {
     $controller = _$controller_;
+    $rootScope = _$rootScope_;
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders']);
     $q = $injector.get('$q');
     SearchParameters = $injector.get('SearchParameters');
     PassholderSearchResults = $injector.get('PassholderSearchResults');
-    $scope = $rootScope;
+    $scope = $rootScope.$new();
     Counter = $injector.get('Counter');
     activeCounter = new Counter(angular.copy(activeCounterJson));
     $state = jasmine.createSpyObj('$state', ['go']);
@@ -152,7 +163,9 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       advancedSearchService: advancedSearchService,
       activeCounterAssociations: activeCounterAssociations,
       activeCounter: activeCounter,
-      $state: $state
+      $state: $state,
+      $rootScope: $rootScope,
+      $scope: $scope
     });
   }));
 
@@ -222,17 +235,6 @@ describe('Controller: PassholderAdvancedSearchController', function () {
   });
 
   it('can find passholders without passNumbers', function () {
-    var searchResponse = {
-      'itemsPerPage': 10,
-      'totalItems': 0,
-      'member': [],
-      'invalidUitpasNumbers': [],
-      'firstPage': 'http://culpas-silex.dev/passholders?page=1',
-      'lastPage': 'http://culpas-silex.dev/passholders?page=1',
-      'previousPage': 'http://culpas-silex.dev/passholders?page=1',
-      'nextPage': 'http://culpas-silex.dev/passholders?page=1'
-    };
-
     advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
 
     controller.findPassholdersByNumbers();
@@ -333,7 +335,10 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       SearchParameters: SearchParameters,
       advancedSearchService: advancedSearchService,
       activeCounterAssociations: [],
-      activeCounter: new Counter(angular.copy(activeCounterJson))
+      activeCounter: new Counter(angular.copy(activeCounterJson)),
+      $state: $state,
+      $rootScope: $rootScope,
+      $scope: $scope
     });
 
     expect(withoutDetailsController.detailModeEnabled).toEqual(false);
@@ -344,7 +349,10 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       SearchParameters: SearchParameters,
       advancedSearchService: advancedSearchService,
       activeCounterAssociations: [],
-      activeCounter: newCounter
+      activeCounter: newCounter,
+      $state: $state,
+      $rootScope: $rootScope,
+      $scope: $scope
     });
 
     expect(withDetailsController.detailModeEnabled).toEqual(true);
@@ -365,5 +373,55 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     searchParameters.mode = SearchModes.NUMBER;
     controller.initializeSearchMode(searchParameters);
     expect(controller.findPassholdersByNumbers).toHaveBeenCalled();
+  });
+
+  it('reloads the parameters from the url on state change success', function () {
+    advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
+    $state.params = {firstName: 'Jos'};
+    $rootScope.$emit('$locationChangeSuccess');
+    var expectedSearchFields = {
+      uitpasNumbers: [],
+      page: 1,
+      limit: 10,
+      dateOfBirth: null,
+      firstName: 'Jos',
+      name: null,
+      street: null,
+      city: null,
+      email: null,
+      membershipAssociationId: null,
+      membershipStatus:
+        null,
+      mode: {
+        title: 'Zoeken',
+        name: 'DETAIL'
+      }
+    };
+    expect(controller.searchFields).toEqual(expectedSearchFields);
+  });
+
+  it('clears the parameters from the url on state change success with empty state params', function () {
+    advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
+    $state.params = {};
+    $rootScope.$emit('$locationChangeSuccess');
+    var expectedSearchFields = {
+      uitpasNumbers: [],
+      page: 1,
+      limit: 10,
+      dateOfBirth: null,
+      firstName: null,
+      name: null,
+      street: null,
+      city: null,
+      email: null,
+      membershipAssociationId: null,
+      membershipStatus:
+        null,
+      mode: {
+        title: 'Zoeken',
+        name: 'DETAIL'
+      }
+    };
+    expect(controller.searchFields).toEqual(expectedSearchFields);
   });
 });

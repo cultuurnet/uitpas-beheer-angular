@@ -108,4 +108,13 @@ describe('Controller: Results Viewer', function () {
   it('can tell when no search has been done', function () {
     expect(controller.noSearchDone()).toBeTruthy();
   });
+
+  it('resets the search parameters when asked', function () {
+    controller.loading = true;
+    controller.results = {some: 'thing'};
+    $rootScope.$emit('resetSearch');
+
+    expect(controller.loading).toBeFalsy();
+    expect(controller.results).toBeNull();
+  })
 });
