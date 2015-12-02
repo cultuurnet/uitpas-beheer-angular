@@ -20,7 +20,7 @@ angular
  * @param $uibModalInstance
  * @constructor
  */
-function CheckinsController (pass, passholder, $uibModalInstance, passholderService, $rootScope) {
+function CheckinsController (pass, passholder, $uibModalInstance, passholderService) {
   /*jshint validthis: true */
   var controller = this;
   controller.passholder = passholder;
