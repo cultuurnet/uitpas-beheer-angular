@@ -46,6 +46,9 @@
 <div class="passholder passholder-points">
   <h3>Puntensaldo</h3>
   <span ubr-passholder-points class="label label-points" ng-bind="pdc.passholder.points"></span>
+  <ul class="text-muted list-unstyled">
+    <li><a ui-sref="counter.main.passholder.checkins()">Historiek</a></li>
+  </ul>
 </div>
 <div class="passholder passholder-kansenstatuten" ng-show="pdc.passholder.kansenStatuten.length">
   <h3><i class="fa fa-heart"></i> Kansenstatuut <a class="pull-right" ui-sref="counter.main.passholder.kansenStatuut()">Beheren</a></h3>

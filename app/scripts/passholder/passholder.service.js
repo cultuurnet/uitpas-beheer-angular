@@ -500,6 +500,29 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   /**
+   * Get all the available checkins and used advantages for a given UiTPAS-number
+   * @param {String} uitpasNumber
+   * @returns {Promise<Checkin[]|ApiError>}
+   */
+  //service.getCheckins = function(uitpasNumber) {
+  service.getCheckins = function() {
+    var deferredCheckins = $q.defer();
+
+    function returnCheckins (checkinsResponse) {
+      deferredCheckins.resolve(checkinsResponse.data);
+    }
+
+    /*$http
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/activities/checkins')
+      .then(returnCheckins, deferredCheckins.reject);*/
+    $http
+     .get('scripts/passholder/fakeCheckins.json')
+     .then(returnCheckins, deferredCheckins.reject);
+
+    return deferredCheckins.promise;
+  };
+
+  /**
    * Remove a ticket sale.
    * @param {Passholder} passholder
    * @param {TicketSale} ticketSale

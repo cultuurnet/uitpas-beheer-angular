@@ -148,6 +148,39 @@ angular
             });
         }
       })
+      .state('counter.main.passholder.checkins', {
+        params: {
+          pass: null,
+          passholder: null
+        },
+        resolve: {
+          pass: getPassFromStateParams,
+          passholder: getPassholderFromStateParams
+        },
+        /* @ngInject */
+        onEnter: function(pass, passholder, $state, $uibModal) {
+          $uibModal
+            .open({
+              animation: true,
+              templateUrl: 'views/passholder/modal-passholder-checkins.html',
+              size: 'sm',
+              resolve: {
+                pass: function() {
+                  return pass;
+                },
+                passholder: function() {
+                  return passholder;
+                }
+              },
+              controller: 'CheckinsController',
+              controllerAs: 'cec'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }
+      })
       .state('counter.main.passholder.replacePass', {
         resolve: {
           passholder: getPassholderFromStateParams,

@@ -1,0 +1,35 @@
+
+<div class="modal-header">
+  <button type="button" class="close" ng-click="cec.cancel()" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h4 class="modal-title">Historiek</h4>
+</div>
+<div class="modal-body">
+  <div class="alert alert-info">
+    Hier vind je een chronologisch overzicht van de activiteiten van Luk Herman Dens aan deze balie. Voor een volledig overzicht bij alle balies kan Luk Herman terecht op uitinvlaanderen.be.
+  </div>
+
+  <div class="panel scroll-area">
+    <div class="panel-body">
+      <div class="slats">
+        <div class="slats-item" ng-repeat="checkin in cec.checkins | orderBy: '-creationDate'">
+          <div class="grid">
+            <div class="grid__12 grid--bp-sml__3 grid--bp-med__3">
+              <p ng-bind="::checkin.creation_date | date: 'dd/MM/yyyy'"></p>
+            </div>
+            <div class="grid__12 grid--bp-sml__6 grid--bp-med__5">
+              <p><strong><span ng-bind="::checkin.title"></span></strong></p>
+            </div>
+            <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
+              <p><span class="activity__points" ng-bind="::checkin.points">+1</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <a ng-click="cec.cancel()" class="btn btn-primary">Sluiten</a>
+</div>
