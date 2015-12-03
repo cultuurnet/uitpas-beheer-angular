@@ -70,8 +70,8 @@ describe('Service: advantage', function () {
     };
     var expectedInternalError = {
       code: 'ADVANTAGES_NOT_FOUND',
-      title: 'Advantages not found',
-      message: 'No advantages found for passholder with identification number: 123-passholder'
+      title: 'Geen voordelen gevonden',
+      message: 'Er kunnen geen voordelen gevonden worden voor de pashouder met nummer: 123-passholder'
     };
 
     var assertNoSuccess = function(advantage) {
