@@ -11,7 +11,7 @@ angular.module('ubr.advantage')
   .service('advantageService', advantageService);
 
 /* @ngInject */
-function advantageService($q, $http, $rootScope, $cacheFactory, appConfig) {
+function advantageService($q, $http, $rootScope, $cacheFactory, appConfig, Advantage) {
   var apiUrl = appConfig.apiUrl + 'passholders';
   var advantageCache = $cacheFactory('advantageCache');
 
@@ -24,7 +24,12 @@ function advantageService($q, $http, $rootScope, $cacheFactory, appConfig) {
     var advantagesRequest = $http.get(apiUrl + '/' + passholderIdentification + '/advantages');
 
     var successGettingAdvantages = function(advantagesData) {
-      deferredAdvantages.resolve(advantagesData);
+      var advantagesObjects = [];
+      angular.forEach(advantagesData, function (jsonAdvantage) {
+        advantagesObjects.push(new Advantage(jsonAdvantage));
+      });
+
+      deferredAdvantages.resolve(advantagesObjects);
     };
 
     var errorGettingAdvantages = function() {
