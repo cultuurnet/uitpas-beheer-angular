@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('Service: bulkActionsService', function () {
+describe('Service: bulkActionsService', function () {
   var apiUrl = 'http://example.com/';
 
   beforeEach(module('ubr.passholder.bulkActions', function($provide) {
