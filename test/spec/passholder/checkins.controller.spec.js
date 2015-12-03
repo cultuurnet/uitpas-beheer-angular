@@ -88,14 +88,14 @@ describe('Controller: CheckinsController', function(){
     });
   }
 
-  fit('should display all checkins and advantages', function () {
+  it('should display all checkins and advantages', function () {
     spyOn(passholderService, 'getCheckins').and.returnValue($q.resolve(expectedCheckins));
     CheckinsController = getController();
     $scope.$apply();
     expect(CheckinsController.checkins).toEqual(expectedCheckins);
   });
 
-  fit('can close the modal', function () {
+  it('can close the modal', function () {
     CheckinsController = getController();
     CheckinsController.cancel();
     expect($uibModalInstance.dismiss).toHaveBeenCalled();
