@@ -87,8 +87,11 @@ function bulkActionsService(appConfig, $http, $interval, $q) {
 
     var pingExportLocation = function () {
       $http
+        //*
         .get(exportUrl)
-        //.get('scripts/passholder/bulk-actions/fakeExportDownload.json')
+        /*/
+        .get('scripts/passholder/bulk-actions/fakeExportDownload.json')
+        //*/
         .then(checkGenerationCompleted, exportError);
     };
 

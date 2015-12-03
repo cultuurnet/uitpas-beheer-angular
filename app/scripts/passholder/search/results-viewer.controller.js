@@ -12,7 +12,7 @@ angular
   .controller('ResultsViewerController', ResultsViewerController);
 
 /* @ngInject */
-function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter, BulkSelection, PassholderSearchResults) {
+function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter, BulkSelection, PassholderSearchResults, bulkActionsService) {
   function getSearchParametersFromState() {
     var params = new SearchParameters();
     params.fromParams($state.params);
@@ -30,9 +30,19 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   controller.bulk = {
     action: 'export',
     submitBusy: false,
-    selection: new BulkSelection(controller.results, controller.searchParameters)
+    selection: new BulkSelection(controller.results, controller.searchParameters),
+    export: {
+      requestingExport: false,
+      downloadLink: null,
+      error: false
+    }
   };
 
+  /**
+   * Helper function that checks if the current page has default search parameters.
+   *
+   * @returns {boolean}
+   */
   controller.hasDefaultParameters = function () {
     var searchParameters = getSearchParametersFromState();
     return searchParameters.hasDefaultParameters();
@@ -42,10 +52,19 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
     controller.loading = false;
   }
 
+  /**
+   * Helper function that informs if a search has been done on the current page.
+   * @returns {boolean}
+   */
   controller.noSearchDone = function () {
     return (controller.results.totalItems === 0 && controller.hasDefaultParameters());
   };
 
+  /**
+   * Helper function that informs if the current page is showing results.
+   *
+   * @returns {boolean}
+   */
   controller.isShowingResults = function () {
     var results = controller.results;
     var showResults = false;
@@ -113,10 +132,43 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
     }
   };
 
+  /**
+   * Export form submit handler. Dispatches to other functions.
+   */
   controller.doBulkAction = function () {
-    console.log(controller.bulk.action);
-    console.log(controller.bulk.selection.toBulkSelection());
     controller.bulk.submitBusy = true;
+    switch (controller.bulk.action) {
+      case 'export':
+        controller.doBulkExport();
+        break;
+    }
+  };
+
+  /**
+   * Request an export and report to the user.
+   */
+  controller.doBulkExport = function () {
+    controller.bulk.export.requestingExport = true;
+    controller.bulk.export.downloadLink = null;
+    controller.bulk.export.error = false;
+
+    var showExportDownloadLink = function (downloadLink) {
+      controller.bulk.export.downloadLink = downloadLink;
+    };
+
+    var informAboutFailure = function () {
+      controller.bulk.export.error = true;
+    };
+
+    var releaseForm = function () {
+      controller.bulk.export.requestingExport = false;
+      controller.bulk.submitBusy = false;
+    };
+
+    bulkActionsService
+      .exportPassholders(controller.bulk.selection.toBulkSelection())
+      .then(showExportDownloadLink, informAboutFailure)
+      .finally(releaseForm);
   };
 
   /**
