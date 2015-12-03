@@ -22,7 +22,6 @@ function advantageService($q, $http, $rootScope, $cacheFactory, appConfig, Advan
     var deferredAdvantages = $q.defer();
 
     var advantagesRequest = $http.get(apiUrl + '/' + passholderIdentification + '/advantages');
-    //var advantagesRequest = $http.get('scripts/advantage/fakeAdvantages.json');
 
     var successGettingAdvantages = function(advantagesData) {
       var advantagesObjects = [];
