@@ -504,20 +504,16 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    * @param {String} uitpasNumber
    * @returns {Promise<Checkin[]|ApiError>}
    */
-  //service.getCheckins = function(uitpasNumber) {
-  service.getCheckins = function() {
+  service.getCheckins = function(uitpasNumber) {
     var deferredCheckins = $q.defer();
 
     function returnCheckins (checkinsResponse) {
       deferredCheckins.resolve(checkinsResponse.data);
     }
 
-    /*$http
-      .get(apiUrl + 'passholders/' + uitpasNumber + '/activities/checkins')
-      .then(returnCheckins, deferredCheckins.reject);*/
     $http
-     .get('scripts/passholder/fakeCheckins.json')
-     .then(returnCheckins, deferredCheckins.reject);
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/activities/points-history')
+      .then(returnCheckins, deferredCheckins.reject);
 
     return deferredCheckins.promise;
   };

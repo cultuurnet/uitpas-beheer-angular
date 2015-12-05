@@ -766,56 +766,29 @@ describe('Service: passholderService', function () {
   });
 
   it('should find checkins and advantages by pass numbers', function (done) {
+    var uitpasNumber = '123456789';
+
     var expectedCheckins = [
       {
-        "creation_date": "2015-10-26",
+        "id": "18",
+        "date": "2015/10/26",
         "title": "Evenement 1",
-        "points": "+1"
+        "points": 1,
+        "type": "ADVANTAGE"
       },
       {
-        "creation_date": "2015-10-26",
-        "title": "Voordeel 1",
-        "points": "-16"
-      },
-      {
-        "creation_date": "2015-10-23",
+        "id": "19",
+        "date": "2015/10/30",
         "title": "Evenement 2",
-        "points": "+1"
+        "points": 20,
+        "type": "ADVANTAGE"
       },
       {
-        "creation_date": "2015-10-23",
-        "title": "Voordeel 2",
-        "points": "-15"
-      },
-      {
-        "creation_date": "2015-10-21",
-        "title": "Evenement 3",
-        "points": "+1"
-      },
-      {
-        "creation_date": "2015-10-21",
-        "title": "Voordeel 3",
-        "points": "-15"
-      },
-      {
-        "creation_date": "2015-10-19",
-        "title": "Evenement 4",
-        "points": "+1"
-      },
-      {
-        "creation_date": "2015-10-19",
-        "title": "Voordeel 4",
-        "points": "-3"
-      },
-      {
-        "creation_date": "2015-10-16",
-        "title": "Evenement 5",
-        "points": "+1"
-      },
-      {
-        "creation_date": "2015-10-16",
-        "title": "Voordeel 5",
-        "points": "-2"
+        "id": "145",
+        "date": "2015/11/20",
+        "title": "Activiteit 1",
+        "points": -5,
+        "type": "CHECKIN"
       }
     ];
 
@@ -825,12 +798,11 @@ describe('Service: passholderService', function () {
     }
 
     $httpBackend
-      .expectGET('scripts/passholder/fakeCheckins.json')
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/activities/points-history')
       .respond(200, expectedCheckins);
 
     passholderService
-      //.getCheckins(uitpasNumber)
-      .getCheckins()
+      .getCheckins(uitpasNumber)
       .then(assertCheckins);
 
     $httpBackend.flush();

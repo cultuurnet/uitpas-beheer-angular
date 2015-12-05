@@ -42,8 +42,7 @@ function CheckinsController (pass, passholder, $uibModalInstance, passholderServ
   var loadCheckins = function() {
     controller.checkinsLoading = true;
     passholderService
-      //.getCheckins(pass.number)
-      .getCheckins()
+      .getCheckins(pass.number)
       .then(displayCheckins);
   };
 

@@ -13,16 +13,21 @@
   <div class="panel scroll-area">
     <div class="panel-body">
       <div class="slats">
-        <div class="slats-item" ng-repeat="checkin in cec.checkins | orderBy: '-creationDate'">
+        <div class="slats-item" ng-repeat="checkin in cec.checkins | orderBy: '-date'">
           <div class="grid">
             <div class="grid__12 grid--bp-sml__3 grid--bp-med__3">
-              <p ng-bind="::checkin.creation_date | date: 'dd/MM/yyyy'"></p>
+              <p ng-bind="::checkin.date"></p>
             </div>
             <div class="grid__12 grid--bp-sml__6 grid--bp-med__5">
               <p><strong><span ng-bind="::checkin.title"></span></strong></p>
             </div>
             <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
-              <p><span class="activity__points" ng-bind="::checkin.points">+1</span></p>
+              <p>
+                <span class="activity__points" ng-if="checkin.points > 0">
+                  +<span ng-bind="::checkin.points"></span>
+                </span>
+                <span class="activity__points" ng-if="checkin.points < 0" ng-bind="::checkin.points"></span>
+              </p>
             </div>
           </div>
         </div>
