@@ -62,9 +62,6 @@ function bulkActionsService(appConfig, $http, $interval, $q) {
     $http
       .post(apiUrl, exportSelection, config)
       .then(exportRequestSuccessful, exportRequestFailed);
-    /*/
-    $q.when({data: {id: '65'}}).then(exportRequestSuccessful, exportRequestFailed);
-    //*/
 
     return deferredExport.promise;
   };
@@ -87,11 +84,7 @@ function bulkActionsService(appConfig, $http, $interval, $q) {
 
     var pingExportLocation = function () {
       $http
-        //*
         .get(exportUrl)
-        /*/
-        .get('scripts/passholder/bulk-actions/fakeExportDownload.json')
-        //*/
         .then(checkGenerationCompleted, exportError);
     };
 
