@@ -97,7 +97,7 @@ function bulkSelectionFactory() {
     toBulkSelection: function () {
       var bulkSelection = {};
 
-      if (this.uitpasNumberSelection.length > 0) {
+      if (!this.selectAll && this.uitpasNumberSelection.length > 0) {
         bulkSelection.selection = this.uitpasNumberSelection;
       }
 
