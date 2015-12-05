@@ -11,6 +11,7 @@
 angular
   .module('ubr.passholder', [
     'ubr.passholder.search',
+    'ubr.passholder.bulkActions',
     'ui.router',
     'uitpasbeheerApp',
     'truncate'

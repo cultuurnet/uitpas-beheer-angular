@@ -2,16 +2,31 @@
 
 describe('Controller: Results Viewer', function () {
 
-  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter;
+  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter, bulkActionsService, $q;
 
   beforeEach(module('ubr.passholder.search'));
+  beforeEach(module('uitpasbeheerApp', function($provide) {
+    UiTPASRouter = jasmine.createSpyObj('UiTPASRouter', ['go', 'getLastIdentification']);
+    $provide.provider('UiTPASRouter', {
+      $get: function () {
+        return UiTPASRouter;
+      }
+    });
 
+    bulkActionsService = jasmine.createSpyObj('bulkActionsService', ['exportPassholders']);
+    $provide.provider('bulkActionsService', {
+      $get: function () {
+        return bulkActionsService;
+      }
+    });
+  }));
 
-  beforeEach(inject(function (_$controller_, _$rootScope_) {
+  beforeEach(inject(function (_$controller_, _$rootScope_, _$q_) {
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders', 'goToPage']);
     $state = jasmine.createSpyObj('$state', ['go']);
-    UiTPASRouter = jasmine.createSpyObj('UiTPASRouter', ['go']);
+
     $state.params = {};
+    $q = _$q_;
     $controller = _$controller_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
@@ -24,7 +39,8 @@ describe('Controller: Results Viewer', function () {
       $rootScope: $rootScope,
       $state: $state,
       advancedSearchService: advancedSearchService,
-      UiTPASRouter: UiTPASRouter
+      UiTPASRouter: UiTPASRouter,
+      bulkActionsService: bulkActionsService
     });
   }
 
@@ -107,5 +123,94 @@ describe('Controller: Results Viewer', function () {
 
   it('can tell when no search has been done', function () {
     expect(controller.noSearchDone()).toBeTruthy();
+  });
+
+  it('can deselect all items for the bulk actions', function () {
+    controller.bulk.selection.uitpasNumberSelection = ['0123456789012', '0123456789013'];
+    controller.bulk.selection.selectAll = false;
+    controller.bulkSelectAll();
+    expect(controller.bulk.selection.uitpasNumberSelection).toEqual([]);
+  });
+
+  it('can remove a pass from the select all bulk selection', function () {
+    var pass = {
+      number: '0132456789012'
+    };
+
+    controller.bulk.selection.selectAll = true;
+    spyOn(controller.bulk.selection, 'removeUitpasNumberFromSelection');
+    controller.togglePassBulkSelection(pass);
+    expect(controller.bulk.selection.removeUitpasNumberFromSelection).toHaveBeenCalledWith(pass.number);
+  });
+
+  it('can remove a pass from an items bulk selection', function () {
+    var pass = {
+      number: '0132456789012'
+    };
+
+    controller.bulk.selection.selectAll = false;
+    controller.bulk.selection.uitpasNumberSelection = ['0123456789012', '0132456789013'];
+    spyOn(controller.bulk.selection, 'removeUitpasNumberFromSelection');
+    spyOn(controller.bulk.selection, 'numberInSelection').and.returnValue(true);
+    controller.togglePassBulkSelection(pass);
+    expect(controller.bulk.selection.removeUitpasNumberFromSelection).toHaveBeenCalledWith(pass.number);
+  });
+
+  it('can add a pass to the bulk selection', function () {
+    var pass = {
+      number: '0132456789012'
+    };
+
+    spyOn(controller.bulk.selection, 'addUitpasNumberToSelection');
+    controller.togglePassBulkSelection(pass);
+    expect(controller.bulk.selection.addUitpasNumberToSelection).toHaveBeenCalledWith(pass.number);
+  });
+
+  it('can start a bulk action and delegate the work', function () {
+    controller.bulk.action = 'export';
+    spyOn(controller, 'doBulkExport');
+    controller.doBulkAction();
+
+    expect(controller.doBulkExport).toHaveBeenCalled();
+  });
+
+  it('can request a bulk export and report success to the user', function () {
+    var expectedParameters = {
+      selection: [ '0123456789012' ],
+      searchParameters: {}
+    };
+    var downloadLink = 'https://media.giphy.com/media/nb0B734bUuTa8/giphy.gif';
+    controller.bulk.selection.uitpasNumberSelection = ['0123456789012'];
+    bulkActionsService.exportPassholders.and.returnValue($q.resolve(downloadLink));
+
+    controller.doBulkExport();
+
+    expect(controller.bulk.export.requestingExport).toBeTruthy();
+
+    $scope.$digest();
+
+    expect(bulkActionsService.exportPassholders).toHaveBeenCalledWith(expectedParameters);
+    expect(controller.bulk.export.downloadLink).toBe(downloadLink);
+    expect(controller.bulk.export.requestingExport).toBeFalsy();
+  });
+
+  it('can request a bulk export and report an error to the user', function () {
+    var expectedParameters = {
+      selection: [ '0123456789012' ],
+      searchParameters: {}
+    };
+    controller.bulk.selection.uitpasNumberSelection = ['0123456789012'];
+    bulkActionsService.exportPassholders.and.returnValue($q.reject());
+
+    controller.doBulkExport();
+
+    expect(controller.bulk.export.requestingExport).toBeTruthy();
+
+    $scope.$digest();
+
+    expect(bulkActionsService.exportPassholders).toHaveBeenCalledWith(expectedParameters);
+    expect(controller.bulk.export.downloadLink).toBeNull();
+    expect(controller.bulk.export.requestingExport).toBeFalsy();
+    expect(controller.bulk.export.error).toBeTruthy();
   });
 });

@@ -62,6 +62,7 @@ module.exports = function(config) {
       "app/scripts/kansenstatuut/ubr.kansenstatuut.module.js",
       "app/scripts/membership/ubr.membership.module.js",
       "app/scripts/passholder/ubr.passholder.module.js",
+      "app/scripts/passholder/bulk-actions/ubr.bulk-actions.module.js",
       "app/scripts/passholder/search/ubr.search.module.js",
       "app/scripts/help/ubr.help.module.js",
       "app/scripts/feedback/ubr.feedback.module.js",
