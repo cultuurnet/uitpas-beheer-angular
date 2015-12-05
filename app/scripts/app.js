@@ -108,15 +108,12 @@ angular
     $httpProvider.defaults.withCredentials = true;
   })
   .run(function(nfcService, eIDService, $rootScope, $uibModalStack) {
-    $rootScope.$on('$stateChangeStart', function(event){
-      event.preventDefault();
+    $rootScope.$on('$locationChangeStart', function(event){
       var top = $uibModalStack.getTop();
       // if a modal window is still open close it
       if (top) {
+        event.preventDefault();
         $uibModalStack.dismiss(top.key);
-      }
-      else {
-        event.defaultPrevented = false;
       }
     });
     nfcService.init();
