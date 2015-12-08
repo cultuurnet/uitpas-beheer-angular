@@ -798,7 +798,7 @@ describe('Service: passholderService', function () {
     }
 
     $httpBackend
-      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/activities/points-history')
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/points-history')
       .respond(200, expectedCheckins);
 
     passholderService

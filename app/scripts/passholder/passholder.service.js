@@ -512,7 +512,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     }
 
     $http
-      .get(apiUrl + 'passholders/' + uitpasNumber + '/activities/points-history')
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/points-history')
       .then(returnCheckins, deferredCheckins.reject);
 
     return deferredCheckins.promise;
