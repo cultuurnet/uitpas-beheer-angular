@@ -123,7 +123,15 @@ angular
     $locationProvider.html5Mode(true);
     $httpProvider.defaults.withCredentials = true;
   })
-  .run(function(nfcService, eIDService) {
+  .run(function(nfcService, eIDService, $rootScope, $uibModalStack) {
+    $rootScope.$on('$locationChangeStart', function(event){
+      var top = $uibModalStack.getTop();
+      // if a modal window is still open close it
+      if (top) {
+        event.preventDefault();
+        $uibModalStack.dismiss(top.key);
+      }
+    });
     nfcService.init();
     eIDService.init();
   })

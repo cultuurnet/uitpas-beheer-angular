@@ -125,6 +125,15 @@ describe('Controller: Results Viewer', function () {
     expect(controller.noSearchDone()).toBeTruthy();
   });
 
+  it('resets the search parameters when asked', function () {
+    controller.loading = true;
+    controller.results = {some: 'thing'};
+    $rootScope.$emit('resetSearch');
+
+    expect(controller.loading).toBeFalsy();
+    expect(controller.results).toBeNull();
+  })
+
   it('can deselect all items for the bulk actions', function () {
     controller.bulk.selection.uitpasNumberSelection = ['0123456789012', '0123456789013'];
     controller.bulk.selection.selectAll = false;
