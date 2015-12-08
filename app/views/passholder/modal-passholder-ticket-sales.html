@@ -12,15 +12,15 @@
   </div>
   <div class="panel panel-default scroll-area">
     <div class="panel-body">
-      <div ng-if="(tsc.ticketSales.length === 0)">
-        <p>Deze gebruiker heeft nog geen tickets gekocht aan kansentarief.</p>
+      <div ng-if="(tsc.ticketSales.length === 0 && !tsc.ticketSalesLoading)">
+        <p>Deze gebruiker heeft nog geen tickets gekocht met korting.</p>
       </div>
       <div ng-if="tsc.ticketSalesLoading">
         <div class="spinner spinner-xsmall">
           <circle-spinner></circle-spinner>
         </div>
       </div>
-      
+
       <div class="overview overview-small overview-slats" ng-if="(tsc.ticketSales.length > 0)">
         <div class="slats">
           <div class="overview__item overview__item-list" ng-repeat="ticketSale in tsc.ticketSales | orderBy: '-creationDate'">

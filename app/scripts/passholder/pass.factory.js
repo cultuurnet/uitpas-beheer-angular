@@ -33,15 +33,9 @@ function passFactory(Passholder) {
   }
 
   function kansenstatuutExpired(passholder) {
-    var isExpired = false;
     /*jshint validthis: true */
     var kansenStatuut = passholder.getKansenstatuutByCardSystemID(this.cardSystem.id);
-
-    if (kansenStatuut && kansenStatuut.status === 'EXPIRED') {
-      isExpired = true;
-    }
-
-    return isExpired;
+    return (kansenStatuut && kansenStatuut.status === 'EXPIRED');
   }
 
   Pass.prototype = {

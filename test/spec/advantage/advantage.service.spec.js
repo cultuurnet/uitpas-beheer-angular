@@ -14,50 +14,39 @@ describe('Service: advantage', function () {
       });
   }));
 
-  var $scope,$httpBackend, advantageService;
+  var $scope,$httpBackend, advantageService, day;
   beforeEach(inject(function ($injector, $rootScope) {
     advantageService = $injector.get('advantageService');
     $scope = $rootScope;
     $httpBackend = $injector.get('$httpBackend');
+    day = $injector.get('day');
   }));
 
   it('should return a list of advantages for a given passholder', function (done) {
     var passholderId = '123-passholder';
     var advantagesData = [
       {
-        id: 'points-promotion--678',
-        title: 'Testvoordeel beperkt per user',
-        points: 2,
-        exchangeable: true
-      },
-      {
-        id: 'points-promotion--677',
-        title: 'Testvoordeel beperkt in stock',
-        points: 2,
-        exchangeable: true
-      },
-      {
-        id: 'points-promotion--676',
-        title: 'Testvoordeel 2 punten onbeperkt',
-        points: 2,
-        exchangeable: true
-      },
-      {
-        id: 'points-promotion--193',
-        title: 'Gratis teaserticket en een 2de ticket voor de helft van de prijs',
-        points: 10,
-        exchangeable: true
-      },
-      {
-        id: 'welcome--5',
-        title: 'Theatercheque € 2,5 in cc De Werf',
-        points: 0,
-        exchangeable: true
+        'id': 'welcome--390',
+        'title': 'Korting op theaterticket.',
+        'points': 5,
+        'exchangeable': true,
+        'description1': 'description 1: Nulla vitae elit libero, a pharetra augue. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Vestibulum id ligula porta felis euismod semper.',
+        'description2': 'description 2: Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla vitae elit libero, a pharetra augue.',
+        'validForCities': [
+          'Leuven',
+          'Aalst',
+          'Mechelen',
+          'Gent'
+        ],
+        'validForCounters': [],
+        'endDate': '2016/09/10'
       }
     ];
+    var expectedAdvantagesData = angular.copy(advantagesData);
+    expectedAdvantagesData[0].endDate = day('2016/09/10', 'YYYY-MM-DD').toDate();
 
     var advantagesRetrieved = function(advantages) {
-      expect(advantages).toEqual(advantagesData);
+      expect(advantages).toEqual(expectedAdvantagesData);
       done();
     };
 
@@ -81,8 +70,8 @@ describe('Service: advantage', function () {
     };
     var expectedInternalError = {
       code: 'ADVANTAGES_NOT_FOUND',
-      title: 'Advantages not found',
-      message: 'No advantages found for passholder with identification number: 123-passholder'
+      title: 'Geen voordelen gevonden',
+      message: 'Er kunnen geen voordelen gevonden worden voor de pashouder met nummer: 123-passholder'
     };
 
     var assertNoSuccess = function(advantage) {

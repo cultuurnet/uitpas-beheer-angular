@@ -82,7 +82,8 @@ describe('Controller: AppController', function () {
       'counter.main.error',
       {
         title: 'Not found',
-        description: 'Passholder not found for identification number: identification'
+        description: 'Passholder not found for identification number: identification',
+        code: 'PASSHOLDER_NOT_FOUND'
       },
       {
         location: false
