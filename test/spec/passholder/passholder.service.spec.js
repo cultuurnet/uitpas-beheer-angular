@@ -770,25 +770,25 @@ describe('Service: passholderService', function () {
 
     var expectedCheckins = [
       {
-        "id": "18",
-        "date": "2015/10/26",
-        "title": "Evenement 1",
-        "points": 1,
-        "type": "ADVANTAGE"
+        'id': '18',
+        'date': '2015/10/26',
+        'title': 'Evenement 1',
+        'points': 1,
+        'type': 'ADVANTAGE'
       },
       {
-        "id": "19",
-        "date": "2015/10/30",
-        "title": "Evenement 2",
-        "points": 20,
-        "type": "ADVANTAGE"
+        'id': '19',
+        'date': '2015/10/30',
+        'title': 'Evenement 2',
+        'points': 20,
+        'type': 'ADVANTAGE'
       },
       {
-        "id": "145",
-        "date": "2015/11/20",
-        "title": "Activiteit 1",
-        "points": -5,
-        "type": "CHECKIN"
+        'id': '145',
+        'date': '2015/11/20',
+        'title': 'Activiteit 1',
+        'points': -5,
+        'type': 'CHECKIN'
       }
     ];
 
