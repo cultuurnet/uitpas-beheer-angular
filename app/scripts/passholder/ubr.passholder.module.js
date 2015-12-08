@@ -148,7 +148,7 @@ angular
             });
         }
       })
-      .state('counter.main.passholder.checkins', {
+      .state('counter.main.passholder.pointHistory', {
         params: {
           pass: null,
           passholder: null
@@ -172,8 +172,8 @@ angular
                   return passholder;
                 }
               },
-              controller: 'CheckinsController',
-              controllerAs: 'cec'
+              controller: 'PointHistoryController',
+              controllerAs: 'phc'
             })
             .result
             .finally(function() {

@@ -500,22 +500,22 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   /**
-   * Get all the available checkins and used advantages for a given UiTPAS-number
+   * Get all the available point history items for a given UiTPAS-number
    * @param {String} uitpasNumber
-   * @returns {Promise<Checkin[]|ApiError>}
+   * @returns {Promise<PointHistory[]|ApiError>}
    */
-  service.getCheckins = function(uitpasNumber) {
-    var deferredCheckins = $q.defer();
+  service.getPointHistory = function(uitpasNumber) {
+    var deferredPointHistory = $q.defer();
 
-    function returnCheckins (checkinsResponse) {
-      deferredCheckins.resolve(checkinsResponse.data);
+    function returnPointHistory (PointHistoryResponse) {
+      deferredPointHistory.resolve(PointHistoryResponse.data);
     }
 
     $http
       .get(apiUrl + 'passholders/' + uitpasNumber + '/points-history')
-      .then(returnCheckins, deferredCheckins.reject);
+      .then(returnPointHistory, deferredPointHistory.reject);
 
-    return deferredCheckins.promise;
+    return deferredPointHistory.promise;
   };
 
   /**

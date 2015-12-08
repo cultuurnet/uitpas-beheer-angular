@@ -768,42 +768,39 @@ describe('Service: passholderService', function () {
   it('should find checkins and advantages by pass numbers', function (done) {
     var uitpasNumber = '123456789';
 
-    var expectedCheckins = [
+    var expectedPointHistory = [
       {
         'id': '18',
         'date': '2015/10/26',
         'title': 'Evenement 1',
-        'points': 1,
-        'type': 'ADVANTAGE'
+        'points': 1
       },
       {
         'id': '19',
         'date': '2015/10/30',
         'title': 'Evenement 2',
-        'points': 20,
-        'type': 'ADVANTAGE'
+        'points': 20
       },
       {
         'id': '145',
         'date': '2015/11/20',
         'title': 'Activiteit 1',
-        'points': -5,
-        'type': 'CHECKIN'
+        'points': -5
       }
     ];
 
-    function assertCheckins(checkins) {
-      expect(checkins).toEqual(expectedCheckins);
+    function assertPointHistory(pointHistory) {
+      expect(pointHistory).toEqual(expectedPointHistory);
       done();
     }
 
     $httpBackend
       .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/points-history')
-      .respond(200, expectedCheckins);
+      .respond(200, expectedPointHistory);
 
     passholderService
-      .getCheckins(uitpasNumber)
-      .then(assertCheckins);
+      .getPointHistory(uitpasNumber)
+      .then(assertPointHistory);
 
     $httpBackend.flush();
   });

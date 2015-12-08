@@ -1,7 +1,7 @@
 'use strict';
 
-describe('Controller: CheckinsController', function(){
-  var CheckinsController, expectedCheckins, pass, $controller, $uibModalInstance, $scope, passholderService, $q;
+describe('Controller: PointHistoryController', function(){
+  var PointHistoryController, expectedPointHistory, pass, $controller, $uibModalInstance, $scope, passholderService, $q;
   beforeEach(module('ubr.passholder'));
   beforeEach(module('uitpasbeheerApp'));
 
@@ -11,54 +11,64 @@ describe('Controller: CheckinsController', function(){
     $scope = $rootScope.$new();
     $q = $injector.get('$q');
     passholderService = $injector.get('passholderService');
-    expectedCheckins = [
+    expectedPointHistory = [
       {
-        'creation_date': '2015-10-26',
+        'id': 12,
+        'date': '2015-10-26',
         'title': 'Evenement 1',
         'points': '+1'
       },
       {
-        'creation_date': '2015-10-26',
+        'id': 13,
+        'date': '2015-10-26',
         'title': 'Voordeel 1',
         'points': '-16'
       },
       {
-        'creation_date': '2015-10-23',
+        'id': 14,
+        'date': '2015-10-23',
         'title': 'Evenement 2',
         'points': '+1'
       },
       {
-        'creation_date': '2015-10-23',
+        'id': 15,
+        'date': '2015-10-23',
         'title': 'Voordeel 2',
         'points': '-15'
       },
       {
-        'creation_date': '2015-10-21',
+        'id': 16,
+        'date': '2015-10-21',
         'title': 'Evenement 3',
         'points': '+1'
       },
       {
-        'creation_date': '2015-10-21',
+        'id': 17,
+        'date': '2015-10-21',
         'title': 'Voordeel 3',
         'points': '-15'
       },
       {
-        'creation_date': '2015-10-19',
+        'id': 18,
+        'date': '2015-10-19',
         'title': 'Evenement 4',
         'points': '+1'
       },
       {
-        'creation_date': '2015-10-19',
+        'id': 19,
+        'date': '2015-10-19',
         'title': 'Voordeel 4',
         'points': '-3'
       },
       {
-        'creation_date': '2015-10-16',
+        'id': 20,
+        'date': '2015-10-16',
         'title': 'Evenement 5',
         'points': '+1'
       },
       {
-        'creation_date': '2015-10-16',
+        'id': 21,
+        'date': '2015-10-16',
         'title': 'Voordeel 5',
         'points': '-2'
       }
@@ -80,7 +90,7 @@ describe('Controller: CheckinsController', function(){
   }));
 
   function getController() {
-    return $controller('CheckinsController', {
+    return $controller('PointHistoryController', {
       pass: pass,
       passholder: pass.passholder,
       $uibModalInstance: $uibModalInstance,
@@ -88,16 +98,16 @@ describe('Controller: CheckinsController', function(){
     });
   }
 
-  it('should display all checkins and advantages', function () {
-    spyOn(passholderService, 'getCheckins').and.returnValue($q.resolve(expectedCheckins));
-    CheckinsController = getController();
+  it('should display the point history', function () {
+    spyOn(passholderService, 'getPointHistory').and.returnValue($q.resolve(expectedPointHistory));
+    PointHistoryController = getController();
     $scope.$apply();
-    expect(CheckinsController.checkins).toEqual(expectedCheckins);
+    expect(PointHistoryController.pointHistory).toEqual(expectedPointHistory);
   });
 
   it('can close the modal', function () {
-    CheckinsController = getController();
-    CheckinsController.cancel();
+    PointHistoryController = getController();
+    PointHistoryController.cancel();
     expect($uibModalInstance.dismiss).toHaveBeenCalled();
   });
 });
