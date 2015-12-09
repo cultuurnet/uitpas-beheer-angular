@@ -2,7 +2,7 @@
 
 describe('Directive: datepicker', function () {
 
-  beforeEach(module('ubr.registration'));
+  beforeEach(module('ubr.utilities'));
   beforeEach(module('uitpasbeheerAppViews'));
 
   var element, scope, datepicker;
