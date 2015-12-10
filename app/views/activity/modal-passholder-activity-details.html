@@ -2,55 +2,47 @@
   <button type="button" class="close" ng-click="adc.cancel()" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">×</span>
   </button>
-  <h4 class="modal-title" ng-bind="::adc.activity.title"></h4>
+  <h4 class="modal-title" ng-bind="::adc.details.title"></h4>
 </div>
 <div class="modal-body">
-  <div ng-if="::adc.activity.description">
-    <p class="evenement-summary" ng-bind="::adc.activity.description"></p>
+  <div ng-if="::adc.details.description">
+    <p class="evenement-summary" ng-bind="::adc.details.description"></p>
   </div>
 
-  <section class="evenement-details">
-    <div ng-if="::adc.activity.when" class="row">
-      <div class="col-xs-3">
+  <section class="evenement-details grid">
+    <div ng-if="::adc.details.when">
+      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
         <p class="evenement-label">Wanneer</p>
       </div>
-      <div class="col-xs-9">
-        <p ng-bind="::adc.activity.when"></p>
+      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+        <p ng-bind="::adc.details.when"></p>
       </div>
     </div>
 
-    <div ng-if="::adc.activity.where" class="row">
-      <div class="col-xs-3">
+    <div ng-if="::adc.details.where">
+      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
         <p class="evenement-label">Waar</p>
       </div>
-      <div class="col-xs-9">
-        <p ng-bind="::adc.activity.where"></p>
+      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+        <p ng-bind="::adc.details.where"></p>
       </div>
     </div>
 
-    <div ng-if="::adc.activity.age" class="row">
-      <div class="col-xs-3">
+    <div ng-if="::adc.details.age">
+      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
         <p class="evenement-label">Leeftijd</p>
       </div>
-      <div class="col-xs-9">
-        <p ng-bind="::adc.activity.age"></p>
+      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+        <p ng-bind="::adc.details.age"></p>
       </div>
     </div>
 
-    <div ng-if="::adc.activity.price" class="row">
-      <div class="col-xs-3">
+    <div ng-if="::adc.details.sales.tariffs.lowestAvailable">
+      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
         <p class="evenement-label">Prijs</p>
       </div>
-      <div class="col-xs-9">
-        <div class="states">
-          <div class="state state-multiple-prices" style="display: none;">
-            <p ng-bind="::adc.activity.price"></p>
-            <p><a class="btn btn-primary" data-dismiss="modal" data-toggle="modal" href="#prijsmatrix">Tarief kiezen</a></p>
-          </div>
-          <div class="state state-one-price" style="display: block;">
-            <p>12 euro</p>
-          </div>
-        </div>
+      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+        <p>&euro; {{::adc.details.sales.tariffs.lowestAvailable}}</p>
       </div>
     </div>
 

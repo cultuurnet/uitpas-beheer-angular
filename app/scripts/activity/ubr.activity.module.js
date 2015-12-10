@@ -81,7 +81,7 @@ angular
               templateUrl: 'views/activity/modal-passholder-activity-details.html',
               size: 'sm',
               resolve: {
-                coupon: function() {
+                activity: function() {
                   return activity;
                 }
               },
@@ -93,5 +93,5 @@ angular
               $state.go('^');
             });
         }
-      })
+      });
   });
