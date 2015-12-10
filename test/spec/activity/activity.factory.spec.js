@@ -17,6 +17,7 @@ describe('Factory: Activity', function () {
       title: 'Altijd open',
       description: '',
       when: '',
+      age: 10,
       points: 182,
       checkinConstraint: {
         allowed: true,
@@ -71,6 +72,7 @@ describe('Factory: Activity', function () {
       title: 'Altijd open',
       description: '',
       when: '',
+      age: 10,
       points: 182,
       checkinConstraint: {
         allowed: true,
@@ -127,6 +129,7 @@ describe('Factory: Activity', function () {
       title: 'Altijd open',
       description: '',
       when: '',
+      age: 10,
       points: 182,
       checkinConstraint: {
         allowed: true,
