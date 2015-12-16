@@ -765,6 +765,46 @@ describe('Service: passholderService', function () {
     $httpBackend.flush();
   });
 
+  it('should find checkins and advantages by pass numbers', function (done) {
+    var uitpasNumber = '123456789';
+
+    var expectedPointHistory = [
+      {
+        'id': '18',
+        'date': '2015/10/26',
+        'title': 'Evenement 1',
+        'points': 1
+      },
+      {
+        'id': '19',
+        'date': '2015/10/30',
+        'title': 'Evenement 2',
+        'points': 20
+      },
+      {
+        'id': '145',
+        'date': '2015/11/20',
+        'title': 'Activiteit 1',
+        'points': -5
+      }
+    ];
+
+    function assertPointHistory(pointHistory) {
+      expect(pointHistory).toEqual(expectedPointHistory);
+      done();
+    }
+
+    $httpBackend
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/points-history')
+      .respond(200, expectedPointHistory);
+
+    passholderService
+      .getPointHistory(uitpasNumber)
+      .then(assertPointHistory);
+
+    $httpBackend.flush();
+  });
+
   it('should find ticketsales by pass numbers', function (done) {
     var uitpasNumber = '123456789';
 
