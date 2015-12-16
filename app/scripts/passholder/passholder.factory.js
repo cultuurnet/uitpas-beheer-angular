@@ -167,6 +167,13 @@ function passholderFactory(moment, day) {
       }
       name += ' ' + this.name.last;
       return name;
+    },
+    getNames: function() {
+      var name = this.name.first;
+      if (this.name.middle) {
+        name += ' ' + this.name.middle;
+      }
+      return name;
     }
   };
 

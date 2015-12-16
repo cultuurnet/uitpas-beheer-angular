@@ -227,6 +227,13 @@ describe('Factory: Passholder', function () {
     expect(passholder.getFullName()).toEqual(expectedFullName);
   });
 
+  it('has a helper function to return the names', function () {
+    var expectedNames = 'Victor Vikky';
+    var passholder = new Passholder(getJsonPassholder());
+
+    expect(passholder.getNames()).toEqual(expectedNames);
+  });
+
   it('has a helper function to serialize the passholder', function () {
     var expectedSerializedData = {
       name: {

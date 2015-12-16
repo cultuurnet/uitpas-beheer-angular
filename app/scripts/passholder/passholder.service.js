@@ -505,6 +505,25 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
   };
 
   /**
+   * Get all the available point history items for a given UiTPAS-number
+   * @param {String} uitpasNumber
+   * @returns {Promise<PointHistory[]|ApiError>}
+   */
+  service.getPointHistory = function(uitpasNumber) {
+    var deferredPointHistory = $q.defer();
+
+    function returnPointHistory (PointHistoryResponse) {
+      deferredPointHistory.resolve(PointHistoryResponse.data);
+    }
+
+    $http
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/points-history')
+      .then(returnPointHistory, deferredPointHistory.reject);
+
+    return deferredPointHistory.promise;
+  };
+
+  /**
    * Remove a ticket sale.
    * @param {Passholder} passholder
    * @param {TicketSale} ticketSale
