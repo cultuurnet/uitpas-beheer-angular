@@ -47,14 +47,14 @@ describe('Controller: ActivityDetailController', function () {
       }
     });
 
-    ActivityDetailController = getController();
-
     function getController() {
       return $controller('ActivityDetailController', {
         activity: activity,
         $uibModalInstance: $uibModalInstance
       });
     }
+
+    ActivityDetailController = getController();
 
     it('should display the details of an activity', function () {
       expect(ActivityDetailController.activity).toEqual(activity);

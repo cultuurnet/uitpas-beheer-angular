@@ -93,6 +93,9 @@ function activityFactory(CheckinState) {
       if (!angular.isUndefined(jsonActivity.sales)) {
         this.sales = parseJsonSales(jsonActivity.sales);
       }
+      if (jsonActivity.where) {
+        this.where = jsonActivity.where;
+      }
     },
     getCheckinState: function () {
       var state;

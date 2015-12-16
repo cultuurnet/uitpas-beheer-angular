@@ -23,8 +23,12 @@
       <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
         <p class="evenement-label">Waar</p>
       </div>
-      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
-        <p ng-bind="::adc.details.where"></p>
+      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8 location">
+        <span class="location__name" ng-bind="::adc.details.where.name"></span>
+        <span class="location__address">
+          <span ng-bind="::adc.details.where.address.street"></span>
+          <span ng-bind-template="{{adc.details.where.address.postalCode}} {{adc.details.where.address.city}}"></span>
+        </span>
       </div>
     </div>
 
