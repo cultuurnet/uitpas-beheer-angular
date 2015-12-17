@@ -39,7 +39,7 @@ describe('Controller: FeedbackController', function () {
         '$setUntouched': jasmine.createSpy('$setUntouched'),
         '$setPristine': jasmine.createSpy('$setPristine')
       }
-    }
+    };
   }));
 
   it('should set some variables from the uitIdUser and activeCounter', function () {
@@ -92,5 +92,5 @@ describe('Controller: FeedbackController', function () {
 
     controller.inputListener();
     expect(controller.feedbackStatus).toBeNull();
-  })
+  });
 });
