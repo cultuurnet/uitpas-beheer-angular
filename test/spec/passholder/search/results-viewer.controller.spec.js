@@ -184,42 +184,11 @@ describe('Controller: Results Viewer', function () {
   });
 
   it('can request a bulk export and report success to the user', function () {
-    var expectedParameters = {
-      selection: [ '0123456789012' ],
-      searchParameters: {}
-    };
-    var downloadLink = 'https://media.giphy.com/media/nb0B734bUuTa8/giphy.gif';
     controller.bulk.selection.uitpasNumberSelection = ['0123456789012'];
-    bulkActionsService.exportPassholders.and.returnValue($q.resolve(downloadLink));
 
     controller.doBulkExport();
 
-    expect(controller.bulk.export.requestingExport).toBeTruthy();
-
-    $scope.$digest();
-
-    expect(bulkActionsService.exportPassholders).toHaveBeenCalledWith(expectedParameters);
-    expect(controller.bulk.export.downloadLink).toBe(downloadLink);
+    expect(bulkActionsService.exportPassholders).toHaveBeenCalled();
     expect(controller.bulk.export.requestingExport).toBeFalsy();
-  });
-
-  it('can request a bulk export and report an error to the user', function () {
-    var expectedParameters = {
-      selection: [ '0123456789012' ],
-      searchParameters: {}
-    };
-    controller.bulk.selection.uitpasNumberSelection = ['0123456789012'];
-    bulkActionsService.exportPassholders.and.returnValue($q.reject());
-
-    controller.doBulkExport();
-
-    expect(controller.bulk.export.requestingExport).toBeTruthy();
-
-    $scope.$digest();
-
-    expect(bulkActionsService.exportPassholders).toHaveBeenCalledWith(expectedParameters);
-    expect(controller.bulk.export.downloadLink).toBeNull();
-    expect(controller.bulk.export.requestingExport).toBeFalsy();
-    expect(controller.bulk.export.error).toBeTruthy();
   });
 });
