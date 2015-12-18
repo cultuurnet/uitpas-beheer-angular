@@ -32,7 +32,7 @@ angular
             .open({
               animation: true,
               templateUrl: 'views/advantage/modal-passholder-advantage-detail.html',
-              size: 'sm',
+              size: 'lg',
               resolve: {
                 advantage: function () {
                   return advantage;
