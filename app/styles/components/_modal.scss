@@ -62,3 +62,37 @@
     }
   }
 }
+
+// modal point history
+.points-history {
+  .panel-body {
+    padding: 0;
+  }
+
+  .scroll-area {
+    border: 1px solid #ccc;
+  }
+
+  p, .grid {
+    margin: 0;
+  }
+
+  .history-item {
+    padding: 25px 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #cccccc;
+    }
+
+    &:hover {
+      background-color: #e5eef5;
+    }
+  }
+
+  .activity__points {
+    color: green;
+    display: block;
+    text-align: center;
+    font-weight: 700;
+  }
+}

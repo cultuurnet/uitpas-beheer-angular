@@ -12,7 +12,7 @@
               Plaats de eID van de pashouder in de lezer en deze gegevens worden snel voor jou ingevuld. <a ng-click="pec.getDataFromEID()">Gegevens inlezen</a>
             </div>
             <div class="alert alert-danger" ng-show="pec.isJavaFXBrowser && pec.eIDError" ng-bind="pec.eIDError"></div>
-            <div class="alert alert-danger" type="{{pec.formAlert.type}}" ng-show="pec.formAlert" ng-bind="pec.formAlert.message"></div>
+            <div class="alert alert-danger" type="{{pec.asyncError.type}}" ng-show="pec.asyncError" ng-bind="pec.asyncError.message"></div>
             <div ng-if="pec.disableInszNumber" class="alert alert-info">
               <div>Het rijksregisternummer kan enkel aangepast worden wanneer er nog geen gekend is.</div>
             </div>

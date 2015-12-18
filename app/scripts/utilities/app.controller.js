@@ -27,7 +27,8 @@ function appController($rootScope, $location, uitid, counterService, $state) {
         'counter.main.error',
         {
           title: error.title,
-          description: error.message
+          description: error.message,
+          code: error.code
         },
         {
           location: false

@@ -7,7 +7,7 @@
   </div>
 
   <div ng-hide="rvc.noSearchDone()">
-    <div ng-show="rvc.results.totalItems == 0" class="alert alert-info small">
+    <div ng-show="rvc.results.totalItems == 0 && !rvc.loading" class="alert alert-info small">
       Er zijn geen resultaten gevonden voor de gebruikte zoekcriteria.
     </div>
     <div ng-show="rvc.results.hasUnknownNumbers() && !rvc.results.hasConfirmedUnknownNumbers() && rvc.results.totalItems > 0" class="alert alert-info small">
@@ -33,8 +33,7 @@
     </p>
 
     <div ng-show="!rvc.loading && rvc.results.totalItems > 0">
-      {{rvc.results.totalItems}} resultaten gevonden
-
+      <span>{{rvc.results.totalItems}} resultaten gevonden</span>
       <ul class="list-unstyled passholder-list">
         <li class="overview__item overview__item-list" ng-repeat="pass in rvc.results.passen">
           <div class="grid display-table" ng-click="rvc.showPassholderDetails(pass.number)">
@@ -71,7 +70,6 @@
                   </div>
                 </li>
               </ul>
-
 
             </div>
 

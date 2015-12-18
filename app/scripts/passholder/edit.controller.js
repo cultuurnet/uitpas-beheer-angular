@@ -60,6 +60,12 @@ function PassholderEditController (passholder, identification, $uibModalInstance
             editForm.email.$error.formatAsync = true;
             editForm.email.$invalid = true;
           }
+          if (errorCode === 'PASSHOLDER_NOT_UPDATED_ON_SERVER') {
+            controller.asyncError = {
+              message: errorResponse.apiError.message,
+              type: 'danger'
+            };
+          }
 
           controller.formSubmitBusy = false;
         };
