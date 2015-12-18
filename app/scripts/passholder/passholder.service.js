@@ -420,7 +420,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    * @param {string} passholderId
    * @param {object} passholderData
    */
-   service.updateCachedPassholder = function(passholderId, passholderData) {
+  service.updateCachedPassholder = function(passholderId, passholderData) {
      var deferredUpdate = $q.defer();
 
      function updateCachedPass(cachedPass) {

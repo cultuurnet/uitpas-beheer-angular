@@ -4,7 +4,7 @@ describe('Factory: BulkSelection', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  var BulkSelection, PassholderSearchResults, SearchParameters, bulkSelection, searchResults, searchParameters, Pass;
+  var BulkSelection, PassholderSearchResults, SearchParameters, bulkSelection, searchResults, searchParameters, Pass, day;
 
   var jsonPass = {
     'uitPas': {
@@ -77,11 +77,12 @@ describe('Factory: BulkSelection', function () {
     membershipStatus: 'ACTIVE'
   };
 
-  beforeEach(inject(function (_BulkSelection_, _PassholderSearchResults_, _SearchParameters_, _Pass_) {
+  beforeEach(inject(function (_BulkSelection_, _PassholderSearchResults_, _SearchParameters_, _Pass_, _day_) {
     BulkSelection = _BulkSelection_;
     PassholderSearchResults = _PassholderSearchResults_;
     SearchParameters = _SearchParameters_;
     Pass = _Pass_;
+    day = _day_;
 
     searchResults = new PassholderSearchResults();
     searchParameters = new SearchParameters();
@@ -136,7 +137,7 @@ describe('Factory: BulkSelection', function () {
         uitpasNumbers: [],
         page: 1,
         limit: 10,
-        dateOfBirth: new Date('2004-08-16'),
+        dateOfBirth: new day('2004-08-16').toDate(),
         firstName: 'Jos',
         name: 'Het debiele ei',
         street: 'Harensesteenweg',

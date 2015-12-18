@@ -55,7 +55,8 @@ function dayFactory() {
       }
 
       date = new Date(year + '-' +  month + '-' + dayOfMonth);
-      day = moment(date);
+      var zoneOffset = date.getTimezoneOffset();
+      day = moment(year + '-' +  month + '-' + dayOfMonth).utcOffset((zoneOffset*-1));
     }
 
     return day;
