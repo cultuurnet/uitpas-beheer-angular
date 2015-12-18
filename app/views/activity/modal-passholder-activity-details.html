@@ -1,0 +1,58 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="adc.cancel()" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h4 class="modal-title" ng-bind="::adc.details.title"></h4>
+</div>
+<div class="modal-body">
+  <div ng-if="::adc.details.description">
+    <p class="evenement-summary" ng-bind="::adc.details.description"></p>
+  </div>
+
+  <section class="evenement-details grid">
+    <div ng-if="::adc.details.when">
+      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
+        <p class="evenement-label">Wanneer</p>
+      </div>
+      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+        <p ng-bind="::adc.details.when"></p>
+      </div>
+    </div>
+
+    <div ng-if="::adc.details.where">
+      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
+        <p class="evenement-label">Waar</p>
+      </div>
+      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8 location">
+        <span class="location__name" ng-bind="::adc.details.where.name"></span>
+        <span class="location__address">
+          <span ng-bind="::adc.details.where.address.street"></span>
+          <span ng-bind-template="{{adc.details.where.address.postalCode}} {{adc.details.where.address.city}}"></span>
+        </span>
+      </div>
+    </div>
+
+    <div ng-if="::adc.details.age">
+      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
+        <p class="evenement-label">Leeftijd</p>
+      </div>
+      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+        <p ng-bind="::adc.details.age"></p>
+      </div>
+    </div>
+
+    <div ng-if="::adc.details.sales.tariffs.lowestAvailable">
+      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
+        <p class="evenement-label">Prijs</p>
+      </div>
+      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+        <p>&euro; {{::adc.details.sales.tariffs.lowestAvailable}}</p>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+<div class="modal-footer">
+  <a ng-click="adc.cancel()" class="btn btn-default">Sluiten</a>
+</div>
