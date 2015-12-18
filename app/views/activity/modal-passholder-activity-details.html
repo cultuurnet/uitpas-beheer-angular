@@ -11,19 +11,19 @@
 
   <section class="evenement-details grid">
     <div ng-if="::adc.details.when">
-      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
-        <p class="evenement-label">Wanneer</p>
+      <div class="grid__12 grid--bp-xsm__3">
+        <p class="evenement-label"><em>Wanneer</em></p>
       </div>
-      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+      <div class="grid__12 grid--bp-xsm__9">
         <p ng-bind="::adc.details.when"></p>
       </div>
     </div>
 
     <div ng-if="::adc.details.where">
-      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
-        <p class="evenement-label">Waar</p>
+      <div class="grid__12 grid--bp-xsm__3">
+        <p class="evenement-label"><em>Waar</em></p>
       </div>
-      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8 location">
+      <div class="grid__12 grid--bp-xsm__9">
         <span class="location__name" ng-bind="::adc.details.where.name"></span>
         <span class="location__address">
           <span ng-bind="::adc.details.where.address.street"></span>
@@ -33,25 +33,24 @@
     </div>
 
     <div ng-if="::adc.details.age">
-      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
-        <p class="evenement-label">Leeftijd</p>
+      <div class="grid__12 grid--bp-xsm__3">
+        <p class="evenement-label"><em>Leeftijd</em></p>
       </div>
-      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+      <div class="grid__12 grid--bp-xsm__9">
         <p ng-bind="::adc.details.age"></p>
       </div>
     </div>
 
     <div ng-if="::adc.details.sales.tariffs.lowestAvailable">
-      <div class="grid__12 grid--bp-sml__3 grid--bp-med__4">
-        <p class="evenement-label">Prijs</p>
+      <div class="grid__12 grid--bp-xsm__3">
+        <p class="evenement-label"><em>Prijs</em></p>
       </div>
-      <div class="grid__12 grid--bp-sml__9 grid--bp-med__8">
+      <div class="grid__12 grid--bp-xsm__9">
         <p>&euro; {{::adc.details.sales.tariffs.lowestAvailable}}</p>
       </div>
     </div>
 
   </section>
-
 </div>
 <div class="modal-footer">
   <a ng-click="adc.cancel()" class="btn btn-default">Sluiten</a>
