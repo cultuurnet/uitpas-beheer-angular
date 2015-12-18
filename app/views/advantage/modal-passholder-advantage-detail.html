@@ -2,28 +2,53 @@
   <button type="button" class="close" ng-click="padc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <h4 class="modal-title" ng-bind="::padc.advantage.title"></h4>
 </div>
-<div class="modal-body modal-body-sticky">
-  <div class="points-wrapper">
-    <span>Nodige punten</span>
-    <div><span ng-bind="::padc.advantage.points"></span> punten</div>
-  </div>
-  <div class="exchange-period-wrapper" ng-show="padc.advantage.endDate">
-    <span>Omruilperiode</span>
-    <div>Tot <span ng-bind="::padc.advantage.endDate | date : 'dd/MM/yyyy'"></span></div>
-  </div>
-  <div class="offered-by-wrapper" ng-show="padc.advantage.validForCounters.length > 0">
-    <span>Aangeboden door</span>
-    <div><span ng-repeat="counter in ::padc.advantage.validForCounters">{{counter.name}}{{$last ? '' : ', '}}</span></div>
-  </div>
-  <div class="descriptions-wrapper" ng-show="padc.advantage.validForCities.length > 0 || padc.advantage.description1 || padc.advantage.description2">
-    <span>Beschrijving & Voorwaarden</span>
+
+<div class="modal-body">
+  <div class="grid">
     <div>
-      <div ng-bind-html="padc.advantage.description1"></div>
-      <div ng-bind-html="padc.advantage.description2"></div>
-      <div ng-show="padc.advantage.validForCities.length > 0">Geldig voor inwoners van <span ng-repeat="city in ::padc.advantage.validForCities">{{city}}{{$last ? '' : ', '}}</span></div>
+      <div class="grid__12 grid--bp-xsm__4">
+        <p><em>Nodige punten</em></p>
+      </div>
+      <div class="grid__12 grid--bp-xsm__8">
+        <p>
+          <ng-pluralize count="padc.advantage.points"
+                        when="{'one': '1 punt', 'other': '{} punten'}">
+          </ng-pluralize>
+        </p>
+      </div>
+    </div>
+
+    <div ng-show="padc.advantage.endDate">
+      <div class="grid__12 grid--bp-xsm__4">
+        <p><em>Omruilperiode</em></p>
+      </div>
+      <div class="grid__12 grid--bp-xsm__8">
+        <p>Tot <span ng-bind="::padc.advantage.endDate | date : 'dd/MM/yyyy'"></span></p>
+      </div>
+    </div>
+
+    <div ng-show="padc.advantage.validForCounters.length > 0">
+      <div class="grid__12 grid--bp-xsm__4">
+        <p><em>Aangeboden door</em></p>
+      </div>
+      <div class="grid__12 grid--bp-xsm__8">
+        <p><span ng-repeat="counter in ::padc.advantage.validForCounters">{{counter.name}}{{$last ? '' : ', '}}</span></p>
+      </div>
+    </div>
+
+    <div ng-show="padc.advantage.validForCities.length > 0 || padc.advantage.description1 || padc.advantage.description2">
+      <div class="grid__12 grid--bp-xsm__4">
+        <p><em>Beschrijving & Voorwaarden</em></p>
+      </div>
+      <div class="grid__12 grid--bp-xsm__8">
+        <p ng-bind-html="padc.advantage.description1"></p>
+        <p ng-bind-html="padc.advantage.description2"></p>
+        <p ng-show="padc.advantage.validForCities.length > 0">Geldig voor inwoners van <span ng-repeat="city in ::padc.advantage.validForCities">{{city}}{{$last ? '' : ', '}}</span></p>
+      </div>
     </div>
   </div>
 </div><!-- end modal-body -->
+
 <div class="modal-footer">
   <a class="btn btn-primary" ng-click="padc.cancelModal()">Sluiten</a>
 </div>
