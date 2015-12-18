@@ -39,7 +39,15 @@
             </div>
           </div>
           <div class="field-group">
-            <button type="button" class="btn btn-primary" ng-disabled="fc.formSubmitBusy || fc.feedbackForm.$invalid" ng-click="fc.submitForm()"><span ng-hide="fc.formSubmitBusy">Versturen</span> <span ng-show="fc.formSubmitBusy"><span class="fa fa-refresh loading small"></span> Formulier wordt verzonden</span></button>
+            <p>
+              <button type="button" class="btn btn-primary" ng-disabled="fc.formSubmitBusy || fc.feedbackForm.$invalid"
+                      ng-click="fc.submitForm()">
+                <span ng-hide="fc.formSubmitBusy">Versturen</span>
+                <span ng-show="fc.formSubmitBusy">
+                  <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+                </span>
+              </button>
+            </p>
           </div>
         </form>
       </div>
