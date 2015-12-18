@@ -71,7 +71,6 @@ angular
 
     $stateProvider
       .state('counter.main.passholder.kansenStatuut', {
-        url: '/kansenstatuut',
         resolve: {
           passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
           identification: ['$stateParams', function ($stateParams) {
@@ -106,11 +105,12 @@ angular
         }]
       })
       .state('counter.main.passholder.kansenStatuut.editRemarks', {
-        url: '/remarks',
         onEnter: editRemarksModal
       })
       .state('counter.main.passholder.kansenStatuut.edit', {
-        url: '/:cardSystemId',
+        params: {
+          cardSystemId: null
+        },
         resolve: {
           passholder: ['passholderService', '$stateParams', getPassholderFromStateParams],
           identification: ['$stateParams', function ($stateParams) {

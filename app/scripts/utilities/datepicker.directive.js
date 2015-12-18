@@ -2,18 +2,18 @@
 
 /**
  * @ngdoc directive
- * @name ubr.registration.directive:ubrDatepicker
+ * @name ubr.utilites.directive:ubrDatepicker
  * @description
  * # ubrDatepicker
  */
 angular
-  .module('ubr.registration')
+  .module('ubr.utilities')
   .directive('ubrDatepicker', ubrDatepicker);
 
 /* @ngInject */
 function ubrDatepicker() {
   return {
-    templateUrl: 'views/registration/datepicker.directive.html',
+    templateUrl: 'views/datepicker.directive.html',
     restrict: 'E',
     require:'ngModel',
     scope: {

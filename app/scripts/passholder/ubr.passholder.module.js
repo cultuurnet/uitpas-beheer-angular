@@ -11,6 +11,7 @@
 angular
   .module('ubr.passholder', [
     'ubr.passholder.search',
+    'ubr.passholder.bulkActions',
     'ui.router',
     'uitpasbeheerApp',
     'truncate'
@@ -45,6 +46,9 @@ angular
               if (pass.isBlocked()) {
                 templatePath = 'views/passholder/content-passholder-blocked.html';
               }
+              else if (pass.kansenstatuutExpired(pass.passholder)) {
+                templatePath = 'views/passholder/content-passholder-kansenstatuut-expired.html';
+              }
               return $templateFactory.fromUrl(templatePath);
             },
             controller: 'PassholderDetailController',
@@ -77,8 +81,8 @@ angular
           pass: getPassFromStateParams,
           passholder: getPassholderFromStateParams,
           /* @ngInject */
-          advantages: function(advantageService, $stateParams) {
-            return advantageService.list($stateParams.identification);
+          advantages: function(advantageService, $stateParams, passholder) {
+            return advantageService.list(passholder.passNumber);
           },
           /* @ngInject */
           activeCounter: function (counterService) {
