@@ -17,6 +17,7 @@ describe('Factory: Activity', function () {
       title: 'Altijd open',
       description: '',
       when: '',
+      age: 10,
       points: 182,
       checkinConstraint: {
         allowed: true,
@@ -57,6 +58,14 @@ describe('Factory: Activity', function () {
             }
           ]
         }
+      },
+      where: {
+        name: 'CC De Werf',
+        address: {
+          street: 'Straat 5',
+          postalCode: '3000',
+          city: 'Leuven'
+        }
       }
     };
 
@@ -71,6 +80,7 @@ describe('Factory: Activity', function () {
       title: 'Altijd open',
       description: '',
       when: '',
+      age: 10,
       points: 182,
       checkinConstraint: {
         allowed: true,
@@ -111,6 +121,14 @@ describe('Factory: Activity', function () {
             }
           ]
         }
+      },
+      where: {
+        name: 'CC De Werf',
+        address: {
+          street: 'Straat 5',
+          postalCode: '3000',
+          city: 'Leuven'
+        }
       }
     };
 
@@ -127,6 +145,7 @@ describe('Factory: Activity', function () {
       title: 'Altijd open',
       description: '',
       when: '',
+      age: 10,
       points: 182,
       checkinConstraint: {
         allowed: true,
