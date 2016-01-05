@@ -9,7 +9,7 @@
       <div class="activity-title" ng-bind="::pat.activity.title"></div>
       <div class="alert alert-danger" ng-show="pat.asyncError" ng-bind="pat.asyncError.cleanMessage"></div>
       <fieldset ng-disabled="pat.formSubmitBusy">
-        <table class="table table-mobile" ng-class="{'table-mobile': Object.keys(pat.activity.sales.base).length > 3}">
+        <table class="table" ng-class="{'table-mobile': pat.sizeOff(pat.activity.sales.base) > 3}">
           <thead><th></th><th ng-repeat="(rank, value) in ::pat.activity.sales.base" ng-bind="::rank"></th></thead>
           <tbody>
             <tr class="base">

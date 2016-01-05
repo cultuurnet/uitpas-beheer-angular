@@ -52,6 +52,15 @@ function PassholderActivityTariffsController (
     $uibModalInstance.dismiss();
   };
 
+  /**
+   * Get the size of an object.
+   * @param {object} object
+   * @returns {Number}
+   */
+  controller.sizeOff = function (object) {
+    return Object.keys(object).length;
+  };
+
   controller.clearAsyncError = function () {
     controller.asyncError = false;
   };
