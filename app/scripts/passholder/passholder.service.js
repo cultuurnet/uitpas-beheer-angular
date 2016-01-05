@@ -60,8 +60,13 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
         deferredPassholder.resolve(pass);
       };
 
-      var rejectPassHolder = function (errorResponse) {
-        deferredPassholder.reject(errorResponse.data);
+      var rejectPassHolder = function () {
+        var error = {
+        code: 'PASS_NOT_FOUND',
+          title: 'Geen pas gevonden',
+          message: 'Er kan geen pas gevonden worden voor het nummer: ' + identification
+        };
+        deferredPassholder.reject(error);
       };
 
       passholderRequest.then(cacheAndResolvePassHolder, rejectPassHolder);
@@ -415,7 +420,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    * @param {string} passholderId
    * @param {object} passholderData
    */
-   service.updateCachedPassholder = function(passholderId, passholderData) {
+  service.updateCachedPassholder = function(passholderId, passholderData) {
      var deferredUpdate = $q.defer();
 
      function updateCachedPass(cachedPass) {
@@ -497,6 +502,25 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
       .then(returnTicketSales, deferredTicketSales.reject);
 
     return deferredTicketSales.promise;
+  };
+
+  /**
+   * Get all the available point history items for a given UiTPAS-number
+   * @param {String} uitpasNumber
+   * @returns {Promise<PointHistory[]|ApiError>}
+   */
+  service.getPointHistory = function(uitpasNumber) {
+    var deferredPointHistory = $q.defer();
+
+    function returnPointHistory (PointHistoryResponse) {
+      deferredPointHistory.resolve(PointHistoryResponse.data);
+    }
+
+    $http
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/points-history')
+      .then(returnPointHistory, deferredPointHistory.reject);
+
+    return deferredPointHistory.promise;
   };
 
   /**

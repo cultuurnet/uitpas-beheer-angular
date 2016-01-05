@@ -11,6 +11,7 @@
 angular
   .module('ubr.passholder', [
     'ubr.passholder.search',
+    'ubr.passholder.bulkActions',
     'ui.router',
     'uitpasbeheerApp',
     'truncate'
@@ -45,6 +46,9 @@ angular
               if (pass.isBlocked()) {
                 templatePath = 'views/passholder/content-passholder-blocked.html';
               }
+              else if (pass.kansenstatuutExpired(pass.passholder)) {
+                templatePath = 'views/passholder/content-passholder-kansenstatuut-expired.html';
+              }
               return $templateFactory.fromUrl(templatePath);
             },
             controller: 'PassholderDetailController',
@@ -77,8 +81,8 @@ angular
           pass: getPassFromStateParams,
           passholder: getPassholderFromStateParams,
           /* @ngInject */
-          advantages: function(advantageService, $stateParams) {
-            return advantageService.list($stateParams.identification);
+          advantages: function(advantageService, $stateParams, passholder) {
+            return advantageService.list(passholder.passNumber);
           },
           /* @ngInject */
           activeCounter: function (counterService) {
@@ -141,6 +145,39 @@ angular
               },
               controller: 'PassholderEditController',
               controllerAs: 'pec'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }
+      })
+      .state('counter.main.passholder.pointHistory', {
+        params: {
+          pass: null,
+          passholder: null
+        },
+        resolve: {
+          pass: getPassFromStateParams,
+          passholder: getPassholderFromStateParams
+        },
+        /* @ngInject */
+        onEnter: function(pass, passholder, $state, $uibModal) {
+          $uibModal
+            .open({
+              animation: true,
+              templateUrl: 'views/passholder/modal-passholder-checkins.html',
+              size: 'sm',
+              resolve: {
+                pass: function() {
+                  return pass;
+                },
+                passholder: function() {
+                  return passholder;
+                }
+              },
+              controller: 'PointHistoryController',
+              controllerAs: 'phc'
             })
             .result
             .finally(function() {

@@ -23,6 +23,7 @@ angular
     'ubr.advantage',
     'ubr.counter',
     'ubr.group',
+    'ubr.feedback',
     'ubr.help',
     'ubr.kansenstatuut',
     'ubr.membership',
@@ -34,7 +35,7 @@ angular
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
-  .config(function ($stateProvider, $locationProvider, $httpProvider, ngTouchSpinProvider) {
+  .config(function ($stateProvider, $locationProvider, $httpProvider, ngTouchSpinProvider, $urlRouterProvider) {
 
     ngTouchSpinProvider.arrowControlsEnabled(false);
 
@@ -81,7 +82,8 @@ angular
         },
         params: {
           'title': null,
-          'description': null
+          'description': null,
+          'code': null
         }
       })
       .state('login', {
@@ -103,6 +105,20 @@ angular
             });
         }
       });
+
+    /* @ngInject */
+    $urlRouterProvider.otherwise(function ($injector) {
+      var state = $injector.get('$state');
+      state.go('counter.main.error', {
+        'title': 'Pagina niet gevonden',
+        'description': 'De gevraagde pagina kan niet worden gevonden.',
+        'code': 'PAGE_NOT_FOUND'
+      },
+        {
+          location: false
+        });
+      return false;
+    });
 
     $locationProvider.html5Mode(true);
     $httpProvider.defaults.withCredentials = true;

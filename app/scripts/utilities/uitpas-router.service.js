@@ -81,7 +81,8 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
         'counter.main.error',
         {
           title: error.title,
-          description: error.message
+          description: error.message,
+          type: error.code
         },
         {
           reload: true
