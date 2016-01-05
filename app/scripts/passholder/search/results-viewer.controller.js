@@ -149,26 +149,10 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
    */
   controller.doBulkExport = function () {
     controller.bulk.export.requestingExport = true;
-    controller.bulk.export.downloadLink = null;
-    controller.bulk.export.error = false;
 
-    var showExportDownloadLink = function (downloadLink) {
-      controller.bulk.export.downloadLink = downloadLink;
-    };
-
-    var informAboutFailure = function () {
-      controller.bulk.export.error = true;
-    };
-
-    var releaseForm = function () {
-      controller.bulk.export.requestingExport = false;
-      controller.bulk.submitBusy = false;
-    };
-
-    bulkActionsService
-      .exportPassholders(controller.bulk.selection.toBulkSelection())
-      .then(showExportDownloadLink, informAboutFailure)
-      .finally(releaseForm);
+    bulkActionsService.exportPassholders(controller.bulk.selection);
+    controller.bulk.export.requestingExport = false;
+    controller.bulk.submitBusy = false;
   };
 
   /**
