@@ -152,8 +152,12 @@ a.toggle-down {
     @include label-variant($label-success-bg);
     text-align: center;
   }
-  &-points h3 {
+  .passholder-points-info {
     float: left;
+
+    h3 {
+      margin-bottom: .5em;
+    }
   }
 
   .animated {

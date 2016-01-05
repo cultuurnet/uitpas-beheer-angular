@@ -79,7 +79,7 @@ describe('Factory: PassCollection', function () {
     var jsonSearchParametersFields = getJsonSearchParametersFields();
     var expectedSearchParametersFields = {
       city: 'Vilvoorde',
-      dateOfBirth: new Date('2004-08-16'),
+      dateOfBirth: new day('2004-08-16').toDate(),
       email: 'jos@humo.be',
       firstName: 'Jos',
       limit: 10,
