@@ -14,4 +14,24 @@ angular
     'uitpasbeheerApp'
   ])
   /* @ngInject */
-  .config(function ($stateProvider) {});
+  .config(function ($stateProvider) {
+
+    $stateProvider
+      .state('counter.main.advancedSearch.bulkAddress', {
+        /* @ngInject */
+        onEnter: function($state, $uibModal) {
+          $uibModal
+            .open({
+              animation: true,
+              templateUrl: 'views/passholder/bulk-actions/modal-bulk-address.html',
+              size: 'sm',
+              controller: 'AddressBulkController',
+              controllerAs: 'abc'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }
+      })
+  });

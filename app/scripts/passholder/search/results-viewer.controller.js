@@ -141,6 +141,9 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
       case 'export':
         controller.doBulkExport();
         break;
+      case 'address':
+        controller.bulk.submitBusy = false;
+        $state.go('counter.main.advancedSearch.bulkAddress');
     }
   };
 

@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="abc.cancel()" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h4 class="modal-title">Adres wijzigen</h4>
+</div>
+<div class="modal-body">
+  <p>Nieuw adres voor 2 geselecteerde pashouders.</p>
+
+  <div class="row">
+
+    <div class="col-xs-12">
+      <div class="form-group">
+        <label for="">Straat, nummer en bus</label>
+        <input type="text" class="form-control" placeholder="" value="">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-horizontal">
+        <div class="form-group">
+          <div class="col-xs-3">
+            <label for="">Postcode</label>
+            <input type="text" class="form-control" placeholder="" value="">
+          </div>
+
+          <div class="col-xs-9">
+            <label for="">Gemeente</label>
+            <input type="text" class="form-control" placeholder="" value="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <a ng-click="abc.cancel()" class="btn btn-default">Annuleren</a>
+  <button type="button" class="btn btn-primary" data-dismiss="modal">Wijzigen</button>
+</div>
