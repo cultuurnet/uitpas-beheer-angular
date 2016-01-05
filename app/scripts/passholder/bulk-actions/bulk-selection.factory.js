@@ -106,6 +106,17 @@ function bulkSelectionFactory() {
       delete bulkSelection.searchParameters.limit;
 
       return bulkSelection;
+    },
+    toQueryParameters: function () {
+      var queryParameters = this.searchParameters.toQueryParameters();
+      delete queryParameters.page;
+      delete queryParameters.limit;
+
+      if(!this.selectAll && this.uitpasNumberSelection.length > 0) {
+        queryParameters['selection[]'] = this.uitpasNumberSelection;
+      }
+
+      return queryParameters;
     }
   };
 
