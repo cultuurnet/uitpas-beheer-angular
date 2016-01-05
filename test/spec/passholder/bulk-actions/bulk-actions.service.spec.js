@@ -118,12 +118,12 @@ describe('Service: bulkActionsService', function () {
     bulkSelection = new BulkSelection(searchResults, searchParameters);
   }));
 
-  it('redirects to the xlsx download url', function() {
+  it('redirects to the xls download url', function() {
     bulkSelection.addUitpasNumberToSelection('0123456789012');
 
     bulkActionsService.exportPassholders(bulkSelection);
 
-    expect($window.location).toEqual('http://example.com/passholders.xlsx?city=Leuven&dateOfBirth=1983-02-03&email=foo@bar.com&firstName=Albe*&membershipAssociationId=5&membershipStatus=ACTIVE&name=Conta*&selection%5B%5D=0123456789012&street=Bondgenotenlaan');
+    expect($window.location).toEqual('http://example.com/passholders.xls?city=Leuven&dateOfBirth=1983-02-03&email=foo@bar.com&firstName=Albe*&membershipAssociationId=5&membershipStatus=ACTIVE&name=Conta*&selection%5B%5D=0123456789012&street=Bondgenotenlaan');
   });
 
 });

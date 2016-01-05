@@ -13,7 +13,7 @@ angular
 
 /* @ngInject */
 function bulkActionsService(appConfig, $window, $httpParamSerializer) {
-  var passholderExportUrl = appConfig.apiUrl + 'passholders.xlsx';
+  var passholderExportUrl = appConfig.apiUrl + 'passholders.xls';
 
   /*jshint validthis: true */
   var service = this;
