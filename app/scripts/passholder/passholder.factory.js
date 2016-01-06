@@ -174,6 +174,17 @@ function passholderFactory(moment, day) {
         name += ' ' + this.name.middle;
       }
       return name;
+    },
+    hasUitPasInCardSystem: function (cardSystem) {
+      var matchingCardSystem = false;
+
+      angular.forEach(this.uitPassen, function (uitpas) {
+        if (parseInt(uitpas.cardSystem.id, 10) === parseInt(cardSystem.id, 10)) {
+          matchingCardSystem = true;
+        }
+      });
+
+      return matchingCardSystem;
     }
   };
 
