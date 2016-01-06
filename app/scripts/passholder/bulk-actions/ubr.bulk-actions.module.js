@@ -18,13 +18,26 @@ angular
 
     $stateProvider
       .state('counter.main.advancedSearch.bulkAddress', {
+        params: {
+          bulkSelection: null
+        },
+        resolve: {
+          bulkSelection: ['$stateParams', function($stateParams) {
+            return $stateParams.bulkSelection;
+          }]
+        },
         /* @ngInject */
-        onEnter: function($state, $uibModal) {
+        onEnter: function(bulkSelection, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
               templateUrl: 'views/passholder/bulk-actions/modal-bulk-address.html',
               size: 'sm',
+              resolve: {
+                bulkSelection: function() {
+                  return bulkSelection;
+                }
+              },
               controller: 'AddressBulkController',
               controllerAs: 'abc'
             })

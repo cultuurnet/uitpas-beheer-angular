@@ -12,8 +12,14 @@ angular
   .controller('AddressBulkController', AddressBulkController);
 
 /* @ngInject */
-function AddressBulkController ($uibModalInstance) {
+function AddressBulkController (bulkSelection, $uibModalInstance) {
   var controller = this;
+  controller.submitBusy = false;
+
+  controller.submitForm = function() {
+    controller.submitBusy = true;
+    console.log(controller);
+  };
 
   this.cancel = function () {
     $uibModalInstance.dismiss('canceled');

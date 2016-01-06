@@ -143,7 +143,7 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
         break;
       case 'address':
         controller.bulk.submitBusy = false;
-        $state.go('counter.main.advancedSearch.bulkAddress');
+        $state.go('counter.main.advancedSearch.bulkAddress', { bulkSelection: controller.bulk.selection });
     }
   };
 
