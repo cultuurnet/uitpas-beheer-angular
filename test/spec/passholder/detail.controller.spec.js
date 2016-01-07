@@ -6,7 +6,7 @@ describe('Controller: PassholderDetailController', function () {
   beforeEach(module('uitpasbeheerApp'));
 
   var detailController, $rootScope, advantage, $q, moment, $scope, passholderService, deferredPassholder,
-      membershipService, $controller, $window;
+      membershipService, $controller, $window, $state;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$controller_, $injector, _$rootScope_) {
@@ -22,6 +22,7 @@ describe('Controller: PassholderDetailController', function () {
     $rootScope = _$rootScope_;
     $window = {history: jasmine.createSpyObj('history', ['back'])};
 
+    $state = jasmine.createSpyObj('$state', ['go']);
     $q = $injector.get('$q');
     moment = $injector.get('moment');
 
@@ -52,7 +53,8 @@ describe('Controller: PassholderDetailController', function () {
       moment: moment,
       passholderService: passholderService,
       activeCounter: {},
-      $window: $window
+      $window: $window,
+      $state: $state
     });
   }
 
