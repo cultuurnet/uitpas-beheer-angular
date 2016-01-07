@@ -281,4 +281,34 @@ describe('Factory: Passholder', function () {
 
     expect(passholder.serialize()).toEqual(expectedSerializedData);
   });
+
+  it('has a helper function to check if a passholder has an uitpas in a given card system', function () {
+    var cardSystemToCheckTruthy = {
+      id: 1
+    };
+    var cardSystemToCheckFalsy = {
+      id: 5
+    };
+
+    var jsonPassholder = getJsonPassholder();
+    jsonPassholder.uitpassen = [
+      {
+        cardSystem: {
+          id: 1,
+          name: 'UiTPAS Leuven'
+        }
+      },
+      {
+        cardSystem: {
+          id: 3,
+          name: 'UiTPAS Aalst'
+        }
+      }
+    ];
+
+    var passholder = new Passholder(jsonPassholder);
+
+    expect(passholder.hasUitPasInCardSystem(cardSystemToCheckTruthy)).toBeTruthy();
+    expect(passholder.hasUitPasInCardSystem(cardSystemToCheckFalsy)).toBeFalsy();
+  });
 });
