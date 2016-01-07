@@ -32,9 +32,12 @@ angular
           pass: ['passholderService', '$stateParams', getPassFromStateParams],
           activeCounter: ['counterService', function (counterService) {
             return counterService.getActive();
+          }],
+          cardSystem: ['$stateParams', function ($stateParams) {
+            return $stateParams.cardSystem;
           }]
         },
-        onEnter : ['pass', 'activeCounter', '$state', '$uibModal', function(pass, activeCounter, $state, $uibModal) {
+        onEnter : ['pass', 'activeCounter', 'cardSystem', '$state', '$uibModal', function(pass, activeCounter, cardSystem, $state, $uibModal) {
           upgradeModalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'views/passholder/card-upgrade/multi-step-form.html',
@@ -45,6 +48,9 @@ angular
               },
               activeCounter: function() {
                 return activeCounter;
+              },
+              cardSystem: function() {
+                return cardSystem;
               }
             },
             controller: 'UpgradeModalController',
@@ -64,8 +70,8 @@ angular
           upgradeModalInstance
             .result
             .then(cardUpgraded, upgradeCanceled);
-      }]
-    })
+        }]
+      })
       .state('counter.main.passholder.upgrade.kansenStatuut', {
         views: {
           'upgradeStep@': {
@@ -74,8 +80,22 @@ angular
         },
         params: {
           'pass': null,
-          'kansenstatuut': null
+          'kansenstatuut': null,
+          'cardSystem': null
         },
         stepNumber: 1
+      })
+      .state('counter.main.passholder.upgrade.newCard', {
+        views: {
+          'upgradeStep@': {
+            templateUrl: 'views/passholder/card-upgrade/new-card.html'
+          }
+        },
+        params: {
+          'pass': null,
+          'kansenstatuut': null,
+          'cardSystem': null
+        },
+        stepNumber: 2
       });
   });

@@ -4,14 +4,14 @@
 </div>
 <ul class="three steps step">
   <li ui-sref-active="active" class="step">
-    <a ui-sref="counter.main.register.form.personalData">Kansenstatuut</a>
+    <a ui-sref="counter.main.passholder.upgrade.kansenStatuut">Kansenstatuut</a>
   </li>
   <li ui-sref-active="active" class="step" ng-switch="umc.getStepNumber() < 2">
     <span ng-switch-when="true">
       Kaart
     </span>
     <span ng-switch-default>
-      <a ui-sref="counter.main.register.form.contactData" >Contact</a>
+      <a ui-sref="counter.main.passholder.upgrade.newCard" >Kaart</a>
     </span>
   </li>
   <li ui-sref-active="active" class="step" ng-switch="umc.getStepNumber() < 3">
@@ -19,7 +19,7 @@
       Prijs
     </span>
     <span ng-switch-default>
-      <a ui-sref="counter.main.register.form.price" ng-hide="umc.getStepNumber() < 3">Prijs</a>
+      <a ui-sref="counter.main.passholder.upgrade.price" ng-hide="umc.getStepNumber() < 3">Prijs</a>
     </span>
   </li>
 </ul>

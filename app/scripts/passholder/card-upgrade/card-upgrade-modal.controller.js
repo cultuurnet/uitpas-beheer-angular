@@ -24,7 +24,8 @@ function UpgradeModalController (
   $scope,
   $q,
   activeCounter,
-  moment
+  moment,
+  cardSystem
 ) {
   /*jshint validthis: true */
   var controller = this;
@@ -32,7 +33,9 @@ function UpgradeModalController (
 
   controller.pass = pass;
   controller.passholder = pass.passholder;
-  console.log(pass);
+  controller.cardSystem = cardSystem;
+  console.log(cardSystem);
+
   controller.formSubmitBusy = false;
   // Price is set to minus one to indicate it has not yet been initialized
   controller.price = -1;
@@ -46,12 +49,24 @@ function UpgradeModalController (
   controller.voucherNumber = '';
   controller.asyncError = undefined;
   controller.furthestStep = 0;
+
   controller.activeCounter = activeCounter;
   controller.upgradeData = {
     withKansenstatuut: 'NO_KANSENSTATUUT',
     kansenstatuutEndDate: moment().endOf('year').toDate(),
     includeKansenStatuutRemarks: false,
-    kansenstatuutRemarks: ''
+    kansenstatuutRemarks: '',
+    withNewCard: 'NO_NEW_CARD'
+  };
+
+  controller.showModalFlowForCardSystem = function(cardSystem) {
+    // Determine the first step by counter permissions.
+    if (controller.activeCounter.isAuthorisedRegistrationCounter(cardSystem.id)) {
+      controller.modalFlow = 'AUTHORIZED_COUNTER';
+    }
+    else {
+      controller.modalFlow = 'UNAUTHORIZED_COUNTER';
+    }
   };
 
   controller.showFieldError = function (form, field) {
@@ -68,39 +83,37 @@ function UpgradeModalController (
     return hasErrors;
   };
 
-  controller.submitPersonalDataForm = function(personalDataForm) {
+  controller.submitKansenstatuutForm = function(kansenstatuutForm) {
 
-    function validatePersonalData() {
+    function validateKansenstatuut() {
       controller.updateFurthestStep();
-      if (personalDataForm.$valid) {
-        var setInszNumberError = function () {
-          personalDataForm.inszNumber.$setValidity('inUse', false);
-          controller.formSubmitBusy = false;
-        };
-
-        var continueRegisterProcess = function () {
+      if (kansenstatuutForm.$valid) {
+        var continueUpgradeProcess = function () {
+          /*
           controller
             .refreshUnreducedPriceInfo()
-            .then(function () {
+            .then(function () {//*/
               controller.formSubmitBusy = false;
 
               if (!controller.asyncError) {
-                $state.go('counter.main.register.form.contactData');
+                $state.go('counter.main.passholder.upgrade.newCard');
               }
-            });
+            //});
         };
 
+        /*
         passholderService
-          .findPassholder(personalDataForm.inszNumber.$viewValue)
-          .then(setInszNumberError, continueRegisterProcess);
+          .findPassholder(kansenstatuutForm.inszNumber.$viewValue)
+          .then(setInszNumberError, continueUpgradeProcess);//*/
+        continueUpgradeProcess();
       } else {
         controller.formSubmitBusy = false;
       }
     }
 
     controller
-      .startSubmit(personalDataForm)
-      .then(validatePersonalData);
+      .startSubmit(kansenstatuutForm)
+      .then(validateKansenstatuut);
   };
 
   controller.getStepNumber = function () {
@@ -175,7 +188,7 @@ function UpgradeModalController (
     };
 
     counterService
-      .getRegistrationPriceInfo(pass, controller.passholder)
+      .getRegistrationPriceInfo(pass, controller.passholder, '', 'CARD_UPGRADE')
       .then(updateUnreducedPriceInfo, controller.handleAsyncError)
       .finally(deferredRefresh.resolve);
 
@@ -238,32 +251,7 @@ function UpgradeModalController (
     $uibModalInstance.dismiss('registration modal closed');
   };
 
-  controller.getDataFromEID = function() {
-    eIDService.getDataFromEID();
-  };
-
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
-  var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
-    angular.merge(controller.eIDData, eIDData);
-    angular.merge(controller.passholder, eIDData);
-    controller.eIDError = false;
-    $scope.$apply();
-  });
-
-  var cleanupEIDPhotoReceivedListener = $rootScope.$on('eIDPhotoReceived', function(event, base64Picture) {
-    controller.eIDData.picture = base64Picture;
-    controller.passholder.picture = base64Picture;
-    $scope.$apply();
-  });
-
-  var cleanupEIDErrorReceivedListener = $rootScope.$on('eIDErrorReceived', function() {
-    controller.eIDError = 'De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.';
-    $scope.$apply();
-  });
-
-  $scope.$on('$destroy', cleanupEIDDataReceivedListener);
-  $scope.$on('$destroy', cleanupEIDPhotoReceivedListener);
-  $scope.$on('$destroy', cleanupEIDErrorReceivedListener);
   $scope.$on('$destroy', stateChangeStartListener);
 }
