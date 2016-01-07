@@ -6,7 +6,12 @@
     <h4 class="modal-title">Adres wijzigen</h4>
   </div>
   <div class="modal-body">
-    <p>Nieuw adres voor 2 geselecteerde pashouders.</p>
+    <p>Nieuw addres voor
+    <!-- Some items selected -->
+    <span ng-hide="abc.bulkSelection.selectAll" ng-bind="abc.bulkSelection.uitpasNumberSelection.length"></span>
+    <!-- All items selected -->
+    <span ng-show="abc.bulkSelection.selectAll" ng-bind="abc.bulkSelection.searchResults.totalItems"></span>
+      geselecteerde pashouder(s).</p>
 
     <div class="row">
 
@@ -41,7 +46,7 @@
   <div class="modal-footer">
     <a ng-click="abc.cancel()" class="btn btn-default" ng-disabled="abc.submitBusy">Annuleren</a>
     <button type="button" class="btn btn-primary" ng-disabled="abc.submitBusy"
-            ng-click="abc.submitForm(passholderEdit)">
+            ng-click="abc.submitForm(bulkAddress)">
       <span ng-hide="abc.submitBusy">Wijzigen</span> <span ng-show="abc.submitBusy"><span class="fa fa-refresh loading small"></span> Wijzigen</span>
     </button>
   </div>
