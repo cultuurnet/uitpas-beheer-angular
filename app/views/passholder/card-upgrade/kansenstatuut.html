@@ -30,26 +30,24 @@
               </div>
             </div>
           </div>
-          <div class="grid__12 field-group" ng-show="umc.upgradeData.withKansenstatuut === 'KANSENSTATUUT'">
-            <div class="panel-body">
-              <p class="element-title" ng-bind-template="Kansenstatuut {{umc.pass.cardSystem.name}}"></p>
-              <div class="form-group">
-                <div class="form-inline">
-                  <ubr-datepicker ng-model="umc.upgradeData.kansenstatuutEndDate" ubr-label="Geldig tot" ubr-id="valid-until"
-                                  ubr-name="endDate"></ubr-datepicker>
-                </div>
-              </div>
-              <div class="checkbox">
-                <label for="remarks-check">
-                  <input type="checkbox" class="remarks-check" id="remarks-check" name="remarks" ng-model="umc.upgradeData.includeKansenStatuutRemarks">
-                  Voeg opmerkingen toe
-                </label>
-              </div>
-              <div class="form-group more-info" ng-show="umc.upgradeData.includeKansenStatuutRemarks">
-                <textarea class="form-control" id="remarks" rows="3" ng-model="umc.upgradeData.kansenstatuutRemarks"></textarea>
+          <div class="grid__12 field-group with-kansenstatuut-fields" ng-show="umc.upgradeData.withKansenstatuut === 'KANSENSTATUUT'">
+            <p class="element-title" ng-bind-template="Kansenstatuut {{umc.pass.cardSystem.name}}"></p>
+            <div class="form-group">
+              <div class="form-inline">
+                <ubr-datepicker ng-model="umc.upgradeData.kansenstatuutEndDate" ubr-label="Geldig tot" ubr-id="valid-until"
+                                ubr-name="endDate"></ubr-datepicker>
               </div>
             </div>
-          </div> <!--/ end .panel-->
+            <div class="checkbox">
+              <label for="remarks-check">
+                <input type="checkbox" class="remarks-check" id="remarks-check" name="remarks" ng-model="umc.upgradeData.includeKansenStatuutRemarks">
+                Voeg opmerkingen toe
+              </label>
+            </div>
+            <div class="form-group more-info" ng-show="umc.upgradeData.includeKansenStatuutRemarks">
+              <textarea class="form-control" id="remarks" rows="3" ng-model="umc.upgradeData.kansenstatuutRemarks"></textarea>
+            </div>
+          </div>
         </div>
       </fieldset>
     </div>

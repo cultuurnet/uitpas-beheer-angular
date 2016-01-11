@@ -29,26 +29,29 @@
               </div>
             </div>
           </div>
-          <div class="panel panel-default text-left" ng-show="umc.upgradeData.withKansenstatuut === 'KANSENSTATUUT'">
-            <div class="panel-body">
-              <p class="element-title" ng-bind-template="Kansenstatuut {{umc.pass.cardSystem.name}}"></p>
-              <div class="form-group">
-                <div class="form-inline">
-                  <ubr-datepicker ng-model="umc.upgradeData.kansenstatuutEndDate" ubr-label="Geldig tot" ubr-id="geldig-tot"
-                                  ubr-name="endDate"></ubr-datepicker>
-                </div>
-              </div>
-              <div class="checkbox">
-                <label for="remarks-check">
-                  <input type="checkbox" class="remarks-check" id="remarks-check" name="remarks" ng-model="umc.upgradeData.includeKansenStatuutRemarks">
-                  Voeg opmerkingen toe
+          <div class="grid__12 field-group with-new-card-fields" ng-show="umc.upgradeData.withNewCard === 'NEW_CARD'">
+            <p>Scan een nieuwe UiTPAS</p>
+            <div class="form-group">
+              <div class="grid__12 required" ng-class="{ 'has-error': (newCardForm.$submitted || newCardForm.uitpasNewNumber.$touched) && newCardForm.uitpasNewNumber.$invalid }">
+                <label class="control-label" for="uitpasNewNumber">
+                  UiTPAS-nummer
                 </label>
-              </div>
-              <div class="form-group more-info" ng-show="umc.upgradeData.includeKansenStatuutRemarks">
-                <textarea class="form-control" id="remarks" rows="3" ng-model="umc.upgradeData.kansenstatuutRemarks"></textarea>
+                <input ubr-uitpas-number-async-validation ng-pattern="/^\d{13}$/" type="text"
+                       class="form-control input-number" name="uitpasNewNumber" id="uitpasNewNumber"
+                       ng-required="true" ubr-card-system="umc.cardSystem.id" ng-model="umc.upgradeData.uitpasNewNumber">
+                1000000396118
+                <div ng-if="(newCardForm.$submitted || newCardForm.uitpasNewNumber.$dirty) && newCardForm.uitpasNewNumber.$invalid" class="text-danger small">
+                  <div ng-if="newCardForm.uitpasNewNumber.$error.pattern">Het nummer heeft een verkeerd formaat, 13 cijfers worden verwacht.</div>
+                  <div ng-if="newCardForm.uitpasNewNumber.$error.notFound">Deze UiTPAS kan niet gevonden worden in het systeem.</div>
+                  <div ng-if="newCardForm.uitpasNewNumber.$error.notLocalStock">Deze UiTPAS zit niet in de locale stock.</div>
+                  <div ng-if="newCardForm.uitpasNewNumber.$error.required">Het UiTPAS-nummer veld is verplicht.</div>
+                  <div ng-if="newCardForm.uitpasNewNumber.$error.cardSystemMismatch">Deze UiTPAS behoort niet tot het <strong ng-bind="umc.cardSystem.name"></strong> kaart-systeem.</div>
+                  <div ng-if="newCardForm.uitpasNewNumber.$error.unavailableForActiveCounter">Deze UiTPAS is niet toegekend aan de actieve balie.</div>
+                </div>
+                <div ng-if="newCardForm.uitpasNewNumber.$pending" class="text-warning small">UiTPAS-nummer wordt gevalideerd.</div>
               </div>
             </div>
-          </div> <!--/ end .panel-->
+          </div>
         </div>
       </fieldset>
     </div>
