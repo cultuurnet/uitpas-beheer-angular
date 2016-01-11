@@ -34,7 +34,6 @@ function UpgradeModalController (
   controller.pass = pass;
   controller.passholder = pass.passholder;
   controller.cardSystem = cardSystem;
-  console.log(cardSystem);
 
   controller.formSubmitBusy = false;
   // Price is set to minus one to indicate it has not yet been initialized
@@ -56,7 +55,11 @@ function UpgradeModalController (
     kansenstatuutEndDate: moment().endOf('year').toDate(),
     includeKansenStatuutRemarks: false,
     kansenstatuutRemarks: '',
-    withNewCard: 'NO_NEW_CARD'
+    withNewCard: 'NO_NEW_CARD',
+    uitpasNewNumber: '',
+    price: -1,
+    unreducedPrice: -1,
+    voucherNumber: ''
   };
 
   controller.showModalFlowForCardSystem = function(cardSystem) {

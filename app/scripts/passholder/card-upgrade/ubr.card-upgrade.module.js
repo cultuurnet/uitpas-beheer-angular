@@ -28,6 +28,11 @@ angular
 
     $stateProvider
       .state('counter.main.passholder.upgrade', {
+        params: {
+          'pass': null,
+          'activeCounter': null,
+          'cardSystem': null
+        },
         resolve: {
           pass: ['passholderService', '$stateParams', getPassFromStateParams],
           activeCounter: ['counterService', function (counterService) {
@@ -78,11 +83,6 @@ angular
             templateUrl: 'views/passholder/card-upgrade/kansenstatuut.html'
           }
         },
-        params: {
-          'pass': null,
-          'kansenstatuut': null,
-          'cardSystem': null
-        },
         stepNumber: 1
       })
       .state('counter.main.passholder.upgrade.newCard', {
@@ -90,11 +90,6 @@ angular
           'upgradeStep@': {
             templateUrl: 'views/passholder/card-upgrade/new-card.html'
           }
-        },
-        params: {
-          'pass': null,
-          'kansenstatuut': null,
-          'cardSystem': null
         },
         stepNumber: 2
       });
