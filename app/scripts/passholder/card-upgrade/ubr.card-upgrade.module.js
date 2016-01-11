@@ -63,7 +63,9 @@ angular
           });
 
           function upgradeCanceled() {
-            $state.go('^');
+            $state.go('counter.main.passholder', {
+              identification: pass.number
+            });
           }
 
           function cardUpgraded() {
@@ -92,5 +94,13 @@ angular
           }
         },
         stepNumber: 2
+      })
+      .state('counter.main.passholder.upgrade.price', {
+        views: {
+          'upgradeStep@': {
+            templateUrl: 'views/passholder/card-upgrade/price.html'
+          }
+        },
+        stepNumber: 3
       });
   });

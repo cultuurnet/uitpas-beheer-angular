@@ -146,18 +146,18 @@ function UpgradeModalController (
     return deferredStart.promise;
   };
 
-  controller.submitContactDataForm = function(contactDataForm) {
+  controller.submitNewCardForm = function(newCardForm) {
     // Remove the email value if the no email checkbox is checked.
     if (controller.excludeEmail) {
       contactDataForm.email.$setViewValue('');
     }
 
     controller
-      .startSubmit(contactDataForm)
+      .startSubmit(newCardForm)
       .then(function () {
-        if (contactDataForm.$valid) {
+        if (newCardForm.$valid) {
           controller.updateFurthestStep(3);
-          $state.go('counter.main.register.form.price');
+          $state.go('counter.main.passholder.upgrade.price');
           controller.formSubmitBusy = false;
         } else {
           controller.formSubmitBusy = false;
