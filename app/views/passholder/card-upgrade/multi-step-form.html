@@ -2,8 +2,8 @@
   <button type="button"  ng-click="umc.close()" class="close" aria-label="Close">&times;</button>
   <h4 class="modal-title">Pashouder lid maken van <span ng-bind="umc.cardSystem.name"></span></h4>
 </div>
-<ul class="three steps step">
-  <li ui-sref-active="active" class="step">
+<ul class="steps step" ng-class="umc.modalFlow === 'AUTHORIZED_COUNTER' ? 'three' : 'two'">
+  <li ui-sref-active="active" class="step" ng-if="umc.modalFlow === 'AUTHORIZED_COUNTER'">
     <a ui-sref="counter.main.passholder.upgrade.kansenStatuut">Kansenstatuut</a>
   </li>
   <li ui-sref-active="active" class="step" ng-switch="umc.getStepNumber() < 2">

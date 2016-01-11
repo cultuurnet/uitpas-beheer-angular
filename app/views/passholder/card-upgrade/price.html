@@ -11,7 +11,7 @@
             <label class="control-label" for="voucherNumber">
               Voucher-nummer
             </label>
-            <input name="voucherNumber" type="text" ng-model="umc.voucherNumber" ng-model-options="umc.priceModelOptions"
+            <input name="voucherNumber" type="text" ng-model="umc.upgradeData.voucherNumber" ng-model-options="umc.priceModelOptions"
                    ng-change="refreshPriceInfo()" id="voucherNumber" ubr-voucher-number class="form-control">
             <div ng-show="umc.showFieldError(priceForm, 'voucherNumber')">
               <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.voucher === true">Het voucher-nummer is ongeldig.</div>

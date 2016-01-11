@@ -36,8 +36,6 @@ function UpgradeModalController (
   controller.cardSystem = cardSystem;
 
   controller.formSubmitBusy = false;
-  // Price is set to minus one to indicate it has not yet been initialized
-  controller.price = -1;
   controller.unreducedPrice = -1;
   controller.priceModelOptions = {
     debounce: {
@@ -45,7 +43,6 @@ function UpgradeModalController (
       'blur': 0
     }
   };
-  controller.voucherNumber = '';
   controller.asyncError = undefined;
   controller.furthestStep = 0;
 
@@ -57,6 +54,7 @@ function UpgradeModalController (
     kansenstatuutRemarks: '',
     withNewCard: 'NO_NEW_CARD',
     uitpasNewNumber: '',
+    // Price is set to minus one to indicate it has not yet been initialized
     price: -1,
     unreducedPrice: -1,
     voucherNumber: ''
@@ -69,8 +67,11 @@ function UpgradeModalController (
     }
     else {
       controller.modalFlow = 'UNAUTHORIZED_COUNTER';
+      controller.upgradeData.withNewCard = 'NEW_CARD';
     }
   };
+
+  controller.showModalFlowForCardSystem(controller.cardSystem);
 
   controller.showFieldError = function (form, field) {
     var hasErrors = false;
@@ -183,10 +184,10 @@ function UpgradeModalController (
     var updateUnreducedPriceInfo = function (priceInfo) {
       var unreducedPrice = priceInfo.price;
 
-      controller.unreducedPrice = unreducedPrice;
+      controller.upgradeData.unreducedPrice = unreducedPrice;
 
-      if (controller.price === -1) {
-        controller.price = unreducedPrice;
+      if (controller.upgradeData.price === -1) {
+        controller.upgradeData.price = unreducedPrice;
       }
     };
 
@@ -230,7 +231,7 @@ function UpgradeModalController (
 
     controller.formSubmitBusy = true;
     passholderService
-      .register(pass, passholderData, controller.voucherNumber, kansenstatuutInfo)
+      .register(pass, passholderData, controller.upgradeData.voucherNumber, kansenstatuutInfo)
       .then(showRegisteredPassholder, controller.handleAsyncError)
       .finally(controller.unlockForm);
   };

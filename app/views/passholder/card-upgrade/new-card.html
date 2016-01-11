@@ -9,7 +9,8 @@
             <div class="alert alert-danger" type="{{umc.formAlert.type}}" ng-show="umc.formAlert" ng-bind="umc.formAlert.message"></div>
           </div>
           <div class="grid__12 field-group required"
-               ng-class="{ 'has-error': umc.showFieldError(newCardForm, 'with-new-card') }">
+               ng-class="{ 'has-error': umc.showFieldError(newCardForm, 'with-new-card') }"
+               ng-if="umc.modalFlow === 'AUTHORIZED_COUNTER'">
             <div class="grid radios">
               <div class="grid__12">
                 <div class="radio">
@@ -38,8 +39,7 @@
                 </label>
                 <input ubr-uitpas-number-async-validation ng-pattern="/^\d{13}$/" type="text"
                        class="form-control input-number" name="uitpasNewNumber" id="uitpasNewNumber"
-                       ng-required="true" ubr-card-system="umc.cardSystem.id" ng-model="umc.upgradeData.uitpasNewNumber">
-                1000000396118
+                       ng-required="true" ubr-action="'UPGRADE'" ubr-card-system="umc.cardSystem.id" ng-model="umc.upgradeData.uitpasNewNumber">
                 <div ng-if="(newCardForm.$submitted || newCardForm.uitpasNewNumber.$dirty) && newCardForm.uitpasNewNumber.$invalid" class="text-danger small">
                   <div ng-if="newCardForm.uitpasNewNumber.$error.pattern">Het nummer heeft een verkeerd formaat, 13 cijfers worden verwacht.</div>
                   <div ng-if="newCardForm.uitpasNewNumber.$error.notFound">Deze UiTPAS kan niet gevonden worden in het systeem.</div>
