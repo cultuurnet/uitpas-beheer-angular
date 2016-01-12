@@ -46,7 +46,7 @@
   <div class="modal-footer">
     <a ng-click="abc.cancel()" class="btn btn-default" ng-disabled="abc.submitBusy">Annuleren</a>
     <button type="button" class="btn btn-primary" ng-disabled="abc.submitBusy"
-            ng-click="abc.submitForm(bulkAddress)">
+            ng-click="abc.submitForm(abc.passholders, bulkAddress)">
       <span ng-hide="abc.submitBusy">Wijzigen</span> <span ng-show="abc.submitBusy"><span class="fa fa-refresh loading small"></span> Wijzigen</span>
     </button>
   </div>

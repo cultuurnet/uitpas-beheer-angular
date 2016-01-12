@@ -12,10 +12,11 @@ angular
   .controller('AddressBulkController', AddressBulkController);
 
 /* @ngInject */
-function AddressBulkController (bulkSelection, advancedSearchService, passholderService, $uibModalInstance) {
+function AddressBulkController (bulkSelection, passholderService, $uibModalInstance, $state) {
   var controller = this;
   controller.submitBusy = false;
   controller.bulkSelection = bulkSelection;
+  var passholders = Array();
   var searchParameters = bulkSelection.searchParameters;
   var totalItems = bulkSelection.searchResults.totalItems;
 
@@ -24,42 +25,39 @@ function AddressBulkController (bulkSelection, advancedSearchService, passholder
     findPassHoldersAgain(searchParameters);
   }
   else {
-    var passnumbers = bulkSelection.uitpasNumberSelection;
+    for (var i = 0, len = bulkSelection.uitpasNumberSelection.length; i < len; i++) {
+      findPassHolderByNumber(bulkSelection.uitpasNumberSelection[i], i);
+    }
+    controller.passholders = passholders;
   }
-
-
-  controller.showSearchResults = function (searchResults) {
-    controller.reloadedResults = searchResults;
-  };
 
   function findPassHoldersAgain(searchParameters) {
-    advancedSearchService
+    passholderService
       .findPassholders(searchParameters)
-      .finally(controller.showSearchResults);
+      .then(
+        function(PassholderSearchResults) {
+          passholders = PassholderSearchResults.passen;
+          for (i = 0, len = passholders.length; i < len; i++) {
+            passholders[i] = passholders[i].passholder;
+          }
+          controller.passholders = passholders;
+        }
+      );
   }
 
-  function updatePassHolder(bulkAddressForm, passnumber){
+  function findPassHolderByNumber(passnumber, i) {
     passholderService.findPassholder(passnumber).then(
       function (passholder) {
-        passholder.address.city = bulkAddressForm.city.$viewValue;
-        passholder.address.postalCode = bulkAddressForm.zip.$viewValue;
-        passholder.address.street = bulkAddressForm.street.$viewValue;
-        passholderService.update(passholder, passnumber);
+        passholders[i] = passholder;
       }
     );
   }
 
-  controller.submitForm = function(bulkAddressForm) {
+  controller.submitForm = function(passholders, bulkAddressForm) {
     if (!controller.submitBusy) {
-
-      /*var street =;
-      var zip =;
-      var city = ;*/
-
       controller.submitBusy = true;
-      for (var i = 0, len = passnumbers.length; i < len; i++) {
-        updatePassHolder(bulkAddressForm, passnumbers[i]);
-      }
+      $state.go('counter.main.advancedSearch.bulkAddressResults', { passholders: passholders, bulkAddressForm: bulkAddressForm });
+      controller.submitBusy = false;
     }
   };
 
