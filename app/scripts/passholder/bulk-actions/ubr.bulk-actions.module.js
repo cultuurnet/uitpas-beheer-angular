@@ -47,4 +47,40 @@ angular
             });
         }
       })
+      .state('counter.main.advancedSearch.bulkAddressResults', {
+        params: {
+          passholders: null,
+          bulkAddressForm: null
+        },
+        resolve: {
+          passholders: ['$stateParams', function($stateParams) {
+            return $stateParams.passholders;
+          }],
+          bulkAddressForm: ['$stateParams', function($stateParams) {
+            return $stateParams.bulkAddressForm;
+          }]
+        },
+        onEnter: function(passholders, bulkAddressForm, $state, $uibModal) {
+          $uibModal
+            .open({
+              animation: true,
+              templateUrl: 'views/passholder/bulk-actions/modal-bulk-address-results.html',
+              size: 'sm',
+              resolve: {
+                passholders: function() {
+                  return passholders;
+                },
+                bulkAddressForm: function() {
+                  return bulkAddressForm;
+                }
+              },
+              controller: 'AddressBulkResultsController',
+              controllerAs: 'abrc'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
+            });
+        }
+      })
   });
