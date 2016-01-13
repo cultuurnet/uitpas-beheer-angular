@@ -11,7 +11,7 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('AddressBulkResultsController', AddressBulkResultsController);
 
-function AddressBulkResultsController(passholders, bulkAddressForm, AddressBulkController, passholderService, $uibModalInstance) {
+function AddressBulkResultsController(passholders, bulkAddressForm, passholderService, $uibModalInstance) {
   var controller = this;
   controller.submitBusy = true;
   controller.passholders = passholders;
@@ -26,7 +26,7 @@ function AddressBulkResultsController(passholders, bulkAddressForm, AddressBulkC
     passholder.address.city = bulkAddressForm.city.$viewValue;
     passholder.address.postalCode = bulkAddressForm.zip.$viewValue;
     passholder.address.street = bulkAddressForm.street.$viewValue;
-    passholderService.update(passholder, passholder.passNumber);
+    console.log(passholderService.update(passholder, passholder.passNumber));
   }
 
   this.cancel = function() {

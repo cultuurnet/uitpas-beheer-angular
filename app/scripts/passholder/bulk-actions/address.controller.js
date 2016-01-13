@@ -15,6 +15,7 @@ angular
 function AddressBulkController (bulkSelection, passholderService, $uibModalInstance, $state) {
   var controller = this;
   controller.submitBusy = false;
+  controller.isSubmitted = false;
   controller.bulkSelection = bulkSelection;
   var passholders = Array();
   var searchParameters = bulkSelection.searchParameters;
@@ -54,10 +55,13 @@ function AddressBulkController (bulkSelection, passholderService, $uibModalInsta
   }
 
   controller.submitForm = function(passholders, bulkAddressForm) {
-    if (!controller.submitBusy) {
-      controller.submitBusy = true;
-      $state.go('counter.main.advancedSearch.bulkAddressResults', { passholders: passholders, bulkAddressForm: bulkAddressForm });
-      controller.submitBusy = false;
+    controller.isSubmitted = true;
+    if(bulkAddressForm.$valid) {
+      if (!controller.submitBusy) {
+        controller.submitBusy = true;
+        $state.go('counter.main.advancedSearch.bulkAddressResults', { passholders: passholders, bulkAddressForm: bulkAddressForm });
+        controller.submitBusy = false;
+      }
     }
   };
 

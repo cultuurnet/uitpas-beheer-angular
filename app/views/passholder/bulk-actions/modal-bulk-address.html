@@ -1,4 +1,4 @@
-<form name="bulkAddress" ng-submit="abc.submitForm(passholderEdit)">
+<form name="bulkAddress" ng-submit="abc.submitForm(bulkAddress.$valid)" novalidate>
   <div class="modal-header">
     <button type="button" class="close" ng-click="abc.cancel()" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">×</span>
@@ -13,12 +13,18 @@
     <span ng-show="abc.bulkSelection.selectAll" ng-bind="abc.bulkSelection.searchResults.totalItems"></span>
       geselecteerde pashouder(s).</p>
 
+    <div class="bg-danger" ng-show="bulkAddress.$invalid && abc.isSubmitted">
+      <p ng-show="bulkAddress.street.$invalid">Straat is een verplicht veld.</p>
+      <p ng-show="bulkAddress.zip.$invalid">Postcode is een verplicht veld.</p>
+      <p ng-show="bulkAddress.street.$invalid">Gemeent is een verplicht veld.</p>
+    </div>
+
     <div class="row">
 
       <div class="col-xs-12">
         <div class="form-group">
-          <label for="">Straat, nummer en bus</label>
-          <input type="text" class="form-control" id="street" name="street" ng-model="abc.address.street">
+          <label>Straat, nummer en bus</label>
+          <input type="text" ng-class="{'has-error': bulkAddress.street.$invalid}" class="form-control" id="street" name="street" ng-model="abc.address.street" required>
         </div>
       </div>
 
@@ -29,13 +35,13 @@
         <div class="form-horizontal">
           <div class="form-group">
             <div class="grid__12 grid--bp-med__3">
-              <label for="">Postcode</label>
-              <input type="text" class="form-control" id="zip" name="zip" ng-model="abc.address.zip">
+              <label>Postcode</label>
+              <input type="text" ng-class="{'has-error': bulkAddress.zip.$invalid}" class="form-control" id="zip" name="zip" ng-model="abc.address.zip" required>
             </div>
 
             <div class="grid__12 grid--bp-med__9">
-              <label for="">Gemeente</label>
-              <input type="text" class="form-control" id="city" name="city" ng-model="abc.address.city">
+              <label>Gemeente</label>
+              <input type="text" ng-class="{'has-error': bulkAddress.city.$invalid}" class="form-control" id="city" name="city" ng-model="abc.address.city" required>
             </div>
           </div>
         </div>

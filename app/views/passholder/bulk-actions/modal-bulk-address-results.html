@@ -5,8 +5,8 @@
 <div class="modal-body">
   <ul class="list-unstyled slats">
 
-    <li class="overview__item overview__item-list" ng-repeat="passholder in abrc.passholders">
-      <div ng-class="{'bg-success': passholder.updated"}>
+    <div ng-repeat="passholder in abrc.passholders">
+      <li class="overview__item overview__item-list" ng-class="{'lowest': passholder.updated}">
         <div class="grid">
           <div class="grid__12 grid--bp-med__6">
             <p class="no-margin">{{ passholder.name.first }} {{ passholder.name.last }}</p>
@@ -21,8 +21,8 @@
           </div>
 
         </div>
-      </div>
-    </li>
+      </li>
+    </div>
 
   </ul>
 
