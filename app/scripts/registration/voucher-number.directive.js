@@ -19,9 +19,17 @@ function ubrVoucherNumber(counterService, $timeout) {
   };
 
   function link(scope, element, attrs, controllers) {
+    var modelController = controllers[1];
     // can't seem to access the registration controller using require so this is a workaround
     var registrationController = scope.prc;
-    var modelController = controllers[1];
+    var reason = 'FIRST_CARD';
+
+    if (scope.umc) {
+      registrationController = scope.umc;
+      // @todo figure out when which reason needs to be used.
+      reason = 'CARD_UPGRADE';
+      reason = 'EXTRA_CARD';
+    }
 
     scope.refreshPriceInfo = function () {
       var voucherNumber = modelController.$viewValue;
@@ -52,7 +60,7 @@ function ubrVoucherNumber(counterService, $timeout) {
       registrationController.clearAsyncError('UNKNOWN_VOUCHER');
       registrationController.price = -1;
       counterService
-        .getRegistrationPriceInfo(registrationController.pass, registrationController.passholder, voucherNumber)
+        .getRegistrationPriceInfo(registrationController.pass, registrationController.passholder, voucherNumber, reason)
         .then(updatePriceInfo, showError);
     };
 

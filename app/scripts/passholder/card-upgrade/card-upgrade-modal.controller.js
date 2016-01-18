@@ -201,17 +201,14 @@ function UpgradeModalController (
 
   controller.handleAsyncError = function (error) {
     var knownAPIError = RegistrationAPIError[error.code];
-    var step = 'personalData';
 
     if (knownAPIError) {
       error.cleanMessage = knownAPIError.message;
-      step = knownAPIError.step;
     } else {
       error.cleanMessage = error.message.split('URL CALLED')[0];
     }
 
     controller.asyncError = error;
-    $state.go('counter.main.register.form.' + step);
   };
 
   controller.unlockForm = function () {
