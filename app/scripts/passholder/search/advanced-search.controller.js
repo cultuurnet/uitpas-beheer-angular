@@ -247,11 +247,20 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
     controller.searchFields = getSearchParametersFromState();
     var emptySearchParams = new SearchParameters();
     if (controller.searchFields.yieldsSameResultSetAs(emptySearchParams)) {
-      $state.params = {};
+      angular.forEach($state.params, function (value, key) {
+        if (key !== 'mode') {
+          $state.params[key] = null;
+        }
+      });
       $rootScope.$emit('resetSearch');
     }
     else {
-      controller.findPassholdersByDetails();
+      if (controller.searchFields.mode.name === 'DETAIL') {
+        controller.findPassholdersByDetails();
+      }
+      else {
+        controller.findPassholdersByNumbers();
+      }
     }
   };
 
