@@ -2,25 +2,29 @@
 
 /**
  * @ngdoc function
- * @name ubr.passholder.bulk-actions.controller:AddressBulkResultController
+ * @name ubr.passholder.bulk-actions.controller:AddressBulkResultsController
  * @description
- * # AddressBulkController
+ * # AddressBulkResultsController
  * Controller of the ubr.passholder.bulkActions module.
  */
 angular
   .module('ubr.passholder.bulkActions')
   .controller('AddressBulkResultsController', AddressBulkResultsController);
 
-function AddressBulkResultsController(passholders, bulkAddressForm, passholderService, $uibModalInstance, $rootScope) {
+function AddressBulkResultsController(passholders, bulkAddressForm, passholderService, $uibModalStack) {
   var controller = this;
+  var updatePassholderFailed = false;
   controller.submitBusy = true;
   controller.passholders = passholders;
   controller.asyncError = null;
 
+
   for (var i = 0, len = controller.passholders.length; i < len; i++) {
     controller.passholders[i].updated = false;
     updatePassHolder(controller.passholders[i]);
-    //controller.passholders[i].updated = true;
+    if (updatePassholderFailed) {
+      controller.passholder[i].failed = true;
+    }
   }
 
   function updatePassHolder(passholder){
@@ -30,14 +34,13 @@ function AddressBulkResultsController(passholders, bulkAddressForm, passholderSe
 
     var updateOk = function(updatedPassholder) {
       updatedPassholder.updated = true;
-      //$uibModalInstance.close();
     };
 
     var updateFailed = function(errorResponse) {
+      updatePassholderFailed = true;
       var errorCode = errorResponse.apiError.code;
       // clear any previous async errors
       controller.asyncError = null;
-
 
       if (errorCode === 'ACTION_NOT_ALLOWED') {
         controller.asyncError = {
@@ -45,7 +48,7 @@ function AddressBulkResultsController(passholders, bulkAddressForm, passholderSe
           type: 'danger'
         };
       }
-      
+
       if (errorCode === 'PASSHOLDER_NOT_UPDATED_ON_SERVER') {
         controller.asyncError = {
           message: errorResponse.apiError.message,
@@ -55,10 +58,10 @@ function AddressBulkResultsController(passholders, bulkAddressForm, passholderSe
     };
 
     passholderService.update(passholder, passholder.passNumber)
-      .then(updateOk, updateFailed);
+      .then(updateOk(passholder), updateFailed);
   }
 
   this.cancel = function() {
-    $uibModalInstance.dismiss('canceled');
+    $uibModalStack.dismissAll();
   }
 }

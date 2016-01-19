@@ -40,14 +40,10 @@ angular
               },
               controller: 'AddressBulkController',
               controllerAs: 'abc'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
             });
         }
       })
-      .state('counter.main.advancedSearch.bulkAddressResults', {
+      .state('counter.main.advancedSearch.bulkAddress.results', {
         params: {
           passholders: null,
           bulkAddressForm: null
@@ -60,7 +56,7 @@ angular
             return $stateParams.bulkAddressForm;
           }]
         },
-        onEnter: function(passholders, bulkAddressForm, $state, $uibModal) {
+        onEnter: function(passholders, bulkAddressForm, $state, $uibModal, bulkSelection) {
           $uibModal
             .open({
               animation: true,
@@ -79,7 +75,7 @@ angular
             })
             .result
             .finally(function() {
-              $state.go('^');
+              $state.go('counter.main.advancedSearch', bulkSelection.searchParameters.toParams(), { reload: true });
             });
         }
       })
