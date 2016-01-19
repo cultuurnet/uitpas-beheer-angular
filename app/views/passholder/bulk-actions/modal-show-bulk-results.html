@@ -1,11 +1,11 @@
 <div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="sbrc.cancel()"><span aria-hidden="true">×</span></button>
   <h4 class="modal-title">Adres wijzigen</h4>
 </div>
 <div class="modal-body">
   <ul class="list-unstyled slats">
 
-    <div ng-repeat="passholder in abrc.passholders">
+    <div ng-repeat="passholder in sbrc.passholders">
       <li class="overview__item overview__item-list" ng-class="{'lowest': passholder.updated}">
         <div class="grid">
           <div class="grid__12 grid--bp-med__6">
@@ -29,11 +29,5 @@
 
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="abrc.cancel()">Sluiten</button>
+  <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sbrc.cancel()">Sluiten</button>
 </div>
-<!--<div class="modal-footer">
-  <button type="button" class="btn btn-primary" ng-disabled="abrc.submitBusy"
-          ng-click="abrc.cancel()">
-    <span ng-hide="abrc.submitBusy">Sluiten</span> <span ng-show="abrc.submitBusy"><span class="fa fa-refresh loading small"></span> Sluiten</span>
-  </button>
-</div>-->

@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc function
- * @name ubr.passholder.bulk-actions.controller:AddressBulkResultsController
+ * @name ubr.passholder.bulk-actions.controller:ShowBulkResultsController
  * @description
- * # AddressBulkResultsController
+ * # ShowBulkResultsController
  * Controller of the ubr.passholder.bulkActions module.
  */
 angular
   .module('ubr.passholder.bulkActions')
-  .controller('AddressBulkResultsController', AddressBulkResultsController);
+  .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function AddressBulkResultsController(passholders, bulkAddressForm, passholderService, $uibModalStack) {
+function ShowBulkResultsController(passholders, bulkAddressForm, passholderService, $uibModalStack) {
   var controller = this;
   var updatePassholderFailed = false;
   controller.submitBusy = true;

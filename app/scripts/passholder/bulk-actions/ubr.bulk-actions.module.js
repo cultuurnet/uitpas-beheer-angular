@@ -43,10 +43,11 @@ angular
             });
         }
       })
-      .state('counter.main.advancedSearch.bulkAddress.results', {
+      .state('counter.main.advancedSearch.showBulkResults', {
         params: {
           passholders: null,
-          bulkAddressForm: null
+          bulkAddressForm: null,
+          bulkSelection: null
         },
         resolve: {
           passholders: ['$stateParams', function($stateParams) {
@@ -54,13 +55,16 @@ angular
           }],
           bulkAddressForm: ['$stateParams', function($stateParams) {
             return $stateParams.bulkAddressForm;
+          }],
+          bulkSelection: ['$stateParams', function($stateParams) {
+            return $stateParams.bulkSelection;
           }]
         },
-        onEnter: function(passholders, bulkAddressForm, $state, $uibModal, bulkSelection) {
+        onEnter: function(passholders, bulkAddressForm, bulkSelection, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
-              templateUrl: 'views/passholder/bulk-actions/modal-bulk-address-results.html',
+              templateUrl: 'views/passholder/bulk-actions/modal-show-bulk-results.html',
               size: 'sm',
               resolve: {
                 passholders: function() {
@@ -68,13 +72,19 @@ angular
                 },
                 bulkAddressForm: function() {
                   return bulkAddressForm;
+                },
+                resolve: {
+                  bulkSelection: function() {
+                    return bulkSelection;
+                  }
                 }
               },
-              controller: 'AddressBulkResultsController',
-              controllerAs: 'abrc'
+              controller: 'ShowBulkResultsController',
+              controllerAs: 'sbrc'
             })
             .result
             .finally(function() {
+              console.log(bulkSelection.searchParameters.toParams());
               $state.go('counter.main.advancedSearch', bulkSelection.searchParameters.toParams(), { reload: true });
             });
         }

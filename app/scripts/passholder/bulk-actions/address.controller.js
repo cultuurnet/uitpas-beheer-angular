@@ -54,12 +54,12 @@ function AddressBulkController (bulkSelection, passholderService, $uibModalInsta
     );
   }
 
-  controller.submitForm = function(passholders, bulkAddressForm) {
+  controller.submitForm = function(passholders, bulkAddressForm, bulkSelection) {
     controller.isSubmitted = true;
     if(bulkAddressForm.$valid) {
       if (!controller.submitBusy) {
         controller.submitBusy = true;
-        $state.go('counter.main.advancedSearch.bulkAddress.results', { passholders: passholders, bulkAddressForm: bulkAddressForm });
+        $state.go('counter.main.advancedSearch.showBulkResults', { passholders: passholders, bulkAddressForm: bulkAddressForm, bulkSelection: bulkSelection });
         controller.submitBusy = false;
       }
     }
