@@ -48,12 +48,14 @@ function UpgradeModalController (
 
   controller.activeCounter = activeCounter;
   controller.upgradeData = {
+    passToCheck: angular.copy(pass),
     withKansenstatuut: 'NO_KANSENSTATUUT',
     kansenstatuutEndDate: moment().endOf('year').toDate(),
     includeKansenStatuutRemarks: false,
     kansenstatuutRemarks: '',
     withNewCard: 'NO_NEW_CARD',
     uitpasNewNumber: '',
+    upgradeReason: 'CARD_UPGRADE',
     // Price is set to minus one to indicate it has not yet been initialized
     price: -1,
     unreducedPrice: -1,
@@ -147,15 +149,18 @@ function UpgradeModalController (
   };
 
   controller.submitNewCardForm = function(newCardForm) {
-    // Remove the email value if the no email checkbox is checked.
-    if (controller.excludeEmail) {
-      contactDataForm.email.$setViewValue('');
-    }
-
     controller
       .startSubmit(newCardForm)
       .then(function () {
         if (newCardForm.$valid) {
+          // Use the new pass number to check on the API if there is a new card.
+          if (controller.upgradeData.withNewCard === 'NEW_CARD') {
+            controller.upgradeData.passToCheck = {
+              number: controller.upgradeData.uitpasNewNumber
+            };
+            // Set the correct reason for the check.
+            controller.upgradeData.upgradeReason = 'EXTRA_CARD';
+          }
           controller.updateFurthestStep(3);
           $state.go('counter.main.passholder.upgrade.price');
           controller.formSubmitBusy = false;
