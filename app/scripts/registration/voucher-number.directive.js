@@ -11,7 +11,7 @@ angular
   .directive('ubrVoucherNumber', ubrVoucherNumber);
 
 /* @ngInject */
-function ubrVoucherNumber(counterService, $timeout) {
+function ubrVoucherNumber(counterService) {
   return {
     restrict: 'A',
     require: ['?^^RegistrationModalController', 'ngModel'],
@@ -68,8 +68,6 @@ function ubrVoucherNumber(counterService, $timeout) {
         .then(updatePriceInfo, showError);
     };
 
-    // the view model does not seem to be available when linking
-    // we have to introduce a timeout and give it time to update be refreshing price info
-    $timeout(scope.refreshPriceInfo);
+    scope.refreshPriceInfo();
   }
 }
