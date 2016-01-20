@@ -15,20 +15,24 @@ function ubrVoucherNumber(counterService, $timeout) {
   return {
     restrict: 'A',
     require: ['?^^RegistrationModalController', 'ngModel'],
+    scope: {
+      pass: '=passToCheck',
+      parentController: '=currentController'
+    },
     link: link
   };
 
   function link(scope, element, attrs, controllers) {
     var modelController = controllers[1];
     // can't seem to access the registration controller using require so this is a workaround
-    var registrationController = scope.prc;
     var reason = 'FIRST_CARD';
+    var passToCheck = scope.parentController.pass;
 
-    if (scope.umc) {
-      registrationController = scope.umc;
-      // @todo figure out when which reason needs to be used.
-      reason = 'CARD_UPGRADE';
-      reason = 'EXTRA_CARD';
+    if (scope.parentController.upgradeData) {
+      reason = scope.parentController.upgradeData.upgradeReason;
+      if (scope.parentController.upgradeData.withNewCard === 'NEW_CARD') {
+        passToCheck = scope.parentController.upgradeData.passToCheck;
+      }
     }
 
     scope.refreshPriceInfo = function () {
@@ -37,10 +41,10 @@ function ubrVoucherNumber(counterService, $timeout) {
       var updatePriceInfo = function (priceInfo) {
         modelController.$setValidity('voucher', true);
 
-        registrationController.price = priceInfo.price;
+        scope.parentController.price = priceInfo.price;
 
         if (!voucherNumber) {
-          registrationController.unreducedPrice = priceInfo.price;
+          scope.parentController.unreducedPrice = priceInfo.price;
         }
       };
 
@@ -48,19 +52,19 @@ function ubrVoucherNumber(counterService, $timeout) {
         if (error.code === 'INVALID_VOUCHER_STATUS') {
           modelController.$setValidity('redeemable', false);
         } else {
-          registrationController.handleAsyncError(error);
+          scope.parentController.handleAsyncError(error);
         }
 
         modelController.$setValidity('voucher', false);
-        registrationController.price = registrationController.unreducedPrice;
+        scope.parentController.price = scope.parentController.unreducedPrice;
         modelController.$setTouched();
       };
 
-      registrationController.clearAsyncError('PARSE_INVALID_VOUCHERNUMBER');
-      registrationController.clearAsyncError('UNKNOWN_VOUCHER');
-      registrationController.price = -1;
+      scope.parentController.clearAsyncError('PARSE_INVALID_VOUCHERNUMBER');
+      scope.parentController.clearAsyncError('UNKNOWN_VOUCHER');
+      scope.parentController.price = -1;
       counterService
-        .getRegistrationPriceInfo(registrationController.pass, registrationController.passholder, voucherNumber, reason)
+        .getRegistrationPriceInfo(passToCheck, scope.parentController.passholder, voucherNumber, reason)
         .then(updatePriceInfo, showError);
     };
 
