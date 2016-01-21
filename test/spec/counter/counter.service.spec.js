@@ -403,7 +403,7 @@ describe('Service: counterService', function () {
     };
 
     $httpBackend
-      .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?date_of_birth=1983-02-03&postal_code=3000&reason=FIRST_CARD')
+      .expectGET(apiUrl + 'uitpas/price?date_of_birth=1983-02-03&postal_code=3000&reason=FIRST_CARD&uitpasNumber=' + pass.number)
       .respond(200, pricePromise);
 
     counterService.getRegistrationPriceInfo(pass, passholder, voucherNumber, reason).then(assertPriceInfo);
@@ -452,7 +452,7 @@ describe('Service: counterService', function () {
     };
 
     $httpBackend
-      .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?date_of_birth=1983-02-03&postal_code=3000&reason=FIRST_CARD&voucher_number=voucher+number')
+      .expectGET(apiUrl + 'uitpas/price?date_of_birth=1983-02-03&postal_code=3000&reason=FIRST_CARD&uitpasNumber=' + pass.number + '&voucher_number=voucher+number')
       .respond(200, pricePromise);
 
     counterService.getRegistrationPriceInfo(pass, passholder, voucherNumber, reason).then(assertPriceInfo);
@@ -492,7 +492,7 @@ describe('Service: counterService', function () {
     };
 
     $httpBackend
-      .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?reason=FIRST_CARD')
+      .expectGET(apiUrl + 'uitpas/price?reason=FIRST_CARD&uitpasNumber=' + pass.number)
       .respond(200, pricePromise);
 
     counterService
