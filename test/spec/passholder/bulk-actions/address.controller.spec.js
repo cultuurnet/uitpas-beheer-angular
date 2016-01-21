@@ -12,6 +12,113 @@ describe('Controller: AddressBulkController', function () {
     city: ''
   };
 
+  var jsonPass = {
+    'uitPas': {
+      'number': '0930000422202',
+      'kansenStatuut': true,
+      'status': 'LOCAL_STOCK',
+      'type': 'CARD',
+      'cardSystem': {
+        'id': '4a567b89',
+        'name': 'UiTPAS Regio Aalst'
+      }
+    },
+    'passHolder': {
+      'uid': 'string',
+      'name': {
+        'first': 'John',
+        'middle': 'Lupus',
+        'last': 'Smith'
+      },
+      'address': {
+        'street': 'Steenweg op Aalst 94',
+        'postalCode': '9308',
+        'city': 'Aalst'
+      },
+      'birth': {
+        'date': '2003-12-26',
+        'place': 'Sint-Agatha-Berchem'
+      },
+      'inszNumber': '93051822361',
+      'gender': 'MALE',
+      'nationality': 'Belg',
+      'picture': 'R0lGODlhDwAPAKECAAAAzMzM/////wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4MLwWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw==',
+      'contact': {
+        'email': 'foo@bar.com',
+        'telephoneNumber': '016454545',
+        'mobileNumber': '+32 498 77 88 99'
+      },
+      'privacy': {
+        'email': true,
+        'sms': true
+      },
+      'points': 40,
+      'remarks': 'Dit maakt niet uit.',
+      'kansenStatuten': [
+        {
+          'status': 'ACTIVE',
+          'endDate': '2015-12-26',
+          'cardSystem': {
+            'id': '4a567b89',
+            'name': 'UiTPAS Regio Aalst'
+          }
+        }
+      ],
+      'uitPassen': [
+        {
+          'number': '0930000422202',
+          'kansenStatuut': true,
+          'status': 'LOCAL_STOCK',
+          'type': 'CARD',
+          'cardSystem': {
+            'id': '4a567b89',
+            'name': 'UiTPAS Regio Aalst'
+          }
+        }
+      ]
+    },
+    'group': {
+      'name': 'Vereniging',
+      'availableTickets': 0
+    }
+  };
+
+  var jsonSearchParameters = {
+    uitpasNumbers: [],
+    page: 1,
+    limit: 10,
+    dateOfBirth: null,
+    firstName: 'jan',
+    name: null,
+    street: null,
+    city: null,
+    email: null,
+    membershipAssociationId: null,
+    membershipStatus: null,
+    mode: {
+      title: 'Zoeken',
+      name: 'DETAIL'
+    }
+  };
+
+  var jsonSearchResults = {
+    firstPage: "http://culpas-silex.dev/passholders?firstName=stijn&limit=10&page=1",
+    invalidUitpasNumbers: [],
+    itemsPerPage: 10,
+    lastPage: "http://culpas-silex.dev/passholders?firstName=stijn&limit=10&page=4",
+    nextPage: "http://culpas-silex.dev/passholders?firstName=stijn&limit=10&page=2",
+    page: 1,
+    passen: [
+      jsonPass,
+      jsonPass,
+      jsonPass,
+      jsonPass
+    ],
+    previousPage: undefined,
+    totalItems: 34,
+    unknownNumbersConfirmed: false,
+  };
+
   // load the controller's module
   beforeEach(module('ubr.passholder'));
   beforeEach(module('uitpasbeheerApp'));
@@ -19,16 +126,16 @@ describe('Controller: AddressBulkController', function () {
   beforeEach(inject(function (_$controller_, $rootScope, $injector, _BulkSelection_, _PassholderSearchResults_, _SearchParameters_) {
     $controller = _$controller_;
     $state = jasmine.createSpyObj('$state', ['go']);
-    passholderService = $injector.get('passholderService');
-    advancedSearchService = $injector.get('advancedSearchService');
+    passholderService = jasmine.createSpyObj('passholderService', ['findPassholders, findPassholder']);
     $uibModalInstance = jasmine.createSpyObj('$uibModalInstance', ['dismiss']);
+    advancedSearchService = jasmine.createSpyObj('advancedSearchServcie', ['findPassholders']);
     $scope = $rootScope.$new();
     BulkSelection = _BulkSelection_;
     PassholderSearchResults = _PassholderSearchResults_;
     SearchParameters = _SearchParameters_;
 
-    searchResults = new PassholderSearchResults();
-    searchParameters = new SearchParameters();
+    searchResults = new PassholderSearchResults(jsonSearchResults);
+    searchParameters = new SearchParameters(jsonSearchParameters);
     bulkSelection = new BulkSelection(searchResults, searchParameters, []);
 
     addressBulkController = getController();
@@ -46,6 +153,9 @@ describe('Controller: AddressBulkController', function () {
   }
 
   it('should initialize', function () {
+    bulkSelection = new BulkSelection(
+      new PassholderSearchResults(), new SearchParameters(), []);
+
     var expectedBulkSelection = {
       uitpasNumberSelection: [],
       searchParameters: {
@@ -83,34 +193,13 @@ describe('Controller: AddressBulkController', function () {
   });
 
   fit('should find all the passholders again when select all is selected', function () {
-    searchParameters.firstName = 'jan';
-    searchResults = advancedSearchService.findPassholders(searchParameters);
-    bulkSelection = new BulkSelection(searchResults, searchParameters, []);
+
     bulkSelection.selectAll = true;
-    searchParameters.limit = searchResults.totalItems;
+    //addressBulkController.checkSelectAll();
 
-    findPassHoldersAgain(searchParameters);
-
-    function findPassHoldersAgain(searchParameters) {
-      passholderService
-        .findPassholders(searchParameters)
-        .then(
-        function(PassholderSearchResults) {
-          var passholders = PassholderSearchResults.passen;
-          angular.forEach(passholders, function(value, key) {
-            passholders[key] = passholders[key].passholder;
-          });
-
-          addressBulkController.passholders = passholders;
-        }
-      );
-    }
-
-    expect(bulkSelection.selectAll).toBeTruthy();
-    expect(searchParameters.limit).toEqual(searchResults.totalItems);
-    //console.log(addressBulkController.passholders);
-    //console.log(searchResults.passen);
-    //expect(addressBulkController.passholders.length).toEqual(searchResults.totalItems);
+    //expect(bulkSelection.selectAll).toBeTruthy();
+    //expect(searchParameters.limit).toEqual(searchResults.totalItems);
+    //expect(passholderService.findPassholders).toHaveBeenCalledWith(searchParameters);
   });
 
   it('should lock down the form while submitting', function () {

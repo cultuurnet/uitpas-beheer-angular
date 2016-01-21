@@ -21,16 +21,18 @@ function AddressBulkController (bulkSelection, passholderService, $uibModalInsta
   var searchParameters = bulkSelection.searchParameters;
   var totalItems = bulkSelection.searchResults.totalItems;
 
-  if (controller.bulkSelection.selectAll) {
-    searchParameters.limit = totalItems;
-    findPassHoldersAgain(searchParameters);
-  }
-  else {
-    for (var i = 0, len = bulkSelection.uitpasNumberSelection.length; i < len; i++) {
-      findPassHolderByNumber(controller.bulkSelection.uitpasNumberSelection[i], i);
+  controller.checkSelectAll = function() {
+    if (controller.bulkSelection.selectAll) {
+      searchParameters.limit = totalItems;
+      findPassHoldersAgain(searchParameters);
     }
-    controller.passholders = passholders;
-  }
+    else {
+      for (var i = 0, len = bulkSelection.uitpasNumberSelection.length; i < len; i++) {
+        findPassHolderByNumber(controller.bulkSelection.uitpasNumberSelection[i], i);
+      }
+      controller.passholders = passholders;
+    }
+  };
 
   function findPassHoldersAgain(searchParameters) {
     passholderService
@@ -38,7 +40,7 @@ function AddressBulkController (bulkSelection, passholderService, $uibModalInsta
       .then(
         function(PassholderSearchResults) {
           passholders = PassholderSearchResults.passen;
-          for (i = 0, len = passholders.length; i < len; i++) {
+          for (var i = 0; i < passholders.length; i++) {
             passholders[i] = passholders[i].passholder;
           }
           controller.passholders = passholders;
