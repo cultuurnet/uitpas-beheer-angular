@@ -50,11 +50,6 @@ describe('Directive: Voucher number', function () {
     scope.voucherNumber = 'green-voucher';
     scope.parentController = registrationController;
     scope.pass = pass;
-
-    //voucherInputElement = angular.element('<input name="voucherNumber" ng-change="refreshPriceInfo()" current-controller="parentController" pass-to-check="pass" type="text" ng-model="voucherNumber" ubr-voucher-number>');
-
-    //$compile(voucherInputElement)(scope);
-    //scope.$digest();
   }));
 
   it('should provide error info when trying to use an invalid voucher', function () {
@@ -126,6 +121,51 @@ describe('Directive: Voucher number', function () {
     expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
     expect(ngModelController.$error.voucher).toBeFalsy();
     expect(registrationController.unreducedPrice).toEqual('5,25');
+  });
+
+  it('can send different data based on the parent controller and return error information', function () {
+    scope.parentController.upgradeData = {
+      upgradeReason: 'CARD_UPGRADE',
+      withNewCard: 'NO_NEW_CARD',
+      passToCheck: scope.pass
+    };
+    var returnedError = {
+      code: 'INVALID_VOUCHER_STATUS'
+    };
+    counterService.getRegistrationPriceInfo.and.returnValue($q.reject(returnedError));
+    compileElement();
+
+    voucherInputElement.val('yellow-voucher').trigger('input');
+    scope.$apply();
+
+    scope.$digest();
+
+    var ngModelController = voucherInputElement.controller('ngModel');
+
+    expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
+    expect(ngModelController.$error.redeemable).toBeTruthy();
+    expect(ngModelController.$error.voucher).toBeTruthy();
+    expect(ngModelController.$touched).toBeTruthy();
+  });
+
+  it('can send different data based on the parent controller and refresh the price information', function () {
+    scope.parentController.upgradeData = {
+      upgradeReason: 'NEW_CARD',
+      withNewCard: 'NEW_CARD',
+      passToCheck: scope.pass
+    };
+    counterService.getRegistrationPriceInfo.and.returnValue($q.resolve(priceInfo));
+    compileElement();
+
+    voucherInputElement.val('yellow-voucher').trigger('input');
+    scope.$apply();
+
+    scope.$digest();
+
+    var ngModelController = voucherInputElement.controller('ngModel');
+
+    expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
+    expect(ngModelController.$error.voucher).toBeFalsy();
   });
 });
 
