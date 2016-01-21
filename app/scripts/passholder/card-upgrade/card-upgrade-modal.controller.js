@@ -257,6 +257,8 @@ function UpgradeModalController (
     $uibModalInstance.dismiss('registration modal closed');
   };
 
+  // @todo: Add a listener on the new card form for uitpas nfc scan.
+
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
   $scope.$on('$destroy', stateChangeStartListener);
