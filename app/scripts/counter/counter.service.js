@@ -247,10 +247,9 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    *   The reason of the registration.
    */
   service.getRegistrationPriceInfo = function (pass, passholder, voucherNumber, reason) {
-    var url = appConfig.apiUrl + 'uitpas/price',
+    var url = appConfig.apiUrl + 'uitpas/' + pass.number + '/price',
         parameters = {
-          'reason': reason || 'FIRST_CARD',
-          'uitpasNumber': pass.number
+          'reason': reason || 'FIRST_CARD'
         },
         config = {
           headers: {},
