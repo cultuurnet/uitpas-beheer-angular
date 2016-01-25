@@ -12,7 +12,7 @@
               Voucher-nummer
             </label>
             <input name="voucherNumber" type="text" ng-model="umc.upgradeData.voucherNumber" ng-model-options="umc.priceModelOptions"
-                   ng-change="refreshPriceInfo()" id="voucherNumber" ubr-voucher-number current-controller="umc" pass-to-check="umc.upgradeData.passToCheck" class="form-control">
+                   ng-change="refreshPriceInfo()" id="voucherNumber" ubr-voucher-number current-controller="umc" ubr-card-system="umc.cardSystem.id" pass-to-check="umc.upgradeData.passToCheck" class="form-control">
             <div ng-show="umc.showFieldError(priceForm, 'voucherNumber')">
               <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.voucher === true">Het voucher-nummer is ongeldig.</div>
               <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.redeemable === true">Dit voucher-nummer is niet inruilbaar.</div>

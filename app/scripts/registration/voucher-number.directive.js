@@ -17,7 +17,8 @@ function ubrVoucherNumber(counterService) {
     require: ['?^^RegistrationModalController', 'ngModel'],
     scope: {
       pass: '=passToCheck',
-      parentController: '=currentController'
+      parentController: '=currentController',
+      cardSystemId: '=?ubrCardSystem'
     },
     link: link
   };
@@ -63,9 +64,17 @@ function ubrVoucherNumber(counterService) {
       scope.parentController.clearAsyncError('PARSE_INVALID_VOUCHERNUMBER');
       scope.parentController.clearAsyncError('UNKNOWN_VOUCHER');
       scope.parentController.price = -1;
-      counterService
-        .getRegistrationPriceInfo(passToCheck, scope.parentController.passholder, voucherNumber, reason)
-        .then(updatePriceInfo, showError);
+
+      if (reason === 'CARD_UPGRADE') {
+        counterService
+          .getUpgradePriceInfo(scope.cardSystemId, scope.parentController.passholder, voucherNumber)
+          .then(updatePriceInfo, showError);
+      }
+      else {
+        counterService
+          .getRegistrationPriceInfo(passToCheck, scope.parentController.passholder, voucherNumber, reason)
+          .then(updatePriceInfo, showError);
+      }
     };
 
     scope.refreshPriceInfo();

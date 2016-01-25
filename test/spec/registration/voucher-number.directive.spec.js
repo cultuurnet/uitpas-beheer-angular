@@ -18,14 +18,14 @@ describe('Directive: Voucher number', function () {
   };
 
   function compileElement () {
-    voucherInputElement = angular.element('<input name="voucherNumber" ng-change="refreshPriceInfo()" current-controller="parentController" pass-to-check="pass" type="text" ng-model="voucherNumber" ubr-voucher-number>');
+    voucherInputElement = angular.element('<input name="voucherNumber" ng-change="refreshPriceInfo()" ubr-card-system="cardSystemId" current-controller="parentController" pass-to-check="pass" type="text" ng-model="voucherNumber" ubr-voucher-number>');
     compile(voucherInputElement)(scope);
 
     scope.$digest();
   }
 
   beforeEach(module('ubr.registration', function ($provide) {
-    counterService = jasmine.createSpyObj('counterService', ['getRegistrationPriceInfo']);
+    counterService = jasmine.createSpyObj('counterService', ['getRegistrationPriceInfo', 'getUpgradePriceInfo']);
     $provide.provider('counterService', {
       $get: function () {
         return counterService;
@@ -129,10 +129,11 @@ describe('Directive: Voucher number', function () {
       withNewCard: 'NO_NEW_CARD',
       passToCheck: scope.pass
     };
+    scope.cardSystemId = '1';
     var returnedError = {
       code: 'INVALID_VOUCHER_STATUS'
     };
-    counterService.getRegistrationPriceInfo.and.returnValue($q.reject(returnedError));
+    counterService.getUpgradePriceInfo.and.returnValue($q.reject(returnedError));
     compileElement();
 
     voucherInputElement.val('yellow-voucher').trigger('input');
@@ -142,7 +143,7 @@ describe('Directive: Voucher number', function () {
 
     var ngModelController = voucherInputElement.controller('ngModel');
 
-    expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
+    expect(counterService.getUpgradePriceInfo).toHaveBeenCalled();
     expect(ngModelController.$error.redeemable).toBeTruthy();
     expect(ngModelController.$error.voucher).toBeTruthy();
     expect(ngModelController.$touched).toBeTruthy();
