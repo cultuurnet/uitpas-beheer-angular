@@ -27,12 +27,6 @@ describe('Controller: searchController', function () {
     return searchController;
   }
 
-  it('should show the last search identity when no identity was found', function () {
-    UiTPASRouter.getLastIdentification.and.returnValue('unknown identification');
-    var searchController = getSearchController();
-    expect(searchController.passholderIdentification).toEqual('unknown identification');
-  });
-
   it('should try to identify a passholder when an identification is provided', function () {
     var searchController = getSearchController();
 
