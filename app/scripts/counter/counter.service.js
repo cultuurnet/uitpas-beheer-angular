@@ -245,6 +245,9 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    *   The voucher number to use with the registration.
    * @param {string} [reason]
    *   The reason of the registration.
+   *
+   * @returns {Promise}
+   *   A promise with the price information to add a passholder to a card system.
    */
   service.getRegistrationPriceInfo = function (pass, passholder, voucherNumber, reason) {
     var url = appConfig.apiUrl + 'uitpas/' + pass.number + '/price',
@@ -263,6 +266,55 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
 
     if (passholder && passholder.birth.date) {
         parameters['date_of_birth'] = moment(passholder.birth.date).format('YYYY-MM-DD');
+    }
+
+    if (passholder && passholder.address.postalCode) {
+      parameters['postal_code'] = passholder.address.postalCode;
+    }
+
+    var resolvePriceInfo = function (responseData) {
+      deferredPriceInfo.resolve(responseData.data);
+    };
+
+    var handleErrorResponse = function (errorResponse) {
+      deferredPriceInfo.reject(errorResponse.data);
+    };
+
+    $http
+      .get(url, config)
+      .then(resolvePriceInfo, handleErrorResponse);
+
+    return deferredPriceInfo.promise;
+  };
+
+  /**
+   * @param {string} [cardSystemId]
+   *   The id of the card system to request the registration price for.
+   * @param {Passholder} [passholder]
+   *   The passholder that's going to be registered with the active counter.
+   * @param {string} [voucherNumber]
+   *   The voucher number to use with the registration.
+   *
+   * @returns {Promise}
+   *   A promise with the price information to register a passholder to a card system.
+   */
+  service.getUpgradePriceInfo = function (cardSystemId, passholder, voucherNumber) {
+    var url = appConfig.apiUrl + 'cardsystem/' + cardSystemId + '/price',
+        parameters = {
+          reason: 'CARD_UPGRADE'
+        },
+        config = {
+          headers: {},
+          params: parameters
+        },
+        deferredPriceInfo = $q.defer();
+
+    if (voucherNumber) {
+      parameters['voucher_number'] = voucherNumber;
+    }
+
+    if (passholder && passholder.birth.date) {
+      parameters['date_of_birth'] = moment(passholder.birth.date).format('YYYY-MM-DD');
     }
 
     if (passholder && passholder.address.postalCode) {
