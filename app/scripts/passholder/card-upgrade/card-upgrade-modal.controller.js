@@ -94,24 +94,16 @@ function UpgradeModalController (
     function validateKansenstatuut() {
       controller.updateFurthestStep();
       if (kansenstatuutForm.$valid) {
-        var continueUpgradeProcess = function () {
-          /*
-          controller
-            .refreshUnreducedPriceInfo()
-            .then(function () {//*/
-              controller.formSubmitBusy = false;
+        controller
+          .refreshUnreducedPriceInfo()
+          .then(function () {
+            controller.formSubmitBusy = false;
 
-              if (!controller.asyncError) {
-                $state.go('counter.main.passholder.upgrade.newCard');
-              }
-            //});
-        };
+            if (!controller.asyncError) {
+              $state.go('counter.main.passholder.upgrade.newCard');
+            }
+          });
 
-        /*
-        passholderService
-          .findPassholder(kansenstatuutForm.inszNumber.$viewValue)
-          .then(setInszNumberError, continueUpgradeProcess);//*/
-        continueUpgradeProcess();
       } else {
         controller.formSubmitBusy = false;
       }
@@ -242,15 +234,6 @@ function UpgradeModalController (
     if (controller.asyncError && controller.asyncError.code === errorCode) {
       controller.asyncError = undefined;
     }
-  };
-
-  controller.emailChanged = function () {
-    controller.clearAsyncError('EMAIL_ALREADY_USED');
-    controller.clearAsyncError('EMAIL_ADDRESS_INVALID');
-  };
-
-  controller.postalCodeChanged = function () {
-    controller.clearAsyncError('PARSE_INVALID_CITY_IDENTIFIER');
   };
 
   controller.close = function () {
