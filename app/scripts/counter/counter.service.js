@@ -300,9 +300,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    */
   service.getUpgradePriceInfo = function (cardSystemId, passholder, voucherNumber) {
     var url = appConfig.apiUrl + 'cardsystem/' + cardSystemId + '/price',
-        parameters = {
-          reason: 'CARD_UPGRADE'
-        },
+        parameters = {},
         config = {
           headers: {},
           params: parameters
