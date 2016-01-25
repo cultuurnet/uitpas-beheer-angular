@@ -75,6 +75,7 @@ function UpgradeModalController (
 
   controller.showModalFlowForCardSystem(controller.cardSystem);
 
+  // Helper functions.
   controller.showFieldError = function (form, field) {
     var hasErrors = false;
 
@@ -87,6 +88,79 @@ function UpgradeModalController (
     }
 
     return hasErrors;
+  };
+
+  controller.getStepNumber = function () {
+    return $state.current.stepNumber;
+  };
+
+  controller.updateFurthestStep = function (event, toState, toParams, fromState) {
+    var stepNumber = fromState ? fromState.stepNumber : null;
+
+    if (stepNumber && stepNumber > controller.furthestStep) {
+      controller.furthestStep = stepNumber;
+    }
+  };
+
+  controller.handleAsyncError = function (error) {
+    var knownAPIError = RegistrationAPIError[error.code];
+
+    if (knownAPIError) {
+      error.cleanMessage = knownAPIError.message;
+    } else {
+      error.cleanMessage = error.message.split('URL CALLED')[0];
+    }
+
+    controller.asyncError = error;
+  };
+
+  controller.unlockForm = function () {
+    controller.formSubmitBusy = false;
+  };
+
+  controller.clearAsyncError = function (errorCode) {
+    if (controller.asyncError && controller.asyncError.code === errorCode) {
+      controller.asyncError = undefined;
+    }
+  };
+
+  controller.refreshUnreducedPriceInfo = function () {
+    var deferredRefresh = $q.defer();
+    var updateUnreducedPriceInfo = function (priceInfo) {
+      var unreducedPrice = priceInfo.price;
+
+      controller.upgradeData.unreducedPrice = unreducedPrice;
+
+      if (controller.upgradeData.price === -1) {
+        controller.upgradeData.price = unreducedPrice;
+      }
+    };
+
+    counterService
+      .getRegistrationPriceInfo(pass, controller.passholder, '', 'CARD_UPGRADE')
+      .then(updateUnreducedPriceInfo, controller.handleAsyncError)
+      .finally(deferredRefresh.resolve);
+
+    return deferredRefresh.promise;
+  };
+
+  controller.close = function () {
+    $uibModalInstance.dismiss('card upgrade modal closed');
+  };
+
+  // Submit functions.
+  controller.startSubmit = function (form) {
+    var deferredStart = $q.defer();
+
+    if (!controller.formSubmitBusy) {
+      form.$setSubmitted();
+      controller.formSubmitBusy = true;
+      deferredStart.resolve();
+    } else {
+      deferredStart.reject('another form submit is already in progress');
+    }
+
+    return deferredStart.promise;
   };
 
   controller.submitKansenstatuutForm = function(kansenstatuutForm) {
@@ -112,32 +186,6 @@ function UpgradeModalController (
     controller
       .startSubmit(kansenstatuutForm)
       .then(validateKansenstatuut);
-  };
-
-  controller.getStepNumber = function () {
-    return $state.current.stepNumber;
-  };
-
-  controller.updateFurthestStep = function (event, toState, toParams, fromState) {
-    var stepNumber = fromState ? fromState.stepNumber : null;
-
-    if (stepNumber && stepNumber > controller.furthestStep) {
-      controller.furthestStep = stepNumber;
-    }
-  };
-
-  controller.startSubmit = function (form) {
-    var deferredStart = $q.defer();
-
-    if (!controller.formSubmitBusy) {
-      form.$setSubmitted();
-      controller.formSubmitBusy = true;
-      deferredStart.resolve();
-    } else {
-      deferredStart.reject('another form submit is already in progress');
-    }
-
-    return deferredStart.promise;
   };
 
   controller.submitNewCardForm = function(newCardForm) {
@@ -176,42 +224,6 @@ function UpgradeModalController (
       });
   };
 
-  controller.refreshUnreducedPriceInfo = function () {
-    var deferredRefresh = $q.defer();
-    var updateUnreducedPriceInfo = function (priceInfo) {
-      var unreducedPrice = priceInfo.price;
-
-      controller.upgradeData.unreducedPrice = unreducedPrice;
-
-      if (controller.upgradeData.price === -1) {
-        controller.upgradeData.price = unreducedPrice;
-      }
-    };
-
-    counterService
-      .getRegistrationPriceInfo(pass, controller.passholder, '', 'CARD_UPGRADE')
-      .then(updateUnreducedPriceInfo, controller.handleAsyncError)
-      .finally(deferredRefresh.resolve);
-
-    return deferredRefresh.promise;
-  };
-
-  controller.handleAsyncError = function (error) {
-    var knownAPIError = RegistrationAPIError[error.code];
-
-    if (knownAPIError) {
-      error.cleanMessage = knownAPIError.message;
-    } else {
-      error.cleanMessage = error.message.split('URL CALLED')[0];
-    }
-
-    controller.asyncError = error;
-  };
-
-  controller.unlockForm = function () {
-    controller.formSubmitBusy = false;
-  };
-
   controller.submitRegistration = function () {
     var showRegisteredPassholder = function (passholder) {
       $uibModalInstance.close(passholder);
@@ -230,18 +242,8 @@ function UpgradeModalController (
       .finally(controller.unlockForm);
   };
 
-  controller.clearAsyncError = function (errorCode) {
-    if (controller.asyncError && controller.asyncError.code === errorCode) {
-      controller.asyncError = undefined;
-    }
-  };
-
-  controller.close = function () {
-    $uibModalInstance.dismiss('registration modal closed');
-  };
-
+  // Listeners and functions.
   // @todo: Add a listener on the new card form for uitpas nfc scan.
-
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
   $scope.$on('$destroy', stateChangeStartListener);
