@@ -5,309 +5,12 @@ describe('Controller: MembershipController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var controller, membershipService, $q, $scope, moment, $rootScope, modalInstance, deferredMemberShips, $httpBackend, $sce,
+  var controller, membershipService, $q, $scope, moment, $rootScope, modalInstance, deferredMemberShips, $httpBackend, $sce, $uibModal,
       today, yesterday, tomorrow, getMembershipWithEndDate;
 
   // Setup mocking data
   var memberShips = {
-    'passholder': {
-      'name': 'geldig veelpunten_cnet 1',
-      'firstName': 'mia',
-      'secondName': '',
-      'email': 'AANGEPASTmia-geldig-veelpunten_cnet-1@mailinator.com',
-      'emailPreference': null,
-      'smsPreference': null,
-      'inszNumber': '14071510183',
-      'dateOfBirth': -679536000,
-      'gender': 'MALE',
-      'street': 'Wolvenveld',
-      'number': '1',
-      'box': null,
-      'postalCode': '9300',
-      'city': 'Aalst',
-      'telephone': '+3234567889',
-      'gsm': '0479/44.44.44',
-      'nationality': 'Belg',
-      'placeOfBirth': 'Aalst',
-      'price': null,
-      'kansenStatuut': null,
-      'kansenStatuutEndDate': null,
-      'kansenStatuutExpired': null,
-      'kansenStatuutInGracePeriod': null,
-      'uitIdUser': {
-        'id': '1bdf5cdd-efdb-450a-829a-b1818a8b78f3',
-        'nick': 'mia-geldig-veelpunten_cnet-1'
-      },
-      'blocked': null,
-      'verified': false,
-      'memberships': [
-        {
-          'id': '231',
-          'associationId': '6',
-          'name': 'Vereniging 1',
-          'endDate': 1483225199,
-          'association': {
-            'id': 6,
-            'name': 'Vereniging 1',
-            'cardSystems': [
-              {
-                'id': 1,
-                'name': 'UiTPAS Regio Aalst',
-                'distributionKeys': []
-              }
-            ],
-            'permissionRead': null,
-            'permissionRegister': null,
-            'enddateCalculation': null,
-            'enddateCalculationValidityTime': null,
-            'enddateCalculationFreeDate': null
-          },
-          'renewable': false,
-          'renewDate': 1480546799,
-          'newEndDate': null,
-          'expired': false,
-          '$$hashKey': 'object:144'
-        },
-        {
-          'id': '305',
-          'associationId': '7',
-          'name': 'testmedewerker Vlaamse Gemeenschapscommissie',
-          'endDate': 1475359199,
-          'association': {
-            'id': 7,
-            'name': 'testmedewerker Vlaamse Gemeenschapscommissie',
-            'cardSystems': [
-              {
-                'id': 1,
-                'name': 'UiTPAS Regio Aalst',
-                'distributionKeys': []
-              }
-            ],
-            'permissionRead': null,
-            'permissionRegister': null,
-            'enddateCalculation': null,
-            'enddateCalculationValidityTime': null,
-            'enddateCalculationFreeDate': null
-          },
-          'renewable': true,
-          'renewDate': 1453458803,
-          'newEndDate': 1475359199,
-          'expired': false,
-          '$$hashKey': 'object:145'
-        }
-      ],
-      'registrationBalieConsumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
-      'points': 15,
-      'moreInfo': '',
-      'schoolConsumerKey': null,
-      'balieConsumerKey': null,
-      'picture': null,
-      'cardSystemSpecific': {
-        '1': {
-          'currentCard': {
-            'city': null,
-            'uitpasNumber': '0930000800118',
-            'kansenpas': true,
-            'status': 'ACTIVE',
-            'type': 'CARD',
-            'cardSystem': {
-              'id': 1,
-              'name': 'UiTPAS Regio Aalst',
-              'distributionKeys': []
-            }
-          },
-          'emailPreference': 'NOTIFICATION_MAILS',
-          'smsPreference': 'NOTIFICATION_SMS',
-          'cardSystem': {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          },
-          'kansenStatuut': true,
-          'kansenStatuutExpired': false,
-          'kansenStatuutEndDate': 1483225199,
-          'kansenStatuutInGracePeriod': false,
-          'status': 'ACTIVE'
-        }
-      },
-      'numberOfCheckins': 20,
-      'inszNumberHash': null,
-      'uitpasNumber': null,
-      'voucherNumber': null,
-      'passNumber': '0930000800118'
-    },
-    'atLeastOneKansenstatuutExpired': false,
-    'otherAssociations': [
-      {
-        'id': 1,
-        'name': 'Jeugdhuis Leeuwerik',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': false,
-        'permissionRegister': false,
-        'enddateCalculation': 'FREE',
-        'enddateCalculationValidityTime': null,
-        'enddateCalculationFreeDate': 1451516400
-      },
-      {
-        'id': 8,
-        'name': 'Vereniging 3',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': true,
-        'permissionRegister': true,
-        'enddateCalculation': 'BASED_ON_DATE_OF_BIRTH',
-        'enddateCalculationValidityTime': 30,
-        'enddateCalculationFreeDate': null,
-        '$$hashKey': 'object:148'
-      },
-      {
-        'id': 9,
-        'name': 'Vereniging 4',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': true,
-        'permissionRegister': false,
-        'enddateCalculation': 'BASED_ON_REGISTRATION_DATE',
-        'enddateCalculationValidityTime': 1,
-        'enddateCalculationFreeDate': null
-      },
-      {
-        'id': 10,
-        'name': 'Vereniging 5',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': true,
-        'permissionRegister': false,
-        'enddateCalculation': 'BASED_ON_REGISTRATION_DATE',
-        'enddateCalculationValidityTime': 1,
-        'enddateCalculationFreeDate': null
-      }
-    ],
-    'allAssociations': {
-      '1': {
-        'id': 1,
-        'name': 'Jeugdhuis Leeuwerik',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': false,
-        'permissionRegister': false,
-        'enddateCalculation': 'FREE',
-        'enddateCalculationValidityTime': null,
-        'enddateCalculationFreeDate': 1451516400
-      },
-      '6': {
-        'id': 6,
-        'name': 'Vereniging 1',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': true,
-        'permissionRegister': true,
-        'enddateCalculation': 'FREE',
-        'enddateCalculationValidityTime': null,
-        'enddateCalculationFreeDate': 1451602799
-      },
-      '7': {
-        'id': 7,
-        'name': 'testmedewerker Vlaamse Gemeenschapscommissie',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': true,
-        'permissionRegister': true,
-        'enddateCalculation': 'FREE',
-        'enddateCalculationValidityTime': null,
-        'enddateCalculationFreeDate': 1443650400
-      },
-      '8': {
-        'id': 8,
-        'name': 'Vereniging 3',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': true,
-        'permissionRegister': true,
-        'enddateCalculation': 'BASED_ON_DATE_OF_BIRTH',
-        'enddateCalculationValidityTime': 30,
-        'enddateCalculationFreeDate': null
-      },
-      '9': {
-        'id': 9,
-        'name': 'Vereniging 4',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': true,
-        'permissionRegister': false,
-        'enddateCalculation': 'BASED_ON_REGISTRATION_DATE',
-        'enddateCalculationValidityTime': 1,
-        'enddateCalculationFreeDate': null
-      },
-      '10': {
-        'id': 10,
-        'name': 'Vereniging 5',
-        'cardSystems': [
-          {
-            'id': 1,
-            'name': 'UiTPAS Regio Aalst',
-            'distributionKeys': []
-          }
-        ],
-        'permissionRead': true,
-        'permissionRegister': false,
-        'enddateCalculation': 'BASED_ON_REGISTRATION_DATE',
-        'enddateCalculationValidityTime': 1,
-        'enddateCalculationFreeDate': null
-      }
-    }
-  };
-  memberShips = {
-    'passholder': {
-      'name': 'geldig veelpunten_cnet 1',
-      'firstName': 'mia',
-      'secondName': '',
+    passholder: {
       'email': 'AANGEPASTmia-geldig-veelpunten_cnet-1@mailinator.com',
       'emailPreference': null,
       'smsPreference': null,
@@ -373,19 +76,63 @@ describe('Controller: MembershipController', function () {
       '0': {
         permissionRegister: false
       },
+      '2': {
+        'id': 2,
+        'name': 'Vereniging 1',
+        'cardSystems': [
+          {
+            'id': 1,
+            'name': 'UiTPAS Regio Aalst',
+            'distributionKeys': []
+          }
+        ],
+        'permissionRead': true,
+        'permissionRegister': false,
+        'enddateCalculation': 'FREE',
+        'enddateCalculationValidityTime': null,
+        'enddateCalculationFreeDate': 1451602799
+      },
       '1': {
-        permissionRegister: true
+        'id': 1,
+        'name': 'Jeugdhuis Leeuwerik',
+        'cardSystems': [
+          {
+            'id': 1,
+            'name': 'UiTPAS Regio Aalst',
+            'distributionKeys': []
+          }
+        ],
+        'permissionRead': true,
+        'permissionRegister': true,
+        'enddateCalculation': 'FREE',
+        'enddateCalculationValidityTime': null,
+        'enddateCalculationFreeDate': 1451516400
       }
     }
   };
-
   var passholder = {
     passNumber: '01234567891234', points: 123
   };
-
+  var fakeModal = {
+    result: {
+      then: function (confirmCallback, cancelCallback) {
+        //Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
+        this.confirmCallBack = confirmCallback;
+        this.cancelCallback = cancelCallback;
+      }
+    },
+    close: function (item) {
+      //The user clicked OK on the modal dialog, call the stored confirm callback with the selected item
+      this.result.confirmCallBack(item);
+    },
+    dismiss: function (type) {
+      //The user clicked cancel on the modal dialog, call the stored cancel callback
+      this.result.cancelCallback(type);
+    }
+  };
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $injector, _$rootScope_) {
+  beforeEach(inject(function ($controller, $injector, _$rootScope_, _$uibModal_) {
 
     $q = $injector.get('$q');
     $sce = $injector.get('$sce');
@@ -393,20 +140,19 @@ describe('Controller: MembershipController', function () {
     $rootScope = _$rootScope_;
     moment = $injector.get('moment');
     $httpBackend = $injector.get('$httpBackend');
+    $uibModal = _$uibModal_;
 
     membershipService  = jasmine.createSpyObj('membershipService', ['list']);
     deferredMemberShips = $q.defer();
     var memberShipPromise = deferredMemberShips.promise;
     membershipService.list.and.returnValue(memberShipPromise);
 
-    modalInstance = {
-      open: jasmine.createSpy('modalInstance.open'),
-      close: jasmine.createSpy('modalInstance.close'),
-      dismiss: jasmine.createSpy('modalInstance.dismiss'),
-      result: {
-        then: jasmine.createSpy('modalInstance.result.then')
-      }
-    };
+    var actualOptions;
+    spyOn($uibModal, 'open').and.callFake(function(options){
+      actualOptions = options;
+
+      return fakeModal;
+    });
 
     controller = $controller('PassholderMembershipController', {
       passholder: passholder,
@@ -415,6 +161,7 @@ describe('Controller: MembershipController', function () {
       $rootScope: $rootScope,
       $scope: $scope,
       MembershipEndDateCalculator: $injector.get('MembershipEndDateCalculator'),
+      $uibModal: $uibModal,
       $uibModalInstance: modalInstance
     });
 
@@ -479,4 +226,32 @@ describe('Controller: MembershipController', function () {
     expect($scope.canStop({ association: { id: 0, permissionRegister: null}})).toBe(false);
   });
 
+  it('should return if application for an association is possible', function () {
+    expect($scope.canApplyFor(memberShips.allAssociations['1'])).toBe(true);
+    expect($scope.canApplyFor(memberShips.allAssociations['2'])).toBe(false);
+  });
+
+  it('should return a title when no register permissions', function () {
+    // Okay this is just bad code, should be refactored, see membership.controller->registerTitle
+    expect($scope.registerTitle(memberShips.allAssociations['1'])).toBeUndefined();
+    expect($scope.registerTitle(memberShips.allAssociations['2'])).not.toBeUndefined();
+  });
+
+  it('can open the membership registration modal', function () {
+    $scope.openMembershipRegistrationModal(memberShips.allAssociations['0'], true);
+    //$scope.$digest();
+    expect($uibModal.open).toHaveBeenCalled();
+  });
+
+  it('can open the membership renewal modal', function () {
+    $scope.openMembershipRenewalModal(memberShips.passholder.memberships[0]);
+    //$scope.$digest();
+    expect($uibModal.open).toHaveBeenCalled();
+  });
+
+  it('can open the membership stop modal', function () {
+    $scope.openMembershipStopModal(memberShips.passholder.memberships[0]);
+    //$scope.$digest();
+    expect($uibModal.open).toHaveBeenCalled();
+  });
 });
