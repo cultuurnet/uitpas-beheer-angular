@@ -219,7 +219,7 @@ function UpgradeModalController (
       .then(function () {
         controller.updateFurthestStep();
         if (priceDataForm.$valid) {
-          controller.submitRegistration();
+          controller.submitUpgrade();
           controller.formSubmitBusy = false;
         } else {
           controller.formSubmitBusy = false;
@@ -227,21 +227,21 @@ function UpgradeModalController (
       });
   };
 
-  controller.submitRegistration = function () {
-    var showRegisteredPassholder = function (passholder) {
+  controller.submitUpgrade = function () {
+    var showUpgradedPassholder = function (passholder) {
       $uibModalInstance.close(passholder);
     };
 
-    var passholderData = angular.copy(controller.passholder);
-
-    if (controller.excludeEmail) {
-      passholderData.contact.email = '';
-    }
-
     controller.formSubmitBusy = true;
     passholderService
-      .register(pass, passholderData, controller.upgradeData.voucherNumber, kansenstatuutInfo)
-      .then(showRegisteredPassholder, controller.handleAsyncError)
+      .addCardSystem(
+        controller.passholder.passNumber,
+        cardSystem.id,
+        controller.upgradeData.voucherNumber,
+        (controller.upgradeData.withKansenstatuut === 'KANSENSTATUUT') ? controller.upgradeData.kansenstatuutEndDate : null,
+        (controller.upgradeData.withNewCard === 'NEW_CARD') ? controller.upgradeData.uitpasNewNumber : null
+      )
+      .then(showUpgradedPassholder, controller.handleAsyncError)
       .finally(controller.unlockForm);
   };
 

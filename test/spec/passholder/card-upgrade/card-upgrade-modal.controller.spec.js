@@ -14,7 +14,7 @@ describe('Controller: Card Upgrade Modal', function () {
       }
     });
 
-    counterService = jasmine.createSpyObj('counterService', ['getRegistrationPriceInfo']);
+    counterService = jasmine.createSpyObj('counterService', ['getRegistrationPriceInfo', 'getUpgradePriceInfo']);
     $provide.provider('counterService', {
       $get: function () {
         return counterService;
@@ -205,6 +205,70 @@ describe('Controller: Card Upgrade Modal', function () {
   });
 
   it('should should set error feedback in the price form', function () {
+
+  });
+
+  it('should refresh the unreduced price info for an extra card', function () {
+    var deferredPriceInfo = $q.defer();
+    var priceInfoPromise = deferredPriceInfo.promise;
+    var returnedPriceInfo = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+    controller.upgradeData.upgradeReason = 'EXTRA_CARD';
+
+    counterService.getRegistrationPriceInfo.and.returnValue(priceInfoPromise);
+
+    controller.refreshUnreducedPriceInfo();
+
+    deferredPriceInfo.resolve(returnedPriceInfo);
+    $scope.$digest();
+
+    expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
+    expect(controller.upgradeData.unreducedPrice).toEqual('5,25');
+  });
+
+  it('should refresh the unreduced price info without an extra card', function () {
+    var deferredPriceInfo = $q.defer();
+    var priceInfoPromise = deferredPriceInfo.promise;
+    var returnedPriceInfo = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+    controller.upgradeData.price = 1;
+
+    counterService.getUpgradePriceInfo.and.returnValue(priceInfoPromise);
+
+    controller.refreshUnreducedPriceInfo();
+
+    deferredPriceInfo.resolve(returnedPriceInfo);
+    $scope.$digest();
+
+    expect(counterService.getUpgradePriceInfo).toHaveBeenCalled();
+    expect(controller.upgradeData.unreducedPrice).toEqual('5,25');
+  });
+
+  it('should submit the upgrade', function () {
+
+  });
+
+  it('should redirect if the submit of the upgrade fails', function () {
 
   });
 });

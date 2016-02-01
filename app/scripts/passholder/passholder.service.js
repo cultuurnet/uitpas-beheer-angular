@@ -561,10 +561,10 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     if (cardSystemId) {
       params['cardSystemId'] = cardSystemId;
     }
-    if (extraCardNumber) {
+    if (extraCardNumber && voucherNumber !== '') {
       params['uitpasNumber'] = extraCardNumber;
     }
-    if (voucherNumber) {
+    if (voucherNumber && voucherNumber !== '') {
       params['voucherNumber'] = voucherNumber;
     }
     if (kansenstatuutEndDate) {
