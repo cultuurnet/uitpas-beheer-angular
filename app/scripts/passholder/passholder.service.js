@@ -539,4 +539,57 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     return deferredRemove.promise;
   };
+
+  /**
+   * Add a passholder to a card system.
+   * @param {string} passholderNumber
+   * @param {Integer} cardSystemId
+   * @param {string} voucherNumber
+   * @param {Date} kansenstatuutEndDate
+   * @param {string} extraCardNumber
+   * @returns {Promise}
+   */
+  service.addCardSystem = function (passholderNumber, cardSystemId, voucherNumber, kansenstatuutEndDate, extraCardNumber) {
+    var config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    var params = {};
+    var deferredRequest = $q.defer();
+
+    if (cardSystemId) {
+      params['cardSystemId'] = cardSystemId;
+    }
+    if (extraCardNumber) {
+      params['uitpasNumber'] = extraCardNumber;
+    }
+    if (voucherNumber) {
+      params['voucherNumber'] = voucherNumber;
+    }
+    if (kansenstatuutEndDate) {
+      params['kansenStatuut'] = {
+        endDate: moment(kansenstatuutEndDate).format('YYYY-MM-DD')
+      };
+    }
+
+    if (!params['cardSystemId'] && !params['uitpasNumber']) {
+      deferredRequest.reject({
+        code: 'MISSING_REQUIRED_FIELDS',
+        message: 'Een card system of nieuw uitpas nummer zijn verplicht. Beide velden zijn leeg.'
+      });
+    }
+    else {
+      var addCardSystemRequest = $http.post(
+        apiUrl + 'passholders/' + passholderNumber + '/cardsystems',
+        params,
+        config
+      );
+
+      addCardSystemRequest.success(deferredRequest.resolve);
+      addCardSystemRequest.error(deferredRequest.reject);
+    }
+
+    return deferredRequest.promise;
+  };
 }
