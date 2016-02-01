@@ -18,7 +18,6 @@ function UpgradeModalController (
   passholderService,
   $uibModalInstance,
   counterService,
-  $stateParams,
   RegistrationAPIError,
   $rootScope,
   $scope,
@@ -29,7 +28,6 @@ function UpgradeModalController (
 ) {
   /*jshint validthis: true */
   var controller = this;
-  var kansenstatuutInfo = $stateParams.kansenstatuut;
 
   controller.pass = pass;
   controller.passholder = pass.passholder;
@@ -51,8 +49,6 @@ function UpgradeModalController (
     passToCheck: angular.copy(pass),
     withKansenstatuut: 'NO_KANSENSTATUUT',
     kansenstatuutEndDate: moment().endOf('year').toDate(),
-    includeKansenStatuutRemarks: false,
-    kansenstatuutRemarks: '',
     withNewCard: 'NO_NEW_CARD',
     uitpasNewNumber: '',
     upgradeReason: 'CARD_UPGRADE',
