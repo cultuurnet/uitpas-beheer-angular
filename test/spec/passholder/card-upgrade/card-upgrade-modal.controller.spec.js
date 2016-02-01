@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: Card Upgrade Modal', function () {
+fdescribe('Controller: Card Upgrade Modal', function () {
 
   var $controller, controller, $scope, $rootScope, counterService, passholderService, $state, $q, Pass, pass,
     $uibModalInstance, RegistrationAPIError, Counter, activeCounter, moment, cardSystem;
@@ -172,20 +172,53 @@ describe('Controller: Card Upgrade Modal', function () {
     expect($uibModalInstance.dismiss).toHaveBeenCalled();
   });
 
-  it('can submit the kansenstatuut form', function () {
+  it('should go to the new card form step when all fields are valid', function () {
+    var formStub = {
+      '$valid': true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+    };
 
+    spyOn(controller, 'refreshUnreducedPriceInfo').and.returnValue($q.when('priceRefreshed'));
+
+    controller.submitKansenstatuutForm(formStub);
+    $scope.$digest();
+
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard');
+    expect(controller.refreshUnreducedPriceInfo).toHaveBeenCalled();
   });
 
   it('should not submit the kansenstatuut form when there are errors', function () {
+    var formStub= {
+      $valid: false,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+    };
 
+    controller.submitKansenstatuutForm(formStub);
+
+    $scope.$digest();
+
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect($state.go).not.toHaveBeenCalledWith();
   });
 
-  it('should should set error feedback in the kansenstatuut form', function () {
+  it('should go to the price form step when all fields are valid', function () {
+    var formStub = {
+      '$valid': true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+    };
+    controller.upgradeData.withNewCard = 'NEW_CARD';
 
-  });
+    spyOn(controller, 'refreshUnreducedPriceInfo').and.returnValue($q.when('priceRefreshed'));
 
-  it('can submit the new card form', function () {
+    controller.submitNewCardForm(formStub);
 
+    $scope.$digest();
+
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.price');
+    expect(controller.refreshUnreducedPriceInfo).toHaveBeenCalled();
+    expect(controller.upgradeData.upgradeReason).toBe('EXTRA_CARD');
   });
 
   it('should not submit the new card form when there are errors', function () {

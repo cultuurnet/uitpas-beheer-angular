@@ -196,17 +196,22 @@ function UpgradeModalController (
       .startSubmit(newCardForm)
       .then(function () {
         if (newCardForm.$valid) {
-          // Use the new pass number to check on the API if there is a new card.
-          if (controller.upgradeData.withNewCard === 'NEW_CARD') {
-            controller.upgradeData.passToCheck = {
-              number: controller.upgradeData.uitpasNewNumber
-            };
-            // Set the correct reason for the check.
-            controller.upgradeData.upgradeReason = 'EXTRA_CARD';
-          }
-          controller.updateFurthestStep(3);
-          $state.go('counter.main.passholder.upgrade.price');
-          controller.formSubmitBusy = false;
+          controller
+            .refreshUnreducedPriceInfo()
+            .then(function () {
+              // Use the new pass number to check on the API if there is a new card.
+              if (controller.upgradeData.withNewCard === 'NEW_CARD') {
+                controller.upgradeData.passToCheck = {
+                  number: controller.upgradeData.uitpasNewNumber
+                };
+                // Set the correct reason for the check.
+                controller.upgradeData.upgradeReason = 'EXTRA_CARD';
+              }
+              controller.updateFurthestStep(3);
+              $state.go('counter.main.passholder.upgrade.price');
+
+              controller.formSubmitBusy = false;
+            });
         } else {
           controller.formSubmitBusy = false;
         }
