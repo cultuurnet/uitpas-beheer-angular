@@ -136,10 +136,17 @@ function UpgradeModalController (
       }
     };
 
-    counterService
-      .getRegistrationPriceInfo(pass, controller.passholder, '', 'CARD_UPGRADE')
-      .then(updateUnreducedPriceInfo, controller.handleAsyncError)
-      .finally(deferredRefresh.resolve);
+    if (controller.upgradeData.upgradeReason === 'CARD_UPGRADE') {
+      counterService
+        .getUpgradePriceInfo(controller.cardSystem.id, controller.passholder, '')
+        .then(updateUnreducedPriceInfo, controller.handleAsyncError);
+    }
+    else {
+      counterService
+        .getRegistrationPriceInfo(pass, controller.passholder, '', 'EXTRA_CARD')
+        .then(updateUnreducedPriceInfo, controller.handleAsyncError);
+    }
+    deferredRefresh.resolve();
 
     return deferredRefresh.promise;
   };
