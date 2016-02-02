@@ -3,11 +3,19 @@
 describe('Controller: Card Upgrade Modal', function () {
 
   var $controller, controller, $scope, $rootScope, counterService, passholderService, $state, $q, Pass, pass,
-    $uibModalInstance, RegistrationAPIError, Counter, activeCounter, moment, cardSystem;
+    $uibModalInstance, Counter, activeCounter, moment, cardSystem;
 
   beforeEach(module('ubr.passholder.cardUpgrade'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
-    passholderService = jasmine.createSpyObj('passholderService', ['register', 'getLastIdentification', 'addCardSystem']);
+    passholderService = jasmine.createSpyObj(
+      'passholderService',
+      [
+        'register',
+        'getLastIdentification',
+        'addCardSystem',
+        'findPass'
+      ]
+    );
     $provide.provider('passholderService', {
       $get: function () {
         return passholderService;
@@ -184,6 +192,25 @@ describe('Controller: Card Upgrade Modal', function () {
     expect(controller.formSubmitBusy).toBeFalsy();
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard');
     expect(controller.refreshUnreducedPriceInfo).toHaveBeenCalled();
+  });
+
+  it('should force a new card when kansenstatuut is chosen', function () {
+    var formStub = {
+      '$valid': true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+    };
+    controller.upgradeData.withKansenstatuut = 'KANSENSTATUUT';
+    var priceInfo = {
+      price: 5
+    };
+    counterService.getUpgradePriceInfo.and.returnValue($q.when(priceInfo));
+
+    controller.submitKansenstatuutForm(formStub);
+    $scope.$digest();
+
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard');
+    expect(controller.upgradeData.withNewCard).toBe('NEW_CARD');
   });
 
   it('should not submit the kansenstatuut form when there are errors', function () {
@@ -419,5 +446,42 @@ describe('Controller: Card Upgrade Modal', function () {
 
     controller.getStepNumber.and.returnValue(3);
     expect(controller.showFieldError(blueForm, 'purpleField')).toBeFalsy();
+  });
+
+  it('should not set the uitpas number from a scanned nfc pass when no new card is needed', function () {
+    var newPass = {
+      number: '0987654321012'
+    };
+    passholderService.findPass.and.returnValue($q.when(newPass));
+    controller.passScanned(null, '043B83DA862680');
+    $scope.$digest();
+
+    expect(controller.upgradeData.uitpasNewNumber).toBe('');
+  });
+
+  it('should  set the uitpas number from a scanned nfc pass when a new card is needed', function () {
+    var newPass = {
+      number: '0987654321012'
+    };
+    controller.newCardForm = {
+      uitpasNewNumber: {
+        '$setDirty': jasmine.createSpy('$setDirty')
+      }
+    };
+    controller.upgradeData.withNewCard = 'NEW_CARD';
+    passholderService.findPass.and.returnValue($q.when(newPass));
+    controller.passScanned(null, '043B83DA862680');
+    $scope.$digest();
+
+    expect(controller.upgradeData.uitpasNewNumber).toBe('0987654321012');
+  });
+
+  it('can warn the user that the uitpas can not be found after scanning an nfc pass', function () {
+    passholderService.findPass.and.returnValue($q.reject());
+    controller.passScanned(null, '043B83DA862680');
+    $scope.$digest();
+
+    expect(controller.formAlert.message).toBe('De gescande UiTPAS kan niet gevonden worden.');
+    expect(controller.formAlert.type).toBe('danger');
   });
 });
