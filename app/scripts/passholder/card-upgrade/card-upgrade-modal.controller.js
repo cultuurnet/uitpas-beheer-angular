@@ -18,7 +18,6 @@ function UpgradeModalController (
   passholderService,
   $uibModalInstance,
   counterService,
-  RegistrationAPIError,
   $rootScope,
   $scope,
   $q,
@@ -99,13 +98,7 @@ function UpgradeModalController (
   };
 
   controller.handleAsyncError = function (error) {
-    var knownAPIError = RegistrationAPIError[error.code];
-
-    if (knownAPIError) {
-      error.cleanMessage = knownAPIError.message;
-    } else {
-      error.cleanMessage = error.message.split('URL CALLED')[0];
-    }
+    error.cleanMessage = error.message.split('URL CALLED')[0];
 
     controller.asyncError = error;
   };
@@ -169,7 +162,6 @@ function UpgradeModalController (
   controller.submitKansenstatuutForm = function(kansenstatuutForm) {
 
     function validateKansenstatuut() {
-      controller.updateFurthestStep();
       if (kansenstatuutForm.$valid) {
         controller
           .refreshUnreducedPriceInfo()
@@ -207,7 +199,6 @@ function UpgradeModalController (
                 // Set the correct reason for the check.
                 controller.upgradeData.upgradeReason = 'EXTRA_CARD';
               }
-              controller.updateFurthestStep(3);
               $state.go('counter.main.passholder.upgrade.price');
 
               controller.formSubmitBusy = false;

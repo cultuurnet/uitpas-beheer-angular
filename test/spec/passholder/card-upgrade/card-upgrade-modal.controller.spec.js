@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('Controller: Card Upgrade Modal', function () {
+describe('Controller: Card Upgrade Modal', function () {
 
   var $controller, controller, $scope, $rootScope, counterService, passholderService, $state, $q, Pass, pass,
     $uibModalInstance, RegistrationAPIError, Counter, activeCounter, moment, cardSystem;
@@ -123,7 +123,6 @@ fdescribe('Controller: Card Upgrade Modal', function () {
     $q = $injector.get('$q');
     $state = $injector.get('$state');
     moment = $injector.get('moment');
-    RegistrationAPIError = $injector.get('RegistrationAPIError');
     $state.current = {
       stepNumber: 1
     };
@@ -149,7 +148,6 @@ fdescribe('Controller: Card Upgrade Modal', function () {
       passholderService: passholderService,
       $uibModalInstance: $uibModalInstance,
       counterService: counterService,
-      RegistrationAPIError: RegistrationAPIError,
       $rootScope: $rootScope,
       $scope: $scope,
       $q: $q,
@@ -370,5 +368,56 @@ fdescribe('Controller: Card Upgrade Modal', function () {
     $scope.$digest();
 
     expect(controller.asyncError).toEqual(error);
+  });
+
+  it('can clear async errors', function () {
+    var error = {
+      code: 'FAIL',
+      message: 'It failed because of an error.'
+    };
+    controller.asyncError = error;
+    controller.clearAsyncError('NOT_THERE');
+    expect(controller.asyncError).toEqual(error);
+    controller.clearAsyncError('FAIL');
+    expect(controller.asyncError).toBeUndefined();
+  });
+
+  it('should update the furthest step when stepping away', function () {
+    controller.furthestStep = 1;
+    controller.updateFurthestStep(null, null, null, {stepNumber: 3});
+    expect(controller.furthestStep).toEqual(3);
+
+    // the furthest step should not be updated when navigating away from an earlier step
+    controller.updateFurthestStep(null, null, null, {stepNumber: 2});
+    expect(controller.furthestStep).toEqual(3);
+
+    // do nothing when navigating from a state without steps
+    controller.updateFurthestStep(null, null, null, {});
+    expect(controller.furthestStep).toEqual(3);
+  });
+
+  it('should return the current step number', function () {
+    var currentStepNumber = controller.getStepNumber();
+    expect(currentStepNumber).toEqual(1);
+  });
+
+  it('should always show form field errors when the form was already stepped to', function () {
+    spyOn(controller, 'getStepNumber');
+    controller.furthestStep = 2;
+
+    var blueForm = {
+      $submitted: false,
+      purpleField: {
+        $touched: false,
+        $dirty: false,
+        $invalid: true
+      }
+    };
+
+    controller.getStepNumber.and.returnValue(1);
+    expect(controller.showFieldError(blueForm, 'purpleField')).toBeTruthy();
+
+    controller.getStepNumber.and.returnValue(3);
+    expect(controller.showFieldError(blueForm, 'purpleField')).toBeFalsy();
   });
 });
