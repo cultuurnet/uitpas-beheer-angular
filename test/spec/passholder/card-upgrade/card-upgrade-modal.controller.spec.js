@@ -195,50 +195,90 @@ fdescribe('Controller: Card Upgrade Modal', function () {
     };
 
     controller.submitKansenstatuutForm(formStub);
-
     $scope.$digest();
 
     expect(controller.formSubmitBusy).toBeFalsy();
     expect($state.go).not.toHaveBeenCalledWith();
   });
 
-  it('should go to the price form step when all fields are valid', function () {
+  it('should go to the price form step when all fields are valid with new card', function () {
     var formStub = {
       '$valid': true,
       '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
     controller.upgradeData.withNewCard = 'NEW_CARD';
+    controller.upgradeData.uitpasNewNumber = 'new uitpas number';
 
     spyOn(controller, 'refreshUnreducedPriceInfo').and.returnValue($q.when('priceRefreshed'));
 
     controller.submitNewCardForm(formStub);
-
     $scope.$digest();
 
     expect(controller.formSubmitBusy).toBeFalsy();
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.price');
     expect(controller.refreshUnreducedPriceInfo).toHaveBeenCalled();
     expect(controller.upgradeData.upgradeReason).toBe('EXTRA_CARD');
+    expect(controller.upgradeData.passToCheck.number).toBe('new uitpas number');
+  });
+
+  it('should go to the price form step when all fields are valid without new card', function () {
+    var formStub = {
+      '$valid': true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+    };
+    controller.upgradeData.withNewCard = 'NO_NEW_CARD';
+
+    spyOn(controller, 'refreshUnreducedPriceInfo').and.returnValue($q.when('priceRefreshed'));
+
+    controller.submitNewCardForm(formStub);
+    $scope.$digest();
+
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.price');
+    expect(controller.refreshUnreducedPriceInfo).toHaveBeenCalled();
+    expect(controller.upgradeData.upgradeReason).toBe('CARD_UPGRADE');
   });
 
   it('should not submit the new card form when there are errors', function () {
+    var formStub= {
+      $valid: false,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+    };
 
+    controller.submitNewCardForm(formStub);
+    $scope.$digest();
+
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect($state.go).not.toHaveBeenCalledWith();
   });
 
-  it('should should set error feedback in the new card form', function () {
+  it('should start the upgrade process after the price step', function () {
+    var formStub = {
+      '$valid': true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+    };
 
-  });
+    spyOn(controller, 'submitUpgrade').and.returnValue($q.when('priceRefreshed'));
 
-  it('can submit the price form', function () {
+    controller.submitPriceForm(formStub);
+    $scope.$digest();
 
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect(controller.submitUpgrade).toHaveBeenCalled();
   });
 
   it('should not submit the price form when there are errors', function () {
+    var formStub= {
+      $valid: false,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+    };
 
-  });
+    spyOn(controller, 'submitUpgrade').and.returnValue($q.when('priceRefreshed'));
+    controller.submitPriceForm(formStub);
+    $scope.$digest();
 
-  it('should should set error feedback in the price form', function () {
-
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect(controller.submitUpgrade).not.toHaveBeenCalledWith();
   });
 
   it('should refresh the unreduced price info for an extra card', function () {
