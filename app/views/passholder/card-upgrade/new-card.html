@@ -32,7 +32,7 @@
           <div class="grid__12 field-group with-new-card-fields" ng-show="umc.upgradeData.withNewCard === 'NEW_CARD'">
             <p>Scan een nieuwe UiTPAS</p>
             <div class="form-group">
-              <div class="grid__12 required" ng-class="{ 'has-error': (umc.newCardForm.$submitted || umc.newCardForm.uitpasNewNumber.$touched) && umc.newCardForm.uitpasNewNumber.$invalid }">
+              <div class="required" ng-class="{ 'has-error': (umc.newCardForm.$submitted || umc.newCardForm.uitpasNewNumber.$touched) && umc.newCardForm.uitpasNewNumber.$invalid }">
                 <label class="control-label" for="uitpasNewNumber">
                   UiTPAS-nummer
                 </label>

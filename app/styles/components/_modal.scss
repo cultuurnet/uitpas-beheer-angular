@@ -100,14 +100,15 @@
 // modal upgrade
 .with-kansenstatuut-fields {
   padding-left: 30px;
-  padding-top: 10px;
   p {
     margin: 0 0 15px;
   }
 }
 
 .with-new-card-fields {
-  padding-left: 20px;
+  .field-group + & {
+    padding-left: 30px;
+  }
   p {
     margin: 0 0 15px;
   }
