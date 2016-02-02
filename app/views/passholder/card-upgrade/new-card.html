@@ -30,9 +30,9 @@
             </div>
           </div>
           <div class="grid__12 field-group with-new-card-fields" ng-show="umc.upgradeData.withNewCard === 'NEW_CARD'">
-            <p>Scan een nieuwe UiTPAS</p>
             <div class="form-group">
               <div class="grid__12 required" ng-class="{ 'has-error': (newCardForm.$submitted || newCardForm.uitpasNewNumber.$touched) && newCardForm.uitpasNewNumber.$invalid }">
+                <p>Scan een nieuwe UiTPAS</p>
                 <label class="control-label" for="uitpasNewNumber">
                   UiTPAS-nummer
                 </label>

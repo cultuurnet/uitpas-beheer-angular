@@ -96,3 +96,31 @@
     font-weight: 700;
   }
 }
+
+// modal upgrade
+.with-kansenstatuut-fields {
+  padding-left: 30px;
+  padding-top: 10px;
+  p {
+    margin: 0 0 15px;
+  }
+}
+
+.with-new-card-fields {
+  padding-left: 20px;
+  p {
+    margin: 0 0 15px;
+  }
+}
+
+.datepicker {
+  @include breakpoint(map-get($breakpoints, med)) {
+    label + .input-group {
+      margin-left: 1em;
+    }
+  }
+}
+
+.element-title {
+  color: $gray-light;
+}

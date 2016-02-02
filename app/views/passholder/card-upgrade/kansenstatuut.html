@@ -33,7 +33,7 @@
           <div class="grid__12 field-group with-kansenstatuut-fields" ng-show="umc.upgradeData.withKansenstatuut === 'KANSENSTATUUT'">
             <p class="element-title" ng-bind-template="Kansenstatuut {{umc.pass.cardSystem.name}}"></p>
             <div class="form-group">
-              <div class="form-inline">
+              <div class="form-inline datepicker">
                 <ubr-datepicker ng-model="umc.upgradeData.kansenstatuutEndDate" ubr-label="Geldig tot" ubr-id="valid-until"
                                 ubr-name="endDate"></ubr-datepicker>
               </div>

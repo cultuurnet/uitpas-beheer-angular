@@ -46,7 +46,7 @@ angular
           upgradeModalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'views/passholder/card-upgrade/multi-step-form.html',
-            size: 'lg',
+            size: 'sm',
             resolve: {
               pass: function() {
                 return pass;
