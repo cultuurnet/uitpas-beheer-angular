@@ -7,7 +7,7 @@ fdescribe('Controller: Card Upgrade Modal', function () {
 
   beforeEach(module('ubr.passholder.cardUpgrade'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
-    passholderService = jasmine.createSpyObj('passholderService', ['register', 'getLastIdentification']);
+    passholderService = jasmine.createSpyObj('passholderService', ['register', 'getLastIdentification', 'addCardSystem']);
     $provide.provider('passholderService', {
       $get: function () {
         return passholderService;
@@ -338,10 +338,37 @@ fdescribe('Controller: Card Upgrade Modal', function () {
   });
 
   it('should submit the upgrade', function () {
+    passholderService.addCardSystem.and.returnValue($q.when());
 
+    controller.submitUpgrade();
+    $scope.$digest();
+
+    expect($uibModalInstance.close).toHaveBeenCalled();
   });
 
-  it('should redirect if the submit of the upgrade fails', function () {
+  it('should submit the upgrade with kansenstatuut and new card', function () {
+    passholderService.addCardSystem.and.returnValue($q.when());
+    controller.upgradeData.withKansenstatuut = 'KANSENSTATUUT';
+    controller.upgradeData.withNewCard = 'NEW_CARD';
 
+    controller.submitUpgrade();
+    $scope.$digest();
+
+    expect($uibModalInstance.close).toHaveBeenCalled();
+  });
+
+  it('should handle errors if the submit of the upgrade fails', function () {
+    var error = {
+      code: 'FAIL',
+      message: 'It failed because of an error.'
+    };
+    passholderService.addCardSystem.and.returnValue($q.reject(error));
+    controller.upgradeData.withKansenstatuut = 'KANSENSTATUUT';
+    controller.upgradeData.withNewCard = 'NEW_CARD';
+
+    controller.submitUpgrade();
+    $scope.$digest();
+
+    expect(controller.asyncError).toEqual(error);
   });
 });
