@@ -166,6 +166,9 @@ function UpgradeModalController (
         controller
           .refreshUnreducedPriceInfo()
           .then(function () {
+            if (controller.upgradeData.withKansenstatuut === 'KANSENSTATUUT') {
+              controller.upgradeData.withNewCard = 'NEW_CARD';
+            }
             controller.formSubmitBusy = false;
 
             if (!controller.asyncError) {

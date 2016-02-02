@@ -3,7 +3,7 @@
 describe('Controller: Card Upgrade Modal', function () {
 
   var $controller, controller, $scope, $rootScope, counterService, passholderService, $state, $q, Pass, pass,
-    $uibModalInstance, RegistrationAPIError, Counter, activeCounter, moment, cardSystem;
+    $uibModalInstance, Counter, activeCounter, moment, cardSystem;
 
   beforeEach(module('ubr.passholder.cardUpgrade'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
@@ -184,6 +184,25 @@ describe('Controller: Card Upgrade Modal', function () {
     expect(controller.formSubmitBusy).toBeFalsy();
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard');
     expect(controller.refreshUnreducedPriceInfo).toHaveBeenCalled();
+  });
+
+  it('should force a new card when kansenstatuut is chosen', function () {
+    var formStub = {
+      '$valid': true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+    };
+    controller.upgradeData.withKansenstatuut = 'KANSENSTATUUT';
+    var priceInfo = {
+      price: 5
+    };
+    counterService.getUpgradePriceInfo.and.returnValue($q.when(priceInfo));
+
+    controller.submitKansenstatuutForm(formStub);
+    $scope.$digest();
+
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard');
+    expect(controller.upgradeData.withNewCard).toBe('NEW_CARD');
   });
 
   it('should not submit the kansenstatuut form when there are errors', function () {
