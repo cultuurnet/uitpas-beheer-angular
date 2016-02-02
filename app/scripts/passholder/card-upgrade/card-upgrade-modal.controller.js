@@ -144,6 +144,28 @@ function UpgradeModalController (
     $uibModalInstance.dismiss('card upgrade modal closed');
   };
 
+  controller.passScanned = function (event, identification) {
+    var useScannedPassNumber = function (newPass) {
+      controller.formAlert = null;
+      // Only set the number when a new card number is needed.
+      if (controller.upgradeData.withNewCard === 'NEW_CARD') {
+        controller.upgradeData.uitpasNewNumber = newPass.number;
+        controller.newCardForm.uitpasNewNumber.$setDirty();
+      }
+    };
+
+    var warnUserNoPassFound = function () {
+      controller.formAlert = {
+        message: 'De gescande UiTPAS kan niet gevonden worden.',
+        type: 'danger'
+      };
+    };
+
+    passholderService
+      .findPass(identification)
+      .then(useScannedPassNumber, warnUserNoPassFound);
+  };
+
   // Submit functions.
   controller.startSubmit = function (form) {
     var deferredStart = $q.defer();
@@ -245,8 +267,9 @@ function UpgradeModalController (
   };
 
   // Listeners and functions.
-  // @todo: Add a listener on the new card form for uitpas nfc scan.
+  var nfcScanListener = $rootScope.$on('nfcNumberReceived', controller.passScanned);
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
+  $scope.$on('$destroy', nfcScanListener);
   $scope.$on('$destroy', stateChangeStartListener);
 }

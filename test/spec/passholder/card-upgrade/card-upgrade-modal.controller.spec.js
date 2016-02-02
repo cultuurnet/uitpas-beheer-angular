@@ -7,7 +7,15 @@ describe('Controller: Card Upgrade Modal', function () {
 
   beforeEach(module('ubr.passholder.cardUpgrade'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
-    passholderService = jasmine.createSpyObj('passholderService', ['register', 'getLastIdentification', 'addCardSystem']);
+    passholderService = jasmine.createSpyObj(
+      'passholderService',
+      [
+        'register',
+        'getLastIdentification',
+        'addCardSystem',
+        'findPass'
+      ]
+    );
     $provide.provider('passholderService', {
       $get: function () {
         return passholderService;
@@ -438,5 +446,42 @@ describe('Controller: Card Upgrade Modal', function () {
 
     controller.getStepNumber.and.returnValue(3);
     expect(controller.showFieldError(blueForm, 'purpleField')).toBeFalsy();
+  });
+
+  it('should not set the uitpas number from a scanned nfc pass when no new card is needed', function () {
+    var newPass = {
+      number: '0987654321012'
+    };
+    passholderService.findPass.and.returnValue($q.when(newPass));
+    controller.passScanned(null, '043B83DA862680');
+    $scope.$digest();
+
+    expect(controller.upgradeData.uitpasNewNumber).toBe('');
+  });
+
+  it('should  set the uitpas number from a scanned nfc pass when a new card is needed', function () {
+    var newPass = {
+      number: '0987654321012'
+    };
+    controller.newCardForm = {
+      uitpasNewNumber: {
+        '$setDirty': jasmine.createSpy('$setDirty')
+      }
+    };
+    controller.upgradeData.withNewCard = 'NEW_CARD';
+    passholderService.findPass.and.returnValue($q.when(newPass));
+    controller.passScanned(null, '043B83DA862680');
+    $scope.$digest();
+
+    expect(controller.upgradeData.uitpasNewNumber).toBe('0987654321012');
+  });
+
+  it('can warn the user that the uitpas can not be found after scanning an nfc pass', function () {
+    passholderService.findPass.and.returnValue($q.reject());
+    controller.passScanned(null, '043B83DA862680');
+    $scope.$digest();
+
+    expect(controller.formAlert.message).toBe('De gescande UiTPAS kan niet gevonden worden.');
+    expect(controller.formAlert.type).toBe('danger');
   });
 });
