@@ -21,47 +21,48 @@ function AddressBulkController (bulkSelection, passholderService, $uibModalInsta
   var searchParameters = bulkSelection.searchParameters;
   var totalItems = bulkSelection.searchResults.totalItems;
 
-  controller.checkSelectAll = function() {
-    if (controller.bulkSelection.selectAll) {
-      searchParameters.limit = totalItems;
-      findPassHoldersAgain(searchParameters);
-    }
-    else {
-      for (var i = 0, len = bulkSelection.uitpasNumberSelection.length; i < len; i++) {
-        findPassHolderByNumber(controller.bulkSelection.uitpasNumberSelection[i], i);
-      }
-      controller.passholders = passholders;
-    }
-  };
-
-  function findPassHoldersAgain(searchParameters) {
+  controller.findPassHoldersAgain = function(searchParameters) {
     passholderService
       .findPassholders(searchParameters)
       .then(
-        function(PassholderSearchResults) {
-          passholders = PassholderSearchResults.passen;
-          for (var i = 0; i < passholders.length; i++) {
-            passholders[i] = passholders[i].passholder;
-          }
-          controller.passholders = passholders;
+      function(PassholderSearchResults) {
+        passholders = PassholderSearchResults.passen;
+        for (var i = 0; i < passholders.length; i++) {
+          passholders[i] = passholders[i].passholder;
         }
-      );
-  }
+        controller.passholders = passholders;
+      }
+    );
+  };
 
-  function findPassHolderByNumber(passnumber, i) {
+  controller.findPassHolderByNumber = function(passnumber, i) {
     passholderService.findPassholder(passnumber).then(
       function (passholder) {
         passholders[i] = passholder;
       }
     );
-  }
+  };
+
+  controller.checkSelectAll = function() {
+    if (controller.bulkSelection.selectAll) {
+      searchParameters.limit = totalItems;
+      controller.findPassHoldersAgain(searchParameters);
+    }
+    else {
+      for (var i = 0, len = bulkSelection.uitpasNumberSelection.length; i < len; i++) {
+        controller.findPassHolderByNumber(controller.bulkSelection.uitpasNumberSelection[i], i);
+      }
+      controller.passholders = passholders;
+    }
+  };
+
+  controller.checkSelectAll();
 
   controller.submitForm = function(passholders, bulkAddressForm, bulkSelection) {
     controller.isSubmitted = true;
     if(bulkAddressForm.$valid) {
       if (!controller.submitBusy) {
         controller.submitBusy = true;
-        bulkAddressForm.$setSubmitted();
         $state.go('counter.main.advancedSearch.showBulkResults', { passholders: passholders, bulkAddressForm: bulkAddressForm, bulkSelection: bulkSelection });
         controller.submitBusy = false;
       }

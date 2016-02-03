@@ -4,13 +4,14 @@ describe('Controller: AddressBulkController', function () {
 
   var $controller, $uibModalInstance, $scope, BulkSelection, PassholderSearchResults, SearchParameters,
     searchResults, searchParameters, bulkSelection, passholderService, advancedSearchService, $state,
-    addressBulkController;
+    addressBulkController, controller;
 
   var addressForm = {
-    street: '',
-    zip: '',
-    city: ''
+    street: 'Teststraat 123',
+    zip: '1000',
+    city: 'Brussel'
   };
+  addressForm.$valid = true;
 
   var jsonPass = {
     'uitPas': {
@@ -102,33 +103,40 @@ describe('Controller: AddressBulkController', function () {
   };
 
   var jsonSearchResults = {
-    firstPage: "http://culpas-silex.dev/passholders?firstName=stijn&limit=10&page=1",
+    firstPage: "http://culpas-silex.dev/passholders?firstName=jan&limit=10&page=1",
     invalidUitpasNumbers: [],
     itemsPerPage: 10,
-    lastPage: "http://culpas-silex.dev/passholders?firstName=stijn&limit=10&page=4",
-    nextPage: "http://culpas-silex.dev/passholders?firstName=stijn&limit=10&page=2",
+    lastPage: "http://culpas-silex.dev/passholders?firstName=jan&limit=10&page=3",
+    nextPage: "http://culpas-silex.dev/passholders?firstName=jan&limit=10&page=2",
     page: 1,
     passen: [
       jsonPass,
       jsonPass,
       jsonPass,
+      jsonPass,
+      jsonPass,
+      jsonPass,
+      jsonPass,
+      jsonPass,
+      jsonPass,
       jsonPass
     ],
+    length: 10,
     previousPage: undefined,
-    totalItems: 34,
-    unknownNumbersConfirmed: false,
+    totalItems: 29,
+    unknownNumbersConfirmed: false
   };
 
   // load the controller's module
   beforeEach(module('ubr.passholder'));
   beforeEach(module('uitpasbeheerApp'));
 
-  beforeEach(inject(function (_$controller_, $rootScope, $injector, _BulkSelection_, _PassholderSearchResults_, _SearchParameters_) {
+  beforeEach(inject(function (_$controller_, $rootScope, $injector, _$state_, _BulkSelection_, _PassholderSearchResults_, _SearchParameters_) {
     $controller = _$controller_;
-    $state = jasmine.createSpyObj('$state', ['go']);
+    $state = _$state_;
     passholderService = jasmine.createSpyObj('passholderService', ['findPassholders, findPassholder']);
     $uibModalInstance = jasmine.createSpyObj('$uibModalInstance', ['dismiss']);
-    advancedSearchService = jasmine.createSpyObj('advancedSearchServcie', ['findPassholders']);
+    advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders']);
     $scope = $rootScope.$new();
     BulkSelection = _BulkSelection_;
     PassholderSearchResults = _PassholderSearchResults_;
@@ -138,19 +146,16 @@ describe('Controller: AddressBulkController', function () {
     searchParameters = new SearchParameters(jsonSearchParameters);
     bulkSelection = new BulkSelection(searchResults, searchParameters, []);
 
-    addressBulkController = getController();
-    addressBulkController.submitBusy = false;
-    addressBulkController.isSubmitted = false;
-  }));
-
-  function getController() {
-    return $controller('AddressBulkController', {
+    controller = $controller('AddressBulkController', {
       bulkSelection: bulkSelection,
       passholderService: passholderService,
       $uibModalInstance: $uibModalInstance,
       $state: $state
     });
-  }
+
+    controller.submitBusy = false;
+    controller.isSubmitted = false;
+  }));
 
   it('should initialize', function () {
     bulkSelection = new BulkSelection(
@@ -192,29 +197,49 @@ describe('Controller: AddressBulkController', function () {
     expect(bulkSelection).toEqual(expectedBulkSelection);
   });
 
-  fit('should find all the passholders again when select all is selected', function () {
+  it('should find all the passholders again when select all is selected', function () {
 
     bulkSelection.selectAll = true;
-    //addressBulkController.checkSelectAll();
+    spyOn(controller, 'findPassHoldersAgain');
 
-    //expect(bulkSelection.selectAll).toBeTruthy();
-    //expect(searchParameters.limit).toEqual(searchResults.totalItems);
-    //expect(passholderService.findPassholders).toHaveBeenCalledWith(searchParameters);
+    controller.checkSelectAll();
+
+    expect(bulkSelection.selectAll).toBeTruthy();
+    expect(searchParameters.limit).toEqual(searchResults.totalItems);
+    expect(controller.findPassHoldersAgain).toHaveBeenCalledWith(searchParameters);
+    expect(controller.passholders).toEqual(searchResults.passen);
+  });
+
+  it('should find the selected passholders individual by number through a loop', function () {
+    bulkSelection.selectAll = false;
+
+    spyOn(controller, 'findPassHolderByNumber');
+
+    controller.checkSelectAll();
+
+    expect(bulkSelection.selectAll).toBeFalsy();
+    expect(controller.findPassHolderByNumber.calls.count()).toBe(bulkSelection.uitpasNumberSelection.length);
+    expect(controller.passholders).toEqual(searchResults.passen);
   });
 
   it('should lock down the form while submitting', function () {
-    addressBulkController.submitForm(searchResults.passen, addressForm, bulkSelection);
-    expect(addressBulkController.isSubmitted).toBeTruthy();
+    controller.submitForm(searchResults.passen, addressForm, bulkSelection);
+    expect(controller.isSubmitted).toBeTruthy();
   });
 
-  /*fit('can submit the form', function() {
-    addressBulkController.submitForm(searchResults.passen, addressForm, bulkSelection);
-    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.showBulkResults',
-      { passholders: searchResults.passen, bulkAddressForm: addressForm, bulkSelection: bulkSelection });
-  });*/
+  it('can submit the form and go to the next state', function() {
+    spyOn(controller, 'submitForm').and.callThrough();
+    spyOn($state, 'go');
+
+    controller.submitForm(searchResults.passen, addressForm, bulkSelection);
+    expect(addressForm.$valid).toBeTruthy();
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.showBulkResults', {
+      passholders: searchResults.passen, bulkAddressForm: addressForm, bulkSelection: bulkSelection });
+    expect($state.transitionTo('counter.main.advancedSearch.showBulkResults'));
+  });
 
   it('can close the modal', function () {
-    addressBulkController.cancel();
+    controller.cancel();
     expect($uibModalInstance.dismiss).toHaveBeenCalled();
   });
 });
