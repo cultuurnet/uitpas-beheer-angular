@@ -93,6 +93,11 @@ describe('Controller: PassholderActivityTariffsController', function () {
     expect(modalInstance.dismiss).toHaveBeenCalled();
   });
 
+  it('can get the size of an object', function () {
+    var controller = getControllerForPassholder(passholder);
+
+    expect(controller.sizeOff(passholder)).toBe(2);
+  });
 
   it('can submit the activity tariffs form', function () {
     var controller = getControllerForPassholder(passholder);

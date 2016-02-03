@@ -11,6 +11,12 @@ body {
   min-height: 100%;
   position: relative;
   @include breakpoint(map-get($breakpoints, sml)) {
+    padding-top: 50px;
+  }
+  @include breakpoint(map-get($breakpoints, med)) {
+    padding-top: 60px;
+  }
+  @include breakpoint(map-get($breakpoints, sml)) {
     > .main,
     > .footer {
       margin-left: 41.667%;
@@ -51,12 +57,12 @@ body {
 
 // fix navbar
 body {
-  @include breakpoint(map-get($breakpoints, sml)) {
+  /* @include breakpoint(map-get($breakpoints, sml)) {
     padding-top: 50px;
   }
   @include breakpoint(map-get($breakpoints, med)) {
     padding-top: 60px;
-  }
+  } */
 }
 .navbar { 
   @include breakpoint(660px) { 

@@ -33,31 +33,36 @@
     </p>
 
     <div ng-show="!rvc.loading && rvc.results.totalItems > 0">
-      <input type="checkbox" ng-model="rvc.bulk.selection.selectAll" id="select-all-passholders" ng-click="rvc.bulkSelectAll()">
-      <!-- No items selected -->
-      <span ng-hide="rvc.bulk.selection.selectAll || rvc.bulk.selection.uitpasNumberSelection.length > 0"><label for="select-all-passholders">{{rvc.results.totalItems}} resultaten gevonden</label></span>
-      <!-- Items selected -->
-      <span ng-show="rvc.bulk.selection.selectAll || rvc.bulk.selection.uitpasNumberSelection.length > 0">
-        <label for="select-all-passholders">
-          <!-- Some items selected -->
-          <span ng-hide="rvc.bulk.selection.selectAll" ng-bind="rvc.bulk.selection.uitpasNumberSelection.length"></span>
-          <!-- All items selected -->
-          <span ng-show="rvc.bulk.selection.selectAll" ng-bind="rvc.bulk.selection.searchResults.totalItems"></span> geselecteerde pashouder(s)
-        </label>
-        <select ng-model="rvc.bulk.action">
-          <option value="export">Exporteren</option>
-          <option value="address">Adres wijzigen</option>
-        </select>
-        <button type="button" ng-disabled="rvc.bulk.submitBusy" class="btn btn-primary" ng-click="rvc.doBulkAction()">
-          <span ng-hide="rvc.bulk.submitBusy">Doorgaan</span>
-          <span ng-show="rvc.bulk.submitBusy"><span class="fa fa-refresh loading small"></span> Actie wordt uitgevoerd</span>
-        </button>
-        <div ng-show="rvc.bulk.export.requestingExport" class="alert alert-info">De export van de pashouders wordt aangevraagd.</div>
-      </span>
-      <div ng-show="rvc.bulk.export.error" class="alert alert-danger">De export van de pashouders kon niet uitgevoerd worden.</div>
-      <div ng-show="rvc.bulk.export.downloadLink" class="alert alert-success">
-        De export is klaar. <a class="btn btn-default" ng-href="{{rvc.bulk.export.downloadLink}}" target="_blank">
-        <span class="fa fa-download"></span> Export downloaden</a>
+      <div class="overview__search">
+        <div class="grid form-inline">
+          <!-- No items selected -->
+          <div class="checkbox grid__12 grid--bp-lrg__5">
+            <ng-pluralize count="rvc.results.totalItems" when="{'one': '{} resultaat gevonden', 'other': '{} resultaten gevonden'}"></ng-pluralize><br>
+            <label for="select-all-passholders"><input class="checkbox" type="checkbox" ng-model="rvc.bulk.selection.selectAll" id="select-all-passholders" ng-click="rvc.bulkSelectAll()"> selecteer alle resultaten</label>
+          </div>
+          <!-- Items selected -->
+          <div class="grid__12 grid--bp-lrg__7">
+            <span ng-show="rvc.bulk.selection.selectAll || rvc.bulk.selection.uitpasNumberSelection.length > 0">
+              <!-- Some items selected -->
+              <span ng-hide="rvc.bulk.selection.selectAll"><ng-pluralize count="rvc.bulk.selection.uitpasNumberSelection.length" when="{'one': '{} geselecteerde pashouder', 'other': '{} geselecteerde pashouders'}"></ng-pluralize></span>
+              <!-- All items selected -->
+              <span ng-show="rvc.bulk.selection.selectAll"><ng-pluralize count="rvc.bulk.selection.searchResults.totalItems" when="{'one': '{} geselecteerde pashouder', 'other': '{} geselecteerde pashouders'}"></ng-pluralize></span>
+              <select class="form-control" ng-model="rvc.bulk.action">
+                <option value="export">Exporteren</option>
+                <option value="address">Adres wijzigen</option>
+              </select>
+              <button type="button" ng-disabled="rvc.bulk.submitBusy" class="btn btn-primary" ng-click="rvc.doBulkAction()">
+                <span ng-hide="rvc.bulk.submitBusy">Doorgaan</span>
+                <span ng-show="rvc.bulk.submitBusy"><span class="fa fa-refresh loading small"></span> Actie wordt uitgevoerd</span>
+              </button>
+            </span>
+            <div ng-show="rvc.bulk.export.requestingExport" class="alert alert-info">De export van de pashouders wordt aangevraagd.</div>
+          </div>
+        </div>
+        <div ng-show="rvc.bulk.export.error" class="alert alert-danger">De export van de pashouders kon niet uitgevoerd worden.</div>
+        <div ng-show="rvc.bulk.export.downloadLink" class="alert alert-success">De export is klaar. <a class="btn btn-default" ng-href="{{rvc.bulk.export.downloadLink}}" target="_blank">
+          <span class="fa fa-download"></span> Export downloaden</a>
+        </div>
       </div>
 
       <ul class="list-unstyled passholder-list">

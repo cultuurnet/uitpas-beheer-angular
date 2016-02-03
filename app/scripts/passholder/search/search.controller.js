@@ -16,8 +16,10 @@ function PassholderSearchController (UiTPASRouter) {
   /*jshint validthis: true */
   var controller = this;
 
-  // Set default parameters.
-  controller.passholderIdentification = UiTPASRouter.getLastIdentification() || '';
+  controller.clearPassholderIdentification = function() {
+    controller.passholderIdentification = '';
+  };
+  controller.clearPassholderIdentification();
 
   controller.findPassholder = function () {
     if (controller.passholderIdentification) {
