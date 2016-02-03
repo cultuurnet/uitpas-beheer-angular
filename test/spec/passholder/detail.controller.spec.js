@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('Controller: PassholderDetailController', function () {
+describe('Controller: PassholderDetailController', function () {
 
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
