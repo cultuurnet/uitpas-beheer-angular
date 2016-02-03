@@ -39,7 +39,7 @@
                 <input ubr-uitpas-number-async-validation ng-pattern="/^\d{13}$/" type="text"
                        class="form-control input-number" name="uitpasNewNumber" id="uitpasNewNumber"
                        ng-required="umc.upgradeData.withNewCard === 'NEW_CARD'" ubr-action="'UPGRADE'" ubr-card-system="umc.cardSystem.id" ng-model="umc.upgradeData.uitpasNewNumber">
-                <div ng-if="(umc.newCardForm.$submitted || umc.newCardForm.uitpasNewNumber.$dirty) && umc.newCardForm.uitpasNewNumber.$invalid" class="text-danger small">
+                <div ng-if="(umc.newCardForm.$submitted || umc.newCardForm.uitpasNewNumber.$dirty || umc.newCardForm.uitpasNewNumber.$touched) && umc.newCardForm.uitpasNewNumber.$invalid" class="text-danger small">
                   <div ng-if="umc.newCardForm.uitpasNewNumber.$error.pattern">Het nummer heeft een verkeerd formaat, 13 cijfers worden verwacht.</div>
                   <div ng-if="umc.newCardForm.uitpasNewNumber.$error.notFound">Deze UiTPAS kan niet gevonden worden in het systeem.</div>
                   <div ng-if="umc.newCardForm.uitpasNewNumber.$error.notLocalStock">Deze UiTPAS zit niet in de locale stock.</div>
