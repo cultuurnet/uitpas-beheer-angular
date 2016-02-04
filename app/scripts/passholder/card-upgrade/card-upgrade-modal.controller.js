@@ -132,7 +132,7 @@ function UpgradeModalController (
     }
     else {
       counterService
-        .getRegistrationPriceInfo(pass, controller.passholder, '', 'EXTRA_CARD')
+        .getRegistrationPriceInfo(controller.upgradeData.passToCheck, controller.passholder, '', 'EXTRA_CARD')
         .then(updateUnreducedPriceInfo, controller.handleAsyncError);
     }
     deferredRefresh.resolve();
@@ -249,8 +249,8 @@ function UpgradeModalController (
   };
 
   controller.submitUpgrade = function () {
-    var showUpgradedPassholder = function (passholder) {
-      $uibModalInstance.close(passholder);
+    var showUpgradedPassholder = function (upgradedPassholder) {
+      $uibModalInstance.close(upgradedPassholder);
     };
 
     controller.formSubmitBusy = true;
