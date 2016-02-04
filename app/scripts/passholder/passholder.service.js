@@ -558,12 +558,14 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     var params = {};
     var deferredRequest = $q.defer();
 
-    if (cardSystemId) {
-      params['cardSystemId'] = cardSystemId;
-    }
-    if (extraCardNumber && voucherNumber !== '') {
+    // Either a new card number or a card system id is required.
+    if (extraCardNumber && extraCardNumber !== '') {
       params['uitpasNumber'] = extraCardNumber;
     }
+    else if (cardSystemId) {
+      params['cardSystemId'] = cardSystemId;
+    }
+
     if (voucherNumber && voucherNumber !== '') {
       params['voucherNumber'] = voucherNumber;
     }
