@@ -39,7 +39,17 @@ describe('Factory: Passholder', function () {
     'points': 309,
     'picture': 'picture-in-base64-format',
     'remarks': 'remarks',
-    'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
+    'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
+    'cardSystems': [
+      {
+        name: 'UiTPAS Regio Aalst',
+        id: '1'
+      },
+      {
+        name: 'UiTPAS Regio Gent',
+        id: '2'
+      }
+    ]
   };
 
   var Passholder, day;
@@ -55,6 +65,7 @@ describe('Factory: Passholder', function () {
 
   it('should correctly parse a passholder with a missing picture', function () {
     var jsonPassholder = getJsonPassholder();
+    delete jsonPassholder.cardSystems;
 
     var expectedPassholder = {
       name: {
@@ -95,7 +106,8 @@ describe('Factory: Passholder', function () {
       inszNumber: '',
       remarks: 'remarks',
       uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
-      uitPassen: []
+      uitPassen: [],
+      cardSystems: []
     };
 
     var passholder = new Passholder(jsonPassholder);
@@ -212,6 +224,16 @@ describe('Factory: Passholder', function () {
             id: '1'
           }
         }
+      ],
+      cardSystems: [
+        {
+          name: 'UiTPAS Regio Aalst',
+          id: '1'
+        },
+        {
+          name: 'UiTPAS Regio Gent',
+          id: '2'
+        }
       ]
     };
 
@@ -275,7 +297,17 @@ describe('Factory: Passholder', function () {
         }
       ],
       remarks: 'remarks',
-      uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
+      uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
+      cardSystems: [
+        {
+          name: 'UiTPAS Regio Aalst',
+          id: '1'
+        },
+        {
+          name: 'UiTPAS Regio Gent',
+          id: '2'
+        }
+      ]
     };
     var passholder = new Passholder(getJsonPassholder());
 

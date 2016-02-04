@@ -134,6 +134,7 @@ function passholderFactory(moment, day) {
       this.uid = jsonPassholder.uid;
       this.remarks = jsonPassholder.remarks || '';
       this.uitPassen = parseJsonUitPassen(jsonPassholder.uitpassen);
+      this.cardSystems = (jsonPassholder.cardSystems ? jsonPassholder.cardSystems : []);
     },
     getKansenstatuutByCardSystemID: function (cardSystemID) {
       var passholder = this,

@@ -151,7 +151,8 @@ describe('Factory: Pass', function () {
         ],
         remarks: 'remarks',
         uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
-        passNumber: '0930000422202'
+        passNumber: '0930000422202',
+        cardSystems: []
       },
       cardSystem: {
         id: '1',
