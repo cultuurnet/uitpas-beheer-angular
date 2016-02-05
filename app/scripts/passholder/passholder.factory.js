@@ -186,6 +186,17 @@ function passholderFactory(moment, day) {
       });
 
       return matchingCardSystem;
+    },
+    isRegisteredInCardSystem: function (cardSystem) {
+      var matchingCardSystem = false;
+
+      angular.forEach(this.cardSystems, function (passHolderCardSystem) {
+        if (passHolderCardSystem.id === cardSystem.id) {
+          matchingCardSystem = true;
+        }
+      });
+
+      return matchingCardSystem;
     }
   };
 
