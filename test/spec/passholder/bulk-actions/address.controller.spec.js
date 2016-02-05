@@ -3,8 +3,7 @@
 describe('Controller: AddressBulkController', function () {
 
   var $controller, $uibModalInstance, $scope, BulkSelection, PassholderSearchResults, SearchParameters,
-    searchResults, searchParameters, bulkSelection, passholderService, advancedSearchService, $state,
-    addressBulkController, controller;
+    searchResults, searchParameters, bulkSelection, passholderService, advancedSearchService, $state, controller;
 
   var addressForm = {
     street: 'Teststraat 123',
