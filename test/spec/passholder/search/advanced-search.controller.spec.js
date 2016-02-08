@@ -377,7 +377,10 @@ describe('Controller: PassholderAdvancedSearchController', function () {
 
   it('reloads the parameters from the url on state change success', function () {
     advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
-    $state.params = {firstName: 'Jos'};
+    $state.params = {
+      firstName: 'Jos',
+      mode: 'NUMBER'
+    };
     $rootScope.$emit('$locationChangeSuccess');
     var expectedSearchFields = {
       uitpasNumbers: [],
@@ -390,8 +393,31 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       city: null,
       email: null,
       membershipAssociationId: null,
-      membershipStatus:
-        null,
+      membershipStatus: null,
+      mode: {
+        title:'Via kaartnummer',
+        name:'NUMBER'
+      }
+    };
+    expect(controller.searchFields).toEqual(expectedSearchFields);
+
+    $state.params = {
+      firstName: 'Jos',
+      mode: 'DETAIL'
+    };
+    $rootScope.$emit('$locationChangeSuccess');
+    var expectedSearchFields = {
+      uitpasNumbers: [],
+      page: 1,
+      limit: 10,
+      dateOfBirth: null,
+      firstName: 'Jos',
+      name: null,
+      street: null,
+      city: null,
+      email: null,
+      membershipAssociationId: null,
+      membershipStatus: null,
       mode: {
         title: 'Zoeken',
         name: 'DETAIL'
@@ -402,11 +428,14 @@ describe('Controller: PassholderAdvancedSearchController', function () {
 
   it('clears the parameters from the url on state change success with empty state params', function () {
     advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
-    $state.params = {};
+    $state.params = {
+      mode: 'DETAIL',
+      page: 5
+    };
     $rootScope.$emit('$locationChangeSuccess');
     var expectedSearchFields = {
       uitpasNumbers: [],
-      page: 1,
+      page: 5,
       limit: 10,
       dateOfBirth: null,
       firstName: null,
@@ -415,13 +444,17 @@ describe('Controller: PassholderAdvancedSearchController', function () {
       city: null,
       email: null,
       membershipAssociationId: null,
-      membershipStatus:
-        null,
+      membershipStatus: null,
       mode: {
         title: 'Zoeken',
         name: 'DETAIL'
       }
     };
+    var expectedStateParams = {
+      mode: 'DETAIL',
+      page: null
+    };
     expect(controller.searchFields).toEqual(expectedSearchFields);
+    expect($state.params).toEqual(expectedStateParams);
   });
 });
