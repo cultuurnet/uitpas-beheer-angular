@@ -343,4 +343,30 @@ describe('Factory: Passholder', function () {
     expect(passholder.hasUitPasInCardSystem(cardSystemToCheckTruthy)).toBeTruthy();
     expect(passholder.hasUitPasInCardSystem(cardSystemToCheckFalsy)).toBeFalsy();
   });
+
+  it('has a helper function to check if a passholder his registered in a given card system', function () {
+    var cardSystemToCheckTruthy = {
+      id: 1
+    };
+    var cardSystemToCheckFalsy = {
+      id: 5
+    };
+
+    var jsonPassholder = getJsonPassholder();
+    jsonPassholder.cardSystems = [
+       {
+        id: 1,
+        name: 'UiTPAS Leuven'
+      },
+      {
+        id: 3,
+        name: 'UiTPAS Aalst'
+      }
+    ];
+
+    var passholder = new Passholder(jsonPassholder);
+
+    expect(passholder.isRegisteredInCardSystem(cardSystemToCheckTruthy)).toBeTruthy();
+    expect(passholder.isRegisteredInCardSystem(cardSystemToCheckFalsy)).toBeFalsy();
+  });
 });
