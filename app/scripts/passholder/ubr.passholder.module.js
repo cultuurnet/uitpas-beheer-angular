@@ -12,6 +12,7 @@ angular
   .module('ubr.passholder', [
     'ubr.passholder.search',
     'ubr.passholder.bulkActions',
+    'ubr.passholder.cardUpgrade',
     'ui.router',
     'uitpasbeheerApp',
     'truncate'

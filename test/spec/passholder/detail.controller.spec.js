@@ -6,7 +6,30 @@ describe('Controller: PassholderDetailController', function () {
   beforeEach(module('uitpasbeheerApp'));
 
   var detailController, $rootScope, advantage, $q, moment, $scope, passholderService, deferredPassholder,
-      membershipService, $controller, $window;
+      membershipService, $controller, $window, $state, activeCounter, Counter;
+
+  function getJsonCounter(){
+    var jsonCounter = {
+      'id': '452',
+      'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+      'name': 'Vierdewereldgroep Mensen voor Mensen',
+      'role': 'admin',
+      'actorId': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+      'cardSystems': {
+        '1': {
+          'permissions': ['registratie', 'kansenstatuut toekennen'],
+          'groups': ['Geauthorizeerde registratie balies'],
+          'id': 1,
+          'name': 'UiTPAS Regio Aalst',
+          'distributionKeys': []
+        }
+      },
+      'permissions': ['registratie', 'kansenstatuut toekennen'],
+      'groups': ['Geauthorizeerde registratie balies']
+    };
+
+    return jsonCounter;
+  }
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$controller_, $injector, _$rootScope_) {
@@ -22,12 +45,15 @@ describe('Controller: PassholderDetailController', function () {
     $rootScope = _$rootScope_;
     $window = {history: jasmine.createSpyObj('history', ['back'])};
 
+    $state = jasmine.createSpyObj('$state', ['go']);
     $q = $injector.get('$q');
     moment = $injector.get('moment');
 
     passholderService = $injector.get('passholderService');
     membershipService = jasmine.createSpyObj('membershipService', ['list']);
     membershipService.list.and.returnValue($q.reject());
+    Counter = $injector.get('Counter');
+    activeCounter = new Counter(getJsonCounter());
 
     spyOn(passholderService, 'getCoupons').and.returnValue($q.reject());
 
@@ -51,8 +77,9 @@ describe('Controller: PassholderDetailController', function () {
       $scope: $scope,
       moment: moment,
       passholderService: passholderService,
-      activeCounter: {},
-      $window: $window
+      activeCounter: activeCounter,
+      $window: $window,
+      $state: $state
     });
   }
 
@@ -130,5 +157,17 @@ describe('Controller: PassholderDetailController', function () {
     detailController.goBack();
 
     expect($window.history.back).toHaveBeenCalled();
+  });
+
+  it('should start with the kansenstatuut modal for authorised counters', function () {
+    var cardSystem = { id: 1 };
+    detailController.showModalForCardSystem(cardSystem);
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.kansenStatuut', { cardSystem: { id: 1 } });
+  });
+
+  it('should start with the new card modal for unauthorised counters', function () {
+    var cardSystem = { id: 5 };
+    detailController.showModalForCardSystem(cardSystem);
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard', { cardSystem: { id: 5 } });
   });
 });

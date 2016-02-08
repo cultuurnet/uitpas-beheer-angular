@@ -1,0 +1,64 @@
+<form name="umc.newCardForm" ng-submit="umc.submitNewCardForm(umc.newCardForm)"
+      novalidate ng-disabled="umc.formSubmitBusy">
+  <div class="modal-body">
+    <div class="container-fluid">
+      <fieldset ng-disabled="umc.formSubmitBusy">
+        <div class="grid">
+          <div class="grid__12 grid--bp-lrg__12">
+            <div class="alert alert-danger" type="{{umc.formAlert.type}}" ng-show="umc.formAlert" ng-bind="umc.formAlert.message"></div>
+          </div>
+          <div class="grid__12 field-group required"
+               ng-class="{ 'has-error': umc.showFieldError(umc.newCardForm, 'with-new-card') }"
+               ng-if="umc.modalFlow === 'AUTHORIZED_COUNTER' && umc.upgradeData.withKansenstatuut === 'NO_KANSENSTATUUT'">
+            <div class="grid radios">
+              <div class="grid__12">
+                <div class="radio">
+                  <label>
+                    <input type="radio" id="no-kansenstatuut" name="with-new-card" value="NO_NEW_CARD"
+                           required ng-model="umc.upgradeData.withNewCard"> Bestaande UiTPAS-kaart gebruiken
+                  </label>
+                </div>
+              </div>
+              <div class="grid__12">
+                <div class="radio">
+                  <label>
+                    <input type="radio" id="kansenstatuut" name="with-new-card" value="NEW_CARD"
+                           required ng-model="umc.upgradeData.withNewCard"> Nieuwe UiTPAS-kaart uitdelen
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid__12 field-group with-new-card-fields" ng-show="umc.upgradeData.withNewCard === 'NEW_CARD'">
+            <p>Scan een nieuwe UiTPAS</p>
+            <div class="form-group">
+              <div class="required" ng-class="{ 'has-error': (umc.newCardForm.$submitted || umc.newCardForm.uitpasNewNumber.$touched) && umc.newCardForm.uitpasNewNumber.$invalid }">
+                <label class="control-label" for="uitpasNewNumber">
+                  UiTPAS-nummer
+                </label>
+                <input ubr-uitpas-number-async-validation ng-pattern="/^\d{13}$/" type="text"
+                       class="form-control input-number" name="uitpasNewNumber" id="uitpasNewNumber"
+                       ng-required="umc.upgradeData.withNewCard === 'NEW_CARD'" ubr-action="'UPGRADE'" ubr-card-system="umc.cardSystem.id" ng-model="umc.upgradeData.uitpasNewNumber">
+                <div ng-if="(umc.newCardForm.$submitted || umc.newCardForm.uitpasNewNumber.$dirty || umc.newCardForm.uitpasNewNumber.$touched) && umc.newCardForm.uitpasNewNumber.$invalid" class="text-danger small">
+                  <div ng-if="umc.newCardForm.uitpasNewNumber.$error.pattern">Het nummer heeft een verkeerd formaat, 13 cijfers worden verwacht.</div>
+                  <div ng-if="umc.newCardForm.uitpasNewNumber.$error.notFound">Deze UiTPAS kan niet gevonden worden in het systeem.</div>
+                  <div ng-if="umc.newCardForm.uitpasNewNumber.$error.notLocalStock">Deze UiTPAS zit niet in de locale stock.</div>
+                  <div ng-if="umc.newCardForm.uitpasNewNumber.$error.required">Het UiTPAS-nummer veld is verplicht.</div>
+                  <div ng-if="umc.newCardForm.uitpasNewNumber.$error.cardSystemMismatch">Deze UiTPAS behoort niet tot het <strong ng-bind="umc.cardSystem.name"></strong> kaart-systeem.</div>
+                  <div ng-if="umc.newCardForm.uitpasNewNumber.$error.unavailableForActiveCounter">Deze UiTPAS is niet toegekend aan de actieve balie.</div>
+                </div>
+                <div ng-if="umc.newCardForm.uitpasNewNumber.$pending" class="text-warning small">UiTPAS-nummer wordt gevalideerd.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div><!-- end modal-body -->
+  <div class="modal-footer">
+    <a class="btn btn-link pull-left" ng-click="umc.close()">Annuleren</a>
+    <input type="button" class="btn btn-default modal-previous" ui-sref="counter.main.passholder.upgrade.kansenStatuut" value="Vorige">
+    <input type="button" class="btn btn-default modal-next" ng-disabled="umc.formSubmitBusy || umc.newCardForm.$invalid || umc.newCardForm.$pending"
+            ng-click="umc.submitNewCardForm(umc.newCardForm)" value="Volgende">
+  </div>
+</form>
