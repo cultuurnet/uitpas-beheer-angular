@@ -588,7 +588,14 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
         config
       );
 
-      addCardSystemRequest.success(deferredRequest.resolve);
+      var reloadPassholderOnSuccess = function () {
+        passholderIdCache.remove(passholderNumber);
+        passholderCache.remove(passholderNumber);
+
+        deferredRequest.resolve();
+      };
+
+      addCardSystemRequest.success(reloadPassholderOnSuccess);
       addCardSystemRequest.error(deferredRequest.reject);
     }
 
