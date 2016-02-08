@@ -1049,7 +1049,7 @@ describe('Service: passholderService', function () {
     $httpBackend.flush();
   });
 
-  it ('rejects when it can not add a passholder to a card system', function (done) {
+  it('rejects when it can not add a passholder to a card system', function (done) {
     var uitpasNumber = '01234567890123';
     var cardSystemId = 1;
     var voucherNumber = '85000000258';
@@ -1077,5 +1077,42 @@ describe('Service: passholderService', function () {
       .catch(checkError);
 
     $httpBackend.flush();
+  });
+
+  it('should remove the passholder from the cache after adding a card system', function (done) {
+    var pass = identityData.uitPas;
+    // Fill the cache so we can check later that it's empty again.
+    var passholderCache = $cacheFactory.get('passholderCache');
+    var passholderIdCache = $cacheFactory.get('passholderIdCache');
+    passholderCache.put(pass.number, pass);
+    passholderIdCache.put(pass.number, pass.number);
+
+    var uitpasNumber = '0930000422202';
+    var cardSystemId = null;
+    var voucherNumber = null;
+    var kansenstatuutEndDate = null;
+    var extraCardNumber = '01324657890124';
+
+    var expectedRequestParams = {
+      uitpasNumber: extraCardNumber
+    };
+
+    var assertSuccess = function () {
+      expect(passholderCache.get(pass.number)).toEqual(undefined);
+      expect(passholderIdCache.get(pass.number)).toEqual(undefined);
+
+      done();
+    };
+
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + uitpasNumber + '/cardsystems', expectedRequestParams)
+      .respond(200);
+
+    passholderService
+      .addCardSystem(uitpasNumber, cardSystemId, voucherNumber, kansenstatuutEndDate, extraCardNumber)
+      .then(assertSuccess);
+
+    $httpBackend.flush();
+
   });
 });

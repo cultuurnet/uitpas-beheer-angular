@@ -39,7 +39,17 @@ describe('Factory: Passholder', function () {
     'points': 309,
     'picture': 'picture-in-base64-format',
     'remarks': 'remarks',
-    'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
+    'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
+    'cardSystems': [
+      {
+        name: 'UiTPAS Regio Aalst',
+        id: '1'
+      },
+      {
+        name: 'UiTPAS Regio Gent',
+        id: '2'
+      }
+    ]
   };
 
   var Passholder, day;
@@ -55,6 +65,7 @@ describe('Factory: Passholder', function () {
 
   it('should correctly parse a passholder with a missing picture', function () {
     var jsonPassholder = getJsonPassholder();
+    delete jsonPassholder.cardSystems;
 
     var expectedPassholder = {
       name: {
@@ -95,7 +106,8 @@ describe('Factory: Passholder', function () {
       inszNumber: '',
       remarks: 'remarks',
       uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
-      uitPassen: []
+      uitPassen: [],
+      cardSystems: []
     };
 
     var passholder = new Passholder(jsonPassholder);
@@ -212,6 +224,16 @@ describe('Factory: Passholder', function () {
             id: '1'
           }
         }
+      ],
+      cardSystems: [
+        {
+          name: 'UiTPAS Regio Aalst',
+          id: '1'
+        },
+        {
+          name: 'UiTPAS Regio Gent',
+          id: '2'
+        }
       ]
     };
 
@@ -275,7 +297,17 @@ describe('Factory: Passholder', function () {
         }
       ],
       remarks: 'remarks',
-      uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
+      uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
+      cardSystems: [
+        {
+          name: 'UiTPAS Regio Aalst',
+          id: '1'
+        },
+        {
+          name: 'UiTPAS Regio Gent',
+          id: '2'
+        }
+      ]
     };
     var passholder = new Passholder(getJsonPassholder());
 
@@ -310,5 +342,31 @@ describe('Factory: Passholder', function () {
 
     expect(passholder.hasUitPasInCardSystem(cardSystemToCheckTruthy)).toBeTruthy();
     expect(passholder.hasUitPasInCardSystem(cardSystemToCheckFalsy)).toBeFalsy();
+  });
+
+  it('has a helper function to check if a passholder his registered in a given card system', function () {
+    var cardSystemToCheckTruthy = {
+      id: 1
+    };
+    var cardSystemToCheckFalsy = {
+      id: 5
+    };
+
+    var jsonPassholder = getJsonPassholder();
+    jsonPassholder.cardSystems = [
+       {
+        id: 1,
+        name: 'UiTPAS Leuven'
+      },
+      {
+        id: 3,
+        name: 'UiTPAS Aalst'
+      }
+    ];
+
+    var passholder = new Passholder(jsonPassholder);
+
+    expect(passholder.isRegisteredInCardSystem(cardSystemToCheckTruthy)).toBeTruthy();
+    expect(passholder.isRegisteredInCardSystem(cardSystemToCheckFalsy)).toBeFalsy();
   });
 });

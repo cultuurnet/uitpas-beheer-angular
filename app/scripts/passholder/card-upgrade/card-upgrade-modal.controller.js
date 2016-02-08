@@ -249,8 +249,8 @@ function UpgradeModalController (
   };
 
   controller.submitUpgrade = function () {
-    var showUpgradedPassholder = function (upgradedPassholder) {
-      $uibModalInstance.close(upgradedPassholder);
+    var showUpgradedPassholder = function () {
+      $uibModalInstance.close();
     };
 
     controller.formSubmitBusy = true;

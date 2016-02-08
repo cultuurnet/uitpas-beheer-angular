@@ -69,9 +69,15 @@ angular
           }
 
           function cardUpgraded() {
-            $state.go('counter.main.passholder', {
-              identification: pass.number
-            });
+            $state.go(
+              'counter.main.passholder',
+              {
+                identification: pass.number
+              },
+              {
+                reload: true
+              }
+            );
           }
 
           upgradeModalInstance

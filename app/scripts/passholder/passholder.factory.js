@@ -134,6 +134,7 @@ function passholderFactory(moment, day) {
       this.uid = jsonPassholder.uid;
       this.remarks = jsonPassholder.remarks || '';
       this.uitPassen = parseJsonUitPassen(jsonPassholder.uitpassen);
+      this.cardSystems = (jsonPassholder.cardSystems ? jsonPassholder.cardSystems : []);
     },
     getKansenstatuutByCardSystemID: function (cardSystemID) {
       var passholder = this,
@@ -180,6 +181,17 @@ function passholderFactory(moment, day) {
 
       angular.forEach(this.uitPassen, function (uitpas) {
         if (uitpas.cardSystem.id === cardSystem.id) {
+          matchingCardSystem = true;
+        }
+      });
+
+      return matchingCardSystem;
+    },
+    isRegisteredInCardSystem: function (cardSystem) {
+      var matchingCardSystem = false;
+
+      angular.forEach(this.cardSystems, function (passHolderCardSystem) {
+        if (passHolderCardSystem.id === cardSystem.id) {
           matchingCardSystem = true;
         }
       });
