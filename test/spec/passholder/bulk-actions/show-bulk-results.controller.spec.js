@@ -150,12 +150,10 @@ describe('Controller: ShowBulkResultsController', function () {
     controller.passholderService = passholderService;
 
     angular.forEach(controller.passholders, function(passholder) {
-      //expect(passholder.asyncError.message).toEqual('Actie niet toegestaan.');
-      //expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.asyncError.message).toEqual('Actie niet toegestaan.');
+      expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
     });
-    //expect(controller.asyncError.message).toEqual('Actie niet toegestaan.');
-    //expect(controller.asyncError.type).toEqual('danger');
   });
 
   it('can close all modals', function () {
