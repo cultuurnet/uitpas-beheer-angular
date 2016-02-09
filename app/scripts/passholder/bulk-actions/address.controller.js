@@ -69,7 +69,7 @@ function AddressBulkController (bulkSelection, passholderService, $uibModalInsta
     }
   };
 
-  this.cancel = function () {
+  controller.cancel = function () {
     $uibModalInstance.dismiss('canceled');
   };
 }
