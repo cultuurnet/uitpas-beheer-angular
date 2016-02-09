@@ -128,12 +128,18 @@ describe('Controller: AddressBulkController', function () {
 
   // load the controller's module
   beforeEach(module('ubr.passholder'));
-  beforeEach(module('uitpasbeheerApp'));
+  beforeEach(module('uitpasbeheerApp', function($provide) {
+    passholderService = jasmine.createSpyObj('passholderService', ['findPassholders, findPassholder']);
+    $provide.provider('passholderService', {
+      $get: function () {
+        return passholderService;
+      }
+    });
+  }));
 
   beforeEach(inject(function (_$controller_, $rootScope, $injector, _$state_, _BulkSelection_, _PassholderSearchResults_, _SearchParameters_) {
     $controller = _$controller_;
     $state = _$state_;
-    passholderService = jasmine.createSpyObj('passholderService', ['findPassholders, findPassholder']);
     $uibModalInstance = jasmine.createSpyObj('$uibModalInstance', ['dismiss']);
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders']);
     $scope = $rootScope.$new();
@@ -200,12 +206,14 @@ describe('Controller: AddressBulkController', function () {
 
     bulkSelection.selectAll = true;
     spyOn(controller, 'findPassHoldersAgain');
+    //spyOn(passholderService, 'findPassholders');
 
     controller.checkSelectAll();
 
     expect(bulkSelection.selectAll).toBeTruthy();
     expect(searchParameters.limit).toEqual(searchResults.totalItems);
     expect(controller.findPassHoldersAgain).toHaveBeenCalledWith(searchParameters);
+    expect(passholderService.findPassholders).toHaveBeenCalledWith(searchParameters);
     expect(controller.passholders).toEqual(searchResults.passen);
   });
 
@@ -218,6 +226,9 @@ describe('Controller: AddressBulkController', function () {
 
     expect(bulkSelection.selectAll).toBeFalsy();
     expect(controller.findPassHolderByNumber.calls.count()).toBe(bulkSelection.uitpasNumberSelection.length);
+    angular.forEach(bulkSelection.uitpasNumberSelection, function(uitpasNumber) {
+      expect(controller.findPassHolderByNumber).toHaveBeenCalledWith(uitpasNumber);
+    });
     expect(controller.passholders).toEqual(searchResults.passen);
   });
 
