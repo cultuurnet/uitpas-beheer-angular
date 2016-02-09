@@ -129,6 +129,11 @@ describe('Controller: ShowBulkResultsController', function () {
     expect(controller.passholders).not.toBe(null);
   });
 
+  it('can close all modals', function () {
+    controller.cancel();
+    expect($uibModalStack.dismissAll).toHaveBeenCalled();
+  });
+
   it('should update all the passholders', function () {
     $scope.$digest();
 
@@ -157,8 +162,37 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   });
 
-  it('can close all modals', function () {
-    controller.cancel();
-    expect($uibModalStack.dismissAll).toHaveBeenCalled();
+  it('should fail in updating the passholder because the passholder could not be updated', function () {
+    passholderService.update.and.callFake(function () {
+      var apiError = {
+        code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER'
+      };
+      return $q.reject(apiError);
+    });
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Pashouder niet werd niet geupdate op de server.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should fail in updating the passholder because something unknown went wrong', function () {
+    passholderService.update.and.callFake(function () {
+      var apiError = {
+        code: 'SOMETHING_ELSE_WENT_WRONG'
+      };
+      return $q.reject(apiError);
+    });
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Pashouder niet werd niet geupdate op de server.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+    });
   });
 });
