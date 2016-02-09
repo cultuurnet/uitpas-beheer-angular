@@ -36,7 +36,11 @@
           <div class="form-group">
             <div class="grid__12 grid--bp-med__3">
               <label>Postcode</label>
-              <input type="text" ng-class="{'has-error': bulkAddress.zip.$invalid}" class="form-control" id="zip" name="zip" ng-model="abc.address.zip" required>
+              <input type="text" ng-pattern="/^\d{4}$/" ng-class="{'has-error': bulkAddress.zip.$invalid}" class="form-control" id="zip" name="zip" ng-model="abc.address.zip" required>
+              <div ng-if="(bulkAddress.$submitted || bulkAddress.zip.$touched) && bulkAddress.zip.$invalid" class="text-danger small">
+                <div ng-if="bulkAddress.zip.$error.pattern">De postcode heeft een verkeerd formaat, 4 cijfers worden verwacht.</div>
+                <div ng-if="bulkAddress.zip.$error.required">Het postcode veld is verplicht.</div>
+              </div>
             </div>
 
             <div class="grid__12 grid--bp-med__9">
@@ -51,8 +55,8 @@
   </div>
   <div class="modal-footer">
     <a ng-click="abc.cancel()" class="btn btn-default" ng-disabled="abc.submitBusy">Annuleren</a>
-    <button type="button" class="btn btn-primary" ng-disabled="abc.submitBusy"
-            ng-click="abc.submitForm(abc.passholders, bulkAddress)">
+    <button type="button" class="btn btn-primary" ng-click="abc.submitForm(abc.passholders, bulkAddress)"
+            ng-disabled="abc.submitBusy || bulkAddress.$invalid || bulkAddress.$pending">
       <span ng-hide="abc.submitBusy">Wijzigen</span> <span ng-show="abc.submitBusy"><span class="fa fa-refresh loading small"></span> Wijzigen</span>
     </button>
   </div>

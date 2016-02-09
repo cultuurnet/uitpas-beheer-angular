@@ -11,60 +11,65 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkAddressForm, passholderService, $uibModalStack, $scope) {
+function ShowBulkResultsController(passholders, bulkAddressForm, passholderService, $uibModalStack) {
   var controller = this;
-  var updatePassholderFailed = false;
   var errorCode;
   controller.submitBusy = true;
   controller.passholders = passholders;
 
-  angular.forEach(controller.passholders, function(passholder, i) {
-    controller.passholders[i].isChecked = false;
-    controller.passholders[i].updated = false;
-    updatePassHolder(controller.passholders[i]);
-
-    if (updatePassholderFailed) {
-      controller.passholders[i].failed = true;
-      controller.passholders[i].isChecked = true;
-      if (errorCode === 'ACTION_NOT_ALLOWED') {
-        controller.passholders[i].asyncError = {
-          message: 'Actie niet toegestaan.',
-          type: 'danger'
-        };
-      }
-
-      if (errorCode === 'PASSHOLDER_NOT_UPDATED_ON_SERVER') {
-        controller.passholders[i].asyncError = {
-          message: 'Pashouder niet werd niet geupdate op de server.',
-          type: 'danger'
-        };
-      }
-    }
-    else {
-      controller.passholders[i].updated = true;
-      controller.passholders[i].isChecked = true;
-    }
+  angular.forEach(controller.passholders, function(passholder) {
+    passholder.isChecked = false;
+    passholder.updated = false;
+    passholder.failed = false;
+    updatePassHolder(passholder);
   });
 
-  function updatePassHolder(passholder){
+  function updatePassHolder(passholder) {
     passholder.address.city = bulkAddressForm.city.$viewValue;
     passholder.address.postalCode = bulkAddressForm.zip.$viewValue;
     passholder.address.street = bulkAddressForm.street.$viewValue;
 
     var updateOk = function() {
-      updatePassholderFailed = false;
+      passholder.updated = true;
+      passholder.isChecked = true;
+      passholder.failed = false;
     };
 
     var updateFailed = function(errorResponse) {
-      updatePassholderFailed = true;
-      errorCode = errorResponse.apiError.code;
+      passholder.updated = false;
+      passholder.isChecked = true;
+      passholder.failed = true;
+
+      errorCode = errorResponse.code;
+
+      switch (errorCode) {
+        case 'ACTION_NOT_ALLOWED':
+          passholder.asyncError = {
+            message: 'Actie niet toegestaan.',
+            type: 'danger'
+          };
+          break;
+
+        case 'PASSHOLDER_NOT_UPDATED_ON_SERVER':
+          passholder.asyncError = {
+            message: 'Pashouder niet werd niet geupdate op de server.',
+            type: 'danger'
+          };
+          break;
+
+        default:
+          passholder.asyncError = {
+            message: 'Pashouder niet werd niet geupdate op de server.',
+            type: 'danger'
+          };
+      }
     };
 
     passholderService.update(passholder, passholder.passNumber)
       .then(updateOk, updateFailed);
   }
 
-  this.cancel = function() {
+  controller.cancel = function() {
     $uibModalStack.dismissAll();
   }
 }
