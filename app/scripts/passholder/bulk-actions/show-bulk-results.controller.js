@@ -45,7 +45,7 @@ function ShowBulkResultsController(passholders, bulkAddressForm, passholderServi
 
         case 'PASSHOLDER_NOT_UPDATED_ON_SERVER':
           passholder.asyncError = {
-            message: 'Pashouder niet werd niet geupdate op de server.',
+            message: 'Pashouder werd niet geupdate op de server.',
             type: 'danger'
           };
           break;

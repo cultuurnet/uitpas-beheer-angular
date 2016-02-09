@@ -173,7 +173,7 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.asyncError.message).toEqual('Pashouder niet werd niet geupdate op de server.');
+      expect(passholder.asyncError.message).toEqual('Pashouder werd niet geupdate op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
     });
