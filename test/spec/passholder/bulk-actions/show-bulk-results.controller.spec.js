@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('Controller: ShowBulkResultsController', function () {
+describe('Controller: ShowBulkResultsController', function () {
 
   var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q;
 
