@@ -2,7 +2,8 @@
 
 describe('Controller: Results Viewer', function () {
 
-  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter, bulkActionsService, $q;
+  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter, bulkActionsService,
+    $q, BulkSelection;
 
   beforeEach(module('ubr.passholder.search'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
@@ -21,9 +22,10 @@ describe('Controller: Results Viewer', function () {
     });
   }));
 
-  beforeEach(inject(function (_$controller_, _$rootScope_, _$q_) {
+  beforeEach(inject(function (_$controller_, _$rootScope_, _$q_, $injector) {
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders', 'goToPage']);
     $state = jasmine.createSpyObj('$state', ['go']);
+    BulkSelection = $injector.get('BulkSelection');
 
     $state.params = {};
     $q = _$q_;
@@ -175,12 +177,20 @@ describe('Controller: Results Viewer', function () {
     expect(controller.bulk.selection.addUitpasNumberToSelection).toHaveBeenCalledWith(pass.number);
   });
 
-  it('can start a bulk action and delegate the work', function () {
+  it('can start a bulk action of type export and delegate the work', function () {
     controller.bulk.action = 'export';
     spyOn(controller, 'doBulkExport');
     controller.doBulkAction();
 
     expect(controller.doBulkExport).toHaveBeenCalled();
+  });
+
+  it('can start a bulk action of type addressand delegate the work', function () {
+    var bulkSelection = new BulkSelection(controller.results, controller.searchParameters);
+    controller.bulk.action = 'address';
+    controller.doBulkAction();
+
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkAddress', { bulkSelection: bulkSelection });
   });
 
   it('can request a bulk export and report success to the user', function () {
