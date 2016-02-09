@@ -17,14 +17,7 @@ function ShowBulkResultsController(passholders, bulkAddressForm, passholderServi
   controller.submitBusy = true;
   controller.passholders = passholders;
 
-  angular.forEach(controller.passholders, function(passholder) {
-    passholder.isChecked = false;
-    passholder.updated = false;
-    passholder.failed = false;
-    updatePassHolder(passholder);
-  });
-
-  function updatePassHolder(passholder) {
+  controller.updatePassHolder = function(passholder) {
     passholder.address.city = bulkAddressForm.city.$viewValue;
     passholder.address.postalCode = bulkAddressForm.zip.$viewValue;
     passholder.address.street = bulkAddressForm.street.$viewValue;
@@ -59,7 +52,7 @@ function ShowBulkResultsController(passholders, bulkAddressForm, passholderServi
 
         default:
           passholder.asyncError = {
-            message: 'Pashouder niet werd niet geupdate op de server.',
+            message: 'Pashouder werd niet geupdate op de server.',
             type: 'danger'
           };
       }
@@ -67,7 +60,14 @@ function ShowBulkResultsController(passholders, bulkAddressForm, passholderServi
 
     passholderService.update(passholder, passholder.passNumber)
       .then(updateOk, updateFailed);
-  }
+  };
+
+  angular.forEach(controller.passholders, function(passholder) {
+    passholder.isChecked = false;
+    passholder.updated = false;
+    passholder.failed = false;
+    controller.updatePassHolder(passholder);
+  });
 
   controller.cancel = function() {
     $uibModalStack.dismissAll();
