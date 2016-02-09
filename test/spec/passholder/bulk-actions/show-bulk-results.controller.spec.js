@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: ShowBulkResultsController', function () {
+fdescribe('Controller: ShowBulkResultsController', function () {
 
   var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q;
 
@@ -56,11 +56,7 @@ describe('Controller: ShowBulkResultsController', function () {
             'name': 'UiTPAS Regio Aalst'
           }
         }
-      ],
-      'asyncError': {
-        'message': '',
-        'type': ''
-      }
+      ]
   };
 
   var getSpyForm = function (formData) {
@@ -87,7 +83,14 @@ describe('Controller: ShowBulkResultsController', function () {
 
   // load the controller's module
   beforeEach(module('ubr.passholder'));
-  beforeEach(module('uitpasbeheerApp'));
+  beforeEach(module('uitpasbeheerApp', function($provide) {
+    passholderService = jasmine.createSpyObj('passholderService', ['update']);
+    $provide.provider('passholderService', {
+      $get: function () {
+        return passholderService;
+      }
+    });
+  }));
 
   beforeEach(inject(function (_$controller_, $rootScope, $injector, _$state_) {
     $controller = _$controller_;
@@ -106,24 +109,28 @@ describe('Controller: ShowBulkResultsController', function () {
       jsonParsePassHolder
     ];
 
-    passholderService = jasmine.createSpyObj('passholderService', ['update']);
+    passholderService.update.and.callFake(function () {
+      return $q.resolve(passholders[0]);
+    });
 
-    controller = $controller('ShowBulkResultsController', {
+    controller = getController();
+  }));
+
+  var getController = function () {
+    return $controller('ShowBulkResultsController', {
       passholders: passholders,
       bulkAddressForm: getSpyForm(),
-      $uibModalStack: $uibModalStack,
-      asyncError: jasmine.createSpy('asyncError'),
-      $scope: $scope
+      passholderService: passholderService,
+      $uibModalStack: $uibModalStack
     });
-  }));
+  };
 
   it('should initialize', function () {
     expect(controller.passholders).not.toBe(null);
   });
 
-  it('shoud update all the passholders', function () {
-    passholderService.update.and.returnValue($q.resolve(passholders));
-    controller.passholderService = passholderService;
+  it('should update all the passholders', function () {
+    $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.address.city).toEqual('Brussel');
@@ -133,21 +140,15 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   });
 
-  fit('should fail in updating the passholder because the action is not allowed', function () {
-    /*controller.bulkAddressForm = getSpyForm({
-      zip: {
-        $viewValue: '!@#!#'
-      }
-    });*/
-
-    var apiError = {
-      apiError: {
+  it('should fail in updating the passholder because the action is not allowed', function () {
+    passholderService.update.and.callFake(function () {
+      var apiError = {
         code: 'ACTION_NOT_ALLOWED'
-      }
-    };
-
-    passholderService.update.and.returnValue($q.reject(apiError));
-    controller.passholderService = passholderService;
+      };
+      return $q.reject(apiError);
+    });
+    controller = getController();
+    $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.asyncError.message).toEqual('Actie niet toegestaan.');
