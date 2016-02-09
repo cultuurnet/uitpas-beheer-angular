@@ -17,7 +17,8 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
     link: link,
     require: 'ngModel',
     scope: {
-     cardSystemId: '=?ubrCardSystem'
+      cardSystemId: '=?ubrCardSystem',
+      action: '=?ubrAction'
     }
   };
   return directive;
@@ -78,6 +79,10 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
 
     ngModel.$asyncValidators.unavailableForActiveCounter = function (modelValue, viewValue) {
       var deferredValidation = $q.defer();
+      var reason = 'NEW_CARD';
+      if (scope.action === 'UPGRADE') {
+        reason = 'EXTRA_CARD';
+      }
 
       var compareWithActiveCounter = function (pass) {
 
@@ -91,7 +96,7 @@ function uitpasNumberAsyncValidationDirective ($q, passholderService, counterSer
 
         counterService
           // TODO: match against the counter of the pass instead of fetching the price
-          .getRegistrationPriceInfo(pass)
+          .getRegistrationPriceInfo(pass, null, null, reason)
           .then(deferredValidation.resolve, checkIfBalieError);
       };
 

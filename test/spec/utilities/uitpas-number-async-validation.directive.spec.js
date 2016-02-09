@@ -2,7 +2,7 @@
 
 describe('Directive: ubrUitpasNumberAsyncValidation', function () {
 
-  var inputElement, scope, inputController, passholderService, $q, counterService;
+  var inputElement, scope, inputController, passholderService, $q, counterService, compile;
 
   // load the directive's module
   beforeEach(module('uitpasbeheerApp', function ($provide) {
@@ -25,12 +25,14 @@ describe('Directive: ubrUitpasNumberAsyncValidation', function () {
   beforeEach(inject(function ($rootScope, $compile, _$q_) {
     scope = $rootScope.$new();
     $q = _$q_;
+    compile = $compile;
 
-    var uitpasNumberInputTemplate = '<input ubr-card-system="cardSystem.id" ubr-uitpas-number-async-validation name="uitpasNumber" type="text" ng-model="uitpasNumber">';
+    var uitpasNumberInputTemplate = '<input ubr-card-system="cardSystem.id" ubr-action="action" ubr-uitpas-number-async-validation name="uitpasNumber" type="text" ng-model="uitpasNumber">';
     inputElement = angular.element(uitpasNumberInputTemplate);
 
     scope.uitpasNumber = '';
     scope.cardSystem = {};
+    scope.action = null;
     $compile(inputElement)(scope);
     inputController = inputElement.controller('ngModel');
     counterService.getRegistrationPriceInfo.and.returnValue($q.resolve());
@@ -107,6 +109,31 @@ describe('Directive: ubrUitpasNumberAsyncValidation', function () {
 
     expect(passholderService.findPass).toHaveBeenCalledWith('1234567891234');
     expect(inputController.$error.unavailableForActiveCounter).toEqual(true);
+  });
+
+  it('can use different reasons to detect whether the active counter is allowed to register an UiTPAS', function () {
+    scope. action = 'UPGRADE';
+    var mismatchedPass = {
+      cardSystem: {
+        id: 'orange-card-system'
+      },
+      isLocalStock: function () {
+        return true;
+      }
+    };
+    passholderService.findPass.and.returnValue($q.resolve(mismatchedPass));
+    var error = {
+      code: 'SOMETHING_ELSE'
+    };
+    counterService.getRegistrationPriceInfo.and.returnValue($q.reject(error));
+
+    compile(inputElement)(scope);
+    inputController = inputElement.controller('ngModel');
+
+    inputElement.val('1234567891234').trigger('input');
+    scope.$apply();
+
+    expect(passholderService.findPass).toHaveBeenCalledWith('1234567891234');
   });
 
   it('should detect when the active counter is allowed to register an UiTPAS', function () {

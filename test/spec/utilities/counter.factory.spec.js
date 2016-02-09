@@ -46,7 +46,7 @@ describe('Factory: Counter', function () {
         '1': {
           'permissions': ['registratie', 'kansenstatuut toekennen'],
           'groups': ['Geauthorizeerde registratie balies'],
-          'id': 1,
+          'id': '1',
           'name': 'UiTPAS Regio Aalst',
           'distributionKeys': []
         }

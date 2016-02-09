@@ -12,7 +12,8 @@ angular
   .controller('ResultsViewerController', ResultsViewerController);
 
 /* @ngInject */
-function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter, BulkSelection, PassholderSearchResults, bulkActionsService) {
+function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter,
+                                  BulkSelection, PassholderSearchResults, bulkActionsService) {
   function getSearchParametersFromState() {
     var params = new SearchParameters();
     params.fromParams($state.params);
@@ -57,6 +58,9 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
    * @returns {boolean}
    */
   controller.noSearchDone = function () {
+    if (controller.results === null) {
+      return true;
+    }
     return (controller.results.totalItems === 0 && controller.hasDefaultParameters());
   };
 
@@ -68,6 +72,10 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   controller.isShowingResults = function () {
     var results = controller.results;
     var showResults = false;
+
+    if (results === null) {
+      return showResults;
+    }
 
     if (results && results.totalItems !== 0) {
       showResults = !results.hasUnknownNumbers() || results.hasConfirmedUnknownNumbers();

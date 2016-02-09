@@ -30,7 +30,7 @@ function counterFactory() {
         groups: jsonCardSystem.groups,
         name: jsonCardSystem.name,
         permissions: jsonCardSystem.permissions,
-        id: jsonCardSystem.id
+        id: String(jsonCardSystem.id)
       };
     });
     return returnObject;
