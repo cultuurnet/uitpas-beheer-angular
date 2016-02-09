@@ -1,0 +1,52 @@
+<form name="kansenstatuutForm" ng-submit="umc.submitKansenstatuutForm(kansenstatuutForm)"
+      novalidate ng-disabled="umc.formSubmitBusy">
+  <div class="modal-body">
+    <div class="container-fluid">
+      <fieldset ng-disabled="umc.formSubmitBusy">
+        <div class="grid">
+          <div class="grid__12 grid--bp-lrg__12">
+            <div class="alert alert-danger" ng-show="umc.isJavaFXBrowser && umc.eIDError" ng-bind="umc.eIDError"></div>
+            <div class="alert alert-danger" type="{{umc.formAlert.type}}" ng-show="umc.formAlert" ng-bind="umc.formAlert.message"></div>
+          </div>
+          <div class="grid__12 field-group required"
+               ng-class="{ 'has-error': umc.showFieldError(kansenstatuutForm, 'with-kansenstatuut') }">
+            <label class="control-label">
+              Pashouder wenst een UiTPAS
+            </label>
+            <div class="grid radios">
+              <div class="grid__12">
+                <div class="radio">
+                  <label>
+                    <input type="radio" id="no-kansenstatuut" name="with-kansenstatuut" value="NO_KANSENSTATUUT" required ng-model="umc.upgradeData.withKansenstatuut"> Zonder kansenstatuut
+                  </label>
+                </div>
+              </div>
+              <div class="grid__12">
+                <div class="radio">
+                  <label>
+                    <input type="radio" id="kansenstatuut" name="with-kansenstatuut" value="KANSENSTATUUT" required ng-model="umc.upgradeData.withKansenstatuut"> Met kansenstatuut
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid__12 field-group with-kansenstatuut-fields" ng-show="umc.upgradeData.withKansenstatuut === 'KANSENSTATUUT'">
+            <p class="element-title" ng-bind-template="Kansenstatuut {{umc.cardSystem.name}}"></p>
+            <div class="form-group">
+              <div class="form-inline datepicker">
+                <ubr-datepicker ng-model="umc.upgradeData.kansenstatuutEndDate" ubr-label="Geldig tot" ubr-id="valid-until"
+                                ubr-name="endDate"></ubr-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div><!-- end modal-body -->
+  <div class="modal-footer">
+    <a class="btn btn-link pull-left" ng-click="umc.close()">Annuleren</a>
+    <input type="button" class="btn btn-default modal-previous" disabled="disabled" value="Vorige">
+    <input type="button" class="btn btn-default modal-next" ng-disabled="umc.formSubmitBusy"
+            ng-click="umc.submitKansenstatuutForm(kansenstatuutForm)" value="Volgende">
+  </div>
+</form>

@@ -89,5 +89,10 @@
 <div class="passholder passholder-extra-actions">
   <ul class="text-muted list-unstyled small">
     <li><a ui-sref="counter.main.passholder.ticketSales()">Historiek korting &amp; bonnen</a></li>
+    <li ng-repeat="cardSystem in pdc.activeCounter.cardSystems">
+      <a ng-show="!pdc.passholder.isRegisteredInCardSystem(cardSystem)"
+         ng-click="pdc.showModalForCardSystem(cardSystem)"
+         ng-bind-template="Lid maken van {{cardSystem.name}}"></a>
+    </li>
   </ul>
 </div>
