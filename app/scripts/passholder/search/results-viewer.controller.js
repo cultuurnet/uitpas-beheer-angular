@@ -152,6 +152,11 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
       case 'address':
         controller.bulk.submitBusy = false;
         $state.go('counter.main.advancedSearch.bulkAddress', { bulkSelection: controller.bulk.selection });
+        break;
+      case 'kansenstatuut':
+        controller.bulk.submitBusy = false;
+        $state.go('counter.main.advancedSearch.bulkKansenstatuut', { bulkSelection: controller.bulk.selection });
+        break;
     }
   };
 
