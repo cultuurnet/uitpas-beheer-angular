@@ -3,7 +3,8 @@
 describe('Controller: BulkActionsController', function () {
 
   var $controller, $uibModalInstance, $scope, BulkSelection, PassholderSearchResults, SearchParameters, $q,
-    searchResults, searchParameters, bulkSelection, passholderService, advancedSearchService, $state, controller, Passholder, passholder;
+    searchResults, searchParameters, bulkSelection, passholderService, advancedSearchService, $state, controller,
+    Passholder, passholder, action;
 
   var addressForm = {
     street: 'Teststraat 123',
@@ -153,6 +154,7 @@ describe('Controller: BulkActionsController', function () {
     searchResults = new PassholderSearchResults(jsonSearchResults);
     searchParameters = new SearchParameters(jsonSearchParameters);
     bulkSelection = new BulkSelection(searchResults, searchParameters, []);
+    action = 'address';
 
 
     controller = getController();
@@ -161,6 +163,7 @@ describe('Controller: BulkActionsController', function () {
   var getController = function () {
     controller = $controller('BulkActionsController', {
       bulkSelection: bulkSelection,
+      action: action,
       passholderService: passholderService,
       $uibModalInstance: $uibModalInstance,
       $state: $state

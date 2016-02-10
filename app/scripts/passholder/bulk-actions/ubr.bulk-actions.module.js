@@ -19,15 +19,19 @@ angular
     $stateProvider
       .state('counter.main.advancedSearch.bulkAddress', {
         params: {
-          bulkSelection: null
+          bulkSelection: null,
+          action: null
         },
         resolve: {
           bulkSelection: ['$stateParams', function($stateParams) {
             return $stateParams.bulkSelection;
+          }],
+          action: ['$stateParams', function($stateParams) {
+            return $stateParams.action;
           }]
         },
         /* @ngInject */
-        onEnter: function(bulkSelection, $state, $uibModal) {
+        onEnter: function(bulkSelection, action, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
@@ -36,6 +40,9 @@ angular
               resolve: {
                 bulkSelection: function() {
                   return bulkSelection;
+                },
+                action: function() {
+                  return action;
                 }
               },
               controller: 'BulkActionsController',
@@ -49,15 +56,19 @@ angular
       })
       .state('counter.main.advancedSearch.bulkKansenstatuut', {
         params: {
-          bulkSelection: null
+          bulkSelection: null,
+          action: null
         },
         resolve: {
           bulkSelection: ['$stateParams', function($stateParams) {
             return $stateParams.bulkSelection;
+          }],
+          action: ['$stateParams', function($stateParams) {
+            return $stateParams.action;
           }]
         },
         /* @ngInject */
-        onEnter: function(bulkSelection, $state, $uibModal) {
+        onEnter: function(bulkSelection, action, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
@@ -66,6 +77,9 @@ angular
               resolve: {
                 bulkSelection: function() {
                   return bulkSelection;
+                },
+                action: function() {
+                  return action;
                 }
               },
               controller: 'BulkActionsController',

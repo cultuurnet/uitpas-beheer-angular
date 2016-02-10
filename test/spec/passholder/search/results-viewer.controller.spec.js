@@ -225,7 +225,7 @@ describe('Controller: Results Viewer', function () {
     controller.bulk.action = 'address';
     controller.doBulkAction();
 
-    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkAddress', { bulkSelection: bulkSelection });
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkAddress', { bulkSelection: bulkSelection, action: 'address' });
   });
 
   it('can request a bulk export and report success to the user', function () {
