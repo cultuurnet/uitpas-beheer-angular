@@ -13,7 +13,7 @@ angular
 
 /* @ngInject */
 function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter,
-                                  BulkSelection, PassholderSearchResults, bulkActionsService) {
+                                  BulkSelection, PassholderSearchResults, bulkActionsService, activeCounter) {
   function getSearchParametersFromState() {
     var params = new SearchParameters();
     params.fromParams($state.params);
@@ -25,6 +25,7 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   var controller = this;
   controller.activePage = 1;
   controller.loading = true;
+  controller.counterHasKansenstatuutPermission = false;
   /** @type {PassholderSearchResults} */
   controller.results = new PassholderSearchResults();
   controller.searchParameters = getSearchParametersFromState();
@@ -38,6 +39,17 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
       error: false
     }
   };
+
+  /**
+   * Helper function that checks if the active counter has the permission for kansenstatuut
+   *
+   */
+  controller.hasCounterPermissions = function() {
+    if (activeCounter.permissions.indexOf('kansenstatuut toekennen')) {
+      controller.counterHasKansenstatuutPermission = true;
+    }
+  };
+  controller.hasCounterPermissions();
 
   /**
    * Helper function that checks if the current page has default search parameters.
