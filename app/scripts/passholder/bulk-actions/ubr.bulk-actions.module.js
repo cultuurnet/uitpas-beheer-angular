@@ -94,21 +94,25 @@ angular
       .state('counter.main.advancedSearch.showBulkResults', {
         params: {
           passholders: null,
-          bulkAddressForm: null,
-          bulkSelection: null
+          bulkForm: null,
+          bulkSelection: null,
+          action: null
         },
         resolve: {
           passholders: ['$stateParams', function($stateParams) {
             return $stateParams.passholders;
           }],
-          bulkAddressForm: ['$stateParams', function($stateParams) {
-            return $stateParams.bulkAddressForm;
+          bulkForm: ['$stateParams', function($stateParams) {
+            return $stateParams.bulkForm;
           }],
           bulkSelection: ['$stateParams', function($stateParams) {
             return $stateParams.bulkSelection;
+          }],
+          action: ['$stateParams', function($stateParams) {
+            return $stateParams.action;
           }]
         },
-        onEnter: function(passholders, bulkAddressForm, bulkSelection, $state, $uibModal) {
+        onEnter: function(passholders, bulkForm, bulkSelection, action, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
@@ -118,12 +122,15 @@ angular
                 passholders: function() {
                   return passholders;
                 },
-                bulkAddressForm: function() {
-                  return bulkAddressForm;
+                bulkForm: function() {
+                  return bulkForm;
                 },
                 resolve: {
                   bulkSelection: function() {
                     return bulkSelection;
+                  },
+                  action: function() {
+                    return action;
                   }
                 }
               },

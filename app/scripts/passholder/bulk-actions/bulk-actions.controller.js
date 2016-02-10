@@ -59,12 +59,12 @@ function BulkActionsController (bulkSelection, action, passholderService, $uibMo
 
   controller.checkSelectAll();
 
-  controller.submitForm = function(passholders, bulkAddressForm, bulkSelection) {
+  controller.submitForm = function(passholders, bulkForm, bulkSelection) {
     controller.isSubmitted = true;
-    if(bulkAddressForm.$valid) {
+    if(bulkForm.$valid) {
       if (!controller.submitBusy) {
         controller.submitBusy = true;
-        $state.go('counter.main.advancedSearch.showBulkResults', { passholders: passholders, bulkAddressForm: bulkAddressForm, bulkSelection: bulkSelection });
+        $state.go('counter.main.advancedSearch.showBulkResults', { passholders: passholders, bulkForm: bulkForm, bulkSelection: bulkSelection, action: controller.action });
         controller.submitBusy = false;
       }
     }

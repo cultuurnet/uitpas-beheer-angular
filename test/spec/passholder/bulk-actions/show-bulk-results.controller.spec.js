@@ -2,7 +2,7 @@
 
 describe('Controller: ShowBulkResultsController', function () {
 
-  var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q;
+  var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q, action;
 
   var jsonPassHolder = {
       'uid': 'string',
@@ -108,6 +108,7 @@ describe('Controller: ShowBulkResultsController', function () {
       jsonParsePassHolder,
       jsonParsePassHolder
     ];
+    action = 'address';
 
     passholderService.update.and.callFake(function () {
       return $q.resolve(passholders[0]);
@@ -119,7 +120,8 @@ describe('Controller: ShowBulkResultsController', function () {
   var getController = function () {
     return $controller('ShowBulkResultsController', {
       passholders: passholders,
-      bulkAddressForm: getSpyForm(),
+      bulkForm: getSpyForm(),
+      action: action,
       passholderService: passholderService,
       $uibModalStack: $uibModalStack
     });

@@ -11,16 +11,23 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkAddressForm, passholderService, $uibModalStack) {
+function ShowBulkResultsController(passholders, bulkForm, action, passholderService, $uibModalStack) {
   var controller = this;
   var errorCode;
   controller.submitBusy = true;
   controller.passholders = passholders;
 
   controller.updatePassHolder = function(passholder) {
-    passholder.address.city = bulkAddressForm.city.$viewValue;
-    passholder.address.postalCode = bulkAddressForm.zip.$viewValue;
-    passholder.address.street = bulkAddressForm.street.$viewValue;
+    switch(action) {
+      case 'address':
+        passholder.address.city = bulkForm.city.$viewValue;
+        passholder.address.postalCode = bulkForm.zip.$viewValue;
+        passholder.address.street = bulkForm.street.$viewValue;
+        break;
+      case 'kansenstatuut':
+        console.log('jeej');
+        break;
+    }
 
     var updateOk = function() {
       passholder.updated = true;
