@@ -22,8 +22,8 @@
         <div class="form-horizontal">
           <div class="form-group">
             <div class="grid__12 grid--bp-med__3">
-              <label>Postcode</label>
-              <input type="date" ng-class="{'has-error': bulkKansenstatuut.date.$invalid}" class="form-control" id="date" name="date" ng-model="bac.date" required>
+              <ubr-datepicker ng-class="{'has-error': bulkKansenstatuut.date.$invalid}" ng-model="bac.kansenstatuutData.kansenstatuutEndDate" ubr-label="Geldig tot" ubr-id="valid-until"
+                                ubr-name="endDate" required></ubr-datepicker>
               <div ng-if="(bulkKansenstatuut.$submitted || bulkKansenstatuut.date.$touched) && bulkKansenstatuut.date.$invalid" class="text-danger small">
                 <div ng-if="bulkKansenstatuut.date.$error.pattern">De datum heeft een verkeerd formaat.</div>
                 <div ng-if="bulkKansenstatuut.date.$error.required">Datum is een verplicht veld.</div>
