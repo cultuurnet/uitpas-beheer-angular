@@ -38,8 +38,8 @@ angular
                   return bulkSelection;
                 }
               },
-              controller: 'AddressBulkController',
-              controllerAs: 'abc'
+              controller: 'BulkActionsController',
+              controllerAs: 'bac'
             });
         }
       })
@@ -86,6 +86,32 @@ angular
             .finally(function() {
               console.log(bulkSelection.searchParameters.toParams());
               $state.go('counter.main.advancedSearch', bulkSelection.searchParameters.toParams(), { reload: true });
+            });
+        }
+      })
+      .state('counter.main.advancedSearch.bulkKansenstatuut', {
+        params: {
+          bulkSelection: null
+        },
+        resolve: {
+          bulkSelection: ['$stateParams', function($stateParams) {
+            return $stateParams.bulkSelection;
+          }]
+        },
+        /* @ngInject */
+        onEnter: function(bulkSelection, $state, $uibModal) {
+          $uibModal
+            .open({
+              animation: true,
+              templateUrl: 'views/passholder/bulk-actions/modal-bulk-kansenstatuut.html',
+              size: 'sm',
+              resolve: {
+                bulkSelection: function() {
+                  return bulkSelection;
+                }
+              },
+              controller: 'BulkActionsController',
+              controllerAs: 'bac'
             });
         }
       })

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: AddressBulkController', function () {
+describe('Controller: BulkActionsController', function () {
 
   var $controller, $uibModalInstance, $scope, BulkSelection, PassholderSearchResults, SearchParameters, $q,
     searchResults, searchParameters, bulkSelection, passholderService, advancedSearchService, $state, controller, Passholder, passholder;
@@ -159,7 +159,7 @@ describe('Controller: AddressBulkController', function () {
   }));
 
   var getController = function () {
-    controller = $controller('AddressBulkController', {
+    controller = $controller('BulkActionsController', {
       bulkSelection: bulkSelection,
       passholderService: passholderService,
       $uibModalInstance: $uibModalInstance,

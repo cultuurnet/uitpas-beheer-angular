@@ -2,17 +2,17 @@
 
 /**
  * @ngdoc function
- * @name ubr.passholder.bulk-actions.controller:AddressBulkController
+ * @name ubr.passholder.bulk-actions.controller:BulkActionsController
  * @description
- * # AddressBulkController
+ * # BulkActionsController
  * Controller of the ubr.passholder.bulkActions module.
  */
 angular
   .module('ubr.passholder.bulkActions')
-  .controller('AddressBulkController', AddressBulkController);
+  .controller('BulkActionsController', BulkActionsController);
 
 /* @ngInject */
-function AddressBulkController (bulkSelection, passholderService, $uibModalInstance, $state) {
+function BulkActionsController (bulkSelection, passholderService, $uibModalInstance, $state) {
   var controller = this;
   controller.submitBusy = false;
   controller.isSubmitted = false;
