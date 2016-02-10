@@ -40,6 +40,10 @@ angular
               },
               controller: 'AddressBulkController',
               controllerAs: 'abc'
+            })
+            .result
+            .finally(function() {
+              $state.go('^');
             });
         }
       })
@@ -84,7 +88,6 @@ angular
             })
             .result
             .finally(function() {
-              console.log(bulkSelection.searchParameters.toParams());
               $state.go('counter.main.advancedSearch', bulkSelection.searchParameters.toParams(), { reload: true });
             });
         }
