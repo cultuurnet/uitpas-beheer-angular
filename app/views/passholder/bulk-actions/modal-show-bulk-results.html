@@ -3,29 +3,30 @@
   <h4 class="modal-title">Adres wijzigen</h4>
 </div>
 <div class="modal-body">
-  <ul class="list-unstyled slats">
+  <div class="panel panel-default scroll-area">
+    <div class="panel-body">
+      
+      <div class="overview overview-small overview-slats">
+        <ul class="list-unstyled">
+          <li ng-repeat="passholder in sbrc.passholders" class="overview__item overview__item-list" ng-class="{'lowest': passholder.updated}">
+            <div class="grid">
+              <div class="grid__12 grid--bp-med__6">
+                <p class="no-margin">{{ passholder.name.first }} {{ passholder.name.last }}</p>
+              </div>
+              <div class="grid__12 grid--bp-med__6">
+                <p class="status text-right no-margin">
+                  <span ng-hide="passholder.isChecked" class="label label-info">Even geduld...</span>
+                  <span class="label label-success" ng-show="passholder.updated">OK</span>
+                  <span class="label label-danger" ng-show="passholder.failed">x</span>
+                </p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
 
-    <div ng-repeat="passholder in sbrc.passholders">
-      <li class="overview__item overview__item-list" ng-class="{'lowest': passholder.updated}">
-        <div class="grid">
-          <div class="grid__12 grid--bp-med__6">
-            <p class="no-margin">{{ passholder.name.first }} {{ passholder.name.last }}</p>
-          </div>
-          <div class="grid__12 grid--bp-med__6">
-            <p class="status text-right no-margin">
-              <span ng-hide="passholder.isChecked" class="spinner spinner-xsmall">
-                <circle-spinner></circle-spinner>
-              </span>
-              <span ng-show="passholder.updated">OK</span>
-              <span ng-show="passholder.failed">x</span>
-            </p>
-          </div>
-
-        </div>
-      </li>
     </div>
-
-  </ul>
+  </div>
 
 </div>
 <div class="modal-footer">
