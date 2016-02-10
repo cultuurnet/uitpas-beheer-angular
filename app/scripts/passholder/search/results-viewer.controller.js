@@ -45,9 +45,11 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
    *
    */
   controller.hasCounterPermissions = function() {
-    if (activeCounter.permissions.indexOf('kansenstatuut toekennen')) {
-      controller.counterHasKansenstatuutPermission = true;
-    }
+    angular.forEach(activeCounter.permissions, function(counterPermission) {
+      if (counterPermission == 'kansenstatuut toekennen') {
+        controller.counterHasKansenstatuutPermission = true;
+      }
+    });
   };
   controller.hasCounterPermissions();
 
