@@ -4,13 +4,14 @@ describe('Controller: GroupDetailController', function () {
 
   var $q, passholderServiceMock;
   var apiUrl = 'http://example.com/';
-  var controller, $scope, $controller, $state, $rootScope, $injector;
+  var controller, $scope, $controller, $state, $rootScope, $injector, $location;
 
   var identification = 1234567;
   var response = {};
 
   // load the controller's module
   beforeEach(module('uitpasbeheerAppViews'));
+  beforeEach(module('ui.router'));
   beforeEach(function() {
     module('ubr.group', function($provide) {
       $provide.constant('appConfig', {
@@ -19,14 +20,12 @@ describe('Controller: GroupDetailController', function () {
       $provide.value('passholderService', passholderServiceMock = {});
     });
 
-    inject(function (_$controller_, _$injector_, _$rootScope_, _$state_, $templateCache) {
+    inject(function (_$controller_, _$injector_, _$rootScope_, _$state_, _$location_) {
       $rootScope = _$rootScope_;
       $injector = _$injector_;
       $controller = _$controller_;
       $state = _$state_;
-      // controller = $controller('GroupDetailController', {
-      //   group: group
-      // });
+      $location = _$location_;
     });
   });
 
@@ -40,11 +39,13 @@ describe('Controller: GroupDetailController', function () {
 
   it('should load the passholders data', function () {
     passholderServiceMock.findPass = jasmine.createSpy('findPass').and.returnValue(response);
-    $state.go('counter.main.group.activityTariffs', { identification: identification });
+    var stateParams = {
+      identification: identification,
+      passholder: {},
+      activity: {}
+    };
+    $state.go('counter.main.group.activityTariffs', stateParams);
     $rootScope.$digest();
     expect(passholderServiceMock.findPass).toHaveBeenCalledWith(identification);
-    // console.log("state", $state.current);
-    // expect($injector.invoke($state.current.resolve.identification)).toBe(identification);
   });
-
 });
