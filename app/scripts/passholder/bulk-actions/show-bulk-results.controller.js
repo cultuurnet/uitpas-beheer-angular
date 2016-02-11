@@ -76,7 +76,6 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       passholder.isChecked = true;
       passholder.failed = true;
 
-      console.log(errorResponse);
       errorCode = errorResponse.data.code;
 
       switch (errorCode) {

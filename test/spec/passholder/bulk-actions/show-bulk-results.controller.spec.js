@@ -3,7 +3,7 @@
 describe('Controller: ShowBulkResultsController', function () {
 
   var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q,
-    Counter, activeCounter, action, day;
+    Counter, activeCounter, action, bulkForm, day;
 
   var jsonPassHolder = {
       'uid': 'string',
@@ -148,6 +148,8 @@ describe('Controller: ShowBulkResultsController', function () {
       jsonParsePassHolder,
       jsonParsePassHolder
     ];
+
+    bulkForm = getSpyForm();
     action = 'address';
 
     passholderService.update.and.callFake(function () {
@@ -156,7 +158,6 @@ describe('Controller: ShowBulkResultsController', function () {
 
     controller = getController();
   }));
-  var bulkForm = getSpyForm();
 
   var getController = function () {
     return $controller('ShowBulkResultsController', {
@@ -186,24 +187,6 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.address.postalCode).toEqual('1000');
       expect(passholder.address.street).toEqual('asdfasdfasd');
       expect(passholder.updated).toBeTruthy();
-    });
-  });
-
-  fit('should renew the passholders kansenstatuut', function() {
-    action = 'kansenstatuut';
-    bulkForm = getSpyDateForm();
-    passholderService.renewKansenstatuut.and.callFake(function () {
-      return $q.resolve(passholders[0]);
-    });
-
-    controller = getController();
-
-    $scope.$digest();
-
-    angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.kansenStatuten[0].endDate).toEqual(day('2015-12-26', 'YYYY-MM-DD').toDate());
-      expect(passholder.updated).toBeTruthy();
-      expect(passholder.isChecked).toBeTruthy();
     });
   });
 
@@ -253,6 +236,87 @@ describe('Controller: ShowBulkResultsController', function () {
 
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.asyncError.message).toEqual('Pashouder werd niet geupdate op de server.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should renew the passholders kansenstatuut', function() {
+    action = 'kansenstatuut';
+    bulkForm = getSpyDateForm();
+    passholderService.renewKansenstatuut.and.callFake(function () {
+      return $q.resolve(passholders[0]);
+    });
+
+    controller = getController();
+
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.kansenStatuten[0].endDate).toEqual(day('2015-12-26', 'YYYY-MM-DD').toDate());
+      expect(passholder.updated).toBeTruthy();
+      expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should fail in renewing the passholder his kansenstatuut because the date is invalid', function () {
+    action = 'kansenstatuut';
+    bulkForm = getSpyDateForm();
+    passholderService.renewKansenstatuut.and.callFake(function () {
+      var apiError = {
+        data: {
+          code: 'KANSENSTATUUT_END_DATE_INVALID'
+        }
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Geen geldige einddatum voor kansenstatuut');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should fail in renewing the passholder his kansenstatuut because it was not updated on the server', function () {
+    action = 'kansenstatuut';
+    bulkForm = getSpyDateForm();
+    passholderService.renewKansenstatuut.and.callFake(function () {
+      var apiError = {
+        data: {
+          code: 'SOMETHING_ELSE_WENT_WRONG'
+        }
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Kansenstatuut werd niet geupdate op de server.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should fail in renewing the passholder his kansenstatuut because the passholder has no kansenstatuut', function () {
+    action = 'kansenstatuut';
+    bulkForm = getSpyDateForm();
+    jsonPassHolder.kansenStatuten = [];
+    var jsonParsePassHolder = new Passholder(jsonPassHolder);
+    passholders = [
+      jsonParsePassHolder
+    ];
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Pashouder heeft geen kansenstatuut.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
     });
