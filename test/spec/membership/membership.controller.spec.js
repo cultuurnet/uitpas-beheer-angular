@@ -5,8 +5,9 @@ describe('Controller: MembershipController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var controller, membershipService, $q, $scope, moment, $rootScope, modalInstance, deferredMemberShips, $httpBackend, $sce, $uibModal,
+  var controller, membershipService, $q, $scope, moment, $rootScope, deferredMemberShips, $httpBackend, $sce, $uibModal,
       today, yesterday, tomorrow, getMembershipWithEndDate;
+  var deferredResult;
 
   // Setup mocking data
   var memberShips = {
@@ -107,20 +108,36 @@ describe('Controller: MembershipController', function () {
         'enddateCalculation': 'FREE',
         'enddateCalculationValidityTime': null,
         'enddateCalculationFreeDate': 1451516400
+      },
+      '3': {
+        'id': 3,
+        'name': 'Jeugdhuis Leeuwerik',
+        'cardSystems': [
+          {
+            'id': 1,
+            'name': 'UiTPAS Regio Aalst',
+            'distributionKeys': []
+          }
+        ],
+        'permissionRead': true,
+        'permissionRegister': true,
+        'enddateCalculation': 'BASED_ON_REGISTRATION_DATE',
+        'enddateCalculationValidityTime': -1,
+        'enddateCalculationFreeDate': 1451516400
       }
     }
   };
   var passholder = {
     passNumber: '01234567891234', points: 123
   };
-  var fakeModal = {
-    result: {
-      then: function (confirmCallback, cancelCallback) {
-        //Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
-        this.confirmCallBack = confirmCallback;
-        this.cancelCallback = cancelCallback;
-      }
-    },
+  var actualOptions, fakeModal = {
+    // result: {
+    //   then: function (confirmCallback, cancelCallback) {
+    //     //Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
+    //     this.confirmCallBack = confirmCallback;
+    //     this.cancelCallback = cancelCallback;
+    //   }
+    //},
     close: function (item) {
       //The user clicked OK on the modal dialog, call the stored confirm callback with the selected item
       this.result.confirmCallBack(item);
@@ -128,6 +145,12 @@ describe('Controller: MembershipController', function () {
     dismiss: function (type) {
       //The user clicked cancel on the modal dialog, call the stored cancel callback
       this.result.cancelCallback(type);
+    },
+    resolve: {
+      association: jasmine.any(Function),
+      passholder: jasmine.any(Function),
+      recentlyExpired: jasmine.any(Function),
+      membership: jasmine.any(Function)
     }
   };
 
@@ -142,15 +165,16 @@ describe('Controller: MembershipController', function () {
     $httpBackend = $injector.get('$httpBackend');
     $uibModal = _$uibModal_;
 
+    deferredResult = $q.defer();
+    fakeModal.result = deferredResult.promise;
+
     membershipService  = jasmine.createSpyObj('membershipService', ['list']);
     deferredMemberShips = $q.defer();
     var memberShipPromise = deferredMemberShips.promise;
     membershipService.list.and.returnValue(memberShipPromise);
 
-    var actualOptions;
     spyOn($uibModal, 'open').and.callFake(function(options){
       actualOptions = options;
-
       return fakeModal;
     });
 
@@ -162,7 +186,7 @@ describe('Controller: MembershipController', function () {
       $scope: $scope,
       MembershipEndDateCalculator: $injector.get('MembershipEndDateCalculator'),
       $uibModal: $uibModal,
-      $uibModalInstance: modalInstance
+      $uibModalInstance: fakeModal
     });
 
     yesterday = moment().subtract(1, 'd');
@@ -229,29 +253,72 @@ describe('Controller: MembershipController', function () {
   it('should return if application for an association is possible', function () {
     expect($scope.canApplyFor(memberShips.allAssociations['1'])).toBe(true);
     expect($scope.canApplyFor(memberShips.allAssociations['2'])).toBe(false);
+    expect($scope.canApplyFor(memberShips.allAssociations['3'])).toBe(false);
+
   });
 
   it('should return a title when no register permissions', function () {
     // Okay this is just bad code, should be refactored, see membership.controller->registerTitle
     expect($scope.registerTitle(memberShips.allAssociations['1'])).toBeUndefined();
     expect($scope.registerTitle(memberShips.allAssociations['2'])).not.toBeUndefined();
+    expect($scope.registerTitle(memberShips.allAssociations['3'])).toContain('te oud');
   });
 
-  it('can open the membership registration modal', function () {
-    $scope.openMembershipRegistrationModal(memberShips.allAssociations['0'], true);
-    //$scope.$digest();
+  it('should open the membership registration modal', function () {
+    var recentlyExpired = true;
+    var association = memberShips.allAssociations['1'];
+
+
+    $scope.openMembershipRegistrationModal(association, recentlyExpired);
     expect($uibModal.open).toHaveBeenCalled();
+
+    expect(actualOptions.resolve.association()).toBe(association);
+    expect(actualOptions.resolve.passholder()).toBe(memberShips.passholder);
+    expect(actualOptions.resolve.recentlyExpired()).toBe(recentlyExpired);
   });
 
-  it('can open the membership renewal modal', function () {
-    $scope.openMembershipRenewalModal(memberShips.passholder.memberships[0]);
-    //$scope.$digest();
-    expect($uibModal.open).toHaveBeenCalled();
+  it('should emit when modal is closed', function () {
+    var recentlyExpired = true;
+    var association = memberShips.allAssociations['1'];
+
+
+    $scope.openMembershipRegistrationModal(association, recentlyExpired);
+    var membership = {};
+    spyOn($rootScope, '$emit');
+    deferredResult.resolve(membership);
+    $scope.$digest();
+
+    expect($rootScope.$emit).toHaveBeenCalledWith('membershipModified', membership);
   });
 
-  it('can open the membership stop modal', function () {
-    $scope.openMembershipStopModal(memberShips.passholder.memberships[0]);
-    //$scope.$digest();
+  it('should open the membership renewal modal', function () {
+    var membership = { association: { id: 1 } }, // id=1 results in allAssociation(where id = 1)
+        association = memberShips.allAssociations['1'];
+
+    $scope.openMembershipRenewalModal(membership);
     expect($uibModal.open).toHaveBeenCalled();
+
+    expect(actualOptions.resolve.membership()).toBe(membership);
+    expect(actualOptions.resolve.association()).toBe(association);
+    expect(actualOptions.resolve.passholder()).toBe(memberShips.passholder);
+  });
+
+  it('should open the membership stop modal', function () {
+    var membership = { id: 1 };
+
+    $scope.openMembershipStopModal(membership);
+    expect($uibModal.open).toHaveBeenCalled();
+
+    expect(actualOptions.resolve.membership()).toBe(membership);
+    expect(actualOptions.resolve.passholder()).toBe(memberShips.passholder);
+  });
+
+  it('should close the modal', function () {
+    spyOn(fakeModal, 'dismiss');
+
+    $scope.closeModal();
+    $scope.$digest();
+
+    expect(fakeModal.dismiss).toHaveBeenCalled();
   });
 });
