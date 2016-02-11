@@ -2,7 +2,8 @@
 
 describe('Controller: ShowBulkResultsController', function () {
 
-  var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q, action;
+  var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q,
+    Counter, activeCounter, action, day;
 
   var jsonPassHolder = {
       'uid': 'string',
@@ -40,8 +41,8 @@ describe('Controller: ShowBulkResultsController', function () {
           'status': 'ACTIVE',
           'endDate': '2015-12-26',
           'cardSystem': {
-            'id': '4a567b89',
-            'name': 'UiTPAS Regio Aalst'
+            'id': '1',
+            'name': 'UiTPAS Dender'
           }
         }
       ],
@@ -52,11 +53,31 @@ describe('Controller: ShowBulkResultsController', function () {
           'status': 'LOCAL_STOCK',
           'type': 'CARD',
           'cardSystem': {
-            'id': '4a567b89',
-            'name': 'UiTPAS Regio Aalst'
+            'id': '1',
+            'name': 'UiTPAS Dender'
           }
         }
       ]
+  };
+
+  var activeCounterJson = {
+    'id': '452',
+    'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+    'name': 'CC de Werf',
+    'role': 'admin',
+    'actorId': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+    'cardSystems': {
+      '1': {
+        'permissions': ['kansenstatuut toekennen'],
+        'groups': ['Geauthorizeerde registratie balies'],
+        'id': 1,
+        'name': 'UiTPAS Dender',
+        'distributionKeys': []
+      }
+    },
+    //'permissions': ['registratie', 'kansenstatuut toekennen'],
+    'permissions': ['kansenstatuut toekennen'],
+    'groups': ['Geauthorizeerde registratie balies']
   };
 
   var getSpyForm = function (formData) {
@@ -81,10 +102,26 @@ describe('Controller: ShowBulkResultsController', function () {
     return spyForm;
   };
 
+  var getSpyDateForm = function (formData) {
+    var spyForm = {
+      $valid: true,
+      $setSubmitted: jasmine.createSpy('$setSubmitted'),
+      endDate: {
+        $viewValue: '2016-12-31'
+      }
+    };
+
+    if (formData) {
+      angular.merge(spyForm, formData);
+    }
+
+    return spyForm;
+  };
+
   // load the controller's module
   beforeEach(module('ubr.passholder'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
-    passholderService = jasmine.createSpyObj('passholderService', ['update']);
+    passholderService = jasmine.createSpyObj('passholderService', ['update', 'renewKansenstatuut']);
     $provide.provider('passholderService', {
       $get: function () {
         return passholderService;
@@ -92,14 +129,17 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   }));
 
-  beforeEach(inject(function (_$controller_, $rootScope, $injector, _$state_) {
+  beforeEach(inject(function (_$controller_, $rootScope, $injector, _$state_, _day_) {
     $controller = _$controller_;
     $state = _$state_;
     $scope = $rootScope.$new();
+    day = _day_;
     $uibModalStack = jasmine.createSpyObj('$uibModalStack', ['dismissAll']);
     $q = $injector.get('$q');
     Passholder = $injector.get('Passholder');
     var jsonParsePassHolder = new Passholder(jsonPassHolder);
+    Counter = $injector.get('Counter');
+    activeCounter = new Counter(angular.copy(activeCounterJson));
 
     passholders = [
       jsonParsePassHolder,
@@ -116,14 +156,16 @@ describe('Controller: ShowBulkResultsController', function () {
 
     controller = getController();
   }));
+  var bulkForm = getSpyForm();
 
   var getController = function () {
     return $controller('ShowBulkResultsController', {
       passholders: passholders,
-      bulkForm: getSpyForm(),
+      bulkForm: bulkForm,
       action: action,
       passholderService: passholderService,
-      $uibModalStack: $uibModalStack
+      $uibModalStack: $uibModalStack,
+      activeCounter: activeCounter
     });
   };
 
@@ -136,7 +178,7 @@ describe('Controller: ShowBulkResultsController', function () {
     expect($uibModalStack.dismissAll).toHaveBeenCalled();
   });
 
-  it('should update all the passholders', function () {
+  it('should update all the passholders address', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
@@ -147,7 +189,25 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   });
 
-  it('should fail in updating the passholder because the action is not allowed', function () {
+  fit('should renew the passholders kansenstatuut', function() {
+    action = 'kansenstatuut';
+    bulkForm = getSpyDateForm();
+    passholderService.renewKansenstatuut.and.callFake(function () {
+      return $q.resolve(passholders[0]);
+    });
+
+    controller = getController();
+
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.kansenStatuten[0].endDate).toEqual(day('2015-12-26', 'YYYY-MM-DD').toDate());
+      expect(passholder.updated).toBeTruthy();
+      expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should fail in updating the passholder address because the action is not allowed', function () {
     passholderService.update.and.callFake(function () {
       var apiError = {
         code: 'ACTION_NOT_ALLOWED'
@@ -164,7 +224,7 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   });
 
-  it('should fail in updating the passholder because the passholder could not be updated', function () {
+  it('should fail in updating the passholder address because the passholder could not be updated', function () {
     passholderService.update.and.callFake(function () {
       var apiError = {
         code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER'
@@ -181,7 +241,7 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   });
 
-  it('should fail in updating the passholder because something unknown went wrong', function () {
+  it('should fail in updating the passholder address because something unknown went wrong', function () {
     passholderService.update.and.callFake(function () {
       var apiError = {
         code: 'SOMETHING_ELSE_WENT_WRONG'

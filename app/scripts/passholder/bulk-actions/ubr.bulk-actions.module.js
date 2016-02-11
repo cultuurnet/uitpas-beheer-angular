@@ -125,13 +125,16 @@ angular
                 bulkForm: function() {
                   return bulkForm;
                 },
+                action: function() {
+                  return action;
+                },
                 resolve: {
                   bulkSelection: function() {
                     return bulkSelection;
-                  },
-                  action: function() {
-                    return action;
                   }
+                },
+                activeCounter: function (counterService) {
+                  return counterService.getActive();
                 }
               },
               controller: 'ShowBulkResultsController',
