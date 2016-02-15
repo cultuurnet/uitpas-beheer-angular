@@ -2,9 +2,9 @@
 
 describe('Controller: GroupDetailController', function () {
 
-  var $q, passholderServiceMock;
+  var passholderServiceMock;
   var apiUrl = 'http://example.com/';
-  var controller, $scope, $controller, $state, $rootScope, $injector, $location;
+  var $controller, $state, $rootScope, $injector, $location;
 
   var identification = 1234567;
   var response = {};

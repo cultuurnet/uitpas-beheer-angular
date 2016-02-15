@@ -5,7 +5,7 @@ describe('Controller: PassholderMembershipRegisterController', function () {
   beforeEach(module('uitpasbeheerApp'));
 
   var $scope, $httpBackend, $q, $controller, association, passholder, membershipService, modalInstance, controller, moment;
-  var endDate, isRecentlyExpired, mockedMembershipEndDateCalculator;
+  var endDate, isRecentlyExpired;
 
   isRecentlyExpired = false;
 
@@ -25,22 +25,6 @@ describe('Controller: PassholderMembershipRegisterController', function () {
     message: 'No active counter set for the current user.',
     code: 'COUNTER_NOT_SET'
   };
-
-  function setMembershipEndDateOnDateOfBirth (isValid) {
-    association.enddateCalculation = 'BASED_ON_DATE_OF_BIRTH';
-    association.enddateCalculationValidityTime = isValid ? 11 : 13;
-    passholder.dateOfBirth = (Date.now()/1000)-(31536000*12); // born exactly 12 years ago
-  }
-
-  function setMembershipEndDateOnRegistrationDate () {
-    association.enddateCalculation = 'BASED_ON_REGISTRATION_DATE';
-    association.enddateCalculationValidityTime = 5;
-  }
-
-  function setMembershipEndDateOnFree () {
-    association.enddateCalculation = 'FREE';
-    association.enddateCalculationFreeDate = (Date.now()/1000)+(31536000/52); // one week from now
-  }
 
   beforeEach(inject(function ($injector, $rootScope){
     $controller = $injector.get('$controller');

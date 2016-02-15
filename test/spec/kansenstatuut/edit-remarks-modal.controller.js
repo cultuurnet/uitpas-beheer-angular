@@ -10,16 +10,10 @@ describe('Controller: EditRemarksModalController', function () {
 
   // Setup mocking data
   var passholder = {
-    passNumber: '01234567891234', points: 123
+    passNumber: '01234567891234',
+    points: 123
   };
   var fakeModal = {
-    // result: {
-    //   then: function (confirmCallback, cancelCallback) {
-    //     //Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
-    //     this.confirmCallBack = confirmCallback;
-    //     this.cancelCallback = cancelCallback;
-    //   }
-    //},
     close: function (item) {
       //The user clicked OK on the modal dialog, call the stored confirm callback with the selected item
       this.result.confirmCallBack(item);
