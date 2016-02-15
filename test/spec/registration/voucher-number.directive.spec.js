@@ -2,7 +2,7 @@
 
 describe('Directive: Voucher number', function () {
 
-  var scope, registrationController, $q, counterService, voucherInputElement;
+  var scope, registrationController, $q, counterService, voucherInputElement, compile;
 
   var priceInfo = {
     price: '5,25',
@@ -17,8 +17,15 @@ describe('Directive: Voucher number', function () {
     }
   };
 
+  function compileElement () {
+    voucherInputElement = angular.element('<input name="voucherNumber" ng-change="refreshPriceInfo()" ubr-card-system="cardSystemId" current-controller="parentController" pass-to-check="pass" type="text" ng-model="voucherNumber" ubr-voucher-number>');
+    compile(voucherInputElement)(scope);
+
+    scope.$digest();
+  }
+
   beforeEach(module('ubr.registration', function ($provide) {
-    counterService = jasmine.createSpyObj('counterService', ['getRegistrationPriceInfo']);
+    counterService = jasmine.createSpyObj('counterService', ['getRegistrationPriceInfo', 'getUpgradePriceInfo']);
     $provide.provider('counterService', {
       $get: function () {
         return counterService;
@@ -30,34 +37,31 @@ describe('Directive: Voucher number', function () {
     $q = $injector.get('$q');
     scope = $rootScope.$new();
     scope.registrationForm = {};
+    compile = $compile;
 
     registrationController = {
-      price: 0
+      price: 0,
+      pass: {},
+      passholder: {}
     };
+    var pass = { number: 'pass number'};
     registrationController.handleAsyncError = jasmine.createSpy('handleAsyncError');
     registrationController.clearAsyncError = jasmine.createSpy('clearAsyncError');
-    scope.prc = registrationController;
     scope.voucherNumber = 'green-voucher';
-
-    voucherInputElement = angular.element('<input name="voucherNumber" ng-change="refreshPriceInfo()" type="text" ng-model="voucherNumber" ubr-voucher-number>');
-
-    $compile(voucherInputElement)(scope);
-    scope.$digest();
+    scope.parentController = registrationController;
+    scope.pass = pass;
   }));
 
   it('should provide error info when trying to use an invalid voucher', function () {
-    var deferredPriceInfo = $q.defer();
-    var priceInfoPromise = deferredPriceInfo.promise;
     var returnedError = {
       code: 'INVALID_VOUCHER_STATUS'
     };
-
-    counterService.getRegistrationPriceInfo.and.returnValue(priceInfoPromise);
+    counterService.getRegistrationPriceInfo.and.returnValue($q.reject(returnedError));
+    compileElement();
 
     voucherInputElement.val('yellow-voucher').trigger('input');
     scope.$apply();
 
-    deferredPriceInfo.reject(returnedError);
     scope.$digest();
 
     var ngModelController = voucherInputElement.controller('ngModel');
@@ -69,18 +73,15 @@ describe('Directive: Voucher number', function () {
   });
 
   it('should provide error info when something goes wrong while retrieving the registration price', function () {
-    var deferredPriceInfo = $q.defer();
-    var priceInfoPromise = deferredPriceInfo.promise;
     var returnedError = {
       code: 'SOME_API_ERROR'
     };
-
-    counterService.getRegistrationPriceInfo.and.returnValue(priceInfoPromise);
+    counterService.getRegistrationPriceInfo.and.returnValue($q.reject(returnedError));
+    compileElement();
 
     voucherInputElement.val('yellow-voucher').trigger('input');
     scope.$apply();
 
-    deferredPriceInfo.reject(returnedError);
     scope.$digest();
 
     var ngModelController = voucherInputElement.controller('ngModel');
@@ -92,15 +93,12 @@ describe('Directive: Voucher number', function () {
   });
 
   it('should refresh the price info', function () {
-    var deferredPriceInfo = $q.defer();
-    var priceInfoPromise = deferredPriceInfo.promise;
-
-    counterService.getRegistrationPriceInfo.and.returnValue(priceInfoPromise);
+    counterService.getRegistrationPriceInfo.and.returnValue($q.resolve(priceInfo));
+    compileElement();
 
     voucherInputElement.val('yellow-voucher').trigger('input');
     scope.$apply();
 
-    deferredPriceInfo.resolve(priceInfo);
     scope.$digest();
 
     var ngModelController = voucherInputElement.controller('ngModel');
@@ -110,15 +108,12 @@ describe('Directive: Voucher number', function () {
   });
 
   it('should refresh the price info to the priceInfo.price if no voucherNumber is present', function () {
-    var deferredPriceInfo = $q.defer();
-    var priceInfoPromise = deferredPriceInfo.promise;
-
-    counterService.getRegistrationPriceInfo.and.returnValue(priceInfoPromise);
+    counterService.getRegistrationPriceInfo.and.returnValue($q.resolve(priceInfo));
+    compileElement();
 
     voucherInputElement.val('').trigger('input');
     scope.$apply();
 
-    deferredPriceInfo.resolve(priceInfo);
     scope.$digest();
 
     var ngModelController = voucherInputElement.controller('ngModel');
@@ -126,6 +121,52 @@ describe('Directive: Voucher number', function () {
     expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
     expect(ngModelController.$error.voucher).toBeFalsy();
     expect(registrationController.unreducedPrice).toEqual('5,25');
+  });
+
+  it('can send different data based on the parent controller and return error information', function () {
+    scope.parentController.upgradeData = {
+      upgradeReason: 'CARD_UPGRADE',
+      withNewCard: 'NO_NEW_CARD',
+      passToCheck: scope.pass
+    };
+    scope.cardSystemId = '1';
+    var returnedError = {
+      code: 'INVALID_VOUCHER_STATUS'
+    };
+    counterService.getUpgradePriceInfo.and.returnValue($q.reject(returnedError));
+    compileElement();
+
+    voucherInputElement.val('yellow-voucher').trigger('input');
+    scope.$apply();
+
+    scope.$digest();
+
+    var ngModelController = voucherInputElement.controller('ngModel');
+
+    expect(counterService.getUpgradePriceInfo).toHaveBeenCalled();
+    expect(ngModelController.$error.redeemable).toBeTruthy();
+    expect(ngModelController.$error.voucher).toBeTruthy();
+    expect(ngModelController.$touched).toBeTruthy();
+  });
+
+  it('can send different data based on the parent controller and refresh the price information', function () {
+    scope.parentController.upgradeData = {
+      upgradeReason: 'NEW_CARD',
+      withNewCard: 'NEW_CARD',
+      passToCheck: scope.pass
+    };
+    counterService.getRegistrationPriceInfo.and.returnValue($q.resolve(priceInfo));
+    compileElement();
+
+    voucherInputElement.val('yellow-voucher').trigger('input');
+    scope.$apply();
+
+    scope.$digest();
+
+    var ngModelController = voucherInputElement.controller('ngModel');
+
+    expect(counterService.getRegistrationPriceInfo).toHaveBeenCalled();
+    expect(ngModelController.$error.voucher).toBeFalsy();
   });
 });
 

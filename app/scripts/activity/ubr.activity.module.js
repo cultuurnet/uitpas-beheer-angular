@@ -39,11 +39,15 @@ angular
         },
         /* @ngInject */
         onEnter: function(passholder, identification, activity, $state, $uibModal) {
+          var modalSize = 'sm';
+          if (Object.keys(activity.sales.base).length > 3) {
+            modalSize = '';
+          }
           $uibModal
             .open({
               animation: true,
               templateUrl: 'views/activity/modal-passholder-activity-tariffs.html',
-              size: 'sm',
+              size: modalSize,
               resolve: {
                 passholder: function () {
                   return passholder;

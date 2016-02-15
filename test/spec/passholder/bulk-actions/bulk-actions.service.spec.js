@@ -7,219 +7,123 @@ describe('Service: bulkActionsService', function () {
     $provide.constant('appConfig', {
       apiUrl: apiUrl
     });
+    $window = jasmine.createSpy();
+    $provide.value('$window', $window);
   }));
 
-  var bulkActionsService, $httpBackend, $q, $interval;
+  var bulkActionsService, $window, $httpParamSerializer, BulkSelection, SearchParameters,
+    PassholderSearchResults, searchParameters, bulkSelection, searchResults;
 
-  var jsonExportSelection = {
-    selection: [
+  var jsonIdentity = {
+    'uitPas': {
+      'number': '0930000422202',
+      'kansenStatuut': false,
+      'status': 'ACTIVE'
+    },
+    'passHolder': {
+      'name': {
+        'first': 'Victor',
+        'last': 'D\'Hooghe'
+      },
+      'address': {
+        'street': 'Baanweg 60',
+        'postalCode': '9308',
+        'city': 'Aalst'
+      },
+      'birth': {
+        'date': '2007-11-15',
+        'place': 'Aalst'
+      },
+      'gender': 'MALE',
+      'nationality': 'belg',
+      'privacy': {
+        'email': false,
+        'sms': false
+      },
+      'contact': {
+        'email': 'email@email.com'
+      },
+      kansenStatuten: [{
+        status: 'ACTIVE',
+        endDate: '2015-12-06',
+        cardSystem: {
+          name: 'UiTPAS Regio Aalst',
+          id: '1'
+        }
+      }],
+      uitPassen: [],
+      'points': 309,
+      'picture': 'picture-in-base64-format',
+      'remarks': 'remarks',
+      'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35'
+    }
+  };
+  var jsonResultCollection = {
+    itemsPerPage: 10,
+    totalItems: 50,
+    member: [
+      jsonIdentity,
+      jsonIdentity,
+      jsonIdentity,
+      jsonIdentity,
+      jsonIdentity,
+      jsonIdentity,
+      jsonIdentity,
+      jsonIdentity,
+      jsonIdentity,
+      jsonIdentity
+    ],
+    invalidUitpasNumbers: [
+      '0987654321012',
+      '0987654321013',
+      '0987654321014',
+      '0987654321015',
+      '0987654321016'
+    ],
+    firstPage: 'http://culpas-silex.dev/passholders?page=1',
+    lastPage: 'http://culpas-silex.dev/passholders?page=5',
+    previousPage: 'http://culpas-silex.dev/passholders?page=1',
+    nextPage: 'http://culpas-silex.dev/passholders?page=2'
+  };
+
+  var searchParams = {
+    'uitpasNumber': [
       '0123456789012',
       '0123456789013',
       '0123456789014',
       '0123456789015'
     ],
-    searchParameters:  {
-      'uitpasNumber': [
-        '0123456789012',
-        '0123456789013',
-        '0123456789014',
-        '0123456789015'
-      ],
-      'dateOfBirth': '1983-02-03',
-      'firstName': 'Albe*',
-      'name': 'Conta*',
-      'street': 'Bondgenotenlaan',
-      'city': 'Leuven',
-      'email': 'foo@bar.com',
-      'membershipAssociationId': '5',
-      'membershipStatus': 'ACTIVE'
-    }
+    'dateOfBirth': '1983-02-03',
+    'firstName': 'Albe*',
+    'name': 'Conta*',
+    'street': 'Bondgenotenlaan',
+    'city': 'Leuven',
+    'email': 'foo@bar.com',
+    'membershipAssociationId': '5',
+    'membershipStatus': 'ACTIVE'
   };
 
-  function getExportSelection () {
-    return angular.copy(jsonExportSelection);
-  }
-
   beforeEach(inject(function ($injector) {
-    $httpBackend = $injector.get('$httpBackend');
     bulkActionsService = $injector.get('bulkActionsService');
-    $q = $injector.get('$q');
-    $interval = $injector.get('$interval');
+    $window = $injector.get('$window');
+    $httpParamSerializer = $injector.get('$httpParamSerializer');
+    BulkSelection = $injector.get('BulkSelection');
+    SearchParameters = $injector.get('SearchParameters');
+    PassholderSearchResults = $injector.get('PassholderSearchResults');
+
+    searchResults = new PassholderSearchResults(jsonResultCollection);
+    searchParameters = new SearchParameters();
+    searchParameters.fromParams(searchParams);
+
+    bulkSelection = new BulkSelection(searchResults, searchParameters);
   }));
 
-  it('can wait for an export to be generated', function(done) {
-    var exportStatus = {
-      completed: false
-    };
+  it('redirects to the xls download url', function() {
+    bulkSelection.addUitpasNumberToSelection('0123456789012');
 
-    var confirmResolved = function (downloadLocation) {
-      expect(downloadLocation).toEqual('http://www.download.me/passholders/export/' + exportId);
-      done();
-    };
-    var exportId = 5;
+    bulkActionsService.exportPassholders(bulkSelection);
 
-    $httpBackend
-      .expectGET(apiUrl + 'passholders/bulkoperations/export/' + exportId)
-      .respond(200, exportStatus);
-
-    bulkActionsService
-      .awaitPassholdersExport(exportId)
-      .then(confirmResolved);
-
-    $interval.flush(2000);
-    $httpBackend.flush();
-
-    exportStatus.completed = true;
-    exportStatus.download = 'http://www.download.me/passholders/export/' + exportId;
-
-    $httpBackend
-      .expectGET(apiUrl + 'passholders/bulkoperations/export/' + exportId)
-      .respond(200, exportStatus);
-
-    $interval.flush(2000);
-    $httpBackend.flush();
+    expect($window.location).toEqual('http://example.com/passholders.xls?city=Leuven&dateOfBirth=1983-02-03&email=foo@bar.com&firstName=Albe*&membershipAssociationId=5&membershipStatus=ACTIVE&name=Conta*&selection%5B%5D=0123456789012&street=Bondgenotenlaan');
   });
 
-  it('stops waiting for an export to be generated on server error', function (done) {
-    var confirmError = function () {
-      done();
-    };
-    var exportId = 5;
-
-    $httpBackend
-      .expectGET(apiUrl + 'passholders/bulkoperations/export/' + exportId)
-      .respond(403);
-
-    bulkActionsService
-      .awaitPassholdersExport(exportId)
-      .catch(confirmError);
-
-    $interval.flush(2000);
-    $httpBackend.flush();
-  });
-
-  it('can request an export with selection parameters', function (done) {
-    var exportSelection = getExportSelection();
-
-    var exportRequestResponse = {
-      id: 5
-    };
-
-    var confirmExportRequested = function (response) {
-      expect(response).toBe(exportRequestResponse.id);
-      done();
-    };
-
-    $httpBackend
-      .expectPOST(apiUrl + 'passholders/bulkoperations/export')
-      .respond(200, exportRequestResponse);
-
-    bulkActionsService
-      .requestPassholdersExport(exportSelection)
-      .then(confirmExportRequested);
-
-    $httpBackend.flush();
-  });
-
-  it ('rejects when it can not request an export', function (done) {
-    var exportSelection = getExportSelection();
-
-    var confirmFailure = function () {
-      done();
-    };
-
-    $httpBackend
-      .expectPOST(apiUrl + 'passholders/bulkoperations/export')
-      .respond(403);
-
-    bulkActionsService
-      .requestPassholdersExport(exportSelection)
-      .catch(confirmFailure);
-
-    $httpBackend.flush();
-  });
-
-  it ('can request an export and await the download path', function (done) {
-    var exportSelection = getExportSelection();
-    var exportId = 5;
-
-    var exportRequestResponse = {
-      id: exportId
-    };
-
-    var exportStatus = {
-      completed: true,
-      download: 'http://www.download.me/passholders/export/' + exportId
-    };
-
-    var confirmExportLocation = function (exportLocation) {
-      expect(exportLocation).toBe(exportStatus.download);
-      done();
-    };
-
-    $httpBackend
-      .expectPOST(apiUrl + 'passholders/bulkoperations/export')
-      .respond(200, exportRequestResponse);
-
-    bulkActionsService
-      .exportPassholders(exportSelection)
-      .then(confirmExportLocation);
-
-    $httpBackend.flush();
-
-    $httpBackend
-      .expectGET(apiUrl + 'passholders/bulkoperations/export/' + exportId)
-      .respond(200, exportStatus);
-
-    $interval.flush(2000);
-    $httpBackend.flush();
-  });
-
-  it('rejects when an export can not be requested', function (done) {
-    var exportSelection = getExportSelection();
-
-    var confirmError = function () {
-      done();
-    };
-
-    $httpBackend
-      .expectPOST(apiUrl + 'passholders/bulkoperations/export')
-      .respond(403);
-
-    bulkActionsService
-      .exportPassholders(exportSelection)
-      .catch(confirmError);
-
-    $httpBackend.flush();
-  });
-
-  it('rejects when an export can not be generated', function (done) {
-    var exportSelection = getExportSelection();
-    var exportId = 5;
-
-    var exportRequestResponse = {
-      id: exportId
-    };
-
-    var confirmError = function () {
-      done();
-    };
-
-    $httpBackend
-      .expectPOST(apiUrl + 'passholders/bulkoperations/export')
-      .respond(200, exportRequestResponse);
-
-    bulkActionsService
-      .exportPassholders(exportSelection)
-      .catch(confirmError);
-
-    $httpBackend.flush();
-
-    $httpBackend
-      .expectGET(apiUrl + 'passholders/bulkoperations/export/' + exportId)
-      .respond(403);
-
-    $interval.flush(2000);
-    $httpBackend.flush();
-  });
 });

@@ -462,7 +462,7 @@ describe('Service: counterService', function () {
     $httpBackend.flush();
   });
 
-  it('can get the price for a registration with voucher number', function (done) {
+  it('can get the price for a registration with limited information', function (done) {
     var pass = new Pass({
       uitPas: {
         number: '123456789'
@@ -500,6 +500,127 @@ describe('Service: counterService', function () {
       .then(assertPriceInfo);
 
     deferredRequest.resolve(priceResponse);
+
+    $httpBackend.flush();
+  });
+
+  it('can return error information when it can notget the price for a registration', function (done) {
+    var pass = new Pass({
+      uitPas: {
+        number: '123456789'
+      }
+    });
+    var passholder = new Passholder();
+
+    var errorResponse = {
+      code: 'NOT_AUTHORIZED'
+    };
+
+    var assertError = function() {
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'uitpas/' + pass.number + '/price?reason=FIRST_CARD')
+      .respond(403, $q.reject(errorResponse));
+
+    counterService
+      .getRegistrationPriceInfo(pass, passholder)
+      .catch(assertError);
+
+
+    $httpBackend.flush();
+  });
+
+  it('can get the price for an upgrade', function (done) {
+    var cardSystemId = 1;
+    var passholder = new Passholder({
+      birth: {
+        date: '1983-02-03'
+      },
+      address: {
+        postalCode: 3000
+      }
+    });
+    var voucherNumber = 'this-is-a-coupon';
+
+    var priceResponse = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+
+    var assertPriceInfo = function(response) {
+      expect(response).toEqual(priceResponse);
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'cardsystem/' + cardSystemId + '/price?date_of_birth=1983-02-03&postal_code=3000&voucher_number=this-is-a-coupon')
+      .respond(200, $q.resolve(priceResponse));
+
+    counterService.getUpgradePriceInfo(cardSystemId, passholder, voucherNumber).then(assertPriceInfo);
+
+    $httpBackend.flush();
+  });
+
+  it('can get the price for an upgrade with limited information', function (done) {
+    var cardSystemId = 1;
+    var passholder = new Passholder();
+    var voucherNumber = false;
+
+    var priceResponse = {
+      price: '5,25',
+      kansenStatuut: true,
+      ageRange: {
+        from: 15,
+        to: 25
+      },
+      voucherType: {
+        name: 'Party people',
+        prefix: 'Pp'
+      }
+    };
+
+    var assertPriceInfo = function(response) {
+      expect(response).toEqual(priceResponse);
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'cardsystem/' + cardSystemId + '/price')
+      .respond(200, $q.resolve(priceResponse));
+
+    counterService.getUpgradePriceInfo(cardSystemId, passholder, voucherNumber).then(assertPriceInfo);
+
+    $httpBackend.flush();
+  });
+
+  it('can return error information when it can not get the price for an upgrade', function (done) {
+    var cardSystemId = 1;
+    var passholder = new Passholder();
+    var voucherNumber = false;
+
+    var errorResponse = {
+      code: 'NOT_AUTHORIZED'
+    };
+
+    var assertError = function() {
+      done();
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'cardsystem/' + cardSystemId + '/price')
+      .respond(403, $q.reject(errorResponse));
+
+    counterService.getUpgradePriceInfo(cardSystemId, passholder, voucherNumber).catch(assertError);
 
     $httpBackend.flush();
   });

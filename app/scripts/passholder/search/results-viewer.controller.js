@@ -12,7 +12,8 @@ angular
   .controller('ResultsViewerController', ResultsViewerController);
 
 /* @ngInject */
-function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter, BulkSelection, PassholderSearchResults, bulkActionsService) {
+function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter,
+                                  BulkSelection, PassholderSearchResults, bulkActionsService) {
   function getSearchParametersFromState() {
     var params = new SearchParameters();
     params.fromParams($state.params);
@@ -57,6 +58,9 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
    * @returns {boolean}
    */
   controller.noSearchDone = function () {
+    if (controller.results === null) {
+      return true;
+    }
     return (controller.results.totalItems === 0 && controller.hasDefaultParameters());
   };
 
@@ -68,6 +72,10 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   controller.isShowingResults = function () {
     var results = controller.results;
     var showResults = false;
+
+    if (results === null) {
+      return showResults;
+    }
 
     if (results && results.totalItems !== 0) {
       showResults = !results.hasUnknownNumbers() || results.hasConfirmedUnknownNumbers();
@@ -141,6 +149,9 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
       case 'export':
         controller.doBulkExport();
         break;
+      case 'address':
+        controller.bulk.submitBusy = false;
+        $state.go('counter.main.advancedSearch.bulkAddress', { bulkSelection: controller.bulk.selection });
     }
   };
 
@@ -149,26 +160,10 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
    */
   controller.doBulkExport = function () {
     controller.bulk.export.requestingExport = true;
-    controller.bulk.export.downloadLink = null;
-    controller.bulk.export.error = false;
 
-    var showExportDownloadLink = function (downloadLink) {
-      controller.bulk.export.downloadLink = downloadLink;
-    };
-
-    var informAboutFailure = function () {
-      controller.bulk.export.error = true;
-    };
-
-    var releaseForm = function () {
-      controller.bulk.export.requestingExport = false;
-      controller.bulk.submitBusy = false;
-    };
-
-    bulkActionsService
-      .exportPassholders(controller.bulk.selection.toBulkSelection())
-      .then(showExportDownloadLink, informAboutFailure)
-      .finally(releaseForm);
+    bulkActionsService.exportPassholders(controller.bulk.selection);
+    controller.bulk.export.requestingExport = false;
+    controller.bulk.submitBusy = false;
   };
 
   /**

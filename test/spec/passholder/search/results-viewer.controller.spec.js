@@ -2,7 +2,8 @@
 
 describe('Controller: Results Viewer', function () {
 
-  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter, bulkActionsService, $q;
+  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter, bulkActionsService,
+    $q, BulkSelection;
 
   beforeEach(module('ubr.passholder.search'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
@@ -21,9 +22,10 @@ describe('Controller: Results Viewer', function () {
     });
   }));
 
-  beforeEach(inject(function (_$controller_, _$rootScope_, _$q_) {
+  beforeEach(inject(function (_$controller_, _$rootScope_, _$q_, $injector) {
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders', 'goToPage']);
     $state = jasmine.createSpyObj('$state', ['go']);
+    BulkSelection = $injector.get('BulkSelection');
 
     $state.params = {};
     $q = _$q_;
@@ -175,7 +177,7 @@ describe('Controller: Results Viewer', function () {
     expect(controller.bulk.selection.addUitpasNumberToSelection).toHaveBeenCalledWith(pass.number);
   });
 
-  it('can start a bulk action and delegate the work', function () {
+  it('can start a bulk action of type export and delegate the work', function () {
     controller.bulk.action = 'export';
     spyOn(controller, 'doBulkExport');
     controller.doBulkAction();
@@ -183,43 +185,20 @@ describe('Controller: Results Viewer', function () {
     expect(controller.doBulkExport).toHaveBeenCalled();
   });
 
-  it('can request a bulk export and report success to the user', function () {
-    var expectedParameters = {
-      selection: [ '0123456789012' ],
-      searchParameters: {}
-    };
-    var downloadLink = 'https://media.giphy.com/media/nb0B734bUuTa8/giphy.gif';
-    controller.bulk.selection.uitpasNumberSelection = ['0123456789012'];
-    bulkActionsService.exportPassholders.and.returnValue($q.resolve(downloadLink));
+  it('can start a bulk action of type addressand delegate the work', function () {
+    var bulkSelection = new BulkSelection(controller.results, controller.searchParameters);
+    controller.bulk.action = 'address';
+    controller.doBulkAction();
 
-    controller.doBulkExport();
-
-    expect(controller.bulk.export.requestingExport).toBeTruthy();
-
-    $scope.$digest();
-
-    expect(bulkActionsService.exportPassholders).toHaveBeenCalledWith(expectedParameters);
-    expect(controller.bulk.export.downloadLink).toBe(downloadLink);
-    expect(controller.bulk.export.requestingExport).toBeFalsy();
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkAddress', { bulkSelection: bulkSelection });
   });
 
-  it('can request a bulk export and report an error to the user', function () {
-    var expectedParameters = {
-      selection: [ '0123456789012' ],
-      searchParameters: {}
-    };
+  it('can request a bulk export and report success to the user', function () {
     controller.bulk.selection.uitpasNumberSelection = ['0123456789012'];
-    bulkActionsService.exportPassholders.and.returnValue($q.reject());
 
     controller.doBulkExport();
 
-    expect(controller.bulk.export.requestingExport).toBeTruthy();
-
-    $scope.$digest();
-
-    expect(bulkActionsService.exportPassholders).toHaveBeenCalledWith(expectedParameters);
-    expect(controller.bulk.export.downloadLink).toBeNull();
+    expect(bulkActionsService.exportPassholders).toHaveBeenCalled();
     expect(controller.bulk.export.requestingExport).toBeFalsy();
-    expect(controller.bulk.export.error).toBeTruthy();
   });
 });

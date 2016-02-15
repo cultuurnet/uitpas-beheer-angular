@@ -51,12 +51,15 @@
   <span ubr-passholder-points class="label label-points" ng-bind="pdc.passholder.points"></span>
 </div>
 <div class="passholder passholder-kansenstatuten" ng-show="pdc.passholder.kansenStatuten.length">
-  <h3><i class="fa fa-heart"></i> Kansenstatuut <a class="pull-right" ui-sref="counter.main.passholder.kansenStatuut()">Beheren</a></h3>
+  <h3><i class="fa fa-heart"></i> Kansenstatuut <a ng-show="pdc.activeCounter.isAuthorisedRegistrationCounter(pdc.pass.cardSystem.id)" class="pull-right" ui-sref="counter.main.passholder.kansenStatuut()">Beheren</a></h3>
   <div class="kansenstatuut list-group">
-    <a class="list-group-item" ng-class="'status-' + kansenStatuut.status" ng-repeat="kansenStatuut in pdc.passholder.kansenStatuten" ui-sref="counter.main.passholder.kansenStatuut()">{{kansenStatuut.cardSystem.name}}
+    <a ng-show="pdc.activeCounter.isAuthorisedRegistrationCounter(pdc.pass.cardSystem.id)" class="list-group-item" ng-class="'status-' + kansenStatuut.status" ng-repeat="kansenStatuut in pdc.passholder.kansenStatuten" ui-sref="counter.main.passholder.kansenStatuut()">{{kansenStatuut.cardSystem.name}}
       <small class="label label-danger" ng-show="kansenStatuut.status === 'EXPIRED'">Vervallen</small>
       <small class="label label-warning" ng-show="kansenStatuut.status === 'IN_GRACE_PERIOD'">Vervallen op {{kansenStatuut.endDate | date : 'dd/MM/yyyy'}}</small>
     </a>
+    <span ng-hide="pdc.activeCounter.isAuthorisedRegistrationCounter(pdc.pass.cardSystem.id)" class="list-group-item" ng-class="'status-' + kansenStatuut.status" ng-repeat="kansenStatuut in pdc.passholder.kansenStatuten">{{kansenStatuut.cardSystem.name}}
+      <small class="label label-danger" ng-show="kansenStatuut.status === 'EXPIRED'">Vervallen</small>
+      <small class="label label-warning" ng-show="kansenStatuut.status === 'IN_GRACE_PERIOD'">Vervallen op {{kansenStatuut.endDate | date : 'dd/MM/yyyy'}}</small></span>
   </div>
 </div>
 <div class="passholder passholder-memberships">
@@ -86,5 +89,10 @@
 <div class="passholder passholder-extra-actions">
   <ul class="text-muted list-unstyled small">
     <li><a ui-sref="counter.main.passholder.ticketSales()">Historiek korting &amp; bonnen</a></li>
+    <li ng-repeat="cardSystem in pdc.activeCounter.cardSystems">
+      <a ng-show="!pdc.passholder.isRegisteredInCardSystem(cardSystem)"
+         ng-click="pdc.showModalForCardSystem(cardSystem)"
+         ng-bind-template="Lid maken van {{cardSystem.name}}"></a>
+    </li>
   </ul>
 </div>

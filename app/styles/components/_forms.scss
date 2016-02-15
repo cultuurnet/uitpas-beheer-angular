@@ -23,6 +23,10 @@ textarea {
   }
 }
 
+input[type="radio"], input[type="checkbox"] {
+  margin: 3px 0 0;
+}
+
 label {
   margin-bottom: 0;
 }
