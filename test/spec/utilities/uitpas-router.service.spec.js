@@ -12,7 +12,10 @@ describe('Service: UiTPAS router', function () {
       }
     });
 
-    $state = jasmine.createSpyObj('$state', ['go']);
+    $state = jasmine.createSpyObj('$state', ['go', 'reload']);
+    $state.params = {
+      identification: 'something'
+    };
     $provide.provider('$state', {
       $get: function () {
         return $state;
@@ -84,6 +87,25 @@ describe('Service: UiTPAS router', function () {
     rootScope.$digest();
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder', expectedStateParameters);
     expect(passholderService.findPass).toHaveBeenCalledWith('valid identification number');
+  });
+
+  it('reloads the passholder detail page when the same passholder is requested', function () {
+    var expectedStateParameters = {
+      pass: {
+        passholder: {
+          name: 'Dude Man',
+          passNumber: 'something'
+        },
+        number: 'something',
+      },
+      identification: 'itsme-123456789'
+    };
+    passholderService.findPass.and.returnValue($q.resolve(expectedStateParameters.pass));
+    router.go('something');
+
+    rootScope.$digest();
+    expect($state.reload).toHaveBeenCalledWith('counter.main.passholder');
+    expect(passholderService.findPass).toHaveBeenCalledWith('something');
   });
 
   it('should show an error when identification fails', function () {

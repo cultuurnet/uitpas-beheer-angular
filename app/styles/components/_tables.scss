@@ -80,3 +80,63 @@ td label input + span {
     color: $white;
   }
 }
+
+// Responsive tables: principle no more tables with data-attributes https://css-tricks.com/responsive-data-tables/
+
+
+.table-mobile {
+  @include breakpoint(map-get($breakpoints, lrg), max-width) {
+    display: block;
+    thead {
+      display: none;
+    }
+    tbody,
+    tbody tr,
+    tbody td {
+      display: block;
+      text-align: left;
+      width: 100%;
+    }
+    tbody td {
+      @include clearfix;
+    }
+    tbody td:before {
+      content: attr(data-title);
+      display: inline-block;
+      float: left;
+      padding-right: 30px;
+      width: 80%;
+    }
+    tbody th {
+      background-color: $gray-15;
+      display: block;
+      font-weight: bold;
+    }
+    tbody td .value {
+      display: inline-block;
+      padding-left: 20px;
+      position: relative;
+      width: 20%;
+      input {
+        left: 0;
+        margin-top: 2px;
+        position: absolute;
+        top: 0; 
+      }
+    }
+  }
+  @include breakpoint(map-get($breakpoints, xxs), max-width) {
+    tbody td:before {
+      width: 100%;
+      padding-right: 0;
+    }
+    tbody td .value {
+      padding-left: 0;
+      text-align: center;
+      width: 100%;
+      input {
+        position: relative;
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+<form name="priceForm" ng-submit="umc.submitPriceForm(priceForm)"
+      novalidate ng-disabled="umc.formSubmitBusy">
+  <div class="modal-body">
+    <div class="container-fluid">
+      <fieldset ng-disabled="umc.formSubmitBusy">
+        <div class="grid">
+          <div class="grid__12 grid--bp-lrg__12">
+            <div class="alert alert-danger" type="{{umc.formAlert.type}}" ng-show="umc.formAlert" ng-bind="umc.formAlert.message"></div>
+          </div>
+          <div class="grid__12 field-group" ng-class="{ 'has-error': umc.showFieldError(priceForm, 'voucherNumber') }">
+            <label class="control-label" for="voucherNumber">
+              Voucher-nummer
+            </label>
+            <input name="voucherNumber" type="text" ng-model="umc.upgradeData.voucherNumber" ng-model-options="umc.priceModelOptions"
+                   ng-change="refreshPriceInfo()" id="voucherNumber" ubr-voucher-number current-controller="umc" ubr-card-system="umc.cardSystem.id" pass-to-check="umc.upgradeData.passToCheck" class="form-control">
+            <div ng-show="umc.showFieldError(priceForm, 'voucherNumber')">
+              <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.voucher === true">Het voucher-nummer is ongeldig.</div>
+              <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.redeemable === true">Dit voucher-nummer is niet inruilbaar.</div>
+            </div>
+          </div>
+          <div class="grid__12 field-group">
+            <label>Prijs:</label>
+            <div ng-show="umc.price === 0">Gratis</div>
+            <div ng-show="umc.price > 0"><span ng-bind="umc.price | number: 2"></span> euro</div>
+        <span ng-show="umc.price < 0">
+          <div class="spinner spinner-xsmall">
+            <circle-spinner></circle-spinner>
+          </div>
+        </span>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div><!-- end modal-body -->
+  <div class="modal-footer">
+    <a class="btn btn-link pull-left" ng-click="umc.close()">Annuleren</a>
+    <input type="button" class="btn btn-default modal-previous" ui-sref="counter.main.passholder.upgrade.newCard" value="Vorige">
+    <input type="button" class="btn btn-default modal-next" ng-disabled="umc.formSubmitBusy"
+            ng-click="umc.submitPriceForm(priceForm)" value="Bewaren">
+  </div>
+</form>

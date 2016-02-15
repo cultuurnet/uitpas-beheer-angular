@@ -111,6 +111,13 @@
   }
   // Variants
   &-search-results {
+    .overview__search {
+      color: $gray-light;
+      padding: $rh-xxs;
+      .form-control {
+        display: inline-block;
+      }
+    }
     .grid__2.first {
       float: right;
       @include breakpoint(map-get($breakpoints, med)) {

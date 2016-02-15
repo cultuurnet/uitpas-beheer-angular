@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <button type="button"  ng-click="umc.close()" class="close" aria-label="Close">&times;</button>
+  <h4 class="modal-title">Pashouder lid maken van <span ng-bind="umc.cardSystem.name"></span></h4>
+</div>
+<ul class="steps step" ng-class="umc.modalFlow === 'AUTHORIZED_COUNTER' ? 'three' : 'two'">
+  <li ui-sref-active="active" class="step" ng-if="umc.modalFlow === 'AUTHORIZED_COUNTER'">
+    <a ui-sref="counter.main.passholder.upgrade.kansenStatuut">Kansenstatuut</a>
+  </li>
+  <li ui-sref-active="active" class="step" ng-switch="umc.getStepNumber() < 2">
+    <span ng-switch-when="true">
+      Kaart
+    </span>
+    <span ng-switch-default>
+      <a ui-sref="counter.main.passholder.upgrade.newCard" >Kaart</a>
+    </span>
+  </li>
+  <li ui-sref-active="active" class="step" ng-switch="umc.getStepNumber() < 3">
+    <span ng-switch-when="true">
+      Prijs
+    </span>
+    <span ng-switch-default>
+      <a ui-sref="counter.main.passholder.upgrade.price" ng-hide="umc.getStepNumber() < 3">Prijs</a>
+    </span>
+  </li>
+</ul>
+
+<div class="modal-body">
+<div class="alert alert-danger" ng-show="umc.asyncError">
+  <span ng-bind="umc.asyncError.cleanMessage"></span>
+</div>
+</div>
+
+<div ui-view="upgradeStep"></div>

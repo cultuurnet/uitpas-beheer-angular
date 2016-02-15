@@ -12,7 +12,17 @@ angular
   .controller('PassholderDetailController', PassholderDetailController);
 
 /* @ngInject */
-function PassholderDetailController (pass, membershipService, $rootScope, moment, $scope, passholderService, activeCounter, $window) {
+function PassholderDetailController (
+  pass,
+  membershipService,
+  $rootScope,
+  moment,
+  $scope,
+  passholderService,
+  activeCounter,
+  $window,
+  $state
+) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -66,6 +76,16 @@ function PassholderDetailController (pass, membershipService, $rootScope, moment
 
   controller.goBack = function () {
     $window.history.back();
+  };
+
+  controller.showModalForCardSystem = function(cardSystem) {
+    // Determine the first step by counter permissions.
+    if (controller.activeCounter.isAuthorisedRegistrationCounter(cardSystem.id)) {
+      $state.go('counter.main.passholder.upgrade.kansenStatuut', {cardSystem: cardSystem});
+    }
+    else {
+      $state.go('counter.main.passholder.upgrade.newCard', {cardSystem: cardSystem});
+    }
   };
 
   function subtractAdvantagePoints(event, exchangedAdvantage) {
