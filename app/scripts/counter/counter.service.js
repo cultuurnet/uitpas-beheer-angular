@@ -421,6 +421,10 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
     return deferredResponse.promise;
   };
 
+  /**
+   * @returns {Promise}
+   *   A promise with associations for the active counter.
+   */
   service.getAssociations = function () {
     var url = apiUrl + '/active/associations';
     var deferredAssociations = $q.defer();
@@ -431,5 +435,21 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       .error(deferredAssociations.reject);
 
     return deferredAssociations.promise;
+  };
+
+  /**
+   * @returns {Promise}
+   *   A promise with schools for the active counter.
+   */
+  service.getSchools = function () {
+    var url = appConfig.apiUrl + 'schools';
+    var deferredSchools = $q.defer();
+
+    $http
+      .get(url)
+      .success(deferredSchools.resolve)
+      .error(deferredSchools.reject);
+
+    return deferredSchools.promise;
   };
 }

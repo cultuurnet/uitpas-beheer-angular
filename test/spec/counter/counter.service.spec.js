@@ -753,4 +753,28 @@ describe('Service: counterService', function () {
       .catch(assertError);
     $httpBackend.flush();
   });
+
+  it('can get a list of schools for the active counter', function (done) {
+    var expectedSchools = [
+      {
+        name: 'School A',
+        id: 'unique-id-a'
+      },
+      {
+        name: 'School B',
+        id: 'unique-id-b'
+      }
+    ];
+
+    var assertSchools = function (schoolsFromAPI) {
+      expect(schoolsFromAPI).toEqual(expectedSchools);
+      done();
+    };
+
+    $httpBackend.expectGET(apiUrl + 'schools').respond(200, expectedSchools);
+
+    counterService.getSchools().then(assertSchools);
+
+    $httpBackend.flush();
+  });
 });
