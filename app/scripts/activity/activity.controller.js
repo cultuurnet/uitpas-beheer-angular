@@ -25,6 +25,7 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
   controller.dateRange = controller.dateRanges.TODAY;
   controller.totalActivities = 0;
   controller.activitiesLoading = 0;
+  controller.hideDateRange = false;
 
   function getSearchParameters () {
     return {
@@ -70,8 +71,23 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
       resetActivePage();
     }
 
+    if (queryChanged() && newSearchParameters.query !== '') {
+      newSearchParameters.dateRange = DateRange.NEXT_12_MONTHS;
+      controller.hideDateRange = true;
+    }
+    else {
+      controller.hideDateRange = false;
+    }
+
     lastSearchParameters = newSearchParameters;
     controller.search();
+  };
+
+  controller.resetSearchQuery = function () {
+    controller.query = '';
+    controller.dateRange = DateRange.TODAY;
+
+    controller.searchParametersChanged();
   };
 
   controller.search = function () {
