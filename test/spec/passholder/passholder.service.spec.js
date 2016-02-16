@@ -1115,4 +1115,27 @@ describe('Service: passholderService', function () {
     $httpBackend.flush();
 
   });
+
+  it('should post the passholder when updating the passholder school', function (done) {
+    var pass = new Pass(getPassData());
+    var passholder = pass.passholder;
+    var school = {
+      id: 'unique-id-a',
+      name: 'School A'
+    };
+    var expectedData = passholder.serialize();
+    expectedData.school = school;
+
+    spyOn(passholderService, 'findPass').and.returnValue($q.resolve(pass));
+
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + pass.number, expectedData)
+      .respond(200, expectedData);
+
+    passholderService
+      .updateSchool(passholder, school)
+      .then(done);
+
+    $httpBackend.flush();
+  });
 });
