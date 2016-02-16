@@ -20,6 +20,7 @@ function KansenstatutenModalController (passholder, activeCounter, cardSystemId,
   controller.passholder = passholder;
   controller.activeCounter = activeCounter;
   controller.cardSystemid = cardSystemId;
+  controller.loadingSchools = false;
 
   controller.cancelModal = function () {
     $uibModalInstance.dismiss();
@@ -37,9 +38,15 @@ function KansenstatutenModalController (passholder, activeCounter, cardSystemId,
     );
   }
 
+  $rootScope.$watch('appBusy', function() {
+    controller.loadingSchools = $rootScope.appBusy;
+  });
+
   var refreshPassHolderOnKansenStatuutRenewalListener = $rootScope.$on('kansenStatuutRenewed', refreshPassholder);
   var refreshPassHolderOnRemarksUpdatedListener = $rootScope.$on('remarksUpdated', refreshPassholder);
+  var refreshPassHolderOnSchoolUpdatedListener = $rootScope.$on('schoolUpdated', refreshPassholder);
 
   $scope.$on('$destroy', refreshPassHolderOnKansenStatuutRenewalListener);
   $scope.$on('$destroy', refreshPassHolderOnRemarksUpdatedListener);
+  $scope.$on('$destroy', refreshPassHolderOnSchoolUpdatedListener);
 }
