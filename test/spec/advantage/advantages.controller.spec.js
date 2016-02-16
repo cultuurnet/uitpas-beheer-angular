@@ -111,15 +111,18 @@ describe('Controller: PassholderAdvantagesController', function () {
   });
 
   it('should update the available point when a checkin occurs', function () {
+    var deferredList = $q.defer();
     advantageController.availablePoints = 3;
     var checkedInActivity = {
       points: 1
     };
+    spyOn(advantageService, 'list').and.returnValue(deferredList.promise);
 
     $rootScope.$emit('activityCheckedIn', checkedInActivity);
-    scope.$digest();
+    //scope.$digest();
 
     expect(advantageController.availablePoints).toEqual(4);
+    expect(advantageService.list).toHaveBeenCalled();
   });
 
   it('should mark advantages with insufficient points when updating advantage exchangeability', function () {
