@@ -85,13 +85,9 @@ function passholderAdvantageController(passholder, advantages, advantageService,
       controller.advantages = advantages;
     };
 
-    var errorAdvantage = function(errorResponse) {
-      console.log(errorResponse);
-    };
-
     advantageService
       .list(controller.passholder.passNumber)
-      .then(updateAdvantagesList, errorAdvantage);
+      .then(updateAdvantagesList);
 
     controller.updateExchangeability(updatedPointCount);
 
