@@ -34,7 +34,20 @@ function HelpController (helpService, $q, $state) {
 
   init();
 
-  controller.submitForm = function () {
+  controller.isFormDirty = function (form) {
+    console.log(form);
+    if (form.$dirty) {
+      console.log('dirty');
+      return true;
+    }
+    else {
+      console.log('niet dirty');
+      return false;
+    }
+  };
+
+  controller.submitForm = function (form) {
+    form.$setPristine();
     controller.formSubmitBusy = true;
 
     var updateHelpOnPage = function () {
