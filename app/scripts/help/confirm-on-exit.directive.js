@@ -11,7 +11,7 @@ angular
   .directive('confirmOnExit', confirmOnExit);
 
 /* @ngInject */
-function confirmOnExit() {
+function confirmOnExit($rootScope) {
   return {
     scope: {
       confirmOnExit: '&',
@@ -30,14 +30,7 @@ function confirmOnExit() {
         if ($scope.confirmOnExit()) {
           if(! confirm($scope.confirmMessageRoute || $scope.confirmMessage)) {
             event.preventDefault();
-          }
-        }
-      });
-
-      var $locationChangeStartUnbind = $scope.$on('$locationChangeStart', function(event) {
-        if ($scope.confirmOnExit()) {
-          if(! confirm($scope.confirmMessageRoute || $scope.confirmMessage)) {
-            event.preventDefault();
+            $rootScope.appBusy = false;
           }
         }
       });
@@ -45,7 +38,6 @@ function confirmOnExit() {
       $scope.$on('$destroy', function() {
         window.onbeforeunload = null;
         $stateChangeStartUnbind();
-        $locationChangeStartUnbind();
       });
     }
   };
