@@ -35,13 +35,10 @@ function HelpController (helpService, $q, $state) {
   init();
 
   controller.isFormDirty = function (form) {
-    console.log(form);
     if (form.$dirty) {
-      console.log('dirty');
       return true;
     }
     else {
-      console.log('niet dirty');
       return false;
     }
   };
