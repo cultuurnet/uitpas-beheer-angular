@@ -12,12 +12,15 @@ angular
   .controller('BulkActionsController', BulkActionsController);
 
 /* @ngInject */
-function BulkActionsController (bulkSelection, action, passholderService, $uibModalInstance, $state) {
+function BulkActionsController (bulkSelection, action, passholderService, $uibModalInstance, $state, moment) {
   var controller = this;
   controller.submitBusy = false;
   controller.isSubmitted = false;
   controller.bulkSelection = bulkSelection;
   controller.action = action;
+  controller.kansenstatuutData = {
+    kansenstatuutEndDate: moment().endOf('year').toDate()
+  };
   var passholders = Array();
   var searchParameters = bulkSelection.searchParameters;
   var totalItems = bulkSelection.searchResults.totalItems;

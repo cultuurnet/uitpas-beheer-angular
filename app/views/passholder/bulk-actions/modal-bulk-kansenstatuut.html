@@ -21,7 +21,7 @@
       <div class="col-xs-12">
         <div class="form-horizontal">
           <div class="form-group">
-            <div class="grid__12 grid--bp-med__3">
+            <div class="form-inline datepicker">
               <ubr-datepicker ng-class="{'has-error': bulkKansenstatuut.date.$invalid}" ng-model="bac.kansenstatuutData.kansenstatuutEndDate" ubr-label="Geldig tot" ubr-id="valid-until"
                                 ubr-name="endDate" required></ubr-datepicker>
               <div ng-if="(bulkKansenstatuut.$submitted || bulkKansenstatuut.date.$touched) && bulkKansenstatuut.date.$invalid" class="text-danger small">
