@@ -6,6 +6,20 @@ describe('Controller: HelpController', function () {
 
   var helpService, $q, helpController, $state, $scope;
 
+  var getSpyForm = function (formData) {
+    var spyForm = {
+      $valid: true,
+      $dirty: true,
+      $setPristine: jasmine.createSpy('$setPristine')
+    };
+
+    if (formData) {
+      angular.merge(spyForm, formData);
+    }
+
+    return spyForm;
+  };
+
   beforeEach(inject(function ($injector, $rootScope){
     var $controller = $injector.get('$controller');
     $scope = $rootScope;
@@ -40,11 +54,27 @@ describe('Controller: HelpController', function () {
     expect(helpController.userCanEdit).toBeTruthy();
   });
 
+  it('should return true if the form is dirty', function () {
+    $scope.$apply();
+
+    expect(helpController.isFormDirty(getSpyForm())).toBeTruthy();
+  });
+
+  it('should return false if the form is not dirty', function () {
+    var form = {
+      $dirty: false
+    };
+
+    $scope.$apply();
+
+    expect(helpController.isFormDirty(getSpyForm(form))).toBeFalsy();
+  });
+
   it('redirects on successful form submit', function () {
     helpController.helpMarkdown = 'submit this';
     helpService.updateHelpOnServer.and.returnValue($q.when());
 
-    helpController.submitForm();
+    helpController.submitForm(getSpyForm());
 
     $scope.$apply();
 
@@ -56,7 +86,7 @@ describe('Controller: HelpController', function () {
     helpController.helpMarkdown = 'submit this';
     helpService.updateHelpOnServer.and.returnValue($q.reject());
 
-    helpController.submitForm();
+    helpController.submitForm(getSpyForm());
 
     $scope.$apply();
 
