@@ -28,7 +28,7 @@ function confirmOnExit($rootScope) {
 
       var $stateChangeStartUnbind = $scope.$on('$stateChangeStart', function(event) {
         if ($scope.confirmOnExit()) {
-          if(! confirm($scope.confirmMessageRoute || $scope.confirmMessage)) {
+          if(! window.confirm($scope.confirmMessageRoute || $scope.confirmMessage)) {
             event.preventDefault();
             $rootScope.appBusy = false;
           }
