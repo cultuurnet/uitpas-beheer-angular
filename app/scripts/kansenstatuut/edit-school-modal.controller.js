@@ -27,7 +27,7 @@ function EditSchoolModalController (passholder, $uibModalInstance, passholderSer
   };
 
   function clearAsyncError (newVal, oldVal) {
-    if (oldVal && oldVal && newVal !== oldVal) {
+    if (oldVal && newVal && newVal !== oldVal) {
       controller.asyncError = null;
     }
   }
@@ -51,7 +51,7 @@ function EditSchoolModalController (passholder, $uibModalInstance, passholderSer
       controller.updatePending = false;
     };
 
-    if (editForm.school.$valid) {
+    if (editForm.editSchool.$valid) {
       controller.updatePending = true;
       var school = controller.school;
 

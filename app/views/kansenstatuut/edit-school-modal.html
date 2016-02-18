@@ -16,11 +16,11 @@
           </div>
           <hr>
           <div class="grid__12 grid--bp-lrg__12 field-group"
-               ng-class="{ 'has-error': (editForm.$submitted || editForm.school.$dirty) && editForm.school.$invalid }">
+               ng-class="{ 'has-error': (editForm.$submitted || editForm.editSchool.$dirty) && editForm.editSchool.$invalid }">
             <label for="edit-school">Kies een nieuwe school</label>
-            <select chosen id="edit-school"
-                    ng-model="esmc.school.name"
-                    ng-options="school.name as school.name for school in esmc.schools"
+            <select chosen name="editSchool" id="edit-school"
+                    ng-model="esmc.school"
+                    ng-options="school as school.name for school in esmc.schools"
                     data-placeholder="Kies een school">
             </select>
           </div>

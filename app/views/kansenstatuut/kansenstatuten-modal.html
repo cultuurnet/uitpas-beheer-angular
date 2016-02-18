@@ -44,10 +44,12 @@
            value="Bewerken">
     <hr>
     <h5>School</h5>
-    <div ng-if="!pksc.passholder.school" class="alert alert-info" role="alert">
+    <div ng-if="!pksc.passholder.school || !pksc.passholder.school.name" class="alert alert-info" role="alert">
       Geen school informatie beschikbaar.
     </div>
-    <i class="fa fa-graduation-cap"></i><span ng-if="pksc.passholder.school" ng-bind="pksc.passholder.school.name"></span>
+    <span ng-show="pksc.passholder.school && pksc.passholder.school.name">
+      <i class="fa fa-graduation-cap"></i><span ng-bind="pksc.passholder.school.name"></span>
+    </span>
     <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editSchool"
            class="btn btn-primary btn-small" value="Bewerken" ng-disabled="pksc.loadingSchools">
     <div ng-show="pksc.loadingSchools" class="alert alert-info text-center">
