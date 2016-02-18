@@ -22,19 +22,35 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
     passholder.address.city = bulkForm.city.$viewValue;
     passholder.address.postalCode = bulkForm.zip.$viewValue;
     passholder.address.street = bulkForm.street.$viewValue;
+    passholder.isChecked = true;
 
-    var updateOk = function() {
+    return passholderService.update(passholder, passholder.passNumber);
+  };
+
+  controller.renewPassholderKansenstatuut = function(passholder, kansenstatuut) {
+    passholder.isChecked = true;
+    var endDate = moment(bulkForm.endDate.$viewValue, 'DD-MM-YYYY').toDate();
+
+    return passholderService.renewKansenstatuut(passholder, kansenstatuut, endDate);
+  };
+
+  controller.updateOK = function (passholder) {
+    return function(promise) {
       passholder.updated = true;
-      passholder.isChecked = true;
-      passholder.failed = false;
-    };
+    }
+  };
 
-    var updateFailed = function(errorResponse) {
-      passholder.updated = false;
-      passholder.isChecked = true;
+  controller.updateFailed = function(passholder, action) {
+    return function(errorResponse) {
       passholder.failed = true;
-
-      errorCode = errorResponse.code;
+      if (action == 'address') {
+        errorCode = errorResponse.code;
+        var defaultMessage = 'Pashouder werd niet geupdate op de server.'
+      }
+      else if (action == 'kansenstatuut') {
+        errorCode = errorResponse.data.code;
+        var defaultMessage = 'Kansenstatuut werd niet geupdate op de server.'
+      }
 
       switch (errorCode) {
         case 'ACTION_NOT_ALLOWED':
@@ -51,34 +67,6 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           };
           break;
 
-        default:
-          passholder.asyncError = {
-            message: 'Pashouder werd niet geupdate op de server.',
-            type: 'danger'
-          };
-      }
-    };
-
-    passholderService.update(passholder, passholder.passNumber)
-      .then(updateOk, updateFailed);
-  };
-
-  controller.renewPassholderKansenstatuut = function(passholder) {
-
-    var updateOk = function() {
-      passholder.updated = true;
-      passholder.isChecked = true;
-      passholder.failed = false;
-    };
-
-    var updateFailed = function(errorResponse) {
-      passholder.updated = false;
-      passholder.isChecked = true;
-      passholder.failed = true;
-
-      errorCode = errorResponse.data.code;
-
-      switch (errorCode) {
         case 'KANSENSTATUUT_END_DATE_INVALID':
           passholder.asyncError = {
             message: 'Geen geldige einddatum voor kansenstatuut',
@@ -86,30 +74,18 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           };
           break;
 
-        default:
+        case 'INVALID_DATE_CONSTRAINTS':
           passholder.asyncError = {
-            message: 'Kansenstatuut werd niet geupdate op de server.',
+            message: 'Geen geldige datum voor kansenstatuut',
             type: 'danger'
           };
-      }
-    };
-    var kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[1].id);
-    var endDate = moment(bulkForm.endDate.$viewValue, 'DD-MM-YYYY').toDate();
+          break;
 
-    // Check if passholder has a kansenstatuut.
-    if (kansenstatuut) {
-      passholderService.renewKansenstatuut(passholder, kansenstatuut, endDate)
-        .then(updateOk, updateFailed);
-    }
-
-    // Error handling if passholder has no kansenstatuut.
-    else {
-      passholder.updated = false;
-      passholder.isChecked = true;
-      passholder.failed = true;
-      passholder.asyncError = {
-        message: 'Pashouder heeft geen kansenstatuut.',
-        type: 'danger'
+        default:
+          passholder.asyncError = {
+            message: defaultMessage,
+            type: 'danger'
+          };
       }
     }
   };
@@ -118,12 +94,29 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
     passholder.isChecked = false;
     passholder.updated = false;
     passholder.failed = false;
+    var callbackSuccess = controller.updateOK(passholder);
+    var callbackFail = controller.updateFailed(passholder, action);
     switch (action) {
       case 'address':
-        controller.updatePassHolderAddress(passholder);
+        controller.updatePassHolderAddress(passholder).then(callbackSuccess, callbackFail);
         break;
       case 'kansenstatuut':
-        controller.renewPassholderKansenstatuut(passholder);
+        var kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[1].id);
+
+        // Check if passholder has a kansenstatuut.
+        if (kansenstatuut) {
+          controller.renewPassholderKansenstatuut(passholder, kansenstatuut).then(callbackSuccess, callbackFail);
+        }
+        // Error handling if passholder has no kansenstatuut.
+        else {
+          passholder.isChecked = true;
+          passholder.updated = false;
+          passholder.failed = true;
+          passholder.asyncError = {
+            message: 'Pashouder heeft geen kansenstatuut.',
+            type: 'danger'
+          }
+        }
         break;
     }
   });

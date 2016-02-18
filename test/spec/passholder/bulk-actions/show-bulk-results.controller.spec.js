@@ -187,6 +187,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.address.postalCode).toEqual('1000');
       expect(passholder.address.street).toEqual('asdfasdfasd');
       expect(passholder.updated).toBeTruthy();
+      expect(passholder.isChecked).toBeTruthy();
     });
   });
 
@@ -201,9 +202,10 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
       expect(passholder.asyncError.message).toEqual('Actie niet toegestaan.');
       expect(passholder.asyncError.type).toEqual('danger');
-      expect(passholder.isChecked).toBeTruthy();
     });
   });
 
@@ -218,9 +220,10 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
       expect(passholder.asyncError.message).toEqual('Pashouder werd niet geupdate op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
-      expect(passholder.isChecked).toBeTruthy();
     });
   });
 
@@ -235,9 +238,10 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
       expect(passholder.asyncError.message).toEqual('Pashouder werd niet geupdate op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
-      expect(passholder.isChecked).toBeTruthy();
     });
   });
 
@@ -276,6 +280,28 @@ describe('Controller: ShowBulkResultsController', function () {
 
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.asyncError.message).toEqual('Geen geldige einddatum voor kansenstatuut');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should fail in renewing the passholder his kansenstatuut because the date constraint is invalid', function () {
+    action = 'kansenstatuut';
+    bulkForm = getSpyDateForm();
+    passholderService.renewKansenstatuut.and.callFake(function () {
+      var apiError = {
+        data: {
+          code: 'INVALID_DATE_CONSTRAINTS'
+        }
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Geen geldige datum voor kansenstatuut');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
     });
