@@ -12,7 +12,7 @@ angular
   .controller('EditSchoolModalController', EditSchoolModalController);
 
 /* @ngInject */
-function EditSchoolModalController (passholder, $uibModalInstance, passholderService, $scope, schools) {
+function EditSchoolModalController (passholder, $uibModalInstance, passholderService, $scope, counterService) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -20,7 +20,19 @@ function EditSchoolModalController (passholder, $uibModalInstance, passholderSer
   controller.passholder = passholder;
   controller.asyncError = null;
   controller.school = passholder.school;
-  controller.schools = schools;
+  controller.schools = [];
+  controller.schoolsLoaded = false;
+
+  controller.loadSchools = function () {
+    counterService.getSchools()
+      .then(
+        function (schools) {
+          controller.schools = schools;
+          controller.schoolsLoaded = true;
+        }
+      );
+  };
+  controller.loadSchools();
 
   controller.cancelModal = function () {
     $uibModalInstance.dismiss();

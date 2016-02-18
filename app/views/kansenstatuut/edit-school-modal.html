@@ -15,7 +15,13 @@
             <strong>Huidige school: </strong><span ng-bind="::esmc.passholder.school.name"></span>
           </div>
           <hr>
-          <div class="grid__12 grid--bp-lrg__12 field-group"
+          <div ng-if="!esmc.schoolsLoaded" class="alert alert-info text-center">
+            <p>De lijst met scholen wordt opgehaald.</p>
+            <div class="spinner spinner-xsmall">
+              <circle-spinner></circle-spinner>
+            </div>
+          </div>
+          <div class="grid__12 grid--bp-lrg__12 field-group" ng-if="esmc.schoolsLoaded"
                ng-class="{ 'has-error': (editForm.$submitted || editForm.editSchool.$dirty) && editForm.editSchool.$invalid }">
             <label for="edit-school">Kies een nieuwe school</label>
             <select chosen name="editSchool" id="edit-school"

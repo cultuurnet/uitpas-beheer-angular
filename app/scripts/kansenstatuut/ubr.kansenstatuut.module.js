@@ -42,8 +42,8 @@ angular
         });
     }
 
-    editSchoolModal.$inject = ['passholder', '$state', '$uibModal', 'schools'];
-    function editSchoolModal (passholder, $state, $uibModal, schools) {
+    editSchoolModal.$inject = ['passholder', '$state', '$uibModal'];
+    function editSchoolModal (passholder, $state, $uibModal) {
       $uibModal
         .open({
           animation: true,
@@ -52,9 +52,6 @@ angular
           resolve: {
             passholder: function () {
               return passholder;
-            },
-            schools: function () {
-              return schools;
             }
           },
           controller: 'EditSchoolModalController',
@@ -132,11 +129,6 @@ angular
         onEnter: editRemarksModal
       })
       .state('counter.main.passholder.kansenStatuut.editSchool', {
-        resolve: {
-          schools: ['counterService', function (counterService) {
-            return counterService.getSchools();
-          }]
-        },
         onEnter: editSchoolModal
       })
       .state('counter.main.passholder.kansenStatuut.edit', {

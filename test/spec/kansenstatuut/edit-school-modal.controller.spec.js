@@ -5,7 +5,7 @@ describe('Controller: EditSchoolModalController', function () {
   // load the controller's module
   beforeEach(module('ubr.kansenstatuut'));
 
-  var controller, passholder, uibModalInstance, passholderService, $q, scope, schools;
+  var controller, passholder, uibModalInstance, passholderService, $q, scope, counterService, schools;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, Passholder, $injector, $rootScope) {
@@ -16,8 +16,6 @@ describe('Controller: EditSchoolModalController', function () {
         then: jasmine.createSpy('uibModalInstance.result.then')
       }
     };
-
-    passholderService = jasmine.createSpyObj('passholderService', ['updateSchool']);
     $q = $injector.get('$q');
     scope = $rootScope.$new();
     schools = [
@@ -48,14 +46,25 @@ describe('Controller: EditSchoolModalController', function () {
       }
     );
 
+    passholderService = jasmine.createSpyObj('passholderService', ['updateSchool']);
+    counterService = jasmine.createSpyObj('counterService', ['getSchools']);
+    counterService.getSchools.and.returnValue($q.when(schools));
+
     controller = $controller('EditSchoolModalController', {
       passholder: passholder,
       $uibModalInstance: uibModalInstance,
       passholderService: passholderService,
       $scope: scope,
-      schools: schools
+      counterService: counterService
     });
   }));
+
+  it('loads schools when initiated', function () {
+    expect(controller.schools).toEqual([]);
+    scope.$digest();
+
+    expect(controller.schools).toEqual(schools);
+  });
 
   it('can dismiss the modal', function () {
     controller.cancelModal();
