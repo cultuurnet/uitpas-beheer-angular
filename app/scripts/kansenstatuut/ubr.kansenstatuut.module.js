@@ -121,7 +121,7 @@ angular
             })
             .result
             .finally(function () {
-              $state.go('^', {}, {reload: true});
+              $state.go('^');
             });
         }]
       })
