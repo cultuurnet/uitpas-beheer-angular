@@ -26,7 +26,7 @@ function EditRemarksModalController (passholder, $uibModalInstance, passholderSe
   };
 
   function clearAsyncError (newVal, oldVal) {
-    if (oldVal && oldVal && newVal !== oldVal) {
+    if (oldVal && newVal && newVal !== oldVal) {
       controller.asyncError = null;
     }
   }
