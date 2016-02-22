@@ -74,6 +74,7 @@ angular
       })
       .state('counter.main.error', {
         redirectOnScan: true,
+        onEnter: redirectOnScan,
         views: {
           'content@counter': {
             templateUrl: 'views/error.html',
