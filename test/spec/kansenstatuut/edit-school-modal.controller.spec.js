@@ -68,7 +68,22 @@ describe('Controller: EditSchoolModalController', function () {
     expect(controller.schools).toEqual([]);
     scope.$digest();
 
-    expect(controller.schools).toEqual(schools);
+    var expectedSchools = [
+      {
+        id: 'unique-id-b',
+        name: 'School B'
+      },
+      {
+        id: 'unique-id-c',
+        name: 'School C'
+      },
+      {
+        id: 'unique-id-d',
+        name: 'School D'
+      }
+    ];
+
+    expect(controller.schools).toEqual(expectedSchools);
   });
 
   it('can dismiss the modal', function () {

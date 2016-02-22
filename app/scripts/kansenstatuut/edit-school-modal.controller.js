@@ -27,7 +27,9 @@ function EditSchoolModalController (passholder, $uibModalInstance, passholderSer
     counterService.getSchools()
       .then(
         function (schools) {
-          controller.schools = schools;
+          controller.schools = schools.filter(function (school) {
+            return school.id !== passholder.school.id;
+          });
           controller.schoolsLoaded = true;
         }
       );
