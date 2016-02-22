@@ -1,11 +1,13 @@
 'use strict';
 
-describe('Controller: EditRemarksModalController', function () {
+ fdescribe('Controller: EditRemarksModalController', function () {
 
   // load the controller's module
   beforeEach(module('ubr.kansenstatuut'));
 
   var controller, passholder, uibModalInstance, passholderService, $q, scope;
+
+  var newRemarks = 'New remarks';
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, Passholder, $injector, $rootScope) {
@@ -44,7 +46,7 @@ describe('Controller: EditRemarksModalController', function () {
     controller.asyncError = { message: 'It did not do what is was supposed to do.' };
     scope.$apply();
 
-    controller.remarks = 'Different text';
+    controller.remarks = newRemarks;
     scope.$apply();
 
     expect(controller.asyncError).toBeNull();
@@ -62,12 +64,18 @@ describe('Controller: EditRemarksModalController', function () {
       }
     };
 
+    controller.remarks = newRemarks;
+
     controller.updateRemarks(formStub);
     expect(controller.updatePending).toBeTruthy();
 
     scope.$digest();
 
-    expect(passholderService.updateRemarks).toHaveBeenCalled();
+    expect(passholderService.updateRemarks)
+      .toHaveBeenCalledWith(
+        passholder,
+        newRemarks
+      );
     expect(controller.updatePending).toBeFalsy();
     expect(uibModalInstance.close).toHaveBeenCalled();
   });
@@ -82,10 +90,16 @@ describe('Controller: EditRemarksModalController', function () {
       }
     };
 
+    controller.remarks = newRemarks;
+
     controller.updateRemarks(formStub);
     scope.$digest();
 
-    expect(passholderService.updateRemarks).toHaveBeenCalled();
+    expect(passholderService.updateRemarks)
+      .toHaveBeenCalledWith(
+        passholder,
+        newRemarks
+      );
     expect(controller.updatePending).toBeFalsy();
     expect(controller.asyncError.message).toBe('It failed.');
   });
