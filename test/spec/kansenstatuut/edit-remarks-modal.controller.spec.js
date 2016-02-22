@@ -1,6 +1,6 @@
 'use strict';
 
- fdescribe('Controller: EditRemarksModalController', function () {
+ describe('Controller: EditRemarksModalController', function () {
 
   // load the controller's module
   beforeEach(module('ubr.kansenstatuut'));
