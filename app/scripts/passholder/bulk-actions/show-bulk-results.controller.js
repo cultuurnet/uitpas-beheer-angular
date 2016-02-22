@@ -35,7 +35,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   };
 
   controller.updateOK = function (passholder) {
-    return function(promise) {
+    return function() {
       passholder.updated = true;
     }
   };
@@ -45,11 +45,11 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       passholder.failed = true;
       if (action == 'address') {
         errorCode = errorResponse.code;
-        var defaultMessage = 'Pashouder werd niet geupdate op de server.'
+        var defaultMessage = 'Pashouder werd niet geüpdatet op de server.'
       }
       else if (action == 'kansenstatuut') {
         errorCode = errorResponse.data.code;
-        var defaultMessage = 'Kansenstatuut werd niet geupdate op de server.'
+        var defaultMessage = 'Kansenstatuut werd niet geüpdatet op de server.'
       }
 
       switch (errorCode) {
@@ -61,10 +61,18 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           break;
 
         case 'PASSHOLDER_NOT_UPDATED_ON_SERVER':
-          passholder.asyncError = {
-            message: 'Pashouder werd niet geupdate op de server.',
-            type: 'danger'
-          };
+          if (errorResponse.apiError && errorResponse.apiError.code === 'PARSE_INVALID_POSTAL_CODE') {
+            passholder.asyncError = {
+              message: 'Geen geldige postcode voor het adres.',
+              type: 'danger'
+            };
+          }
+          else {
+            passholder.asyncError = {
+              message: 'Pashouder werd niet geüpdatet op de server.',
+              type: 'danger'
+            };
+          }
           break;
 
         case 'KANSENSTATUUT_END_DATE_INVALID':

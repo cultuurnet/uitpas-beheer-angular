@@ -127,9 +127,11 @@
             <label class="control-label" for="postal-code">
               Postcode
             </label>
-            <input type="text" class="form-control" id="postal-code" name="postalCode" ng-required="true" ng-model="pec.passholder.address.postalCode">
+            <input type="text" class="form-control" id="postal-code" name="postalCode" ng-required="true"
+                   ng-change="pec.removeAsyncError(passholderEdit, 'postalCode')" ng-model="pec.passholder.address.postalCode">
             <div ng-if="(passholderEdit.$submitted || passholderEdit.postalCode.$touched) && passholderEdit.postalCode.$invalid" class="text-danger small">
               <div ng-if="passholderEdit.postalCode.$error.required">De postcode is verplicht.</div>
+              <div ng-if="passholderEdit.postalCode.$error.formatAsync">Deze postcode is foutief.</div>
             </div>
           </div>
           <div class="grid__12 grid--bp-xsm__6 grid--bp-med__3 field-group required" ng-class="{ 'has-error': (passholderEdit.$submitted || passholderEdit.city.$touched) && passholderEdit.city.$invalid }">
