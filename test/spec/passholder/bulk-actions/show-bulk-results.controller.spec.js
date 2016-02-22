@@ -75,7 +75,6 @@ describe('Controller: ShowBulkResultsController', function () {
         'distributionKeys': []
       }
     },
-    //'permissions': ['registratie', 'kansenstatuut toekennen'],
     'permissions': ['kansenstatuut toekennen'],
     'groups': ['Geauthorizeerde registratie balies']
   };
@@ -222,7 +221,7 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
-      expect(passholder.asyncError.message).toEqual('Pashouder werd niet geupdate op de server.');
+      expect(passholder.asyncError.message).toEqual('Pashouder werd niet geüpdatet op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
     });
   });
@@ -240,7 +239,7 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
-      expect(passholder.asyncError.message).toEqual('Pashouder werd niet geupdate op de server.');
+      expect(passholder.asyncError.message).toEqual('Pashouder werd niet geüpdatet op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
     });
   });
@@ -323,7 +322,7 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.asyncError.message).toEqual('Kansenstatuut werd niet geupdate op de server.');
+      expect(passholder.asyncError.message).toEqual('Kansenstatuut werd niet geüpdatet op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
     });
@@ -345,6 +344,27 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.asyncError.message).toEqual('Pashouder heeft geen kansenstatuut.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should fail in updating the passholder address because a wrong postalcode was given', function () {
+    passholderService.update.and.callFake(function () {
+      var error = {
+        code: 'PASSHOLDER_NOT_UPDATED_ON_SERVER',
+        apiError: {
+          code: 'PARSE_INVALID_POSTAL_CODE'
+        }
+      };
+      return $q.reject(error);
+    });
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+      expect(passholder.asyncError.message).toEqual('Geen geldige postcode voor het adres.');
+      expect(passholder.asyncError.type).toEqual('danger');
     });
   });
 });
