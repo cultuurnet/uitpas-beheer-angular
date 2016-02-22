@@ -7,6 +7,11 @@ describe('Controller: EditSchoolModalController', function () {
 
   var controller, passholder, uibModalInstance, passholderService, $q, scope, counterService, schools;
 
+  var newSchool = {
+    id: 'unique-id-b',
+    name: 'School B'
+  };
+
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, Passholder, $injector, $rootScope) {
     uibModalInstance = {
@@ -75,10 +80,7 @@ describe('Controller: EditSchoolModalController', function () {
     controller.asyncError = { message: 'It did not do what is was supposed to do.' };
     scope.$apply();
 
-    controller.school = {
-      id: 'unique-id-b',
-      name: 'School B'
-    };
+    controller.school = newSchool;
     scope.$apply();
 
     expect(controller.asyncError).toBeNull();
@@ -99,12 +101,19 @@ describe('Controller: EditSchoolModalController', function () {
       }
     };
 
+    controller.school = newSchool;
+
     controller.updateSchool(formStub);
     expect(controller.updatePending).toBeTruthy();
 
     scope.$digest();
 
-    expect(passholderService.updateSchool).toHaveBeenCalled();
+    expect(passholderService.updateSchool)
+      .toHaveBeenCalledWith(
+        passholder,
+        newSchool
+      );
+
     expect(controller.updatePending).toBeFalsy();
     expect(uibModalInstance.close).toHaveBeenCalled();
   });
@@ -119,10 +128,17 @@ describe('Controller: EditSchoolModalController', function () {
       }
     };
 
+    controller.school = newSchool;
+
     controller.updateSchool(formStub);
     scope.$digest();
 
-    expect(passholderService.updateSchool).toHaveBeenCalled();
+    expect(passholderService.updateSchool)
+      .toHaveBeenCalledWith(
+        passholder,
+        newSchool
+      );
+
     expect(controller.updatePending).toBeFalsy();
     expect(controller.asyncError.message).toBe('It failed.');
   });
