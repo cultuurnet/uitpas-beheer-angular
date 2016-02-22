@@ -40,7 +40,7 @@ describe('Controller: EditRemarksModalController', function () {
     expect(uibModalInstance.dismiss).toHaveBeenCalled();
   });
 
-  it('can clears async errors', function () {
+  it('can clear async errors', function () {
     controller.asyncError = { message: 'It did not do what is was supposed to do.' };
     scope.$apply();
 
