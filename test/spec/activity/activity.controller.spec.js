@@ -100,6 +100,7 @@ describe('Controller: ActivityController', function () {
     activityController.query = 'some new query';
     activityController.searchParametersChanged();
     expect(activityController.page).toEqual(1);
+    expect(activityController.hideDateRange).toBeTruthy();
 
     // Reset when date range changes.
     activityController.page = 4;
@@ -257,5 +258,15 @@ describe('Controller: ActivityController', function () {
 
     $scope.$digest();
     expect(activityController.search).toHaveBeenCalled();
+  });
+
+  it('should reset the search query and date range field when asked', function () {
+    activityController.query = 'something';
+    activityController.dateRange = DateRange.NEXT_12_MONTHS;
+
+    activityController.resetSearchQuery();
+
+    expect(activityController.query).toBe('');
+    expect(activityController.dateRange).toBe(DateRange.TODAY);
   });
 });

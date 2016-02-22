@@ -157,12 +157,13 @@ describe('Service: counterService', function () {
       expect(counterService.getActiveFromServer).toHaveBeenCalled();
 
       // the active counter should now resolve immediately
-      counterService.getActive().then(function(counter) {
+      var assertActiveCounterSet = function(counter) {
         expect(counter).toEqual(expectedCounter);
         expect(counterService.setActive.calls.count()).toEqual(1);
         expect(counterService.getActiveFromServer.calls.count()).toEqual(1);
-      });
-      done();
+        done();
+      };
+      counterService.getActive().then(assertActiveCounterSet);
     };
 
     counterService.getActive().then(activeCounterFetchedFromAPI);
@@ -751,6 +752,30 @@ describe('Service: counterService', function () {
     counterService
       .deleteMembership(uid)
       .catch(assertError);
+    $httpBackend.flush();
+  });
+
+  it('can get a list of schools for the active counter', function (done) {
+    var expectedSchools = [
+      {
+        name: 'School A',
+        id: 'unique-id-a'
+      },
+      {
+        name: 'School B',
+        id: 'unique-id-b'
+      }
+    ];
+
+    var assertSchools = function (schoolsFromAPI) {
+      expect(schoolsFromAPI).toEqual(expectedSchools);
+      done();
+    };
+
+    $httpBackend.expectGET(apiUrl + 'schools').respond(200, expectedSchools);
+
+    counterService.getSchools().then(assertSchools);
+
     $httpBackend.flush();
   });
 });

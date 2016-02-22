@@ -1,0 +1,45 @@
+<form name="bulkKansenstatuut" ng-submit="bac.submitForm(bulkKansenstatuut.$valid)" novalidate>
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="bac.cancel()" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Kansenstatuut verlengen</h4>
+  </div>
+  <div class="modal-body">
+    <p>Kansenstatuut verlengen voor
+      <!-- Some items selected -->
+      <span ng-hide="bac.bulkSelection.selectAll" ng-bind="bac.bulkSelection.uitpasNumberSelection.length"></span>
+      <!-- All items selected -->
+      <span ng-show="bac.bulkSelection.selectAll" ng-bind="bac.bulkSelection.searchResults.totalItems"></span>
+      geselecteerde pashouder(s).</p>
+
+    <div class="bg-danger" ng-show="bulkAddress.$invalid && bac.isSubmitted">
+      <p ng-show="bulkKansenstatuut.date.$invalid">Datum is een verplicht veld.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-horizontal">
+          <div class="form-group">
+            <div class="form-inline datepicker">
+              <ubr-datepicker ng-class="{'has-error': bulkKansenstatuut.date.$invalid}" ng-model="bac.kansenstatuutData.kansenstatuutEndDate" ubr-label="Geldig tot" ubr-id="valid-until"
+                                ubr-name="endDate" required></ubr-datepicker>
+              <div ng-if="(bulkKansenstatuut.$submitted || bulkKansenstatuut.date.$touched) && bulkKansenstatuut.date.$invalid" class="text-danger small">
+                <div ng-if="bulkKansenstatuut.date.$error.pattern">De datum heeft een verkeerd formaat.</div>
+                <div ng-if="bulkKansenstatuut.date.$error.required">Datum is een verplicht veld.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <a ng-click="bac.cancel()" class="btn btn-default" ng-disabled="bac.submitBusy">Annuleren</a>
+    <button type="button" class="btn btn-primary" ng-click="bac.submitForm(bac.passholders, bulkKansenstatuut)"
+            ng-disabled="bac.submitBusy || bulkKansenstatuut.$invalid || bulkKansenstatuut.$pending">
+      <span ng-hide="bac.submitBusy">Verlengen</span> <span ng-show="bac.submitBusy"><span class="fa fa-refresh loading small"></span> Verlengen</span>
+    </button>
+  </div>
+</form>

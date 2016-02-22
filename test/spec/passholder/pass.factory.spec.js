@@ -57,6 +57,7 @@ describe('Factory: Pass', function () {
     }],
     'points': 309,
     'remarks': 'remarks',
+    'school': null,
     'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
     'uitpassen': [
       {
@@ -150,6 +151,7 @@ describe('Factory: Pass', function () {
           }
         ],
         remarks: 'remarks',
+        school: null,
         uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
         passNumber: '0930000422202',
         cardSystems: []

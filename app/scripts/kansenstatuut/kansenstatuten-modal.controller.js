@@ -39,7 +39,9 @@ function KansenstatutenModalController (passholder, activeCounter, cardSystemId,
 
   var refreshPassHolderOnKansenStatuutRenewalListener = $rootScope.$on('kansenStatuutRenewed', refreshPassholder);
   var refreshPassHolderOnRemarksUpdatedListener = $rootScope.$on('remarksUpdated', refreshPassholder);
+  var refreshPassHolderOnSchoolUpdatedListener = $rootScope.$on('schoolUpdated', refreshPassholder);
 
   $scope.$on('$destroy', refreshPassHolderOnKansenStatuutRenewalListener);
   $scope.$on('$destroy', refreshPassHolderOnRemarksUpdatedListener);
+  $scope.$on('$destroy', refreshPassHolderOnSchoolUpdatedListener);
 }

@@ -90,12 +90,8 @@ function CheckInDevicesConnectionsController (CheckInDevices, $q) {
 
       job = queue.shift();
 
-      if (job instanceof Function) {
-        job().finally(finishJob);
-      }
-      else {
-        currentSimultaneousRequests--;
-      }
+      job().finally(finishJob);
+
     }
   }
 
