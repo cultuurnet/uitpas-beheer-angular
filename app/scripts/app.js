@@ -10,6 +10,7 @@
  */
 angular
   .module('uitpasbeheerApp', [
+    'angular.chosen',
     'angular-spinkit',
     'config',
     'http-auth-interceptor',

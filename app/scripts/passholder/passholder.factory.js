@@ -103,6 +103,7 @@ function passholderFactory(moment, day) {
     this.kansenStatuten = [];
     this.uitPassen = [];
     this.remarks = '';
+    this.school = null;
 
     if (jsonPassholder) {
       this.parseJson(jsonPassholder);
@@ -133,6 +134,7 @@ function passholderFactory(moment, day) {
       this.points = jsonPassholder.points;
       this.uid = jsonPassholder.uid;
       this.remarks = jsonPassholder.remarks || '';
+      this.school = jsonPassholder.school || null;
       this.uitPassen = parseJsonUitPassen(jsonPassholder.uitpassen);
       this.cardSystems = (jsonPassholder.cardSystems ? jsonPassholder.cardSystems : []);
     },

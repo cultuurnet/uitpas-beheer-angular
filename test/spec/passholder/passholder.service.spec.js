@@ -12,7 +12,7 @@ describe('Service: passholderService', function () {
   }));
 
   // Instantiate service.
-  var passholderService, $httpBackend, $q, $scope, Passholder, Pass, $cacheFactory, SearchParameters, PassholderSearchResults, Coupon;
+  var passholderService, $httpBackend, $q, $scope, $rootScope, Passholder, Pass, $cacheFactory, SearchParameters, PassholderSearchResults, Coupon;
 
   var identityData = {
     'uitPas': {
@@ -51,11 +51,12 @@ describe('Service: passholderService', function () {
     return angular.copy(identityData);
   }
 
-  beforeEach(inject(function ($injector, $rootScope) {
+  beforeEach(inject(function ($injector, _$rootScope_) {
     $httpBackend = $injector.get('$httpBackend');
     passholderService = $injector.get('passholderService');
     $q = $injector.get('$q');
-    $scope = $rootScope;
+    $scope = _$rootScope_.$new();
+    $rootScope = _$rootScope_;
     Passholder = $injector.get('Passholder');
     Pass = $injector.get('Pass');
     $cacheFactory = $injector.get('$cacheFactory');
@@ -1114,5 +1115,45 @@ describe('Service: passholderService', function () {
 
     $httpBackend.flush();
 
+  });
+
+  it('should post the passholder when updating the passholder school', function (done) {
+    var pass = new Pass(getPassData());
+    var passholder = pass.passholder;
+    var school = {
+      id: 'unique-id-a',
+      name: 'School A'
+    };
+    var expectedData = passholder.serialize();
+    expectedData.school = school;
+    var passHolderCache = $cacheFactory.get('passholderCache');
+
+    spyOn(passholderService, 'findPass').and.returnValue($q.resolve(pass));
+    spyOn($rootScope, '$emit');
+    spyOn(passHolderCache, 'put').and.callThrough();
+
+    $httpBackend
+      .expectPOST(apiUrl + 'passholders/' + pass.number, expectedData)
+      .respond(200, expectedData);
+
+    var expectedCachedPass = pass;
+    expectedCachedPass.passholder.school = school;
+
+    var assertSuccess = function () {
+      expect(passHolderCache.put)
+        .toHaveBeenCalledWith(
+          identityData.uitPas.number,
+          expectedCachedPass
+        );
+      expect(passHolderCache.get(pass.number)).toEqual(expectedCachedPass);
+      expect($rootScope.$emit).toHaveBeenCalledWith('schoolUpdated');
+      done();
+    };
+
+    passholderService
+      .updateSchool(passholder, school)
+      .then(assertSuccess);
+
+    $httpBackend.flush();
   });
 });

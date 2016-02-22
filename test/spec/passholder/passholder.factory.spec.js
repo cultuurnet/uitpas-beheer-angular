@@ -39,6 +39,7 @@ describe('Factory: Passholder', function () {
     'points': 309,
     'picture': 'picture-in-base64-format',
     'remarks': 'remarks',
+    'school': null,
     'uid': 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
     'cardSystems': [
       {
@@ -105,6 +106,7 @@ describe('Factory: Passholder', function () {
       picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
       inszNumber: '',
       remarks: 'remarks',
+      school: null,
       uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
       uitPassen: [],
       cardSystems: []
@@ -159,6 +161,10 @@ describe('Factory: Passholder', function () {
   });
 
   it('should correctly parse a passholder with uitPassen', function () {
+    var school = {
+      'name': 'De Zonnewijzer',
+      'id': '550e8400-e29b-41d4-a716-446655440000'
+    };
     var jsonPassholder = getJsonPassholder();
     jsonPassholder.uitpassen = [
       {
@@ -173,6 +179,7 @@ describe('Factory: Passholder', function () {
       }
     ];
     jsonPassholder.inszNumber = 'insz';
+    jsonPassholder.school = school;
 
     var expectedPassholder = {
       name: {
@@ -212,6 +219,7 @@ describe('Factory: Passholder', function () {
       picture: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
       inszNumber: 'insz',
       remarks: 'remarks',
+      school: school,
       uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
       uitPassen: [
         {
@@ -297,6 +305,7 @@ describe('Factory: Passholder', function () {
         }
       ],
       remarks: 'remarks',
+      school: null,
       uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
       cardSystems: [
         {
