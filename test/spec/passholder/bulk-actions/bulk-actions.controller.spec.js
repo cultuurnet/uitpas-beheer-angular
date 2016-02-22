@@ -1,9 +1,10 @@
 'use strict';
 
-describe('Controller: AddressBulkController', function () {
+describe('Controller: BulkActionsController', function () {
 
   var $controller, $uibModalInstance, $scope, BulkSelection, PassholderSearchResults, SearchParameters, $q,
-    searchResults, searchParameters, bulkSelection, passholderService, advancedSearchService, $state, controller, Passholder, passholder;
+    searchResults, searchParameters, bulkSelection, passholderService, advancedSearchService, $state, controller,
+    Passholder, passholder, action;
 
   var addressForm = {
     street: 'Teststraat 123',
@@ -153,14 +154,16 @@ describe('Controller: AddressBulkController', function () {
     searchResults = new PassholderSearchResults(jsonSearchResults);
     searchParameters = new SearchParameters(jsonSearchParameters);
     bulkSelection = new BulkSelection(searchResults, searchParameters, []);
+    action = 'address';
 
 
     controller = getController();
   }));
 
   var getController = function () {
-    controller = $controller('AddressBulkController', {
+    controller = $controller('BulkActionsController', {
       bulkSelection: bulkSelection,
+      action: action,
       passholderService: passholderService,
       $uibModalInstance: $uibModalInstance,
       $state: $state
@@ -271,7 +274,7 @@ describe('Controller: AddressBulkController', function () {
     controller.submitForm(searchResults.passen, addressForm, bulkSelection);
     expect(addressForm.$valid).toBeTruthy();
     expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.showBulkResults', {
-      passholders: searchResults.passen, bulkAddressForm: addressForm, bulkSelection: bulkSelection });
+      passholders: searchResults.passen, bulkForm: addressForm, bulkSelection: bulkSelection, action: action });
     expect($state.transitionTo('counter.main.advancedSearch.showBulkResults'));
   });
 

@@ -13,7 +13,7 @@ angular
 
 /* @ngInject */
 function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter,
-                                  BulkSelection, PassholderSearchResults, bulkActionsService) {
+                                  BulkSelection, PassholderSearchResults, bulkActionsService, activeCounter) {
   function getSearchParametersFromState() {
     var params = new SearchParameters();
     params.fromParams($state.params);
@@ -25,6 +25,7 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   var controller = this;
   controller.activePage = 1;
   controller.loading = true;
+  controller.counterHasKansenstatuutPermission = false;
   /** @type {PassholderSearchResults} */
   controller.results = new PassholderSearchResults();
   controller.searchParameters = getSearchParametersFromState();
@@ -38,6 +39,19 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
       error: false
     }
   };
+
+  /**
+   * Helper function that checks if the active counter has the permission for kansenstatuut
+   *
+   */
+  controller.hasCounterPermissions = function() {
+    angular.forEach(activeCounter.permissions, function(counterPermission) {
+      if (counterPermission == 'kansenstatuut toekennen') {
+        controller.counterHasKansenstatuutPermission = true;
+      }
+    });
+  };
+  controller.hasCounterPermissions();
 
   /**
    * Helper function that checks if the current page has default search parameters.
@@ -151,7 +165,12 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
         break;
       case 'address':
         controller.bulk.submitBusy = false;
-        $state.go('counter.main.advancedSearch.bulkAddress', { bulkSelection: controller.bulk.selection });
+        $state.go('counter.main.advancedSearch.bulkAddress', { bulkSelection: controller.bulk.selection, action: 'address' });
+        break;
+      case 'kansenstatuut':
+        controller.bulk.submitBusy = false;
+        $state.go('counter.main.advancedSearch.bulkKansenstatuut', { bulkSelection: controller.bulk.selection, action: 'kansenstatuut' });
+        break;
     }
   };
 
