@@ -157,12 +157,13 @@ describe('Service: counterService', function () {
       expect(counterService.getActiveFromServer).toHaveBeenCalled();
 
       // the active counter should now resolve immediately
-      counterService.getActive().then(function(counter) {
+      var assertActiveCounterSet = function(counter) {
         expect(counter).toEqual(expectedCounter);
         expect(counterService.setActive.calls.count()).toEqual(1);
         expect(counterService.getActiveFromServer.calls.count()).toEqual(1);
-      });
-      done();
+        done();
+      };
+      counterService.getActive().then(assertActiveCounterSet);
     };
 
     counterService.getActive().then(activeCounterFetchedFromAPI);
