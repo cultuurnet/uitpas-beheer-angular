@@ -124,7 +124,7 @@ function passholderFactory(moment, day) {
         this.inszNumber = jsonPassholder.inszNumber;
       }
       if (jsonPassholder.picture) {
-        this.picture = 'data:image/jpeg;base64, ' + jsonPassholder.picture;
+        this.picture = jsonPassholder.picture;
       }
       this.gender = jsonPassholder.gender;
       this.nationality = jsonPassholder.nationality;
@@ -199,6 +199,9 @@ function passholderFactory(moment, day) {
       });
 
       return matchingCardSystem;
+    },
+    getPictureSrc: function () {
+      return 'data:image/jpeg;base64, ' + this.picture;
     }
   };
 
