@@ -175,7 +175,7 @@ describe('Controller: ShowBulkResultsController', function () {
 
   it('can close all modals', function () {
     controller.cancel();
-    expect($uibModalStack.dismissAll).toHaveBeenCalled();
+    expect($uibModalStack.dismissAll).toHaveBeenCalledWith('bulkResultsClosed');
   });
 
   it('should update all the passholders address', function () {

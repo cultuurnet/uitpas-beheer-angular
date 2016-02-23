@@ -49,8 +49,10 @@ angular
               controllerAs: 'bac'
             })
             .result
-            .finally(function() {
-              $state.go('^');
+            .catch(function (message) {
+              if (message !== 'bulkResultsClosed') {
+                $state.go('^');
+              }
             });
         }
       })
@@ -86,8 +88,10 @@ angular
               controllerAs: 'bac'
             })
             .result
-            .finally(function() {
-              $state.go('^');
+            .catch(function (message) {
+              if (message !== 'bulkResultsClosed') {
+                $state.go('^');
+              }
             });
         }
       })
