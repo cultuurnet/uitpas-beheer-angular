@@ -452,4 +452,20 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
 
     return deferredSchools.promise;
   };
+
+/**
+ * @returns {Promise}
+ *   A promise with a list of activities for the active counter.
+ */
+  service.getActivities = function () {
+    var url = apiUrl + '/active/activities';
+    var deferredAssociations = $q.defer();
+
+    $http
+      .get(url)
+      .success(deferredAssociations.resolve)
+      .error(deferredAssociations.reject);
+
+    return deferredAssociations.promise;
+  };
 }
