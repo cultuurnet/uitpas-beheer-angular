@@ -146,4 +146,62 @@ angular
             });
         }
       })
+      .state('counter.main.advancedSearch.bulkPoints', {
+        url: '/bulkactions/points',
+        requiresCounter: true,
+        reloadOnSearch: false,
+        params: {
+          'activeCounterAssociations': null,
+          'activeCounter': null,
+          bulkSelection: null,
+          action: null,
+          $uibModalInstance: null,
+          passholder: null
+        },
+        resolve: {
+          /* @ngInject */
+          activeCounterAssociations: function (counterService) {
+            return counterService.getAssociations();
+          },
+          /* @ngInject */
+          activeCounter: function (counterService) {
+            return counterService.getActive();
+          },
+          bulkSelection: ['$stateParams', function($stateParams) {
+            return $stateParams.bulkSelection;
+          }],
+          action: ['$stateParams', function($stateParams) {
+            return $stateParams.action;
+          }],
+          $uibModalInstance: ['$stateParams', function($stateParams) {
+            return $stateParams.$uibModalInstance;
+          }],
+          passholder: ['$stateParams', function($stateParams) {
+            $stateParams.passholder = {
+              gender: 'MALE',
+              inszNumber: '',
+              nationality: 'belg',
+              passNumber: '0930000005015',
+              picture: '',
+              points: 3,
+              remarks: '',
+              school: null,
+              uid: 'a52f7de7-e4a9-480b-8a04-fefde55acfa5'
+            };
+            return $stateParams.passholder;
+          }]
+        },
+        views: {
+          'content@counter': {
+            templateUrl: 'views/activity/content-passholder-activities.html',
+            controller: 'ActivityController',
+            controllerAs: 'ac'
+          },
+          'sidebar@counter': {
+            templateUrl: 'views/passholder/bulk-actions/selected-passholders.html',
+            controller: 'BulkActionsController',
+            controllerAs: 'bac'
+          }
+        }
+      });
   });

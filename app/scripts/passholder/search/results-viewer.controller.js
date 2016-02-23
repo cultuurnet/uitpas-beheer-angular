@@ -160,6 +160,10 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   controller.doBulkAction = function () {
     controller.bulk.submitBusy = true;
     switch (controller.bulk.action) {
+      case 'points':
+        controller.bulk.submitBusy = false;
+        $state.go('counter.main.advancedSearch.bulkPoints', { bulkSelection: controller.bulk.selection, action: 'points' });
+        break;
       case 'export':
         controller.doBulkExport();
         break;
