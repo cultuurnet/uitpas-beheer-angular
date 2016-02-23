@@ -71,14 +71,19 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
     }
 
     function registerNewPassholder(pass) {
-      $state.go(
-        'counter.main.register',
-        {
-          pass: pass,
-          identification: pass.number,
-          type: pass.type
-        }
-      );
+      if (pass.number === $state.params.identification) {
+        $state.reload('counter.main.register');
+      }
+      else {
+        $state.go(
+          'counter.main.register',
+          {
+            pass: pass,
+            identification: pass.number,
+            type: pass.type
+          }
+        );
+      }
     }
 
     function displayIdentificationError(error) {
