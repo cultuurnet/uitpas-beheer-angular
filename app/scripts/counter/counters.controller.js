@@ -12,7 +12,7 @@ angular
   .controller('CountersController', countersController);
 
 /* @ngInject */
-function countersController($state, counterService, list, lastActiveId) {
+function countersController($state, counterService, list, lastActiveId, appConfig) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -39,21 +39,5 @@ function countersController($state, counterService, list, lastActiveId) {
     });
   };
 
-  controller.contacts = [
-    {
-      name: 'UiTPAS Oostende',
-      telephone: '059 12 34 56',
-      email: 'uit@oostende.be'
-    },
-    {
-      name: 'UiTPAS Gent',
-      telephone: '059 12 34 56',
-      email: 'uit@gent.be'
-    },
-    {
-      name: 'Andere regio\'s',
-      telephone: '059 12 34 56',
-      email: 'vragen@uitpas.be'
-    }
-  ];
+  controller.contacts = appConfig.contacts || [];
 }
