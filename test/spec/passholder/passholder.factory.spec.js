@@ -104,7 +104,6 @@ describe('Factory: Passholder', function () {
       }],
       points: 309,
       picture: 'picture-in-base64-format',
-      pictureData: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
       inszNumber: '',
       remarks: 'remarks',
       school: null,
@@ -218,7 +217,6 @@ describe('Factory: Passholder', function () {
       }],
       points: 309,
       picture: 'picture-in-base64-format',
-      pictureData: 'data:image/jpeg;base64, ' + 'picture-in-base64-format',
       inszNumber: 'insz',
       remarks: 'remarks',
       school: school,
@@ -264,6 +262,13 @@ describe('Factory: Passholder', function () {
     var passholder = new Passholder(getJsonPassholder());
 
     expect(passholder.getNames()).toEqual(expectedNames);
+  });
+
+  it('has a helper function to return the picture source', function () {
+    var expectedPictureSrc = 'data:image/jpeg;base64, ' + 'picture-in-base64-format';
+    var passholder = new Passholder(getJsonPassholder());
+
+    expect(passholder.getPictureSrc()).toEqual(expectedPictureSrc);
   });
 
   it('has a helper function to serialize the passholder', function () {

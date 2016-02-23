@@ -116,7 +116,6 @@ describe('Factory: Pass', function () {
         },
         inszNumber: '',
         picture: '',
-        pictureData: '',
         gender: 'MALE',
         nationality: 'belg',
         privacy: {

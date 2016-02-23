@@ -74,8 +74,8 @@
           <div class="grid display-table" ng-click="rvc.showPassholderDetails(pass.number)">
             <div class="grid__2 grid--bp-med__1 first">
               <!-- image -->
-              <img ng-if="pass.passholder.pictureData" style="width: 47px; height: 64px"
-                   ng-src="{{pass.passholder.pictureData}}" />
+              <img ng-if="pass.passholder.picture" style="width: 47px; height: 64px"
+                   ng-src="{{::pass.passholder.getPictureSrc()}}" />
             </div>
             <div class="grid__10 grid--bp-med__4">
               <!-- name -->
