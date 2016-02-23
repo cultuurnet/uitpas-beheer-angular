@@ -103,6 +103,7 @@ function passholderFactory(moment, day) {
     this.kansenStatuten = [];
     this.uitPassen = [];
     this.remarks = '';
+    this.school = null;
 
     if (jsonPassholder) {
       this.parseJson(jsonPassholder);
@@ -123,7 +124,7 @@ function passholderFactory(moment, day) {
         this.inszNumber = jsonPassholder.inszNumber;
       }
       if (jsonPassholder.picture) {
-        this.picture = 'data:image/jpeg;base64, ' + jsonPassholder.picture;
+        this.picture = jsonPassholder.picture;
       }
       this.gender = jsonPassholder.gender;
       this.nationality = jsonPassholder.nationality;
@@ -133,6 +134,7 @@ function passholderFactory(moment, day) {
       this.points = jsonPassholder.points;
       this.uid = jsonPassholder.uid;
       this.remarks = jsonPassholder.remarks || '';
+      this.school = jsonPassholder.school || null;
       this.uitPassen = parseJsonUitPassen(jsonPassholder.uitpassen);
       this.cardSystems = (jsonPassholder.cardSystems ? jsonPassholder.cardSystems : []);
     },
@@ -197,6 +199,9 @@ function passholderFactory(moment, day) {
       });
 
       return matchingCardSystem;
+    },
+    getPictureSrc: function () {
+      return 'data:image/jpeg;base64, ' + this.picture;
     }
   };
 

@@ -81,7 +81,16 @@ function passholderAdvantageController(passholder, advantages, advantageService,
     var updatedPointCount = controller.availablePoints + activity.points;
     controller.availablePoints = updatedPointCount;
 
+    var updateAdvantagesList = function(advantages) {
+      controller.advantages = advantages;
+    };
+
+    advantageService
+      .list(controller.passholder.passNumber)
+      .then(updateAdvantagesList);
+
     controller.updateExchangeability(updatedPointCount);
+
   }
 
   var activityCheckinListener = $rootScope.$on('activityCheckedIn', activityCheckedIn);

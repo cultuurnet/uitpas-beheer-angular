@@ -42,6 +42,27 @@ angular
         });
     }
 
+    editSchoolModal.$inject = ['passholder', '$state', '$uibModal'];
+    function editSchoolModal (passholder, $state, $uibModal) {
+      $uibModal
+        .open({
+          animation: true,
+          templateUrl: 'views/kansenstatuut/edit-school-modal.html',
+          size: 'sm',
+          resolve: {
+            passholder: function () {
+              return passholder;
+            }
+          },
+          controller: 'EditSchoolModalController',
+          controllerAs: 'esmc'
+        })
+        .result
+        .finally(function () {
+          $state.go('^');
+        });
+    }
+
     editKansenstatuutModal.inject = ['passholder', 'activeCounter', 'cardSystemId', '$state', '$uibModal'];
     function editKansenstatuutModal(passholder, activeCounter, cardSystemId, $state, $uibModal) {
       $uibModal
@@ -106,6 +127,9 @@ angular
       })
       .state('counter.main.passholder.kansenStatuut.editRemarks', {
         onEnter: editRemarksModal
+      })
+      .state('counter.main.passholder.kansenStatuut.editSchool', {
+        onEnter: editSchoolModal
       })
       .state('counter.main.passholder.kansenStatuut.edit', {
         params: {

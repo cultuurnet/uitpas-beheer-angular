@@ -9,7 +9,7 @@
 <div class="passholder passholder-data">
   <h3>Gegevens <a class="pull-right" ui-sref="counter.main.passholder.edit()">Aanpassen</a></h3>
   <img ng-if="pdc.passholder.picture" class="pull-right" style="width: 47px; height: 64px"
-       ng-src="{{pdc.passholder.picture}}" />
+       ng-src="{{pdc.passholder.getPictureSrc()}}" />
   <div class="name">{{pdc.passholder.name.first}} {{pdc.passholder.name.middle}} {{pdc.passholder.name.last}}</div>
   <div class="address">
     {{pdc.passholder.address.street}}<br />
@@ -60,6 +60,9 @@
     <span ng-hide="pdc.activeCounter.isAuthorisedRegistrationCounter(pdc.pass.cardSystem.id)" class="list-group-item" ng-class="'status-' + kansenStatuut.status" ng-repeat="kansenStatuut in pdc.passholder.kansenStatuten">{{kansenStatuut.cardSystem.name}}
       <small class="label label-danger" ng-show="kansenStatuut.status === 'EXPIRED'">Vervallen</small>
       <small class="label label-warning" ng-show="kansenStatuut.status === 'IN_GRACE_PERIOD'">Vervallen op {{kansenStatuut.endDate | date : 'dd/MM/yyyy'}}</small></span>
+  </div>
+  <div ng-show="pdc.passholder.school && pdc.passholder.school.name">
+    <a ui-sref="counter.main.passholder.kansenStatuut()"><i class="fa fa-graduation-cap"></i><span ng-bind="pdc.passholder.school.name"></span></a>
   </div>
 </div>
 <div class="passholder passholder-memberships">

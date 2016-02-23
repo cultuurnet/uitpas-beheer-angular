@@ -120,6 +120,7 @@ function PassholderDetailController (
   var cleanupActivityCheckedInListener = $rootScope.$on('activityCheckedIn', addCheckinPoint);
   var cleanupPassholderUpdatedListener = $rootScope.$on('passholderUpdated', setPassholderForSidebar);
   var cleanupKansenStatuutRenewalListener = $rootScope.$on('kansenStatuutRenewed', refreshPassholder);
+  var cleanupSchoolUpdatedListener = $rootScope.$on('schoolUpdated', refreshPassholder);
   var cleanupTicketRemovedListener = $rootScope.$on('ticketRemoved', loadCoupons);
   var cleanupActivityTariffClaimedListener = $rootScope.$on('activityTariffClaimed', loadCoupons);
 
@@ -128,6 +129,7 @@ function PassholderDetailController (
   $scope.$on('$destroy', cleanupActivityCheckedInListener);
   $scope.$on('$destroy', cleanupPassholderUpdatedListener);
   $scope.$on('$destroy', cleanupKansenStatuutRenewalListener);
+  $scope.$on('$destroy', cleanupSchoolUpdatedListener);
   $scope.$on('$destroy', cleanupTicketRemovedListener);
   $scope.$on('$destroy', cleanupActivityTariffClaimedListener);
 }

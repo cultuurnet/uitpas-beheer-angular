@@ -2,7 +2,7 @@
   <h2 class="overview__title">Activiteiten</h2>
   <div class="grid overview__search">
     <div class="grid__12 grid--bp-med__6">
-      <div class="btn-group" uib-dropdown>
+      <div class="btn-group" uib-dropdown ng-hide="ac.hideDateRange && !ac.activitiesLoading">
         <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
         <button type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="!!ac.activitiesLoading">
           <span class="caret"></span>
@@ -26,6 +26,11 @@
             <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">Afgelopen activiteiten</a>
           </li>
         </ul>
+      </div>
+      <div ng-show="ac.hideDateRange && !ac.activitiesLoading">
+        <strong><ng-pluralize count="ac.totalActivities"
+                      when="{'one': '1 resultaat gevonden', 'other': '{} resultaten gevonden'}">
+        </ng-pluralize> </strong> <a ng-click="ac.resetSearchQuery()">Annuleren</a>
       </div>
     </div>
     <div class="grid__12 grid--bp-med__6 text-right">

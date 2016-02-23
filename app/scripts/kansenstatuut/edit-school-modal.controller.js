@@ -2,24 +2,39 @@
 
 /**
  * @ngdoc function
- * @name uitpasbeheerApp.controller:EditRemarksModalController
+ * @name uitpasbeheerApp.controller:EditSchoolModalController
  * @description
- * # EditRemarksModalController
+ * # EditSchoolModalController
  * Controller of the ubr.kansenstatuut
  */
 angular
   .module('ubr.kansenstatuut')
-  .controller('EditRemarksModalController', EditRemarksModalController);
+  .controller('EditSchoolModalController', EditSchoolModalController);
 
 /* @ngInject */
-function EditRemarksModalController (passholder, $uibModalInstance, passholderService, $scope) {
+function EditSchoolModalController (passholder, $uibModalInstance, passholderService, $scope, counterService) {
   /*jshint validthis: true */
   var controller = this;
 
   controller.updatePending = false;
   controller.passholder = passholder;
   controller.asyncError = null;
-  controller.remarks = passholder.remarks;
+  controller.school = passholder.school;
+  controller.schools = [];
+  controller.schoolsLoaded = false;
+
+  controller.loadSchools = function () {
+    counterService.getSchools()
+      .then(
+        function (schools) {
+          controller.schools = schools.filter(function (school) {
+            return school.id !== passholder.school.id;
+          });
+          controller.schoolsLoaded = true;
+        }
+      );
+  };
+  controller.loadSchools();
 
   controller.cancelModal = function () {
     $uibModalInstance.dismiss();
@@ -32,10 +47,10 @@ function EditRemarksModalController (passholder, $uibModalInstance, passholderSe
   }
 
   $scope.$watch(function () {
-    return controller.remarks || null;
+    return controller.school || null;
   }, clearAsyncError);
 
-  controller.updateRemarks = function (editForm) {
+  controller.updateSchool = function (editForm) {
     var stopEditing = function() {
       $uibModalInstance.close();
     };
@@ -50,12 +65,12 @@ function EditRemarksModalController (passholder, $uibModalInstance, passholderSe
       controller.updatePending = false;
     };
 
-    if (editForm.remarks.$valid) {
+    if (editForm.editSchool.$valid) {
       controller.updatePending = true;
-      var remarks = controller.remarks;
+      var school = controller.school;
 
       passholderService
-        .updateRemarks(passholder, remarks)
+        .updateSchool(passholder, school)
         .then(stopEditing, showUpdateErrors)
         .finally(unlockForm);
     }

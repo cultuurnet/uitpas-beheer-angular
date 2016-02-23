@@ -2,21 +2,25 @@
 
 /**
  * @ngdoc function
- * @name ubr.passholder.bulk-actions.controller:AddressBulkController
+ * @name ubr.passholder.bulk-actions.controller:BulkActionsController
  * @description
- * # AddressBulkController
+ * # BulkActionsController
  * Controller of the ubr.passholder.bulkActions module.
  */
 angular
   .module('ubr.passholder.bulkActions')
-  .controller('AddressBulkController', AddressBulkController);
+  .controller('BulkActionsController', BulkActionsController);
 
 /* @ngInject */
-function AddressBulkController (bulkSelection, passholderService, $uibModalInstance, $state) {
+function BulkActionsController (bulkSelection, action, passholderService, $uibModalInstance, $state, moment) {
   var controller = this;
   controller.submitBusy = false;
   controller.isSubmitted = false;
   controller.bulkSelection = bulkSelection;
+  controller.action = action;
+  controller.kansenstatuutData = {
+    kansenstatuutEndDate: moment().endOf('year').toDate()
+  };
   var passholders = Array();
   var searchParameters = bulkSelection.searchParameters;
   var totalItems = bulkSelection.searchResults.totalItems;
@@ -58,12 +62,12 @@ function AddressBulkController (bulkSelection, passholderService, $uibModalInsta
 
   controller.checkSelectAll();
 
-  controller.submitForm = function(passholders, bulkAddressForm, bulkSelection) {
+  controller.submitForm = function(passholders, bulkForm) {
     controller.isSubmitted = true;
-    if(bulkAddressForm.$valid) {
+    if(bulkForm.$valid) {
       if (!controller.submitBusy) {
         controller.submitBusy = true;
-        $state.go('counter.main.advancedSearch.showBulkResults', { passholders: passholders, bulkAddressForm: bulkAddressForm, bulkSelection: bulkSelection });
+        $state.go('counter.main.advancedSearch.showBulkResults', { passholders: passholders, bulkForm: bulkForm, bulkSelection: controller.bulkSelection, action: controller.action });
         controller.submitBusy = false;
       }
     }

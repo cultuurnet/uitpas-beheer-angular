@@ -42,6 +42,16 @@
     <p style="white-space: pre-wrap" ng-if="pksc.passholder.remarks" ng-bind="pksc.passholder.remarks | characters:300"></p>
     <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editRemarks" class="btn btn-primary btn-small"
            value="Bewerken">
+    <hr>
+    <h5>School</h5>
+    <div ng-if="!pksc.passholder.school || !pksc.passholder.school.name" class="alert alert-info" role="alert">
+      Geen school informatie beschikbaar.
+    </div>
+    <span ng-show="pksc.passholder.school && pksc.passholder.school.name">
+      <i class="fa fa-graduation-cap"></i><span ng-bind="pksc.passholder.school.name"></span>
+    </span>
+    <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editSchool"
+           class="btn btn-primary btn-small" value="Bewerken">
   </section>
 
 </div><!-- end modal-body -->

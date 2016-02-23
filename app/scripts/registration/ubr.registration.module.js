@@ -27,10 +27,17 @@ angular
 
     var registrationModalInstance;
 
+    redirectOnScan.$inject = ['UiTPASRouter'];
+    function redirectOnScan(UiTPASRouter) {
+      UiTPASRouter.redirectOnScanEnabled();
+    }
+
     $stateProvider
       .state('counter.main.register', {
         url: 'passholder/:identification/register',
         requiresCounter: true,
+        redirectOnScan: true,
+        onEnter: redirectOnScan,
         params: {
           pass: null,
           identification: null

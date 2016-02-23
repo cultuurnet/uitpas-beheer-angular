@@ -12,7 +12,7 @@ angular
   .controller('HelpController', HelpController);
 
 /* @ngInject */
-function HelpController (helpService, $q, $state) {
+function HelpController (helpService, $q, $state, appConfig) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -34,7 +34,17 @@ function HelpController (helpService, $q, $state) {
 
   init();
 
-  controller.submitForm = function () {
+  controller.isFormDirty = function (form) {
+    if (form.$dirty) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  };
+
+  controller.submitForm = function (form) {
+    form.$setPristine();
     controller.formSubmitBusy = true;
 
     var updateHelpOnPage = function () {
@@ -51,4 +61,6 @@ function HelpController (helpService, $q, $state) {
 
     controller.formSubmitBusy = false;
   };
+
+  controller.contacts = appConfig.contacts || [];
 }

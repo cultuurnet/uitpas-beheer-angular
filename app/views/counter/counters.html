@@ -33,11 +33,11 @@
   <div class="site-login__intro" ng-if="::!counters.total">
     <p>Je bent nog geen lid van een UiTPAS-balie. Om deze applicatie te kunnen gebruiken, moet je lid zijn van een UiTPAS-balie.</p>
     <p>Stuur je e-mailadres en de naam van je organisatie naar de verantwoordelijke.</p>
-    <ul class="list-unstyled" ng-repeat="contact in ::counters.contacts">
-      <li class="vcard">
+    <ul class="helpdesk-list">
+      <li class="vcard" ng-repeat="contact in ::counters.contacts">
         <span class="org" ng-bind="::contact.name"></span>
-        <span class="tel" ng-bind="::contact.telephone"></span>
-        <span class="email"><a ng-href="mailto:{{ ::contact.email }}" ng-bind="::contact.email"></a></span>
+        <span class="tel" ng-bind="::contact.telephone" ng-if="::contact.telephone"></span>
+        <span class="email"><a ng-href="mailto:{{ ::contact.email }}" ng-bind="::contact.email" ng-if="::contact.email"></a></span>
       </li>
     </ul>
   </div>
