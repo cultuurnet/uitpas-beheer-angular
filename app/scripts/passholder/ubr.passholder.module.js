@@ -76,7 +76,8 @@ angular
           'pass': null,
           'passholder': null,
           'advantages': null,
-          'activeCounter': null
+          'activeCounter': null,
+          'activityMode': null
         },
         resolve: {
           pass: getPassFromStateParams,
@@ -88,6 +89,9 @@ angular
           /* @ngInject */
           activeCounter: function (counterService) {
             return counterService.getActive();
+          },
+          activityMode: function() {
+            return 'passholders';
           }
         }
       })

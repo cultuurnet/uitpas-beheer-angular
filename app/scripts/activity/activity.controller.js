@@ -12,7 +12,7 @@ angular
   .controller('ActivityController', ActivityController);
 
 /* @ngInject */
-function ActivityController (passholder, activityService, DateRange, $rootScope, $scope) {
+function ActivityController (passholder, activityService, counterService, DateRange, $rootScope, $scope, activityMode) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -104,9 +104,16 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
     };
 
     ++controller.activitiesLoading;
-    activityService
-      .search(passholder, searchParameters)
-      .then(showSearchResults, searchingFailed);
+    if (activityMode == 'passholders') {
+      activityService
+        .search(passholder, searchParameters)
+        .then(showSearchResults, searchingFailed);
+    }
+    else if (activityMode == 'counter') {
+      counterService
+        .getActivities()
+        .then(showSearchResults, searchingFailed);
+    }
   };
 
   // Do an initial search to populate the activity list.
