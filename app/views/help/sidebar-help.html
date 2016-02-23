@@ -6,8 +6,8 @@
   <h3>Snel naar</h3>
   <div ubr-showdown-markdown-to-html="hc.helpMarkdown" md-filters="getOnlyTitles"></div>
   <h3>Helpdesk</h3>
-  <ul class="helpdesk-list" ng-repeat="contact in ::hc.contacts">
-    <li class="vcard">
+  <ul class="helpdesk-list">
+    <li class="vcard" ng-repeat="contact in ::hc.contacts">
       <span class="org" ng-bind="::contact.name"></span>
       <span class="tel" ng-bind="::contact.telephone" ng-if="::contact.telephone"></span>
       <span class="email"><a ng-href="mailto:{{ ::contact.email }}" ng-bind="::contact.email" ng-if="::contact.email"></a></span>
