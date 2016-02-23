@@ -88,6 +88,7 @@ function passholderFactory(moment, day) {
     };
     this.inszNumber = '';
     this.picture = '';
+    this.pictureData = '';
     this.gender = '';
     this.nationality = '';
     this.privacy = {
@@ -124,7 +125,8 @@ function passholderFactory(moment, day) {
         this.inszNumber = jsonPassholder.inszNumber;
       }
       if (jsonPassholder.picture) {
-        this.picture = 'data:image/jpeg;base64, ' + jsonPassholder.picture;
+        this.picture = jsonPassholder.picture;
+        this.pictureData = 'data:image/jpeg;base64, ' + jsonPassholder.picture;
       }
       this.gender = jsonPassholder.gender;
       this.nationality = jsonPassholder.nationality;
@@ -160,6 +162,7 @@ function passholderFactory(moment, day) {
       });
 
       delete serializedPassholder.uitPassen;
+      delete serializedPassholder.pictureData;
 
       return serializedPassholder;
     },
