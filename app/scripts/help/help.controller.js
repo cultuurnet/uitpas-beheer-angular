@@ -12,7 +12,7 @@ angular
   .controller('HelpController', HelpController);
 
 /* @ngInject */
-function HelpController (helpService, $q, $state) {
+function HelpController (helpService, $q, $state, appConfig) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -61,4 +61,6 @@ function HelpController (helpService, $q, $state) {
 
     controller.formSubmitBusy = false;
   };
+
+  controller.contacts = appConfig.contacts || [];
 }
