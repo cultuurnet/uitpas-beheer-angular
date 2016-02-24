@@ -86,6 +86,14 @@ describe('Controller: EditSchoolModalController', function () {
     expect(controller.schools).toEqual(expectedSchools);
   });
 
+  it('loads all schools when the passholder does not have a school', function () {
+    expect(controller.schools).toEqual([]);
+    controller.passholder.school = {};
+    scope.$digest();
+
+    expect(controller.schools).toEqual(schools);
+  });
+
   it('can dismiss the modal', function () {
     controller.cancelModal();
     expect(uibModalInstance.dismiss).toHaveBeenCalled();
