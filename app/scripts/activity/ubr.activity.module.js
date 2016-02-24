@@ -46,7 +46,7 @@ angular
           $uibModal
             .open({
               animation: true,
-              templateUrl: 'views/activity/modal-passholder-activity-tariffs.html',
+              templateUrl: 'views/activity/modal-activity-tariffs.html',
               size: modalSize,
               resolve: {
                 passholder: function () {
@@ -82,7 +82,7 @@ angular
           $uibModal
             .open({
               animation: true,
-              templateUrl: 'views/activity/modal-passholder-activity-details.html',
+              templateUrl: 'views/activity/modal-activity-details.html',
               size: 'sm',
               resolve: {
                 activity: function() {

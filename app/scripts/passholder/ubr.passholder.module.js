@@ -61,7 +61,7 @@ angular
             controllerAs: 'pdc'
           },
           'top@counter.main.passholder': {
-            templateUrl: 'views/activity/content-passholder-activities.html',
+            templateUrl: 'views/activity/content-activities.html',
             controller: 'ActivityController',
             controllerAs: 'ac'
           },
