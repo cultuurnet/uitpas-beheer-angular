@@ -1,4 +1,26 @@
 {
   "apiUrl": "http://culpas-silex.dev/",
-  "basePath": "/"
+  "basePath": "/",
+  "contacts": [
+    {
+      "name": "Dender",
+      "email": "aalst@uitpas.be"
+    },
+    {
+      "name": "Paspartoe",
+      "email": "paspartoe@vgc.be"
+    },
+    {
+      "name": "Gent",
+      "email": "uitpas@gent.be"
+    },
+    {
+      "name": "Oostende",
+      "email": "uitpas@oostende.be"
+    },
+    {
+      "name": "Zuidwest",
+      "email": "uitpas@zuidwest.be"
+    }
+  ]
 }
