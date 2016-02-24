@@ -104,14 +104,14 @@ function ActivityController (passholder, activityService, counterService, DateRa
     };
 
     ++controller.activitiesLoading;
-    if (activityMode == 'passholders') {
+    if (activityMode === 'passholders') {
       activityService
         .search(passholder, searchParameters)
         .then(showSearchResults, searchingFailed);
     }
-    else if (activityMode == 'counter') {
+    else if (activityMode === 'counter') {
       counterService
-        .getActivities()
+        .getActivities(searchParameters)
         .then(showSearchResults, searchingFailed);
     }
   };
