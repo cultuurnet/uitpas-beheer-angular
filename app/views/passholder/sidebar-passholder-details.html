@@ -61,9 +61,6 @@
       <small class="label label-danger" ng-show="kansenStatuut.status === 'EXPIRED'">Vervallen</small>
       <small class="label label-warning" ng-show="kansenStatuut.status === 'IN_GRACE_PERIOD'">Vervallen op {{kansenStatuut.endDate | date : 'dd/MM/yyyy'}}</small></span>
   </div>
-  <div ng-show="pdc.passholder.school && pdc.passholder.school.name">
-    <a ui-sref="counter.main.passholder.kansenStatuut()"><i class="fa fa-graduation-cap"></i><span ng-bind="pdc.passholder.school.name"></span></a>
-  </div>
 </div>
 <div class="passholder passholder-memberships">
   <h3><i class="fa fa-users"></i> Lidmaatschappen <a class="pull-right" ui-sref="counter.main.passholder.memberships()">Beheren</a></h3>
