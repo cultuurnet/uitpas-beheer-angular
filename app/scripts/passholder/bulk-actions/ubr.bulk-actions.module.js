@@ -116,7 +116,8 @@ angular
             return $stateParams.action;
           }]
         },
-        onEnter: function(passholders, bulkForm, bulkSelection, action, $state, $uibModal) {
+        /* @ngInject */
+        onEnter: function(passholders, bulkForm, bulkSelection, action, $state, $uibModal, counterService) {
           $uibModal
             .open({
               animation: true,
@@ -132,12 +133,10 @@ angular
                 action: function() {
                   return action;
                 },
-                resolve: {
-                  bulkSelection: function() {
-                    return bulkSelection;
-                  }
+                bulkSelection: function() {
+                  return bulkSelection;
                 },
-                activeCounter: function (counterService) {
+                activeCounter: function () {
                   return counterService.getActive();
                 }
               },
