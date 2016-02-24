@@ -1,9 +1,46 @@
 // Footer
 .footer {
-  background-color: $white; 
+  background-color: $white;
+  border-top: 1px solid $gray-15; 
+  margin-top: $rh-med;
   padding-bottom: $rh-xsm;
 
-  a {
-    margin-right: .5em;
+  .list-inline {
+    display: block;
+    width: 100%;
+    + .list-inline {
+      border-top: 1px solid $gray-15; 
+      padding-top: $rh-xsm;
+    }
+    li {
+      display: block;
+      width: 100%;
+    }
+  }
+  
+  @include breakpoint(map-get($breakpoints, sml)) {
+    border-top: none;
+    .list-inline + .list-inline {
+      border-top: none; 
+      padding-top: 0;
+    }
+  }
+  
+  @include breakpoint(map-get($breakpoints, lrg)) {
+    .list-inline {
+      display: inline;
+      width: auto;
+      float: left;
+      + .list-inline {
+        float: right;
+      }
+      li {
+        display: inline;
+        width: auto;
+      }
+      a {
+        margin-right: .5em;
+      }
+    }
   }
 }
