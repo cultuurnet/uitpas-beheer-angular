@@ -4,7 +4,7 @@ describe('Controller: ActivityController', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  var $scope, $httpBackend, $q, activityController, activityService, DateRange;
+  var $controller, $scope, $rootScope, $httpBackend, $q, activityController, activityService, counterService, DateRange;
 
   var deferredActivities;
 
@@ -62,24 +62,29 @@ describe('Controller: ActivityController', function () {
 
   var passholder = { passNumber: '01234567891234', points: 123 };
 
-  beforeEach(inject(function ($injector, $rootScope){
-    var $controller = $injector.get('$controller');
+  beforeEach(inject(function ($injector){
+    $controller = $injector.get('$controller');
     $q = $injector.get('$q');
+    $rootScope = $injector.get('$rootScope');
     deferredActivities = $q.defer();
     var activityPromise = deferredActivities.promise;
     activityService = jasmine.createSpyObj('activityService', ['checkin', 'claimTariff', 'search']);
+    counterService = jasmine.createSpyObj('counterService', ['getActivities']);
     DateRange = $injector.get('DateRange');
     $scope = $rootScope.$new();
     $httpBackend = $injector.get('$httpBackend');
 
     activityService.search.and.returnValue(activityPromise);
+    counterService.getActivities.and.returnValue(activityPromise);
 
     activityController = $controller('ActivityController', {
       passholder: passholder,
       activityService: activityService,
+      counterService: counterService,
       DateRange: DateRange,
       $rootScope: $rootScope,
-      $scope: $scope
+      $scope: $scope,
+      activityMode: 'passholders'
     });
   }));
 
@@ -88,6 +93,24 @@ describe('Controller: ActivityController', function () {
     $scope.$digest();
 
     expect(activityService.search).toHaveBeenCalled();
+    expect(activityController.activitiesLoading).toEqual(0);
+  });
+
+  it('should fetch an initial list of activities for the active counter', function () {
+    activityController = $controller('ActivityController', {
+      passholder: passholder,
+      activityService: activityService,
+      counterService: counterService,
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope,
+      activityMode: 'counter'
+    });
+
+    deferredActivities.resolve(pagedActivities);
+    $scope.$digest();
+
+    expect(counterService.getActivities).toHaveBeenCalled();
     expect(activityController.activitiesLoading).toEqual(0);
   });
 
