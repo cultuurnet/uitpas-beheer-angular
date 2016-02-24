@@ -130,6 +130,6 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   });
 
   controller.cancel = function() {
-    $uibModalStack.dismissAll();
+    $uibModalStack.dismissAll('bulkResultsClosed');
   }
 }
