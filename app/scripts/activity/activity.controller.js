@@ -26,6 +26,7 @@ function ActivityController (passholder, activityService, counterService, DateRa
   controller.totalActivities = 0;
   controller.activitiesLoading = 0;
   controller.hideDateRange = false;
+  controller.activityMode = activityMode;
 
   function getSearchParameters () {
     return {
