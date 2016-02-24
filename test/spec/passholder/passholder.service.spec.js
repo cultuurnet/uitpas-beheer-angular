@@ -1157,7 +1157,7 @@ describe('Service: passholderService', function () {
     $httpBackend.flush();
   });
 
-  it('should clean up the identification before searching a pass', function () {
+  it('cleans up the identification before searching a pass', function () {
     var inszNumber = '201010-002-91';
     var cleanInszNumber = '20101000291';
 
