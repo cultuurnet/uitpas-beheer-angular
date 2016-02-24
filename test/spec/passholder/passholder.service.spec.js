@@ -98,7 +98,7 @@ describe('Service: passholderService', function () {
   });
 
   it('throws an error when the pass request returns an error', function(done) {
-    var uitpasNumber = 'this-is-a-number';
+    var uitpasNumber = 'thisIsANumber';
     var expectedError = {
       type: 'error',
       exception: 'CultuurNet\\UiTPASBeheer\\PassHolder\\PassHolderNotFoundException',
@@ -208,7 +208,7 @@ describe('Service: passholderService', function () {
   });
 
   it('throws an error when the passholder request returns an error', function(done) {
-    var uitpasNumber = 'this-is-a-number';
+    var uitpasNumber = 'thisIsANumber';
     var expectedError = {
       type: 'error',
       exception: 'CultuurNet\\UiTPASBeheer\\PassHolder\\PassHolderNotFoundException',
@@ -1154,6 +1154,21 @@ describe('Service: passholderService', function () {
       .updateSchool(passholder, school)
       .then(assertSuccess);
 
+    $httpBackend.flush();
+  });
+
+  it('should clean up the identification before searching a pass', function () {
+    var inszNumber = '201010-002-91';
+    var cleanInszNumber = '20101000291';
+
+    // Mock an HTTP response.
+    $httpBackend
+      .expectGET(apiUrl + 'identities/' + cleanInszNumber)
+      .respond(200, JSON.stringify(identityData));
+    // Request the passholder data and assert it when its returned.
+    passholderService.findPass(inszNumber);
+
+    // Deliver the HTTP response so the user data is asserted.
     $httpBackend.flush();
   });
 });
