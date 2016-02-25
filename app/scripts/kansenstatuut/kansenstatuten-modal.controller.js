@@ -31,24 +31,16 @@ function KansenstatutenModalController (passholder, activeCounter, cardSystemId,
 
   controller.removeSchool = function () {
     controller.updatePending = true;
-    console.log(controller.passholder);
     var passholderData = angular.copy(controller.passholder);
-    passholderData.school = {};
+    passholderData.school = null;
 
-    var showUpdatedPassholder = function (updatedPassholderData) {
-      console.log(updatedPassholderData);
-      controller.updatePending = false;
-    };
-
-    var informAboutUpdateFailure = function (error) {
-      console.log(error);
+    var releaseForm = function () {
       controller.updatePending = false;
     };
 
     passholderService
       .update(passholderData, controller.passholder.passNumber)
-      .then(showUpdatedPassholder, informAboutUpdateFailure);
-    console.log('removing all schools');
+      .finally(releaseForm);
   };
 
   function refreshPassholder () {
