@@ -96,7 +96,8 @@ angular
           passholders: null,
           bulkForm: null,
           bulkSelection: null,
-          action: null
+          action: null,
+          activity: null
         },
         resolve: {
           passholders: ['$stateParams', function($stateParams) {
@@ -110,9 +111,12 @@ angular
           }],
           action: ['$stateParams', function($stateParams) {
             return $stateParams.action;
+          }],
+          activity: ['$stateParams', function($stateParams) {
+            return $stateParams.activity;
           }]
         },
-        onEnter: function(passholders, bulkForm, bulkSelection, action, $state, $uibModal) {
+        onEnter: function(passholders, bulkForm, bulkSelection, action, activity, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
@@ -135,6 +139,9 @@ angular
                 },
                 activeCounter: function (counterService) {
                   return counterService.getActive();
+                },
+                activity: function() {
+                  return activity;
                 }
               },
               controller: 'ShowBulkResultsController',
@@ -156,7 +163,9 @@ angular
           bulkSelection: null,
           action: null,
           $uibModalInstance: null,
-          passholder: null
+          passholder: null,
+          passholders: null,
+          activityMode: null
         },
         resolve: {
           /* @ngInject */
@@ -176,24 +185,16 @@ angular
           $uibModalInstance: ['$stateParams', function($stateParams) {
             return $stateParams.$uibModalInstance;
           }],
-          passholder: ['$stateParams', function($stateParams) {
-            $stateParams.passholder = {
-              gender: 'MALE',
-              inszNumber: '',
-              nationality: 'belg',
-              passNumber: '0930000005015',
-              picture: '',
-              points: 3,
-              remarks: '',
-              school: null,
-              uid: 'a52f7de7-e4a9-480b-8a04-fefde55acfa5'
-            };
-            return $stateParams.passholder;
-          }]
+          passholder: function () {
+            return null;
+          },
+          activityMode: function() {
+            return 'counter';
+          }
         },
         views: {
           'content@counter': {
-            templateUrl: 'views/activity/content-passholder-activities.html',
+            templateUrl: 'views/activity/content-activities.html',
             controller: 'ActivityController',
             controllerAs: 'ac'
           },

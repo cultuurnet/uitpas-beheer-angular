@@ -75,6 +75,7 @@ angular
           'identification': null,
           'pass': null,
           'passholder': null,
+          'passholders': null,
           'advantages': null,
           'activeCounter': null,
           'activityMode': null
@@ -92,6 +93,9 @@ angular
           },
           activityMode: function() {
             return 'passholders';
+          },
+          passholders: function() {
+            return null;
           }
         }
       })

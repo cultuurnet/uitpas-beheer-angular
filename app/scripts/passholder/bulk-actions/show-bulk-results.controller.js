@@ -11,7 +11,7 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkForm, action, passholderService, $uibModalStack, activeCounter, moment) {
+function ShowBulkResultsController(passholders, bulkForm, action, passholderService, $uibModalStack, activeCounter, activity, moment) {
   var controller = this;
   var errorCode;
   controller.submitBusy = true;
@@ -125,6 +125,9 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
             type: 'danger'
           }
         }
+        break;
+      case 'points':
+        console.log('jes');
         break;
     }
   });

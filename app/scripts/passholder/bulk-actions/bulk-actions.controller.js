@@ -12,7 +12,7 @@ angular
   .controller('BulkActionsController', BulkActionsController);
 
 /* @ngInject */
-function BulkActionsController (bulkSelection, action, passholderService, $uibModalInstance, $state, moment) {
+function BulkActionsController (bulkSelection, action, passholderService, $uibModalInstance, $state, $scope, $rootScope, moment) {
   var controller = this;
   controller.submitBusy = false;
   controller.isSubmitted = false;
@@ -62,6 +62,12 @@ function BulkActionsController (bulkSelection, action, passholderService, $uibMo
 
   controller.checkSelectAll();
 
+  function getPassholdersFromBulkSelection (bulkSelectionData) {
+    controller.bulkSelection = bulkSelectionData;
+    controller.checkSelectAll();
+    return controller.passholders;
+  }
+
   controller.submitForm = function(passholders, bulkForm, bulkSelection) {
     controller.isSubmitted = true;
     if(bulkForm.$valid) {
@@ -76,4 +82,8 @@ function BulkActionsController (bulkSelection, action, passholderService, $uibMo
   controller.cancel = function () {
     $uibModalInstance.dismiss('canceled');
   };
+
+  var getPassholdersFromBulkSelectionListener = $rootScope.$on('getPassholdersFromBulkSelection', getPassholdersFromBulkSelection(bulkSelection));
+
+  $scope.$on('$destroy', getPassholdersFromBulkSelectionListener);
 }
