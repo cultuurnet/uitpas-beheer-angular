@@ -50,7 +50,7 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
         $state.go('counter.main.error', {
           'title': 'Kaart verwijderd',
           'description': 'Deze kaart is verwijderd. Vraag de pashouder naar zijn nieuwe kaart',
-          'code': 'pass-deleted'
+          'code': 'PASS_DELETED'
         });
       }
       else {
