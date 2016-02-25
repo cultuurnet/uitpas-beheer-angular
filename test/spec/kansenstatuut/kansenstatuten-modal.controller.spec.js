@@ -17,7 +17,7 @@ describe('Controller: KansenstatutenModalController', function () {
       }
     };
 
-    passholderService = jasmine.createSpyObj('passholderService', ['renewKansenstatuut', 'update']);
+    passholderService = jasmine.createSpyObj('passholderService', ['renewKansenstatuut', 'update', 'findPassholder']);
     $q = $injector.get('$q');
     scope = $rootScope.$new();
     Counter = $injector.get('Counter');
@@ -72,7 +72,20 @@ describe('Controller: KansenstatutenModalController', function () {
 
     controller.removeSchool();
 
+    expect(controller.updatePending).toBe(true);
+
     expect(passholderService.update).toHaveBeenCalledWith(passholderData, passholderData.passNumber);
+    scope.$digest();
+    expect(controller.updatePending).toBe(false);
+  });
+
+  it('refreshes the passholder when an event is emitted', function() {
+    var newPassholder = {};
+    passholderService.findPassholder.and.returnValue($q.resolve(newPassholder));
+    scope.$emit('kansenStatuutRenewed');
+    scope.$digest();
+    expect(passholderService.findPassholder).toHaveBeenCalledWith(passholder.passNumber);
+    expect(controller.passholder).toBe(newPassholder);
   });
 
   it('can verify if the active counter can edit a kansenstatuut', function () {
