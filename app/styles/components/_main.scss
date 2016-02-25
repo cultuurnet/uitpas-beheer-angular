@@ -32,6 +32,9 @@ a {
 hr {
   margin-top: $rh-xsm;
   margin-bottom: $rh-xsm;
+  .well & {
+    border-color: $well-border;
+  }
 }
 
 .direction {

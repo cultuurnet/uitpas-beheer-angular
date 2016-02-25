@@ -10,29 +10,29 @@
 
     <div class="container-fluid">
       <fieldset ng-disabled="esmc.updatePending">
-        <div class="grid">
-          <div ng-show="esmc.passholder.school">
-            <strong>Huidige school: </strong><span ng-bind="::esmc.passholder.school.name"></span>
-          </div>
-          <hr>
-          <div ng-if="!esmc.schoolsLoaded" class="alert alert-info text-center">
-            <p>De lijst met scholen wordt opgehaald.</p>
-            <div class="spinner spinner-xsmall">
-              <circle-spinner></circle-spinner>
-            </div>
-          </div>
-          <div class="grid__12 grid--bp-lrg__12 field-group" ng-if="esmc.schoolsLoaded"
-               ng-class="{ 'has-error': (editForm.$submitted || editForm.editSchool.$dirty) && editForm.editSchool.$invalid }">
-            <label for="edit-school">Kies een nieuwe school</label>
-            <select chosen name="editSchool" id="edit-school"
-                    ng-model="esmc.school"
-                    ng-options="school as school.name for school in esmc.schools"
-                    data-placeholder="Kies een school">
-            </select>
-          </div>
+        
+        <div ng-show="esmc.passholder.school">
+          <strong>Huidige school: </strong><span ng-bind="::esmc.passholder.school.name"></span>
         </div>
-      </fieldset>
-    </div>
+        <hr>
+        <div ng-if="!esmc.schoolsLoaded" class="alert alert-info text-center">
+          <p>De lijst met scholen wordt opgehaald.
+            <span class="spinner spinner-xsmall spinner-inline">
+              <circle-spinner></circle-spinner>
+            </span>
+          </p>
+        </div>
+        <div class="field-group" ng-if="esmc.schoolsLoaded"
+             ng-class="{ 'has-error': (editForm.$submitted || editForm.editSchool.$dirty) && editForm.editSchool.$invalid }">
+          <label for="edit-school">Kies een nieuwe school</label>
+          <select chosen name="editSchool" id="edit-school"
+                  ng-model="esmc.school"
+                  ng-options="school as school.name for school in esmc.schools"
+                  data-placeholder="Kies een school">
+          </select>
+        </div>
+      </div>
+    </fieldset>
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a ng-click="esmc.cancelModal()">Annuleren</a>
