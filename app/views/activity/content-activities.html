@@ -58,7 +58,9 @@
       <div class="grid display-table">
         <div class="grid__12 grid--bp-med__6 first">
           <div class="date" ng-bind="::activity.when"></div>
-          <h3 ui-sref="counter.main.passholder.activity({ activity: activity })">{{activity.title}}</h3>
+          <h3 ng-if="ac.activityMode == 'passholders'" ui-sref="counter.main.passholder.activity({ activity: activity })">{{activity.title}}</h3>
+          <h3 ng-if="ac.activityMode == 'counter'" ui-sref="counter.main.activity({ activity: activity })">{{activity.title}}</h3>
+
         </div> <!--/ end .grid-first -->
 
         <div class="grid__12 grid--bp-med__3 middle">

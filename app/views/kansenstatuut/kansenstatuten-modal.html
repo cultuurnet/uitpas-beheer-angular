@@ -45,11 +45,11 @@
     <hr>
     <h5>School</h5>
     <div ng-if="!pksc.passholder.school || !pksc.passholder.school.name" class="alert alert-info" role="alert">
-      Geen school informatie beschikbaar.
+      <p>Geen school informatie beschikbaar.</p>
     </div>
-    <span ng-show="pksc.passholder.school && pksc.passholder.school.name">
+    <p ng-show="pksc.passholder.school && pksc.passholder.school.name">
       <i class="fa fa-graduation-cap"></i><span ng-bind="pksc.passholder.school.name"></span>
-    </span>
+    </p>
     <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editSchool"
            class="btn btn-primary btn-small" ng-disabled="pksc.updatePending" value="Bewerken">
     <a ng-click="pksc.removeSchool()" ng-disabled="pksc.updatePending">Verwijderen</a>
