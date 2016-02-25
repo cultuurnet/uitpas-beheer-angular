@@ -12,7 +12,7 @@ angular
   .controller('BulkActionsController', BulkActionsController);
 
 /* @ngInject */
-function BulkActionsController (bulkSelection, action, passholderService, $uibModalInstance, $state, $scope, $rootScope, moment) {
+function BulkActionsController (bulkSelection, action, $uibModalInstance, $state, moment) {
   var controller = this;
   controller.submitBusy = false;
   controller.isSubmitted = false;
@@ -21,52 +21,11 @@ function BulkActionsController (bulkSelection, action, passholderService, $uibMo
   controller.kansenstatuutData = {
     kansenstatuutEndDate: moment().endOf('year').toDate()
   };
-  var passholders = Array();
-  var searchParameters = bulkSelection.searchParameters;
-  var totalItems = bulkSelection.searchResults.totalItems;
-
-  controller.findPassHoldersAgain = function(searchParameters) {
-    passholderService
-      .findPassholders(searchParameters)
-      .then(
-      function(PassholderSearchResults) {
-        passholders = PassholderSearchResults.passen;
-        for (var i = 0; i < passholders.length; i++) {
-          passholders[i] = passholders[i].passholder;
-        }
-        controller.passholders = passholders;
-      }
-    );
-  };
-
-  controller.findPassHolderByNumber = function(passnumber, i) {
-    passholderService.findPassholder(passnumber).then(
-      function (passholder) {
-        passholders[i] = passholder;
-      }
-    );
-  };
-
-  controller.checkSelectAll = function() {
-    if (controller.bulkSelection.selectAll) {
-      searchParameters.limit = totalItems;
-      controller.findPassHoldersAgain(searchParameters);
-    }
-    else {
-      for (var i = 0, len = bulkSelection.uitpasNumberSelection.length; i < len; i++) {
-        controller.findPassHolderByNumber(controller.bulkSelection.uitpasNumberSelection[i], i);
-      }
-      controller.passholders = passholders;
-    }
-  };
-
-  controller.checkSelectAll();
-
-  function getPassholdersFromBulkSelection (bulkSelectionData) {
-    controller.bulkSelection = bulkSelectionData;
-    controller.checkSelectAll();
-    return controller.passholders;
-  }
+  bulkSelection.getPassholderNumbers()
+    .then(function(response){
+      controller.passholders = response;
+    });
+  console.log(controller.passholders);
 
   controller.submitForm = function(passholders, bulkForm, bulkSelection) {
     controller.isSubmitted = true;
@@ -82,8 +41,4 @@ function BulkActionsController (bulkSelection, action, passholderService, $uibMo
   controller.cancel = function () {
     $uibModalInstance.dismiss('canceled');
   };
-
-  var getPassholdersFromBulkSelectionListener = $rootScope.$on('getPassholdersFromBulkSelection', getPassholdersFromBulkSelection(bulkSelection));
-
-  $scope.$on('$destroy', getPassholdersFromBulkSelectionListener);
 }

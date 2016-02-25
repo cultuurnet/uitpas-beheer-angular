@@ -12,7 +12,7 @@ angular
   .factory('BulkSelection', bulkSelectionFactory);
 
 /* @ngInject */
-function bulkSelectionFactory() {
+function bulkSelectionFactory($q, passholderService) {
   /**
    * @class BulkSelection
    * @constructor
@@ -117,6 +117,37 @@ function bulkSelectionFactory() {
       }
 
       return queryParameters;
+    },
+    getPassholderNumbers: function () {
+      var passholders = Array();
+      var deferred;
+      deferred = $q.defer();
+      this.initialized = deferred.promise;
+
+      if (this.selectAll) {
+        this.searchParameters.limit = this.searchResults.totalItems;
+        passholderService
+          .findPassholders(this.searchParameters)
+          .then(
+          function(PassholderSearchResults) {
+            angular.forEach(PassholderSearchResults.passen, function(passholder){
+              passholders.push(passholder);
+            });
+          }
+        );
+      }
+      else {
+        angular.forEach(this.uitpasNumberSelection, function(selection) {
+          passholderService.findPassholder(selection)
+            .then(
+              function(passholder) {
+                passholders.push(passholder);
+              }
+            );
+        });
+      }
+      deferred.resolve(passholders);
+      return deferred.promise;
     }
   };
 
