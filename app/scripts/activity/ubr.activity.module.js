@@ -21,8 +21,8 @@ angular
       return passholderService.findPassholder($stateParams.identification);
     }
 
-    $stateProvider.state(
-      'counter.main.passholder.activityTariffs', {
+    $stateProvider
+      .state('counter.main.passholder.activityTariffs', {
         params: {
           identification: null,
           passholder: null,
