@@ -454,6 +454,8 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
   };
 
   /**
+   * @param {SearchParameters} [searchParameters]
+   *  The parameters to use when searching for the activities.
    * @returns {Promise}
    *   A promise with a list of activities for the active counter.
    */
