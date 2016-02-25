@@ -21,6 +21,37 @@ angular
       return passholderService.findPassholder($stateParams.identification);
     }
 
+    var activityModal = {
+      params: {
+        activity: null
+      },
+      resolve: {
+        activity: ['$stateParams', function($stateParams) {
+          return $stateParams.activity;
+        }]
+      },
+      /* @ngInject */
+      onEnter: function(activity, $state, $uibModal) {
+        $uibModal
+          .open({
+            animation: true,
+            templateUrl: 'views/activity/modal-activity-details.html',
+            size: 'sm',
+            resolve: {
+              activity: function() {
+                return activity;
+              }
+            },
+            controller: 'ActivityDetailController',
+            controllerAs: 'adc'
+          })
+          .result
+          .finally(function() {
+            $state.go('^');
+          });
+      }
+    };
+
     $stateProvider
       .state('counter.main.passholder.activityTariffs', {
         params: {
@@ -68,64 +99,6 @@ angular
             });
         }
       })
-      .state('counter.main.passholder.activity', {
-        params: {
-          activity: null
-        },
-        resolve: {
-          activity: ['$stateParams', function($stateParams) {
-            return $stateParams.activity;
-          }]
-        },
-        /* @ngInject */
-        onEnter: function(activity, $state, $uibModal) {
-          $uibModal
-            .open({
-              animation: true,
-              templateUrl: 'views/activity/modal-activity-details.html',
-              size: 'sm',
-              resolve: {
-                activity: function() {
-                  return activity;
-                }
-              },
-              controller: 'ActivityDetailController',
-              controllerAs: 'adc'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }
-      })
-      .state('counter.main.activity', {
-        params: {
-          activity: null
-        },
-        resolve: {
-          activity: ['$stateParams', function($stateParams) {
-            return $stateParams.activity;
-          }]
-        },
-        /* @ngInject */
-        onEnter: function(activity, $state, $uibModal) {
-          $uibModal
-            .open({
-              animation: true,
-              templateUrl: 'views/activity/modal-activity-details.html',
-              size: 'sm',
-              resolve: {
-                activity: function() {
-                  return activity;
-                }
-              },
-              controller: 'ActivityDetailController',
-              controllerAs: 'adc'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }
-      });
+      .state('counter.main.passholder.activity', angular.copy(activityModal))
+      .state('counter.main.activity', angular.copy(activityModal));
   });
