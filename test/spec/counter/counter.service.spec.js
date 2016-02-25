@@ -14,7 +14,7 @@ describe('Service: counterService', function () {
   }));
 
   // instantiate service
-  var counterService, scope, $cookies, $httpBackend, $q, uitid, Pass, Passholder, Counter, Role;
+  var counterService, scope, $cookies, $httpBackend, $q, uitid, Pass, Passholder, Counter, Role, Activity, DateRange;
 
   var fakeCookieKey = function (cookieKey) {
     spyOn(counterService, 'determineLastActiveCookieKey').and.returnValue($q.resolve(cookieKey));
@@ -45,6 +45,47 @@ describe('Service: counterService', function () {
     }
   };
 
+  var pagedActivityData = {
+    '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
+    '@type': 'PagedCollection',
+    'itemsPerPage': 5,
+    'totalItems': 2,
+    'member': [
+      {
+        'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+        'title': 'Altijd open',
+        'description': '',
+        'when': '',
+        'age': 10,
+        'points': 182,
+        'checkinConstraint': {
+          'allowed': true,
+          'startDate': '2015-09-01T00:00:00+00:00',
+          'endDate': '2015-09-01T23:59:59+00:00',
+          'reason': ''
+        },
+        'free': false
+      },
+      {
+        'id': 'eb7c1532-dc32-43bf-a0be-1b9dcf52d2be',
+        'title': 'Testevent punten sparen',
+        'description': '',
+        'when': '',
+        'age': 10,
+        'points': 182,
+        'checkinConstraint': {
+          'allowed': true,
+          'startDate': '2015-09-01T00:00:00+00:00',
+          'endDate': '2015-09-01T23:59:59+00:00',
+          'reason': ''
+        },
+        'free': true
+      }
+    ],
+    'firstPage': 'http://culpas-silex.dev/passholders/0900000330317/activities?date_type=today&limit=5&page=1&query=',
+    'lastPage': 'http://culpas-silex.dev/passholders/0900000330317/activities?date_type=today&limit=5&page=1&query='
+  };
+
   beforeEach(inject(function ($injector, $rootScope) {
     Pass = $injector.get('Pass');
     Passholder = $injector.get('Passholder');
@@ -56,6 +97,8 @@ describe('Service: counterService', function () {
     $q = $injector.get('$q');
     Counter = $injector.get('Counter');
     Role = $injector.get('Role');
+    Activity = $injector.get('Activity');
+    DateRange = $injector.get('DateRange');
   }));
 
   it('should remember the last active counter', function (done) {
@@ -775,6 +818,95 @@ describe('Service: counterService', function () {
     $httpBackend.expectGET(apiUrl + 'schools').respond(200, expectedSchools);
 
     counterService.getSchools().then(assertSchools);
+
+    $httpBackend.flush();
+  });
+
+  it('can get a list of activities for the active counter', function(done) {
+    var searchParameters = {
+      query: 'something awesome',
+      dateRange: DateRange.TODAY,
+      page: 1,
+      limit: 5
+    };
+    $httpBackend
+      .expectGET(apiUrl + 'counters/active/activities?date_type=today&limit=5&page=1&query=something+awesome')
+      .respond(200, JSON.stringify(pagedActivityData));
+
+    var expectedPagedActivities = {
+      activities: [
+        {
+          'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+          'title': 'Altijd open',
+          'description': '',
+          'when': '',
+          'age': 10,
+          'points': 182,
+          'checkinConstraint': {
+            'allowed': true,
+            'startDate': new Date('2015-09-01T00:00:00+00:00'),
+            'endDate': new Date('2015-09-01T23:59:59+00:00'),
+            'reason': ''
+          },
+          'free': false
+        },
+        {
+          'id': 'eb7c1532-dc32-43bf-a0be-1b9dcf52d2be',
+          'title': 'Testevent punten sparen',
+          'description': '',
+          'when': '',
+          'age' : 10,
+          'points': 182,
+          'checkinConstraint': {
+            'allowed': true,
+            'startDate': new Date('2015-09-01T00:00:00+00:00'),
+            'endDate': new Date('2015-09-01T23:59:59+00:00'),
+            'reason': ''
+          },
+          'free': true
+        }
+      ],
+      totalActivities: 2
+    };
+
+    function assertActivities(pagedActivities) {
+      expect(pagedActivities).toEqual(expectedPagedActivities);
+      done();
+    }
+
+    counterService
+      .getActivities(searchParameters)
+      .then(assertActivities);
+
+    $httpBackend.flush();
+  });
+
+  it ('throws an error when it can\'t get a list of activities for the active counter', function (done) {
+    var searchParameters = {
+      query: 'something awesome',
+      dateRange: DateRange.TODAY,
+      page: 1,
+      limit: 5
+    };
+    var expectedError = {
+      code: 'UNKNOWN_EVENT_CDBID',
+      exception: 'CultuurNet\UiTPASBeheer\Exception\ReadableCodeResponseException',
+      message: 'Event with cdbid [eb7c1532-dc32-43bf-a0be-1b9dcf52d2be1] not found. URL CALLED: https://acc2.uitid.be/uitid/rest/uitpas/passholder/checkin POST DATA: cdbid=eb7c1532-dc32-43bf-a0be-1b9dcf52d2be1&uitpasNumber=0930000419406&balieConsumerKey=31413BDF-DFC7-7A9F-10403618C2816E44',
+      type: 'error'
+    };
+
+    $httpBackend
+      .expectGET(apiUrl + 'counters/active/activities?date_type=today&limit=5&page=1&query=something+awesome')
+      .respond(403, expectedError);
+
+    function assertError(error) {
+      expect(error.code).toBe('UNKNOWN_EVENT_CDBID');
+      done();
+    }
+
+    counterService
+      .getActivities(searchParameters)
+      .catch(assertError);
 
     $httpBackend.flush();
   });
