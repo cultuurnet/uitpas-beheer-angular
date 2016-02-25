@@ -6,10 +6,6 @@
     <aside role="complementary" class="sidebar grid__12 grid--bp-sml__5 grid--bp-med__4 grid--bp-xlr__3">
         <div ui-view="sidebar" class="inside" ng-show="app.user">
         </div>
-        <div class="buildnumber">
-          <i class="fa fa-code"></i>
-          build: <em ng-bind="::app.buildNumber"></em>
-        </div>
     </aside> <!-- /aside -->
 
     <div ui-view="content" class="main grid__12" ng-class="{'grid--bp-sml__7 grid--bp-med__8 grid--bp-xlr__9': app.user}" role="main">
@@ -23,7 +19,8 @@
             <li>
                 <a ui-sref="counter.main.help">Help</a>
             </li>
-            <li>
+            <li class="buildnumber text-muted">
+                <em>App versie <span ng-bind="::app.buildNumber"></span></em>
                 <!--<a href="/kaartlezers-detecteren.html">Detecteer kaartlezers</a>-->
             </li>
         </ul>
