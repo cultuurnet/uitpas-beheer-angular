@@ -26,5 +26,8 @@ angular
     },
     PAGE_NOT_FOUND: {
       class: 'page-not-found'
+    },
+    PASS_DELETED: {
+      class: 'pass-deleted'
     }
   });
