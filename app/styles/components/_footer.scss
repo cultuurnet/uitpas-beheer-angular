@@ -44,3 +44,10 @@
     }
   }
 }
+
+.buildnumber {
+  border-top: 1px solid $gray-15;
+  clear: both;
+  margin-top: $rh-xsm;
+  padding-top: $rh-xsm;
+}

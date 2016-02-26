@@ -72,6 +72,14 @@
       text-decoration: none;
     }
   }
+
+  // build number
+  .buildnumber {
+      position: relative;
+      bottom: 1.4em;
+      left: .1em;
+      font-size: .7em;
+  }
 }
 
 // Sidebar: Passholder

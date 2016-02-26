@@ -1,6 +1,7 @@
 {
   "apiUrl": "http://culpas-silex.dev/",
   "basePath": "/",
+  "buildNumber": "001",
   "contacts": [
     {
       "name": "Dender",
