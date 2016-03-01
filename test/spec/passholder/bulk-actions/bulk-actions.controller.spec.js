@@ -224,16 +224,6 @@ describe('Controller: BulkActionsController', function () {
     expect(bulkSelection).toEqual(expectedBulkSelection);
   });
 
-  xit('should get all passholder numbers through the bulkSelection factory', function () {
-
-    bulkSelectionSpy.getPassholderNumbers.and.callFake(function () {
-      return $q.resolve(passholdersPromise);
-    });
-    $scope.$digest();
-
-    expect(controller.passholders).toEqual(passholdersPromise);
-  });
-
   it('should lock down the form while submitting', function () {
     controller.submitForm(searchResults.passen, addressForm, bulkSelection);
     expect(controller.isSubmitted).toBeTruthy();
