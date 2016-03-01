@@ -123,7 +123,6 @@ function bulkSelectionFactory($q, passholderService) {
       var deferred;
       deferred = $q.defer();
       this.initialized = deferred.promise;
-
       if (this.selectAll) {
         this.searchParameters.limit = this.searchResults.totalItems;
         passholderService

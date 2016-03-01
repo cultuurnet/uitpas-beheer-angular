@@ -11,7 +11,7 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkForm, action, passholderService, $uibModalStack, activeCounter, activity, moment) {
+function ShowBulkResultsController(passholders, bulkForm, action, passholderService, activityService, $uibModalStack, activeCounter, activity, moment) {
   var controller = this;
   var errorCode;
   controller.submitBusy = true;
@@ -35,6 +35,11 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
     return passholderService.renewKansenstatuut(passholder, kansenstatuut, endDate);
   };
 
+  controller.passholderCheckin = function(activity, passholder) {
+    passholder.isChecked = true;
+    return activityService.checkin(activity, passholder);
+  };
+
   controller.updateOK = function (passholder) {
     return function() {
       passholder.updated = true;
@@ -51,6 +56,10 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       else if (action == 'kansenstatuut') {
         errorCode = errorResponse.data.code;
         var defaultMessage = 'Kansenstatuut werd niet geüpdatet op de server.'
+      }
+      else if (action == 'points') {
+        errorCode = errorResponse.data.code;
+        var defaultMessage = 'Er werden geen punten gespaard voor het geselecteerde evenement.'
       }
 
       switch (errorCode) {
@@ -86,6 +95,13 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
         case 'INVALID_DATE_CONSTRAINTS':
           passholder.asyncError = {
             message: 'Geen geldige datum voor kansenstatuut',
+            type: 'danger'
+          };
+          break;
+
+        case 'CHECKIN_FAILED':
+          passholder.asyncError = {
+            message: 'Punten sparen mislukt',
             type: 'danger'
           };
           break;
@@ -128,7 +144,8 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
         }
         break;
       case 'points':
-        console.log('jes');
+        controller.passholderCheckin(activity, passholder)
+          .then(callbackSuccess, callbackFail);
         break;
     }
   });

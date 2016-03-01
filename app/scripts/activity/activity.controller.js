@@ -185,7 +185,7 @@ function ActivityController (passholder, bulkSelection, activityService, counter
 
   controller.bulkCheckin = function (activity) {
     activity.checkinBusy = true;
-    //controller.passholders = bulkSelection.getPassholderNumbers();
+    controller.passholders = bulkSelection.getPassholderNumbers();
     $state.go('counter.main.advancedSearch.showBulkResults', {
       passholders: controller.passholders,
       bulkForm: null,

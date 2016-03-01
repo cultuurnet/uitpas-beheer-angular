@@ -25,7 +25,6 @@ function BulkActionsController (bulkSelection, action, $uibModalInstance, $state
     .then(function(response){
       controller.passholders = response;
     });
-  console.log(controller.passholders);
 
   controller.submitForm = function(passholders, bulkForm) {
     controller.isSubmitted = true;
