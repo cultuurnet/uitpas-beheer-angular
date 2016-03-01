@@ -156,7 +156,7 @@ describe('Controller: BulkActionsController', function () {
     SearchParameters = $injector.get('SearchParameters');
     Passholder = $injector.get('Passholder');
 
-    bulkSelectionSpy.getPassholderNumbers.and.returnValue(passholdersPromise);
+    //bulkSelectionSpy.getPassholderNumbers.and.returnValue(passholdersPromise);
 
     passholder = new Passholder(jsonPass);
     searchResults = new PassholderSearchResults(jsonSearchResults);
@@ -226,7 +226,9 @@ describe('Controller: BulkActionsController', function () {
 
   xit('should get all passholder numbers through the bulkSelection factory', function () {
 
-    //spyOn(bulkSelection, 'getPassholderNumbers').and.returnValue(passholdersPromise);
+    bulkSelectionSpy.getPassholderNumbers.and.callFake(function () {
+      return $q.resolve(passholdersPromise);
+    });
     $scope.$digest();
 
     expect(controller.passholders).toEqual(passholdersPromise);

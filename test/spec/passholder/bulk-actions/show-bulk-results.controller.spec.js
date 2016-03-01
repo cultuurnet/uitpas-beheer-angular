@@ -3,7 +3,7 @@
 describe('Controller: ShowBulkResultsController', function () {
 
   var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q,
-    Counter, activeCounter, activityService, action, bulkForm, day;
+    Counter, activeCounter, activityService, action, bulkForm, day, activity, Activity;
 
   var jsonPassHolder = {
       'uid': 'string',
@@ -168,6 +168,7 @@ describe('Controller: ShowBulkResultsController', function () {
         return passholderService;
       }
     });
+    activityService = jasmine.createSpyObj('activityService', ['checkin']);
     $provide.provider('activityService', {
       $get: function () {
         return activityService;
@@ -183,9 +184,11 @@ describe('Controller: ShowBulkResultsController', function () {
     $uibModalStack = jasmine.createSpyObj('$uibModalStack', ['dismissAll']);
     $q = $injector.get('$q');
     Passholder = $injector.get('Passholder');
+    Activity = $injector.get('Activity');
     var jsonParsePassHolder = new Passholder(jsonPassHolder);
     Counter = $injector.get('Counter');
     activeCounter = new Counter(angular.copy(activeCounterJson));
+    activity = new Activity(getJsonActivity());
 
     passholders = [
       jsonParsePassHolder,
@@ -214,7 +217,7 @@ describe('Controller: ShowBulkResultsController', function () {
       activityService: activityService,
       $uibModalStack: $uibModalStack,
       activeCounter: activeCounter,
-      activity: getJsonActivity()
+      activity: activity
     });
   };
 
@@ -414,6 +417,43 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.failed).toBeTruthy();
       expect(passholder.asyncError.message).toEqual('Geen geldige postcode voor het adres.');
       expect(passholder.asyncError.type).toEqual('danger');
+    });
+  });
+
+  it('shoud checkin the passholder on the activity', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      return $q.resolve(activity);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.updated).toBeTruthy();
+      expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should fail in checking the passholders in on the given activity', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      var apiError = {
+        data: {
+          code: 'CHECKIN_FAILED'
+        }
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Punten sparen mislukt');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
     });
   });
 });
