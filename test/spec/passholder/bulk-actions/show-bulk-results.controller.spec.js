@@ -3,7 +3,7 @@
 describe('Controller: ShowBulkResultsController', function () {
 
   var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q,
-    Counter, activeCounter, action, bulkForm, day;
+    Counter, activeCounter, activityService, action, bulkForm, day;
 
   var jsonPassHolder = {
       'uid': 'string',
@@ -117,6 +117,48 @@ describe('Controller: ShowBulkResultsController', function () {
     return spyForm;
   };
 
+  function getJsonActivity() {
+    var jsonActivity = {
+      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      'title': 'Altijd open',
+      'description': '',
+      'when': '',
+      'age': 10,
+      'points': 182,
+      'checkinConstraint': {
+        'allowed': true,
+        'startDate': '2015-09-01T00:00:00+00:00',
+        'endDate': '2015-09-01T23:59:59+00:00',
+        'reason': ''
+      },
+      free: true,
+      sales: {
+        maximumReached: false,
+        differentiation: false,
+        base: {
+          'Default prijsklasse': 6
+        },
+        tariffs: {
+          kansentariefAvailable: true,
+          couponAvailable: false,
+          lowestAvailable: 1.5,
+          list: [
+            {
+              name: 'Kansentarief',
+              type: 'KANSENTARIEF',
+              maximumReached: false,
+              prices: {
+                'Default prijsklasse': 1.5
+              }
+            }
+          ]
+        }
+      }
+    };
+
+    return angular.copy(jsonActivity);
+  }
+
   // load the controller's module
   beforeEach(module('ubr.passholder'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
@@ -124,6 +166,11 @@ describe('Controller: ShowBulkResultsController', function () {
     $provide.provider('passholderService', {
       $get: function () {
         return passholderService;
+      }
+    });
+    $provide.provider('activityService', {
+      $get: function () {
+        return activityService;
       }
     });
   }));
@@ -164,8 +211,10 @@ describe('Controller: ShowBulkResultsController', function () {
       bulkForm: bulkForm,
       action: action,
       passholderService: passholderService,
+      activityService: activityService,
       $uibModalStack: $uibModalStack,
-      activeCounter: activeCounter
+      activeCounter: activeCounter,
+      activity: getJsonActivity()
     });
   };
 

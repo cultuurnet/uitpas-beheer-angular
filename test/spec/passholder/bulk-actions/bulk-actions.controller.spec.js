@@ -4,7 +4,7 @@ describe('Controller: BulkActionsController', function () {
 
   var $controller, $uibModalInstance, $scope, BulkSelection, PassholderSearchResults, SearchParameters, $q,
     searchResults, searchParameters, bulkSelection, passholderService, advancedSearchService, $state, controller,
-    Passholder, passholder, action;
+    Passholder, passholder, action, bulkSelectionSpy;
 
   var addressForm = {
     street: 'Teststraat 123',
@@ -127,28 +127,36 @@ describe('Controller: BulkActionsController', function () {
     unknownNumbersConfirmed: false
   };
 
+  var passholdersPromise = [
+    jsonPass,
+    jsonPass,
+    jsonPass,
+    jsonPass,
+    jsonPass,
+    jsonPass,
+    jsonPass,
+    jsonPass,
+    jsonPass,
+    jsonPass
+  ];
+
   // load the controller's module
   beforeEach(module('ubr.passholder'));
-  beforeEach(module('uitpasbeheerApp', function($provide) {
-    passholderService = jasmine.createSpyObj('passholderService', ['findPassholders', 'findPassholder']);
-    $provide.provider('passholderService', {
-      $get: function () {
-        return passholderService;
-      }
-    });
-  }));
 
   beforeEach(inject(function (_$controller_, $rootScope, $injector, _$state_) {
     $controller = _$controller_;
     $state = _$state_;
     $uibModalInstance = jasmine.createSpyObj('$uibModalInstance', ['dismiss']);
     advancedSearchService = jasmine.createSpyObj('advancedSearchService', ['findPassholders']);
+    bulkSelectionSpy = jasmine.createSpyObj('bulkSelectionFactory', ['getPassholderNumbers']);
     $scope = $rootScope.$new();
     $q = $injector.get('$q');
     BulkSelection = $injector.get('BulkSelection');
     PassholderSearchResults = $injector.get('PassholderSearchResults');
     SearchParameters = $injector.get('SearchParameters');
     Passholder = $injector.get('Passholder');
+
+    bulkSelectionSpy.getPassholderNumbers.and.returnValue(passholdersPromise);
 
     passholder = new Passholder(jsonPass);
     searchResults = new PassholderSearchResults(jsonSearchResults);
@@ -216,50 +224,12 @@ describe('Controller: BulkActionsController', function () {
     expect(bulkSelection).toEqual(expectedBulkSelection);
   });
 
-  it('should find all the passholders again when select all is selected', function () {
-    bulkSelection.selectAll = true;
-    spyOn(controller, 'findPassHoldersAgain');
+  xit('should get all passholder numbers through the bulkSelection factory', function () {
 
-    controller.checkSelectAll();
-
-    expect(bulkSelection.selectAll).toBeTruthy();
-    expect(searchParameters.limit).toEqual(searchResults.totalItems);
-    expect(controller.findPassHoldersAgain).toHaveBeenCalledWith(searchParameters);
-  });
-
-  it('should find all the passholders when asked', function () {
-    passholderService.findPassholders.and.returnValue($q.when(searchResults));
-
-    controller = getController();
-    controller.passholders = {};
-
-    controller.findPassHoldersAgain(searchParameters);
-
-    $scope.$digest();
-    expect(Object.keys(controller.passholders).length).toBe(10);
-  });
-
-  it('should try to find passholders by numbers when selectAll is not selected', function () {
-    bulkSelection.selectAll = false;
-    bulkSelection.uitpasNumberSelection =['0934000004515'];
-    spyOn(controller, 'findPassHolderByNumber');
-
-    controller.checkSelectAll();
-
-    expect(bulkSelection.selectAll).toBeFalsy();
-    expect(controller.findPassHolderByNumber.calls.count()).toBe(1);
-  });
-
-  it('should find the selected passholders by number', function () {
-    passholderService.findPassholder.and.returnValue($q.when(passholder));
-
-    controller = getController();
-
-    controller.findPassHolderByNumber('0934000004515', 0);
-
+    //spyOn(bulkSelection, 'getPassholderNumbers').and.returnValue(passholdersPromise);
     $scope.$digest();
 
-    expect(controller.passholders).toEqual([passholder]);
+    expect(controller.passholders).toEqual(passholdersPromise);
   });
 
   it('should lock down the form while submitting', function () {

@@ -4,7 +4,7 @@ describe('Factory: BulkSelection', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  var BulkSelection, PassholderSearchResults, SearchParameters, bulkSelection, searchResults, searchParameters, Pass, day;
+  var BulkSelection, Passholder, passholder, passholderService, PassholderSearchResults, SearchParameters, bulkSelection, searchResults, searchParameters, Pass, day, $q;
 
   var jsonPass = {
     'uitPas': {
@@ -77,13 +77,17 @@ describe('Factory: BulkSelection', function () {
     membershipStatus: 'ACTIVE'
   };
 
-  beforeEach(inject(function (_BulkSelection_, _PassholderSearchResults_, _SearchParameters_, _Pass_, _day_) {
+  beforeEach(inject(function ($injector, _BulkSelection_, _PassholderSearchResults_, _SearchParameters_, _Pass_, _day_) {
     BulkSelection = _BulkSelection_;
     PassholderSearchResults = _PassholderSearchResults_;
     SearchParameters = _SearchParameters_;
     Pass = _Pass_;
     day = _day_;
+    passholderService = $injector.get('passholderService');
+    $q = $injector.get('$q');
+    Passholder = $injector.get('Passholder');
 
+    passholder = new Passholder(jsonPass);
     searchResults = new PassholderSearchResults();
     searchParameters = new SearchParameters();
     bulkSelection = new BulkSelection(searchResults, searchParameters, []);
@@ -298,5 +302,44 @@ describe('Factory: BulkSelection', function () {
     ];
     expect(bulkSelection.toBulkSelection()).toEqual(expectedBulkSelection);
 
+  });
+
+  it('should find all the passholders again when select all is selected', function () {
+    bulkSelection.selectAll = true;
+    spyOn(passholderService, 'findPassholders').and.returnValue($q.when(jsonSearchResultsWithPassen));
+
+    bulkSelection.getPassholderNumbers();
+
+    expect(bulkSelection.searchParameters.limit).toEqual(bulkSelection.searchResults.totalItems);
+    expect(passholderService.findPassholders).toHaveBeenCalledWith(bulkSelection.searchParameters);
+  });
+
+  xit('should find all the passholders when asked', function () {
+    passholderService.findPassholders.and.returnValue($q.when(searchResults));
+    controller.passholders = {};
+
+    controller.findPassHoldersAgain(searchParameters);
+
+    $scope.$digest();
+    expect(Object.keys(controller.passholders).length).toBe(10);
+  });
+
+  it('should try to find passholders by numbers when selectAll is not selected', function () {
+    bulkSelection.uitpasNumberSelection =['0934000004515'];
+    spyOn(passholderService, 'findPassholder').and.returnValue($q.when(jsonSearchResultsWithPassen));;
+
+    bulkSelection.getPassholderNumbers();
+
+    expect(passholderService.findPassholder.calls.count()).toBe(1);
+  });
+
+  xit('should find the selected passholders by number', function () {
+    passholderService.findPassholder.and.returnValue($q.when(passholder));
+
+    controller.findPassHolderByNumber('0934000004515', 0);
+
+    $scope.$digest();
+
+    expect(controller.passholders).toEqual([passholder]);
   });
 });
