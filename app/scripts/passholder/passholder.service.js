@@ -41,6 +41,9 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    *   A passholder promise.
    */
   service.findPass = function(identification) {
+    // Clean up the identification before using it.
+    // It should only contain alphanumerical characters.
+    identification = identification.replace(/([^a-z0-9]+)/gi, '');
     var deferredPassholder = $q.defer();
 
     var passholderId = passholderIdCache.get(identification);

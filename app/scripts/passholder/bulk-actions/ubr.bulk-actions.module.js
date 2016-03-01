@@ -49,8 +49,10 @@ angular
               controllerAs: 'bac'
             })
             .result
-            .finally(function() {
-              $state.go('^');
+            .catch(function (message) {
+              if (message !== 'bulkResultsClosed') {
+                $state.go('^');
+              }
             });
         }
       })
@@ -86,8 +88,10 @@ angular
               controllerAs: 'bac'
             })
             .result
-            .finally(function() {
-              $state.go('^');
+            .catch(function (message) {
+              if (message !== 'bulkResultsClosed') {
+                $state.go('^');
+              }
             });
         }
       })
@@ -116,7 +120,8 @@ angular
             return $stateParams.activity;
           }]
         },
-        onEnter: function(passholders, bulkForm, bulkSelection, action, activity, $state, $uibModal) {
+        /* @ngInject */
+        onEnter: function(passholders, bulkForm, bulkSelection, action, activity, $state, $uibModal, counterService) {
           $uibModal
             .open({
               animation: true,
@@ -132,12 +137,10 @@ angular
                 action: function() {
                   return action;
                 },
-                resolve: {
-                  bulkSelection: function() {
-                    return bulkSelection;
-                  }
+                bulkSelection: function() {
+                  return bulkSelection;
                 },
-                activeCounter: function (counterService) {
+                activeCounter: function () {
                   return counterService.getActive();
                 },
                 activity: function() {

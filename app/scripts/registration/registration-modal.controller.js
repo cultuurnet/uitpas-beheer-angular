@@ -231,7 +231,7 @@ function RegistrationModalController (
   };
 
   controller.postalCodeChanged = function () {
-    controller.clearAsyncError('PARSE_INVALID_CITY_IDENTIFIER');
+    controller.clearAsyncError('PARSE_INVALID_POSTAL_CODE');
   };
 
   controller.close = function () {

@@ -17,6 +17,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   controller.submitBusy = true;
   controller.passholders = passholders;
   controller.activeCounter = activeCounter;
+  controller.action = action;
 
   controller.updatePassHolderAddress = function(passholder) {
     passholder.address.city = bulkForm.city.$viewValue;
@@ -133,6 +134,6 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   });
 
   controller.cancel = function() {
-    $uibModalStack.dismissAll();
+    $uibModalStack.dismissAll('bulkResultsClosed');
   }
 }

@@ -27,12 +27,12 @@ function BulkActionsController (bulkSelection, action, $uibModalInstance, $state
     });
   console.log(controller.passholders);
 
-  controller.submitForm = function(passholders, bulkForm, bulkSelection) {
+  controller.submitForm = function(passholders, bulkForm) {
     controller.isSubmitted = true;
     if(bulkForm.$valid) {
       if (!controller.submitBusy) {
         controller.submitBusy = true;
-        $state.go('counter.main.advancedSearch.showBulkResults', { passholders: passholders, bulkForm: bulkForm, bulkSelection: bulkSelection, action: controller.action });
+        $state.go('counter.main.advancedSearch.showBulkResults', { passholders: passholders, bulkForm: bulkForm, bulkSelection: controller.bulkSelection, action: controller.action });
         controller.submitBusy = false;
       }
     }

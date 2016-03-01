@@ -28,7 +28,7 @@
         <td>
           <input type="button" class="btn btn-default btn-small" ng-show="pksc.counterCanAlterKansenStatuut(kansenStatuut)"
                  ui-sref="counter.main.passholder.kansenStatuut.edit({ cardSystemId: kansenStatuut.cardSystem.id })"
-                 value="Bewerken">
+                 value="Bewerken" ng-disabled="pksc.updatePending">
         </td>
       </tr>
     </tbody>
@@ -41,20 +41,23 @@
     </div>
     <p style="white-space: pre-wrap" ng-if="pksc.passholder.remarks" ng-bind="pksc.passholder.remarks | characters:300"></p>
     <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editRemarks" class="btn btn-primary btn-small"
-           value="Bewerken">
+           value="Bewerken" ng-disabled="pksc.updatePending">
     <hr>
     <h5>School</h5>
     <div ng-if="!pksc.passholder.school || !pksc.passholder.school.name" class="alert alert-info" role="alert">
-      Geen school informatie beschikbaar.
+      <p>Geen school informatie beschikbaar.</p>
     </div>
-    <span ng-show="pksc.passholder.school && pksc.passholder.school.name">
+    <p ng-show="pksc.passholder.school && pksc.passholder.school.name">
       <i class="fa fa-graduation-cap"></i><span ng-bind="pksc.passholder.school.name"></span>
-    </span>
+    </p>
     <input type="button" ui-sref="counter.main.passholder.kansenStatuut.editSchool"
-           class="btn btn-primary btn-small" value="Bewerken">
-  </section>
+           class="btn btn-primary btn-small" ng-disabled="pksc.updatePending" value="Bewerken">
+    <input type="button" ng-click="pksc.removeSchool()" ng-show="pksc.passholder.school"
+           class="btn btn-default btn-small" ng-disabled="pksc.updatePending" value="Verwijderen">
+    </section>
 
 </div><!-- end modal-body -->
 <div class="modal-footer">
-  <a ng-click="pksc.cancelModal()" class="btn btn-default">Sluiten</a>
+  <input type="button" ng-click="pksc.cancelModal()" class="btn btn-default btn-small"
+         ng-disabled="pksc.updatePending" value="Sluiten">
 </div>

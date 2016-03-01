@@ -29,6 +29,20 @@ function KansenstatutenModalController (passholder, activeCounter, cardSystemId,
     return controller.activeCounter.isAuthorisedRegistrationCounter(kansenStatuut.cardSystem.id);
   };
 
+  controller.removeSchool = function () {
+    controller.updatePending = true;
+    var passholderData = angular.copy(controller.passholder);
+    passholderData.school = null;
+
+    var releaseForm = function () {
+      controller.updatePending = false;
+    };
+
+    passholderService
+      .update(passholderData, controller.passholder.passNumber)
+      .finally(releaseForm);
+  };
+
   function refreshPassholder () {
     passholderService.findPassholder(passholder.passNumber).then(
       function (passholder) {
