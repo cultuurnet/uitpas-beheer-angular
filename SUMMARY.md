@@ -7,4 +7,5 @@
    * File structure
 * Development
    * Coding standards
+   * Unit tests
 
