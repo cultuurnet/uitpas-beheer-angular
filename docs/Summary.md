@@ -1,7 +1,7 @@
 # Summary
 
 * Introduction
-* Intended audience
+* [Intended audience](intended-audience.md)
 * Language
 * Architecture
   * Structure
