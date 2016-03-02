@@ -28,7 +28,8 @@ When left empty the base path is assumed to be the root from which the applicati
 {
   "apiUrl": "http://culpas-silex.dev/",
   "basePath": "/public/app/"
-}```
+}
+```
 
 ### contacts
 The contact information is shown on two locations.
@@ -58,4 +59,5 @@ The contact information is shown on two locations.
       "email": "uitpas@zuidwest.be",
       "telephone": "0499116726"
     }
-  ]```
+  ]
+  ```
