@@ -1,5 +1,5 @@
 # Summary
 
 * [Introduction](docs/introduction.md)
-* Intended audience
+* [Intended audience](docs/intended_audience.md)
 
