@@ -439,9 +439,7 @@ describe('Controller: ShowBulkResultsController', function () {
     action = 'points';
     activityService.checkin.and.callFake(function () {
       var apiError = {
-        data: {
-          code: 'CHECKIN_FAILED'
-        }
+        code: 'CHECKIN_FAILED'
       };
       return $q.reject(apiError);
     });
@@ -450,7 +448,27 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.asyncError.message).toEqual('Punten sparen mislukt');
+      expect(passholder.asyncError.message).toEqual('Punten sparen niet gelukt.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in checking the passholders in on the given activity because something else went wrong', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      var apiError = {
+        code: 'SOMETHING_ELSE_WENT_WRONG'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Er werden geen punten gespaard voor het geselecteerde evenement.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
