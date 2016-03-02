@@ -6,7 +6,7 @@
 * [Architecture](docs/architecture/architecture.md)
    * File structure
 * [Development](docs/development/development.md)
-   * Coding standards
-   * Unit tests
-   * Helper scripts
+   * [Coding standards](docs/development/coding_standards.md)
+   * [Unit tests](docs/development/unit_tests.md)
+   * [Helper scripts](docs/development/helper_scripts.md)
 
