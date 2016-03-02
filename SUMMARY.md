@@ -5,7 +5,7 @@
 * [Language](docs/language.md)
 * [Architecture](docs/architecture/architecture.md)
    * File structure
-* Development
+* [Development](docs/development/development.md)
    * Coding standards
    * Unit tests
 
