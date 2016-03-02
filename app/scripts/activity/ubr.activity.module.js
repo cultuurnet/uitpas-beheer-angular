@@ -100,5 +100,5 @@ angular
         }
       })
       .state('counter.main.passholder.activity', angular.copy(activityModal))
-      .state('counter.main.activity', angular.copy(activityModal));
+      .state('counter.main.advancedSearch.bulkPoints.activity', angular.copy(activityModal));
   });
