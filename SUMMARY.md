@@ -6,7 +6,7 @@
 * [Language](docs/language.md)
 * [Architecture](docs/architecture/architecture.md)
    * [File system layout](docs/architecture/file_system_layout.md)
-       * App
+       * [App](docs/architecture/files_app.md)
        * Bower components
        * Dist
 * [Development](docs/development/development.md)
