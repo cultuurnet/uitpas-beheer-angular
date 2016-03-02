@@ -10,7 +10,7 @@
        * [Bower components](docs/architecture/files_bower_components.md)
        * [Coverage](docs/architecture/files_coverage.md)
        * [Dist](docs/architecture/files_dist.md)
-       * Node modules
+       * [Node modules](docs/architecture/files_node_modules.md)
 * [Development](docs/development/development.md)
    * [Coding standards](docs/development/coding_standards.md)
    * [Unit tests](docs/development/unit_tests.md)
