@@ -8,3 +8,4 @@ We wrote this manual for web developers with good knowledge of:
 * [ui-router](https://github.com/angular-ui/ui-router), a solution for flexible routing with nested views in AngularJS
 * [Git](https://git-scm.com), a distributed version control system,
 * [GitHub](https://github.com), a web-based Git repository hosting service.
+* [npm](https://www.npmjs.com/), a package manager for javascript projects.
