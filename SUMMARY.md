@@ -11,7 +11,7 @@
        * [Coverage](docs/architecture/files_coverage.md)
        * [Dist](docs/architecture/files_dist.md)
        * [Node modules](docs/architecture/files_node_modules.md)
-       * Test
+       * [Test](docs/architecture/files_test.md)
 * [Development](docs/development/development.md)
    * [Coding standards](docs/development/coding_standards.md)
    * [Unit tests](docs/development/unit_tests.md)
