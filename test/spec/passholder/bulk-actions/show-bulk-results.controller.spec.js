@@ -435,11 +435,11 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   });
 
-  it('should fail in checking the passholders in on the given activity', function() {
+  it('should fail in checking the passholders in on the given activity because of invalid card', function() {
     action = 'points';
     activityService.checkin.and.callFake(function () {
       var apiError = {
-        code: 'CHECKIN_FAILED'
+        code: 'INVALID_CARD_STATUS'
       };
       return $q.reject(apiError);
     });
@@ -448,7 +448,47 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.asyncError.message).toEqual('Punten sparen niet gelukt.');
+      expect(passholder.asyncError.message).toEqual('Punt sparen niet gelukt kaart geblokkeerd.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in checking the passholders in on the given activity because of an expired kansenstatuut', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      var apiError = {
+        code: 'KANSENSTATUUT_EXPIRED'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Punt sparen niet gelukt kansenstatuut vervallen.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in checking the passholders in on the given activity because of maximum reached', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      var apiError = {
+        code: 'MAXIMUM_REACHED'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Punt al gespaard.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
@@ -468,7 +508,7 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.asyncError.message).toEqual('Er werden geen punten gespaard voor het geselecteerde evenement.');
+      expect(passholder.asyncError.message).toEqual('Punt sparen niet gelukt.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
