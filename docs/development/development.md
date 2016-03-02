@@ -7,5 +7,4 @@
 * Livereload is added to 
 
 `grunt build`
-* Builds the app to the `dist` folder. (This will not be available at http://culpas.dev).
-* There is a [helper script](helper_scripts.md) that will make the new build available at http://culpas.dev.
+* Builds the app to the `dist` folder.
