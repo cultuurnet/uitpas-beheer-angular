@@ -59,7 +59,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       }
       else if (action == 'points') {
         errorCode = errorResponse.code;
-        var defaultMessage = 'Er werden geen punten gespaard voor het geselecteerde evenement.'
+        var defaultMessage = 'Punt sparen niet gelukt.'
       }
 
       switch (errorCode) {
@@ -99,9 +99,23 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           };
           break;
 
-        case 'CHECKIN_FAILED':
+        case 'INVALID_CARD_STATUS':
           passholder.asyncError = {
-            message: 'Punten sparen niet gelukt.',
+            message: 'Punt sparen niet gelukt kaart geblokkeerd.',
+            type: 'danger'
+          };
+          break;
+
+        case 'KANSENSTATUUT_EXPIRED':
+          passholder.asyncError = {
+            message: 'Punt sparen niet gelukt kansenstatuut vervallen.',
+            type: 'danger'
+          };
+          break;
+
+        case 'MAXIMUM_REACHED':
+          passholder.asyncError = {
+            message: 'Punt al gespaard.',
             type: 'danger'
           };
           break;
