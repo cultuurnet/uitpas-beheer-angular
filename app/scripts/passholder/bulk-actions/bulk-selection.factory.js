@@ -128,11 +128,11 @@ function bulkSelectionFactory($q, passholderService) {
         passholderService
           .findPassholders(this.searchParameters)
           .then(
-          function(PassholderSearchResults) {
-            angular.forEach(PassholderSearchResults.passen, function(passholder){
-              passholders.push(passholder);
-            });
-          }
+            function(PassholderSearchResults) {
+              angular.forEach(PassholderSearchResults.passen, function(passholder){
+                passholders.push(passholder.passholder);
+              })
+            }
         );
       }
       else {

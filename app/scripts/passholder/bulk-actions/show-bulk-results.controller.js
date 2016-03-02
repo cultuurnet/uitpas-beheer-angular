@@ -58,7 +58,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
         var defaultMessage = 'Kansenstatuut werd niet geüpdatet op de server.'
       }
       else if (action == 'points') {
-        errorCode = errorResponse.data.code;
+        errorCode = errorResponse.code;
         var defaultMessage = 'Er werden geen punten gespaard voor het geselecteerde evenement.'
       }
 
@@ -101,7 +101,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
 
         case 'CHECKIN_FAILED':
           passholder.asyncError = {
-            message: 'Punten sparen mislukt',
+            message: 'Punten sparen niet gelukt.',
             type: 'danger'
           };
           break;

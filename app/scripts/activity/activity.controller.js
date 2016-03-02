@@ -28,6 +28,9 @@ function ActivityController (passholder, bulkSelection, activityService, counter
   controller.hideDateRange = false;
   controller.activityMode = activityMode;
   controller.bulkSelection = bulkSelection;
+  if (bulkSelection !== null) {
+    controller.passholders = bulkSelection.getPassholderNumbers();
+  }
 
   function getSearchParameters () {
     return {
@@ -185,7 +188,6 @@ function ActivityController (passholder, bulkSelection, activityService, counter
 
   controller.bulkCheckin = function (activity) {
     activity.checkinBusy = true;
-    controller.passholders = bulkSelection.getPassholderNumbers();
     $state.go('counter.main.advancedSearch.showBulkResults', {
       passholders: controller.passholders,
       bulkForm: null,

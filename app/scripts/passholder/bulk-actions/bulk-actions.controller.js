@@ -21,6 +21,8 @@ function BulkActionsController (bulkSelection, action, $uibModalInstance, $state
   controller.kansenstatuutData = {
     kansenstatuutEndDate: moment().endOf('year').toDate()
   };
+
+  //controller.passholders = bulkSelection.getPassholderNumbers();
   bulkSelection.getPassholderNumbers()
     .then(function(response){
       controller.passholders = response;
