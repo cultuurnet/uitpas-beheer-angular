@@ -6,4 +6,5 @@
 * [Architecture](docs/architecture/architecture.md)
    * File structure
 * Development
+   * Coding standards
 
