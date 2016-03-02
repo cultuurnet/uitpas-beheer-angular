@@ -7,6 +7,7 @@
 * [Architecture](docs/architecture/architecture.md)
    * [File system layout](docs/architecture/file_system_layout.md)
        * App
+       * Bower components
 * [Development](docs/development/development.md)
    * [Coding standards](docs/development/coding_standards.md)
    * [Unit tests](docs/development/unit_tests.md)
