@@ -1,1 +1,1 @@
-# File structure
+# File system layout
