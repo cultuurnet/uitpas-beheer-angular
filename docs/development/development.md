@@ -4,7 +4,7 @@
 
 `grunt serve`
 * Serves the app on http://localhost:9999
-* Livereload is added to 
+* Livereload is added to reload the browser after file changes.
 
 `grunt build`
 * Builds the app to the `dist` folder.
