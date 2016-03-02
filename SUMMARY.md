@@ -6,6 +6,6 @@
 * [Architecture](docs/architecture/architecture.md)
    * [File structure](docs/architecture/file_structure.md)
 * [Development](docs/development/development.md)
-   * Coding standards
-   * Unit tests
+   * [Coding standards](docs/development/coding_standards.md)
+   * [Unit tests](docs/development/unit_tests.md)
 
