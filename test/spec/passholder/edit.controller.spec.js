@@ -224,8 +224,7 @@ describe('Controller: PassholderEditController', function () {
 
     var form = getSpyForm({
       email: {
-        $error: {},
-        $invalid: false
+        $setValidity: jasmine.createSpy('$setValidity')
       }
     });
 
@@ -234,8 +233,7 @@ describe('Controller: PassholderEditController', function () {
     controller.submitForm(form);
     $scope.$digest();
 
-    expect(form.email.$invalid).toBeTruthy();
-    expect(form.email.$error.formatAsync).toBeTruthy();
+    expect(form.email.$setValidity).toHaveBeenCalled();
   });
 
   it('should call the eIDService to get the eID data', function () {
@@ -265,5 +263,39 @@ describe('Controller: PassholderEditController', function () {
   it('should react to an eID read error', function () {
     $rootScope.$emit('eIDErrorReceived', '');
     expect(controller.eIDError).toEqual('De eID kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.');
+  });
+
+  it('should show an error when an async postal code formatting error occurs', function () {
+    var postalCodeFormatError = $q.reject({
+      apiError: {
+        code: 'PARSE_INVALID_POSTAL_CODE'
+      }
+    });
+
+    var form = getSpyForm({
+      postalCode: {
+        $error: {},
+        $invalid: false,
+        $setValidity: jasmine.createSpy('$setValidity')
+      }
+    });
+
+    spyOn(passholderService, 'update').and.returnValue(postalCodeFormatError);
+
+    controller.submitForm(form);
+    $scope.$digest();
+
+    expect(form.postalCode.$setValidity).toHaveBeenCalledWith('formatAsync', false);
+  });
+
+  it('can remove field async errors when the field value changes', function () {
+    var form = getSpyForm({
+      postalCode: {
+        $setValidity: jasmine.createSpy('$setValidity')
+      }
+    });
+
+    controller.removeAsyncError(form, 'postalCode');
+    expect(form.postalCode.$setValidity).toHaveBeenCalledWith('formatAsync', true);
   });
 });

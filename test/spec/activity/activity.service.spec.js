@@ -246,7 +246,7 @@ describe('Service: activity', function (){
     };
 
     function assertError(error) {
-      expect(error.code).toBe('CHECKIN_FAILED');
+      expect(error.code).toBe('UNKNOWN_EVENT_CDBID');
       done();
     }
 

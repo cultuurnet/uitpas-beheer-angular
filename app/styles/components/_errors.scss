@@ -1,0 +1,35 @@
+// error pages
+.error-page {
+  background-position: 50% top;
+  background-repeat: no-repeat;
+  background-size: auto 7em;
+  padding-top: 9em;
+
+}
+.advantages-not-found {
+  padding-top: 0;
+}
+.pass-not-found {
+  background-image: url('../images/svg/fallback/card-search.png');
+  .svg & {
+    background-image: url('../images/svg/card-search.svg');
+  }
+}
+.page-not-found {
+  background-image: url('../images/svg/fallback/page-notfound.png');
+  .svg & {
+    background-image: url('../images/svg/page-notfound.svg');
+  }
+}
+.pass-deleted {
+  background-image: url('../images/svg/fallback/card-blocked.png');
+  .svg & {
+    background-image: url('../images/svg/card-blocked.svg');
+  }
+}
+.unknown-error {
+  background-image: url('../images/svg/fallback/card-search.png');
+  .svg & {
+    background-image: url('../images/svg/card-search.svg');
+  }
+}

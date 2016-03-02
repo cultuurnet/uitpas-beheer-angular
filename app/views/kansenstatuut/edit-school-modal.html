@@ -1,0 +1,47 @@
+<form name="editForm" ng-submit="esmc.updateSchool(editForm)" novalidate ng-class="{'form-submiting': esmc.updatePending}">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="esmc.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">School aanpassen</h4>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-danger" ng-show="esmc.asyncError">
+      <span ng-bind="esmc.asyncError.message"></span>
+    </div>
+
+    <div class="container-fluid">
+      <fieldset ng-disabled="esmc.updatePending">
+        
+        <div ng-show="esmc.passholder.school">
+          <strong>Huidige school: </strong><span ng-bind="::esmc.passholder.school.name"></span>
+        </div>
+        <hr>
+        <div ng-if="!esmc.schoolsLoaded" class="alert alert-info text-center">
+          <p>De lijst met scholen wordt opgehaald.
+            <span class="spinner spinner-xsmall spinner-inline">
+              <circle-spinner></circle-spinner>
+            </span>
+          </p>
+        </div>
+        <div class="field-group" ng-if="esmc.schoolsLoaded"
+             ng-class="{ 'has-error': (editForm.$submitted || editForm.editSchool.$dirty) && editForm.editSchool.$invalid }">
+          <label for="edit-school">Kies een nieuwe school</label>
+          <select chosen name="editSchool" id="edit-school"
+                  ng-model="esmc.school"
+                  ng-options="school as school.name for school in esmc.schools"
+                  data-placeholder="Kies een school">
+          </select>
+        </div>
+      </div>
+    </fieldset>
+  </div><!-- end modal-body -->
+  <div class="modal-footer">
+    <a ng-click="esmc.cancelModal()">Annuleren</a>
+    <button type="button" class="btn btn-primary btn-small" ng-disabled="esmc.updatePending || editForm.$invalid"
+            ng-click="esmc.updateSchool(editForm)">
+      <span ng-hide="esmc.updatePending">Bewaren</span>
+      <span ng-show="esmc.updatePending">
+        <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+      </span>
+    </button>
+  </div>
+</form>

@@ -49,6 +49,8 @@ module.exports = function(config) {
       'bower_components/ngTouchSpin/src/js/ngTouchSpin.js',
       'bower_components/phoneformat/dist/phone-format-global.js',
       'bower_components/showdown/dist/showdown.js',
+      'bower_components/angular-chosen-js/angular-chosen.js',
+      'bower_components/chosen/chosen.jquery.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/app.js",

@@ -1,11 +1,13 @@
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="sbrc.cancel()"><span aria-hidden="true">×</span></button>
-  <h4 class="modal-title">Adres wijzigen</h4>
+  <h4 class="modal-title" ng-show="sbrc.action=='address'">Adres wijzigen</h4>
+  <h4 class="modal-title" ng-show="sbrc.action=='kansenstatuut'">Kansenstatuut verlengen</h4>
+  <h4 class="modal-title" ng-show="sbrc.action=='points'">Punten sparen</h4>
 </div>
 <div class="modal-body">
   <div class="panel panel-default scroll-area">
     <div class="panel-body">
-      
+
       <div class="overview overview-small overview-slats">
         <ul class="list-unstyled">
           <li ng-repeat="passholder in sbrc.passholders" class="overview__item overview__item-list" ng-class="{'lowest': passholder.updated}">
@@ -17,7 +19,7 @@
                 <p class="status text-right no-margin">
                   <span ng-hide="passholder.isChecked" class="label label-info">Even geduld...</span>
                   <span class="label label-success" ng-show="passholder.updated">OK</span>
-                  <span class="label label-danger" ng-show="passholder.failed">x</span>
+                  <span class="label label-danger" ng-show="passholder.failed">{{ passholder.asyncError.message }}</span>
                 </p>
               </div>
             </div>

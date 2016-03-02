@@ -115,11 +115,13 @@ describe('Controller: PassholderAdvantagesController', function () {
     var checkedInActivity = {
       points: 1
     };
+    spyOn(advantageService, 'list').and.returnValue($q.resolve([]));
 
     $rootScope.$emit('activityCheckedIn', checkedInActivity);
     scope.$digest();
 
     expect(advantageController.availablePoints).toEqual(4);
+    expect(advantageService.list).toHaveBeenCalled();
   });
 
   it('should mark advantages with insufficient points when updating advantage exchangeability', function () {

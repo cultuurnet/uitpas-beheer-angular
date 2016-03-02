@@ -22,7 +22,14 @@
     "moment": "~2.10.6",
     "ngTouchSpin": "2dotstwice/ngTouchSpin#master",
     "phoneformat": "phoneformat.js#~1.0.3",
-    "showdown": "~1.3.0"
+    "showdown": "~1.3.0",
+    "angular-chosen-js": "*",
+    "chosen": "~1.4.2"
+  },
+  "overrides": {
+    "angular-chosen-js": {
+      "main": "angular-chosen.js"
+    }
   },
   "devDependencies": {
     "angular-mocks": "^1.3.0"

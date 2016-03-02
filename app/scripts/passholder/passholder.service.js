@@ -41,6 +41,9 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    *   A passholder promise.
    */
   service.findPass = function(identification) {
+    // Clean up the identification before using it.
+    // It should only contain alphanumerical characters.
+    identification = identification.replace(/([^a-z0-9]+)/gi, '');
     var deferredPassholder = $q.defer();
 
     var passholderId = passholderIdCache.get(identification);
@@ -359,6 +362,41 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
           deferredUpdate.resolve();
 
           $rootScope.$emit('remarksUpdated');
+        });
+    }
+
+    $http
+      .post(passholderPath, passholderData, requestOptions)
+      .then(updateLocalPassholder, deferredUpdate.reject);
+
+    return deferredUpdate.promise;
+  };
+
+  /**
+   * Update the school for a passholder.
+   *
+   * @param {Passholder} passholder
+   * @param {object} school
+   */
+  service.updateSchool = function (passholder, school) {
+    var passholderId = passholder.passNumber;
+    var passholderPath = apiUrl + 'passholders/' + passholderId;
+    var passholderData = passholder.serialize();
+    passholderData.school = school;
+    var requestOptions = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    var deferredUpdate = $q.defer();
+
+    function updateLocalPassholder(updateResponse) {
+      service
+        .updateCachedPassholder(passholderId, updateResponse.data)
+        .then(function () {
+          deferredUpdate.resolve();
+
+          $rootScope.$emit('schoolUpdated');
         });
     }
 

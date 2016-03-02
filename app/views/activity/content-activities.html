@@ -2,7 +2,7 @@
   <h2 class="overview__title">Activiteiten</h2>
   <div class="grid overview__search">
     <div class="grid__12 grid--bp-med__6">
-      <div class="btn-group" uib-dropdown>
+      <div class="btn-group" uib-dropdown ng-hide="ac.hideDateRange && !ac.activitiesLoading">
         <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
         <button type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="!!ac.activitiesLoading">
           <span class="caret"></span>
@@ -26,6 +26,11 @@
             <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">Afgelopen activiteiten</a>
           </li>
         </ul>
+      </div>
+      <div ng-show="ac.hideDateRange && !ac.activitiesLoading">
+        <strong><ng-pluralize count="ac.totalActivities"
+                      when="{'one': '1 resultaat gevonden', 'other': '{} resultaten gevonden'}">
+        </ng-pluralize> </strong> <a ng-click="ac.resetSearchQuery()">Annuleren</a>
       </div>
     </div>
     <div class="grid__12 grid--bp-med__6 text-right">
@@ -53,7 +58,9 @@
       <div class="grid display-table">
         <div class="grid__12 grid--bp-med__6 first">
           <div class="date" ng-bind="::activity.when"></div>
-          <h3 ui-sref="counter.main.passholder.activity({ activity: activity })">{{activity.title}}</h3>
+          <h3 ng-if="ac.activityMode == 'passholders'" ui-sref="counter.main.passholder.activity({ activity: activity })">{{activity.title}}</h3>
+          <h3 ng-if="ac.activityMode == 'counter'" ui-sref="counter.main.advancedSearch.bulkPoints.activity({ activity: activity })">{{activity.title}}</h3>
+
         </div> <!--/ end .grid-first -->
 
         <div class="grid__12 grid--bp-med__3 middle">
@@ -66,7 +73,8 @@
             <i ng-switch-when="expired">Evenement afgelopen</i>
             <div ng-switch-when="available">
               <div class="points">+<span ng-bind="::activity.points"></span></div>
-              <button class="btn btn-default btn-sm" ng-click="ac.checkin(activity)">Punten sparen</button>
+              <button ng-if="ac.activityMode == 'passholders'" class="btn btn-default btn-sm" ng-click="ac.checkin(activity)">Punten sparen</button>
+              <button ng-if="ac.activityMode == 'counter'" ng-click="ac.bulkCheckin(activity)" class="btn btn-default btn-sm" >Punten sparen</button>
             </div>
           </div>
           <!--status failed-->

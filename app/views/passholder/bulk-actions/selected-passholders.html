@@ -1,0 +1,32 @@
+<div class="sidebar__inner">
+
+  <div class="back-nav">
+    <a ui-sref="counter.main">Terug</a>
+  </div>
+
+  <p class="element-title"><span class="count-pashouders" ng-bind="bac.passholders.length"></span> pashouder(s) geselecteerd</p>
+
+  <ul class="listreset">
+
+    <li class="slats-item" ng-repeat="passholder in bac.passholders">
+      <div class="checkbox-on-left">
+        <input type="checkbox" class="pashouder-selectie" checked="">
+        {{ passholder.name.first }} {{ passholder.name.last }}
+
+        <ul class="listreset statuut">
+          <li class="grid passholder-passes" ng-repeat="pass in passholder.uitPassen">
+
+            <div class="grid__12 grid--bp-med__4" ng-show="$first">
+              <span class="label label-danger" ng-show="pass.isKansenstatuut() && pass.kansenstatuutExpired(passholder)">Kansenstatuut vervallen</span>
+              <span class="label label-success" ng-show="pass.isKansenstatuut() && !pass.kansenstatuutExpired(passholder)">Kansenstatuut geldig</span>
+              <span class="label label-danger" ng-show="pass.isBlocked()">Kaart geblokeerd</span>
+            </div>
+          </li>
+        </ul>
+
+      </div>
+    </li>
+
+  </ul>
+
+</div>

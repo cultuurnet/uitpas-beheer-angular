@@ -12,7 +12,7 @@ angular
   .controller('ActivityController', ActivityController);
 
 /* @ngInject */
-function ActivityController (passholder, activityService, DateRange, $rootScope, $scope) {
+function ActivityController (passholder, bulkSelection, activityService, counterService, DateRange, $rootScope, $scope, activityMode, $state) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -25,6 +25,12 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
   controller.dateRange = controller.dateRanges.TODAY;
   controller.totalActivities = 0;
   controller.activitiesLoading = 0;
+  controller.hideDateRange = false;
+  controller.activityMode = activityMode;
+  controller.bulkSelection = bulkSelection;
+  if (bulkSelection !== null) {
+    controller.passholders = bulkSelection.getPassholderNumbers();
+  }
 
   function getSearchParameters () {
     return {
@@ -70,8 +76,23 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
       resetActivePage();
     }
 
+    if (queryChanged() && newSearchParameters.query !== '') {
+      newSearchParameters.dateRange = DateRange.NEXT_12_MONTHS;
+      controller.hideDateRange = true;
+    }
+    else {
+      controller.hideDateRange = false;
+    }
+
     lastSearchParameters = newSearchParameters;
     controller.search();
+  };
+
+  controller.resetSearchQuery = function () {
+    controller.query = '';
+    controller.dateRange = DateRange.TODAY;
+
+    controller.searchParametersChanged();
   };
 
   controller.search = function () {
@@ -88,9 +109,16 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
     };
 
     ++controller.activitiesLoading;
-    activityService
-      .search(passholder, searchParameters)
-      .then(showSearchResults, searchingFailed);
+    if (activityMode === 'passholders') {
+      activityService
+        .search(passholder, searchParameters)
+        .then(showSearchResults, searchingFailed);
+    }
+    else if (activityMode === 'counter') {
+      counterService
+        .getActivities(searchParameters)
+        .then(showSearchResults, searchingFailed);
+    }
   };
 
   // Do an initial search to populate the activity list.
@@ -156,6 +184,17 @@ function ActivityController (passholder, activityService, DateRange, $rootScope,
     activityService
       .checkin(activity, passholder)
       .then(updateActivity, checkinError);
+  };
+
+  controller.bulkCheckin = function (activity) {
+    activity.checkinBusy = true;
+    $state.go('counter.main.advancedSearch.showBulkResults', {
+      passholders: controller.passholders,
+      bulkForm: null,
+      bulkSelection: controller.bulkSelection,
+      action: 'points',
+      activity: activity
+    });
   };
 
   controller.updateClaimedTariffActivity = function () {

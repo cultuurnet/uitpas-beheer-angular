@@ -12,7 +12,7 @@ angular
   .controller('AppController', appController);
 
 /* @ngInject */
-function appController($rootScope, $location, uitid, counterService, $state) {
+function appController($rootScope, $location, appConfig, uitid, counterService, $state) {
   $rootScope.appBusy = true;
 
   $rootScope.$on('$stateChangeStart', function () {
@@ -45,6 +45,7 @@ function appController($rootScope, $location, uitid, counterService, $state) {
 
   app.user = undefined;
   app.counter = undefined;
+  app.buildNumber = appConfig.buildNumber;
 
   app.requireActiveCounter = function (event, toState, toParams) {
     if (toState.requiresCounter && !app.counter) {

@@ -5,10 +5,28 @@ describe('Controller: EditKansenstatuutModalController', function () {
   // load the controller's module
   beforeEach(module('ubr.kansenstatuut'));
 
-  var controller, activeCounter, modalInstance, passholderService, $q, scope;
+  var controller, activeCounter, modalInstance, passholderService, $q, scope, passholder;
+
+  var cardSystemId = 1;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, Passholder, $injector, $rootScope) {
+    passholder = new Passholder(
+      {
+        passNumber: '01234567891234',
+        kansenStatuten: [
+          {
+            cardSystem: {
+              id: 1,
+              name: 'UiTPAS Dender'
+            },
+            status: 'ACTIVE',
+            endDate: '1921-02-02'
+          }
+        ]
+      }
+    );
+
     activeCounter = {
       cardSystems: {
         1: {
@@ -30,10 +48,10 @@ describe('Controller: EditKansenstatuutModalController', function () {
     scope = $rootScope.$new();
 
     controller = $controller('EditKansenstatuutModalController', {
-      passholder: new Passholder({ passNumber: '01234567891234' }),
+      passholder: passholder,
       activeCounter: activeCounter,
       $uibModalInstance: modalInstance,
-      cardSystemId: 1,
+      cardSystemId: cardSystemId,
       passholderService: passholderService,
       $scope: scope
     });
@@ -51,16 +69,21 @@ describe('Controller: EditKansenstatuutModalController', function () {
       }
     };
     var expectedEndDate = new Date('1922-02-02');
-    controller.kansenstatuut = {
-      endDate: new Date('1922-02-02')
-    };
+
     passholderService.renewKansenstatuut.and.returnValue($q.resolve());
+
+    controller.kansenstatuut.endDate = expectedEndDate;
 
     controller.updateKansenstatuut(editForm);
     scope.$digest();
 
     expect(passholderService.renewKansenstatuut)
-      .toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), expectedEndDate);
+      .toHaveBeenCalledWith(
+        passholder,
+        controller.kansenstatuut,
+        expectedEndDate
+      );
+
     expect(modalInstance.close).toHaveBeenCalled();
   });
 
@@ -71,6 +94,9 @@ describe('Controller: EditKansenstatuutModalController', function () {
       }
     };
     var expectedEndDate = new Date('1922-02-02');
+
+    controller.kansenstatuut.endDate = expectedEndDate;
+
     var errorResponse = {
       data: {
         code: 'TOTALLY_UNACCEPTABLE_DUDE',
@@ -91,7 +117,11 @@ describe('Controller: EditKansenstatuutModalController', function () {
     scope.$digest();
 
     expect(passholderService.renewKansenstatuut)
-      .toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), expectedEndDate);
+      .toHaveBeenCalledWith(
+        passholder,
+        controller.kansenstatuut,
+        expectedEndDate
+      );
     expect(modalInstance.close).not.toHaveBeenCalled();
     expect(controller.asyncError).toEqual(expectedAsyncError);
   });
