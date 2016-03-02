@@ -1,5 +1,6 @@
 # Summary
 
+* [Introduction](README.md)
 * [Introduction](docs/introduction.md)
 * [Intended audience](docs/intended_audience.md)
 * [Language](docs/language.md)
@@ -8,5 +9,4 @@
 * [Development](docs/development/development.md)
    * [Coding standards](docs/development/coding_standards.md)
    * [Unit tests](docs/development/unit_tests.md)
-   * [Helper scripts](docs/development/helper_scripts.md)
 
