@@ -15,4 +15,5 @@
 * [Development](docs/development/development.md)
    * [Coding standards](docs/development/coding_standards.md)
    * [Unit tests](docs/development/unit_tests.md)
+   * Styling and markup
 
