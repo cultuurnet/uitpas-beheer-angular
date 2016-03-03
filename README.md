@@ -1,9 +1,8 @@
+# Introduction
+
 [![Build Status](https://travis-ci.org/cultuurnet/uitpas-beheer-angular.svg?branch=master)](https://travis-ci.org/cultuurnet/uitpas-beheer-angular) [![Coverage Status](https://coveralls.io/repos/cultuurnet/uitpas-beheer-angular/badge.svg)](https://coveralls.io/r/cultuurnet/uitpas-beheer-angular)
 
-# uitpasbeheer
-
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.11.1.
+# UiTPAS beheer
 
 ## Build & development
 
@@ -17,8 +16,7 @@ Running `grunt test` will run the unit tests with karma.
 
 ## Configuration
 
-The `config.dist.json` file at the root of the project holds the default config. You can make your own adjustments and write
- them to `config.json`. `config.dist.json` will be ignored when `config.json` is present.
+The `config.dist.json` file at the root of the project holds the default config. You can make your own adjustments and write them to `config.json`. `config.dist.json` will be ignored when `config.json` is present.
  
 Current configuration options:
 ### apiUrl
@@ -32,3 +30,34 @@ When left empty the base path is assumed to be the root from which the applicati
   "basePath": "/public/app/"
 }
 ```
+
+### contacts
+The contact information is shown on two locations.
+* On the counter selection page when the user is not assigned to a counter
+* In the sidebar of the help page
+
+```json
+"contacts": [
+    {
+      "name": "Dender",
+      "email": "aalst@uitpas.be"
+    },
+    {
+      "name": "Paspartoe",
+      "email": "paspartoe@vgc.be"
+    },
+    {
+      "name": "Gent",
+      "email": "uitpas@gent.be"
+    },
+    {
+      "name": "Oostende",
+      "email": "uitpas@oostende.be"
+    },
+    {
+      "name": "Zuidwest",
+      "email": "uitpas@zuidwest.be",
+      "telephone": "0499116726"
+    }
+  ]
+  ```
