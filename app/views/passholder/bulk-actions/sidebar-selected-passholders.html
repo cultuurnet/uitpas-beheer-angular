@@ -4,7 +4,9 @@
     <a ui-sref="counter.main">Terug</a>
   </div>
 
-  <p class="element-title"><span class="count-pashouders" ng-bind="bac.passholders.length"></span> pashouder(s) geselecteerd</p>
+  <p class="element-title">
+    <ng-pluralize class="count-pashouders" count="bac.passholders.length" when="{'0': 'geen pashouders geselecteerd', '1': '{} pashouder geselecteerd', 'other': '{} pashouders geselecteerd'}"></ng-pluralize>
+  </p>
 
   <ul class="listreset">
 

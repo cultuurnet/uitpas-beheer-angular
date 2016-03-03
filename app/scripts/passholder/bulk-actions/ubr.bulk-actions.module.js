@@ -192,7 +192,7 @@ angular
             controllerAs: 'ac'
           },
           'sidebar@counter': {
-            templateUrl: 'views/passholder/bulk-actions/selected-passholders.html',
+            templateUrl: 'views/passholder/bulk-actions/sidebar-selected-passholders.html',
             controller: 'BulkActionsController',
             controllerAs: 'bac'
           }
