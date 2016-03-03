@@ -11,9 +11,11 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkForm, action, passholderService, $uibModalStack, activeCounter, moment, $q) {
+function ShowBulkResultsController(passholders, bulkForm, action, passholderService, $uibModalStack, activeCounter, moment, $q, Queue) {
   var controller = this;
   var errorCode;
+  var queue = new Queue(4);
+
   controller.submitBusy = true;
   controller.passholders = passholders;
   controller.activeCounter = activeCounter;
@@ -100,28 +102,6 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
     };
   };
 
-  var queue = [];
-  var maxSimultaneousRequests = 4;
-  var currentSimultaneousRequests = 0;
-  function enqueue(callback) {
-    queue.push(callback);
-  }
-
-  function finishJob() {
-    currentSimultaneousRequests--;
-    processQueue();
-  }
-  function processQueue() {
-    var job;
-
-    // Start up to maxSimultaneousRequests items from the queue.
-    while (queue.length > 0 && currentSimultaneousRequests < maxSimultaneousRequests) {
-      currentSimultaneousRequests++;
-      job = queue.shift();
-      job().finally(finishJob);
-    }
-  }
-
   angular.forEach(controller.passholders, function(passholder) {
     var job = function() {
       var deferred = $q.defer();
@@ -161,9 +141,9 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       }
       return deferred.promise;
     };
-    enqueue(job);
+    queue.enqueue(job);
   });
-  processQueue();
+  queue.startProcessingQueue();
 
   controller.cancel = function() {
     $uibModalStack.dismissAll('bulkResultsClosed');
