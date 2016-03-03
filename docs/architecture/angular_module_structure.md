@@ -24,7 +24,10 @@ Controllers never:
 - Inject markup
 
 ## [Directives](https://docs.angularjs.org/guide/directive)
- Directives are used in case where a certain logic is tightly coupled with markup, or where markup has to be repeated on multiple pages.
+ Directives are used in case when:
+ 
+- a certain logic is tightly coupled with markup
+- markup has to be repeated on multiple pages
 
 ## [Constants](http://twofuckingdevelopers.com/2014/06/angularjs-best-practices-001-constants)
 
