@@ -11,7 +11,7 @@
    * [Definition of done](docs/development/definition_of_done.md)
    * [Unit tests](docs/development/unit_tests.md)
    * [Coding standards](docs/development/coding_standards.md)
+   * Swagger documentation
    * [Styling and markup](docs/development/styling_and_markup.md)
    * [External libraries](docs/development/external_libraries.md)
-   * Swagger documentation
 
