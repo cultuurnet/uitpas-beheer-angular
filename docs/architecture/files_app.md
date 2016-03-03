@@ -3,7 +3,9 @@
  Most directory names are self-explanatory.
 
 ## Scripts
- Contains all the javascript files.
+ Contains all the javascript files. The files are grouped together conceptually as [modules](https://docs.angularjs.org/guide/module).
+ 
+ The folder _passholder_ contains all the files that deal with the pasholder. Subfolders are used for large fractions of functionality.
  
 ## Styles
  Contains all the [Sass](http://sass-lang.com) .scss files for styling.
