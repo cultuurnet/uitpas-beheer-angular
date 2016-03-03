@@ -1,0 +1,2 @@
+# Angular module structure
+
