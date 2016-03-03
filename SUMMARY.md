@@ -12,7 +12,7 @@
    * [Unit tests](docs/development/unit_tests.md)
    * [Coding standards](docs/development/coding_standards.md)
    * Swagger documentation
+   * Peer review
    * [Styling and markup](docs/development/styling_and_markup.md)
    * [External libraries](docs/development/external_libraries.md)
-   * Peer review
 
