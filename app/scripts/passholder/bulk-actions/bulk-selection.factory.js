@@ -120,9 +120,7 @@ function bulkSelectionFactory($q, passholderService) {
     },
     getPassholderNumbers: function () {
       var passholders = Array();
-      var deferred;
-      deferred = $q.defer();
-      this.initialized = deferred.promise;
+      var deferred = $q.defer();
       if (this.selectAll) {
         this.searchParameters.limit = this.searchResults.totalItems;
         passholderService

@@ -75,9 +75,7 @@ angular
           'identification': null,
           'pass': null,
           'passholder': null,
-          'passholders': null,
           'advantages': null,
-          'activeCounter': null,
           'activityMode': null,
           'bulkSelection': null
         },

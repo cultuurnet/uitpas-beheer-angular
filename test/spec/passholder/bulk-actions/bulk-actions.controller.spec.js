@@ -156,8 +156,6 @@ describe('Controller: BulkActionsController', function () {
     SearchParameters = $injector.get('SearchParameters');
     Passholder = $injector.get('Passholder');
 
-    //bulkSelectionSpy.getPassholderNumbers.and.returnValue(passholdersPromise);
-
     passholder = new Passholder(jsonPass);
     searchResults = new PassholderSearchResults(jsonSearchResults);
     searchParameters = new SearchParameters(jsonSearchParameters);

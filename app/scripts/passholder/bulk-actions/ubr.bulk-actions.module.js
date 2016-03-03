@@ -161,24 +161,14 @@ angular
         requiresCounter: true,
         reloadOnSearch: false,
         params: {
-          'activeCounterAssociations': null,
-          'activeCounter': null,
           bulkSelection: null,
           action: null,
           $uibModalInstance: null,
           passholder: null,
-          passholders: null,
           activityMode: null
         },
         resolve: {
           /* @ngInject */
-          activeCounterAssociations: function (counterService) {
-            return counterService.getAssociations();
-          },
-          /* @ngInject */
-          activeCounter: function (counterService) {
-            return counterService.getActive();
-          },
           bulkSelection: ['$stateParams', function($stateParams) {
             return $stateParams.bulkSelection;
           }],
