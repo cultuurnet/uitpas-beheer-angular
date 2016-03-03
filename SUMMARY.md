@@ -16,5 +16,5 @@
    * [Coding standards](docs/development/coding_standards.md)
    * [Unit tests](docs/development/unit_tests.md)
    * [Styling and markup](docs/development/styling_and_markup.md)
-   * External libraries
+   * [External libraries](docs/development/external_libraries.md)
 
