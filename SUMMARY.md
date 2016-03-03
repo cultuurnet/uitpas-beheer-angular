@@ -6,7 +6,7 @@
 * [Architecture](docs/architecture/architecture.md)
    * [File system layout](docs/architecture/file_system_layout.md)
        * [App](docs/architecture/files_app.md)
-   * Angular module structure
+   * [Angular module structure](docs/architecture/angular_module_structure.md)
 * [Development](docs/development/development.md)
    * [Coding standards](docs/development/coding_standards.md)
    * [Unit tests](docs/development/unit_tests.md)
