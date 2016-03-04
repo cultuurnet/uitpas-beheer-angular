@@ -6,6 +6,18 @@
  Contains all the javascript files. The files are grouped together conceptually as [modules](angular_module_structure.md).
  
  The folder _passholder_ contains all the files that deal with the pasholder. Subfolders are used for large fractions of functionality.
+
+### Special script files
+* `app.js`: The main angular module. Injects all other modules. Contains general ui-router states.
+* `config.js`: Is generated during `grunt build` and filled with the configuration data from `config.dist.json` or `config.json`
+
+### Scipts/utilities
+ Contains functionality that is used across the multiple controllers. Some files of more importance are:
+
+* `app.controller.js`: Contains general routing and authentication functionality.
+* `day.factory.js`: Creates moment objects from date strings.Circumvents a bug in JavaFX: https://bugs.openjdk.java.net/browse/JDK-8090098. Also see: https://jira.uitdatabank.be/browse/UBR-212
+* ``: 
+* ``: 
  
 ## Styles
  Contains all the [Sass](http://sass-lang.com) .scss files for styling.
