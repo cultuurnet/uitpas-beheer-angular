@@ -29,6 +29,9 @@ Controllers never:
 - a certain logic is tightly coupled with markup
 - markup has to be repeated on multiple pages
 
+Directives that are very specific to an app concept should be placed in the corresponding module.
+Directives that can be used across the app should be placed in the `utilities` module.
+
 ## [Constants](http://twofuckingdevelopers.com/2014/06/angularjs-best-practices-001-constants)
 
 
