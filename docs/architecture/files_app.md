@@ -15,15 +15,16 @@
  Contains functionality that is used across the multiple controllers. Some files of more importance are:
 
 * `app.controller.js`: Contains general routing and authentication functionality.
-* `day.factory.js`: Creates moment objects from date strings.Circumvents a bug in JavaFX: https://bugs.openjdk.java.net/browse/JDK-8090098. Also see: https://jira.uitdatabank.be/browse/UBR-212
-* ``: 
-* ``: 
- 
+* `day.factory.js`: Creates moment objects from date strings.Circumvents a bug in JavaFX: https://bugs.openjdk.java.net/browse/JDK-8090098. Also see: https://jira.uitdatabank.be/browse/UBR-212. This might become obsolete.
+* `uitpas-router.service.js`: Contains redirection logic based on UiTPAS type and status.
+
+---
 ## Styles
  Contains all the [Sass](http://sass-lang.com) .scss files for styling.
  
  Read more about [styling and markup](../development/styling_and_markup.md).
- 
+
+---
 ## Views
  Contains all the template files used in the app states.
  
