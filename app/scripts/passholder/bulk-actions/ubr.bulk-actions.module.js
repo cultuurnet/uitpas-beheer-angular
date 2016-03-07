@@ -168,7 +168,6 @@ angular
           activityMode: null
         },
         resolve: {
-          /* @ngInject */
           bulkSelection: ['$stateParams', function($stateParams) {
             console.log($stateParams);
             return $stateParams.bulkSelection;

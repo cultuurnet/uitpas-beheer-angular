@@ -64,7 +64,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       }
       else if (action == 'points') {
         errorCode = errorResponse.code;
-        var defaultMessage = 'Punt sparen niet gelukt.'
+        defaultMessage = 'Punt sparen niet gelukt.'
       }
 
       switch (errorCode) {
