@@ -239,6 +239,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.address.street).toEqual('asdfasdfasd');
       expect(passholder.updated).toBeTruthy();
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -255,6 +256,7 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
       expect(passholder.asyncError.message).toEqual('Actie niet toegestaan.');
       expect(passholder.asyncError.type).toEqual('danger');
     });
@@ -273,6 +275,7 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
       expect(passholder.asyncError.message).toEqual('Pashouder werd niet geüpdatet op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
     });
@@ -291,6 +294,7 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
       expect(passholder.asyncError.message).toEqual('Pashouder werd niet geüpdatet op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
     });
@@ -311,6 +315,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.kansenStatuten[0].endDate).toEqual(day('2015-12-26', 'YYYY-MM-DD').toDate());
       expect(passholder.updated).toBeTruthy();
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -333,6 +338,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.asyncError.message).toEqual('Geen geldige einddatum voor kansenstatuut');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -355,6 +361,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.asyncError.message).toEqual('Geen geldige datum voor kansenstatuut');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -377,6 +384,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.asyncError.message).toEqual('Kansenstatuut werd niet geüpdatet op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -396,6 +404,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.asyncError.message).toEqual('Pashouder heeft geen kansenstatuut.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -415,6 +424,7 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
       expect(passholder.asyncError.message).toEqual('Geen geldige postcode voor het adres.');
       expect(passholder.asyncError.type).toEqual('danger');
     });

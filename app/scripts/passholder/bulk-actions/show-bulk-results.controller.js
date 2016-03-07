@@ -11,9 +11,11 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkForm, action, passholderService, activityService, $uibModalStack, activeCounter, activity, moment) {
+function ShowBulkResultsController(passholders, bulkForm, action, passholderService, activityService, $uibModalStack, activeCounter, activity, moment, $q, Queue) {
   var controller = this;
   var errorCode;
+  var queue = new Queue(4);
+
   controller.submitBusy = true;
   controller.passholders = passholders;
   controller.activeCounter = activeCounter;
@@ -43,19 +45,22 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   controller.updateOK = function (passholder) {
     return function() {
       passholder.updated = true;
-    }
+      passholder.beingProcessed = false;
+    };
   };
 
   controller.updateFailed = function(passholder, action) {
     return function(errorResponse) {
       passholder.failed = true;
-      if (action == 'address') {
+      passholder.beingProcessed = false;
+      var defaultMessage;
+      if (action === 'address') {
         errorCode = errorResponse.code;
-        var defaultMessage = 'Pashouder werd niet geüpdatet op de server.'
+        defaultMessage = 'Pashouder werd niet geüpdatet op de server.';
       }
-      else if (action == 'kansenstatuut') {
+      else if (action === 'kansenstatuut') {
         errorCode = errorResponse.data.code;
-        var defaultMessage = 'Kansenstatuut werd niet geüpdatet op de server.'
+        defaultMessage = 'Kansenstatuut werd niet geüpdatet op de server.';
       }
       else if (action == 'points') {
         errorCode = errorResponse.code;
@@ -126,45 +131,62 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
             type: 'danger'
           };
       }
-    }
+    };
   };
 
   angular.forEach(controller.passholders, function(passholder) {
-    passholder.isChecked = false;
-    passholder.updated = false;
-    passholder.failed = false;
-    var callbackSuccess = controller.updateOK(passholder);
-    var callbackFail = controller.updateFailed(passholder, action);
-    switch (action) {
-      case 'address':
-        controller.updatePassHolderAddress(passholder).then(callbackSuccess, callbackFail);
-        break;
-      case 'kansenstatuut':
-        var kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[1].id);
+    var job = function() {
+      var deferred = $q.defer();
+      passholder.isChecked = false;
+      passholder.updated = false;
+      passholder.failed = false;
+      passholder.beingProcessed = false;
+      var callbackSuccess = function() {
+        deferred.resolve(passholder);
+        controller.updateOK(passholder).apply(this, arguments);
+      };
+      var callbackFail = function() {
+        deferred.reject(passholder, action);
+        controller.updateFailed(passholder, action).apply(this, arguments);
+      };
+      switch (action) {
+        case 'address':
+          passholder.beingProcessed = true;
+          controller.updatePassHolderAddress(passholder).then(callbackSuccess, callbackFail);
+          break;
+        case 'kansenstatuut':
+          passholder.beingProcessed = true;
+          var kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[1].id);
 
-        // Check if passholder has a kansenstatuut.
-        if (kansenstatuut) {
-          controller.renewPassholderKansenstatuut(passholder, kansenstatuut).then(callbackSuccess, callbackFail);
-        }
-        // Error handling if passholder has no kansenstatuut.
-        else {
-          passholder.isChecked = true;
-          passholder.updated = false;
-          passholder.failed = true;
-          passholder.asyncError = {
-            message: 'Pashouder heeft geen kansenstatuut.',
-            type: 'danger'
+          // Check if passholder has a kansenstatuut.
+          if (kansenstatuut) {
+            controller.renewPassholderKansenstatuut(passholder, kansenstatuut).then(callbackSuccess, callbackFail);
           }
-        }
-        break;
-      case 'points':
-        controller.passholderCheckin(activity, passholder)
-          .then(callbackSuccess, callbackFail);
-        break;
-    }
+          // Error handling if passholder has no kansenstatuut.
+          else {
+            passholder.isChecked = true;
+            passholder.beingProcessed = false;
+            passholder.updated = false;
+            passholder.failed = true;
+            passholder.asyncError = {
+              message: 'Pashouder heeft geen kansenstatuut.',
+              type: 'danger'
+            };
+          }
+          break;
+        case 'points':
+          passholder.beingProcessed = true;
+          controller.passholderCheckin(activity, passholder)
+            .then(callbackSuccess, callbackFail);
+          break;
+      }
+      return deferred.promise;
+    };
+    queue.enqueue(job);
   });
+  queue.startProcessingQueue();
 
   controller.cancel = function() {
     $uibModalStack.dismissAll('bulkResultsClosed');
-  }
+  };
 }
