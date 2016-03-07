@@ -157,7 +157,7 @@ angular
         }
       })
       .state('counter.main.advancedSearch.bulkPoints', {
-        url: '/bulkactions/points',
+        url: '/bulkactions/points?selection[]',
         requiresCounter: true,
         reloadOnSearch: false,
         params: {
@@ -170,6 +170,7 @@ angular
         resolve: {
           /* @ngInject */
           bulkSelection: ['$stateParams', function($stateParams) {
+            $stateParams.bulkSelection.toQueryParameters();
             return $stateParams.bulkSelection;
           }],
           action: ['$stateParams', function($stateParams) {

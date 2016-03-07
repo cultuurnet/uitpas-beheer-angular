@@ -116,6 +116,10 @@ function bulkSelectionFactory($q, passholderService) {
         queryParameters['selection[]'] = this.uitpasNumberSelection;
       }
 
+      if(this.selectAll) {
+        queryParameters['selection[]'] = 'selectAll';
+      }
+
       return queryParameters;
     },
     getPassholderNumbers: function () {
