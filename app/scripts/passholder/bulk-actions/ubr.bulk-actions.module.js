@@ -157,7 +157,7 @@ angular
         }
       })
       .state('counter.main.advancedSearch.bulkPoints', {
-        url: '/bulkactions/points?name&firstName&street&email&city&dateOfBirth&membershipAssociationId&membershipStatus&uitpasNumbers&page&mode&selection&totalItems',
+        url: '/bulkactions/points',
         requiresCounter: true,
         reloadOnSearch: false,
         params: {
