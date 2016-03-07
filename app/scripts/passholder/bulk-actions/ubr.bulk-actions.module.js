@@ -168,10 +168,21 @@ angular
           activityMode: null
         },
         resolve: {
-          bulkSelection: ['$stateParams', function($stateParams) {
-            console.log($stateParams);
+          /* @ngInject */
+          bulkSelection: function($stateParams, SearchParameters, BulkSelection, PassholderSearchResults) {
+            if (!$stateParams.bulkSelection) {
+              var searchParams = new SearchParameters();
+              searchParams.fromParams($stateParams);
+              var searchResults = new PassholderSearchResults();
+              searchResults.totalItems = 10;
+              var bulkSelection = new BulkSelection(searchResults, searchParams, $stateParams.selection);
+              if (!$stateParams.selection) {
+                bulkSelection.selectAll = true;
+              }
+              return bulkSelection;
+            }
             return $stateParams.bulkSelection;
-          }],
+          },
           action: ['$stateParams', function($stateParams) {
             return $stateParams.action;
           }],
