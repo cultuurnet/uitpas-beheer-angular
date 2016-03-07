@@ -40,12 +40,14 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   controller.updateOK = function (passholder) {
     return function() {
       passholder.updated = true;
+      passholder.beingProcessed = false;
     };
   };
 
   controller.updateFailed = function(passholder, action) {
     return function(errorResponse) {
       passholder.failed = true;
+      passholder.beingProcessed = false;
       var defaultMessage;
       if (action === 'address') {
         errorCode = errorResponse.code;
@@ -108,6 +110,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       passholder.isChecked = false;
       passholder.updated = false;
       passholder.failed = false;
+      passholder.beingProcessed = false;
       var callbackSuccess = function() {
         deferred.resolve(passholder);
         controller.updateOK(passholder).apply(this, arguments);
@@ -118,9 +121,11 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       };
       switch (action) {
         case 'address':
+          passholder.beingProcessed = true;
           controller.updatePassHolderAddress(passholder).then(callbackSuccess, callbackFail);
           break;
         case 'kansenstatuut':
+          passholder.beingProcessed = true;
           var kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[1].id);
 
           // Check if passholder has a kansenstatuut.
@@ -130,6 +135,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           // Error handling if passholder has no kansenstatuut.
           else {
             passholder.isChecked = true;
+            passholder.beingProcessed = false;
             passholder.updated = false;
             passholder.failed = true;
             passholder.asyncError = {
