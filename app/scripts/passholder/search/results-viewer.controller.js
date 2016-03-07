@@ -164,7 +164,9 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
         controller.bulk.submitBusy = false;
         var params = controller.bulk.selection.toQueryParameters();
         params.action = 'points';
-
+        if (!params.selection) {
+          params.totalItems = controller.bulk.selection.searchResults.totalItems;
+        }
         $state.go('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
         break;
       case 'export':

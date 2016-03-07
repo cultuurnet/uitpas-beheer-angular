@@ -157,7 +157,7 @@ angular
         }
       })
       .state('counter.main.advancedSearch.bulkPoints', {
-        url: '/bulkactions/points?name&firstName&street&email&city&dateOfBirth&membershipAssociationId&membershipStatus&uitpasNumbers&page&mode&selection',
+        url: '/bulkactions/points?name&firstName&street&email&city&dateOfBirth&membershipAssociationId&membershipStatus&uitpasNumbers&page&mode&selection&totalItems',
         requiresCounter: true,
         reloadOnSearch: false,
         params: {
@@ -174,7 +174,9 @@ angular
               var searchParams = new SearchParameters();
               searchParams.fromParams($stateParams);
               var searchResults = new PassholderSearchResults();
-              searchResults.totalItems = 10;
+              if (!$stateParams.selection) {
+                searchResults.totalItems = $stateParams.totalItems;
+              }
               var bulkSelection = new BulkSelection(searchResults, searchParams, $stateParams.selection);
               if (!$stateParams.selection) {
                 bulkSelection.selectAll = true;
