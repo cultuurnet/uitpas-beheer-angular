@@ -113,11 +113,11 @@ function bulkSelectionFactory($q, passholderService) {
       delete queryParameters.limit;
 
       if(!this.selectAll && this.uitpasNumberSelection.length > 0) {
-        queryParameters['selection[]'] = this.uitpasNumberSelection;
+        queryParameters['selection'] = this.uitpasNumberSelection;
       }
 
       if(this.selectAll) {
-        queryParameters['selection[]'] = 'selectAll';
+        queryParameters['selection'] = 'selectAll';
       }
 
       return queryParameters;
