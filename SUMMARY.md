@@ -8,6 +8,7 @@
        * [App](docs/architecture/files_app.md)
    * [Angular module structure](docs/architecture/angular_module_structure.md)
 * [Development](docs/development/development.md)
+   * [Configuration](docs/development/configuration.md)
    * [Definition of done](docs/development/definition_of_done.md)
    * [Unit tests](docs/development/unit_tests.md)
    * [Coding standards](docs/development/coding_standards.md)
@@ -15,5 +16,4 @@
    * [Peer review](docs/development/peer_review.md)
    * [Styling and markup](docs/development/styling_and_markup.md)
    * [External libraries](docs/development/external_libraries.md)
-   * [Configuration](docs/development/configuration.md)
 
