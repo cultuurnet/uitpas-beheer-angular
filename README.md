@@ -3,7 +3,13 @@
 [![Build Status](https://travis-ci.org/cultuurnet/uitpas-beheer-angular.svg?branch=master)](https://travis-ci.org/cultuurnet/uitpas-beheer-angular) [![Coverage Status](https://coveralls.io/repos/cultuurnet/uitpas-beheer-angular/badge.svg)](https://coveralls.io/r/cultuurnet/uitpas-beheer-angular)
 
 # UiTPAS beheer
+ Before you start working on this project , be sure you have read the following sections:
+ 
+ * []()
+ * []()
+ * []()
 
+ But please, take the time read the whole documentation, it will save everyone a lot of time.
 ## Build & development
 Run `grunt` for building and `grunt serve` for preview.
 
@@ -14,5 +20,4 @@ Pre-commit hooks can be bypassed with the option `--no-verify`. This should be u
 ## Testing
  Running `grunt test` will run the unit tests with karma.
 
-## Configuration
  
