@@ -1,6 +1,9 @@
 # App
  Contains all the files that make up the application. You should work in this directory.
  Most directory names are self-explanatory.
+ 
+ ## Index.html
+ This main HTML file ties the app together. It provides the main `ui-view` which includes child views. All javascript files need to be included here. Bower_components are add by bower. Every script file you add to the app should also be added to this file.
 
 ## Scripts
  Contains all the javascript files. The files are grouped together conceptually as [modules](angular_module_structure.md).
