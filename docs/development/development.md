@@ -8,3 +8,4 @@
 
 `grunt build`
 * Builds the app to the `dist` folder.
+* This process resembles the process for production the most.
