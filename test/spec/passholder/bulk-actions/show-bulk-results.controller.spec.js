@@ -248,6 +248,31 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   });
 
+  it('should filter out all passholders without a kansenstatuut', function() {
+    jsonPassHolder.kansenStatuten = [];
+    var jsonParsePassHolder = new Passholder(jsonPassHolder);
+    passholders = [
+      jsonParsePassHolder,
+      jsonParsePassHolder,
+      jsonParsePassHolder,
+      jsonParsePassHolder,
+      jsonParsePassHolder
+    ];
+
+    action = 'kansenstatuut';
+    controller = getController();
+
+    $scope.$digest();
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
+      expect(passholder.updated).toBeFalsy();
+      expect(passholder.failed).toBeTruthy();
+      expect(passholder.asyncError.message).toEqual('Pashouder heeft geen kansenstatuut.');
+      expect(passholder.asyncError.type).toEqual('danger');
+    });
+  });
+
   it('should renew the passholders kansenstatuut', function() {
     action = 'kansenstatuut';
     bulkForm = getSpyDateForm();
