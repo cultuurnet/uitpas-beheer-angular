@@ -5,7 +5,7 @@
 ## Scripts
  Contains all the javascript files. The files are grouped together conceptually as [modules](angular_module_structure.md).
  
- The folder _passholder_ contains all the files that deal with the pasholder. Subfolders are used for large fractions of functionality.
+ The folder _passholder_ contains all the files that deal with the passholder. Subfolders are used for large fractions of functionality.
 
 ### Special script files
 * `app.js`: The main angular module. Injects all other modules. Contains general ui-router states.
