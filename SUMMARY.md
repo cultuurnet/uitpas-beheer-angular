@@ -15,5 +15,5 @@
    * [Peer review](docs/development/peer_review.md)
    * [Styling and markup](docs/development/styling_and_markup.md)
    * [External libraries](docs/development/external_libraries.md)
-   * Configuration
+   * [Configuration](docs/development/configuration.md)
 
