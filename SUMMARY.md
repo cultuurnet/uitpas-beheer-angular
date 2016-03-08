@@ -9,7 +9,6 @@
    * [Angular module structure](docs/architecture/angular_module_structure.md)
 * [Development](docs/development/development.md)
    * [Configuration](docs/development/configuration.md)
-   * [Build & development](docs/development/build_development.md)
    * [Definition of done](docs/development/definition_of_done.md)
    * [Unit tests](docs/development/unit_tests.md)
    * [Coding standards](docs/development/coding_standards.md)
