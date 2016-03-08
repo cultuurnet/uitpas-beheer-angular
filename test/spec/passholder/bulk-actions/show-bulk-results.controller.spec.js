@@ -8,9 +8,9 @@ describe('Controller: ShowBulkResultsController', function () {
   var jsonPassHolder = {
       'uid': 'string',
       'name': {
-        'first': 'John',
-        'middle': 'Lupus',
-        'last': 'Smith'
+        'first': 'Jeffrey',
+        'middle': '',
+        'last': 'Scholliers'
       },
       'address': {
         'street': 'Steenweg op Aalst 94',
@@ -21,7 +21,7 @@ describe('Controller: ShowBulkResultsController', function () {
         'date': '2003-12-26',
         'place': 'Sint-Agatha-Berchem'
       },
-      'inszNumber': '93051822361',
+      'inszNumber': '97122957396',
       'gender': 'MALE',
       'nationality': 'Belg',
       'picture': 'R0lGODlhDwAPAKECAAAAzMzM/////wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4MLwWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw==',
@@ -39,7 +39,7 @@ describe('Controller: ShowBulkResultsController', function () {
       'kansenStatuten': [
         {
           'status': 'ACTIVE',
-          'endDate': '2015-12-26',
+          'endDate': '2017-12-31',
           'cardSystem': {
             'id': '1',
             'name': 'UiTPAS Dender'
@@ -48,9 +48,9 @@ describe('Controller: ShowBulkResultsController', function () {
       ],
       'uitPassen': [
         {
-          'number': '0930000422202',
+          'number': '0930000210219',
           'kansenStatuut': true,
-          'status': 'LOCAL_STOCK',
+          'status': 'ACTIVE',
           'type': 'CARD',
           'cardSystem': {
             'id': '1',
@@ -248,31 +248,6 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   });
 
-  it('should filter out all passholders without a kansenstatuut', function() {
-    jsonPassHolder.kansenStatuten = [];
-    var jsonParsePassHolder = new Passholder(jsonPassHolder);
-    passholders = [
-      jsonParsePassHolder,
-      jsonParsePassHolder,
-      jsonParsePassHolder,
-      jsonParsePassHolder,
-      jsonParsePassHolder
-    ];
-
-    action = 'kansenstatuut';
-    controller = getController();
-
-    $scope.$digest();
-    angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.isChecked).toBeTruthy();
-      expect(passholder.beingProcessed).toBeFalsy();
-      expect(passholder.updated).toBeFalsy();
-      expect(passholder.failed).toBeTruthy();
-      expect(passholder.asyncError.message).toEqual('Pashouder heeft geen kansenstatuut.');
-      expect(passholder.asyncError.type).toEqual('danger');
-    });
-  });
-
   it('should renew the passholders kansenstatuut', function() {
     action = 'kansenstatuut';
     bulkForm = getSpyDateForm();
@@ -285,7 +260,7 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.kansenStatuten[0].endDate).toEqual(day('2015-12-26', 'YYYY-MM-DD').toDate());
+      expect(passholder.kansenStatuten[0].endDate).toEqual(day('2017-12-31', 'YYYY-MM-DD').toDate());
       expect(passholder.updated).toBeTruthy();
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.beingProcessed).toBeFalsy();
@@ -361,7 +336,7 @@ describe('Controller: ShowBulkResultsController', function () {
     });
   });
 
-  it('should fail in renewing the passholder his kansenstatuut because the passholder has no kansenstatuut', function () {
+  it('should filter out all the passholders without a kansenstatuut and give them the right errormessage.', function () {
     action = 'kansenstatuut';
     bulkForm = getSpyDateForm();
     jsonPassHolder.kansenStatuten = [];
