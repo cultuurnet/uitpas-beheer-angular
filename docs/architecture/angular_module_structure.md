@@ -33,5 +33,6 @@ Directives that are very specific to an app concept should be placed in the corr
 Directives that can be used across the app should be placed in the `utilities` module.
 
 ## [Constants](http://twofuckingdevelopers.com/2014/06/angularjs-best-practices-001-constants)
+ Constants are used for fixed information structures that need to be used in several places of the app.
 
 
