@@ -30,7 +30,7 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   controller.results = new PassholderSearchResults();
   controller.searchParameters = getSearchParametersFromState();
   controller.bulk = {
-    action: 'export',
+    action: 'points',
     submitBusy: false,
     selection: new BulkSelection(controller.results, controller.searchParameters),
     export: {
@@ -160,6 +160,15 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
   controller.doBulkAction = function () {
     controller.bulk.submitBusy = true;
     switch (controller.bulk.action) {
+      case 'points':
+        controller.bulk.submitBusy = false;
+        var params = controller.bulk.selection.toQueryParameters();
+        params.action = 'points';
+        if (!params.selection) {
+          params.totalItems = controller.bulk.selection.searchResults.totalItems;
+        }
+        $state.go('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
+        break;
       case 'export':
         controller.doBulkExport();
         break;

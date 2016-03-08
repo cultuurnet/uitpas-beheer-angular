@@ -220,12 +220,31 @@ describe('Controller: Results Viewer', function () {
     expect(controller.doBulkExport).toHaveBeenCalled();
   });
 
-  it('can start a bulk action of type addressand delegate the work', function () {
+  it('can start a bulk action of type address and delegate the work', function () {
     var bulkSelection = new BulkSelection(controller.results, controller.searchParameters);
     controller.bulk.action = 'address';
     controller.doBulkAction();
 
     expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkAddress', { bulkSelection: bulkSelection, action: 'address' });
+  });
+
+  it('can start a bulk action of type kansenstatuut and delegate the work', function () {
+    var bulkSelection = new BulkSelection(controller.results, controller.searchParameters);
+    controller.bulk.action = 'kansenstatuut';
+    controller.doBulkAction();
+
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkKansenstatuut', { bulkSelection: bulkSelection, action: 'kansenstatuut' });
+  });
+
+  it('can start a bulk action of type points and delegate the work', function () {
+    var params = controller.bulk.selection.toQueryParameters();
+    params.action = 'points';
+    if (!params.selection) {
+      params.totalItems = controller.bulk.selection.searchResults.totalItems;
+    }
+    controller.doBulkAction();
+
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
   });
 
   it('can request a bulk export and report success to the user', function () {

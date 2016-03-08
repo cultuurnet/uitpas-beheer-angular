@@ -12,7 +12,7 @@ angular
   .controller('ActivityController', ActivityController);
 
 /* @ngInject */
-function ActivityController (passholder, activityService, counterService, DateRange, $rootScope, $scope, activityMode) {
+function ActivityController (passholder, bulkSelection, activityService, counterService, DateRange, $rootScope, $scope, activityMode, $state) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -27,6 +27,10 @@ function ActivityController (passholder, activityService, counterService, DateRa
   controller.activitiesLoading = 0;
   controller.hideDateRange = false;
   controller.activityMode = activityMode;
+  controller.bulkSelection = bulkSelection;
+  if (bulkSelection !== null) {
+    controller.passholders = bulkSelection.getPassholderNumbers();
+  }
 
   function getSearchParameters () {
     return {
@@ -180,6 +184,17 @@ function ActivityController (passholder, activityService, counterService, DateRa
     activityService
       .checkin(activity, passholder)
       .then(updateActivity, checkinError);
+  };
+
+  controller.bulkCheckin = function (activity) {
+    activity.checkinBusy = true;
+    $state.go('counter.main.advancedSearch.showBulkResults', {
+      passholders: controller.passholders,
+      bulkForm: null,
+      bulkSelection: controller.bulkSelection,
+      action: 'points',
+      activity: activity
+    });
   };
 
   controller.updateClaimedTariffActivity = function () {

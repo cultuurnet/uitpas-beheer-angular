@@ -76,8 +76,8 @@ angular
           'pass': null,
           'passholder': null,
           'advantages': null,
-          'activeCounter': null,
-          'activityMode': null
+          'activityMode': null,
+          'bulkSelection': null
         },
         resolve: {
           pass: getPassFromStateParams,
@@ -92,6 +92,12 @@ angular
           },
           activityMode: function() {
             return 'passholders';
+          },
+          passholders: function() {
+            return null;
+          },
+          bulkSelection: function() {
+            return null;
           }
         }
       })

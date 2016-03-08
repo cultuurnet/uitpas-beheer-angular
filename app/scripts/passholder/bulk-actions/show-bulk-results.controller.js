@@ -11,7 +11,7 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkForm, action, passholderService, $uibModalStack, activeCounter, moment, $q, Queue) {
+function ShowBulkResultsController(passholders, bulkForm, action, passholderService, activityService, $uibModalStack, activeCounter, activity, moment, $q, Queue) {
   var controller = this;
   var errorCode;
   var queue = new Queue(4);
@@ -38,6 +38,11 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
     return passholderService.renewKansenstatuut(passholder, kansenstatuut, endDate);
   };
 
+  controller.passholderCheckin = function(activity, passholder) {
+    passholder.isChecked = true;
+    return activityService.checkin(activity, passholder);
+  };
+
   controller.updateOK = function (passholder) {
     return function() {
       passholder.updated = true;
@@ -57,6 +62,10 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       else if (action === 'kansenstatuut') {
         errorCode = errorResponse.data.code;
         defaultMessage = 'Kansenstatuut werd niet geüpdatet op de server.';
+      }
+      else if (action == 'points') {
+        errorCode = errorResponse.code;
+        defaultMessage = 'Punt sparen niet gelukt.'
       }
 
       switch (errorCode) {
@@ -92,6 +101,27 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
         case 'INVALID_DATE_CONSTRAINTS':
           passholder.asyncError = {
             message: 'Geen geldige datum voor kansenstatuut',
+            type: 'danger'
+          };
+          break;
+
+        case 'INVALID_CARD_STATUS':
+          passholder.asyncError = {
+            message: 'Punt sparen niet gelukt kaart geblokkeerd.',
+            type: 'danger'
+          };
+          break;
+
+        case 'KANSENSTATUUT_EXPIRED':
+          passholder.asyncError = {
+            message: 'Punt sparen niet gelukt kansenstatuut vervallen.',
+            type: 'danger'
+          };
+          break;
+
+        case 'MAXIMUM_REACHED':
+          passholder.asyncError = {
+            message: 'Punt al gespaard.',
             type: 'danger'
           };
           break;
@@ -166,6 +196,11 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
         case 'kansenstatuut':
           passholder.beingProcessed = true;
           controller.renewPassholderKansenstatuut(passholder, passholder.kansenstatuut).then(callbackSuccess, callbackFail);
+          break;
+        case 'points':
+          passholder.beingProcessed = true;
+          controller.passholderCheckin(activity, passholder)
+            .then(callbackSuccess, callbackFail);
           break;
       }
       return deferred.promise;

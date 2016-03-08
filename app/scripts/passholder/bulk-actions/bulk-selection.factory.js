@@ -12,7 +12,7 @@ angular
   .factory('BulkSelection', bulkSelectionFactory);
 
 /* @ngInject */
-function bulkSelectionFactory() {
+function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
   /**
    * @class BulkSelection
    * @constructor
@@ -28,7 +28,7 @@ function bulkSelectionFactory() {
     initialize: function (searchResults, searchParameters, selection) {
       this.uitpasNumberSelection = (selection) ? selection : [];
       this.searchParameters = searchParameters;
-      this.searchResults = searchResults;
+      this.searchResults = searchResults ? searchResults : new PassholderSearchResults();
       this.selectAll = false;
     },
     /**
@@ -113,10 +113,38 @@ function bulkSelectionFactory() {
       delete queryParameters.limit;
 
       if(!this.selectAll && this.uitpasNumberSelection.length > 0) {
-        queryParameters['selection[]'] = this.uitpasNumberSelection;
+        queryParameters['selection'] = this.uitpasNumberSelection;
       }
 
       return queryParameters;
+    },
+    getPassholderNumbers: function () {
+      var passholders = Array();
+      var deferred = $q.defer();
+      if (this.selectAll) {
+        this.searchParameters.limit = this.searchResults.totalItems;
+        passholderService
+          .findPassholders(this.searchParameters)
+          .then(
+            function(PassholderSearchResults) {
+              angular.forEach(PassholderSearchResults.passen, function(passholder){
+                passholders.push(passholder.passholder);
+              })
+            }
+        );
+      }
+      else {
+        angular.forEach(this.uitpasNumberSelection, function(selection) {
+          passholderService.findPassholder(selection)
+            .then(
+              function(passholder) {
+                passholders.push(passholder);
+              }
+            );
+        });
+      }
+      deferred.resolve(passholders);
+      return deferred.promise;
     }
   };
 
