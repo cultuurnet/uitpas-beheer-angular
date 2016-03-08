@@ -123,7 +123,7 @@ describe('Service: bulkActionsService', function () {
 
     bulkActionsService.exportPassholders(bulkSelection);
 
-    expect($window.location).toEqual('http://example.com/passholders.xls?city=Leuven&dateOfBirth=1983-02-03&email=foo@bar.com&firstName=Albe*&membershipAssociationId=5&membershipStatus=ACTIVE&name=Conta*&selection%5B%5D=0123456789012&street=Bondgenotenlaan');
+    expect($window.location).toEqual('http://example.com/passholders.xls?city=Leuven&dateOfBirth=1983-02-03&email=foo@bar.com&firstName=Albe*&membershipAssociationId=5&membershipStatus=ACTIVE&name=Conta*&selection=0123456789012&street=Bondgenotenlaan');
   });
 
 });

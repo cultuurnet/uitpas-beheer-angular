@@ -157,7 +157,7 @@ angular
         }
       })
       .state('counter.main.advancedSearch.bulkPoints', {
-        url: '/bulkactions/points',
+        url: '/bulkactions/points?selection&totalItems',
         requiresCounter: true,
         reloadOnSearch: false,
         params: {
@@ -169,16 +169,13 @@ angular
         },
         resolve: {
           /* @ngInject */
-          bulkSelection: function($stateParams, SearchParameters, BulkSelection, PassholderSearchResults) {
+          bulkSelection: function($stateParams, SearchParameters, BulkSelection) {
             if (!$stateParams.bulkSelection) {
               var searchParams = new SearchParameters();
               searchParams.fromParams($stateParams);
-              var searchResults = new PassholderSearchResults();
+              var bulkSelection = new BulkSelection(null, searchParams, $stateParams.selection);
               if (!$stateParams.selection) {
-                searchResults.totalItems = $stateParams.totalItems;
-              }
-              var bulkSelection = new BulkSelection(searchResults, searchParams, $stateParams.selection);
-              if (!$stateParams.selection) {
+                bulkSelection.searchResults.totalItems = $stateParams.totalItems;
                 bulkSelection.selectAll = true;
               }
               return bulkSelection;

@@ -12,7 +12,7 @@ angular
   .factory('BulkSelection', bulkSelectionFactory);
 
 /* @ngInject */
-function bulkSelectionFactory($q, passholderService) {
+function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
   /**
    * @class BulkSelection
    * @constructor
@@ -28,7 +28,7 @@ function bulkSelectionFactory($q, passholderService) {
     initialize: function (searchResults, searchParameters, selection) {
       this.uitpasNumberSelection = (selection) ? selection : [];
       this.searchParameters = searchParameters;
-      this.searchResults = searchResults;
+      this.searchResults = searchResults ? searchResults : new PassholderSearchResults();
       this.selectAll = false;
     },
     /**

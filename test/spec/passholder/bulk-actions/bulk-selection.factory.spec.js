@@ -137,6 +137,11 @@ describe('Factory: BulkSelection', function () {
     expect(bulkSelection).toEqual(expectedBulkSelection);
   });
 
+  it('should initialize whitout a searchResults object', function () {
+    var expectedBulkSelection = new BulkSelection(null, new SearchParameters(), []);
+    expect(bulkSelection).toEqual(expectedBulkSelection);
+  });
+
   it('can receive new searchParameters', function () {
     var newSearchparamaters = new SearchParameters(jsonSearchParameters);
     bulkSelection.updateSearchParameters(newSearchparamaters);
