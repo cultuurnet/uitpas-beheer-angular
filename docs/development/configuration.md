@@ -1,7 +1,7 @@
 # Configuration
 The `config.dist.json` file at the root of the project holds the default config. You can make your own adjustments and write them to `config.json`. `config.dist.json` will be ignored when `config.json` is present.
  
-Current configuration options:
+##Current configuration options
 ### apiUrl
  The location of the API. This option is required as it will be used to prefix all API calls.
 
