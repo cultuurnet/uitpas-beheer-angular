@@ -8,7 +8,7 @@
  The folder _passholder_ contains all the files that deal with the passholder. Subfolders are used for large fractions of functionality.
 
 ### Special script files
-* `app.js`: The main angular module. Injects all other modules. Contains general ui-router states.
+* `app.js`: The main angular module. Injects all other modules. Contains general ui-router states. Every module you add should be added as a dependency to this module.
 * `config.js`: Is generated during `grunt build` and filled with the configuration data from `config.dist.json` or `config.json`
 
 ### Scipts/utilities
