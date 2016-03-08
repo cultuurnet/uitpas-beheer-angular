@@ -2,6 +2,8 @@
 
 Unit tests are done with [Jasmine](http://jasmine.github.io).
 
+Running `grunt test` or `grunt karma`will run the unit tests with [karma](https://karma-runner.github.io).
+
 ## Test coverage
  A test coverage report is generated when `grunt karma` is run. This can be found inside the `coverage` folder.
 
