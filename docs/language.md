@@ -4,8 +4,8 @@ English is used as much as possible throughout the application code.
 
 There are a few exceptions to this rule:
 
-Brand names like **UiTPAS**.
+* Brand names like **UiTPAS**.
+* Business concepts like **Kansenstatuut** and **Kansentarief**; which are rather local/national and thus no exact English equivalent exists.
+* Strings used for error feedback that need to be set dynamically.
 
-Business concepts like **Kansenstatuut** and **Kansentarief**; which are rather local/national and thus no exact English equivalent exists. To ensure these concepts stay clear, their original Dutch name is used.
-
-Strings like error feedback that need to be set dynamically.
+To ensure these concepts stay clear, their original Dutch name is used.
