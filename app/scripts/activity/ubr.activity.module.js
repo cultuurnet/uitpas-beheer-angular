@@ -77,18 +77,20 @@ angular
         activityMode: ['$stateParams', function($stateParams) {
           return $stateParams.activityMode;
         }],
-        /*bulkSelection: ['$stateParams', function($stateParams) {
-          return $stateParams.bulkSelection;
-        }],*/
         bulkSelection: function($stateParams, SearchParameters, BulkSelection) {
-          var searchParams = new SearchParameters();
-          searchParams.fromParams($stateParams);
-          var bulkSelection = new BulkSelection(null, searchParams, $stateParams.selection);
-          if (!$stateParams.selection) {
-            bulkSelection.searchResults.totalItems = $stateParams.totalItems;
-            bulkSelection.selectAll = true;
+          if(!$stateParams.bulkSelection) {
+            var searchParams = new SearchParameters();
+            searchParams.fromParams($stateParams);
+            var bulkSelection = new BulkSelection(null, searchParams, $stateParams.selection);
+            if (!$stateParams.selection) {
+              bulkSelection.searchResults.totalItems = $stateParams.totalItems;
+              bulkSelection.selectAll = true;
+            }
+            return bulkSelection;
           }
-          return bulkSelection;
+          else {
+            return $stateParams.bulkSelection;
+          }
         },
         counter: function(counterService) {
           return counterService.getActive();

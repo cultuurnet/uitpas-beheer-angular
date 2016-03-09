@@ -29,7 +29,6 @@ function PassholderActivityTariffsController (
 
   if (activityMode === 'counter') {
     controller.getPassholdersBusy = true;
-    console.log(bulkSelection);
     bulkSelection.getPassholderNumbers()
       .then(function(response) {
         controller.passholders = response;

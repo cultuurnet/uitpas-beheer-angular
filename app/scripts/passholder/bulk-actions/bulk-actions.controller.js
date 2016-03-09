@@ -17,7 +17,6 @@ function BulkActionsController (bulkSelection, action, $uibModalInstance, $state
 
   controller.submitBusy = false;
   controller.isSubmitted = false;
-  console.log(bulkSelection);
   controller.bulkSelection = bulkSelection;
   controller.action = action;
   controller.kansenstatuutData = {

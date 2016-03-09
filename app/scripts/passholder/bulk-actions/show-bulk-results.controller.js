@@ -45,12 +45,11 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
 
   controller.passholderClaimTariff = function(passholder, activity, tariff, ticketCount) {
     passholder.isChecked = true;
-    return activityService.claimTariff(passholder, activity, tariff.prices[0], ticketCount);
+    return activityService.claimTariff(passholder, activity, tariff, ticketCount);
   };
 
   controller.updateOK = function (passholder) {
-    return function(response) {
-      console.log(response);
+    return function() {
       passholder.updated = true;
       passholder.beingProcessed = false;
     };
@@ -58,7 +57,6 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
 
   controller.updateFailed = function(passholder, action) {
     return function(errorResponse) {
-      console.log(errorResponse);
       passholder.failed = true;
       passholder.beingProcessed = false;
       var defaultMessage;
@@ -73,6 +71,10 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       else if (action == 'points') {
         errorCode = errorResponse.code;
         defaultMessage = 'Punt sparen niet gelukt.'
+      }
+      else if (action == 'tariffs') {
+        errorCode = errorResponse.code;
+        defaultMessage = 'Tarief registreren niet gelukt.'
       }
 
       switch (errorCode) {
@@ -113,10 +115,18 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           break;
 
         case 'INVALID_CARD_STATUS':
-          passholder.asyncError = {
-            message: 'Punt sparen niet gelukt kaart geblokkeerd.',
-            type: 'danger'
-          };
+          if (action == 'points') {
+            passholder.asyncError = {
+              message: 'Punt sparen mislukt, kaart geblokkeerd.',
+              type: 'danger'
+            };
+          }
+          else if (action == 'tariffs') {
+            passholder.asyncError = {
+              message: 'Tarief registreren mislukt, kaart geblokkeerd.',
+              type: 'danger'
+            };
+          }
           break;
 
         case 'KANSENSTATUUT_EXPIRED':
@@ -127,11 +137,33 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           break;
 
         case 'MAXIMUM_REACHED':
+          if (action == 'points') {
+            passholder.asyncError = {
+              message: 'Punt al gespaard.',
+              type: 'danger'
+            };
+          }
+          else if (action == 'tariffs') {
+            passholder.asyncError = {
+              message: 'Tarief reeds geregistreerd.',
+              type: 'danger'
+            };
+          }
+          break;
+
+        case 'MISSING_PROPERTY':
           passholder.asyncError = {
-            message: 'Punt al gespaard.',
-            type: 'danger'
+            message: 'Prijsklasse ontbreekt.',
+            typer: 'error'
           };
           break;
+
+        case 'INVALID_CARD': {
+          passholder.asyncError = {
+            message: 'Pashouder heeft geen kansenstatuut.',
+            type: 'error'
+          };
+        }
 
         default:
           passholder.asyncError = {
@@ -181,7 +213,6 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   }
 
   angular.forEach(queuedPassholders, function(passholder) {
-    console.log(passholder);
     var job = function() {
       var deferred = $q.defer();
       passholder.isChecked = false;
