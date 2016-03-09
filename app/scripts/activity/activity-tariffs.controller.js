@@ -14,7 +14,11 @@ angular
 /* @ngInject */
 function PassholderActivityTariffsController (
   passholder,
+  passholders,
   activity,
+  activityMode,
+  bulkSelection,
+  counter,
   $uibModalInstance,
   activityService,
   $rootScope,
@@ -23,23 +27,58 @@ function PassholderActivityTariffsController (
   /*jshint validthis: true */
   var controller = this;
 
-  controller.passholder = passholder;
+  if (activityMode === 'counter') {
+    controller.bulkSelection = bulkSelection;
+    controller.passholders = passholders;
+
+    var kansenstatuut;
+    var keepGoing = true;
+
+    angular.forEach(controller.passholders, function(passholder){
+      kansenstatuut = passholder.getKansenstatuutByCardSystemID(counter.cardSystems[1].id);
+      if(kansenstatuut && keepGoing) {
+        controller.passholder = passholder;
+        getGroupSale();
+        keepGoing = false;
+      }
+    })
+  }
+  else {
+    controller.passholder = passholder;
+    getGroupSale();
+  }
   controller.activity = activity;
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
   controller.asyncError = false;
-  controller.groupSale = passholder.hasOwnProperty('availableTickets') ? {
-    tickets: 1,
-    maxTickets: passholder.availableTickets,
-    getTotalPrice: function () {
-      var defaultPrice = 0;
-      var selectedPrice = controller.selectedTariff ? controller.selectedTariff.price : null;
-      var ticketPrice = selectedPrice ? selectedPrice : defaultPrice;
-      var totalPrice = ticketPrice * this.tickets;
 
-      return totalPrice;
-    }
-  } : null;
+  /*function getFirstPassholderWithKansenstatuut(passholders) {
+    var keepGoing = true;
+    var kansenstatuut;
+    angular.forEach(passholders, function(passholder){
+      kansenstatuut = passholder.getKansenstatuutByCardSystemID(counter.cardSystems[1].id);
+      if(kansenstatuut && keepGoing) {
+        controller.passholder = passholder;
+        getGroupSale();
+        keepGoing = false;
+      }
+    });
+  }*/
+
+  function getGroupSale() {
+    controller.groupSale = controller.passholder.hasOwnProperty('availableTickets') ? {
+      tickets: 1,
+      maxTickets: passholder.availableTickets,
+      getTotalPrice: function () {
+        var defaultPrice = 0;
+        var selectedPrice = controller.selectedTariff ? controller.selectedTariff.price : null;
+        var ticketPrice = selectedPrice ? selectedPrice : defaultPrice;
+        var totalPrice = ticketPrice * this.tickets;
+
+        return totalPrice;
+      }
+    } : null;
+  }
 
   function init() {
     var firstTariff = controller.activity.sales.tariffs.list[0];

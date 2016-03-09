@@ -42,6 +42,11 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
     return activityService.checkin(activity, passholder);
   };
 
+  controller.passholderClaimTariff = function(tariff, activity, passholder) {
+    passholder.isChecked = true;
+    return activityService.claimTariff(passholder, activity, tariff.prices[0]);
+  };
+
   controller.updateOK = function (passholder) {
     return function() {
       passholder.updated = true;
@@ -179,6 +184,9 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           controller.passholderCheckin(activity, passholder)
             .then(callbackSuccess, callbackFail);
           break;
+        case 'tariffs':
+          controller.passholderClaimTariff(tariff, activity, passholder)
+            .then(callbackSuccess, callbackFail);
       }
       return deferred.promise;
     };
