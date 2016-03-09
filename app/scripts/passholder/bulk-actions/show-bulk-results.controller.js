@@ -11,7 +11,7 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkForm, action, passholderService, activityService, $uibModalStack, activeCounter, activity, moment, $q, Queue) {
+function ShowBulkResultsController(passholders, bulkForm, action, passholderService, activityService, $uibModalStack, activeCounter, activity, tariff, ticketCount, moment, $q, Queue) {
   var controller = this;
   var errorCode;
   var queue = new Queue(4);
@@ -43,13 +43,14 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
     return activityService.checkin(activity, passholder);
   };
 
-  controller.passholderClaimTariff = function(tariff, activity, passholder) {
+  controller.passholderClaimTariff = function(passholder, activity, tariff, ticketCount) {
     passholder.isChecked = true;
-    return activityService.claimTariff(passholder, activity, tariff.prices[0]);
+    return activityService.claimTariff(passholder, activity, tariff.prices[0], ticketCount);
   };
 
   controller.updateOK = function (passholder) {
-    return function() {
+    return function(response) {
+      console.log(response);
       passholder.updated = true;
       passholder.beingProcessed = false;
     };
@@ -57,6 +58,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
 
   controller.updateFailed = function(passholder, action) {
     return function(errorResponse) {
+      console.log(errorResponse);
       passholder.failed = true;
       passholder.beingProcessed = false;
       var defaultMessage;
@@ -179,6 +181,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   }
 
   angular.forEach(queuedPassholders, function(passholder) {
+    console.log(passholder);
     var job = function() {
       var deferred = $q.defer();
       passholder.isChecked = false;
@@ -208,7 +211,8 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
             .then(callbackSuccess, callbackFail);
           break;
         case 'tariffs':
-          controller.passholderClaimTariff(tariff, activity, passholder)
+          passholder.beingProcessed = true;
+          controller.passholderClaimTariff(passholder, activity, tariff, ticketCount)
             .then(callbackSuccess, callbackFail);
       }
       return deferred.promise;

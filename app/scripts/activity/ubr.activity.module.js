@@ -26,15 +26,6 @@ angular
       }
     }
 
-    function getPassholdersFromBulkSelection($stateParams) {
-      if ($stateParams.activityMode === 'counter') {
-        return $stateParams.bulkSelection.getPassholderNumbers();
-      }
-      else {
-        return null;
-      }
-    }
-
     var activityModal = {
       params: {
         activity: null
@@ -70,7 +61,6 @@ angular
       params: {
         identification: null,
         passholder: null,
-        passholders: null,
         activity: null,
         activityMode: null,
         bulkSelection: null,
@@ -78,7 +68,6 @@ angular
       },
       resolve: {
         passholder: getPassholderFromStateParams,
-        passholders: getPassholdersFromBulkSelection,
         identification: ['$stateParams', function($stateParams) {
           return $stateParams.identification;
         }],
@@ -88,15 +77,25 @@ angular
         activityMode: ['$stateParams', function($stateParams) {
           return $stateParams.activityMode;
         }],
-        bulkSelection: ['$stateParams', function($stateParams) {
+        /*bulkSelection: ['$stateParams', function($stateParams) {
           return $stateParams.bulkSelection;
-        }],
+        }],*/
+        bulkSelection: function($stateParams, SearchParameters, BulkSelection) {
+          var searchParams = new SearchParameters();
+          searchParams.fromParams($stateParams);
+          var bulkSelection = new BulkSelection(null, searchParams, $stateParams.selection);
+          if (!$stateParams.selection) {
+            bulkSelection.searchResults.totalItems = $stateParams.totalItems;
+            bulkSelection.selectAll = true;
+          }
+          return bulkSelection;
+        },
         counter: function(counterService) {
           return counterService.getActive();
         }
       },
       /* @ngInject */
-      onEnter: function(passholder, passholders, identification, activity, activityMode, bulkSelection, counter, $state, $uibModal) {
+      onEnter: function(passholder, identification, activity, activityMode, bulkSelection, counter, $state, $uibModal) {
         var modalSize = 'sm';
         if (Object.keys(activity.sales.base).length > 3) {
           modalSize = '';
@@ -109,9 +108,6 @@ angular
             resolve: {
               passholder: function () {
                 return passholder;
-              },
-              passholders: function() {
-                return passholders;
               },
               identification: function () {
                 return identification;
