@@ -15,6 +15,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   var controller = this;
   var errorCode;
   var queue = new Queue(4);
+  var queuedPassholders = Array();
 
   controller.submitBusy = true;
   controller.passholders = passholders;
@@ -139,7 +140,45 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
     };
   };
 
-  angular.forEach(controller.passholders, function(passholder) {
+  /**
+   *
+   * Helper function to filter out the passholders without a kansenstatuut.
+   * Otherwise the queue doesn't work anymore because it doesn't always return
+   * a promise.
+   *
+   */
+  controller.prepareKansenstatuutPassholdersForQueue = function() {
+    var passholdersWithKansenStatuut = Array();
+
+    angular.forEach(controller.passholders, function(passholder, key) {
+      var kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[1].id);
+
+      if (kansenstatuut) {
+        passholder.kansenstatuut = kansenstatuut;
+        passholdersWithKansenStatuut.push(passholder);
+      }
+      else {
+        controller.passholders[key].isChecked = true;
+        controller.passholders[key].beingProcessed = false;
+        controller.passholders[key].updated = false;
+        controller.passholders[key].failed = true;
+        controller.passholders[key].asyncError = {
+          message: 'Pashouder heeft geen kansenstatuut.',
+          type: 'danger'
+        };
+      }
+    });
+    return passholdersWithKansenStatuut;
+  };
+
+  if (action == 'kansenstatuut') {
+    queuedPassholders = controller.prepareKansenstatuutPassholdersForQueue();
+  }
+  else {
+    queuedPassholders = controller.passholders;
+  }
+
+  angular.forEach(queuedPassholders, function(passholder) {
     var job = function() {
       var deferred = $q.defer();
       passholder.isChecked = false;
@@ -161,23 +200,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           break;
         case 'kansenstatuut':
           passholder.beingProcessed = true;
-          var kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[1].id);
-
-          // Check if passholder has a kansenstatuut.
-          if (kansenstatuut) {
-            controller.renewPassholderKansenstatuut(passholder, kansenstatuut).then(callbackSuccess, callbackFail);
-          }
-          // Error handling if passholder has no kansenstatuut.
-          else {
-            passholder.isChecked = true;
-            passholder.beingProcessed = false;
-            passholder.updated = false;
-            passholder.failed = true;
-            passholder.asyncError = {
-              message: 'Pashouder heeft geen kansenstatuut.',
-              type: 'danger'
-            };
-          }
+          controller.renewPassholderKansenstatuut(passholder, passholder.kansenstatuut).then(callbackSuccess, callbackFail);
           break;
         case 'points':
           passholder.beingProcessed = true;
