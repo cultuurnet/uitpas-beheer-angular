@@ -28,7 +28,7 @@ angular.module('ubr.counter')
   .service('counterService', counterService);
 
 /* @ngInject */
-function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment, Counter, CounterMembership) {
+function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, moment, Counter, CounterMembership, Activity) {
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
@@ -41,7 +41,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @returns {Promise}
    *   A promise with a list of available counters for the active user.
    */
-  service.getList = function() {
+  service.getList = function () {
     var deferredList = $q.defer();
 
     if (Object.keys(service.list).length > 0) {
@@ -49,14 +49,14 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
     } else {
       $http
         .get(apiUrl)
-        .success(function(listData) {
+        .success(function (listData) {
           service.list = {};
           angular.forEach(listData, function (jsonCounter, key) {
             service.list[key] = new Counter(jsonCounter);
           });
           deferredList.resolve(service.list);
         })
-        .error(function() {
+        .error(function () {
           deferredList.reject('unable to retrieve counters for active user');
         });
     }
@@ -68,15 +68,15 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @returns {Promise}
    *   A promise with the active counter for the current user.
    */
-  service.getActive = function() {
+  service.getActive = function () {
     var deferredCounter = $q.defer();
 
-    var updateActiveCounter = function(activeCounter) {
+    var updateActiveCounter = function (activeCounter) {
       service.active = activeCounter;
       deferredCounter.resolve(activeCounter);
     };
 
-    var suggestActiveCounter = function() {
+    var suggestActiveCounter = function () {
       service.getList().then(activateOnlyCounter);
     };
 
@@ -84,7 +84,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       var ids = Object.keys(list);
       if (ids.length === 1) {
         var onlyCounterId = ids[0],
-            onlyCounter = list[onlyCounterId];
+          onlyCounter = list[onlyCounterId];
         service.setActive(onlyCounter);
         deferredCounter.resolve(onlyCounter);
       } else {
@@ -105,15 +105,15 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @returns {Promise}
    *   A promise with the active counter for the current user, from the server.
    */
-  service.getActiveFromServer = function() {
+  service.getActiveFromServer = function () {
     var deferred = $q.defer();
 
     $http
       .get(apiUrl + '/active')
-      .success(function(counter) {
+      .success(function (counter) {
         deferred.resolve(new Counter(counter));
       })
-      .error(function() {
+      .error(function () {
         deferred.reject();
       });
 
@@ -126,7 +126,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @returns {Promise}
    *   A promise that the active counter has been set for the current user.
    */
-  service.setActive = function(activeCounter) {
+  service.setActive = function (activeCounter) {
     var deferred = $q.defer();
 
     var setActiveOnServer = service.setActiveOnServer(activeCounter.id);
@@ -136,7 +136,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       deferred.reject('something went wrong while activating the counter');
     };
 
-    var updateActiveCounter = function() {
+    var updateActiveCounter = function () {
       service.active = activeCounter;
       $rootScope.$emit('activeCounterChanged', activeCounter);
       deferred.resolve();
@@ -151,7 +151,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @returns {Promise}
    *   A promise that the active counter has been set for the current user on the server.
    */
-  service.setActiveOnServer = function(id) {
+  service.setActiveOnServer = function (id) {
     var deferred = $q.defer();
 
     $http
@@ -160,10 +160,10 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
           'Content-Type': 'application/json'
         }
       })
-      .success(function() {
+      .success(function () {
         deferred.resolve();
       })
-      .error(function() {
+      .error(function () {
         deferred.reject();
       });
 
@@ -174,15 +174,15 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @returns {Promise}
    *   A promise that the last active counter id has been stored on the client.
    */
-  service.setLastActiveId = function(id) {
+  service.setLastActiveId = function (id) {
     var deferred = $q.defer();
 
     service.determineLastActiveCookieKey().then(
-      function(cookieKey) {
+      function (cookieKey) {
         $cookies.put(cookieKey, id);
         deferred.resolve(cookieKey);
       },
-      function() {
+      function () {
         deferred.reject();
       }
     );
@@ -194,7 +194,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @returns {Promise}
    *   A promise with a the last active counter id for the active user.
    */
-  service.getLastActiveId = function() {
+  service.getLastActiveId = function () {
     var deferred = $q.defer();
 
     var foundCounterCookieKey = function (cookieKey) {
@@ -221,14 +221,14 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    *   A promise with the cookie key for the last active counter for the current
    *   user.
    */
-  service.determineLastActiveCookieKey = function() {
+  service.determineLastActiveCookieKey = function () {
     var deferred = $q.defer();
 
     uitid.getUser().then(
-      function(user) {
+      function (user) {
         deferred.resolve('lastActiveCounter-' + user.id);
       },
-      function() {
+      function () {
         deferred.reject();
       }
     );
@@ -251,21 +251,21 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    */
   service.getRegistrationPriceInfo = function (pass, passholder, voucherNumber, reason) {
     var url = appConfig.apiUrl + 'uitpas/' + pass.number + '/price',
-        parameters = {
-          'reason': reason || 'FIRST_CARD'
-        },
-        config = {
-          headers: {},
-          params: parameters
-        },
-        deferredPriceInfo = $q.defer();
+      parameters = {
+        'reason': reason || 'FIRST_CARD'
+      },
+      config = {
+        headers: {},
+        params: parameters
+      },
+      deferredPriceInfo = $q.defer();
 
     if (voucherNumber) {
       parameters['voucher_number'] = voucherNumber;
     }
 
     if (passholder && passholder.birth.date) {
-        parameters['date_of_birth'] = moment(passholder.birth.date).format('YYYY-MM-DD');
+      parameters['date_of_birth'] = moment(passholder.birth.date).format('YYYY-MM-DD');
     }
 
     if (passholder && passholder.address.postalCode) {
@@ -300,12 +300,12 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    */
   service.getUpgradePriceInfo = function (cardSystemId, passholder, voucherNumber) {
     var url = appConfig.apiUrl + 'cardsystem/' + cardSystemId + '/price',
-        parameters = {},
-        config = {
-          headers: {},
-          params: parameters
-        },
-        deferredPriceInfo = $q.defer();
+      parameters = {},
+      config = {
+        headers: {},
+        params: parameters
+      },
+      deferredPriceInfo = $q.defer();
 
     if (voucherNumber) {
       parameters['voucher_number'] = voucherNumber;
@@ -343,7 +343,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
     var url = apiUrl + '/active/members';
     var deferredMembers = $q.defer();
 
-    var handleMembershipData = function(membershipData) {
+    var handleMembershipData = function (membershipData) {
       var memberships = [];
 
       membershipData.forEach(function (membershipJson) {
@@ -421,6 +421,10 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
     return deferredResponse.promise;
   };
 
+  /**
+   * @returns {Promise}
+   *   A promise with associations for the active counter.
+   */
   service.getAssociations = function () {
     var url = apiUrl + '/active/associations';
     var deferredAssociations = $q.defer();
@@ -431,5 +435,70 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       .error(deferredAssociations.reject);
 
     return deferredAssociations.promise;
+  };
+
+  /**
+   * @returns {Promise}
+   *   A promise with schools for the active counter.
+   */
+  service.getSchools = function () {
+    var url = appConfig.apiUrl + 'schools';
+    var deferredSchools = $q.defer();
+
+    $http
+      .get(url)
+      .success(deferredSchools.resolve)
+      .error(deferredSchools.reject);
+
+    return deferredSchools.promise;
+  };
+
+  /**
+   * @param {SearchParameters} [searchParameters]
+   *  The parameters to use when searching for the activities.
+   * @returns {Promise}
+   *   A promise with a list of activities for the active counter.
+   */
+  service.getActivities = function (searchParameters) {
+    var deferredActivities = $q.defer();
+
+    /*jshint camelcase: false */
+    var requestParameters = {
+      query: searchParameters.query,
+      date_type: searchParameters.dateRange.value,
+      page: searchParameters.page,
+      limit: searchParameters.limit
+    };
+
+    var searchRequest = $http.get(
+      apiUrl + '/active/activities',
+      {
+        withCredentials: true,
+        params: requestParameters
+      });
+
+    var handlePagedActivityResults = function (activityData) {
+      var pagedResults = {
+        activities: [],
+        totalActivities: activityData.totalItems
+      };
+
+      if (activityData.member) {
+        activityData.member.forEach(function (jsonActivity) {
+          pagedResults.activities.push(new Activity(jsonActivity));
+        });
+      }
+
+      deferredActivities.resolve(pagedResults);
+    };
+
+    var rejectSearch = function (error) {
+      deferredActivities.reject(error);
+    };
+
+    searchRequest.success(handlePagedActivityResults);
+    searchRequest.error(rejectSearch);
+
+    return deferredActivities.promise;
   };
 }

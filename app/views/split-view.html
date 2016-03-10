@@ -11,9 +11,30 @@
     <div ui-view="content" class="main grid__12" ng-class="{'grid--bp-sml__7 grid--bp-med__8 grid--bp-xlr__9': app.user}" role="main">
     </div> <!-- /main -->
 
-    <footer class="footer grid__12 grid--bp-sml__8 grid--bp-med__9" role="contentinfo" ng-show="app.user">
-        <a ui-sref="counter.main.feedback">Meld een probleem</a>
-        <a ui-sref="counter.main.help">Help</a>
+    <footer class="footer grid__12 grid--bp-sml__7 grid--bp-med__8 grid--bp-xlr__9" role="contentinfo" ng-show="app.user">
+        <ul class="list-inline">
+            <li>
+                <a ui-sref="counter.main.feedback">Meld een probleem</a>
+            </li>
+            <li>
+                <a ui-sref="counter.main.help">Help</a>
+            </li>
+        </ul>
+        <ul class="list-inline text-muted small">
+            <li>Volg ons op</li>
+            <li>
+                <a href="https://www.facebook.com/uitpaspartner/?fref=ts" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
+            </li>
+            <li>
+                <a href="https://twitter.com/@uitpas/" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
+            </li>
+            <li>
+                <a href="http://uitpaspartner.be/" target="_blank"><i class="fa fa-external-link"></i> Website</a>
+            </li>
+        </ul>
+        <p class="buildnumber small text-muted">
+            <em>App versie <span ng-bind="::app.buildNumber"></span></em>
+        </p>
     </footer> <!-- /footer -->
 
 </div> <!--/ .main-content -->

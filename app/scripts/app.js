@@ -10,6 +10,7 @@
  */
 angular
   .module('uitpasbeheerApp', [
+    'angular.chosen',
     'angular-spinkit',
     'config',
     'http-auth-interceptor',
@@ -73,6 +74,7 @@ angular
       })
       .state('counter.main.error', {
         redirectOnScan: true,
+        onEnter: redirectOnScan,
         views: {
           'content@counter': {
             templateUrl: 'views/error.html',

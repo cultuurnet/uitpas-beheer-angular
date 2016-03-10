@@ -46,6 +46,13 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
       else if (pass.group) {
         displayGroupDetails(pass.group);
       }
+      else if (pass.status === 'DELETED') {
+        $state.go('counter.main.error', {
+          'title': 'Kaart verwijderd',
+          'description': 'Deze kaart is verwijderd. Vraag de pashouder naar zijn nieuwe kaart',
+          'code': 'PASS_DELETED'
+        });
+      }
       else {
         registerNewPassholder(pass);
       }
@@ -71,14 +78,19 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
     }
 
     function registerNewPassholder(pass) {
-      $state.go(
-        'counter.main.register',
-        {
-          pass: pass,
-          identification: pass.number,
-          type: pass.type
-        }
-      );
+      if (pass.number === $state.params.identification) {
+        $state.reload('counter.main.register');
+      }
+      else {
+        $state.go(
+          'counter.main.register',
+          {
+            pass: pass,
+            identification: pass.number,
+            type: pass.type
+          }
+        );
+      }
     }
 
     function displayIdentificationError(error) {

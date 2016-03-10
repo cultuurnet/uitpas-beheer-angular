@@ -12,7 +12,7 @@ angular
   .controller('CheckInDevicesConnectionsController', CheckInDevicesConnectionsController);
 
 /* @ngInject */
-function CheckInDevicesConnectionsController (CheckInDevices, $q) {
+function CheckInDevicesConnectionsController (CheckInDevices, $q, Queue) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -47,9 +47,7 @@ function CheckInDevicesConnectionsController (CheckInDevices, $q) {
 
   }
 
-  var queue = [];
-  var maxSimultaneousRequests = 4;
-  var currentSimultaneousRequests = 0;
+  var queue = new Queue(4);
 
   function clearState(device) {
     device.state = null;
@@ -61,43 +59,16 @@ function CheckInDevicesConnectionsController (CheckInDevices, $q) {
         connecting: true
       };
 
-      enqueue(function () {
+      queue.enqueue(function () {
         return connectDevice(device, key);
       });
     });
 
-    processQueue();
+    queue.startProcessingQueue();
   };
 
   controller.clearState = clearState;
 
-  function enqueue(callback) {
-    queue.push(callback);
-  }
-
-  function finishJob() {
-    currentSimultaneousRequests--;
-
-    processQueue();
-  }
-
-  function processQueue() {
-    var job;
-
-    // Start up to maxSimultaneousRequests items from the queue.
-    while (queue.length > 0 && currentSimultaneousRequests < maxSimultaneousRequests) {
-      currentSimultaneousRequests++;
-
-      job = queue.shift();
-
-      if (job instanceof Function) {
-        job().finally(finishJob);
-      }
-      else {
-        currentSimultaneousRequests--;
-      }
-    }
-  }
 
   function connectDevice(device, key) {
     return CheckInDevices.connectDeviceToActivity(device.id, device.activityId)

@@ -57,14 +57,16 @@ function PassholderEditController (passholder, identification, $uibModalInstance
             };
           }
           if (errorCode === 'EMAIL_ADDRESS_INVALID') {
-            editForm.email.$error.formatAsync = true;
-            editForm.email.$invalid = true;
+            editForm.email.$setValidity('formatAsync', false);
           }
           if (errorCode === 'PASSHOLDER_NOT_UPDATED_ON_SERVER') {
             controller.asyncError = {
               message: errorResponse.apiError.message,
               type: 'danger'
             };
+          }
+          if (errorCode === 'PARSE_INVALID_POSTAL_CODE') {
+            editForm.postalCode.$setValidity('formatAsync', false);
           }
 
           controller.formSubmitBusy = false;
@@ -83,8 +85,8 @@ function PassholderEditController (passholder, identification, $uibModalInstance
     }
   };
 
-  controller.emailChanged = function (form) {
-    form.email.$setValidity('formatAsync', true);
+  controller.removeAsyncError = function (form, field) {
+    form[field].$setValidity('formatAsync', true);
   };
 
   controller.getDataFromEID = function() {

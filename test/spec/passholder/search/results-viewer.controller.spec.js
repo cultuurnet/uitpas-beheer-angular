@@ -3,7 +3,27 @@
 describe('Controller: Results Viewer', function () {
 
   var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter, bulkActionsService,
-    $q, BulkSelection;
+    $q, BulkSelection, Counter, activeCounter;
+
+  var activeCounterJson = {
+    'id': '452',
+    'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+    'name': 'Vierdewereldgroep Mensen voor Mensen',
+    'role': 'admin',
+    'actorId': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+    'cardSystems': {
+      '1': {
+        'permissions': ['kansenstatuut toekennen'],
+        'groups': ['Geauthorizeerde registratie balies'],
+        'id': 1,
+        'name': 'UiTPAS Regio Aalst',
+        'distributionKeys': []
+      }
+    },
+    //'permissions': ['registratie', 'kansenstatuut toekennen'],
+    'permissions': ['kansenstatuut toekennen'],
+    'groups': ['Geauthorizeerde registratie balies']
+  };
 
   beforeEach(module('ubr.passholder.search'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
@@ -32,6 +52,10 @@ describe('Controller: Results Viewer', function () {
     $controller = _$controller_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
+
+    Counter = $injector.get('Counter');
+    activeCounter = new Counter(angular.copy(activeCounterJson));
+
     controller = getController();
   }));
 
@@ -42,9 +66,20 @@ describe('Controller: Results Viewer', function () {
       $state: $state,
       advancedSearchService: advancedSearchService,
       UiTPASRouter: UiTPASRouter,
-      bulkActionsService: bulkActionsService
+      bulkActionsService: bulkActionsService,
+      activeCounter: activeCounter
     });
   }
+
+  it('should check if the active counter has the permission for kansenstatuut', function () {
+    spyOn(controller, 'hasCounterPermissions');
+    controller.hasCounterPermissions();
+
+    $scope.$digest();
+
+    expect(controller.hasCounterPermissions).toHaveBeenCalled();
+    expect(controller.counterHasKansenstatuutPermission).toBeTruthy();
+  });
 
   it('should show results immediately when there are no unknown numbers', function () {
     controller.results = jasmine.createSpyObj('results', ['hasUnknownNumbers', 'hasConfirmedUnknownNumbers']);
@@ -134,7 +169,7 @@ describe('Controller: Results Viewer', function () {
 
     expect(controller.loading).toBeFalsy();
     expect(controller.results).toBeNull();
-  })
+  });
 
   it('can deselect all items for the bulk actions', function () {
     controller.bulk.selection.uitpasNumberSelection = ['0123456789012', '0123456789013'];
@@ -185,12 +220,31 @@ describe('Controller: Results Viewer', function () {
     expect(controller.doBulkExport).toHaveBeenCalled();
   });
 
-  it('can start a bulk action of type addressand delegate the work', function () {
+  it('can start a bulk action of type address and delegate the work', function () {
     var bulkSelection = new BulkSelection(controller.results, controller.searchParameters);
     controller.bulk.action = 'address';
     controller.doBulkAction();
 
-    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkAddress', { bulkSelection: bulkSelection });
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkAddress', { bulkSelection: bulkSelection, action: 'address' });
+  });
+
+  it('can start a bulk action of type kansenstatuut and delegate the work', function () {
+    var bulkSelection = new BulkSelection(controller.results, controller.searchParameters);
+    controller.bulk.action = 'kansenstatuut';
+    controller.doBulkAction();
+
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkKansenstatuut', { bulkSelection: bulkSelection, action: 'kansenstatuut' });
+  });
+
+  it('can start a bulk action of type points and delegate the work', function () {
+    var params = controller.bulk.selection.toQueryParameters();
+    params.action = 'points';
+    if (!params.selection) {
+      params.totalItems = controller.bulk.selection.searchResults.totalItems;
+    }
+    controller.doBulkAction();
+
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
   });
 
   it('can request a bulk export and report success to the user', function () {

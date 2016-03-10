@@ -131,12 +131,8 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
       $rootScope.$emit('activityCheckedIn', checkedInActivity);
     };
 
-    var checkinRejected = function () {
-      deferredCheckin.reject({
-        code: 'CHECKIN_FAILED',
-        title: 'Punten sparen mislukt',
-        message: 'Het sparen van punt(en) voor ' + activity.title + ' is niet gelukt.'
-      });
+    var checkinRejected = function (error) {
+      deferredCheckin.reject(error);
     };
 
     checkinRequest.success(checkinAccepted);

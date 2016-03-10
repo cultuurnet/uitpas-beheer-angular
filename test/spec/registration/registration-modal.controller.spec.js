@@ -365,7 +365,7 @@ describe('Controller: RegistrationModalController', function () {
 
 
     controller.postalCodeChanged();
-    expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('PARSE_INVALID_CITY_IDENTIFIER');
+    expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('PARSE_INVALID_POSTAL_CODE');
   });
 
   it('should clear the async error by error code', function () {
