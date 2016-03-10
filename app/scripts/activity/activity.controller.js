@@ -29,7 +29,10 @@ function ActivityController (passholder, bulkSelection, activityService, counter
   controller.activityMode = activityMode;
   controller.bulkSelection = bulkSelection;
   if (bulkSelection !== null) {
-    controller.passholders = bulkSelection.getPassholderNumbers();
+
+    bulkSelection.getPassholderNumbers().then(function (passholders) {
+      controller.passholders = passholders;
+    });
   }
 
   function getSearchParameters () {

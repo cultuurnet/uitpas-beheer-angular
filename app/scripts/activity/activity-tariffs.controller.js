@@ -14,37 +14,75 @@ angular
 /* @ngInject */
 function PassholderActivityTariffsController (
   passholder,
+  passholders,
   activity,
+  activityMode,
+  bulkSelection,
+  counter,
   $uibModalInstance,
   activityService,
   $rootScope,
+  $state,
+  Passholder,
   TicketSaleAPIError
 ) {
   /*jshint validthis: true */
   var controller = this;
 
-  controller.passholder = passholder;
+  if (activityMode === 'counter') {
+    controller.passholders = passholders;
+    controller.bulkSelection = bulkSelection;
+    var passholder = getFirstPassholderWithKansenstatuut(passholders);
+    controller.passholder = new Passholder(passholder);
+  }
+  else {
+    controller.passholder = passholder;
+  }
+  getGroupSale();
+  controller.activityMode = activityMode;
   controller.activity = activity;
+  console.log(controller.activity);
+  console.log(controller.passholder);
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
   controller.asyncError = false;
-  controller.groupSale = passholder.hasOwnProperty('availableTickets') ? {
-    tickets: 1,
-    maxTickets: passholder.availableTickets,
-    getTotalPrice: function () {
-      var defaultPrice = 0;
-      var selectedPrice = controller.selectedTariff ? controller.selectedTariff.price : null;
-      var ticketPrice = selectedPrice ? selectedPrice : defaultPrice;
-      var totalPrice = ticketPrice * this.tickets;
 
-      return totalPrice;
-    }
-  } : null;
+  function getGroupSale() {
+    controller.groupSale = controller.passholder.hasOwnProperty('availableTickets') ? {
+      tickets: 1,
+      maxTickets: passholder.availableTickets,
+      getTotalPrice: function () {
+        var defaultPrice = 0;
+        var selectedPrice = controller.selectedTariff ? controller.selectedTariff.price : null;
+        var ticketPrice = selectedPrice ? selectedPrice : defaultPrice;
+        var totalPrice = ticketPrice * this.tickets;
+
+        return totalPrice;
+      }
+    } : null;
+  }
+
+  function getFirstPassholderWithKansenstatuut(resolvedPassholders) {
+    var keepGoing = true;
+    var kansenstatuut;
+    angular.forEach(resolvedPassholders, function(resolvedPassholder){
+      kansenstatuut = resolvedPassholder.getKansenstatuutByCardSystemID(counter.cardSystems[1].id);
+      if(kansenstatuut && keepGoing) {
+        return resolvedPassholder;
+        //getGroupSale();
+        keepGoing = false;
+      }
+    });
+  }
 
   function init() {
     var firstTariff = controller.activity.sales.tariffs.list[0];
     var defaultTariff = firstTariff.prices[0];
     controller.selectedTariff = defaultTariff;
+
+    if (activityMode === 'counter') {
+      controller.totalAmount = controller.selectedTariff.price * controller.passholders.length;
+    }
   }
   init();
 
@@ -99,4 +137,19 @@ function PassholderActivityTariffsController (
       .claimTariff(passholder, activity, tariff, ticketCount)
       .then(tariffClaimedSuccessfully, tariffNotClaimed);
   };
+
+  controller.bulkClaimTariff = function() {
+    controller.formSubmitBusy = true;
+    var tariff = angular.copy(controller.selectedTariff);
+    var ticketCount = controller.groupSale ? controller.groupSale.tickets : null;
+
+    $state.go('counter.main.advancedSearch.showBulkResults', {
+      passholders: controller.passholders,
+      activity: controller.activity,
+      tariff: tariff,
+      ticketCount: ticketCount,
+      action: 'tariffs'
+    });
+  };
+
 }

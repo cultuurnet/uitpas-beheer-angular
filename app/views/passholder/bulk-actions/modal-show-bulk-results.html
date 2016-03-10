@@ -3,6 +3,7 @@
   <h4 class="modal-title" ng-show="sbrc.action=='address'">Adres wijzigen</h4>
   <h4 class="modal-title" ng-show="sbrc.action=='kansenstatuut'">Kansenstatuut verlengen</h4>
   <h4 class="modal-title" ng-show="sbrc.action=='points'">Punten sparen</h4>
+  <h4 class="modal-title" ng-show="sbrc.action=='tariffs'">Tarief registreren</h4>
 </div>
 <div class="modal-body">
   <div class="panel panel-default scroll-area">
@@ -30,6 +31,12 @@
         </ul>
       </div>
 
+    </div>
+  </div>
+
+  <div ng-if="sbrc.action == 'tariffs'" class="grid__12">
+    <div class="total-amount">
+      <span><strong>Totaal </strong>&euro; {{::sbrc.totalAmount}}</span>
     </div>
   </div>
 

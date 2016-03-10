@@ -106,11 +106,13 @@
             <i class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<br><a class="history-modal small" ui-sref="counter.main.passholder.ticketSales()">Historiek</a></i>
             <div class="price-differentiation" ng-switch-when="priceDifferentiation">
               <small>vanaf</small><br><strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong>
-              <a class="btn btn-default btn-sm tariff-modal" ui-sref="counter.main.passholder.activityTariffs({ activity: activity })">Tarief kiezen</a>
+              <a ng-if="ac.activityMode == 'passholders'" class="btn btn-default btn-sm tariff-modal" ui-sref="counter.main.passholder.activityTariffs({ activity: activity, activityMode: ac.activityMode })">Tarief kiezen</a>
+              <a ng-if="ac.activityMode == 'counter'" class="btn btn-default btn-sm tariff-modal" ui-sref="counter.main.advancedSearch.bulkPoints.activityTariffs({ activity: activity, activityMode: ac.activityMode, passholders: ac.passholders})">Tarief kiezen</a>
             </div>
             <div class="kansen-tariff" ng-switch-when="kansenTariff" ng-hide="activity.tariffClaimInProgress">
               <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br><small>aan kansentarief</small>
-              <a class="btn btn-default btn-sm assign-tariff" ng-click="ac.claimTariff(activity.sales.tariffs.list[0], activity)" >Tarief toekennen</a>
+              <a ng-if="ac.activityMode == 'passholders'" class="btn btn-default btn-sm assign-tariff" ng-click="ac.claimTariff(activity.sales.tariffs.list[0], activity)" >Tarief toekennen</a>
+              <a ng-if="ac.activityMode == 'counter'" class="btn btn-default btn-sm assign-tariff" ng-click="ac.bulkClaimTariff(activity.sales.tariffs.list[0], activity)" >Tarief toekennen</a>
             </div>
             <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = activity.getRedeemableCoupons()[0]">
               <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br>

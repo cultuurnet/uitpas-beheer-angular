@@ -119,8 +119,9 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
       return queryParameters;
     },
     getPassholderNumbers: function () {
-      var passholders = Array();
+      var passholders = [];
       var deferred = $q.defer();
+
       if (this.selectAll) {
         this.searchParameters.limit = this.searchResults.totalItems;
         passholderService
@@ -129,7 +130,8 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
             function(PassholderSearchResults) {
               angular.forEach(PassholderSearchResults.passen, function(passholder){
                 passholders.push(passholder.passholder);
-              })
+              });
+              deferred.resolve(passholders);
             }
         );
       }
@@ -142,8 +144,9 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
               }
             );
         });
+        deferred.resolve(passholders);
       }
-      deferred.resolve(passholders);
+
       return deferred.promise;
     }
   };
