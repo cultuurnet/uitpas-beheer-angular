@@ -51,7 +51,8 @@
                 <option value="address">Adres wijzigen</option>
                 <option value="export">Exporteren</option>
                 <option ng-show="rvc.counterHasKansenstatuutPermission" value="kansenstatuut">Kansenstatuut verlengen</option>
-                <option value="points">Punt sparen of tarief registreren</option>
+                <!--<option value="points">Punt sparen of tarief registreren</option>-->
+                <option value="points">Punt sparen</option>
               </select>
               <button type="button" ng-disabled="rvc.bulk.submitBusy" class="btn btn-primary" ng-click="rvc.doBulkAction()">
                 <span ng-hide="rvc.bulk.submitBusy">Doorgaan</span>

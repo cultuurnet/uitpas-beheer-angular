@@ -91,17 +91,17 @@
         </div> <!--/ end .grid-middle -->
         <div class="grid__12 grid--bp-med__3 last">
           <!--status busy-->
-          <div class="content-holder" ng-show="activity.tariffClaimInProgress && !activity.tariffClaimError">
+          <div ng-if="ac.activityMode === 'passholders'" class="content-holder" ng-show="activity.tariffClaimInProgress && !activity.tariffClaimError">
             <div class="spinner spinner-xsmall">
               <circle-spinner></circle-spinner>
             </div>
           </div>
           <!--status error-->
-          <div class="content-holder" ng-show="!activity.tariffClaimInProgress && activity.tariffClaimError">
+          <div ng-if="ac.activityMode === 'passholders'" class="content-holder" ng-show="!activity.tariffClaimInProgress && activity.tariffClaimError">
             <i class="error">{{activity.tariffClaimError.message}}</i>
           </div>
           <!--status start-->
-          <div class="content-holder" ng-switch="activity.getTariff()" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
+          <div ng-if="ac.activityMode === 'passholders'" class="content-holder" ng-switch="activity.getTariff()" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
             <i class="free-event" ng-switch-when="free">Gratis</i>
             <i class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<br><a class="history-modal small" ui-sref="counter.main.passholder.ticketSales()">Historiek</a></i>
             <div class="price-differentiation" ng-switch-when="priceDifferentiation">
