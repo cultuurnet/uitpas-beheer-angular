@@ -147,5 +147,5 @@ function PassholderActivityTariffsController (
       ticketCount: ticketCount,
       action: 'tariffs'
     });
-  }
+  };
 }
