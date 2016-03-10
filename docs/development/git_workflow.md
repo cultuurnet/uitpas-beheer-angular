@@ -3,8 +3,6 @@
 ## Permanent branches
 ### `master`
 * This branch is used on the production environment, and is released periodically.
-* All feature branches should be branched from this branch.
-* All feature branch pull requests should have this branch as base branch.
 
 ### `hotfix/hotfix`
 * Gets updated with `master` when possible and needed (after each release to production).
@@ -12,7 +10,10 @@
 
 ## Temporary branches
 ### Feature branches
- Each issue gets its own feature branch. The naming for the feature branches is:
+* Each issue gets its own feature branch.
+* All feature branches should be branched from `master` branch.
+* All feature branch pull requests should have `master` as base branch.
+* The naming for the feature branches is:
 ```
    feature/{Jira issue-number}
 ```
