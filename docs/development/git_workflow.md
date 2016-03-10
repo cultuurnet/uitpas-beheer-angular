@@ -11,7 +11,7 @@
 ## Temporary branches
 ### Feature branches
 * Each issue gets its own feature branch.
-* All feature branches should be branched from `master` branch.
+* All feature branches should be branched from the `master` branch.
 * All feature branch pull requests should have `master` as base branch.
 * The naming for the feature branches is:
 ```
@@ -25,7 +25,7 @@ Examples are:
 ```
 
 ### Hotfix branches
- An issue might require a hotfix that needs to be brought to production as soon as possible. Start the development branch for these issue from `hotfix/hotfix`.
+ An issue might require a hotfix that needs to be brought to production as soon as possible. All hotfix branches should be branched from the `hotfix/hotfix` branch. Start the development branch for these issue from `hotfix/hotfix`.
 
 The naming for the feature branches is:
  ```
