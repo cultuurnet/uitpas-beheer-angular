@@ -3,14 +3,14 @@
 describe('Controller: ShowBulkResultsController', function () {
 
   var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q,
-    Counter, activeCounter, action, bulkForm, day;
+    Counter, activeCounter, activityService, action, bulkForm, day, activity, Activity;
 
   var jsonPassHolder = {
       'uid': 'string',
       'name': {
-        'first': 'John',
-        'middle': 'Lupus',
-        'last': 'Smith'
+        'first': 'Jeffrey',
+        'middle': '',
+        'last': 'Scholliers'
       },
       'address': {
         'street': 'Steenweg op Aalst 94',
@@ -21,7 +21,7 @@ describe('Controller: ShowBulkResultsController', function () {
         'date': '2003-12-26',
         'place': 'Sint-Agatha-Berchem'
       },
-      'inszNumber': '93051822361',
+      'inszNumber': '97122957396',
       'gender': 'MALE',
       'nationality': 'Belg',
       'picture': 'R0lGODlhDwAPAKECAAAAzMzM/////wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4MLwWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw==',
@@ -39,7 +39,7 @@ describe('Controller: ShowBulkResultsController', function () {
       'kansenStatuten': [
         {
           'status': 'ACTIVE',
-          'endDate': '2015-12-26',
+          'endDate': '2017-12-31',
           'cardSystem': {
             'id': '1',
             'name': 'UiTPAS Dender'
@@ -48,9 +48,9 @@ describe('Controller: ShowBulkResultsController', function () {
       ],
       'uitPassen': [
         {
-          'number': '0930000422202',
+          'number': '0930000210219',
           'kansenStatuut': true,
-          'status': 'LOCAL_STOCK',
+          'status': 'ACTIVE',
           'type': 'CARD',
           'cardSystem': {
             'id': '1',
@@ -117,6 +117,48 @@ describe('Controller: ShowBulkResultsController', function () {
     return spyForm;
   };
 
+  function getJsonActivity() {
+    var jsonActivity = {
+      'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
+      'title': 'Altijd open',
+      'description': '',
+      'when': '',
+      'age': 10,
+      'points': 182,
+      'checkinConstraint': {
+        'allowed': true,
+        'startDate': '2015-09-01T00:00:00+00:00',
+        'endDate': '2015-09-01T23:59:59+00:00',
+        'reason': ''
+      },
+      free: true,
+      sales: {
+        maximumReached: false,
+        differentiation: false,
+        base: {
+          'Default prijsklasse': 6
+        },
+        tariffs: {
+          kansentariefAvailable: true,
+          couponAvailable: false,
+          lowestAvailable: 1.5,
+          list: [
+            {
+              name: 'Kansentarief',
+              type: 'KANSENTARIEF',
+              maximumReached: false,
+              prices: {
+                'Default prijsklasse': 1.5
+              }
+            }
+          ]
+        }
+      }
+    };
+
+    return angular.copy(jsonActivity);
+  }
+
   // load the controller's module
   beforeEach(module('ubr.passholder'));
   beforeEach(module('uitpasbeheerApp', function($provide) {
@@ -124,6 +166,12 @@ describe('Controller: ShowBulkResultsController', function () {
     $provide.provider('passholderService', {
       $get: function () {
         return passholderService;
+      }
+    });
+    activityService = jasmine.createSpyObj('activityService', ['checkin']);
+    $provide.provider('activityService', {
+      $get: function () {
+        return activityService;
       }
     });
   }));
@@ -136,9 +184,11 @@ describe('Controller: ShowBulkResultsController', function () {
     $uibModalStack = jasmine.createSpyObj('$uibModalStack', ['dismissAll']);
     $q = $injector.get('$q');
     Passholder = $injector.get('Passholder');
+    Activity = $injector.get('Activity');
     var jsonParsePassHolder = new Passholder(jsonPassHolder);
     Counter = $injector.get('Counter');
     activeCounter = new Counter(angular.copy(activeCounterJson));
+    activity = new Activity(getJsonActivity());
 
     passholders = [
       jsonParsePassHolder,
@@ -164,8 +214,10 @@ describe('Controller: ShowBulkResultsController', function () {
       bulkForm: bulkForm,
       action: action,
       passholderService: passholderService,
+      activityService: activityService,
       $uibModalStack: $uibModalStack,
-      activeCounter: activeCounter
+      activeCounter: activeCounter,
+      activity: activity
     });
   };
 
@@ -187,6 +239,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.address.street).toEqual('asdfasdfasd');
       expect(passholder.updated).toBeTruthy();
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -203,6 +256,7 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
       expect(passholder.asyncError.message).toEqual('Actie niet toegestaan.');
       expect(passholder.asyncError.type).toEqual('danger');
     });
@@ -221,6 +275,7 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
       expect(passholder.asyncError.message).toEqual('Pashouder werd niet geüpdatet op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
     });
@@ -239,6 +294,7 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
       expect(passholder.asyncError.message).toEqual('Pashouder werd niet geüpdatet op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
     });
@@ -256,9 +312,10 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.kansenStatuten[0].endDate).toEqual(day('2015-12-26', 'YYYY-MM-DD').toDate());
+      expect(passholder.kansenStatuten[0].endDate).toEqual(day('2017-12-31', 'YYYY-MM-DD').toDate());
       expect(passholder.updated).toBeTruthy();
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -281,6 +338,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.asyncError.message).toEqual('Geen geldige einddatum voor kansenstatuut');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -303,6 +361,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.asyncError.message).toEqual('Geen geldige datum voor kansenstatuut');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -325,10 +384,11 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.asyncError.message).toEqual('Kansenstatuut werd niet geüpdatet op de server.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
-  it('should fail in renewing the passholder his kansenstatuut because the passholder has no kansenstatuut', function () {
+  it('should filter out all the passholders without a kansenstatuut and give them the right errormessage.', function () {
     action = 'kansenstatuut';
     bulkForm = getSpyDateForm();
     jsonPassHolder.kansenStatuten = [];
@@ -344,6 +404,7 @@ describe('Controller: ShowBulkResultsController', function () {
       expect(passholder.asyncError.message).toEqual('Pashouder heeft geen kansenstatuut.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
     });
   });
 
@@ -363,8 +424,104 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
+      expect(passholder.beingProcessed).toBeFalsy();
       expect(passholder.asyncError.message).toEqual('Geen geldige postcode voor het adres.');
       expect(passholder.asyncError.type).toEqual('danger');
+    });
+  });
+
+  it('shoud checkin the passholder on the activity', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      return $q.resolve(activity);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.updated).toBeTruthy();
+      expect(passholder.isChecked).toBeTruthy();
+    });
+  });
+
+  it('should fail in checking the passholders in on the given activity because of invalid card', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      var apiError = {
+        code: 'INVALID_CARD_STATUS'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Punt sparen niet gelukt kaart geblokkeerd.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in checking the passholders in on the given activity because of an expired kansenstatuut', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      var apiError = {
+        code: 'KANSENSTATUUT_EXPIRED'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Punt sparen niet gelukt kansenstatuut vervallen.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in checking the passholders in on the given activity because of maximum reached', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      var apiError = {
+        code: 'MAXIMUM_REACHED'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Punt al gespaard.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in checking the passholders in on the given activity because something else went wrong', function() {
+    action = 'points';
+    activityService.checkin.and.callFake(function () {
+      var apiError = {
+        code: 'SOMETHING_ELSE_WENT_WRONG'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Punt sparen niet gelukt.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
     });
   });
 });

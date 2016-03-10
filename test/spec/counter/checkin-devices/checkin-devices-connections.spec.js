@@ -24,6 +24,7 @@ describe('Service: CheckInDevicesConnectionsController', function () {
   var deferredDevices, deferredActivities;
 
   // load the service's module
+  beforeEach(module('ubr.utilities'));
   beforeEach(module('ubr.counter.checkin-devices', function($provide) {
     $provide.constant('appConfig', {
       apiUrl: apiUrl

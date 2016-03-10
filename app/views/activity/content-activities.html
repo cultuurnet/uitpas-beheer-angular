@@ -59,7 +59,7 @@
         <div class="grid__12 grid--bp-med__6 first">
           <div class="date" ng-bind="::activity.when"></div>
           <h3 ng-if="ac.activityMode == 'passholders'" ui-sref="counter.main.passholder.activity({ activity: activity })">{{activity.title}}</h3>
-          <h3 ng-if="ac.activityMode == 'counter'" ui-sref="counter.main.activity({ activity: activity })">{{activity.title}}</h3>
+          <h3 ng-if="ac.activityMode == 'counter'" ui-sref="counter.main.advancedSearch.bulkPoints.activity({ activity: activity })">{{activity.title}}</h3>
 
         </div> <!--/ end .grid-first -->
 
@@ -73,7 +73,8 @@
             <i ng-switch-when="expired">Evenement afgelopen</i>
             <div ng-switch-when="available">
               <div class="points">+<span ng-bind="::activity.points"></span></div>
-              <button class="btn btn-default btn-sm" ng-click="ac.checkin(activity)">Punten sparen</button>
+              <button ng-if="ac.activityMode == 'passholders'" class="btn btn-default btn-sm" ng-click="ac.checkin(activity)">Punten sparen</button>
+              <button ng-if="ac.activityMode == 'counter'" ng-click="ac.bulkCheckin(activity)" class="btn btn-default btn-sm" >Punten sparen</button>
             </div>
           </div>
           <!--status failed-->
@@ -90,17 +91,17 @@
         </div> <!--/ end .grid-middle -->
         <div class="grid__12 grid--bp-med__3 last">
           <!--status busy-->
-          <div class="content-holder" ng-show="activity.tariffClaimInProgress && !activity.tariffClaimError">
+          <div ng-if="ac.activityMode === 'passholders'" class="content-holder" ng-show="activity.tariffClaimInProgress && !activity.tariffClaimError">
             <div class="spinner spinner-xsmall">
               <circle-spinner></circle-spinner>
             </div>
           </div>
           <!--status error-->
-          <div class="content-holder" ng-show="!activity.tariffClaimInProgress && activity.tariffClaimError">
+          <div ng-if="ac.activityMode === 'passholders'" class="content-holder" ng-show="!activity.tariffClaimInProgress && activity.tariffClaimError">
             <i class="error">{{activity.tariffClaimError.message}}</i>
           </div>
           <!--status start-->
-          <div class="content-holder" ng-switch="activity.getTariff()" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
+          <div ng-if="ac.activityMode === 'passholders'" class="content-holder" ng-switch="activity.getTariff()" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
             <i class="free-event" ng-switch-when="free">Gratis</i>
             <i class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<br><a class="history-modal small" ui-sref="counter.main.passholder.ticketSales()">Historiek</a></i>
             <div class="price-differentiation" ng-switch-when="priceDifferentiation">
