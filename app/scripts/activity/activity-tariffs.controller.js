@@ -23,6 +23,7 @@ function PassholderActivityTariffsController (
   activityService,
   $rootScope,
   $state,
+  Passholder,
   TicketSaleAPIError
 ) {
   /*jshint validthis: true */
@@ -31,14 +32,17 @@ function PassholderActivityTariffsController (
   if (activityMode === 'counter') {
     controller.passholders = passholders;
     controller.bulkSelection = bulkSelection;
-    getFirstPassholderWithKansenstatuut(passholders);
+    var passholder = getFirstPassholderWithKansenstatuut(passholders);
+    controller.passholder = new Passholder(passholder);
   }
   else {
     controller.passholder = passholder;
-    getGroupSale();
   }
+  getGroupSale();
   controller.activityMode = activityMode;
   controller.activity = activity;
+  console.log(controller.activity);
+  console.log(controller.passholder);
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
   controller.asyncError = false;
@@ -64,8 +68,8 @@ function PassholderActivityTariffsController (
     angular.forEach(resolvedPassholders, function(resolvedPassholder){
       kansenstatuut = resolvedPassholder.getKansenstatuutByCardSystemID(counter.cardSystems[1].id);
       if(kansenstatuut && keepGoing) {
-        controller.passholder = resolvedPassholder;
-        getGroupSale();
+        return resolvedPassholder;
+        //getGroupSale();
         keepGoing = false;
       }
     });
