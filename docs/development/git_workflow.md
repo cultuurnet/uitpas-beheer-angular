@@ -25,7 +25,7 @@ Examples are:
 ```
 
 ### Hotfix branches
- An issue might require a hotfix that needs to be brought to production as soon as possible. All hotfix branches should be branched from the `hotfix/hotfix` branch. Start the development branch for these issue from `hotfix/hotfix`.
+ An issue might require a hotfix that needs to be brought to production as soon as possible. All hotfix branches should be branched from the `hotfix/hotfix` branch.
 
 The naming for the feature branches is:
  ```
