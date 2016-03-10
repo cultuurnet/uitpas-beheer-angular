@@ -173,7 +173,7 @@ function ShowBulkResultsController(
         case 'MISSING_PROPERTY':
           passholder.asyncError = {
             message: 'Prijsklasse ontbreekt.',
-            typer: 'error'
+            type: 'error'
           };
           break;
 
