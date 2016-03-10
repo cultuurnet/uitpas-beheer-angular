@@ -6,7 +6,7 @@ describe('Controller: PassholderActivityTariffsController', function () {
 
   var $scope, $httpBackend, $q, $controller, activityService, modalInstance, TicketSaleAPIError,
     activityMode, bulkSelection, $state, BulkSelection, PassholderSearchResults, SearchParameters,
-    searchResults, searchParameters, Counter, activeCounter;
+    searchResults, searchParameters, Counter, activeCounter, passholders, Passholder;
 
   var activity = {
     'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
@@ -46,11 +46,6 @@ describe('Controller: PassholderActivityTariffsController', function () {
   };
 
   var passholder = { passNumber: '01234567891234', points: 123 };
-  var passholders = [
-    passholder,
-    passholder,
-    passholder
-  ];
 
   var jsonSearchParameters = {
     uitpasNumbers: [],
@@ -103,9 +98,64 @@ describe('Controller: PassholderActivityTariffsController', function () {
     'groups': ['Geauthorizeerde registratie balies']
   };
 
+  var jsonPassHolder = {
+    'uid': 'string',
+    'name': {
+      'first': 'Jeffrey',
+      'middle': '',
+      'last': 'Scholliers'
+    },
+    'address': {
+      'street': 'Steenweg op Aalst 94',
+      'postalCode': '9308',
+      'city': 'Aalst'
+    },
+    'birth': {
+      'date': '2003-12-26',
+      'place': 'Sint-Agatha-Berchem'
+    },
+    'inszNumber': '97122957396',
+    'gender': 'MALE',
+    'nationality': 'Belg',
+    'picture': 'R0lGODlhDwAPAKECAAAAzMzM/////wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4MLwWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw==',
+    'contact': {
+      'email': 'foo@bar.com',
+      'telephoneNumber': '016454545',
+      'mobileNumber': '+32 498 77 88 99'
+    },
+    'privacy': {
+      'email': true,
+      'sms': true
+    },
+    'points': 40,
+    'remarks': 'Dit maakt niet uit.',
+    'kansenStatuten': [
+      {
+        'status': 'ACTIVE',
+        'endDate': '2017-12-31',
+        'cardSystem': {
+          'id': '1',
+          'name': 'UiTPAS Dender'
+        }
+      }
+    ],
+    'uitPassen': [
+      {
+        'number': '0930000210219',
+        'kansenStatuut': true,
+        'status': 'ACTIVE',
+        'type': 'CARD',
+        'cardSystem': {
+          'id': '1',
+          'name': 'UiTPAS Dender'
+        }
+      }
+    ]
+  };
+
   beforeEach(inject(function ($injector, $rootScope){
     $controller = $injector.get('$controller');
-    $state = $injector.get('$state');
+    $state = jasmine.createSpyObj('$state', ['go']);
     modalInstance = {
       close: jasmine.createSpy('modalInstance.close'),
       dismiss: jasmine.createSpy('modalInstance.dismiss'),
@@ -132,6 +182,16 @@ describe('Controller: PassholderActivityTariffsController', function () {
     Counter = $injector.get('Counter');
     activeCounter = new Counter(angular.copy(jsonCounter));
 
+    Passholder = $injector.get('Passholder');
+    var jsonParsePassholder = new Passholder(jsonPassHolder);
+
+    passholders = [
+      jsonParsePassholder,
+      jsonParsePassholder,
+      jsonParsePassholder,
+      jsonParsePassholder
+    ];
+
     searchResults = new PassholderSearchResults(jsonSearchResults);
     searchParameters = new SearchParameters(jsonSearchParameters);
     bulkSelection = new BulkSelection(searchResults, searchParameters, []);
@@ -139,7 +199,7 @@ describe('Controller: PassholderActivityTariffsController', function () {
     activityMode = 'passholders';
   }));
 
-  function getControllerForPassholder(passholder) {
+  function getControllerForPassholder() {
     var controller = $controller('PassholderActivityTariffsController', {
       passholder: passholder,
       passholders: passholders,
@@ -236,8 +296,8 @@ describe('Controller: PassholderActivityTariffsController', function () {
   });
 
   it('it should keep track of the total ticket price when buying multiple group tickets', function (){
-    var group = {availableTickets: 10};
-    var controller = getControllerForPassholder(group);
+    passholder = {availableTickets: 10};
+    var controller = getControllerForPassholder();
 
     expect(controller.groupSale.maxTickets).toEqual(10);
     expect(controller.groupSale.getTotalPrice()).toEqual(1.5);
@@ -263,5 +323,37 @@ describe('Controller: PassholderActivityTariffsController', function () {
 
     controller.clearAsyncError();
     expect(controller.asyncError).toEqual(false);
+  });
+
+  it('should should have certain paramaters at initialisation when activity is counter', function () {
+    activityMode = 'counter';
+    passholder = '';
+    var controller = getControllerForPassholder();
+    expect(controller.passholders).toEqual(passholders);
+    expect(controller.bulkSelection).toEqual(bulkSelection);
+    expect(controller.passholder).toEqual(passholders[0]);
+    expect(controller.activity).toEqual(activity);
+  });
+
+  it('can submit the activity tariffs form in bulk', function () {
+    var controller = getControllerForPassholder();
+
+    controller.selectedTariff = {
+      type: 'COUPON',
+      id: 123,
+      price: 1235,
+      priceClass: 'Basisprijs'
+    };
+
+    controller.bulkClaimTariff();
+
+    expect(controller.formSubmitBusy).toBeTruthy();
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.showBulkResults',{
+      passholders: controller.passholders,
+      activity: controller.activity,
+      tariff: controller.selectedTariff,
+      ticketCount: null,
+      action: 'tariffs'
+    });
   });
 });
