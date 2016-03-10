@@ -3,7 +3,7 @@
 describe('Controller: ShowBulkResultsController', function () {
 
   var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q,
-    Counter, activeCounter, activityService, action, bulkForm, day, activity, Activity;
+    Counter, activeCounter, activityService, action, bulkForm, day, activity, Activity, tariff, ticketCount;
 
   var jsonPassHolder = {
       'uid': 'string',
@@ -77,6 +77,13 @@ describe('Controller: ShowBulkResultsController', function () {
     },
     'permissions': ['kansenstatuut toekennen'],
     'groups': ['Geauthorizeerde registratie balies']
+  };
+
+  var jsonTariff = {
+    type: 'COUPON',
+    id: 123,
+    price: 1235,
+    priceClass: 'Basisprijs'
   };
 
   var getSpyForm = function (formData) {
@@ -200,6 +207,7 @@ describe('Controller: ShowBulkResultsController', function () {
 
     bulkForm = getSpyForm();
     action = 'address';
+    tariff = jsonTariff;
 
     passholderService.update.and.callFake(function () {
       return $q.resolve(passholders[0]);
@@ -217,7 +225,9 @@ describe('Controller: ShowBulkResultsController', function () {
       activityService: activityService,
       $uibModalStack: $uibModalStack,
       activeCounter: activeCounter,
-      activity: activity
+      activity: activity,
+      tariff: tariff,
+      ticketCount: ticketCount
     });
   };
 
@@ -458,7 +468,7 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.asyncError.message).toEqual('Punt sparen niet gelukt kaart geblokkeerd.');
+      expect(passholder.asyncError.message).toEqual('Punt sparen mislukt, kaart geblokkeerd.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();

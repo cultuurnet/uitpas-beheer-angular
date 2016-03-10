@@ -4,7 +4,9 @@ describe('Controller: PassholderActivityTariffsController', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  var $scope, $httpBackend, $q, $controller, activityService, modalInstance, TicketSaleAPIError;
+  var $scope, $httpBackend, $q, $controller, activityService, modalInstance, TicketSaleAPIError,
+    activityMode, bulkSelection, $state, BulkSelection, PassholderSearchResults, SearchParameters,
+    searchResults, searchParameters, Counter, activeCounter;
 
   var activity = {
     'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
@@ -44,10 +46,66 @@ describe('Controller: PassholderActivityTariffsController', function () {
   };
 
   var passholder = { passNumber: '01234567891234', points: 123 };
+  var passholders = [
+    passholder,
+    passholder,
+    passholder
+  ];
+
+  var jsonSearchParameters = {
+    uitpasNumbers: [],
+    page: 1,
+    limit: 10,
+    dateOfBirth: null,
+    firstName: 'jan',
+    name: null,
+    street: null,
+    city: null,
+    email: null,
+    membershipAssociationId: null,
+    membershipStatus: null,
+    mode: {
+      title: 'Zoeken',
+      name: 'DETAIL'
+    }
+  };
+
+  var jsonSearchResults = {
+    firstPage: 'http://culpas-silex.dev/passholders?firstName=jan&limit=10&page=1',
+    invalidUitpasNumbers: [],
+    itemsPerPage: 10,
+    lastPage: 'http://culpas-silex.dev/passholders?firstName=jan&limit=10&page=3',
+    nextPage: 'http://culpas-silex.dev/passholders?firstName=jan&limit=10&page=2',
+    page: 1,
+    member: [],
+    length: 10,
+    previousPage: undefined,
+    totalItems: 29,
+    unknownNumbersConfirmed: false
+  };
+
+  var jsonCounter = {
+    'id': '452',
+    'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+    'name': 'CC de Werf',
+    'role': 'admin',
+    'actorId': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
+    'cardSystems': {
+      '1': {
+        'permissions': ['kansenstatuut toekennen'],
+        'groups': ['Geauthorizeerde registratie balies'],
+        'id': 1,
+        'name': 'UiTPAS Dender',
+        'distributionKeys': []
+      }
+    },
+    'permissions': ['kansenstatuut toekennen'],
+    'groups': ['Geauthorizeerde registratie balies']
+  };
 
   beforeEach(inject(function ($injector, $rootScope){
     $controller = $injector.get('$controller');
-
+    $state = $injector.get('$state');
     modalInstance = {
       close: jasmine.createSpy('modalInstance.close'),
       dismiss: jasmine.createSpy('modalInstance.dismiss'),
@@ -66,15 +124,33 @@ describe('Controller: PassholderActivityTariffsController', function () {
         step: 'orangeStep'
       }
     };
+
+    BulkSelection = $injector.get('BulkSelection');
+    PassholderSearchResults = $injector.get('PassholderSearchResults');
+    SearchParameters = $injector.get('SearchParameters');
+
+    Counter = $injector.get('Counter');
+    activeCounter = new Counter(angular.copy(jsonCounter));
+
+    searchResults = new PassholderSearchResults(jsonSearchResults);
+    searchParameters = new SearchParameters(jsonSearchParameters);
+    bulkSelection = new BulkSelection(searchResults, searchParameters, []);
+
+    activityMode = 'passholders';
   }));
 
   function getControllerForPassholder(passholder) {
     var controller = $controller('PassholderActivityTariffsController', {
       passholder: passholder,
+      passholders: passholders,
       activity: activity,
+      activityMode: activityMode,
+      bulkSelection: bulkSelection,
+      counter: activeCounter,
       $uibModalInstance: modalInstance,
       activityService: activityService,
       $rootScope: $scope,
+      $state: $state,
       TicketSaleAPIError: TicketSaleAPIError
     });
 
