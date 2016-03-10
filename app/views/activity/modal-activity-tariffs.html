@@ -66,6 +66,11 @@
     <a class="btn btn-link" ng-click="pat.cancelModal()">Annuleren</a>
     <button ng-if="pat.activityMode == 'passholders'" type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid"
             ng-click="pat.claimTariff(pat.passholder, pat.activity, passholderActivityTariffs)">
+      <span ng-hide="pat.formSubmitBusy">Tarief toekennen</span>
+            <span ng-show="pat.formSubmitBusy">
+              <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+            </span>
+      </button>
     <button ng-if="pat.activityMode == 'counter'" type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid"
               ng-click="pat.bulkClaimTariff()">
       <span ng-hide="pat.formSubmitBusy">Tarief toekennen</span>
