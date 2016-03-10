@@ -2,7 +2,7 @@
 
 ## Permanent branches
 ### `master`
-* This branch is used on the production and is released periodically.
+* This branch is used on the production environment, and is released periodically.
 * All feature branches should be branched from this branch.
 * All feature branch pull requests should have this branch as base branch.
 
