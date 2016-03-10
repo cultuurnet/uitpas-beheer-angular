@@ -34,6 +34,12 @@
     </div>
   </div>
 
+  <div ng-if="sbrc.action == 'tariffs'" class="grid__12">
+    <div class="total-amount">
+      <span><strong>Totaal </strong>&euro; {{::sbrc.totalAmount}}</span>
+    </div>
+  </div>
+
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sbrc.cancel()">Sluiten</button>

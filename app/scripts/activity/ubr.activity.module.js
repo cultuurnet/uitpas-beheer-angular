@@ -17,7 +17,7 @@ angular
   /* @ngInject */
   .config(function ($stateProvider) {
     /* @ngInject */
-    function getPassholderFromStateParams(passholderService, $stateParams) {
+    function getPassholderFromStateParams(passholderService, counterService, $stateParams) {
       if ($stateParams.activityMode === 'passholders') {
         return passholderService.findPassholder($stateParams.identification);
       }
@@ -61,6 +61,7 @@ angular
       params: {
         identification: null,
         passholder: null,
+        passholders: null,
         activity: null,
         activityMode: null,
         bulkSelection: null,
@@ -68,6 +69,9 @@ angular
       },
       resolve: {
         passholder: getPassholderFromStateParams,
+        passholders: ['$stateParams', function($stateParams) {
+          return $stateParams.passholders;
+        }],
         identification: ['$stateParams', function($stateParams) {
           return $stateParams.identification;
         }],
@@ -97,7 +101,7 @@ angular
         }
       },
       /* @ngInject */
-      onEnter: function(passholder, identification, activity, activityMode, bulkSelection, counter, $state, $uibModal) {
+      onEnter: function(passholder, passholders, identification, activity, activityMode, bulkSelection, counter, $state, $uibModal) {
         var modalSize = 'sm';
         if (Object.keys(activity.sales.base).length > 3) {
           modalSize = '';
@@ -110,6 +114,9 @@ angular
             resolve: {
               passholder: function () {
                 return passholder;
+              },
+              passholders: function () {
+                return passholders;
               },
               identification: function () {
                 return identification;

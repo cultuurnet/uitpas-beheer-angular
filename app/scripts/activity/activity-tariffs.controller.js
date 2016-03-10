@@ -14,6 +14,7 @@ angular
 /* @ngInject */
 function PassholderActivityTariffsController (
   passholder,
+  passholders,
   activity,
   activityMode,
   bulkSelection,
@@ -28,15 +29,9 @@ function PassholderActivityTariffsController (
   var controller = this;
 
   if (activityMode === 'counter') {
-    controller.getPassholdersBusy = true;
-    bulkSelection.getPassholderNumbers()
-      .then(function(response) {
-        controller.passholders = response;
-        getFirstPassholderWithKansenstatuut(response);
-      })
-      .finally(function() {
-        controller.getPassholdersBusy = false;
-      });
+    controller.passholders = passholders;
+    controller.bulkSelection = bulkSelection;
+    getFirstPassholderWithKansenstatuut(passholders);
   }
   else {
     controller.passholder = passholder;
@@ -80,6 +75,10 @@ function PassholderActivityTariffsController (
     var firstTariff = controller.activity.sales.tariffs.list[0];
     var defaultTariff = firstTariff.prices[0];
     controller.selectedTariff = defaultTariff;
+
+    if (activityMode === 'counter') {
+      controller.totalAmount = controller.selectedTariff.price * controller.passholders.length;
+    }
   }
   init();
 
@@ -148,4 +147,5 @@ function PassholderActivityTariffsController (
       action: 'tariffs'
     });
   };
+
 }

@@ -11,7 +11,22 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkForm, action, passholderService, activityService, $uibModalStack, activeCounter, activity, tariff, ticketCount, moment, $q, Queue) {
+function ShowBulkResultsController(
+  passholders,
+  bulkForm,
+  action,
+  passholderService,
+  activityService,
+  $uibModalStack,
+  activeCounter,
+  activity,
+  tariff,
+  ticketCount,
+  moment,
+  $q,
+  Queue,
+  $state
+) {
   var controller = this;
   var errorCode;
   var queue = new Queue(4);
@@ -21,6 +36,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   controller.passholders = passholders;
   controller.activeCounter = activeCounter;
   controller.action = action;
+  controller.totalAmount = 0;
 
   controller.updatePassHolderAddress = function(passholder) {
     passholder.address.city = bulkForm.city.$viewValue;
@@ -49,6 +65,9 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   };
 
   controller.updateOK = function (passholder) {
+    if (action == 'tariffs') {
+      controller.totalAmount = controller.totalAmount + tariff.price;
+    }
     return function() {
       passholder.updated = true;
       passholder.beingProcessed = false;
@@ -163,6 +182,7 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
             message: 'Pashouder heeft geen kansenstatuut.',
             type: 'error'
           };
+          break;
         }
 
         default:
