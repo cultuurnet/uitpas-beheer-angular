@@ -165,14 +165,11 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
         var params = controller.bulk.selection.toQueryParameters();
         params.action = 'points';
         // fix for UBR-469
+        params.mode = $state.params.mode;
         if ($state.params.mode === 'NUMBER' && controller.bulk.selection.selectAll == true) {
-          params.mode = 'NUMBER';
-          if (params.uitpasNumber) {
+          if (controller.bulk.selection.searchParameters.uitpasNumbers) {
             params.selection = controller.bulk.selection.searchParameters.uitpasNumbers;
           }
-        }
-        else {
-          params.mode = 'DETAIL';
         }
 
         if (!params.selection) {

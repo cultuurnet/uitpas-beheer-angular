@@ -237,6 +237,7 @@ describe('Controller: Results Viewer', function () {
   });
 
   it('can start a bulk action of type points and delegate the work', function () {
+    $state.params.mode = 'DETAIL';
     var params = controller.bulk.selection.toQueryParameters();
     params.action = 'points';
     params.mode = 'DETAIL';
@@ -250,15 +251,19 @@ describe('Controller: Results Viewer', function () {
 
   it('can start a bulk action of type points and delegate the work when the mode is NUMBER and selectAll is true', function () {
     $state.params.mode = 'NUMBER';
+    controller.bulk.selection.searchParameters.uitpasNumbers = [
+      '0930000002905',
+      '0930000020303',
+      '0930000000107'
+    ];
     controller.bulk.selection.selectAll = true;
     var params = controller.bulk.selection.toQueryParameters();
     params.action = 'points';
-    if (!params.selection) {
-      params.totalItems = controller.bulk.selection.searchResults.totalItems;
-    }
-    controller.doBulkAction();
     params.mode = 'NUMBER';
-    
+    params.selection = controller.bulk.selection.searchParameters.uitpasNumbers;
+
+    controller.doBulkAction();
+
     expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
   });
 
