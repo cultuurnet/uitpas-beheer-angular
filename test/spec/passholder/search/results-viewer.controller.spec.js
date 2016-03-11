@@ -239,11 +239,26 @@ describe('Controller: Results Viewer', function () {
   it('can start a bulk action of type points and delegate the work', function () {
     var params = controller.bulk.selection.toQueryParameters();
     params.action = 'points';
+    params.mode = 'DETAIL';
     if (!params.selection) {
       params.totalItems = controller.bulk.selection.searchResults.totalItems;
     }
     controller.doBulkAction();
 
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
+  });
+
+  it('can start a bulk action of type points and delegate the work when the mode is NUMBER and selectAll is true', function () {
+    $state.params.mode = 'NUMBER';
+    controller.bulk.selection.selectAll = true;
+    var params = controller.bulk.selection.toQueryParameters();
+    params.action = 'points';
+    if (!params.selection) {
+      params.totalItems = controller.bulk.selection.searchResults.totalItems;
+    }
+    controller.doBulkAction();
+    params.mode = 'NUMBER';
+    
     expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
   });
 
