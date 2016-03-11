@@ -164,6 +164,16 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
         controller.bulk.submitBusy = false;
         var params = controller.bulk.selection.toQueryParameters();
         params.action = 'points';
+        // fix for UBR-469
+        if ($state.params.mode === 'NUMBER' && controller.bulk.selection.selectAll == true) {
+          params.mode = 'NUMBER';
+          params.selection = params.uitpasNumber;
+          params.selection = controller.bulk.selection.searchParameters.uitpasNumbers;
+        }
+        else {
+          params.mode = 'DETAIL';
+        }
+
         if (!params.selection) {
           params.totalItems = controller.bulk.selection.searchResults.totalItems;
         }
