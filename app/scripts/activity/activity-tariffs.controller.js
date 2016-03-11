@@ -41,8 +41,6 @@ function PassholderActivityTariffsController (
   getGroupSale();
   controller.activityMode = activityMode;
   controller.activity = activity;
-  console.log(controller.activity);
-  console.log(controller.passholder);
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
   controller.asyncError = false;
@@ -69,7 +67,6 @@ function PassholderActivityTariffsController (
       kansenstatuut = resolvedPassholder.getKansenstatuutByCardSystemID(counter.cardSystems[1].id);
       if(kansenstatuut && keepGoing) {
         return resolvedPassholder;
-        //getGroupSale();
         keepGoing = false;
       }
     });
