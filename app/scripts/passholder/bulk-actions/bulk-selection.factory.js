@@ -134,7 +134,15 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
         );
       }
       else {
-        angular.forEach(this.uitpasNumberSelection, function(selection) {
+        // Fix for UBR-468
+        if (typeof this.uitpasNumberSelection === 'string') {
+          var uitpasNumberSelection = [this.uitpasNumberSelection];
+        }
+        else {
+          var uitpasNumberSelection = this.uitpasNumberSelection;
+        }
+
+        angular.forEach(uitpasNumberSelection, function(selection) {
           passholderService.findPassholder(selection)
             .then(
               function(passholder) {
