@@ -334,12 +334,7 @@ describe('Factory: BulkSelection', function () {
     expect(passholderService.findPassholder.calls.count()).toBe(1);
   });
 
-  it('should try to find passholder when uitpasNumberSelection is a string', function () {
-    bulkSelection.uitpasNumberSelection = '0934000004515';
-    spyOn(passholderService, 'findPassholder').and.returnValue($q.when(jsonSearchResultsWithPassen));;
+  it('throws an error when selection is not an array', function () {
 
-    bulkSelection.getPassholderNumbers();
-
-    expect(passholderService.findPassholder.calls.count()).toBe(1);
   });
 });

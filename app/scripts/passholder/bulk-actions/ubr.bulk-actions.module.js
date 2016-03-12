@@ -161,6 +161,9 @@ angular
         requiresCounter: true,
         reloadOnSearch: false,
         params: {
+          selection: {
+            array: true
+          },
           bulkSelection: null,
           action: null,
           $uibModalInstance: null,

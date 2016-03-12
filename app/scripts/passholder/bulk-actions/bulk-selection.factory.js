@@ -27,6 +27,9 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
   BulkSelection.prototype = {
     initialize: function (searchResults, searchParameters, selection) {
       this.uitpasNumberSelection = (selection) ? selection : [];
+      if (!selection instanceof Array) {
+        throw Error('Unexpected value for selection.');
+      }
       this.searchParameters = searchParameters;
       this.searchResults = searchResults ? searchResults : new PassholderSearchResults();
       this.selectAll = false;
@@ -134,15 +137,7 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
         );
       }
       else {
-        // Fix for UBR-468
-        if (typeof this.uitpasNumberSelection === 'string') {
-          var uitpasNumberSelection = [this.uitpasNumberSelection];
-        }
-        else {
-          var uitpasNumberSelection = this.uitpasNumberSelection;
-        }
-
-        angular.forEach(uitpasNumberSelection, function(selection) {
+        angular.forEach(this.uitpasNumberSelection, function(selection) {
           passholderService.findPassholder(selection)
             .then(
               function(passholder) {
