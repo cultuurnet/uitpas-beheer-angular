@@ -5,7 +5,7 @@
 # UiTPAS beheer
  The absolute minimum to read before starting development are
  
- * [Development](development/development.md)
+ * [Development](development/development.html)
  * [Configuration](development/configuration.md)
  * [Unit tests](development/unit_tests.md)
 
