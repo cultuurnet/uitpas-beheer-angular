@@ -27,7 +27,7 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
   BulkSelection.prototype = {
     initialize: function (searchResults, searchParameters, selection) {
       this.uitpasNumberSelection = (selection) ? selection : [];
-      if (!selection instanceof Array) {
+      if (this.uitpasNumberSelection instanceof Array === false) {
         throw Error('Unexpected value for selection.');
       }
       this.searchParameters = searchParameters;

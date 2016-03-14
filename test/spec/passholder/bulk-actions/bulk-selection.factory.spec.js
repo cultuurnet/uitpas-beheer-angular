@@ -326,7 +326,7 @@ describe('Factory: BulkSelection', function () {
   });
 
   it('should try to find passholders by numbers when selectAll is not selected', function () {
-    bulkSelection.uitpasNumberSelection =['0934000004515'];
+    bulkSelection.uitpasNumberSelection = ['0934000004515'];
     spyOn(passholderService, 'findPassholder').and.returnValue($q.when(jsonSearchResultsWithPassen));;
 
     bulkSelection.getPassholderNumbers();
@@ -335,6 +335,10 @@ describe('Factory: BulkSelection', function () {
   });
 
   it('throws an error when selection is not an array', function () {
+    var bulkSelectionInitialize = function() {
+      new BulkSelection(searchResults, searchParameters, '0934000004515');
+    };
 
+    expect(bulkSelectionInitialize).toThrowError('Unexpected value for selection.');
   });
 });
