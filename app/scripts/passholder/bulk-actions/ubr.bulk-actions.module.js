@@ -171,10 +171,13 @@ angular
         }
       })
       .state('counter.main.advancedSearch.bulkPoints', {
-        url: '/bulkactions/points?selection&totalItems',
+        url: '/bulkactions/points?selection&totalItems&mode',
         requiresCounter: true,
         reloadOnSearch: false,
         params: {
+          selection: {
+            array: true
+          },
           bulkSelection: null,
           action: null,
           $uibModalInstance: null,

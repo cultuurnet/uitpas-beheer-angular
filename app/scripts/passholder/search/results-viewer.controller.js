@@ -164,6 +164,15 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
         controller.bulk.submitBusy = false;
         var params = controller.bulk.selection.toQueryParameters();
         params.action = 'points';
+        params.mode = $state.params.mode;
+        // When search mode is NUMBER and selectAll is true in the bulkSelection,
+        // put all the selected uitpasNumbers in the stateParameters for the bulkAction points.
+        if ($state.params.mode === 'NUMBER' && controller.bulk.selection.selectAll == true) {
+          if (controller.bulk.selection.searchParameters.uitpasNumbers) {
+            params.selection = controller.bulk.selection.searchParameters.uitpasNumbers;
+          }
+        }
+
         if (!params.selection) {
           params.totalItems = controller.bulk.selection.searchResults.totalItems;
         }
