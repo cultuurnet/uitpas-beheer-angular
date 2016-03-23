@@ -17,5 +17,5 @@
    * [Styling and markup](docs/development/styling_and_markup.md)
    * [External libraries](docs/development/external_libraries.md)
    * [Git workflow](docs/development/git_workflow.md)
-   * Card readers
+   * [Card readers](docs/development/card_readers.md)
 
