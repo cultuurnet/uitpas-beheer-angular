@@ -109,7 +109,8 @@ function ActivityController (passholder, bulkSelection, activityService, counter
     };
 
     ++controller.activitiesLoading;
-    if (activityMode === 'passholders') {
+    if (activityMode === 'passholders' ||
+    activityMode === 'group') {
       activityService
         .search(passholder, searchParameters)
         .then(showSearchResults, searchingFailed);

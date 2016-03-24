@@ -38,14 +38,22 @@ angular
         redirectOnScan: true,
         params: {
           pass: null,
-          identification: null
+          identification: null,
+          activityMode: null,
+          bulkSelection: null
         },
         resolve: {
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }],
           group: getGroup,
-          passholder: getGroup
+          passholder: getGroup,
+          activityMode: function() {
+            return 'group';
+          },
+          bulkSelection: function() {
+            return null;
+          }
         },
         views: {
           'sidebar@counter': {
