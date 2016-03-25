@@ -24,7 +24,6 @@ function ShowBulkResultsController(
   ticketCount,
   moment,
   $q,
-  $scope,
   Queue
 ) {
   var controller = this;
@@ -79,7 +78,7 @@ function ShowBulkResultsController(
     };
   };
 
-  $scope.getTotalAmount = function() {
+  controller.getTotalAmount = function() {
     return controller.totalAmount;
   };
 
