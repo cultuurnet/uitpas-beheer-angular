@@ -22,7 +22,7 @@ angular
         return passholderService.findPassholder($stateParams.identification);
       }
       else {
-        return null;
+        return $stateParams.passholder;
       }
     }
 
