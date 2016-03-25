@@ -4,8 +4,9 @@ describe('Controller: ActivityController', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  var $controller, $scope, $rootScope, $httpBackend, $q, activityController, activityService, counterService, DateRange,
-    BulkSelection, bulkSelection, $state, SearchParameters, searchParameters, PassholderSearchResults, searchResults;
+  var $controller, $scope, $rootScope, $httpBackend, $q, activityController, activityService, DateRange, Passholder,
+    BulkSelection, bulkSelection, $state, SearchParameters, searchParameters, PassholderSearchResults, searchResults,
+    passholdersPromise, passholder;
 
   var deferredActivities;
 
@@ -61,7 +62,7 @@ describe('Controller: ActivityController', function () {
     totalActivities: 2
   };
 
-  var passholder = { passNumber: '01234567891234', points: 123 };
+  //var passholder = { passNumber: '01234567891234', points: 123 };
 
   var jsonSearchParameters = {
     uitpasNumbers: [],
@@ -177,18 +178,37 @@ describe('Controller: ActivityController', function () {
     unknownNumbersConfirmed: false
   };
 
+  var activeCounter = {
+      'id': '1149',
+      'consumerKey': '9d466f7f88231cf298d5cb5dd23d55af',
+      'name': 'KSA-VKSJ Denderhoutem',
+      'role': 'member',
+      'actorId': 'c1372ef5-65db-4f95-aa2f-478fb5b58258',
+      'cardSystems': {
+        '1': {
+          'permissions': [],
+          'groups': ['Checkin and Ticket balies'],
+          'id': 1,
+          'name': 'UiTPAS Regio Aalst',
+          'distributionKeys': []
+        }
+      },
+      'permissions': [],
+      'groups': ['Checkin and Ticket balies']
+  };
+
   beforeEach(inject(function ($injector){
     $controller = $injector.get('$controller');
     $q = $injector.get('$q');
     $rootScope = $injector.get('$rootScope');
     BulkSelection = $injector.get('BulkSelection');
+    Passholder = $injector.get('Passholder');
     PassholderSearchResults = $injector.get('PassholderSearchResults');
     SearchParameters = $injector.get('SearchParameters');
     $state = $injector.get('$state');
     deferredActivities = $q.defer();
     var activityPromise = deferredActivities.promise;
     activityService = jasmine.createSpyObj('activityService', ['checkin', 'claimTariff', 'search']);
-    counterService = jasmine.createSpyObj('counterService', ['getActivities']);
     DateRange = $injector.get('DateRange');
     $scope = $rootScope.$new();
     $httpBackend = $injector.get('$httpBackend');
@@ -198,18 +218,28 @@ describe('Controller: ActivityController', function () {
     bulkSelection = new BulkSelection(searchResults, searchParameters, []);
 
     activityService.search.and.returnValue(activityPromise);
-    counterService.getActivities.and.returnValue(activityPromise);
+
+    passholder = new Passholder(jsonPass.passholder);
+
+    passholdersPromise = [
+      passholder,
+      passholder,
+      passholder,
+      passholder,
+      passholder
+    ];
 
     activityController = $controller('ActivityController', {
       passholder: passholder,
+      passholders: null,
       bulkSelection: bulkSelection,
       activityService: activityService,
-      counterService: counterService,
       DateRange: DateRange,
       $rootScope: $rootScope,
       $scope: $scope,
       activityMode: 'passholders',
-      $state: $state
+      $state: $state,
+      activeCounter: activeCounter
     });
   }));
 
@@ -221,23 +251,24 @@ describe('Controller: ActivityController', function () {
     expect(activityController.activitiesLoading).toEqual(0);
   });
 
-  it('should fetch an initial list of activities for the active counter', function () {
+  it('should fetch an initial list of activities when multiple passholders were given', function () {
     activityController = $controller('ActivityController', {
       passholder: passholder,
+      passholders: passholdersPromise,
       bulkSelection: bulkSelection,
       activityService: activityService,
-      counterService: counterService,
       DateRange: DateRange,
       $rootScope: $rootScope,
       $scope: $scope,
       activityMode: 'counter',
-      $state: $state
+      $state: $state,
+      activeCounter: activeCounter
     });
 
     deferredActivities.resolve(pagedActivities);
     $scope.$digest();
 
-    expect(counterService.getActivities).toHaveBeenCalled();
+    expect(activityService.search).toHaveBeenCalled();
     expect(activityController.activitiesLoading).toEqual(0);
   });
 

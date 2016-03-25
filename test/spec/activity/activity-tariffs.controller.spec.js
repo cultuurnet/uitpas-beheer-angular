@@ -325,13 +325,12 @@ describe('Controller: PassholderActivityTariffsController', function () {
     expect(controller.asyncError).toEqual(false);
   });
 
-  it('should should have certain paramaters at initialisation when activity is counter', function () {
+  it('should should have certain parameters at initialisation when activity is counter', function () {
     activityMode = 'counter';
     passholder = '';
     var controller = getControllerForPassholder();
     expect(controller.passholders).toEqual(passholders);
     expect(controller.bulkSelection).toEqual(bulkSelection);
-    expect(controller.passholder).toEqual(passholders[0]);
     expect(controller.activity).toEqual(activity);
   });
 

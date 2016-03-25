@@ -169,6 +169,7 @@ describe('Controller: BulkActionsController', function () {
   var getController = function () {
     controller = $controller('BulkActionsController', {
       bulkSelection: bulkSelection,
+      passholders: passholdersPromise,
       action: action,
       passholderService: passholderService,
       $uibModalInstance: $uibModalInstance,

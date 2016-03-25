@@ -107,7 +107,6 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
     };
 
     ++controller.activitiesLoading;
-
     if (activityMode === 'counter') {
       var keepGoing = true;
       angular.forEach(controller.passholders, function(passholder) {
@@ -124,7 +123,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
         keepGoing = true;
         angular.forEach(controller.passholders, function(passholder) {
           if(keepGoing) {
-            if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[1].id) == 'ACTIVE') {
+            if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[1].id) === 'ACTIVE') {
               controller.passholder = passholder;
               keepGoing = false;
             }
