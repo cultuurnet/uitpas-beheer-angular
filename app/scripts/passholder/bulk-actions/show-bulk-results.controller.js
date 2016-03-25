@@ -24,8 +24,8 @@ function ShowBulkResultsController(
   ticketCount,
   moment,
   $q,
-  Queue,
-  $state
+  $scope,
+  Queue
 ) {
   var controller = this;
   var errorCode;
@@ -36,6 +36,7 @@ function ShowBulkResultsController(
   controller.passholders = passholders;
   controller.activeCounter = activeCounter;
   controller.action = action;
+  controller.tariff = tariff;
   controller.totalAmount = 0;
 
   controller.updatePassHolderAddress = function(passholder) {
@@ -64,6 +65,10 @@ function ShowBulkResultsController(
     return activityService.claimTariff(passholder, activity, tariff, ticketCount);
   };
 
+  controller.getTotalAmount = function() {
+    return controller.totalAmount;
+  };
+
   controller.updateOK = function (passholder) {
     if (action == 'tariffs') {
       controller.totalAmount = controller.totalAmount + tariff.price;
@@ -72,6 +77,10 @@ function ShowBulkResultsController(
       passholder.updated = true;
       passholder.beingProcessed = false;
     };
+  };
+
+  $scope.getTotalAmount = function() {
+    return controller.totalAmount;
   };
 
   controller.updateFailed = function(passholder, action) {
