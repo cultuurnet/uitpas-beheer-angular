@@ -12,7 +12,7 @@ angular
   .controller('ActivityController', ActivityController);
 
 /* @ngInject */
-function ActivityController (passholder, bulkSelection, activityService, counterService, DateRange, $rootScope, $scope, activityMode, $state) {
+function ActivityController (passholder, passholders, bulkSelection, activityService, DateRange, $rootScope, $scope, activityMode, $state, activeCounter) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -28,12 +28,7 @@ function ActivityController (passholder, bulkSelection, activityService, counter
   controller.hideDateRange = false;
   controller.activityMode = activityMode;
   controller.bulkSelection = bulkSelection;
-  if (bulkSelection !== null) {
-
-    bulkSelection.getPassholderNumbers().then(function (passholders) {
-      controller.passholders = passholders;
-    });
-  }
+  controller.passholders = passholders;
 
   function getSearchParameters () {
     return {
@@ -112,16 +107,38 @@ function ActivityController (passholder, bulkSelection, activityService, counter
     };
 
     ++controller.activitiesLoading;
-    if (activityMode === 'passholders') {
-      activityService
-        .search(passholder, searchParameters)
-        .then(showSearchResults, searchingFailed);
+
+    if (activityMode === 'counter') {
+      var keepGoing = true;
+      angular.forEach(controller.passholders, function(passholder) {
+        if(keepGoing) {
+          if(passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[1].id)) {
+            controller.passholder = passholder;
+            keepGoing = false;
+          }
+        }
+      });
+
+      // If no passholder in the array has a kansenstatuut, check for the first with an active UiTPAS.
+      if (!controller.hasOwnProperty('passholder')) {
+        keepGoing = true;
+        angular.forEach(controller.passholders, function(passholder) {
+          if(keepGoing) {
+            if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[1].id) == 'ACTIVE') {
+              controller.passholder = passholder;
+              keepGoing = false;
+            }
+          }
+        });
+      }
     }
-    else if (activityMode === 'counter') {
-      counterService
-        .getActivities(searchParameters)
-        .then(showSearchResults, searchingFailed);
+    else {
+      controller.passholder = passholder;
     }
+
+    activityService
+      .search(controller.passholder, searchParameters)
+      .then(showSearchResults, searchingFailed);
   };
 
   // Do an initial search to populate the activity list.

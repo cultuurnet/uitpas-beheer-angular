@@ -12,7 +12,7 @@ angular
   .controller('BulkActionsController', BulkActionsController);
 
 /* @ngInject */
-function BulkActionsController (bulkSelection, action, $uibModalInstance, $state, moment) {
+function BulkActionsController (bulkSelection, passholders, action, $uibModalInstance, $state, moment) {
   var controller = this;
 
   controller.submitBusy = false;
@@ -22,11 +22,7 @@ function BulkActionsController (bulkSelection, action, $uibModalInstance, $state
   controller.kansenstatuutData = {
     kansenstatuutEndDate: moment().endOf('year').toDate()
   };
-
-  controller.bulkSelection.getPassholderNumbers()
-    .then(function(response){
-      controller.passholders = response;
-    });
+  controller.passholders = passholders;
 
   controller.submitForm = function(passholders, bulkForm) {
     controller.isSubmitted = true;

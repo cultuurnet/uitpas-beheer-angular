@@ -182,7 +182,9 @@ angular
           action: null,
           $uibModalInstance: null,
           passholder: null,
-          activityMode: null
+          passholders: null,
+          activityMode: null,
+          activeCounter: null
         },
         resolve: {
           /* @ngInject */
@@ -195,6 +197,7 @@ angular
                 bulkSelection.searchResults.totalItems = $stateParams.totalItems;
                 bulkSelection.selectAll = true;
               }
+              $stateParams.bulkSelection = bulkSelection;
               return bulkSelection;
             }
             return $stateParams.bulkSelection;
@@ -208,8 +211,14 @@ angular
           passholder: function () {
             return null;
           },
+          passholders: function ($stateParams) {
+            return $stateParams.bulkSelection.getPassholderNumbers();
+          },
           activityMode: function() {
             return 'counter';
+          },
+          activeCounter: function(counterService) {
+            return counterService.getActive();
           }
         },
         views: {
