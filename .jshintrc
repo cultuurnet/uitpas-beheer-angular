@@ -22,6 +22,7 @@
     "angular": false,
     "moment": false,
     "PhoneFormat": false,
-    "showdown": false
+    "showdown": false,
+    "_": false
   }
 }
