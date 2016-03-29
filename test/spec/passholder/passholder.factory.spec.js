@@ -150,6 +150,25 @@ describe('Factory: Passholder', function () {
     expect(kansenstatuut).toEqual(expectedKansenstatuut);
   });
 
+  it('should return the status of an Uitpas for a given card system ID', function () {
+    var passholder = new Passholder(getJsonPassholder());
+    passholder.uitPassen = [
+      {
+        number: '0930000422202',
+        kansenStatuut: true,
+        status: 'ACTIVE',
+        type: 'CARD',
+        cardSystem: {
+          id: '1',
+          name: 'UiTPAS Regio Aalst'
+        }
+      }
+    ];
+    var status = passholder.getUitpasStatusInCardSystemID('1');
+
+    expect(status).toEqual('ACTIVE');
+  });
+
   it('should not create duplicate kansenstatuten when parsing new kansenstatuut data', function () {
     var originalPassholderData = getJsonPassholder();
     var passholder = new Passholder(originalPassholderData);

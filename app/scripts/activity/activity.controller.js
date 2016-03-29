@@ -105,7 +105,6 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
     var searchingFailed = function () {
       --controller.activitiesLoading;
     };
-
     ++controller.activitiesLoading;
     if (activityMode === 'counter') {
       var keepGoing = true;

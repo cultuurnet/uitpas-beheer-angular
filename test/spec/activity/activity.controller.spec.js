@@ -6,7 +6,7 @@ describe('Controller: ActivityController', function () {
 
   var $controller, $scope, $rootScope, $httpBackend, $q, activityController, activityService, DateRange, Passholder,
     BulkSelection, bulkSelection, $state, SearchParameters, searchParameters, PassholderSearchResults, searchResults,
-    passholdersPromise, passholder;
+    passholders, passholder;
 
   var deferredActivities;
 
@@ -83,74 +83,129 @@ describe('Controller: ActivityController', function () {
   };
 
   var jsonPass = {
-    'uitPas': {
-      'number': '0930000422202',
-      'kansenStatuut': true,
-      'status': 'LOCAL_STOCK',
-      'type': 'CARD',
-      'cardSystem': {
-        'id': '4a567b89',
-        'name': 'UiTPAS Regio Aalst'
+    uitPas: {
+      number: '0930000422202',
+      kansenStatuut: true,
+      status: 'LOCAL_STOCK',
+      type: 'CARD',
+      cardSystem: {
+        id: '4a567b89',
+        name: 'UiTPAS Regio Aalst'
       }
     },
-    'passHolder': {
-      'uid': 'string',
-      'name': {
-        'first': 'John',
-        'middle': 'Lupus',
-        'last': 'Smith'
+    passHolder: {
+      uid: 'string',
+      name: {
+        first: 'John',
+        middle: 'Lupus',
+        last: 'Smith'
       },
-      'address': {
-        'street': 'Steenweg op Aalst 94',
-        'postalCode': '9308',
-        'city': 'Aalst'
+      address: {
+        street: 'Steenweg op Aalst 94',
+        postalCode: '9308',
+        city: 'Aalst'
       },
-      'birth': {
-        'date': '2003-12-26',
-        'place': 'Sint-Agatha-Berchem'
+      birth: {
+        date: '2003-12-26',
+        place: 'Sint-Agatha-Berchem'
       },
-      'inszNumber': '93051822361',
-      'gender': 'MALE',
-      'nationality': 'Belg',
-      'picture': 'R0lGODlhDwAPAKECAAAAzMzM/////wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4MLwWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw==',
-      'contact': {
-        'email': 'foo@bar.com',
-        'telephoneNumber': '016454545',
-        'mobileNumber': '+32 498 77 88 99'
+      inszNumber: '93051822361',
+      gender: 'MALE',
+      nationality: 'Belg',
+      picture: 'R0lGODlhDwAPAKECAAAAzMzM/////wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4MLwWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw==',
+      contact: {
+        email: 'foo@bar.com',
+        telephoneNumber: '016454545',
+        mobileNumber: '+32 498 77 88 99'
       },
-      'privacy': {
-        'email': true,
-        'sms': true
+      privacy: {
+        email: true,
+        sms: true
       },
-      'points': 40,
-      'remarks': 'Dit maakt niet uit.',
-      'kansenStatuten': [
+      points: 40,
+      remarks: 'Dit maakt niet uit.',
+      kansenStatuten: [
         {
-          'status': 'ACTIVE',
-          'endDate': '2015-12-26',
-          'cardSystem': {
-            'id': '4a567b89',
-            'name': 'UiTPAS Regio Aalst'
+          status: 'ACTIVE',
+          endDate: '2015-12-26',
+          cardSystem: {
+            id: '4a567b89',
+            name: 'UiTPAS Regio Aalst'
           }
         }
       ],
-      'uitPassen': [
+      uitPassen: [
         {
-          'number': '0930000422202',
-          'kansenStatuut': true,
-          'status': 'LOCAL_STOCK',
-          'type': 'CARD',
-          'cardSystem': {
-            'id': '4a567b89',
-            'name': 'UiTPAS Regio Aalst'
+          number: '0930000422202',
+          kansenStatuut: true,
+          status: 'LOCAL_STOCK',
+          type: 'CARD',
+          cardSystem: {
+            id: '4a567b89',
+            name: 'UiTPAS Regio Aalst'
           }
         }
       ]
     },
-    'group': {
-      'name': 'Vereniging',
-      'availableTickets': 0
+    group: {
+      name: 'Vereniging',
+      availableTickets: 0
     }
+  };
+
+  var jsonPassholder = {
+      uid: 'string',
+      name: {
+        first: 'John',
+        middle: 'Lupus',
+        last: 'Smith'
+      },
+      address: {
+        street: 'Steenweg op Aalst 94',
+        postalCode: '9308',
+        city: 'Aalst'
+      },
+      birth: {
+        date: '2003-12-26',
+        place: 'Sint-Agatha-Berchem'
+      },
+      inszNumber: '93051822361',
+      gender: 'MALE',
+      nationality: 'Belg',
+      picture: 'R0lGODlhDwAPAKECAAAAzMzM/////wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4MLwWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw==',
+      contact: {
+        email: 'foo@bar.com',
+        telephoneNumber: '016454545',
+        mobileNumber: '+32 498 77 88 99'
+      },
+      privacy: {
+        email: true,
+        sms: true
+      },
+      points: 40,
+      remarks: 'Dit maakt niet uit.',
+      kansenStatuten: [
+        {
+          status: 'ACTIVE',
+          endDate: '2015-12-26',
+          cardSystem: {
+            id: '1',
+            name: 'UiTPAS Regio Aalst'
+          }
+        }
+      ],
+      uitPassen: [
+        {
+          number: '0930000422202',
+          kansenStatuut: true,
+          status: 'ACTIVE',
+          type: 'CARD',
+          cardSystem: {
+            id: '1',
+            name: 'UiTPAS Regio Aalst'
+          }
+        }
+      ]
   };
 
   var jsonSearchResults = {
@@ -188,7 +243,7 @@ describe('Controller: ActivityController', function () {
         '1': {
           'permissions': [],
           'groups': ['Checkin and Ticket balies'],
-          'id': 1,
+          'id': '1',
           'name': 'UiTPAS Regio Aalst',
           'distributionKeys': []
         }
@@ -219,9 +274,9 @@ describe('Controller: ActivityController', function () {
 
     activityService.search.and.returnValue(activityPromise);
 
-    passholder = new Passholder(jsonPass.passholder);
+    passholder = new Passholder(jsonPassholder);
 
-    passholdersPromise = [
+    passholders = [
       passholder,
       passholder,
       passholder,
@@ -244,27 +299,6 @@ describe('Controller: ActivityController', function () {
   }));
 
   it('should fetch an initial list of activities for the active passholder', function () {
-    deferredActivities.resolve(pagedActivities);
-    $scope.$digest();
-
-    expect(activityService.search).toHaveBeenCalled();
-    expect(activityController.activitiesLoading).toEqual(0);
-  });
-
-  it('should fetch an initial list of activities when multiple passholders were given', function () {
-    activityController = $controller('ActivityController', {
-      passholder: passholder,
-      passholders: passholdersPromise,
-      bulkSelection: bulkSelection,
-      activityService: activityService,
-      DateRange: DateRange,
-      $rootScope: $rootScope,
-      $scope: $scope,
-      activityMode: 'counter',
-      $state: $state,
-      activeCounter: activeCounter
-    });
-
     deferredActivities.resolve(pagedActivities);
     $scope.$digest();
 
@@ -449,5 +483,85 @@ describe('Controller: ActivityController', function () {
 
     expect(activityController.query).toBe('');
     expect(activityController.dateRange).toBe(DateRange.TODAY);
+  });
+
+  it('should fetch an initial list of activities when multiple passholders were given', function () {
+    activityController = $controller('ActivityController', {
+      passholder: passholder,
+      passholders: passholders,
+      bulkSelection: bulkSelection,
+      activityService: activityService,
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope,
+      activityMode: 'counter',
+      $state: $state,
+      activeCounter: activeCounter
+    });
+
+    deferredActivities.resolve(pagedActivities);
+    $scope.$digest();
+
+    expect(activityService.search).toHaveBeenCalled();
+    expect(activityController.activitiesLoading).toEqual(0);
+  });
+
+  it('should fill in the passholder property of the controller when mulitple passholders were given', function () {
+    activityController = $controller('ActivityController', {
+      passholder: null,
+      passholders: passholders,
+      bulkSelection: bulkSelection,
+      activityService: activityService,
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope,
+      activityMode: 'counter',
+      $state: $state,
+      activeCounter: activeCounter
+    });
+
+    $scope.$digest();
+
+    expect(activityController.passholder).toEqual(passholder);
+  });
+
+  it('should fill in the passholder property of the controller when mulitple passholders were given but no one has a valid kansenstatuut', function () {
+    delete passholder.kansenStatuten;
+
+    passholder.uitPassen = [
+      {
+        number: '0930000422202',
+        kansenStatuut: true,
+        status: 'ACTIVE',
+        type: 'CARD',
+        cardSystem: {
+          id: '1',
+          name: 'UiTPAS Regio Aalst'
+        }
+      }
+    ];
+
+    var passholdersAlter = [
+      passholder,
+      passholder,
+      passholder
+    ];
+
+    activityController = $controller('ActivityController', {
+      passholder: null,
+      passholders: passholdersAlter,
+      bulkSelection: bulkSelection,
+      activityService: activityService,
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope,
+      activityMode: 'counter',
+      $state: $state,
+      activeCounter: activeCounter
+    });
+
+    $scope.$digest();
+
+    expect(activityController.passholder).toEqual(passholder);
   });
 });
