@@ -11,7 +11,21 @@ angular
   .module('ubr.passholder.bulkActions')
   .controller('ShowBulkResultsController', ShowBulkResultsController);
 
-function ShowBulkResultsController(passholders, bulkForm, action, passholderService, activityService, $uibModalStack, activeCounter, activity, moment, $q, Queue) {
+function ShowBulkResultsController(
+  passholders,
+  bulkForm,
+  action,
+  passholderService,
+  activityService,
+  $uibModalStack,
+  activeCounter,
+  activity,
+  tariff,
+  ticketCount,
+  moment,
+  $q,
+  Queue
+) {
   var controller = this;
   var errorCode;
   var queue = new Queue(4);
@@ -21,6 +35,8 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
   controller.passholders = passholders;
   controller.activeCounter = activeCounter;
   controller.action = action;
+  controller.tariff = tariff;
+  controller.totalAmount = 0;
 
   controller.updatePassHolderAddress = function(passholder) {
     passholder.address.city = bulkForm.city.$viewValue;
@@ -43,11 +59,27 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
     return activityService.checkin(activity, passholder);
   };
 
+  controller.passholderClaimTariff = function(passholder, activity, tariff, ticketCount) {
+    passholder.isChecked = true;
+    return activityService.claimTariff(passholder, activity, tariff, ticketCount);
+  };
+
+  controller.getTotalAmount = function() {
+    return controller.totalAmount;
+  };
+
   controller.updateOK = function (passholder) {
+    if (action == 'tariffs') {
+      controller.totalAmount = controller.totalAmount + tariff.price;
+    }
     return function() {
       passholder.updated = true;
       passholder.beingProcessed = false;
     };
+  };
+
+  controller.getTotalAmount = function() {
+    return controller.totalAmount;
   };
 
   controller.updateFailed = function(passholder, action) {
@@ -66,6 +98,10 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
       else if (action == 'points') {
         errorCode = errorResponse.code;
         defaultMessage = 'Punt sparen niet gelukt.'
+      }
+      else if (action == 'tariffs') {
+        errorCode = errorResponse.code;
+        defaultMessage = 'Tarief registreren niet gelukt.'
       }
 
       switch (errorCode) {
@@ -106,10 +142,18 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           break;
 
         case 'INVALID_CARD_STATUS':
-          passholder.asyncError = {
-            message: 'Punt sparen niet gelukt kaart geblokkeerd.',
-            type: 'danger'
-          };
+          if (action == 'points') {
+            passholder.asyncError = {
+              message: 'Punt sparen mislukt, kaart geblokkeerd.',
+              type: 'danger'
+            };
+          }
+          else if (action == 'tariffs') {
+            passholder.asyncError = {
+              message: 'Tarief registreren mislukt, kaart geblokkeerd.',
+              type: 'danger'
+            };
+          }
           break;
 
         case 'KANSENSTATUUT_EXPIRED':
@@ -120,11 +164,34 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           break;
 
         case 'MAXIMUM_REACHED':
+          if (action == 'points') {
+            passholder.asyncError = {
+              message: 'Punt al gespaard.',
+              type: 'danger'
+            };
+          }
+          else if (action == 'tariffs') {
+            passholder.asyncError = {
+              message: 'Tarief reeds geregistreerd.',
+              type: 'danger'
+            };
+          }
+          break;
+
+        case 'MISSING_PROPERTY':
           passholder.asyncError = {
-            message: 'Punt al gespaard.',
-            type: 'danger'
+            message: 'Prijsklasse ontbreekt.',
+            type: 'error'
           };
           break;
+
+        case 'INVALID_CARD': {
+          passholder.asyncError = {
+            message: 'Pashouder heeft geen kansenstatuut.',
+            type: 'error'
+          };
+          break;
+        }
 
         default:
           passholder.asyncError = {
@@ -202,6 +269,10 @@ function ShowBulkResultsController(passholders, bulkForm, action, passholderServ
           controller.passholderCheckin(activity, passholder)
             .then(callbackSuccess, callbackFail);
           break;
+        case 'tariffs':
+          passholder.beingProcessed = true;
+          controller.passholderClaimTariff(passholder, activity, tariff, ticketCount)
+            .then(callbackSuccess, callbackFail);
       }
       return deferred.promise;
     };

@@ -150,6 +150,18 @@ function passholderFactory(moment, day) {
 
       return matchingKansenstatuut;
     },
+    getUitpasStatusInCardSystemID: function (cardSystemID) {
+      var passholder = this,
+          status = null;
+
+      angular.forEach(passholder.uitPassen, function (uitpas) {
+        if (uitpas.cardSystem.id === cardSystemID) {
+          status = uitpas.status;
+        }
+      });
+
+      return status;
+    },
     serialize: function () {
       var serializedPassholder = angular.copy(this);
 

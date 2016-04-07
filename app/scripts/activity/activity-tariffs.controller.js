@@ -14,37 +14,54 @@ angular
 /* @ngInject */
 function PassholderActivityTariffsController (
   passholder,
+  passholders,
   activity,
+  activityMode,
+  bulkSelection,
+  counter,
   $uibModalInstance,
   activityService,
   $rootScope,
+  $state,
   TicketSaleAPIError
 ) {
   /*jshint validthis: true */
   var controller = this;
 
   controller.passholder = passholder;
+  controller.passholders = passholders;
+  controller.bulkSelection = bulkSelection;
+
+  getGroupSale();
+  controller.activityMode = activityMode;
   controller.activity = activity;
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
   controller.asyncError = false;
-  controller.groupSale = passholder.hasOwnProperty('availableTickets') ? {
-    tickets: 1,
-    maxTickets: passholder.availableTickets,
-    getTotalPrice: function () {
-      var defaultPrice = 0;
-      var selectedPrice = controller.selectedTariff ? controller.selectedTariff.price : null;
-      var ticketPrice = selectedPrice ? selectedPrice : defaultPrice;
-      var totalPrice = ticketPrice * this.tickets;
 
-      return totalPrice;
-    }
-  } : null;
+  function getGroupSale() {
+    controller.groupSale = controller.passholder.hasOwnProperty('availableTickets') ? {
+      tickets: 1,
+      maxTickets: passholder.availableTickets,
+      getTotalPrice: function () {
+        var defaultPrice = 0;
+        var selectedPrice = controller.selectedTariff ? controller.selectedTariff.price : null;
+        var ticketPrice = selectedPrice ? selectedPrice : defaultPrice;
+        var totalPrice = ticketPrice * this.tickets;
+
+        return totalPrice;
+      }
+    } : null;
+  }
 
   function init() {
     var firstTariff = controller.activity.sales.tariffs.list[0];
     var defaultTariff = firstTariff.prices[0];
     controller.selectedTariff = defaultTariff;
+
+    if (activityMode === 'counter') {
+      controller.totalAmount = controller.selectedTariff.price * controller.passholders.length;
+    }
   }
   init();
 
@@ -63,6 +80,7 @@ function PassholderActivityTariffsController (
 
   controller.clearAsyncError = function () {
     controller.asyncError = false;
+    controller.totalAmount = controller.selectedTariff.price * controller.passholders.length;
   };
 
   controller.handleAsyncError = function (error) {
@@ -99,4 +117,19 @@ function PassholderActivityTariffsController (
       .claimTariff(passholder, activity, tariff, ticketCount)
       .then(tariffClaimedSuccessfully, tariffNotClaimed);
   };
+
+  controller.bulkClaimTariff = function() {
+    controller.formSubmitBusy = true;
+    var tariff = angular.copy(controller.selectedTariff);
+    var ticketCount = controller.groupSale ? controller.groupSale.tickets : null;
+
+    $state.go('counter.main.advancedSearch.showBulkResults', {
+      passholders: controller.passholders,
+      activity: controller.activity,
+      tariff: tariff,
+      ticketCount: ticketCount,
+      action: 'tariffs'
+    });
+  };
+
 }

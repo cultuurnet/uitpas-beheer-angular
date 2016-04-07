@@ -3,7 +3,7 @@
 describe('Controller: ShowBulkResultsController', function () {
 
   var $controller, $uibModalStack, $scope, $state, controller, passholders, passholderService, Passholder, $q,
-    Counter, activeCounter, activityService, action, bulkForm, day, activity, Activity;
+    Counter, activeCounter, activityService, action, bulkForm, day, activity, Activity, tariff, ticketCount;
 
   var jsonPassHolder = {
       'uid': 'string',
@@ -60,6 +60,13 @@ describe('Controller: ShowBulkResultsController', function () {
       ]
   };
 
+  var tariff = {
+    type: 'COUPON',
+    id: 123,
+    price: 1235,
+    priceClass: 'Basisprijs'
+  };
+
   var activeCounterJson = {
     'id': '452',
     'consumerKey': 'b95d1bcf-533d-45ac-afcd-e015cfe86c84',
@@ -77,6 +84,13 @@ describe('Controller: ShowBulkResultsController', function () {
     },
     'permissions': ['kansenstatuut toekennen'],
     'groups': ['Geauthorizeerde registratie balies']
+  };
+
+  var jsonTariff = {
+    type: 'COUPON',
+    id: 123,
+    price: 1235,
+    priceClass: 'Basisprijs'
   };
 
   var getSpyForm = function (formData) {
@@ -168,7 +182,7 @@ describe('Controller: ShowBulkResultsController', function () {
         return passholderService;
       }
     });
-    activityService = jasmine.createSpyObj('activityService', ['checkin']);
+    activityService = jasmine.createSpyObj('activityService', ['checkin', 'claimTariff']);
     $provide.provider('activityService', {
       $get: function () {
         return activityService;
@@ -200,6 +214,7 @@ describe('Controller: ShowBulkResultsController', function () {
 
     bulkForm = getSpyForm();
     action = 'address';
+    tariff = jsonTariff;
 
     passholderService.update.and.callFake(function () {
       return $q.resolve(passholders[0]);
@@ -217,7 +232,9 @@ describe('Controller: ShowBulkResultsController', function () {
       activityService: activityService,
       $uibModalStack: $uibModalStack,
       activeCounter: activeCounter,
-      activity: activity
+      activity: activity,
+      tariff: tariff,
+      ticketCount: ticketCount
     });
   };
 
@@ -458,7 +475,7 @@ describe('Controller: ShowBulkResultsController', function () {
     $scope.$digest();
 
     angular.forEach(controller.passholders, function(passholder) {
-      expect(passholder.asyncError.message).toEqual('Punt sparen niet gelukt kaart geblokkeerd.');
+      expect(passholder.asyncError.message).toEqual('Punt sparen mislukt, kaart geblokkeerd.');
       expect(passholder.asyncError.type).toEqual('danger');
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
@@ -520,6 +537,122 @@ describe('Controller: ShowBulkResultsController', function () {
     angular.forEach(controller.passholders, function(passholder) {
       expect(passholder.asyncError.message).toEqual('Punt sparen niet gelukt.');
       expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('shoud claim the tariff for the passholders on the activity', function() {
+    action = 'tariffs';
+    activityService.claimTariff.and.callFake(function () {
+      return $q.resolve(activity);
+    });
+    var price = controller.passholders.length * tariff.price;
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.updated).toBeTruthy();
+      expect(passholder.isChecked).toBeTruthy();
+    });
+    expect(controller.totalAmount).toBe(price);
+  });
+
+  it('should fail in claiming the tariff for the passholders on the given activity because something else went wrong', function() {
+    action = 'tariffs';
+    activityService.claimTariff.and.callFake(function () {
+      var apiError = {
+        code: 'SOMETHING_ELSE_WENT_WRONG'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Tarief registreren niet gelukt.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in claiming the tariff for the passholders on the given activity because of invalid card', function() {
+    action = 'tariffs';
+    activityService.claimTariff.and.callFake(function () {
+      var apiError = {
+        code: 'INVALID_CARD_STATUS'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Tarief registreren mislukt, kaart geblokkeerd.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in claiming the tariff for the passholders on the given activity because of maximum reached', function() {
+    action = 'tariffs';
+    activityService.claimTariff.and.callFake(function () {
+      var apiError = {
+        code: 'MAXIMUM_REACHED'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Tarief reeds geregistreerd.');
+      expect(passholder.asyncError.type).toEqual('danger');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in claiming the tariff for the passholders on the given activity because of missing property', function() {
+    action = 'tariffs';
+    activityService.claimTariff.and.callFake(function () {
+      var apiError = {
+        code: 'MISSING_PROPERTY'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Prijsklasse ontbreekt.');
+      expect(passholder.asyncError.type).toEqual('error');
+      expect(passholder.isChecked).toBeTruthy();
+      expect(passholder.failed).toBeTruthy();
+    });
+  });
+
+  it('should fail in claiming the tariff for the passholders on the given activity because of invalid card', function() {
+    action = 'tariffs';
+    activityService.claimTariff.and.callFake(function () {
+      var apiError = {
+        code: 'INVALID_CARD'
+      };
+      return $q.reject(apiError);
+    });
+
+    controller = getController();
+    $scope.$digest();
+
+    angular.forEach(controller.passholders, function(passholder) {
+      expect(passholder.asyncError.message).toEqual('Pashouder heeft geen kansenstatuut.');
+      expect(passholder.asyncError.type).toEqual('error');
       expect(passholder.isChecked).toBeTruthy();
       expect(passholder.failed).toBeTruthy();
     });

@@ -225,7 +225,7 @@ describe('Controller: Results Viewer', function () {
     controller.bulk.action = 'address';
     controller.doBulkAction();
 
-    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkAddress', { bulkSelection: bulkSelection, action: 'address' });
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkAddress', { bulkSelection: bulkSelection, passholders: null, action: 'address' });
   });
 
   it('can start a bulk action of type kansenstatuut and delegate the work', function () {
@@ -233,7 +233,7 @@ describe('Controller: Results Viewer', function () {
     controller.bulk.action = 'kansenstatuut';
     controller.doBulkAction();
 
-    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkKansenstatuut', { bulkSelection: bulkSelection, action: 'kansenstatuut' });
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkKansenstatuut', { bulkSelection: bulkSelection, passholders: null, action: 'kansenstatuut' });
   });
 
   it('can start a bulk action of type points and delegate the work', function () {
