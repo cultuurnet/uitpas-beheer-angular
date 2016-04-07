@@ -19,8 +19,8 @@ describe('Controller: ActivityController', function () {
         'when': '',
         'checkinConstraint': {
           'allowed': true,
-          'startDate': new Date(1438584553*1000),
-          'endDate': new Date(1438584553*1000),
+          'startDate': new Date(1438584553 * 1000),
+          'endDate': new Date(1438584553 * 1000),
           'reason': ''
         },
         sales: {
@@ -53,8 +53,8 @@ describe('Controller: ActivityController', function () {
         'when': '',
         'checkinConstraint': {
           'allowed': true,
-          'startDate': new Date(1438584553*1000),
-          'endDate': new Date(1438584553*1000),
+          'startDate': new Date(1438584553 * 1000),
+          'endDate': new Date(1438584553 * 1000),
           'reason': ''
         }
       }
@@ -154,58 +154,58 @@ describe('Controller: ActivityController', function () {
   };
 
   var jsonPassholder = {
-      uid: 'string',
-      name: {
-        first: 'John',
-        middle: 'Lupus',
-        last: 'Smith'
-      },
-      address: {
-        street: 'Steenweg op Aalst 94',
-        postalCode: '9308',
-        city: 'Aalst'
-      },
-      birth: {
-        date: '2003-12-26',
-        place: 'Sint-Agatha-Berchem'
-      },
-      inszNumber: '93051822361',
-      gender: 'MALE',
-      nationality: 'Belg',
-      picture: 'R0lGODlhDwAPAKECAAAAzMzM/////wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4MLwWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw==',
-      contact: {
-        email: 'foo@bar.com',
-        telephoneNumber: '016454545',
-        mobileNumber: '+32 498 77 88 99'
-      },
-      privacy: {
-        email: true,
-        sms: true
-      },
-      points: 40,
-      remarks: 'Dit maakt niet uit.',
-      kansenStatuten: [
-        {
-          status: 'ACTIVE',
-          endDate: '2015-12-26',
-          cardSystem: {
-            id: '1',
-            name: 'UiTPAS Regio Aalst'
-          }
+    uid: 'string',
+    name: {
+      first: 'John',
+      middle: 'Lupus',
+      last: 'Smith'
+    },
+    address: {
+      street: 'Steenweg op Aalst 94',
+      postalCode: '9308',
+      city: 'Aalst'
+    },
+    birth: {
+      date: '2003-12-26',
+      place: 'Sint-Agatha-Berchem'
+    },
+    inszNumber: '93051822361',
+    gender: 'MALE',
+    nationality: 'Belg',
+    picture: 'R0lGODlhDwAPAKECAAAAzMzM/////wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4MLwWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw==',
+    contact: {
+      email: 'foo@bar.com',
+      telephoneNumber: '016454545',
+      mobileNumber: '+32 498 77 88 99'
+    },
+    privacy: {
+      email: true,
+      sms: true
+    },
+    points: 40,
+    remarks: 'Dit maakt niet uit.',
+    kansenStatuten: [
+      {
+        status: 'ACTIVE',
+        endDate: '2015-12-26',
+        cardSystem: {
+          id: '1',
+          name: 'UiTPAS Regio Aalst'
         }
-      ],
-      uitPassen: [
-        {
-          number: '0930000422202',
-          kansenStatuut: true,
-          status: 'ACTIVE',
-          type: 'CARD',
-          cardSystem: {
-            id: '1',
-            name: 'UiTPAS Regio Aalst'
-          }
+      }
+    ],
+    uitPassen: [
+      {
+        number: '0930000422202',
+        kansenStatuut: true,
+        status: 'ACTIVE',
+        type: 'CARD',
+        cardSystem: {
+          id: '1',
+          name: 'UiTPAS Regio Aalst'
         }
-      ]
+      }
+    ]
   };
 
   var jsonSearchResults = {
@@ -234,25 +234,25 @@ describe('Controller: ActivityController', function () {
   };
 
   var activeCounter = {
-      'id': '1149',
-      'consumerKey': '9d466f7f88231cf298d5cb5dd23d55af',
-      'name': 'KSA-VKSJ Denderhoutem',
-      'role': 'member',
-      'actorId': 'c1372ef5-65db-4f95-aa2f-478fb5b58258',
-      'cardSystems': {
-        '1': {
-          'permissions': [],
-          'groups': ['Checkin and Ticket balies'],
-          'id': '1',
-          'name': 'UiTPAS Regio Aalst',
-          'distributionKeys': []
-        }
-      },
-      'permissions': [],
-      'groups': ['Checkin and Ticket balies']
+    'id': '1149',
+    'consumerKey': '9d466f7f88231cf298d5cb5dd23d55af',
+    'name': 'KSA-VKSJ Denderhoutem',
+    'role': 'member',
+    'actorId': 'c1372ef5-65db-4f95-aa2f-478fb5b58258',
+    'cardSystems': {
+      '1': {
+        'permissions': [],
+        'groups': ['Checkin and Ticket balies'],
+        'id': '1',
+        'name': 'UiTPAS Regio Aalst',
+        'distributionKeys': []
+      }
+    },
+    'permissions': [],
+    'groups': ['Checkin and Ticket balies']
   };
 
-  beforeEach(inject(function ($injector){
+  beforeEach(inject(function ($injector) {
     $controller = $injector.get('$controller');
     $q = $injector.get('$q');
     $rootScope = $injector.get('$rootScope');
@@ -344,7 +344,7 @@ describe('Controller: ActivityController', function () {
     expect(activityService.search).toHaveBeenCalledWith(passholder, expectedSearchParameters);
   });
 
-  it('should enter a loading state while retrieving search results', function (){
+  it('should enter a loading state while retrieving search results', function () {
     deferredActivities.resolve(pagedActivities);
     $scope.$digest();
 
@@ -356,7 +356,7 @@ describe('Controller: ActivityController', function () {
     expect(activityController.activitiesLoading).toEqual(0);
   });
 
-  it('should exit the loading state when search results fail to load', function (){
+  it('should exit the loading state when search results fail to load', function () {
     activityController.search();
     expect(activityController.activitiesLoading).toEqual(2);
 
@@ -400,8 +400,8 @@ describe('Controller: ActivityController', function () {
       'when': '',
       'checkinConstraint': {
         'allowed': true,
-        'startDate': new Date(1438584553*1000),
-        'endDate': new Date(1438584553*1000),
+        'startDate': new Date(1438584553 * 1000),
+        'endDate': new Date(1438584553 * 1000),
         'reason': ''
       }
     };
@@ -527,6 +527,55 @@ describe('Controller: ActivityController', function () {
 
   it('should fill in the passholder property of the controller when mulitple passholders were given but no one has a valid kansenstatuut', function () {
     delete passholder.kansenStatuten;
+
+    passholder.uitPassen = [
+      {
+        number: '0930000422202',
+        kansenStatuut: true,
+        status: 'ACTIVE',
+        type: 'CARD',
+        cardSystem: {
+          id: '1',
+          name: 'UiTPAS Regio Aalst'
+        }
+      }
+    ];
+
+    var passholdersAlter = [
+      passholder,
+      passholder,
+      passholder
+    ];
+
+    activityController = $controller('ActivityController', {
+      passholder: null,
+      passholders: passholdersAlter,
+      bulkSelection: bulkSelection,
+      activityService: activityService,
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope,
+      activityMode: 'counter',
+      $state: $state,
+      activeCounter: activeCounter
+    });
+
+    $scope.$digest();
+
+    expect(activityController.passholder).toEqual(passholder);
+  });
+
+  it('should fill in the passholder property of the controller when all passholders kansenstatuut expired', function () {
+    passholder.kansenStatuten = [
+      {
+        status: 'EXPIRED',
+        endDate: '2015-12-26',
+        cardSystem: {
+          id: '1',
+          name: 'UiTPAS Regio Aalst'
+        }
+      }
+    ];
 
     passholder.uitPassen = [
       {

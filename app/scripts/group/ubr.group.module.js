@@ -38,9 +38,11 @@ angular
         redirectOnScan: true,
         params: {
           pass: null,
+          passholders: null,
           identification: null,
           activityMode: null,
-          bulkSelection: null
+          bulkSelection: null,
+          activeCounter: null
         },
         resolve: {
           identification: ['$stateParams', function($stateParams) {
@@ -48,11 +50,17 @@ angular
           }],
           group: getGroup,
           passholder: getGroup,
+          passholders: function() {
+            return null;
+          },
           activityMode: function() {
             return 'group';
           },
           bulkSelection: function() {
             return null;
+          },
+          activeCounter: function (counterService) {
+            return counterService.getActive();
           }
         },
         views: {
