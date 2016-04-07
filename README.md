@@ -1,34 +1,12 @@
+# Introduction
+
 [![Build Status](https://travis-ci.org/cultuurnet/uitpas-beheer-angular.svg?branch=master)](https://travis-ci.org/cultuurnet/uitpas-beheer-angular) [![Coverage Status](https://coveralls.io/repos/cultuurnet/uitpas-beheer-angular/badge.svg)](https://coveralls.io/r/cultuurnet/uitpas-beheer-angular)
 
-# uitpasbeheer
-
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.11.1.
-
-## Build & development
-
-Run `grunt` for building and `grunt serve` for preview.
-
-Install git hooks with `grunt githooks`.
-
-## Testing
-
-Running `grunt test` will run the unit tests with karma.
-
-## Configuration
-
-The `config.dist.json` file at the root of the project holds the default config. You can make your own adjustments and write
- them to `config.json`. `config.dist.json` will be ignored when `config.json` is present.
+# UiTPAS beheer
+ The absolute minimum to read before starting development are
  
-Current configuration options:
-### apiUrl
-The location of the API. This option is required as it will be used to prefix all API calls.
+ * [Development](development/development.md)
+ * [Configuration](development/configuration.md)
+ * [Unit tests](development/unit_tests.md)
 
-### basePath
-When left empty the base path is assumed to be the root from which the application is served. If the app is located in a sub-directory for example: *public/app/* you add the path to the directory with a leading slash as the basePath property. This will take care of correctly serving all the assets and generating URLs while routing.
-```json
-{
-  "apiUrl": "http://culpas-silex.dev/",
-  "basePath": "/public/app/"
-}
-```
+But please, take the time read the whole documentation, it will save everyone a lot of time.

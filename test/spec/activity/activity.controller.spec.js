@@ -306,6 +306,46 @@ describe('Controller: ActivityController', function () {
     expect(activityController.activitiesLoading).toEqual(0);
   });
 
+  it('should fetch an initial list of activities for a group pass', function () {
+    activityController = $controller('ActivityController', {
+      passholder: passholder,
+      bulkSelection: bulkSelection,
+      activityService: activityService,
+      counterService: counterService,
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope,
+      activityMode: 'group',
+      $state: $state
+    });
+
+    deferredActivities.resolve(pagedActivities);
+    $scope.$digest();
+
+    expect(activityService.search).toHaveBeenCalled();
+    expect(activityController.activitiesLoading).toEqual(0);
+  });
+
+  it('should fetch an initial list of activities for the active counter', function () {
+    activityController = $controller('ActivityController', {
+      passholder: passholder,
+      bulkSelection: bulkSelection,
+      activityService: activityService,
+      counterService: counterService,
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope,
+      activityMode: 'counter',
+      $state: $state
+    });
+
+    deferredActivities.resolve(pagedActivities);
+    $scope.$digest();
+
+    expect(counterService.getActivities).toHaveBeenCalled();
+    expect(activityController.activitiesLoading).toEqual(0);
+  });
+
   it('should reset the active page when the query or date range search parameter changes', function () {
     deferredActivities.resolve(pagedActivities);
     $scope.$digest();
