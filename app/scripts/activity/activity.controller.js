@@ -109,7 +109,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
     if (activityMode === 'counter') {
       var keepGoing = true;
       var kansenstatuut;
-      var passholderNoKansenstatuut = new Array();
+      var passholderNoKansenstatuut = [];
 
       angular.forEach(controller.passholders, function(passholder) {
         if(keepGoing) {
@@ -156,7 +156,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
     else {
       controller.passholder = passholder;
     }
-    
+
     activityService
       .search(controller.passholder, searchParameters)
       .then(showSearchResults, searchingFailed);

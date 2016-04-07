@@ -235,7 +235,7 @@ describe('Controller: BulkActionsController', function () {
     controller.submitForm(searchResults.passen, addressForm, bulkSelection);
     expect(addressForm.$valid).toBeTruthy();
     expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.showBulkResults', {
-      passholders: searchResults.passen, bulkForm: addressForm, bulkSelection: bulkSelection, action: action });
+      passholders: controller.passholders, bulkForm: addressForm, bulkSelection: bulkSelection, action: action });
     expect($state.transitionTo('counter.main.advancedSearch.showBulkResults'));
   });
 
