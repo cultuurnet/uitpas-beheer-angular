@@ -80,18 +80,34 @@ angular
         params: {
           identification: null,
           passholder: null,
-          activity: null
+          passholders: null,
+          activity: null,
+          activityMode: null,
+          bulkSelection: null,
+          counter: null,
         },
         resolve: {
           passholder: getGroup,
+          passholders: function() {
+            return null;
+          },
           identification: ['$stateParams', function($stateParams) {
             return $stateParams.identification;
           }],
           activity: ['$stateParams', function($stateParams) {
             return $stateParams.activity;
-          }]
+          }],
+          activityMode: function() {
+            return 'group';
+          },
+          bulkSelection: function () {
+            return null;
+          },
+          counter: function (counterService) {
+            return counterService.getActive();
+          }
         },
-        onEnter: ['passholder', 'identification', 'activity', '$state', '$uibModal', function(passholder, identification, activity, $state, $uibModal) {
+        onEnter: ['passholder', 'passholders', 'identification', 'activity', 'activityMode', 'bulkSelection', 'counter', '$state', '$uibModal', function(passholder, passholders, identification, activity, activityMode, bulkSelection, counter, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
@@ -101,11 +117,23 @@ angular
                 passholder: function () {
                   return passholder;
                 },
+                passholders: function () {
+                  return passholders;
+                },
                 identification: function () {
                   return identification;
                 },
                 activity: function () {
                   return activity;
+                },
+                activityMode: function () {
+                  return activityMode;
+                },
+                bulkSelection: function () {
+                  return bulkSelection;
+                },
+                counter: function () {
+                  return counter;
                 }
               },
               controller: 'PassholderActivityTariffsController',
