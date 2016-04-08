@@ -225,6 +225,7 @@ describe('Factory: Pass', function () {
     expect(pass.isKansenstatuut()).toBeFalsy();
     expect(pass.isBlocked()).toBeFalsy();
     expect(pass.isLocalStock()).toBeFalsy();
+    expect(pass.isExpired()).toBeFalsy();
   });
 
   it('has a helper function to check if a kansenstatuut is expired', function () {
