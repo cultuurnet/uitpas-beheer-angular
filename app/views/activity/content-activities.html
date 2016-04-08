@@ -119,6 +119,10 @@
               <small ng-bind="::tariffCoupon.name"></small>
               <a class="btn btn-default btn-sm assign-tariff" ng-click="ac.claimTariff(tariffCoupon, activity)" >Tarief toekennen</a>
             </div>
+            <div class="base-tariff" ng-switch-default>
+              <strong>&euro; {{::activity.sales.base.Basisprijs}}</strong><br>
+              <small>Voor deze activiteit is er geen kortingstarief</small>
+            </div>
           </div>
 
         </div> <!--/ end .grid-last -->
