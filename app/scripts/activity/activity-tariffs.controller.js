@@ -80,7 +80,9 @@ function PassholderActivityTariffsController (
 
   controller.clearAsyncError = function () {
     controller.asyncError = false;
-    controller.totalAmount = controller.selectedTariff.price * controller.passholders.length;
+    if (activityMode === 'counter') {
+      controller.totalAmount = controller.selectedTariff.price * controller.passholders.length;
+    }
   };
 
   controller.handleAsyncError = function (error) {
