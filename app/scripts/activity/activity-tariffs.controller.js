@@ -17,7 +17,6 @@ function PassholderActivityTariffsController (
   passholders,
   activity,
   activityMode,
-  bulkSelection,
   counter,
   $uibModalInstance,
   activityService,
@@ -30,7 +29,6 @@ function PassholderActivityTariffsController (
 
   controller.passholder = passholder;
   controller.passholders = passholders;
-  controller.bulkSelection = bulkSelection;
 
   getGroupSale();
   controller.activityMode = activityMode;

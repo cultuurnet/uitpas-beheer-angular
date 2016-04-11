@@ -5,8 +5,8 @@ describe('Controller: PassholderActivityTariffsController', function () {
   beforeEach(module('uitpasbeheerApp'));
 
   var $scope, $httpBackend, $q, $controller, activityService, modalInstance, TicketSaleAPIError,
-    activityMode, bulkSelection, $state, BulkSelection, PassholderSearchResults, SearchParameters,
-    searchResults, searchParameters, Counter, activeCounter, passholders, Passholder;
+    activityMode, $state, PassholderSearchResults, SearchParameters, searchResults, searchParameters,
+    Counter, activeCounter, passholders, Passholder;
 
   var activity = {
     'id': 'e71f3381-21aa-4f73-a860-17cf3e31f013',
@@ -175,7 +175,6 @@ describe('Controller: PassholderActivityTariffsController', function () {
       }
     };
 
-    BulkSelection = $injector.get('BulkSelection');
     PassholderSearchResults = $injector.get('PassholderSearchResults');
     SearchParameters = $injector.get('SearchParameters');
 
@@ -194,7 +193,6 @@ describe('Controller: PassholderActivityTariffsController', function () {
 
     searchResults = new PassholderSearchResults(jsonSearchResults);
     searchParameters = new SearchParameters(jsonSearchParameters);
-    bulkSelection = new BulkSelection(searchResults, searchParameters, []);
 
     activityMode = 'passholders';
   }));
@@ -205,7 +203,6 @@ describe('Controller: PassholderActivityTariffsController', function () {
       passholders: passholders,
       activity: activity,
       activityMode: activityMode,
-      bulkSelection: bulkSelection,
       counter: activeCounter,
       $uibModalInstance: modalInstance,
       activityService: activityService,
@@ -325,13 +322,14 @@ describe('Controller: PassholderActivityTariffsController', function () {
     expect(controller.asyncError).toEqual(false);
   });
 
-  it('should should have certain parameters at initialisation when activity is counter', function () {
+  it('should initialize when activityMode is counter', function () {
     activityMode = 'counter';
     passholder = '';
     var controller = getControllerForPassholder();
+
     expect(controller.passholders).toEqual(passholders);
-    expect(controller.bulkSelection).toEqual(bulkSelection);
     expect(controller.activity).toEqual(activity);
+    expect(controller.totalAmount).toEqual(6);
   });
 
   it('can submit the activity tariffs form in bulk', function () {
