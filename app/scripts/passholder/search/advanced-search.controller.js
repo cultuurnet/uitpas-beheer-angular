@@ -246,7 +246,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
   var locationChangeSuccess = function() {
     controller.searchFields = getSearchParametersFromState();
     var emptySearchParams = new SearchParameters();
-    if (controller.searchFields.yieldsSameResultSetAs(emptySearchParams)) {
+    if (controller.searchFields.yieldsSameResultSetAs(emptySearchParams) && !controller.searchFields.page) {
       angular.forEach($state.params, function (value, key) {
         if (key !== 'mode') {
           $state.params[key] = null;
