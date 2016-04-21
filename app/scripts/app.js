@@ -24,7 +24,7 @@ angular
     'ubr.advantage',
     'ubr.counter',
     'ubr.group',
-    'ubr.feedback',
+    'ubr.feedback', 
     'ubr.help',
     'ubr.kansenstatuut',
     'ubr.membership',
@@ -32,7 +32,8 @@ angular
     'ubr.registration',
     'ubr.utilities',
     'ui.router',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'cultuurnet.ga-tag-manager'
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
