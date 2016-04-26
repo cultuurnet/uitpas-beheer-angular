@@ -20,3 +20,16 @@
 
   <span class="label label-points" ng-bind="gdc.group.availableTickets"></span>
 </div>
+
+<div class="passholder passholder-coupons">
+  <h3><i class="fa fa-ticket"></i> Bonnen</h3>
+  <div class="overview__loading" ng-show="gdc.couponsLoading">
+    <div class="spinner spinner-small">
+      <circle-spinner></circle-spinner>
+    </div>
+  </div>
+
+  <ul class="list-group" ng-hide="gdc.couponsLoading">
+    <li class="list-group-item" ng-repeat="coupon in gdc.coupons"><a ui-sref="counter.main.group.coupon({ coupon: coupon })">{{coupon.name}}</a></li>
+  </ul>
+</div>
