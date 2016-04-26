@@ -93,7 +93,7 @@ angular
           $uibModal
             .open({
               animation: true,
-              templateUrl: 'views/passholder/modal-passholder-coupon.html',
+              templateUrl: 'views/coupon/modal-coupon.html',
               size: 'sm',
               resolve: {
                 coupon: function() {
