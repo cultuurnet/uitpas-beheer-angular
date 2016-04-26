@@ -5,10 +5,10 @@
  * @name ubr.passholder.Coupon
  * @description
  * # Coupon factory
- * Factory in the ubr.passholder module.
+ * Factory in the ubr.coupon module.
  */
 angular
-  .module('ubr.passholder')
+  .module('ubr.coupon')
   .factory('Coupon', couponFactory);
 
 /* @ngInject */

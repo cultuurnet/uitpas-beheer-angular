@@ -12,9 +12,30 @@ angular
   .controller('GroupDetailController', GroupDetailController);
 
 /* @ngInject */
-function GroupDetailController (group) {
+function GroupDetailController (group, passholderService) {
   /*jshint validthis: true */
   var controller = this;
 
   controller.group = group;
+
+  controller.couponsLoading = false;
+
+  var displayCoupons = function(coupons) {
+    controller.coupons = coupons;
+  };
+
+  var loadCoupons = function() {
+    controller.couponsLoading = true;
+
+    function removeLoadingState() {
+      controller.couponsLoading = false;
+    }
+
+    passholderService
+      .getCoupons(group.passNumber)
+      .then(displayCoupons)
+      .finally(removeLoadingState);
+  };
+
+  loadCoupons();
 }
