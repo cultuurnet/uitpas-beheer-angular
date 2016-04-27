@@ -12,7 +12,7 @@
   <div ng-if="::cdc.coupon.expirationDate">
     <p><strong>Geldig tot:</strong> <span ng-bind="::cdc.coupon.expirationDate | date : 'dd/MM/yyyy'"></span></p>
   </div>
-  <div ng-if="cdc.coupon.remainingTotal && cdc.coupon.remainingTotal.volume">
+  <div ng-if="cdc.coupon.remainingTotal">
     <p>
       <strong>Nog beschikbaar:</strong>
       <ng-pluralize count="::cdc.coupon.remainingTotal.volume"
