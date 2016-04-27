@@ -64,7 +64,7 @@
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a class="btn btn-link" ng-click="pat.cancelModal()">Annuleren</a>
-    <button ng-if="pat.activityMode == 'passholders'" type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid"
+    <button ng-if="pat.activityMode == 'passholders' || 'group'" type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid"
             ng-click="pat.claimTariff(pat.passholder, pat.activity, passholderActivityTariffs)">
       <span ng-hide="pat.formSubmitBusy">Tarief toekennen</span>
             <span ng-show="pat.formSubmitBusy">

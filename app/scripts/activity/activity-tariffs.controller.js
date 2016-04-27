@@ -17,7 +17,6 @@ function PassholderActivityTariffsController (
   passholders,
   activity,
   activityMode,
-  bulkSelection,
   counter,
   $uibModalInstance,
   activityService,
@@ -30,7 +29,6 @@ function PassholderActivityTariffsController (
 
   controller.passholder = passholder;
   controller.passholders = passholders;
-  controller.bulkSelection = bulkSelection;
 
   getGroupSale();
   controller.activityMode = activityMode;
@@ -80,7 +78,9 @@ function PassholderActivityTariffsController (
 
   controller.clearAsyncError = function () {
     controller.asyncError = false;
-    controller.totalAmount = controller.selectedTariff.price * controller.passholders.length;
+    if (activityMode === 'counter') {
+      controller.totalAmount = controller.selectedTariff.price * controller.passholders.length;
+    }
   };
 
   controller.handleAsyncError = function (error) {

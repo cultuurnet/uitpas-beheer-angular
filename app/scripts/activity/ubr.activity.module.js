@@ -64,7 +64,6 @@ angular
         passholders: null,
         activity: null,
         activityMode: null,
-        bulkSelection: null,
         counter: null
       },
       resolve: {
@@ -81,27 +80,12 @@ angular
         activityMode: ['$stateParams', function($stateParams) {
           return $stateParams.activityMode;
         }],
-        bulkSelection: function($stateParams, SearchParameters, BulkSelection) {
-          if(!$stateParams.bulkSelection) {
-            var searchParams = new SearchParameters();
-            searchParams.fromParams($stateParams);
-            var bulkSelection = new BulkSelection(null, searchParams, $stateParams.selection);
-            if (!$stateParams.selection) {
-              bulkSelection.searchResults.totalItems = $stateParams.totalItems;
-              bulkSelection.selectAll = true;
-            }
-            return bulkSelection;
-          }
-          else {
-            return $stateParams.bulkSelection;
-          }
-        },
         counter: function(counterService) {
           return counterService.getActive();
         }
       },
       /* @ngInject */
-      onEnter: function(passholder, passholders, identification, activity, activityMode, bulkSelection, counter, $state, $uibModal) {
+      onEnter: function(passholder, passholders, identification, activity, activityMode, counter, $state, $uibModal) {
         var modalSize = 'sm';
         if (Object.keys(activity.sales.base).length > 3) {
           modalSize = '';
@@ -126,9 +110,6 @@ angular
               },
               activityMode: function() {
                 return activityMode;
-              },
-              bulkSelection: function() {
-                return bulkSelection;
               },
               counter: function() {
                 return counter;
