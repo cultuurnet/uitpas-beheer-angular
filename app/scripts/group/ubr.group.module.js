@@ -31,11 +31,6 @@ angular
       return deferredGroup.promise;
     }
 
-    /* @ngInject */
-    var getCouponsFromStateParams = function($stateParams) {
-      return $stateParams.coupon;
-    };
-
     $stateProvider
       .state('counter.main.group', {
         url: 'group/:identification',
@@ -80,33 +75,5 @@ angular
             controllerAs: 'ac'
           }
         }
-      })
-      .state('counter.main.group.coupon', {
-        params: {
-          coupon: null
-        },
-        resolve: {
-          coupon: getCouponsFromStateParams
-        },
-        /* @ngInject */
-        onEnter: function(coupon, $state, $uibModal) {
-          $uibModal
-            .open({
-              animation: true,
-              templateUrl: 'views/coupon/modal-coupon.html',
-              size: 'sm',
-              resolve: {
-                coupon: function() {
-                  return coupon;
-                }
-              },
-              controller: 'CouponDetailController',
-              controllerAs: 'cdc'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }
-      })
+      });
   });
