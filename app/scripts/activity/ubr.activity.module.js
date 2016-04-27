@@ -17,9 +17,22 @@ angular
   /* @ngInject */
   .config(function ($stateProvider) {
     /* @ngInject */
-    function getPassholderFromStateParams(passholderService, counterService, $stateParams) {
+    getPassholderFromStateParams.$inject = ['passholderService', '$stateParams', '$q'];
+    function getPassholderFromStateParams(passholderService, $stateParams, $q) {
       if ($stateParams.activityMode === 'passholders') {
         return passholderService.findPassholder($stateParams.identification);
+      }
+      else if ($stateParams.activityMode === 'group') {
+        var groupId = $stateParams.identification;
+        var deferredGroup = $q.defer();
+
+        passholderService
+          .findPass(groupId)
+          .then(function(pass) {
+            deferredGroup.resolve(pass.group);
+          });
+
+        return deferredGroup.promise;
       }
       else {
         return $stateParams.passholder;
@@ -80,12 +93,11 @@ angular
         activityMode: ['$stateParams', function($stateParams) {
           return $stateParams.activityMode;
         }],
-        counter: function(counterService) {
+        counter: ['counterService', function(counterService) {
           return counterService.getActive();
-        }
+        }]
       },
-      /* @ngInject */
-      onEnter: function(passholder, passholders, identification, activity, activityMode, counter, $state, $uibModal) {
+      onEnter: ['passholder', 'passholders', 'identification', 'activity', 'activityMode', 'counter', '$state', '$uibModal', function(passholder, passholders, identification, activity, activityMode, counter, $state, $uibModal) {
         var modalSize = 'sm';
         if (Object.keys(activity.sales.base).length > 3) {
           modalSize = '';
@@ -108,10 +120,10 @@ angular
               activity: function () {
                 return activity;
               },
-              activityMode: function() {
+              activityMode: function () {
                 return activityMode;
               },
-              counter: function() {
+              counter: function () {
                 return counter;
               }
             },
@@ -119,15 +131,17 @@ angular
             controllerAs: 'pat'
           })
           .result
-          .finally(function() {
+          .finally(function () {
             $state.go('^');
           });
-      }
+      }]
     };
 
     $stateProvider
       .state('counter.main.passholder.activityTariffs', angular.copy(tariffModal))
       .state('counter.main.advancedSearch.bulkPoints.activityTariffs', angular.copy(tariffModal))
+      .state('counter.main.group.activityTariffs', angular.copy(tariffModal))
       .state('counter.main.passholder.activity', angular.copy(activityModal))
-      .state('counter.main.advancedSearch.bulkPoints.activity', angular.copy(activityModal));
+      .state('counter.main.advancedSearch.bulkPoints.activity', angular.copy(activityModal))
+      .state('counter.main.group.activity', angular.copy(activityModal));
   });
