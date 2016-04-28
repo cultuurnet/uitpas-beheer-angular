@@ -31,11 +31,6 @@ angular
       return deferredGroup.promise;
     }
 
-    /* @ngInject */
-    var getCouponsFromStateParams = function($stateParams) {
-      return $stateParams.coupon;
-    };
-
     $stateProvider
       .state('counter.main.group', {
         url: 'group/:identification',
@@ -80,102 +75,5 @@ angular
             controllerAs: 'ac'
           }
         }
-      })
-      .state('counter.main.group.coupon', {
-        params: {
-          coupon: null
-        },
-        resolve: {
-          coupon: getCouponsFromStateParams
-        },
-        /* @ngInject */
-        onEnter: function(coupon, $state, $uibModal) {
-          $uibModal
-            .open({
-              animation: true,
-              templateUrl: 'views/coupon/modal-coupon.html',
-              size: 'sm',
-              resolve: {
-                coupon: function() {
-                  return coupon;
-                }
-              },
-              controller: 'CouponDetailController',
-              controllerAs: 'cdc'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }
-      })
-      .state('counter.main.group.activityTariffs', {
-        params: {
-          identification: null,
-          passholder: null,
-          passholders: null,
-          activity: null,
-          activityMode: null,
-          bulkSelection: null,
-          counter: null,
-        },
-        resolve: {
-          passholder: getGroup,
-          passholders: function() {
-            return null;
-          },
-          identification: ['$stateParams', function($stateParams) {
-            return $stateParams.identification;
-          }],
-          activity: ['$stateParams', function($stateParams) {
-            return $stateParams.activity;
-          }],
-          activityMode: function() {
-            return 'group';
-          },
-          bulkSelection: function () {
-            return null;
-          },
-          counter: function (counterService) {
-            return counterService.getActive();
-          }
-        },
-        onEnter: ['passholder', 'passholders', 'identification', 'activity', 'activityMode', 'bulkSelection', 'counter', '$state', '$uibModal', function(passholder, passholders, identification, activity, activityMode, bulkSelection, counter, $state, $uibModal) {
-          $uibModal
-            .open({
-              animation: true,
-              templateUrl: 'views/activity/modal-activity-tariffs.html',
-              size: 'sm',
-              resolve: {
-                passholder: function () {
-                  return passholder;
-                },
-                passholders: function () {
-                  return passholders;
-                },
-                identification: function () {
-                  return identification;
-                },
-                activity: function () {
-                  return activity;
-                },
-                activityMode: function () {
-                  return activityMode;
-                },
-                bulkSelection: function () {
-                  return bulkSelection;
-                },
-                counter: function () {
-                  return counter;
-                }
-              },
-              controller: 'PassholderActivityTariffsController',
-              controllerAs: 'pat'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }]
       });
   });

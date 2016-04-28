@@ -52,7 +52,7 @@
 
         <div class="grid__12 grid--bp-med__9 first">
           <div class="date" ng-bind="::activity.when"></div>
-          <h3 ng-bind="::activity.title"></h3>
+          <h3 ui-sref="counter.main.group.activity({ activity: activity })">{{activity.title}}</h3>
         </div> <!--/ end .grid-first -->
 
         <div class="grid__12 grid--bp-med__3 last">
@@ -72,7 +72,7 @@
             <i class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<!--<br><a class="history-modal small">Historiek</a>--></i>
             <div class="price-differentiation" ng-switch-when="priceDifferentiation">
               <small>vanaf</small><br><strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong>
-              <a class="btn btn-default btn-sm tariff-modal" ui-sref="counter.main.group.activityTariffs({ activity: activity })">Tarief kiezen</a>
+              <a class="btn btn-default btn-sm tariff-modal" ui-sref="counter.main.group.activityTariffs({ activity: activity, activityMode: ac.activityMode })">Tarief kiezen</a>
             </div>
             <div class="kansen-tariff" ng-switch-when="kansenTariff" ng-hide="activity.tariffClaimInProgress">
               <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br><small>aan kansentarief</small>
