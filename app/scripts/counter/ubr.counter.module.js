@@ -14,6 +14,7 @@ angular
     'ubr.counter.checkin-devices',
     'ubr.counter.expense-report',
     'ubr.counter.membership',
+    'ubr.counter.statistics',
     'truncate'
   ])
   /* @ngInject */

@@ -501,4 +501,66 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
 
     return deferredActivities.promise;
   };
+
+  /**
+   * Get default date range
+   *
+   * return {Object<FromToDates>} An object with formatted from/to values.
+   */
+  service.getDefaultDateRange = function () {
+    var now = new Date();
+    // 2 weeks ago.
+    var then = new Date((new Date()).setTime((new Date()).getTime() - (14 * 1000 * 60 * 60 * 24)));
+
+    var dateRange = {
+      from: [then.getDate(), then.getMonth()+1, then.getFullYear()].join('/'),
+      to: [now.getDate(), now.getMonth()+1, now.getFullYear()].join('/'),
+    };
+
+    return dateRange;
+  };
+
+  /**
+   * Get sales statistics.
+   *
+   * @param {Parameters} object with from/to keys
+   *
+   * @return {Promise<CounterSalesStatistics[]|ApiError>} A list of datapoints or an error response.
+   */
+  service.getSalesStatistics = function (params) {
+    var dates = this.getDefaultDateRange();
+    var query = [];
+    var num;
+    params = params || [];
+    // If no params were passed, use single default date range.
+    if (!params.length) {
+      params.push({ from: dates.from, to: dates.to});
+    }
+    // Prepare querystring
+    for (var i = 0, max = params.length; i < max; i++) {
+      num = i ? i+1 : '';
+      query.push('from' + num + '=' + params[i].from);
+      query.push('to' + num + '=' + params[i].to);
+    }
+    var url = apiUrl + '/cardsales?' + query.join('&');
+    var deferredSales = $q.defer();
+    var activeId;
+
+    this.getActive().then(function(data) {
+      activeId = data.id;
+
+      url += '&balieId=' + activeId;
+
+      $http
+        .get(url)
+        .success(handleSalesData)
+        .error(deferredSales.reject);
+    });
+
+    var handleSalesData = function (salesData) {
+      deferredSales.resolve(salesData);
+    };
+
+    return deferredSales.promise;
+  };
 }
