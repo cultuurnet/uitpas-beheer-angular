@@ -1,0 +1,29 @@
+.counter-statistics-graph {
+  path.area {
+    fill: #cce2d2;
+    stroke-width: 0;
+  }
+  path.line {
+    stroke: #00a869;
+    stroke-width: 2;
+    fill: none;
+  }
+  circle.dot {
+    fill: #00a869;
+    stroke-width: 0;
+  }
+  .axis {
+    path,
+    line {
+      fill: none;
+      stroke: #CCC;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+    }
+    text {
+      font-size: 11px;
+      color: #333;
+      fill: #333;
+    }
+  }
+}

@@ -13,20 +13,20 @@
   <div ng-show="csc.dateRanges" class="period-chooser">
      <a href="#" class="ppu" id="range" ng-click="csc.pickingDate = !csc.pickingDate">
           <p class="selected-date">
-              <span>{{csc.dateRanges[0].from | date: 'dd/MM/yyyy'}} - {{csc.dateRanges[0].to | date: 'dd/MM/yyyy'}}</span>
+              <span>{{csc.dateRanges[0].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[0].to.format('DD/MM/YYYY')}}</span>
           </p>
-          <p ng-show="csc.dateRanges[1]" class="text-muted"><span class="period-2">Vergeleken met {{csc.dateRanges[1].from | date: 'dd/MM/yyyy'}} - {{csc.dateRanges[1].to | date: 'dd/MM/yyyy'}}</span></p>
+          <p ng-show="csc.showCompare()" class="text-muted"><span class="period-2">Vergeleken met {{csc.dateRanges[1].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[1].to.format('DD/MM/YYYY')}}</span></p>
       </a>
   </div>
-  <div class="period" id="period-one" ng-class="{hidden: !csc.pickingDate}">
+  <div ng-init="csc.addDatePicker()" class="period" id="period-one" ng-class="{hidden: !csc.pickingDate}">
       <div class="row">
           <div class="col-xs-6">
               <label>Van</label><br/>
-              <input ng-change="csc.updateDateRanges()" ng-model="csc.dateRanges[0].from" ng-value="csc.dateRanges[0].from | date: 'dd/MM/yyyy'" type="text" id="period-one-from" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+              <input ng-value="csc.dateRanges[0].from.format('DD/MM/YYYY')" type="text" id="period-one-from" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
           </div>
           <div class="col-xs-6">
               <label>Tot</label><br/>
-              <input ng-change="csc.updateDateRanges()" ng-model="csc.dateRanges[0].to" ng-value="csc.dateRanges[0].to | date: 'dd/MM/yyyy'" type="text" id="period-one-to" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+              <input ng-value="csc.dateRanges[0].to.format('DD/MM/YYYY')" type="text" id="period-one-to" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
           </div>
       </div>
       <div class="row">
@@ -42,22 +42,21 @@
               <div class="row compare-period" ng-class="{hidden: !csc.comparing}">
                   <div class="col-xs-6">
                       <label>Van</label><br/>
-                      <input type="text" class="form-control" id="period-two-from" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                      <input ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY')" type="text" class="form-control" id="period-two-from" placeholder="dd/mm/jjjj" data-provide="datepicker">
                   </div>
                   <div class="col-xs-6">
                       <label>Tot</label><br/>
-                      <input type="text" class="form-control" id="period-two-to" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                      <input ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY')" type="text" class="form-control" id="period-two-to" placeholder="dd/mm/jjjj" data-provide="datepicker">
                   </div>
               </div>
           </div>
       </div>
-      <a class="btn btn-primary" id="dateSubmit" href="javascript:getDates()" type="reset">Bevestigen</a>
-      <a class="btn btn-link" href="javascript:Annuleren()" type="reset">Annuleren</a>
+      <a class="btn btn-primary" id="dateSubmit" ng-click="csc.updateDates($event)" type="reset">Bevestigen</a>
+      <a class="btn btn-link" ng-click="csc.resetDates($event)" type="reset">Annuleren</a>
   </div>
 
 
   <div class="counter-statistics-graph" ng-if="!csc.loadingStatistics">
-    graph
   </div>
 
 </section>

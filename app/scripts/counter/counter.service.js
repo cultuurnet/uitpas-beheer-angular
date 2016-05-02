@@ -508,16 +508,28 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * return {Object<FromToDates>} An object with formatted from/to values.
    */
   service.getDefaultDateRange = function () {
-    var now = new Date();
+    var moment = window.moment;
+    var now = moment();
     // 2 weeks ago.
-    var then = new Date((new Date()).setTime((new Date()).getTime() - (14 * 1000 * 60 * 60 * 24)));
+    var then = moment().subtract(2, 'weeks');
 
     var dateRange = {
-      from: [then.getDate(), then.getMonth()+1, then.getFullYear()].join('/'),
-      to: [now.getDate(), now.getMonth()+1, now.getFullYear()].join('/'),
+      from: then,
+      to: now,
     };
 
     return dateRange;
+  };
+
+  /**
+   * Format dates using default formatting.
+   *
+   * @param {Date} Date object or moment() parsable string.
+   *
+   * @return {String} A formatted date like DD/MM/YYY.
+   */
+  service.formatStatisticsDate = function (date) {
+    return window.moment(date).format('DD/MM/YYYY');
   };
 
   /**
@@ -527,22 +539,27 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    *
    * @return {Promise<CounterSalesStatistics[]|ApiError>} A list of datapoints or an error response.
    */
-  service.getSalesStatistics = function (params) {
+  service.getStatistics = function (params, path) {
     var dates = this.getDefaultDateRange();
     var query = [];
     var num;
+    var fromStr;
+    var toStr;
     params = params || [];
+    path = path || 'cardsales';
     // If no params were passed, use single default date range.
     if (!params.length) {
       params.push({ from: dates.from, to: dates.to});
     }
     // Prepare querystring
     for (var i = 0, max = params.length; i < max; i++) {
+      fromStr = this.formatStatisticsDate(params[i].from);
+      toStr = this.formatStatisticsDate(params[i].to);
       num = i ? i+1 : '';
-      query.push('from' + num + '=' + params[i].from);
-      query.push('to' + num + '=' + params[i].to);
+      query.push('from' + num + '=' + fromStr);
+      query.push('to' + num + '=' + toStr);
     }
-    var url = apiUrl + '/cardsales?' + query.join('&');
+    var url = apiUrl + '/' + path + '?' + query.join('&');
     var deferredSales = $q.defer();
     var activeId;
 
