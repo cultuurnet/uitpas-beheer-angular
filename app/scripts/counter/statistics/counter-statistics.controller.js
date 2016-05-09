@@ -15,11 +15,31 @@ angular
 function CounterStatisticsController(counterService, $element, $state, $scope) {
   /*jshint validthis: true */
   var controller = this,
-      paths = {
-    'counter.statistics': 'cardsales',
-    'counter.statistics.savings': 'checkins',
-    'counter.statistics.exchange': 'exchanges',
-    'counter.statistics.mia': 'mias'
+      info = {
+    'counter.statistics': {
+      path: 'cardsales',
+      title: 'Verkochte kaarten',
+      type: 'Kopers',
+      profile: 'Profiel van de koper'
+    },
+    'counter.statistics.savings': {
+      path: 'checkins',
+      title: 'Gespaarde punten',
+      type: 'Actieve spaarders',
+      profile: 'Profiel van de actieve spaarder'
+    },
+    'counter.statistics.exchange': {
+      path: 'exchanges',
+      title: 'Omgeruilde voordelen',
+      type: 'Omgeruilde voordelen',
+      profile: 'Profiel van de actieve ruiler'
+    },
+    'counter.statistics.mia': {
+      path: 'mias',
+      title: 'Actieve MIA\'s',
+      type: 'Actieve MIA\'s',
+      profile: 'Profiel van MIA\'s'
+    }
   };
 
   controller.loadingStatistics = true;
@@ -29,6 +49,8 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   controller.formattedDates = [];
   controller.pickingDate = false;
   controller.comparing = false;
+  controller.titleStr = '';
+  controller.profileStr = '';
 
   controller.loadDefaultDateRange = function() {
     var dateRange = counterService.getDefaultDateRange();
@@ -83,6 +105,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     this.updateDates($event);
   };
 
+  // Checker for the date picker popout.
   controller.showCompare = function () {
     return controller.comparing &&
            controller.dateRanges[1] &&
@@ -90,11 +113,19 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
            controller.dateRanges[1].to;
   };
 
+  // Checker for compare table.
+  controller.compareTable = function() {
+    return !!(controller.statistics && controller.statistics.profiles2);
+  };
+
   controller.loadStatistics = function () {
     var showStatistics = function (statistics) {
       controller.statistics = statistics;
       controller.loadingStatistics = false;
       controller.noStatisticsError = false;
+      controller.titleStr = info[$state.current.name].title;
+      controller.profileStr = info[$state.current.name].profile;
+      // Using settimeout to avoid waiting an extra cycle.
       setTimeout(function(){
         controller.renderGraph();
       }, 0);
@@ -107,7 +138,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
     controller.loadingStatistics = true;
     counterService
-      .getStatistics(controller.dateRanges, paths[$state.current.name])
+      .getStatistics(controller.dateRanges, info[$state.current.name].path)
       .then(showStatistics, noStatisticsFound);
   };
 
@@ -150,7 +181,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         stats = this.statistics,
         // Global d3 reference.
         d3 = window.d3,
-        format = d3.time.format("%d-%m-%Y"),
+        format = d3.time.format('%d-%m-%Y'),
         // Hardcoded margin.
         margin = 40,
         // Grab width - margins.
@@ -160,11 +191,20 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         xScale = d3.time.scale().range([0, width]),
         yScale = d3.scale.linear().range([height, 0]),
         // Axis handlers.
-        xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(5).tickFormat(d3.time.format("%d/%m")),
-        yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(3),
+        xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(5).tickFormat(d3.time.format('%d/%m')),
+        yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(3),
+        compare = this.compareTable(),
         line,
+        line2,
         area,
         graph;
+
+    if (compare) {
+      xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(5).tickFormat('');
+      line2 = d3.svg.line()
+              .x(function (d) { return xScale(format.parse(d.date)); })
+              .y(function (d) { return yScale(parseInt(d.count2, 10)); });
+    }
 
     // Make sure it's cleared.
     $graphWrap.empty();
@@ -189,7 +229,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     yScale.domain([0, d3.max(stats.periods, function (d) {
         var max;
         // TODO: handler comparison graphs.
-        if (false) {
+        if (compare) {
           max = Math.max(parseInt(d.count, 10), parseInt(d.count2, 10));
         }
         else {
@@ -208,6 +248,13 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         .datum(stats.periods)
         .attr('class', 'line')
         .attr('d', line);
+    if (compare) {
+      // Make a line path per period.
+      graph.append('path')
+          .datum(stats.periods)
+          .attr('class', 'line line-2')
+          .attr('d', line2);
+    }
     // Add the X Axis.
     graph.append('g')
         .attr('class', 'x axis')
@@ -230,6 +277,21 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         .attr('cy', function(d) {
           return yScale(parseInt(d.count, 10));
         });
+    if (compare) {
+      // Add a circle per data point.
+      graph.selectAll('dot-2')
+          .data(stats.periods)
+          .enter()
+          .append('circle')
+          .attr('class', 'dot dot-2')
+          .attr('r', 5)
+          .attr('cx', function(d) {
+            return xScale(format.parse(d.date));
+          })
+          .attr('cy', function(d) {
+            return yScale(parseInt(d.count2, 10));
+          });
+    }
   };
 
   controller.loadDefaultDateRange();

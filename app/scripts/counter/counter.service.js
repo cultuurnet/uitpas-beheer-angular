@@ -555,6 +555,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
     for (var i = 0, max = params.length; i < max; i++) {
       fromStr = this.formatStatisticsDate(params[i].from);
       toStr = this.formatStatisticsDate(params[i].to);
+      // Add number, starting with '', then 2, 3, ...
       num = i ? i+1 : '';
       query.push('from' + num + '=' + fromStr);
       query.push('to' + num + '=' + toStr);

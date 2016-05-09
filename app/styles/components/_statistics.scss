@@ -1,29 +1,144 @@
+$graph1-fg: #00a869;
+$graph1-bg: #cce2d2;
+
+$graph2-fg: #f4ac0e;
+$graph2-bg: #f2e4ce;
+
+$axis-border-color: #ccc;
+
+$axis-text-color: #333;
+
+$graph-page-bg: #fff;
+
 .counter-statistics-graph {
   path.area {
-    fill: #cce2d2;
+    fill: $graph1-bg;
     stroke-width: 0;
+    &.area-2 {
+      fill: $graph2-bg;
+    }
   }
   path.line {
-    stroke: #00a869;
+    stroke: $graph1-fg;
     stroke-width: 2;
     fill: none;
+    &.line-2 {
+      stroke: $graph2-fg;
+    }
   }
   circle.dot {
-    fill: #00a869;
+    fill: $graph1-fg;
     stroke-width: 0;
+    &.dot-2 {
+      fill: $graph2-fg;
+    }
   }
   .axis {
     path,
     line {
       fill: none;
-      stroke: #CCC;
+      stroke: $axis-border-color;
       stroke-width: 1;
       shape-rendering: crispEdges;
     }
     text {
       font-size: 11px;
-      color: #333;
-      fill: #333;
+      color: $axis-text-color;
+      fill: $axis-text-color;
     }
+  }
+}
+
+.counter-statistics-wrapper {
+  .period-1,
+  .period-2 {
+    &:after {
+      color: $graph1-fg;
+      content: "\f111";
+      margin-left: 6px;
+      display: inline-block;
+      font-family: "FontAwesome";
+      font-size: 9px;
+      vertical-align: middle;
+    }
+  }
+  .period-2 {
+    &:after {
+      color: $graph2-fg;
+    }
+  }
+  .stat__number {
+    color: #555555;
+    font-weight: bold;
+    font-size: 45px;
+    margin: 20px 0 10px 0;
+    line-height: 1;
+    text-align: center;
+  }
+  .serie-1 .stat__number {
+    color: $graph1-fg;
+  }
+  .serie-2 .stat__number {
+    color: $graph2-fg;
+  }
+  .stat__caption {
+    color: #555555;
+    font-weight: bold;
+    text-align: center;
+  }
+  .columnbar {
+    position: relative;
+    display: block;
+    .bar {
+      position: absolute;
+      top: -9px;
+      bottom: -9px;
+      left: -8px;
+      background: $graph1-bg;
+      border-top: 1px solid $graph-page-bg;
+      border-bottom: 1px solid $graph-page-bg;
+      &.bar-2 {
+        background: $graph2-bg;
+      }
+    }
+    .text {
+      position: relative;
+      z-index: 1;
+    }
+    &.compare {
+      .bar {
+        border-top: 0;
+        border-bottom: 0;
+        &:first-child {
+          bottom: 50%;
+          top: -7px;
+        }
+        &.bar-2 {
+          top: 50%;
+          bottom: -7px;
+        }
+      }
+    }
+  }
+  .panel {
+    margin-bottom: 20px;
+    background-color: $graph-page-bg;
+    border: 1px solid $axis-border-color;
+    border-radius: 4px;
+  }
+  .panel-heading {
+    padding: 10px 15px;
+    border-bottom: 1px solid $axis-border-color;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #777;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+  .table-heading {
+    font-weight: bold;
+    margin-left: -8px;
+    padding-left: 0px;
+    padding-top: 24px;
   }
 }
