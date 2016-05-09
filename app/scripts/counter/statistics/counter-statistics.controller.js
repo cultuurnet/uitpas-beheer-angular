@@ -31,7 +31,11 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     'counter.statistics.exchange': {
       path: 'exchanges',
       title: 'Omgeruilde voordelen',
-      type: 'Omgeruilde voordelen',
+      type: {
+        active: 'Actieve ruilers',
+        new: 'Nieuwe ruilers',
+        transactions: 'Omgeruilde voordelen'
+      },
       profile: 'Profiel van de actieve ruiler'
     },
     'counter.statistics.mia': {
@@ -125,6 +129,9 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       controller.noStatisticsError = false;
       controller.titleStr = info[$state.current.name].title;
       controller.profileStr = info[$state.current.name].profile;
+      controller.typeStr = info[$state.current.name].type;
+      controller.which = $state.current.name.split('.');
+      controller.which = controller.which[controller.which.length - 1];
       // Using settimeout to avoid waiting an extra cycle.
       setTimeout(function(){
         controller.renderGraph();

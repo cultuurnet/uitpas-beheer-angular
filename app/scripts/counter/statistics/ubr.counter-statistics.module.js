@@ -35,7 +35,7 @@ angular
         }
       })
       .state('counter.statistics.savings', {
-        url: '/counter-statistics/savings',
+        url: '/savings',
         requiresCounter: true,
         views: {
           content: {
@@ -52,7 +52,7 @@ angular
         }
       })
       .state('counter.statistics.exchange', {
-        url: '/counter-statistics/exchange',
+        url: '/exchange',
         requiresCounter: true,
         views: {
           content: {
@@ -69,7 +69,7 @@ angular
         }
       })
       .state('counter.statistics.mia', {
-        url: '/counter-statistics/mia',
+        url: '/mia',
         requiresCounter: true,
         views: {
           content: {
