@@ -10,49 +10,54 @@
     Er kunnen geen statistieken opgehaald worden voor deze balie.
   </div>
 
-  <div ng-show="csc.dateRanges" class="period-chooser">
-     <a href="#" class="ppu" ng-click="csc.pickingDate = !csc.pickingDate">
-          <p class="selected-date">
-              <span>{{csc.dateRanges[0].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[0].to.format('DD/MM/YYYY')}}</span>
-          </p>
-          <p ng-show="csc.showCompare()" class="text-muted"><span class="period-2">Vergeleken met {{csc.dateRanges[1].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[1].to.format('DD/MM/YYYY')}}</span></p>
-      </a>
-  </div>
-  <div ng-init="csc.addDatePicker()" class="period" ng-class="{hidden: !csc.pickingDate}">
-      <div class="row">
-          <div class="col-xs-6">
-              <label>Van</label><br/>
-              <input ng-value="csc.dateRanges[0].from.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
-          </div>
-          <div class="col-xs-6">
-              <label>Tot</label><br/>
-              <input ng-value="csc.dateRanges[0].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-xs-12">
-              <div class="checkbox no-margin">
-                  <label>
-                      <input type="checkbox" class="comparecheck" ng-model="csc.comparing">
-                      Vergelijken met andere periode
-                  </label>
-              </div>
-          </div>
-          <div class="col-xs-12">
-              <div class="row compare-period" ng-class="{hidden: !csc.comparing}">
-                  <div class="col-xs-6">
-                      <label>Van</label><br/>
-                      <input ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
-                  </div>
-                  <div class="col-xs-6">
-                      <label>Tot</label><br/>
-                      <input ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
-                  </div>
-              </div>
-          </div>
-      </div>
-      <a class="btn btn-primary" ng-click="csc.updateDates($event)" type="reset">Bevestigen</a>
-      <a class="btn btn-link" ng-click="csc.resetDates($event)" type="reset">Annuleren</a>
+  <div class="page-header">
+    <h1>{{csc.pageTitle}}</h1>
+    <div ng-show="csc.dateRanges" class="period-chooser">
+       <a href="#" class="ppu" ng-click="csc.pickingDate = !csc.pickingDate">
+            <p class="selected-date">
+                <span class="period-1">{{csc.dateRanges[0].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[0].to.format('DD/MM/YYYY')}}</span>
+            </p>
+            <p ng-show="csc.showCompare()" class="text-muted"><span class="period-2">Vergeleken met {{csc.dateRanges[1].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[1].to.format('DD/MM/YYYY')}}</span></p>
+        </a>
+
+        <div ng-init="csc.addDatePicker()" class="popover" ng-class="{hidden: !csc.pickingDate}">
+            <div class="row">
+                <div class="col-xs-6">
+                    <label>Van</label><br/>
+                    <input ng-value="csc.dateRanges[0].from.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                </div>
+                <div class="col-xs-6">
+                    <label>Tot</label><br/>
+                    <input ng-value="csc.dateRanges[0].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="checkbox no-margin">
+                        <label>
+                            <input type="checkbox" class="comparecheck" ng-model="csc.comparing">
+                            Vergelijken met andere periode
+                        </label>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="row compare-period" ng-class="{hidden: !csc.comparing}">
+                        <div class="col-xs-6">
+                            <label>Van</label><br/>
+                            <input ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                        </div>
+                        <div class="col-xs-6">
+                            <label>Tot</label><br/>
+                            <input ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="btn btn-primary" ng-click="csc.updateDates($event)" type="reset">Bevestigen</a>
+            <a class="btn btn-link" ng-click="csc.resetDates($event)" type="reset">Annuleren</a>
+        </div>
+
+    </div>
   </div>
 
   <div class="counter-statistics-wrapper">
@@ -318,6 +323,213 @@
                   </table>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="counter-statistics-table" ng-if="!csc.loadingStatistics && csc.which === 'mia'">
+        <div ng-class="{'col-xs-12': !csc.compareTable(), 'col-xs-6': csc.compareTable()}">
+          <p><span class="period-1">Periode 1</span></p>
+          <div class="serie-1">
+            <div class="row">
+              <div class="col-xs-4 col-md-4 col-lg-2">
+                <section class="stat">
+                  <h2 class="stat__number">{{csc.statistics['active_mias']}}</h2>
+                  <p class="stat__caption">{{csc.typeStr.active}}</p>
+                </section>
+              </div>
+              <div class="col-xs-4 col-md-4 col-lg-2">
+                <section class="stat">
+                  <h2 class="stat__number">{{csc.statistics['saving_mias']}}</h2>
+                  <p class="stat__caption">{{csc.typeStr.saving}}</p>
+                </section>
+              </div>
+              <div class="col-xs-4 col-md-4 col-lg-2">
+                <section class="stat">
+                  <h2 class="stat__number">{{csc.statistics['exchanging_mias']}}</h2>
+                  <p class="stat__caption">{{csc.typeStr.exchanging}}</p>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-class="{'col-xs-12': !csc.compareTable(), 'col-xs-6': csc.compareTable()}">
+          <p ng-if="csc.compareTable()"><span class="period-2">Periode 2</span></p>
+          <div class="serie-2" ng-if="csc.compareTable()">
+            <div class="row">
+              <div class="col-xs-4 col-md-4 col-lg-2">
+                <section class="stat">
+                  <h2 class="stat__number">{{csc.statistics['active_mias2']}}</h2>
+                  <p class="stat__caption">{{csc.typeStr.active}}</p>
+                </section>
+              </div>
+              <div class="col-xs-4 col-md-4 col-lg-2">
+                <section class="stat">
+                  <h2 class="stat__number">{{csc.statistics['saving_mias2']}}</h2>
+                  <p class="stat__caption">{{csc.typeStr.saving}}</p>
+                </section>
+              </div>
+              <div class="col-xs-4 col-md-4 col-lg-2">
+                <section class="stat">
+                  <h2 class="stat__number">{{csc.statistics['exchanging_mias2']}}</h2>
+                  <p class="stat__caption">{{csc.typeStr.exchanging}}</p>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <div class="panel">
+            <div class="panel-heading">{{csc.profileStr}}</div>
+            <div class="panel-body">
+              <table class="table">
+                <thead>
+                  <tr ng-if="!csc.compareTable()">
+                    <th></th>
+                    <th class="number">Aan je balie</th>
+                    <th class="number">Gemiddelde</th>
+                  </tr>
+                  <tr ng-if="csc.compareTable()">
+                    <th></th>
+                    <th class="number">Periode 1</th>
+                    <th class="number">Periode 2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="table-heading" colspan="3">Geslacht</td>
+                  </tr>
+                  <tr ng-repeat="gender in csc.statistics.profiles.gender">
+                    <td>
+                      <span class="columnbar" ng-class="{compare: csc.compareTable()}">
+                        <span class="bar" style="width: {{gender.count}}%" ></span>
+                        <span ng-if="csc.compareTable()" class="bar bar-2" style="width: {{csc.statistics.profiles2.gender[$index].count}}%" ></span>
+                        <span class="text">{{gender.title}}</span>
+                      </span>
+                    </td>
+                    <td class="number">{{gender.count}}%</td>
+                    <td class="number non" ng-if="!csc.compareTable()">{{csc.statistics.profiles_allBallie.gender[$index].count}}%</td>
+                    <td class="number non" ng-if="csc.compareTable()">{{csc.statistics.profiles2.gender[$index].count}}%</td>
+                  </tr>
+                  <tr>
+                    <td class="table-heading" colspan="3">Leeftijd</td>
+                  </tr>
+                  <tr ng-repeat="age in csc.statistics['per_age']">
+                    <td>
+                      <span class="columnbar" ng-class="{compare: csc.compareTable()}">
+                        <span class="bar" style="width: {{age.count}}%"></span>
+                        <span ng-if="csc.compareTable()" class="bar bar-2" style="width: {{csc.statistics['per_age2'][$index].count}}%" ></span>
+                        <span class="text">{{age.AgeRange}} jaar</span>
+                      </span>
+                    </td>
+                    <td class="number">{{age.count}}%</td>
+                    <td class="number non" ng-if="!csc.compareTable()">{{csc.statistics['per_age_allBallie'][$index].count}}%</td>
+                    <td class="number non" ng-if="csc.compareTable()">{{csc.statistics['per_age2'][$index].count}}%</td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="3" class="table-heading">Woonplaats</td>
+                  </tr>
+                  <tr ng-repeat="province in csc.statistics['per_province']">
+                    <td>
+                      <span class="columnbar" ng-class="{compare: csc.compareTable()}">
+                        <span class="bar" style="width: {{province.count}}%"></span>
+                        <span ng-if="csc.compareTable()" class="bar bar-2" style="width: {{csc.statistics['per_province2'][$index].count}}%" ></span>
+                        <span class="text">{{province.Province}}</span>
+                      </span>
+                    </td>
+                    <td class="number">{{province.count}}%</td>
+                    <td class="number non" ng-if="!csc.compareTable()">{{csc.statistics['per_province_allBallie'][$index].count}}%</td>
+                    <td class="number non" ng-if="csc.compareTable()">{{csc.statistics['per_province2'][$index].count}}%</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6">
+          <div class="panel">
+            <div class="panel-heading">Aanbod</div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="serie-1">
+                    <section class="stat">
+                      <h2 class="stat__number"><span>{{csc.statistics.nrTicketsLowTarif}}</span></h2>
+                      <p class="stat__caption">tickets aan kansentarief</p>
+                    </section>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" ng-if="csc.statistics['top_popularTickets'] && csc.statistics['top_popularTickets'].length">
+                <div class="col-xs-12">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Populairste tickets</th>
+                        <th class="number" ng-class="{'period-1': csc.compareTable()}"><span>Aantal tickets</span></th>
+                        <th class="number period-2" ng-if="csc.compareTable()"><span>Aantal tickets</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="top in csc.statistics['top_popularTickets']">
+                        <td>{{top.title}}</td>
+                        <td class="number">{{top.count}}</td>
+                        <td class="number" ng-if="csc.compareTable()">{{csc.statistics['top_popularTickets2'][$index].count}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="row" ng-if="csc.statistics['top_popularActivities'] && csc.statistics['top_popularActivities'].length">
+                <div class="col-xs-12">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Populairste activiteiten</th>
+                        <th class="number" ng-class="{'period-1': csc.compareTable()}"><span>Aantal spaarders</span></th>
+                        <th class="number period-2" ng-if="csc.compareTable()"><span>Aantal spaarders</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="top in csc.statistics['top_popularActivities']">
+                        <td>{{top.title}}</td>
+                        <td class="number">{{top.count}}</td>
+                        <td class="number" ng-if="csc.compareTable()">{{csc.statistics['top_popularActivities2'][$index].count}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="row" ng-if="csc.statistics['top_popularExchangeAdvantages'] && csc.statistics['top_popularExchangeAdvantages'].length">
+                <div class="col-xs-12">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Populairste omruilvoordelen</th>
+                        <th class="number" ng-class="{'period-1': csc.compareTable()}"><span>Aantal ruilers</span></th>
+                        <th class="number period-2" ng-if="csc.compareTable()"><span>Aantal ruilers</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="top in csc.statistics['top_popularExchangeAdvantages']">
+                        <td>{{top.title}}</td>
+                        <td class="number">{{top.count}}</td>
+                        <td class="number" ng-if="csc.compareTable()">{{csc.statistics['top_popularExchangeAdvantages2'][$index].count}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

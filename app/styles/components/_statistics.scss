@@ -10,6 +10,8 @@ $axis-text-color: #333;
 
 $graph-page-bg: #fff;
 
+$graph-link-color: #337ab7;
+
 .counter-statistics-graph {
   path.area {
     fill: $graph1-bg;
@@ -50,6 +52,14 @@ $graph-page-bg: #fff;
 }
 
 .counter-statistics-wrapper {
+  th {
+    text-align: left;
+    font-weight: normal;
+    &.number {
+      text-align: right;
+      width: 115px;
+    }
+  }
   .period-1,
   .period-2 {
     &:after {
@@ -140,5 +150,60 @@ $graph-page-bg: #fff;
     margin-left: -8px;
     padding-left: 0px;
     padding-top: 24px;
+  }
+}
+.page-header {
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  h1 {
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 60px;
+    margin: 0;
+    float: left;
+  }
+  .period-chooser {
+    float: right;
+    padding: 6px 12px;
+    background-color: $graph-page-bg;
+    border: 1px solid $axis-border-color;
+    position: relative;
+    p {
+      margin-bottom: 0;
+      text-align: right;
+    }
+    a {
+      color: $graph-link-color;
+      text-decoration: none;
+      &:hover {
+        color: darken($graph-link-color, 25%);
+      }
+    }
+    .period-1,
+    .period-2 {
+      &:after {
+        content: "\f111";
+        margin-left: 6px;
+        display: inline-block;
+        font-family: "FontAwesome";
+        font-size: 9px;
+        vertical-align: middle;
+      }
+    }
+    .period-1:after {
+      color: $graph1-fg;
+    }
+    .period-2:after {
+      color: $graph2-fg;
+    }
+    .popover {
+      display: block;
+      &.hidden {
+        display: none;
+      }
+    }
   }
 }

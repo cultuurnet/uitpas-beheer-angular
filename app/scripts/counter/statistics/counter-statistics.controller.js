@@ -17,18 +17,25 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   var controller = this,
       info = {
     'counter.statistics': {
+      pageTitle: 'Verkoop',
       path: 'cardsales',
       title: 'Verkochte kaarten',
       type: 'Kopers',
       profile: 'Profiel van de koper'
     },
     'counter.statistics.savings': {
+      pageTitle: 'Sparen',
       path: 'checkins',
       title: 'Gespaarde punten',
-      type: 'Actieve spaarders',
+      type: {
+        saved: 'Gespaarde punten',
+        active: 'Actieve spaarders',
+        new: 'Nieuwe spaarders'
+      },
       profile: 'Profiel van de actieve spaarder'
     },
     'counter.statistics.exchange': {
+      pageTitle: 'Ruilen',
       path: 'exchanges',
       title: 'Omgeruilde voordelen',
       type: {
@@ -39,9 +46,14 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       profile: 'Profiel van de actieve ruiler'
     },
     'counter.statistics.mia': {
+      pageTitle: 'MIA\'s',
       path: 'mias',
       title: 'Actieve MIA\'s',
-      type: 'Actieve MIA\'s',
+      type: {
+        active: 'Actieve MIA\'s',
+        saving: 'Sparende MIA\'s',
+        exchanging: 'Ruilende MIA\'s'
+      },
       profile: 'Profiel van MIA\'s'
     }
   };
@@ -67,7 +79,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
   controller.updateDates = function ($event) {
     var $el = angular.element($event.target),
-        $wrap = $el.closest('.period'),
+        $wrap = $el.closest('.popover'),
         $rows = $wrap.children('.row'),
         $row = $rows.eq(0),
         $inputs = $row.find('input'),
@@ -93,7 +105,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
   controller.resetDates = function ($event) {
     var $el = angular.element($event.target),
-        $wrap = $el.closest('.period'),
+        $wrap = $el.closest('.popover'),
         $rows = $wrap.children('.row'),
         $row = $rows.eq(0),
         $inputs = $row.find('input'),
@@ -130,6 +142,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       controller.titleStr = info[$state.current.name].title;
       controller.profileStr = info[$state.current.name].profile;
       controller.typeStr = info[$state.current.name].type;
+      controller.pageTitle = info[$state.current.name].pageTitle;
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
       // Using settimeout to avoid waiting an extra cycle.
