@@ -102,7 +102,12 @@ function PassholderActivityTariffsController (
 
     var tariffClaimedSuccessfully = function () {
       tariff.assigned = true;
-      $rootScope.$emit('activityTariffClaimed', activity);
+      if (controller.groupSale && tariff.type === 'COUPON') {
+        $rootScope.$emit('activityTariffClaimedWithCoupon', activity);
+      }
+      else {
+        $rootScope.$emit('activityTariffClaimed', activity);
+      }
       controller.formSubmitBusy = false;
       $uibModalInstance.close();
     };
