@@ -77,9 +77,6 @@ function passFactory(Passholder) {
     },
     isLocalStock: function() {
       return this.status === 'LOCAL_STOCK';
-    },
-    isExpired: function() {
-      return this.status === 'EXPIRED';
     }
   };
 
