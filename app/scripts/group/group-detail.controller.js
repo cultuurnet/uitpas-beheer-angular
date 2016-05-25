@@ -12,7 +12,7 @@ angular
   .controller('GroupDetailController', GroupDetailController);
 
 /* @ngInject */
-function GroupDetailController (group, passholderService) {
+function GroupDetailController (group, passholderService, $rootScope, $scope) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -38,4 +38,8 @@ function GroupDetailController (group, passholderService) {
   };
 
   loadCoupons();
+
+  var cleanupActivityTariffClaimedWithCouponListener = $rootScope.$on('activityTariffClaimedWithCoupon', loadCoupons);
+
+  $scope.$on('$destroy', cleanupActivityTariffClaimedWithCouponListener);
 }
