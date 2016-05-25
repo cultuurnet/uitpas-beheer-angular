@@ -4,7 +4,7 @@ describe('Controller: GroupDetailController', function () {
 
   var passholderServiceMock;
   var apiUrl = 'http://example.com/';
-  var $controller, $state, $rootScope, $injector, $location, $q;
+  var $controller, $state, $rootScope, $injector, $location, $q, $scope;
 
   var identification = 1234567;
   var response = {};
@@ -22,6 +22,7 @@ describe('Controller: GroupDetailController', function () {
 
     inject(function (_$controller_, _$injector_, _$rootScope_, _$state_, _$location_) {
       $rootScope = _$rootScope_;
+      $scope = _$rootScope_.$new();
       $injector = _$injector_;
       $controller = _$controller_;
       $state = _$state_;
@@ -61,7 +62,9 @@ describe('Controller: GroupDetailController', function () {
 
     var controller = $controller('GroupDetailController', {
       group: group,
-      couponsLoading: false
+      couponsLoading: false,
+      $rootScope: $rootScope,
+      $scope: $scope
     });
     $rootScope.$digest();
     expect(controller.group).toBe(group);

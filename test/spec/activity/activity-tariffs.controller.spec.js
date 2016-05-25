@@ -254,7 +254,35 @@ describe('Controller: PassholderActivityTariffsController', function () {
     deferredClaim.resolve({claim: 'claim'});
     $scope.$digest();
 
-    expect($scope.$emit).toHaveBeenCalled();
+    expect($scope.$emit).toHaveBeenCalledWith('activityTariffClaimed', activity);
+    expect(controller.formSubmitBusy).toBeFalsy();
+    expect(modalInstance.close).toHaveBeenCalled();
+  });
+
+  it('can submit the activity tariffs form when groupsale with coupon', function () {
+    var controller = getControllerForPassholder(passholder);
+    var deferredClaim = $q.defer();
+    var claimPromise = deferredClaim.promise;
+
+    controller.selectedTariff = {
+      type: 'COUPON',
+      id: 123,
+      price: 1235,
+      priceClass: 'Basisprijs'
+    };
+    controller.groupSale = true;
+
+    spyOn(activityService, 'claimTariff').and.returnValue(claimPromise);
+    spyOn($scope, '$emit');
+
+    controller.claimTariff(passholder, activity);
+
+    expect(controller.formSubmitBusy).toBeTruthy();
+
+    deferredClaim.resolve({claim: 'claim'});
+    $scope.$digest();
+
+    expect($scope.$emit).toHaveBeenCalledWith('activityTariffClaimedWithCoupon', activity);
     expect(controller.formSubmitBusy).toBeFalsy();
     expect(modalInstance.close).toHaveBeenCalled();
   });
