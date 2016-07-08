@@ -505,11 +505,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    * @param {String} uitpasNumber
    * @return {Coupon[]}
    */
-  service.getCoupons = function(uitpasNumber, maxCoupons) {
-    if (typeof(maxCoupons)==='undefined') {
-      maxCoupons = 20;
-    }
-
+  service.getCoupons = function(uitpasNumber) {
     var deferredCoupons = $q.defer();
 
     function returnCoupons (couponsResponse) {
@@ -521,7 +517,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
     }
 
     $http
-      .get(apiUrl + 'passholders/' + uitpasNumber + '/coupons?max=' + maxCoupons)
+      .get(apiUrl + 'passholders/' + uitpasNumber + '/coupons')
       .then(returnCoupons, deferredCoupons.reject);
 
     return deferredCoupons.promise;
