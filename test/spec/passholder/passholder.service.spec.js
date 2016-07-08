@@ -406,7 +406,7 @@ describe('Service: passholderService', function () {
     }
 
     $httpBackend
-      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/coupons')
+      .expectGET(apiUrl + 'passholders/' + uitpasNumber + '/coupons?max=20')
       .respond(200, expectedCoupons);
 
     passholderService
