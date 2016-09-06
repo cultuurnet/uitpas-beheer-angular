@@ -25,7 +25,6 @@
     "showdown": "~1.3.0",
     "angular-chosen-js": "*",
     "chosen": "~1.4.2",
-    "lodash": "^4.6.1",
     "cultuurnet-google-tagmanager": "*"
   },
   "overrides": {
