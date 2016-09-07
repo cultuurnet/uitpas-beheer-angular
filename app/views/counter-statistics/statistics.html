@@ -136,7 +136,8 @@
                       <span class="columnbar" ng-class="{compare: csc.compareTable()}">
                         <span class="bar" style="width: {{age.count}}%"></span>
                         <span ng-if="csc.compareTable()" class="bar bar-2" style="width: {{csc.statistics['per_age2'][$index].count}}%" ></span>
-                        <span class="text">{{age.AgeRange}} jaar</span>
+                        <span ng-if="age.AgeRange !== 'unknow'" class="text" >{{age.AgeRange}} jaar</span>
+                        <span ng-if="age.AgeRange === 'unknow'" class="text">Onbekend</span>
                       </span>
                     </td>
                     <td class="number">{{age.count}}%</td>
@@ -259,7 +260,8 @@
                       <span class="columnbar" ng-class="{compare: csc.compareTable()}">
                         <span class="bar" style="width: {{age.count}}%"></span>
                         <span ng-if="csc.compareTable()" class="bar bar-2" style="width: {{csc.statistics['per_age2'][$index].count}}%" ></span>
-                        <span class="text">{{age.AgeRange}} jaar</span>
+                        <span ng-if="age.AgeRange !== 'unknow'" class="text" >{{age.AgeRange}} jaar</span>
+                        <span ng-if="age.AgeRange === 'unknow'" class="text">Onbekend</span>
                       </span>
                     </td>
                     <td class="number">{{age.count}}%</td>
@@ -422,7 +424,8 @@
                       <span class="columnbar" ng-class="{compare: csc.compareTable()}">
                         <span class="bar" style="width: {{age.count}}%"></span>
                         <span ng-if="csc.compareTable()" class="bar bar-2" style="width: {{csc.statistics['per_age2'][$index].count}}%" ></span>
-                        <span class="text">{{age.AgeRange}} jaar</span>
+                        <span ng-if="age.AgeRange !== 'unknow'" class="text" >{{age.AgeRange}} jaar</span>
+                        <span ng-if="age.AgeRange === 'unknow'" class="text">Onbekend</span>
                       </span>
                     </td>
                     <td class="number">{{age.count}}%</td>
