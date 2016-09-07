@@ -72,7 +72,7 @@
         <div ng-class="{'col-xs-12': !csc.compareTable(), 'col-xs-6': csc.compareTable()}">
           <p><span class="period-1">Periode 1</span></p>
           <div class="serie-1">
-            <div class="row">
+            <div class="grid">
               <div class="col-xs-12">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics.totalusers}}</h2>
@@ -170,21 +170,21 @@
       <div class="counter-statistics-table" ng-if="!csc.loadingStatistics && csc.which === 'exchange'">
         <div ng-class="{'col-xs-12': !csc.compareTable(), 'col-xs-6': csc.compareTable()}">
           <p><span class="period-1">Periode 1</span></p>
-          <div class="serie-1">
-            <div class="row">
-              <div class="col-xs-4 col-md-4 col-lg-2">
+          <div class="serie-1 grid">
+            <div class="grid__12 grid--bp-med__8 serie-wrapper">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics.transactions}}</h2>
                   <p class="stat__caption">{{csc.typeStr.transactions}}</p>
                 </section>
               </div>
-              <div class="col-xs-4 col-md-4 col-lg-2">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['new_users']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.new}}</p>
                 </section>
               </div>
-              <div class="col-xs-4 col-md-4 col-lg-2">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_users']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.active}}</p>
@@ -195,21 +195,21 @@
         </div>
         <div ng-class="{'col-xs-12': !csc.compareTable(), 'col-xs-6': csc.compareTable()}">
           <p ng-if="csc.compareTable()"><span class="period-2">Periode 2</span></p>
-          <div class="serie-2" ng-if="csc.compareTable()">
-            <div class="row">
-              <div class="col-xs-4 col-md-4 col-lg-2">
+          <div class="serie-2 grid" ng-if="csc.compareTable()">
+            <div class="grid__12 grid--bp-med__8 serie-wrapper">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics.transactions2}}</h2>
                   <p class="stat__caption">{{csc.typeStr.transactions}}</p>
                 </section>
               </div>
-              <div class="col-xs-4 col-md-4 col-lg-2">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['new_users2']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.new}}</p>
                 </section>
               </div>
-              <div class="col-xs-4 col-md-4 col-lg-2">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_users2']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.active}}</p>
@@ -218,7 +218,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-12 col-sm-6">
+        <div>
           <div class="panel">
             <div class="panel-heading">{{csc.profileStr}}</div>
             <div class="panel-body">
@@ -289,12 +289,12 @@
           </div>
         </div>
 
-        <div class="col-xs-12 col-sm-6">
+        <div>
           <div class="panel">
             <div class="panel-heading">Aanbod</div>
             <div class="panel-body">
-              <div class="row">
-                <div class="col-xs-12">
+              <div class="grid">
+                <div class="grid__12">
                   <div class="serie-1">
                     <section class="stat">
                       <h2 class="stat__number"><span>{{csc.statistics['total_ruilen']}}</span></h2>
@@ -303,8 +303,8 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-xs-12">
+              <div class="grid">
+                <div class="grid__12">
                   <table class="table">
                     <thead>
                       <tr>
@@ -331,23 +331,23 @@
       </div>
 
       <div class="counter-statistics-table" ng-if="!csc.loadingStatistics && csc.which === 'mia'">
-        <div ng-class="{'col-xs-12': !csc.compareTable(), 'col-xs-6': csc.compareTable()}">
+        <div>
           <p><span class="period-1">Periode 1</span></p>
-          <div class="serie-1">
-            <div class="row">
-              <div class="col-xs-4 col-md-4 col-lg-2">
+          <div class="serie-1 grid">
+            <div class="grid__12 grid--bp-med__8 serie-wrapper">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_mias']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.active}}</p>
                 </section>
               </div>
-              <div class="col-xs-4 col-md-4 col-lg-2">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['saving_mias']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.saving}}</p>
                 </section>
               </div>
-              <div class="col-xs-4 col-md-4 col-lg-2">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['exchanging_mias']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.exchanging}}</p>
@@ -356,23 +356,23 @@
             </div>
           </div>
         </div>
-        <div ng-class="{'col-xs-12': !csc.compareTable(), 'col-xs-6': csc.compareTable()}">
+        <div>
           <p ng-if="csc.compareTable()"><span class="period-2">Periode 2</span></p>
-          <div class="serie-2" ng-if="csc.compareTable()">
-            <div class="row">
-              <div class="col-xs-4 col-md-4 col-lg-2">
+          <div class="serie-2 grid" ng-if="csc.compareTable()">
+            <div class="grid__12 grid--bp-med__8 serie-wrapper">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_mias2']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.active}}</p>
                 </section>
               </div>
-              <div class="col-xs-4 col-md-4 col-lg-2">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['saving_mias2']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.saving}}</p>
                 </section>
               </div>
-              <div class="col-xs-4 col-md-4 col-lg-2">
+              <div class="grid__12 grid--bp-med__4">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['exchanging_mias2']}}</h2>
                   <p class="stat__caption">{{csc.typeStr.exchanging}}</p>
@@ -381,7 +381,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-12 col-sm-6">
+        <div>
           <div class="panel">
             <div class="panel-heading">{{csc.profileStr}}</div>
             <div class="panel-body">
@@ -452,12 +452,12 @@
           </div>
         </div>
 
-        <div class="col-xs-12 col-sm-6">
+        <div>
           <div class="panel">
             <div class="panel-heading">Aanbod</div>
             <div class="panel-body">
               <div class="row">
-                <div class="col-xs-12">
+                <div class="grid__12">
                   <div class="serie-1">
                     <section class="stat">
                       <h2 class="stat__number"><span>{{csc.statistics.nrTicketsLowTarif}}</span></h2>
@@ -468,7 +468,7 @@
               </div>
 
               <div class="row" ng-if="csc.statistics['top_popularTickets'] && csc.statistics['top_popularTickets'].length">
-                <div class="col-xs-12">
+                <div class="grid__12">
                   <table class="table">
                     <thead>
                       <tr>
@@ -489,7 +489,7 @@
               </div>
 
               <div class="row" ng-if="csc.statistics['top_popularActivities'] && csc.statistics['top_popularActivities'].length">
-                <div class="col-xs-12">
+                <div class="grid__12">
                   <table class="table">
                     <thead>
                       <tr>
@@ -510,7 +510,7 @@
               </div>
 
               <div class="row" ng-if="csc.statistics['top_popularExchangeAdvantages'] && csc.statistics['top_popularExchangeAdvantages'].length">
-                <div class="col-xs-12">
+                <div class="grid__12">
                   <table class="table">
                     <thead>
                       <tr>
