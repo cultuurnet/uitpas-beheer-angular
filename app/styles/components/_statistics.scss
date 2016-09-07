@@ -155,7 +155,73 @@ $graph-link-color: #337ab7;
     padding-left: 0px;
     padding-top: 24px;
   }
+
+  .frequences {
+
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      position: relative;
+      z-index: 0;
+      clear: both;
+
+      &:before {
+        border-bottom: 1px dotted #ccc;
+        content: " ";
+        display: block;
+        bottom: 4px;
+        position: absolute;
+        width: 100%;
+        z-index: -1;
+      }
+
+      .total-frequence {
+        display: inline;
+        background-color: $graph-page-bg;
+        padding-right: 12px;
+        z-index: 100;
+      }
+
+      .frequence-percent {
+        float: right;
+        padding-left: 12px;
+        z-index: 100;
+        background-color: $graph-page-bg;
+      }
+
+      .frequence-meter {
+
+        background: none repeat scroll 0 0 $graph2-bg;
+        border-radius: 2px;
+        height: 13px;
+        overflow: hidden;
+        position: relative;
+        width: 50px;
+        display: inline-block;
+
+        span {
+          background: #00a869;
+          display: block;
+          height: 100%;
+          overflow: hidden;
+          position: relative;
+        }
+
+      }
+
+    }
+
+  }
+
 }
+
+.serie-1 .frequence-meter span {
+  background: #f4ac0e;
+}
+
 .page-header {
   &:after {
     content: '';
