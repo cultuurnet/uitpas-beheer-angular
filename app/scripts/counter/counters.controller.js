@@ -14,7 +14,8 @@ angular
 /* @ngInject */
 function countersController($state, counterService, list, lastActiveId, appConfig) {
   /*jshint validthis: true */
-  var controller = this;
+  var controller = this,
+    analyticsEnabled = (typeof ga === 'function');
 
   controller.list = [];
   controller.lastActive = undefined;
@@ -35,6 +36,12 @@ function countersController($state, counterService, list, lastActiveId, appConfi
 
   controller.setActiveCounter = function(activeCounter) {
     counterService.setActive(activeCounter).then(function() {
+      // If analytics is enabled, set the selected counter as dimension.
+      if (analyticsEnabled) {
+        ga('set', 'dimension1', activeCounter.id);
+        ga('set', 'dimension2', activeCounter.name);
+      }
+
       $state.go('counter.main');
     });
   };

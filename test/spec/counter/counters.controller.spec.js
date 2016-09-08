@@ -7,6 +7,8 @@ describe('Controller: CountersController', function () {
 
   var CountersController, $scope, $location, counterService, $q, $state;
 
+  window.ga = function(method, key, value) {};
+
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope, _$q_, _counterService_, _$state_) {
     counterService = _counterService_;
@@ -14,6 +16,7 @@ describe('Controller: CountersController', function () {
     $scope = $rootScope.$new();
     $state = _$state_;
     $q = _$q_;
+
     CountersController = $controller('CountersController', {
       $location: $location,
       counterService: counterService,
@@ -68,12 +71,15 @@ describe('Controller: CountersController', function () {
   });
 
   it('Can activate a counter', function (done) {
+
     var counterToActivate = {},
         deferredActivation = $q.defer(),
-        activeCounterPromise = deferredActivation.promise;
+        activeCounterPromise = deferredActivation.promise,
+        gaSpy = spyOn(window, 'ga');
 
     var counterActivated = function () {
       expect($state.go).toHaveBeenCalledWith('counter.main');
+      expect(gaSpy).toHaveBeenCalled();
       done();
     };
 
@@ -87,4 +93,5 @@ describe('Controller: CountersController', function () {
     activeCounterPromise.finally(counterActivated);
     $scope.$digest();
   });
+
 });
