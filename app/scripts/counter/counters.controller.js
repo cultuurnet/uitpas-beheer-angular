@@ -38,8 +38,15 @@ function countersController($state, counterService, list, lastActiveId, appConfi
     counterService.setActive(activeCounter).then(function() {
       // If analytics is enabled, set the selected counter as dimension.
       if (analyticsEnabled) {
-        ga('set', 'dimension1', activeCounter.id);
-        ga('set', 'dimension2', activeCounter.name);
+
+        var trackers = ga.getAll();
+        for (var i = 0; i < trackers.length; i++) {
+          var trackerName = trackers[i].get('name');
+          ga(trackerName + '.set', 'dimension1', activeCounter.id);
+          ga(trackerName + '.set', 'dimension2', activeCounter.name);
+          ga(trackerName + '.send', 'pageview');
+        }
+
       }
 
       $state.go('counter.main');
