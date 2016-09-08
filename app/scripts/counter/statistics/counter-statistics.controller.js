@@ -20,6 +20,8 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       pageTitle: 'Verkoop',
       path: 'cardsales',
       title: 'Verkochte kaarten',
+      plural_label: 'verkochte kaarten',
+      single_label: 'verkochte kaart',
       type: 'Kopers',
       profile: 'Profiel van de koper'
     },
@@ -27,6 +29,8 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       pageTitle: 'Sparen',
       path: 'checkins',
       title: 'Gespaarde punten',
+      plural_label: 'gespaarde punten',
+      single_label: 'gespaard punt',
       type: {
         saved: 'Gespaarde punten',
         active: 'Actieve spaarders',
@@ -38,6 +42,8 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       pageTitle: 'Ruilen',
       path: 'exchanges',
       title: 'Omgeruilde voordelen',
+      plural_label: 'omgeruilde voordelen',
+      single_label: 'omgeruild voordeel',
       type: {
         active: 'Actieve ruilers',
         new: 'Nieuwe ruilers',
@@ -49,6 +55,8 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       pageTitle: 'MIA\'s',
       path: 'mias',
       title: 'Actieve MIA\'s',
+      plural_label: 'actieve MIA\'s',
+      single_label: 'actieve MIA',
       type: {
         active: 'Actieve MIA\'s',
         saving: 'Sparende MIA\'s',
@@ -220,7 +228,6 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         graph;
 
     if (compare) {
-      xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(5).tickFormat('');
       line2 = d3.svg.line()
               .x(function (d) { return xScale(format.parse(d.date)); })
               .y(function (d) { return yScale(parseInt(d.count2, 10)); });
@@ -228,6 +235,8 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
     // Make sure it's cleared.
     $graphWrap.empty();
+    var tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 0);
+
     // Line handler.
     line = d3.svg.line()
           .x(function(d) { return xScale(format.parse(d.date)); })
@@ -296,7 +305,12 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         })
         .attr('cy', function(d) {
           return yScale(parseInt(d.count, 10));
-        });
+        })
+        .on("mouseover", function(d) {
+          showTooltip(d.count, d.date)
+        })
+        .on("mouseout", hideTooltip);
+
     if (compare) {
       // Add a circle per data point.
       graph.selectAll('dot-2')
@@ -310,8 +324,39 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
           })
           .attr('cy', function(d) {
             return yScale(parseInt(d.count2, 10));
-          });
+          })
+          .on("mouseover", function(d) {
+            showTooltip(d.count2, d.date2)
+          })
+          .on("mouseout", hideTooltip);
     }
+
+    /**
+     * Show the tooltip for a point on the graph.
+     */
+    function showTooltip(total, date) {
+
+        var label = (total == 1 ? info[$state.current.name].single_label : info[$state.current.name].plural_label);
+
+        tooltip.html("<strong>" + date + "</strong><br/>" + " " + total + " " + label);
+
+        // Tooltip needs to move first, if not getBoundingClientRect returns old info.
+        tooltip.style("left", (d3.event.pageX + 5) + "px");
+
+        var elementInfo = tooltip.node().getBoundingClientRect();
+        tooltip.style("top", (d3.event.pageY - elementInfo.height) + "px");
+
+        tooltip.transition().duration(100).style("opacity", 1);
+
+    }
+
+    /**
+     * Hide the tooltip.
+     */
+    function hideTooltip() {
+      tooltip.transition().duration(200).style("opacity", 0);
+    }
+
   };
 
   controller.loadDefaultDateRange();

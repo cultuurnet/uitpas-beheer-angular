@@ -5,8 +5,9 @@ $graph2-fg: #f4ac0e;
 $graph2-bg: #f2e4ce;
 
 $axis-border-color: #ccc;
-
 $axis-text-color: #333;
+$statistics-tooltip-bg-color: #333;
+$statistics-tooltip-text-color: #fff;
 
 $graph-page-bg: #fff;
 
@@ -34,6 +35,7 @@ $graph-link-color: #337ab7;
     &.dot-2 {
       fill: $graph2-fg;
     }
+    z-index: 999;
   }
   .axis {
     path,
@@ -48,6 +50,17 @@ $graph-link-color: #337ab7;
       color: $axis-text-color;
       fill: $axis-text-color;
     }
+  }
+  .graph-tooltip {
+    position: absolute;
+    text-align: center;
+    min-width: 40px;
+    padding: 2px 4px;
+    background: $statistics-tooltip-bg-color;
+    color: $statistics-tooltip-text-color;
+    border: 0px;
+    border-radius: 1px;
+    z-index: 1;
   }
 }
 
