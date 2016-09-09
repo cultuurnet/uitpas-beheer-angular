@@ -129,17 +129,17 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     this.updateDates($event);
   };
 
-  // Checker for the date picker popout.
-  controller.showCompare = function () {
+  // Is the user comparing.
+  controller.isComparing = function () {
     return controller.comparing &&
            controller.dateRanges[1] &&
            controller.dateRanges[1].from &&
            controller.dateRanges[1].to;
   };
 
-  // Checker for compare table.
-  controller.compareTable = function() {
-    return !!(controller.statistics && controller.statistics.profiles2);
+  // Does the controller has comparing data.
+  controller.hasCompareData = function() {
+    return controller.statistics && controller.statistics.profiles2;
   };
 
   controller.loadStatistics = function () {
@@ -153,9 +153,10 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       controller.pageTitle = info[$state.current.name].pageTitle;
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
+
       // Using settimeout to avoid waiting an extra cycle.
       setTimeout(function(){
-        controller.renderGraph();
+        controller.renderGraph(controller.statistics);
       }, 0);
     };
 
@@ -202,11 +203,11 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   };
 
   // Helper function for drawing the actual graph.
-  controller.renderGraph = function () {
+  controller.renderGraph = function (statistics) {
     // Grab placeholder.
     var $graphWrap = $element.find('.counter-statistics-graph'),
         // The data to be used.
-        stats = this.statistics,
+        stats = statistics,
         // Global d3 reference.
         d3 = window.d3,
         format = d3.time.format('%d-%m-%Y'),
@@ -221,7 +222,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         // Axis handlers.
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(5).tickFormat(d3.time.format('%d/%m')),
         yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(3),
-        compare = this.compareTable(),
+        compare = this.hasCompareData(),
         line,
         line2,
         area,
@@ -329,6 +330,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
             showTooltip(d.count2, d.date2)
           })
           .on("mouseout", hideTooltip);
+
     }
 
     /**
