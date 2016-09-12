@@ -85,6 +85,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     return new Date(dateStr);
   };
 
+  /* istanbul ignore next */
   controller.updateDates = function ($event) {
     var $el = angular.element($event.target),
         $wrap = $el.closest('.popover'),
@@ -111,6 +112,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     controller.pickingDate = false;
   };
 
+  /* istanbul ignore next */
   controller.resetDates = function ($event) {
     var $el = angular.element($event.target),
         $wrap = $el.closest('.popover'),
@@ -171,6 +173,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       .then(showStatistics, noStatisticsFound);
   };
 
+  /* istanbul ignore next */
   controller.addDatePicker = function () {
     // Using setTimeout instead of $timeout to save a cycle.
     setTimeout(function() {
