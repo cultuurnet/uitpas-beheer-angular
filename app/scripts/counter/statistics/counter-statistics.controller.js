@@ -77,8 +77,9 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   controller.profileStr = '';
 
   controller.loadDefaultDateRange = function() {
-    var dateRange = counterService.getDefaultDateRange();
-    controller.dateRanges.push(dateRange);
+    var dateRange = counterService.getDefaultDateRange(),
+        dateRange2 = counterService.getDefaultDateRange();
+    controller.dateRanges.push(dateRange, dateRange2);
   };
 
   controller.makeDate = function (dateStr) {
@@ -96,8 +97,8 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         $row2, $inputs2;
     controller.dateRanges[0].from = moment(val[0], 'DD/MM/YYYY');
     controller.dateRanges[0].to = moment(val[1], 'DD/MM/YYYY');
-    if (controller.comparing) {
-      controller.dateRanges[1] = controller.dateRanges[1] || {};
+    controller.dateRanges[1] = controller.dateRanges[1] || {};
+    if (controller.isComparing()) {
       $row2 = $rows.eq(1);
       $inputs2 = $row2.find('input[type="text"]');
       val = $inputs2.eq(0).val().split(' - ');
@@ -123,7 +124,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         $row2, $inputs2;
     $inputs.eq(0).val(controller.dateRanges[0].from.format('DD/MM/YYYY'));
     $inputs.eq(1).val(controller.dateRanges[0].to.format('DD/MM/YYYY'));
-    if (controller.dateRanges[1] && controller.dateRanges[1].from && controller.dateRanges[1].to) {
+    if (controller.isComparing()) {
       $row2 = $rows.eq(1);
       $inputs2 = $row2.find('input[type="text"]');
       $inputs2.eq(0).val(controller.dateRanges[1].from.format('DD/MM/YYYY'));
@@ -146,6 +147,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   };
 
   controller.loadStatistics = function () {
+    var currentRanges = [];
     var showStatistics = function (statistics) {
       controller.statistics = statistics;
       controller.loadingStatistics = false;
@@ -168,9 +170,15 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
       controller.noStatisticsError = true;
     };
 
+    currentRanges.push(controller.dateRanges[0]);
+
+    if (controller.isComparing()) {
+      currentRanges.push(controller.dateRanges[1]);
+    }
+
     controller.loadingStatistics = true;
     counterService
-      .getStatistics(controller.dateRanges, info[$state.current.name].path)
+      .getStatistics(currentRanges, info[$state.current.name].path)
       .then(showStatistics, noStatisticsFound);
   };
 
