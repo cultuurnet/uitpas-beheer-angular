@@ -89,27 +89,28 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   controller.updateDates = function ($event) {
     var $el = angular.element($event.target),
         $wrap = $el.closest('.popover'),
-        $rows = $wrap.children('.row'),
+        $rows = $wrap.children('.row').eq(0).children(),
         $row = $rows.eq(0),
-        $inputs = $row.find('input'),
-        $row2, $inputs2, val1, val2;
-    controller.dateRanges[0].from = moment($inputs.eq(0).val(), 'DD/MM/YYYY');
-    controller.dateRanges[0].to = moment($inputs.eq(1).val(), 'DD/MM/YYYY');
+        $inputs = $row.find('input[type="text"]'),
+        val = $inputs.eq(0).val().split(' - '),
+        $row2, $inputs2;
+    controller.dateRanges[0].from = moment(val[0], 'DD/MM/YYYY');
+    controller.dateRanges[0].to = moment(val[1], 'DD/MM/YYYY');
     if (controller.comparing) {
       controller.dateRanges[1] = controller.dateRanges[1] || {};
       $row2 = $rows.eq(1);
       $inputs2 = $row2.find('input[type="text"]');
-      val1 = $inputs2.eq(0).val();
-      val2 = $inputs2.eq(1).val();
-      if (val1 && val2) {
-        controller.dateRanges[1].from = moment(val1, 'DD/MM/YYYY');
-        controller.dateRanges[1].to = moment(val2, 'DD/MM/YYYY');
+      val = $inputs2.eq(0).val().split(' - ');
+      if (val && val.length) {
+        controller.dateRanges[1].from = moment(val[0], 'DD/MM/YYYY');
+        controller.dateRanges[1].to = moment(val[1], 'DD/MM/YYYY');
       }
       else {
         controller.comparing = false;
       }
     }
     controller.pickingDate = false;
+    controller.loadStatistics();
   };
 
   /* istanbul ignore next */
@@ -178,16 +179,27 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     // Using setTimeout instead of $timeout to save a cycle.
     setTimeout(function() {
       // Coupled to DOM :(
-      var $wrap = $element.find('.period'),
+      var $wrap = $element.find('.period-chooser'),
           $rows = $wrap.find('.row'),
           $row1 = $rows.eq(0),
           $row2 = $rows.eq(1),
           $inputs = $row1.find('input[type="text"]'),
           $inputs2 = $row2.find('input[type="text"]'),
-          defOpts = {format: 'DD/MM/YYYY'},
           jQuery = window.jQuery,
           def3 = new Date(),
-          def4 = new Date();
+          def4 = new Date(),
+          defOpts;
+      defOpts = {
+        locale: { format: 'DD/MM/YYYY'},
+        ranges: {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+      };
       // If we have a second range, use that as default.
       if (controller.dateRanges[1]) {
         if (controller.dateRanges[1].from) {
@@ -197,11 +209,11 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
           def4 = controller.dateRanges[1].to._d;
         }
       }
-      // Attach datetimepickers
-      $inputs.eq(0).datetimepicker(jQuery.extend(defOpts, {defaultDate: controller.dateRanges[0].from._d}));
-      $inputs.eq(1).datetimepicker(jQuery.extend(defOpts, {defaultDate: controller.dateRanges[0].to._d}));
-      $inputs2.eq(0).datetimepicker(jQuery.extend(defOpts, {defaultDate: def3}));
-      $inputs2.eq(1).datetimepicker(jQuery.extend(defOpts, {defaultDate: def4}));
+      // Attach daterangepickers
+      $inputs.eq(0).daterangepicker(jQuery.extend(defOpts, {defaultDate: controller.dateRanges[0].from._d}));
+      $inputs.eq(1).daterangepicker(jQuery.extend(defOpts, {defaultDate: controller.dateRanges[0].to._d}));
+      $inputs2.eq(0).daterangepicker(jQuery.extend(defOpts, {defaultDate: def3}));
+      $inputs2.eq(1).daterangepicker(jQuery.extend(defOpts, {defaultDate: def4}));
     }, 0);
   };
 
@@ -239,7 +251,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
     // Make sure it's cleared.
     $graphWrap.empty();
-    var tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 0);
+    var tooltip = d3.select('.counter-statistics-graph').append('div').attr('class', 'graph-tooltip').style('opacity', 0);
 
     // Line handler.
     line = d3.svg.line()
