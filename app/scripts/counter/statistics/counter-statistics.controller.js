@@ -142,7 +142,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
   // Does the controller has comparing data.
   controller.hasCompareData = function() {
-    return controller.statistics && controller.statistics.profiles2;
+    return !!(controller.statistics && controller.statistics.profiles2);
   };
 
   controller.loadStatistics = function () {
@@ -179,7 +179,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     // Using setTimeout instead of $timeout to save a cycle.
     setTimeout(function() {
       // Coupled to DOM :(
-      var $wrap = $element.find('.period-chooser'),
+      var $wrap = angular.element(document.querySelectorAll('.period-chooser')),
           $rows = $wrap.find('.row'),
           $row1 = $rows.eq(0),
           $row2 = $rows.eq(1),
@@ -218,11 +218,11 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   };
 
   // Helper function for drawing the actual graph.
-  controller.renderGraph = function (statistics) {
+  controller.renderGraph = function () {
     // Grab placeholder.
-    var $graphWrap = $element.find('.counter-statistics-graph'),
+    var $graphWrap = angular.element(document.querySelectorAll('.counter-statistics-graph')),
         // The data to be used.
-        stats = statistics,
+        stats = controller.statistics,
         // Global d3 reference.
         d3 = window.d3,
         format = d3.time.format('%d-%m-%Y'),
@@ -303,7 +303,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     // Add the X Axis.
     graph.append('g')
         .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
+        .attr('transform', 'translate(0, ' + height + ')')
         .call(xAxis);
     // Add the Y Axis.
     graph.append('g')
@@ -323,9 +323,11 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
           return yScale(parseInt(d.count, 10));
         })
         .on("mouseover", function(d) {
-          showTooltip(d.count, d.date)
+          controller.showTooltip(d3.event, tooltip, d.count, d.date)
         })
-        .on("mouseout", hideTooltip);
+        .on("mouseout", function() {
+          controller.hideTooltip(d3.event, tooltip);
+        });
 
     if (compare) {
       // Add a circle per data point.
@@ -342,38 +344,41 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
             return yScale(parseInt(d.count2, 10));
           })
           .on("mouseover", function(d) {
-            showTooltip(d.count2, d.date2)
+            controller.showTooltip(tooltip, d.count2, d.date2)
           })
-          .on("mouseout", hideTooltip);
+          .on("mouseout", function() {
+            controller.hideTooltip(tooltip);
+          });
 
     }
 
-    /**
-     * Show the tooltip for a point on the graph.
-     */
-    function showTooltip(total, date) {
+  };
 
-        var label = (total == 1 ? info[$state.current.name].single_label : info[$state.current.name].plural_label);
 
-        tooltip.html("<strong>" + date + "</strong><br/>" + " " + total + " " + label);
+  /**
+   * Show the tooltip for a point on the graph.
+   */
+  controller.showTooltip = function(event, tooltip, total, date) {
 
-        // Tooltip needs to move first, if not getBoundingClientRect returns old info.
-        tooltip.style("left", (d3.event.pageX + 5) + "px");
+    var label = (total == 1 ? info[$state.current.name].single_label : info[$state.current.name].plural_label);
 
-        var elementInfo = tooltip.node().getBoundingClientRect();
-        tooltip.style("top", (d3.event.pageY - elementInfo.height) + "px");
+    tooltip.html("<strong>" + date + "</strong><br/>" + " " + total + " " + label);
 
-        tooltip.transition().duration(100).style("opacity", 1);
+    // Tooltip needs to move first, if not getBoundingClientRect returns old info.
+    tooltip.style("left", (event.pageX + 5) + "px");
 
-    }
+    var elementInfo = tooltip.node().getBoundingClientRect();
+    tooltip.style("top", (event.pageY - elementInfo.height) + "px");
 
-    /**
-     * Hide the tooltip.
-     */
-    function hideTooltip() {
-      tooltip.transition().duration(200).style("opacity", 0);
-    }
+    tooltip.transition().duration(100).style("opacity", 1);
 
+  };
+
+  /**
+   * Hide the tooltip.
+   */
+  controller.hideTooltip = function(tooltip) {
+    tooltip.transition().duration(200).style("opacity", 0);
   };
 
   controller.loadDefaultDateRange();
