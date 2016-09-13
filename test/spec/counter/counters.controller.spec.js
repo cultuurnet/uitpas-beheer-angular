@@ -7,8 +7,6 @@ describe('Controller: CountersController', function () {
 
   var CountersController, $scope, $location, counterService, $q, $state;
 
-  window.ga = function(method, key, value) {};
-
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope, _$q_, _counterService_, _$state_) {
     counterService = _counterService_;
@@ -71,6 +69,28 @@ describe('Controller: CountersController', function () {
   });
 
   it('Can activate a counter', function (done) {
+
+    function Tracker(name) {
+
+      this.name = name;
+
+      this.get = function(key) {
+        return name;
+      }
+
+    }
+
+    function Ga() {
+
+      this.getAll = function() {
+        return [
+          new Tracker('name')
+        ];
+      }
+
+    }
+
+    window.ga = new Ga();
 
     var counterToActivate = {},
         deferredActivation = $q.defer(),
