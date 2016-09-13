@@ -23,7 +23,7 @@ describe('Controller: CounterStatisticsController', function () {
   }));
 
   beforeEach(function() {
-    $(document.body).append('<div class="counter-statistics-graph" style="width: 400px;"></div>');
+    $(document.body).append('<div class="counter-statistics-graph" style="width: 800px;"></div>');
     jasmine.clock().install();
   })
 
@@ -50,7 +50,7 @@ describe('Controller: CounterStatisticsController', function () {
 
     CounterStatisticsController.loadDefaultDateRange();
 
-    expect(arraySpy).toHaveBeenCalledWith('date');
+    expect(arraySpy).toHaveBeenCalledWith('date', 'date');
 
   });
 
@@ -104,6 +104,36 @@ describe('Controller: CounterStatisticsController', function () {
 
   });
 
+  it('loads 2 default dates if comparing', function() {
+
+    var statistics = {
+      periods: ''
+    };
+
+    $state.current = {
+      'name' : 'counter.statistics'
+    }
+
+    var deferredLoad = $q.defer(),
+      getStatisticsPromise = deferredLoad.promise;
+
+    counterService.getStatistics.and.returnValue(getStatisticsPromise);
+
+    var dateRange = {
+      from: '2016-09-09',
+      to: '2016-09-10'
+    }
+    CounterStatisticsController.comparing = true;
+    CounterStatisticsController.dateRanges = [];
+    CounterStatisticsController.dateRanges.push(dateRange);
+    CounterStatisticsController.dateRanges.push(dateRange);
+
+    CounterStatisticsController.loadStatistics();
+
+    expect(counterService.getStatistics).toHaveBeenCalledWith(CounterStatisticsController.dateRanges, 'cardsales');
+
+  });
+
   it('shows error when failed to load the statistics', function() {
 
     var deferredLoad = $q.defer(),
@@ -143,7 +173,10 @@ describe('Controller: CounterStatisticsController', function () {
       to: '2016-09-10'
     }
     CounterStatisticsController.comparing = true;
+    CounterStatisticsController.dateRanges = [];
     CounterStatisticsController.dateRanges.push(dateRange);
+    CounterStatisticsController.dateRanges.push(dateRange);
+
     expect(CounterStatisticsController.isComparing()).toBeTruthy();
 
   });
@@ -186,7 +219,7 @@ describe('Controller: CounterStatisticsController', function () {
     var $svg = angular.element(document).find('svg');
     var $g = $svg.find('g');
 
-    expect($svg.width()).toEqual(400);
+    expect($svg.width()).toEqual(800);
     expect(angular.element($g[0]).attr('transform')).toEqual('translate(40, 40)');
 
     expect(angular.element($g[0].querySelectorAll('.x')).attr('transform')).toEqual('translate(0, 250)');
@@ -444,6 +477,74 @@ describe('Controller: CounterStatisticsController', function () {
     var spy = spyOn(CounterStatisticsController, 'loadStatistics');
     rootScope.$broadcast('$stateChangeSuccess');
     expect(spy).toHaveBeenCalled();
+
+  });
+
+  it('re-renders after resize', function () {
+
+    $state.current = {
+      'name' : 'counter.statistics'
+    }
+
+    CounterStatisticsController.statistics = {
+      "periods": [
+
+        {
+          "date": "01-07-2016",
+          "count": 0,
+          "date2": null,
+          "count2": 0
+        },
+        {
+          "date": "02-07-2016",
+          "count": 0,
+          "date2": null,
+          "count2": 0
+        }
+      ]
+    };
+
+    CounterStatisticsController.renderGraph();
+
+    var spy = spyOn(CounterStatisticsController, 'renderGraph');
+    var event = document.createEvent('Event');
+    event.initEvent('resize', true, true);
+    window.dispatchEvent(event);
+
+    expect(spy).toHaveBeenCalled();
+
+  });
+
+  it('has fixed width if wrapper is to small', function () {
+
+    $state.current = {
+      'name' : 'counter.statistics'
+    }
+
+    CounterStatisticsController.statistics = {
+      "periods": [
+
+        {
+          "date": "01-07-2016",
+          "count": 0,
+          "date2": null,
+          "count2": 0
+        },
+        {
+          "date": "02-07-2016",
+          "count": 0,
+          "date2": null,
+          "count2": 0
+        }
+      ]
+    };
+
+    d3.select('.counter-statistics-graph').attr('style', "width: 300px");
+    CounterStatisticsController.renderGraph();
+
+    var $svg = angular.element(document).find('svg');
+
+    expect($svg.width()).toEqual(600);
 
   });
 

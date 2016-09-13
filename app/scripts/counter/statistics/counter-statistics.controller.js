@@ -135,10 +135,10 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
   // Is the user comparing.
   controller.isComparing = function () {
-    return controller.comparing &&
+    return !!(controller.comparing &&
            controller.dateRanges[1] &&
            controller.dateRanges[1].from &&
-           controller.dateRanges[1].to;
+           controller.dateRanges[1].to);
   };
 
   // Does the controller has comparing data.
@@ -227,17 +227,25 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
   // Helper function for drawing the actual graph.
   controller.renderGraph = function () {
+
     // Grab placeholder.
-    var $graphWrap = angular.element(document.querySelectorAll('.counter-statistics-graph')),
-        // The data to be used.
-        stats = controller.statistics,
+    var $graphWrap = angular.element(document.querySelectorAll('.counter-statistics-graph'));
+
+    // If graph would be more then 600px, force fixed width.
+    var maxWidth = $graphWrap.width();
+    if (maxWidth < 600) {
+      maxWidth = 600;
+    }
+
+    // The data to be used.
+    var stats = controller.statistics,
         // Global d3 reference.
         d3 = window.d3,
         format = d3.time.format('%d-%m-%Y'),
         // Hardcoded margin.
         margin = 40,
         // Grab width - margins.
-        width = $graphWrap.width() - (margin * 2),
+        width = maxWidth - (margin * 2),
         height = 250,
         // Scaling functions.
         xScale = d3.time.scale().range([0, width]),
@@ -299,15 +307,9 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     // Make a line path per period.
     graph.append('path')
         .datum(stats.periods)
-        .attr('class', 'line')
+        .attr('class', 'line line-1')
         .attr('d', line);
-    if (compare) {
-      // Make a line path per period.
-      graph.append('path')
-          .datum(stats.periods)
-          .attr('class', 'line line-2')
-          .attr('d', line2);
-    }
+
     // Add the X Axis.
     graph.append('g')
         .attr('class', 'x axis')
@@ -322,7 +324,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         .data(stats.periods)
         .enter()
         .append('circle')
-        .attr('class', 'dot')
+        .attr('class', 'dot dot-1')
         .attr('r', 5)
         .attr('cx', function(d) {
           return xScale(format.parse(d.date));
@@ -338,6 +340,13 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         });
 
     if (compare) {
+
+      // Make a line path per period.
+      graph.append('path')
+        .datum(stats.periods)
+        .attr('class', 'line line-2')
+        .attr('d', line2);
+
       // Add a circle per data point.
       graph.selectAll('dot-2')
           .data(stats.periods)
@@ -360,8 +369,11 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
     }
 
-  };
+    d3.select(window).on('resize', function() {
+      controller.renderGraph();
+    });
 
+  };
 
   /**
    * Show the tooltip for a point on the graph.
