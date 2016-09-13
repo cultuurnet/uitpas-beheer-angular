@@ -5,6 +5,13 @@ describe('Controller: CountersController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
+  function Tracker(name) {
+    this.name = name;
+    this.get = function(key) {
+      return name;
+    }
+  }
+
   var CountersController, $scope, $location, counterService, $q, $state;
 
   // Initialize the controller and a mock scope
@@ -14,6 +21,14 @@ describe('Controller: CountersController', function () {
     $scope = $rootScope.$new();
     $state = _$state_;
     $q = _$q_;
+
+    window.ga = function() {}
+    window.ga.getAll = function() {
+      return [
+        new Tracker('name')
+      ];
+    }
+
     CountersController = $controller('CountersController', {
       $location: $location,
       counterService: counterService,
@@ -68,29 +83,6 @@ describe('Controller: CountersController', function () {
   });
 
   it('Can activate a counter', function (done) {
-
-    function Tracker(name) {
-
-      this.name = name;
-
-      this.get = function(key) {
-        return name;
-      }
-
-    }
-
-    function Ga() {
-
-      this.getAll = function() {
-        return [
-          new Tracker('name')
-        ];
-      }
-
-    }
-
-    window.ga = new Ga();
-
     var counterToActivate = {},
         deferredActivation = $q.defer(),
         activeCounterPromise = deferredActivation.promise,
