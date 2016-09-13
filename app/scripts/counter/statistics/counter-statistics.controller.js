@@ -199,6 +199,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
           defOpts;
       defOpts = {
         locale: { format: 'DD/MM/YYYY'},
+        opens: 'left',
         ranges: {
           'Today': [moment(), moment()],
           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -260,7 +261,6 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     // Make sure it's cleared.
     $graphWrap.empty();
     var tooltip = d3.select('.counter-statistics-graph').append('div').attr('class', 'graph-tooltip').style('opacity', 0);
-
     // Line handler.
     line = d3.svg.line()
           .x(function(d) { return xScale(format.parse(d.date)); })
@@ -330,10 +330,10 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         .attr('cy', function(d) {
           return yScale(parseInt(d.count, 10));
         })
-        .on("mouseover", function(d) {
+        .on('mouseover', function(d) {
           controller.showTooltip(d3.event, tooltip, d.count, d.date)
         })
-        .on("mouseout", function() {
+        .on('mouseout', function() {
           controller.hideTooltip(d3.event, tooltip);
         });
 
@@ -351,11 +351,11 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
           .attr('cy', function(d) {
             return yScale(parseInt(d.count2, 10));
           })
-          .on("mouseover", function(d) {
-            controller.showTooltip(tooltip, d.count2, d.date2)
+          .on('mouseover', function(d) {
+            controller.showTooltip(d3.event, tooltip, d.count2, d.date2);
           })
-          .on("mouseout", function() {
-            controller.hideTooltip(tooltip);
+          .on('mouseout', function() {
+            controller.hideTooltip(d3.event, tooltip);
           });
 
     }
@@ -385,7 +385,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   /**
    * Hide the tooltip.
    */
-  controller.hideTooltip = function(tooltip) {
+  controller.hideTooltip = function(event, tooltip) {
     tooltip.transition().duration(200).style("opacity", 0);
   };
 
