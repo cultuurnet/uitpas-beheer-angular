@@ -8,7 +8,7 @@
  * Controller of the ubr.passholder module.
  */
 angular
-  .module('ubr.passholder')
+  .module('ubr.coupon')
   .controller('CouponDetailController', CouponDetailController);
 
 /* @ngInject */

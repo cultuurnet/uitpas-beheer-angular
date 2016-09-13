@@ -316,6 +316,11 @@ describe('Service: activity', function (){
       priceClass: 'Eerste rang',
       tariffId: '10'
     };
+    spyOn($rootScope, '$emit');
+
+    function claimActivity(response) {
+      expect($rootScope.$emit).toHaveBeenCalledWith('ticketsSold', response);
+    }
 
     $httpBackend.expectPOST(apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales', expectedPostParams)
       .respond(200, claim);
@@ -334,7 +339,8 @@ describe('Service: activity', function (){
       .respond(200, claim);
 
     var kansenstatuutClaimPromise = activityService
-      .claimTariff(passholder, activity, priceInfo);
+      .claimTariff(passholder, activity, priceInfo)
+      .then(claimActivity);
 
     var allTariffsClaimed = function () {
       done();

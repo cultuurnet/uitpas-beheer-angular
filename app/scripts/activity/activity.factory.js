@@ -123,7 +123,8 @@ function activityFactory(CheckinState) {
     /**
      * Get the most suitable tariff based on the sales info of the activity.
      *
-     * @return {string}
+     * @return {string|null}
+     *  Null will be returned if the tariff is unknown.
      */
     getTariff: function () {
       var tariff = null,
