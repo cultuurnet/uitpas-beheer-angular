@@ -63,10 +63,10 @@
           <p><span class="period-1">Periode 1</span></p>
           <div class="serie-1">
             <div class="grid">
-              <div class="col-xs-12">
+              <div class="grid__12" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics.totalusers}}</h2>
-                  <p class="stat__caption">Kopers</p>
+                  <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
                 </section>
               </div>
             </div>
@@ -76,10 +76,10 @@
           <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span></p>
           <div class="serie-2" ng-if="csc.hasCompareData()">
             <div class="row">
-              <div class="col-xs-12">
+              <div class="grid__12" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics.totalusers2}}</h2>
-                  <p class="stat__caption">Kopers</p>
+                  <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
                 </section>
               </div>
             </div>
@@ -92,22 +92,22 @@
           <p><span class="period-1">Periode 1</span></p>
           <div class="serie-1 grid">
             <div class="grid__12 grid--bp-med__6">
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.saved.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['transactions']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.saved}}</p>
+                  <p class="stat__caption">{{csc.typeStr.saved.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_users']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.active}}</p>
+                  <p class="stat__caption">{{csc.typeStr.active.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.new.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['new_users']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.new}}</p>
+                  <p class="stat__caption">{{csc.typeStr.new.label}}</p>
                 </section>
               </div>
             </div>
@@ -128,22 +128,22 @@
           <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span></p>
           <div class="serie-2 grid" ng-if="csc.hasCompareData()">
             <div class="grid__12 grid--bp-med__6">
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.saved.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['transactions2']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.saved}}</p>
+                  <p class="stat__caption">{{csc.typeStr.saved.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_users2']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.active}}</p>
+                  <p class="stat__caption">{{csc.typeStr.active.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.new.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['new_users2']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.new}}</p>
+                  <p class="stat__caption">{{csc.typeStr.new.label}}</p>
                 </section>
               </div>
             </div>
@@ -167,22 +167,22 @@
           <p><span class="period-1">Periode 1</span></p>
           <div class="serie-1 grid">
             <div class="grid__12 grid--bp-med__8 serie-wrapper">
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_mias']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.active}}</p>
+                  <p class="stat__caption">{{csc.typeStr.active.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.saving.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['saving_mias']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.saving}}</p>
+                  <p class="stat__caption">{{csc.typeStr.saving.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.exchanging.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['exchanging_mias']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.exchanging}}</p>
+                  <p class="stat__caption">{{csc.typeStr.exchanging.label}}</p>
                 </section>
               </div>
             </div>
@@ -192,22 +192,22 @@
           <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span></p>
           <div class="serie-2 grid" ng-if="csc.hasCompareData()">
             <div class="grid__12 grid--bp-med__8 serie-wrapper">
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_mias2']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.active}}</p>
+                  <p class="stat__caption">{{csc.typeStr.active.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.saving.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['saving_mias2']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.saving}}</p>
+                  <p class="stat__caption">{{csc.typeStr.saving.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.exchanging.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['exchanging_mias2']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.exchanging}}</p>
+                  <p class="stat__caption">{{csc.typeStr.exchanging.label}}</p>
                 </section>
               </div>
             </div>
@@ -220,22 +220,22 @@
           <p><span class="period-1">Periode 1</span></p>
           <div class="serie-1 grid">
             <div class="grid__12 grid--bp-med__8 serie-wrapper">
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.transactions.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics.transactions}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.transactions}}</p>
+                  <p class="stat__caption">{{csc.typeStr.transactions.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.new.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['new_users']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.new}}</p>
+                  <p class="stat__caption">{{csc.typeStr.new.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_users']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.active}}</p>
+                  <p class="stat__caption">{{csc.typeStr.active.label}}</p>
                 </section>
               </div>
             </div>
@@ -245,22 +245,22 @@
           <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span></p>
           <div class="serie-2 grid" ng-if="csc.hasCompareData()">
             <div class="grid__12 grid--bp-med__8 serie-wrapper">
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.transactions.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics.transactions2}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.transactions}}</p>
+                  <p class="stat__caption">{{csc.typeStr.transactions.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+                <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.new.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['new_users2']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.new}}</p>
+                  <p class="stat__caption">{{csc.typeStr.new.label}}</p>
                 </section>
               </div>
-              <div class="grid__12 grid--bp-med__4">
+              <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
                 <section class="stat">
                   <h2 class="stat__number">{{csc.statistics['active_users2']}}</h2>
-                  <p class="stat__caption">{{csc.typeStr.active}}</p>
+                  <p class="stat__caption">{{csc.typeStr.active.label}}</p>
                 </section>
               </div>
             </div>
@@ -276,8 +276,8 @@
               <thead>
               <tr ng-if="!csc.hasCompareData()">
                 <th></th>
-                <th class="number">Aan je balie</th>
-                <th class="number">Gemiddelde</th>
+                <th class="number" ng-mouseover="csc.showHelpTooltip($event, 'yourBallie')" ng-mouseleave="csc.hideTooltip()">Aan je balie</th>
+                <th class="number" ng-mouseover="csc.showHelpTooltip($event, 'average')" ng-mouseleave="csc.hideTooltip()">Gemiddelde</th>
               </tr>
               <tr ng-if="csc.hasCompareData()">
                 <th></th>
@@ -350,7 +350,7 @@
                   <div class="serie-1">
                     <section class="stat">
                       <h2 class="stat__number"><span>{{csc.statistics['total_ruilen']}}</span></h2>
-                      <p class="stat__caption">aangeboden voordelen</p>
+                      <p class="stat__caption">{{ csc.extraTable.title }}</p>
                     </section>
                   </div>
                 </div>
@@ -360,9 +360,9 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th>Populairste ruilvoordelen</th>
-                        <th class="number" ng-class="{'period-1': csc.hasCompareData()}"><span>Aantal ruilers</span></th>
-                        <th class="number period-2" ng-if="csc.hasCompareData()"><span>Aantal ruilers</span></th>
+                        <th>{{ csc.extraTable.firstTableTitleLeft }}</th>
+                        <th class="number" ng-class="{'period-1': csc.hasCompareData()}"><span>{{ csc.extraTable.csc.extraTable.firstTableTitleRight }}</span></th>
+                        <th class="number period-2" ng-if="csc.hasCompareData()"><span>{{ csc.extraTable.csc.extraTable.firstTableTitleRight }}</span></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -392,7 +392,7 @@
                   <div class="serie-1">
                     <section class="stat">
                       <h2 class="stat__number"><span>{{csc.statistics.nrTicketsLowTarif}}</span></h2>
-                      <p class="stat__caption">tickets aan kansentarief</p>
+                      <p class="stat__caption">{{ csc.extraTable.title }}</p>
                     </section>
                   </div>
                 </div>
@@ -403,9 +403,9 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th>Populairste tickets</th>
-                        <th class="number" ng-class="{'period-1': csc.hasCompareData()}"><span>Aantal tickets</span></th>
-                        <th class="number period-2" ng-if="csc.hasCompareData()"><span>Aantal tickets</span></th>
+                        <th>{{ csc.extraTable.firstTableTitleLeft }}</th>
+                        <th class="number" ng-class="{'period-1': csc.hasCompareData()}"><span>{{ csc.extraTable.secondTableTitleRight }}</span></th>
+                        <th class="number period-2" ng-if="csc.hasCompareData()"><span>{{ csc.extraTable.secondTableTitleRight }}</span></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -424,9 +424,9 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th>Populairste activiteiten</th>
-                        <th class="number" ng-class="{'period-1': csc.hasCompareData()}"><span>Aantal spaarders</span></th>
-                        <th class="number period-2" ng-if="csc.hasCompareData()"><span>Aantal spaarders</span></th>
+                        <th>{{ csc.extraTable.secondTableLeftTitle }}</th>
+                        <th class="number" ng-class="{'period-1': csc.hasCompareData()}"><span>{{ csc.extraTable.secondTableTitleRight }}</span></th>
+                        <th class="number period-2" ng-if="csc.hasCompareData()"><span>{{ csc.extraTable.secondTableTitleRight }}</span></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -445,9 +445,9 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th>Populairste omruilvoordelen</th>
-                        <th class="number" ng-class="{'period-1': csc.hasCompareData()}"><span>Aantal ruilers</span></th>
-                        <th class="number period-2" ng-if="csc.hasCompareData()"><span>Aantal ruilers</span></th>
+                        <th>{{ csc.extraTable.firstTableTitleLeft }}</th>
+                        <th class="number" ng-class="{'period-1': csc.hasCompareData()}"><span>{{ csc.extraTable.firstTableTitleRight }}</span></th>
+                        <th class="number period-2" ng-if="csc.hasCompareData()"><span>{{ csc.extraTable.firstTableTitleRight }}</span></th>
                       </tr>
                     </thead>
                     <tbody>
