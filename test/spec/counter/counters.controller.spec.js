@@ -14,6 +14,7 @@ describe('Controller: CountersController', function () {
     $scope = $rootScope.$new();
     $state = _$state_;
     $q = _$q_;
+
     CountersController = $controller('CountersController', {
       $location: $location,
       counterService: counterService,
@@ -68,12 +69,37 @@ describe('Controller: CountersController', function () {
   });
 
   it('Can activate a counter', function (done) {
+
+    function Tracker(name) {
+
+      this.name = name;
+
+      this.get = function(key) {
+        return name;
+      }
+
+    }
+
+    function Ga() {
+
+      this.getAll = function() {
+        return [
+          new Tracker('name')
+        ];
+      }
+
+    }
+
+    window.ga = new Ga();
+
     var counterToActivate = {},
         deferredActivation = $q.defer(),
-        activeCounterPromise = deferredActivation.promise;
+        activeCounterPromise = deferredActivation.promise,
+        gaSpy = spyOn(window, 'ga');
 
     var counterActivated = function () {
       expect($state.go).toHaveBeenCalledWith('counter.main');
+      expect(gaSpy).toHaveBeenCalled();
       done();
     };
 
@@ -87,4 +113,5 @@ describe('Controller: CountersController', function () {
     activeCounterPromise.finally(counterActivated);
     $scope.$digest();
   });
+
 });

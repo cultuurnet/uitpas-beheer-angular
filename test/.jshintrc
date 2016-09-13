@@ -23,7 +23,8 @@
     "angular": false,
     "browser": false,
     "inject": false,
-    "PhoneFormat": false
+    "PhoneFormat": false,
+    "ga" : false
   }
 }
 
