@@ -50,7 +50,7 @@ describe('Controller: CounterStatisticsController', function () {
 
     CounterStatisticsController.loadDefaultDateRange();
 
-    expect(arraySpy).toHaveBeenCalledWith('date');
+    expect(arraySpy).toHaveBeenCalledWith('date', 'date');
 
   });
 
@@ -143,7 +143,8 @@ describe('Controller: CounterStatisticsController', function () {
       to: '2016-09-10'
     }
     CounterStatisticsController.comparing = true;
-    CounterStatisticsController.dateRanges.push(dateRange);
+    CounterStatisticsController.dateRanges[1] = dateRange;
+    expect(CounterStatisticsController.dateRanges.length).toEqual(2);
     expect(CounterStatisticsController.isComparing()).toBeTruthy();
 
   });
