@@ -432,7 +432,7 @@ describe('Controller: CounterStatisticsController', function () {
   it('correctly hides the tooltip', function () {
 
     var tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 1);
-    CounterStatisticsController.hideTooltip(tooltip);
+    CounterStatisticsController.hideTooltip(null, tooltip);
 
     flushTransitions();
 
