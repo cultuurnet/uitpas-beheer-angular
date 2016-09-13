@@ -12,26 +12,27 @@ describe('Controller: CountersController', function () {
     }
   }
 
-  var CountersController, $scope, $location, counterService, $q, $state;
+  var CountersController, GoogleTagmanagerService, $scope, $location, counterService, $q, $state;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope, _$q_, _counterService_, _$state_) {
     counterService = _counterService_;
     $location = jasmine.createSpyObj('$location', ['path']);
+    GoogleTagmanagerService = jasmine.createSpyObj('GoogleTagmanagerService', ['isEnabled', 'getTrackers', 'setVariable', 'sendEvent'])
+
+    GoogleTagmanagerService.isEnabled.and.returnValue(true);
+    GoogleTagmanagerService.getTrackers.and.returnValue([
+      new Tracker('name')
+    ]);
+
     $scope = $rootScope.$new();
     $state = _$state_;
     $q = _$q_;
 
-    window.ga = function() {}
-    window.ga.getAll = function() {
-      return [
-        new Tracker('name')
-      ];
-    }
-
     CountersController = $controller('CountersController', {
       $location: $location,
       counterService: counterService,
+      GoogleTagmanagerService: GoogleTagmanagerService,
       list:
         {
           '1149': {
@@ -83,14 +84,18 @@ describe('Controller: CountersController', function () {
   });
 
   it('Can activate a counter', function (done) {
-    var counterToActivate = {},
-        deferredActivation = $q.defer(),
-        activeCounterPromise = deferredActivation.promise,
-        gaSpy = spyOn(window, 'ga');
+    var counterToActivate = {
+        id: 1,
+        name: 'counter'
+      },
+      deferredActivation = $q.defer(),
+      activeCounterPromise = deferredActivation.promise;
 
     var counterActivated = function () {
       expect($state.go).toHaveBeenCalledWith('counter.main');
-      expect(gaSpy).toHaveBeenCalled();
+      expect(GoogleTagmanagerService.setVariable).toHaveBeenCalledWith('name', 'dimension1', 1);
+      expect(GoogleTagmanagerService.setVariable).toHaveBeenCalledWith('name', 'dimension2', 'counter');
+      expect(GoogleTagmanagerService.sendEvent).toHaveBeenCalledWith('name', 'pageview');
       done();
     };
 

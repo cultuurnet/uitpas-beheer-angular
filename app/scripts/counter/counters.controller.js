@@ -12,11 +12,10 @@ angular
   .controller('CountersController', countersController);
 
 /* @ngInject */
-function countersController($state, counterService, list, lastActiveId, appConfig) {
+function countersController($state, counterService, list, lastActiveId, appConfig, GoogleTagmanagerService) {
 
   /*jshint validthis: true */
-  var controller = this,
-    analyticsEnabled = (typeof ga === 'function');
+  var controller = this;
 
   controller.list = [];
   controller.lastActive = undefined;
@@ -39,13 +38,13 @@ function countersController($state, counterService, list, lastActiveId, appConfi
     counterService.setActive(activeCounter).then(function() {
 
       // If analytics is enabled, set the selected counter as dimension.
-      if (analyticsEnabled) {
-        var trackers = ga.getAll();
+      if (GoogleTagmanagerService.isEnabled()) {
+        var trackers = GoogleTagmanagerService.getTrackers();
         for (var i = 0; i < trackers.length; i++) {
           var trackerName = trackers[i].get('name');
-          ga(trackerName + '.set', 'dimension1', activeCounter.id);
-          ga(trackerName + '.set', 'dimension2', activeCounter.name);
-          ga(trackerName + '.send', 'pageview');
+          GoogleTagmanagerService.setVariable(trackerName, 'dimension1', activeCounter.id);
+          GoogleTagmanagerService.setVariable(trackerName, 'dimension2', activeCounter.name);
+          GoogleTagmanagerService.sendEvent(trackerName, 'pageview');
         }
       }
 
