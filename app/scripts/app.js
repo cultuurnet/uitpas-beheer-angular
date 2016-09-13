@@ -23,6 +23,7 @@ angular
     'ubr.activity',
     'ubr.advantage',
     'ubr.counter',
+    'ubr.coupon',
     'ubr.group',
     'ubr.feedback',
     'ubr.help',

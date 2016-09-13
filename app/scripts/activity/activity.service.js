@@ -79,7 +79,11 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
       ticketSale.ticketCount = amount;
       ticketSale.passholder = passholder;
       deferredClaim.resolve(ticketSale);
-      $rootScope.$emit('ticketsSold', ticketSale);
+      // Don't fire this emit when the tariff is claimed
+      // by a coupon for a group pass.
+      if (priceInfo.type !== 'COUPON') {
+        $rootScope.$emit('ticketsSold', ticketSale);
+      }
     };
 
     var claimParameters = {

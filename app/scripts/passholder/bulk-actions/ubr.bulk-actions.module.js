@@ -101,7 +101,9 @@ angular
           bulkForm: null,
           bulkSelection: null,
           action: null,
-          activity: null
+          activity: null,
+          tariff: null,
+          ticketCount: null
         },
         resolve: {
           passholders: ['$stateParams', function($stateParams) {
@@ -118,10 +120,16 @@ angular
           }],
           activity: ['$stateParams', function($stateParams) {
             return $stateParams.activity;
+          }],
+          tariff: ['$stateParams', function($stateParams) {
+            return $stateParams.tariff;
+          }],
+          ticketCount: ['$stateParams', function($stateParams) {
+            return $stateParams.ticketCount;
           }]
         },
         /* @ngInject */
-        onEnter: function(passholders, bulkForm, bulkSelection, action, activity, $state, $uibModal, counterService) {
+        onEnter: function(passholders, bulkForm, bulkSelection, action, activity, tariff, ticketCount, $state, $uibModal, counterService) {
           $uibModal
             .open({
               animation: true,
@@ -145,6 +153,12 @@ angular
                 },
                 activity: function() {
                   return activity;
+                },
+                tariff: function() {
+                  return tariff;
+                },
+                ticketCount: function() {
+                  return ticketCount;
                 }
               },
               controller: 'ShowBulkResultsController',
@@ -168,7 +182,9 @@ angular
           action: null,
           $uibModalInstance: null,
           passholder: null,
-          activityMode: null
+          passholders: null,
+          activityMode: null,
+          activeCounter: null
         },
         resolve: {
           /* @ngInject */
@@ -181,6 +197,7 @@ angular
                 bulkSelection.searchResults.totalItems = $stateParams.totalItems;
                 bulkSelection.selectAll = true;
               }
+              $stateParams.bulkSelection = bulkSelection;
               return bulkSelection;
             }
             return $stateParams.bulkSelection;
@@ -194,8 +211,14 @@ angular
           passholder: function () {
             return null;
           },
+          passholders: function ($stateParams) {
+            return $stateParams.bulkSelection.getPassholderNumbers();
+          },
           activityMode: function() {
             return 'counter';
+          },
+          activeCounter: function(counterService) {
+            return counterService.getActive();
           }
         },
         views: {

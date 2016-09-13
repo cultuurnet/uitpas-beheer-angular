@@ -7,6 +7,7 @@
   <div class="modal-body">
     <div class="container-fluid">
       <div class="activity-title" ng-bind="::pat.activity.title"></div>
+      <ng-pluralize ng-if="pat.activityMode == 'counter'" class="count-pashouders" count="pat.passholders.length" when="{'0': 'geen pashouders geselecteerd', '1': '{} pashouder geselecteerd', 'other': '{} pashouders geselecteerd'}"></ng-pluralize>
       <div class="alert alert-danger" ng-show="pat.asyncError" ng-bind="pat.asyncError.cleanMessage"></div>
       <fieldset ng-disabled="pat.formSubmitBusy">
         <table class="table" ng-class="{'table-mobile': pat.sizeOff(pat.activity.sales.base) > 3}">
@@ -36,6 +37,12 @@
           <div class="grid__12 grid--bp-lrg__4">
             <div class="lowest-legend small"><em>Laagste tarief</em></div>
           </div>
+          <div ng-if="pat.activityMode == 'counter'" class="grid__12 grid--bp-lrg__8">
+            <div class="total-amount pull-right">
+              <span><strong>Geschat totaal </strong>&euro; {{ pat.totalAmount }} *</span><br />
+              <span class="small muted">* De precieze prijs wordt hierna berekend.</span>
+            </div>
+          </div>
 
           <div ng-if="pat.groupSale">
             <div class="grid__12 grid--bp-lrg__4">
@@ -57,8 +64,15 @@
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a class="btn btn-link" ng-click="pat.cancelModal()">Annuleren</a>
-    <button type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid"
+    <button ng-if="pat.activityMode == 'passholders' || pat.activityMode == 'group'" type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid"
             ng-click="pat.claimTariff(pat.passholder, pat.activity, passholderActivityTariffs)">
+      <span ng-hide="pat.formSubmitBusy">Tarief toekennen</span>
+            <span ng-show="pat.formSubmitBusy">
+              <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden
+            </span>
+      </button>
+    <button ng-if="pat.activityMode == 'counter'" type="button" class="btn btn-primary pull-right" ng-disabled="pat.formSubmitBusy || passholderActivityTariffs.$invalid"
+              ng-click="pat.bulkClaimTariff()">
       <span ng-hide="pat.formSubmitBusy">Tarief toekennen</span>
             <span ng-show="pat.formSubmitBusy">
               <span class="fa fa-refresh loading small"></span> Formulier wordt verzonden

@@ -30,11 +30,6 @@ angular
       return passholderService.findPass($stateParams.identification);
     };
 
-    /* @ngInject */
-    var getCouponsFromStateParams = function($stateParams) {
-      return $stateParams.coupon;
-    };
-
     $stateProvider
       .state('counter.main.passholder', {
         url: 'passholder/:identification',
@@ -261,34 +256,6 @@ angular
               },
               controller: 'PassholderBlockPassController',
               controllerAs: 'pbp'
-            })
-            .result
-            .finally(function() {
-              $state.go('^');
-            });
-        }
-      })
-      .state('counter.main.passholder.coupon', {
-        params: {
-          coupon: null
-        },
-        resolve: {
-          coupon: getCouponsFromStateParams
-        },
-        /* @ngInject */
-        onEnter: function(coupon, $state, $uibModal) {
-          $uibModal
-            .open({
-              animation: true,
-              templateUrl: 'views/passholder/modal-passholder-coupon.html',
-              size: 'sm',
-              resolve: {
-                coupon: function() {
-                  return coupon;
-                }
-              },
-              controller: 'CouponDetailController',
-              controllerAs: 'cdc'
             })
             .result
             .finally(function() {
