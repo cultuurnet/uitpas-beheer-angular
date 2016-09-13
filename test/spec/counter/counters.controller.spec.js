@@ -14,7 +14,6 @@ describe('Controller: CountersController', function () {
     $scope = $rootScope.$new();
     $state = _$state_;
     $q = _$q_;
-
     CountersController = $controller('CountersController', {
       $location: $location,
       counterService: counterService,
@@ -113,5 +112,4 @@ describe('Controller: CountersController', function () {
     activeCounterPromise.finally(counterActivated);
     $scope.$digest();
   });
-
 });

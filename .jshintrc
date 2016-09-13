@@ -23,7 +23,6 @@
     "moment": false,
     "PhoneFormat": false,
     "showdown": false,
-    "ga" : false,
-    "showdown": false
+    "ga" : false
   }
 }
