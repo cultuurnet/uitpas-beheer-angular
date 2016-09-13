@@ -232,12 +232,7 @@ module.exports = function (grunt) {
               main: [
                 'dist/phone-format-global.js'
               ]
-            },
-            'cultuurnet-google-tag-manager': {
-              main: [
-                'src/ga-tag.manager.module.js'
-              ]
-            },
+            }
           }
         },
         exclude: [
