@@ -31,6 +31,15 @@ label {
   margin-bottom: 0;
 }
 
+.checkbox {
+  &.no-margin {
+    margin: 0;
+  }
+  label {
+    font-weight: 600;
+  }
+}
+
 form label {
   margin-bottom: $rh-xxs;
 }

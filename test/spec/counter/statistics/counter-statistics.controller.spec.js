@@ -176,7 +176,7 @@ describe('Controller: CounterStatisticsController', function () {
     CounterStatisticsController.dateRanges = [];
     CounterStatisticsController.dateRanges.push(dateRange);
     CounterStatisticsController.dateRanges.push(dateRange);
-
+    expect(CounterStatisticsController.dateRanges.length).toEqual(2);
     expect(CounterStatisticsController.isComparing()).toBeTruthy();
 
   });

@@ -285,8 +285,17 @@ $graph-link-color: #337ab7;
     }
     .popover {
       display: block;
+      padding: 10px;
+      min-width: 276px;
+      left: auto;
+      right: 0;
       &.hidden {
         display: none;
+      }
+    }
+    .compare-period {
+      &.inactive {
+        opacity: .5;
       }
     }
   }
