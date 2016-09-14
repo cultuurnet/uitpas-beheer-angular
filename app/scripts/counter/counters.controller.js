@@ -12,7 +12,7 @@ angular
   .controller('CountersController', countersController);
 
 /* @ngInject */
-function countersController($state, counterService, list, lastActiveId, appConfig, GoogleTagmanagerService) {
+function countersController($state, counterService, list, lastActiveId, appConfig, GoogleAnalyticsService) {
 
   /*jshint validthis: true */
   var controller = this;
@@ -38,13 +38,13 @@ function countersController($state, counterService, list, lastActiveId, appConfi
     counterService.setActive(activeCounter).then(function() {
 
       // If analytics is enabled, set the selected counter as dimension.
-      if (GoogleTagmanagerService.isEnabled()) {
+      if (GoogleAnalyticsService.isEnabled()) {
         var trackers = GoogleTagmanagerService.getTrackers();
         for (var i = 0; i < trackers.length; i++) {
           var trackerName = trackers[i].get('name');
-          GoogleTagmanagerService.setVariable(trackerName, 'dimension1', activeCounter.id);
-          GoogleTagmanagerService.setVariable(trackerName, 'dimension2', activeCounter.name);
-          GoogleTagmanagerService.sendEvent(trackerName, 'pageview');
+          GoogleAnalyticsService.setVariable(trackerName, 'dimension1', activeCounter.id);
+          GoogleAnalyticsService.setVariable(trackerName, 'dimension2', activeCounter.name);
+          GoogleAnalyticsService.sendEvent(trackerName, 'pageview');
         }
       }
 
