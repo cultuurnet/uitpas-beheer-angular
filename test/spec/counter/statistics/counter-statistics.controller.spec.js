@@ -176,7 +176,7 @@ describe('Controller: CounterStatisticsController', function () {
     CounterStatisticsController.dateRanges = [];
     CounterStatisticsController.dateRanges.push(dateRange);
     CounterStatisticsController.dateRanges.push(dateRange);
-
+    expect(CounterStatisticsController.dateRanges.length).toEqual(2);
     expect(CounterStatisticsController.isComparing()).toBeTruthy();
 
   });
@@ -464,7 +464,7 @@ describe('Controller: CounterStatisticsController', function () {
   it('correctly hides the tooltip', function () {
 
     var tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 1);
-    CounterStatisticsController.hideTooltip(tooltip);
+    CounterStatisticsController.hideTooltip(null, tooltip);
 
     flushTransitions();
 

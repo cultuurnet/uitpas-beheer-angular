@@ -21,30 +21,30 @@
         </a>
 
         <div ng-init="csc.addDatePicker()" class="popover" ng-class="{hidden: !csc.pickingDate}">
-            <div class="row">
-                <div class="col-xs-6">
-                    <label>Period</label><br/>
-                    <input ng-value="csc.dateRanges[0].from.format('DD/MM/YYYY') + ' - ' + csc.dateRanges[0].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
-                </div>
-                <div class="col-xs-6">
-                    <div class="checkbox no-margin">
-                        <label>
-                            <input type="checkbox" class="comparecheck" ng-model="csc.comparing">
-                            Vergelijken met andere periode
-                        </label>
-                    </div>
-                    <div class="row compare-period" ng-class="{hidden: !csc.comparing}">
-                        <div>
-                            <label>Compare</label><br/>
-                            <input ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY') + ' - ' + csc.dateRanges[1].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
-                        </div>
-                    </div>
-                </div>
+            <div class="row clearfix">
+              <div class="grid__12">
+                  <label>Period</label><br/>
+                  <input ng-value="csc.dateRanges[0].from.format('DD/MM/YYYY') + ' - ' + csc.dateRanges[0].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+              </div>
+              <div class="grid__12">
+                  <div class="checkbox no-margin">
+                      <label>
+                          <input type="checkbox" class="comparecheck" ng-model="csc.comparing">
+                          Vergelijk
+                      </label>
+                  </div>
+                  <div class="row compare-period" ng-class="{inactive: !csc.comparing}">
+                      <div>
+                          <label class="hidden">Compare</label>
+                          <input ng-disabled="!csc.comparing" ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY') + ' - ' + csc.dateRanges[1].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                      </div>
+                  </div>
+              </div>
+              <div class="grid__12">
+                <a class="btn btn-primary" ng-click="csc.updateDates($event)" type="reset">Bevestigen</a>
+                <a class="btn btn-link" ng-click="csc.resetDates($event)" type="reset">Annuleren</a>
+              </div>
             </div>
-            <div class="row">
-            </div>
-            <a class="btn btn-primary" ng-click="csc.updateDates($event)" type="reset">Bevestigen</a>
-            <a class="btn btn-link" ng-click="csc.resetDates($event)" type="reset">Annuleren</a>
         </div>
 
     </div>
