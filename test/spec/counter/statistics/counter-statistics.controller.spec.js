@@ -4,7 +4,7 @@ describe('Controller: CounterStatisticsController', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  var CounterStatisticsController, $state, counterService, $scope, rootScope, $q;
+  var CounterStatisticsController, $state, counterStatisticsService, $scope, rootScope, $q;
 
   beforeEach(inject(function ($controller, _$state_, $rootScope, _$q_) {
 
@@ -13,10 +13,9 @@ describe('Controller: CounterStatisticsController', function () {
     rootScope = $rootScope;
     $scope = $rootScope.$new();
 
-    counterService = jasmine.createSpyObj('counterService', ['getDefaultDateRange', 'getStatistics']);
+    counterStatisticsService = jasmine.createSpyObj('counterStatisticsService', ['getDefaultDateRange', 'getStatistics']);
     CounterStatisticsController = $controller('CounterStatisticsController', {
-      counterService: counterService,
-      $element: angular.element('<div class="counter-statistics-graph"> </div>'),
+      counterStatisticsService: counterStatisticsService,
       $scope: $scope,
       $state : $state
     });
@@ -45,7 +44,7 @@ describe('Controller: CounterStatisticsController', function () {
   it('loads the default date range', function () {
 
     var dateRange = 'date';
-    counterService.getDefaultDateRange.and.returnValue(dateRange);
+    counterStatisticsService.getDefaultDateRange.and.returnValue(dateRange);
     var arraySpy = spyOn(CounterStatisticsController.dateRanges, 'push');
 
     CounterStatisticsController.loadDefaultDateRange();
@@ -82,7 +81,7 @@ describe('Controller: CounterStatisticsController', function () {
       renderGraphCalled = true;
     }
 
-    counterService.getStatistics.and.returnValue(getStatisticsPromise);
+    counterStatisticsService.getStatistics.and.returnValue(getStatisticsPromise);
     CounterStatisticsController.loadStatistics();
     deferredLoad.resolve(statistics);
 
@@ -117,7 +116,7 @@ describe('Controller: CounterStatisticsController', function () {
     var deferredLoad = $q.defer(),
       getStatisticsPromise = deferredLoad.promise;
 
-    counterService.getStatistics.and.returnValue(getStatisticsPromise);
+    counterStatisticsService.getStatistics.and.returnValue(getStatisticsPromise);
 
     var dateRange = {
       from: '2016-09-09',
@@ -130,7 +129,7 @@ describe('Controller: CounterStatisticsController', function () {
 
     CounterStatisticsController.loadStatistics();
 
-    expect(counterService.getStatistics).toHaveBeenCalledWith(CounterStatisticsController.dateRanges, 'cardsales');
+    expect(counterStatisticsService.getStatistics).toHaveBeenCalledWith(CounterStatisticsController.dateRanges, 'cardsales');
 
   });
 
@@ -149,7 +148,7 @@ describe('Controller: CounterStatisticsController', function () {
 
     expect(CounterStatisticsController.noStatisticsError).toBeFalsy();
 
-    counterService.getStatistics.and.returnValue(getStatisticsPromise);
+    counterStatisticsService.getStatistics.and.returnValue(getStatisticsPromise);
     CounterStatisticsController.loadStatistics();
     deferredLoad.reject(statistics);
 
