@@ -53,16 +53,6 @@ describe('Controller: CounterStatisticsController', function () {
 
   });
 
-  it('returns a correct date', function () {
-
-    var dateString = "September 9, 2016 11:13:00";
-    var expectDate = new Date(dateString);
-
-    var date = CounterStatisticsController.makeDate(dateString);
-
-    expect(expectDate).toEqual(date);
-  });
-
   it('loads the statistics', function() {
 
     var deferredLoad = $q.defer(),

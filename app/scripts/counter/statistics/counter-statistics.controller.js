@@ -87,10 +87,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     controller.dateRanges.push(dateRange, dateRange2);
   };
 
-  controller.makeDate = function (dateStr) {
-    return new Date(dateStr);
-  };
-
   /* istanbul ignore next */
   controller.updateDates = function ($event) {
     var $el = angular.element($event.target),
