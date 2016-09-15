@@ -151,6 +151,37 @@ describe('Controller: CounterStatisticsController', function () {
     expect(CounterStatisticsController.hasCompareData()).toBeFalsy();
   });
 
+  it('correctly updates the dates', function () {
+
+    CounterStatisticsController.dateRange = 'new date range';
+    CounterStatisticsController.compareDateRange = 'new compare date range';
+
+    spyOn(CounterStatisticsController, 'loadStatistics').and.returnValue(true);
+
+    CounterStatisticsController.updateDates();
+
+    expect(CounterStatisticsController.selectedDateRange).toEqual(CounterStatisticsController.dateRange);
+    expect(CounterStatisticsController.selectedCompareDateRange).toEqual(CounterStatisticsController.compareDateRange);
+
+  });
+
+  it('correctly resets the dates', function () {
+
+    CounterStatisticsController.selectedDateRange = 'old date range';
+    CounterStatisticsController.selectedCompareDateRange = 'old compare date range';
+
+    CounterStatisticsController.dateRange = 'new date range';
+    CounterStatisticsController.compareDateRange = 'new compare date range';
+
+    spyOn(CounterStatisticsController, 'loadStatistics').and.returnValue(true);
+
+    CounterStatisticsController.resetDates();
+
+    expect(CounterStatisticsController.selectedDateRange).toEqual(CounterStatisticsController.dateRange);
+    expect(CounterStatisticsController.selectedCompareDateRange).toEqual(CounterStatisticsController.compareDateRange);
+
+  });
+
   it('renders graph in correct size', function () {
     CounterStatisticsController.statistics = {
       "periods": [
