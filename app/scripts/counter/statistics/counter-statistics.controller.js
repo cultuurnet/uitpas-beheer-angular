@@ -345,7 +345,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         });
 
     if (compare) {
-
       // Make a line path per period.
       graph.append('path')
         .datum(stats.periods)
@@ -371,7 +370,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           .on('mouseout', function() {
             controller.hideTooltip(d3.event, tooltip);
           });
-
     }
 
     d3.select(window).on('resize', function() {

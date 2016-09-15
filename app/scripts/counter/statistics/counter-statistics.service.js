@@ -82,9 +82,7 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
     var deferredSales = $q.defer();
 
     counterService.getActive().then(function(data) {
-
       query['balieId'] = data.id;
-
       $http.get(
         apiUrl + '/' + path,
         {
@@ -93,7 +91,6 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
         })
         .success(handleSalesData)
         .error(deferredSales.reject);
-
     });
 
     var handleSalesData = function (salesData) {
