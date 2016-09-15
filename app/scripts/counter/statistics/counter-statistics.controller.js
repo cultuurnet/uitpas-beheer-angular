@@ -23,7 +23,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       plural_label: 'verkochte kaarten',
       single_label: 'verkochte kaart',
       type: 'Kopers',
-      profile: 'Profiel van de koper'
+      profile: 'Profiel van de koper',
+      template: 'views/counter-statistics/statistics-sales.html',
     },
     'counter.statistics.savings': {
       pageTitle: 'Sparen',
@@ -36,7 +37,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         active: 'Actieve spaarders',
         new: 'Nieuwe spaarders'
       },
-      profile: 'Profiel van de actieve spaarder'
+      profile: 'Profiel van de actieve spaarder',
+      template: 'views/counter-statistics/statistics-savings.html',
     },
     'counter.statistics.exchange': {
       pageTitle: 'Ruilen',
@@ -49,7 +51,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         new: 'Nieuwe ruilers',
         transactions: 'Omgeruilde voordelen'
       },
-      profile: 'Profiel van de actieve ruiler'
+      profile: 'Profiel van de actieve ruiler',
+      template: 'views/counter-statistics/statistics-exchanges.html',
     },
     'counter.statistics.mia': {
       pageTitle: 'MIA\'s',
@@ -62,7 +65,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         saving: 'Sparende MIA\'s',
         exchanging: 'Ruilende MIA\'s'
       },
-      profile: 'Profiel van MIA\'s'
+      profile: 'Profiel van MIA\'s',
+      template: 'views/counter-statistics/statistics-mias.html',
     }
   };
 
@@ -75,6 +79,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   controller.comparing = false;
   controller.titleStr = '';
   controller.profileStr = '';
+  controller.typeTemplate = '';
 
   controller.loadDefaultDateRange = function() {
     var dateRange = counterStatisticsService.getDefaultDateRange(),
@@ -156,6 +161,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       controller.profileStr = info[$state.current.name].profile;
       controller.typeStr = info[$state.current.name].type;
       controller.pageTitle = info[$state.current.name].pageTitle;
+      controller.typeTemplate = info[$state.current.name].template;
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
 
@@ -228,7 +234,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   // Helper function for drawing the actual graph.
   controller.renderGraph = function () {
-
     // Grab placeholder.
     var $graphWrap = angular.element(document.querySelectorAll('.counter-statistics-graph'));
 
@@ -372,14 +377,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     d3.select(window).on('resize', function() {
       controller.renderGraph();
     });
-
   };
 
   /**
    * Show the tooltip for a point on the graph.
    */
   controller.showTooltip = function(event, tooltip, total, date) {
-
     var label = (total == 1 ? info[$state.current.name].single_label : info[$state.current.name].plural_label);
 
     tooltip.html("<strong>" + date + "</strong><br/>" + " " + total + " " + label);
@@ -391,7 +394,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     tooltip.style("top", (event.pageY - elementInfo.height) + "px");
 
     tooltip.transition().duration(100).style("opacity", 1);
-
   };
 
   /**
