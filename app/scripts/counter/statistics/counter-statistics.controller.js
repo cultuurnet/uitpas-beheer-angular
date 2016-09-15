@@ -91,7 +91,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   };
   controller.dateRange = controller.selectedDateRange = counterStatisticsService.getDefaultDateRange();
   controller.compareDateRange = controller.selectedCompareDateRange = counterStatisticsService.getDefaultDateRange();
-  controller.formattedDates = [];
   controller.pickingDate = false;
   controller.comparing = controller.selectedComparestate = false;
   controller.titleStr = '';
