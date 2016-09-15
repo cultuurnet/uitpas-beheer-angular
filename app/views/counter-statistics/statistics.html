@@ -12,19 +12,21 @@
 
   <div class="page-header">
     <h1>{{csc.pageTitle}}</h1>
-    <div ng-show="csc.dateRanges" class="period-chooser">
+    <div class="period-chooser">
        <a href="#" class="ppu" ng-click="csc.pickingDate = !csc.pickingDate">
             <p class="selected-date">
-                <span class="period-1">{{csc.dateRanges[0].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[0].to.format('DD/MM/YYYY')}}</span>
+                <span class="period-1">{{csc.dateRange.startDate.format('DD/MM/YYYY')}} - {{csc.dateRange.endDate.format('DD/MM/YYYY')}}</span>
             </p>
-            <p ng-show="csc.isComparing()" class="text-muted"><span class="period-2">Vergeleken met {{csc.dateRanges[1].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[1].to.format('DD/MM/YYYY')}}</span></p>
+            <p ng-show="csc.isComparing()" class="text-muted"><span class="period-2">Vergeleken met {{csc.compareDateRange.startDate.format('DD/MM/YYYY')}} - {{csc.compareDateRange.endDate.format('DD/MM/YYYY')}}</span></p>
         </a>
 
         <div ng-init="csc.addDatePicker()" class="popover" ng-class="{hidden: !csc.pickingDate}">
             <div class="row clearfix">
               <div class="grid__12">
                   <label>Period</label><br/>
-                  <input ng-value="csc.dateRanges[0].from.format('DD/MM/YYYY') + ' - ' + csc.dateRanges[0].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                <input date-range-picker name="daterange" class="form-control date-picker" type="text"
+                       ng-model="csc.dateRange" options="csc.datePickerOpts" required/>
+
               </div>
               <div class="grid__12">
                   <div class="checkbox no-margin">
@@ -36,7 +38,8 @@
                   <div class="row compare-period" ng-class="{inactive: !csc.comparing}">
                       <div>
                           <label class="hidden">Compare</label>
-                          <input ng-disabled="!csc.comparing" ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY') + ' - ' + csc.dateRanges[1].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                        <input ng-disabled="!csc.comparing" date-range-picker name="daterange-compare" class="form-control date-picker" type="text"
+                               ng-model="csc.compareDateRange" required options="csc.datePickerOpts"/>
                       </div>
                   </div>
               </div>

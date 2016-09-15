@@ -5,6 +5,10 @@ describe('Controller: CounterStatisticsController', function () {
   beforeEach(module('uitpasbeheerApp'));
 
   var CounterStatisticsController, $state, counterStatisticsService, $scope, rootScope, $q;
+  var dateRange = {
+    from: '2016-09-09',
+    to: '2016-09-10'
+  }
 
   beforeEach(inject(function ($controller, _$state_, $rootScope, _$q_) {
 
@@ -14,6 +18,8 @@ describe('Controller: CounterStatisticsController', function () {
     $scope = $rootScope.$new();
 
     counterStatisticsService = jasmine.createSpyObj('counterStatisticsService', ['getDefaultDateRange', 'getStatistics']);
+    counterStatisticsService.getDefaultDateRange.and.returnValue(dateRange);
+
     CounterStatisticsController = $controller('CounterStatisticsController', {
       counterStatisticsService: counterStatisticsService,
       $scope: $scope,
@@ -42,19 +48,10 @@ describe('Controller: CounterStatisticsController', function () {
   }
 
   it('loads the default date range', function () {
-
-    var dateRange = 'date';
-    counterStatisticsService.getDefaultDateRange.and.returnValue(dateRange);
-    var arraySpy = spyOn(CounterStatisticsController.dateRanges, 'push');
-
-    CounterStatisticsController.loadDefaultDateRange();
-
-    expect(arraySpy).toHaveBeenCalledWith('date', 'date');
-
+    expect(CounterStatisticsController.dateRange).toEqual(dateRange);
   });
 
   it('loads the statistics', function() {
-
     var deferredLoad = $q.defer(),
       getStatisticsPromise = deferredLoad.promise;
 
@@ -90,11 +87,9 @@ describe('Controller: CounterStatisticsController', function () {
     });
 
     $scope.$digest();
-
   });
 
   it('loads 2 default dates if comparing', function() {
-
     var statistics = {
       periods: ''
     };
@@ -108,23 +103,17 @@ describe('Controller: CounterStatisticsController', function () {
 
     counterStatisticsService.getStatistics.and.returnValue(getStatisticsPromise);
 
-    var dateRange = {
-      from: '2016-09-09',
-      to: '2016-09-10'
-    }
     CounterStatisticsController.comparing = true;
-    CounterStatisticsController.dateRanges = [];
-    CounterStatisticsController.dateRanges.push(dateRange);
-    CounterStatisticsController.dateRanges.push(dateRange);
+    var dateRanges = [];
+    dateRanges.push(dateRange);
+    dateRanges.push(dateRange);
 
     CounterStatisticsController.loadStatistics();
 
-    expect(counterStatisticsService.getStatistics).toHaveBeenCalledWith(CounterStatisticsController.dateRanges, 'cardsales');
-
+    expect(counterStatisticsService.getStatistics).toHaveBeenCalledWith(dateRanges, 'cardsales');
   });
 
   it('shows error when failed to load the statistics', function() {
-
     var deferredLoad = $q.defer(),
       getStatisticsPromise = deferredLoad.promise;
 
@@ -148,30 +137,9 @@ describe('Controller: CounterStatisticsController', function () {
     });
 
     $scope.$digest();
-
-  });
-
-  it('correctly returns the is comparing value when comparing', function () {
-    expect(CounterStatisticsController.isComparing()).toBeFalsy();
-  });
-
-  it('correctly returns the is comparing value when comparing', function () {
-
-    var dateRange = {
-      from: '2016-09-09',
-      to: '2016-09-10'
-    }
-    CounterStatisticsController.comparing = true;
-    CounterStatisticsController.dateRanges = [];
-    CounterStatisticsController.dateRanges.push(dateRange);
-    CounterStatisticsController.dateRanges.push(dateRange);
-    expect(CounterStatisticsController.dateRanges.length).toEqual(2);
-    expect(CounterStatisticsController.isComparing()).toBeTruthy();
-
   });
 
   it('correctly indicates that comparing data is available', function () {
-
     CounterStatisticsController.statistics = {
       profiles2 : true
     }
@@ -184,7 +152,6 @@ describe('Controller: CounterStatisticsController', function () {
   });
 
   it('renders graph in correct size', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -213,14 +180,9 @@ describe('Controller: CounterStatisticsController', function () {
 
     expect(angular.element($g[0].querySelectorAll('.x')).attr('transform')).toEqual('translate(0, 250)');
     expect($g[0].querySelectorAll('.y').length).toEqual(1);
-
-
-
-
   });
 
   it('correctly renders the required dots', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -243,11 +205,9 @@ describe('Controller: CounterStatisticsController', function () {
 
     expect(d3.selectAll('circle').size()).toEqual(2);
     expect(d3.selectAll('path').size()).toEqual(4);
-
   });
 
   it('correctly renders the required dots when comparing', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -274,7 +234,6 @@ describe('Controller: CounterStatisticsController', function () {
   });
 
   it('correctly hides tooltips on mouseout', function () {
-
     $state.current = {
       'name' : 'counter.statistics'
     }
@@ -306,14 +265,12 @@ describe('Controller: CounterStatisticsController', function () {
     $dots[0][0].dispatchEvent(event);
 
     expect(spy).toHaveBeenCalled();
-
   });
 
   /**
    * Test the given event.
    */
   function testMouseEvent(controllerMethod, event, selector) {
-
     $state.current = {
       'name' : 'counter.statistics'
     }
@@ -328,11 +285,9 @@ describe('Controller: CounterStatisticsController', function () {
     $dots[0][0].dispatchEvent(domEvent);
 
     expect(spy).toHaveBeenCalled();
-
   }
 
   it('correctly shows tooltips on mouseover', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -352,11 +307,9 @@ describe('Controller: CounterStatisticsController', function () {
     };
 
     testMouseEvent('showTooltip', 'mouseover', 'circle');
-
   });
 
   it('correctly shows tooltips on mouseover for compare data', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -377,11 +330,9 @@ describe('Controller: CounterStatisticsController', function () {
     };
 
     testMouseEvent('showTooltip', 'mouseover', '.dot-2');
-
   });
 
   it('correctly hides tooltips on mouseover', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -401,11 +352,9 @@ describe('Controller: CounterStatisticsController', function () {
     };
 
     testMouseEvent('hideTooltip', 'mouseout', 'circle');
-
   });
 
   it('correctly hides tooltips on mouseover for compare data', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -426,11 +375,9 @@ describe('Controller: CounterStatisticsController', function () {
     };
 
     testMouseEvent('hideTooltip', 'mouseout', '.dot-2');
-
   });
 
   it('correctly shows the tooltip', function () {
-
     $state.current = {
       'name' : 'counter.statistics'
     }
@@ -447,30 +394,24 @@ describe('Controller: CounterStatisticsController', function () {
 
     flushTransitions();
     expect(tooltip.style('opacity')).toEqual('1');
-
   });
 
   it('correctly hides the tooltip', function () {
-
     var tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 1);
     CounterStatisticsController.hideTooltip(null, tooltip);
 
     flushTransitions();
 
     expect(tooltip.style('opacity')).toEqual('0');
-
   });
 
   it('reloads at state change', function () {
-
     var spy = spyOn(CounterStatisticsController, 'loadStatistics');
     rootScope.$broadcast('$stateChangeSuccess');
     expect(spy).toHaveBeenCalled();
-
   });
 
   it('re-renders after resize', function () {
-
     $state.current = {
       'name' : 'counter.statistics'
     }
@@ -501,11 +442,9 @@ describe('Controller: CounterStatisticsController', function () {
     window.dispatchEvent(event);
 
     expect(spy).toHaveBeenCalled();
-
   });
 
   it('has fixed width if wrapper is to small', function () {
-
     $state.current = {
       'name' : 'counter.statistics'
     }
@@ -534,7 +473,6 @@ describe('Controller: CounterStatisticsController', function () {
     var $svg = angular.element(document).find('svg');
 
     expect($svg.width()).toEqual(600);
-
   });
 
 });
