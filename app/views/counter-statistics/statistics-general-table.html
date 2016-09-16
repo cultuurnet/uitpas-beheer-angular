@@ -38,7 +38,7 @@
                       <span class="columnbar" ng-class="{compare: csc.hasCompareData()}">
                         <span class="bar" style="width: {{age.count}}%"></span>
                         <span ng-if="csc.hasCompareData()" class="bar bar-2" style="width: {{csc.statistics['per_age2'][$index].count}}%" ></span>
-                        <span class="text">{{age.AgeRange}} jaar</span>
+                        <span class="text">{{age.AgeRange | ageStatistics}}</span>
                       </span>
         </td>
         <td class="number">{{age.count}}%</td>
