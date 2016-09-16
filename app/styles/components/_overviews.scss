@@ -72,7 +72,20 @@
   }
   &-extra-small &__item-list {
       padding: $rh-xxs;
+  }
+  &__item-checkboxes {
+
+    .checkboxes {
+      float: left;
+      width: 25px;
     }
+
+    .display-table {
+      float: left;
+      width: calc(100% - 25px);
+    }
+
+  }
   &__item.unavailable {
     opacity: .6;
   }

@@ -68,8 +68,10 @@
       </div>
 
       <ul class="list-unstyled passholder-list">
-        <li class="overview__item overview__item-list" ng-repeat="pass in rvc.results.passen">
-          <div>
+        <li class="overview__item overview__item-checkboxes overview__item-list" ng-repeat="pass in rvc.results.passen">
+          <div class="grid">
+            <div class="grid__12">
+          <div class="checkboxes">
             <input type="checkbox" ng-click="rvc.togglePassBulkSelection(pass)" ng-checked="rvc.bulk.selection.selectAll || rvc.bulk.selection.numberInSelection(pass.number)">
           </div>
           <div class="grid display-table" ng-click="rvc.showPassholderDetails(pass.number)">
@@ -109,6 +111,8 @@
 
             </div>
 
+          </div>
+          </div>
           </div>
         </li>
       </ul>
