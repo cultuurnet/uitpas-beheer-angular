@@ -76,7 +76,7 @@ describe('Controller: CounterStatisticsController', function () {
 
       expect(CounterStatisticsController.titleStr).toEqual('Verkochte kaarten');
       expect(CounterStatisticsController.profileStr).toEqual('Profiel van de koper');
-      expect(CounterStatisticsController.typeStr).toEqual('Kopers');
+      expect(CounterStatisticsController.typeStr.buyers.label).toEqual('Kopers');
       expect(CounterStatisticsController.statistics).toEqual(statistics);
 
       setTimeout(function(){
@@ -408,32 +408,33 @@ describe('Controller: CounterStatisticsController', function () {
     testMouseEvent('hideTooltip', 'mouseout', '.dot-2');
   });
 
-  it('correctly shows the tooltip', function () {
-    $state.current = {
-      'name' : 'counter.statistics'
-    }
-
+  it('correctly shows tooltips', function () {
     var event = {
       'pageX': 10,
       'pageY': 10,
     }
 
-    var tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 0);
-    CounterStatisticsController.showTooltip(event, tooltip, 2, '1/1/2016');
+    CounterStatisticsController.tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 0);
+    CounterStatisticsController.showTooltip(event, 'my tekst');
 
-    expect(tooltip.html()).toEqual('<strong>1/1/2016</strong><br> 2 verkochte kaarten');
+    expect(CounterStatisticsController.tooltip.html()).toEqual('my tekst');
 
     flushTransitions();
-    expect(tooltip.style('opacity')).toEqual('1');
+
+    expect(CounterStatisticsController.tooltip.style('opacity')).toEqual('1');
+
+    CounterStatisticsController.showHelpTooltip(event, 'average');
+    expect(CounterStatisticsController.tooltip.html()).toEqual('Help tekst bij het gemiddelde');
+
   });
 
   it('correctly hides the tooltip', function () {
-    var tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 1);
-    CounterStatisticsController.hideTooltip(null, tooltip);
+    CounterStatisticsController.tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 1);
+    CounterStatisticsController.hideTooltip();
 
     flushTransitions();
 
-    expect(tooltip.style('opacity')).toEqual('0');
+    expect(CounterStatisticsController.tooltip.style('opacity')).toEqual('0');
   });
 
   it('reloads at state change', function () {
