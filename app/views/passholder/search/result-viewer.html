@@ -71,48 +71,48 @@
         <li class="overview__item overview__item-checkboxes overview__item-list" ng-repeat="pass in rvc.results.passen">
           <div class="grid">
             <div class="grid__12">
-          <div class="checkboxes">
-            <input type="checkbox" ng-click="rvc.togglePassBulkSelection(pass)" ng-checked="rvc.bulk.selection.selectAll || rvc.bulk.selection.numberInSelection(pass.number)">
-          </div>
-          <div class="grid display-table" ng-click="rvc.showPassholderDetails(pass.number)">
-            <div class="grid__2 grid--bp-med__1 first">
-              <!-- image -->
-              <img ng-if="pass.passholder.picture" style="width: 47px; height: 64px"
-                   ng-src="{{::pass.passholder.getPictureSrc()}}" />
+              <div class="checkboxes">
+                <input type="checkbox" ng-click="rvc.togglePassBulkSelection(pass)" ng-checked="rvc.bulk.selection.selectAll || rvc.bulk.selection.numberInSelection(pass.number)">
+              </div>
+              <div class="grid display-table" ng-click="rvc.showPassholderDetails(pass.number)">
+                <div class="grid__2 grid--bp-med__1 first">
+                  <!-- image -->
+                  <img ng-if="pass.passholder.picture" style="width: 47px; height: 64px"
+                       ng-src="{{::pass.passholder.getPictureSrc()}}" />
+                </div>
+                <div class="grid__10 grid--bp-med__4">
+                  <!-- name -->
+                  <strong class="ch-name" ng-bind="::pass.passholder.getFullName()"></strong><br>
+                  <em class="ch-address">
+                    <span ng-bind="::pass.passholder.address.street"></span><br>
+                    <span ng-bind="::pass.passholder.address.postalCode"></span>
+                    <span ng-bind="::pass.passholder.address.city"></span>
+                  </em>
+                </div>
+                <div class="grid__12 grid--bp-med__7">
+
+                  <ul class="listreset small">
+                    <li class="grid passholder-passes" ng-repeat="otherPass in ::pass.passholder.uitPassen">
+                      <div class="grid__12 grid--bp-med__4">
+                        <span ng-bind="::otherPass.number"></span>
+                      </div>
+
+                      <div class="grid__12 grid--bp-med__4">
+                        <span ng-bind="::otherPass.cardSystem.name"></span>
+                      </div>
+
+                      <div class="grid__12 grid--bp-med__4">
+                        <span class="label label-danger" ng-show="otherPass.isKansenstatuut() && otherPass.kansenstatuutExpired(pass.passholder)">Kansenstatuut vervallen</span>
+                        <span class="label label-success" ng-show="otherPass.isKansenstatuut() && !otherPass.kansenstatuutExpired(pass.passholder)">Kansenstatuut geldig</span>
+                        <span class="label label-danger" ng-show="otherPass.isBlocked()">Kaart geblokeerd</span>
+                      </div>
+                    </li>
+                  </ul>
+
+                </div>
+
+              </div>
             </div>
-            <div class="grid__10 grid--bp-med__4">
-              <!-- name -->
-              <strong class="ch-name" ng-bind="::pass.passholder.getFullName()"></strong><br>
-              <em class="ch-address">
-                <span ng-bind="::pass.passholder.address.street"></span><br>
-                <span ng-bind="::pass.passholder.address.postalCode"></span>
-                <span ng-bind="::pass.passholder.address.city"></span>
-              </em>
-            </div>
-            <div class="grid__12 grid--bp-med__7">
-
-              <ul class="listreset small">
-                <li class="grid passholder-passes" ng-repeat="otherPass in ::pass.passholder.uitPassen">
-                  <div class="grid__12 grid--bp-med__4">
-                    <span ng-bind="::otherPass.number"></span>
-                  </div>
-
-                  <div class="grid__12 grid--bp-med__4">
-                    <span ng-bind="::otherPass.cardSystem.name"></span>
-                  </div>
-
-                  <div class="grid__12 grid--bp-med__4">
-                    <span class="label label-danger" ng-show="otherPass.isKansenstatuut() && otherPass.kansenstatuutExpired(pass.passholder)">Kansenstatuut vervallen</span>
-                    <span class="label label-success" ng-show="otherPass.isKansenstatuut() && !otherPass.kansenstatuutExpired(pass.passholder)">Kansenstatuut geldig</span>
-                    <span class="label label-danger" ng-show="otherPass.isBlocked()">Kaart geblokeerd</span>
-                  </div>
-                </li>
-              </ul>
-
-            </div>
-
-          </div>
-          </div>
           </div>
         </li>
       </ul>
