@@ -430,7 +430,39 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
     $state.params = {
       mode: 'DETAIL',
-      page: 5
+      page: null
+    };
+    $rootScope.$emit('$locationChangeSuccess');
+    var expectedSearchFields = {
+      uitpasNumbers: [],
+      page: 1,
+      limit: 10,
+      dateOfBirth: null,
+      firstName: null,
+      name: null,
+      street: null,
+      city: null,
+      email: null,
+      membershipAssociationId: null,
+      membershipStatus: null,
+      mode: {
+        title: 'Zoeken',
+        name: 'DETAIL'
+      }
+    };
+    var expectedStateParams = {
+      mode: 'DETAIL',
+      page: null
+    };
+    expect(controller.searchFields).toEqual(expectedSearchFields);
+    expect($state.params).toEqual(expectedStateParams);
+  });
+
+  it('does not clear the parameters from the url on state change success when page parameter is given', function () {
+    advancedSearchService.findPassholders.and.returnValue($q.when(new PassholderSearchResults(searchResponse)));
+    $state.params = {
+      mode: 'DETAIL',
+      'page' : 5,
     };
     $rootScope.$emit('$locationChangeSuccess');
     var expectedSearchFields = {
@@ -452,7 +484,7 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     };
     var expectedStateParams = {
       mode: 'DETAIL',
-      page: null
+      page: 5
     };
     expect(controller.searchFields).toEqual(expectedSearchFields);
     expect($state.params).toEqual(expectedStateParams);
