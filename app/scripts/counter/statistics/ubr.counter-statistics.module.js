@@ -11,7 +11,8 @@
 angular
   .module('ubr.counter.statistics', [
     'ui.router',
-    'ubr.counter'
+    'ubr.counter',
+    'daterangepicker'
   ])
   /* @ngInject */
   .config(function ($stateProvider) {

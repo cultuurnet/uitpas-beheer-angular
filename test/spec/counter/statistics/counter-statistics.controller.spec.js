@@ -4,7 +4,11 @@ describe('Controller: CounterStatisticsController', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  var CounterStatisticsController, $state, counterService, $scope, rootScope, $q;
+  var CounterStatisticsController, $state, counterStatisticsService, $scope, rootScope, $q;
+  var dateRange = {
+    from: '2016-09-09',
+    to: '2016-09-10'
+  }
 
   beforeEach(inject(function ($controller, _$state_, $rootScope, _$q_) {
 
@@ -13,10 +17,11 @@ describe('Controller: CounterStatisticsController', function () {
     rootScope = $rootScope;
     $scope = $rootScope.$new();
 
-    counterService = jasmine.createSpyObj('counterService', ['getDefaultDateRange', 'getStatistics']);
+    counterStatisticsService = jasmine.createSpyObj('counterStatisticsService', ['getDefaultDateRange', 'getStatistics']);
+    counterStatisticsService.getDefaultDateRange.and.returnValue(dateRange);
+
     CounterStatisticsController = $controller('CounterStatisticsController', {
-      counterService: counterService,
-      $element: angular.element('<div class="counter-statistics-graph"> </div>'),
+      counterStatisticsService: counterStatisticsService,
       $scope: $scope,
       $state : $state
     });
@@ -43,29 +48,10 @@ describe('Controller: CounterStatisticsController', function () {
   }
 
   it('loads the default date range', function () {
-
-    var dateRange = 'date';
-    counterService.getDefaultDateRange.and.returnValue(dateRange);
-    var arraySpy = spyOn(CounterStatisticsController.dateRanges, 'push');
-
-    CounterStatisticsController.loadDefaultDateRange();
-
-    expect(arraySpy).toHaveBeenCalledWith('date', 'date');
-
-  });
-
-  it('returns a correct date', function () {
-
-    var dateString = "September 9, 2016 11:13:00";
-    var expectDate = new Date(dateString);
-
-    var date = CounterStatisticsController.makeDate(dateString);
-
-    expect(expectDate).toEqual(date);
+    expect(CounterStatisticsController.dateRange).toEqual(dateRange);
   });
 
   it('loads the statistics', function() {
-
     var deferredLoad = $q.defer(),
       getStatisticsPromise = deferredLoad.promise;
 
@@ -82,7 +68,7 @@ describe('Controller: CounterStatisticsController', function () {
       renderGraphCalled = true;
     }
 
-    counterService.getStatistics.and.returnValue(getStatisticsPromise);
+    counterStatisticsService.getStatistics.and.returnValue(getStatisticsPromise);
     CounterStatisticsController.loadStatistics();
     deferredLoad.resolve(statistics);
 
@@ -101,11 +87,9 @@ describe('Controller: CounterStatisticsController', function () {
     });
 
     $scope.$digest();
-
   });
 
   it('loads 2 default dates if comparing', function() {
-
     var statistics = {
       periods: ''
     };
@@ -117,25 +101,19 @@ describe('Controller: CounterStatisticsController', function () {
     var deferredLoad = $q.defer(),
       getStatisticsPromise = deferredLoad.promise;
 
-    counterService.getStatistics.and.returnValue(getStatisticsPromise);
+    counterStatisticsService.getStatistics.and.returnValue(getStatisticsPromise);
 
-    var dateRange = {
-      from: '2016-09-09',
-      to: '2016-09-10'
-    }
     CounterStatisticsController.comparing = true;
-    CounterStatisticsController.dateRanges = [];
-    CounterStatisticsController.dateRanges.push(dateRange);
-    CounterStatisticsController.dateRanges.push(dateRange);
+    var dateRanges = [];
+    dateRanges.push(dateRange);
+    dateRanges.push(dateRange);
 
     CounterStatisticsController.loadStatistics();
 
-    expect(counterService.getStatistics).toHaveBeenCalledWith(CounterStatisticsController.dateRanges, 'cardsales');
-
+    expect(counterStatisticsService.getStatistics).toHaveBeenCalledWith(dateRanges, 'cardsales');
   });
 
   it('shows error when failed to load the statistics', function() {
-
     var deferredLoad = $q.defer(),
       getStatisticsPromise = deferredLoad.promise;
 
@@ -149,7 +127,7 @@ describe('Controller: CounterStatisticsController', function () {
 
     expect(CounterStatisticsController.noStatisticsError).toBeFalsy();
 
-    counterService.getStatistics.and.returnValue(getStatisticsPromise);
+    counterStatisticsService.getStatistics.and.returnValue(getStatisticsPromise);
     CounterStatisticsController.loadStatistics();
     deferredLoad.reject(statistics);
 
@@ -159,30 +137,9 @@ describe('Controller: CounterStatisticsController', function () {
     });
 
     $scope.$digest();
-
-  });
-
-  it('correctly returns the is comparing value when comparing', function () {
-    expect(CounterStatisticsController.isComparing()).toBeFalsy();
-  });
-
-  it('correctly returns the is comparing value when comparing', function () {
-
-    var dateRange = {
-      from: '2016-09-09',
-      to: '2016-09-10'
-    }
-    CounterStatisticsController.comparing = true;
-    CounterStatisticsController.dateRanges = [];
-    CounterStatisticsController.dateRanges.push(dateRange);
-    CounterStatisticsController.dateRanges.push(dateRange);
-    expect(CounterStatisticsController.dateRanges.length).toEqual(2);
-    expect(CounterStatisticsController.isComparing()).toBeTruthy();
-
   });
 
   it('correctly indicates that comparing data is available', function () {
-
     CounterStatisticsController.statistics = {
       profiles2 : true
     }
@@ -194,8 +151,38 @@ describe('Controller: CounterStatisticsController', function () {
     expect(CounterStatisticsController.hasCompareData()).toBeFalsy();
   });
 
-  it('renders graph in correct size', function () {
+  it('correctly updates the dates', function () {
 
+    CounterStatisticsController.dateRange = 'new date range';
+    CounterStatisticsController.compareDateRange = 'new compare date range';
+
+    spyOn(CounterStatisticsController, 'loadStatistics').and.returnValue(true);
+
+    CounterStatisticsController.updateDates();
+
+    expect(CounterStatisticsController.selectedDateRange).toEqual(CounterStatisticsController.dateRange);
+    expect(CounterStatisticsController.selectedCompareDateRange).toEqual(CounterStatisticsController.compareDateRange);
+
+  });
+
+  it('correctly resets the dates', function () {
+
+    CounterStatisticsController.selectedDateRange = 'old date range';
+    CounterStatisticsController.selectedCompareDateRange = 'old compare date range';
+
+    CounterStatisticsController.dateRange = 'new date range';
+    CounterStatisticsController.compareDateRange = 'new compare date range';
+
+    spyOn(CounterStatisticsController, 'loadStatistics').and.returnValue(true);
+
+    CounterStatisticsController.resetDates();
+
+    expect(CounterStatisticsController.selectedDateRange).toEqual(CounterStatisticsController.dateRange);
+    expect(CounterStatisticsController.selectedCompareDateRange).toEqual(CounterStatisticsController.compareDateRange);
+
+  });
+
+  it('renders graph in correct size', function () {
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -224,14 +211,9 @@ describe('Controller: CounterStatisticsController', function () {
 
     expect(angular.element($g[0].querySelectorAll('.x')).attr('transform')).toEqual('translate(0, 250)');
     expect($g[0].querySelectorAll('.y').length).toEqual(1);
-
-
-
-
   });
 
   it('correctly renders the required dots', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -254,11 +236,9 @@ describe('Controller: CounterStatisticsController', function () {
 
     expect(d3.selectAll('circle').size()).toEqual(2);
     expect(d3.selectAll('path').size()).toEqual(4);
-
   });
 
   it('correctly renders the required dots when comparing', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -285,7 +265,6 @@ describe('Controller: CounterStatisticsController', function () {
   });
 
   it('correctly hides tooltips on mouseout', function () {
-
     $state.current = {
       'name' : 'counter.statistics'
     }
@@ -317,14 +296,12 @@ describe('Controller: CounterStatisticsController', function () {
     $dots[0][0].dispatchEvent(event);
 
     expect(spy).toHaveBeenCalled();
-
   });
 
   /**
    * Test the given event.
    */
   function testMouseEvent(controllerMethod, event, selector) {
-
     $state.current = {
       'name' : 'counter.statistics'
     }
@@ -339,11 +316,9 @@ describe('Controller: CounterStatisticsController', function () {
     $dots[0][0].dispatchEvent(domEvent);
 
     expect(spy).toHaveBeenCalled();
-
   }
 
   it('correctly shows tooltips on mouseover', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -363,11 +338,9 @@ describe('Controller: CounterStatisticsController', function () {
     };
 
     testMouseEvent('showTooltip', 'mouseover', 'circle');
-
   });
 
   it('correctly shows tooltips on mouseover for compare data', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -388,11 +361,9 @@ describe('Controller: CounterStatisticsController', function () {
     };
 
     testMouseEvent('showTooltip', 'mouseover', '.dot-2');
-
   });
 
   it('correctly hides tooltips on mouseover', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -412,11 +383,9 @@ describe('Controller: CounterStatisticsController', function () {
     };
 
     testMouseEvent('hideTooltip', 'mouseout', 'circle');
-
   });
 
   it('correctly hides tooltips on mouseover for compare data', function () {
-
     CounterStatisticsController.statistics = {
       "periods": [
 
@@ -437,11 +406,9 @@ describe('Controller: CounterStatisticsController', function () {
     };
 
     testMouseEvent('hideTooltip', 'mouseout', '.dot-2');
-
   });
 
   it('correctly shows tooltips', function () {
-
     var event = {
       'pageX': 10,
       'pageY': 10,
@@ -453,6 +420,7 @@ describe('Controller: CounterStatisticsController', function () {
     expect(CounterStatisticsController.tooltip.html()).toEqual('my tekst');
 
     flushTransitions();
+
     expect(CounterStatisticsController.tooltip.style('opacity')).toEqual('1');
 
     CounterStatisticsController.showHelpTooltip(event, 'average');
@@ -461,26 +429,21 @@ describe('Controller: CounterStatisticsController', function () {
   });
 
   it('correctly hides the tooltip', function () {
-
     CounterStatisticsController.tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 1);
     CounterStatisticsController.hideTooltip();
 
     flushTransitions();
 
     expect(CounterStatisticsController.tooltip.style('opacity')).toEqual('0');
-
   });
 
   it('reloads at state change', function () {
-
     var spy = spyOn(CounterStatisticsController, 'loadStatistics');
     rootScope.$broadcast('$stateChangeSuccess');
     expect(spy).toHaveBeenCalled();
-
   });
 
   it('re-renders after resize', function () {
-
     $state.current = {
       'name' : 'counter.statistics'
     }
@@ -511,11 +474,9 @@ describe('Controller: CounterStatisticsController', function () {
     window.dispatchEvent(event);
 
     expect(spy).toHaveBeenCalled();
-
   });
 
   it('has fixed width if wrapper is to small', function () {
-
     $state.current = {
       'name' : 'counter.statistics'
     }
@@ -544,7 +505,6 @@ describe('Controller: CounterStatisticsController', function () {
     var $svg = angular.element(document).find('svg');
 
     expect($svg.width()).toEqual(600);
-
   });
 
 });

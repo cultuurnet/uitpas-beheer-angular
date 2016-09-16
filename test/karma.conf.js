@@ -53,6 +53,10 @@ module.exports = function(config) {
       'bower_components/chosen/chosen.jquery.min.js',
       'bower_components/d3/d3.js',
       'bower_components/bootstrap-daterangepicker/daterangepicker.js',
+      'bower_components/lodash/lodash.js',
+      'bower_components/cultuurnet-google-tagmanager/src/cultuurnet-google-tagmanager.module.js',
+      'bower_components/bootstrap/dist/js/bootstrap.js',
+      'bower_components/angular-daterangepicker/js/angular-daterangepicker.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/app.js",
