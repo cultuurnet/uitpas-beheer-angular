@@ -39,7 +39,7 @@ function countersController($state, counterService, list, lastActiveId, appConfi
 
       // If analytics is enabled, set the selected counter as dimension.
       if (GoogleAnalyticsService.isEnabled()) {
-        var trackers = GoogleTagmanagerService.getTrackers();
+        var trackers = GoogleAnalyticsService.getTrackers();
         for (var i = 0; i < trackers.length; i++) {
           var trackerName = trackers[i].get('name');
           GoogleAnalyticsService.setVariable(trackerName, 'dimension1', activeCounter.id);
