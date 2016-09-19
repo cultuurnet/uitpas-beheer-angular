@@ -8,8 +8,10 @@ describe('Controller: CountersController', function () {
   function Tracker(name) {
     this.name = name;
     this.get = function(key) {
-      return name;
-    }
+      if (key === 'name') {
+        return this.name;
+      }
+    };
   }
 
   var CountersController, GoogleAnalyticsService, $scope, $location, counterService, $q, $state;
@@ -18,11 +20,12 @@ describe('Controller: CountersController', function () {
   beforeEach(inject(function ($controller, $rootScope, _$q_, _counterService_, _$state_) {
     counterService = _counterService_;
     $location = jasmine.createSpyObj('$location', ['path']);
-    GoogleAnalyticsService = jasmine.createSpyObj('GoogleAnalyticsService', ['isEnabled', 'getTrackers', 'setVariable', 'sendEvent'])
+    GoogleAnalyticsService = jasmine.createSpyObj('GoogleAnalyticsService', ['isEnabled', 'getTrackers', 'setVariable', 'sendEvent']);
 
     GoogleAnalyticsService.isEnabled.and.returnValue(true);
     GoogleAnalyticsService.getTrackers.and.returnValue([
-      new Tracker('name')
+      new Tracker('trackerA'),
+      new Tracker('trackerB')
     ]);
 
     $scope = $rootScope.$new();
@@ -93,9 +96,14 @@ describe('Controller: CountersController', function () {
 
     var counterActivated = function () {
       expect($state.go).toHaveBeenCalledWith('counter.main');
-      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('name', 'dimension1', 1);
-      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('name', 'dimension2', 'counter');
-      expect(GoogleAnalyticsService.sendEvent).toHaveBeenCalledWith('name', 'pageview');
+      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('trackerA', 'dimension1', 1);
+      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('trackerA', 'dimension2', 'counter');
+      expect(GoogleAnalyticsService.sendEvent).toHaveBeenCalledWith('trackerA', 'pageview');
+
+      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('trackerB', 'dimension1', 1);
+      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('trackerB', 'dimension2', 'counter');
+      expect(GoogleAnalyticsService.sendEvent).toHaveBeenCalledWith('trackerB', 'pageview');
+
       done();
     };
 
