@@ -1,0 +1,73 @@
+<section class="overview overview-small overview-counter-statistics">
+
+  <div class="overview__loading" ng-if="csc.loadingStatistics">
+    <div class="spinner spinner-small">
+      <circle-spinner></circle-spinner>
+    </div>
+  </div>
+
+  <div ng-show="csc.noStatisticsError" class="alert alert-danger">
+    Er kunnen geen statistieken opgehaald worden voor deze balie.
+  </div>
+
+  <div class="page-header">
+    <h1>{{csc.pageTitle}}</h1>
+    <div class="period-chooser">
+      <a href="#" class="ppu" ng-click="csc.pickingDate = !csc.pickingDate">
+        <p class="selected-date">
+          <span class="period-1">{{csc.dateRange.startDate.format('DD/MM/YYYY')}} - {{csc.dateRange.endDate.format('DD/MM/YYYY')}}</span>
+        </p>
+        <p ng-show="csc.isComparing()" class="text-muted"><span class="period-2">Vergeleken met {{csc.compareDateRange.startDate.format('DD/MM/YYYY')}} - {{csc.compareDateRange.endDate.format('DD/MM/YYYY')}}</span></p>
+      </a>
+
+      <div ng-init="csc.addDatePicker()" class="popover" ng-class="{hidden: !csc.pickingDate}">
+        <div class="row clearfix">
+          <div class="grid__12">
+            <label>Period</label><br/>
+            <input date-range-picker name="daterange" class="form-control date-picker" type="text"
+                   ng-model="csc.dateRange" options="csc.datePickerOpts" required/>
+
+          </div>
+          <div class="grid__12">
+            <div class="checkbox no-margin">
+              <label>
+                <input type="checkbox" class="comparecheck" ng-model="csc.comparing">
+                Vergelijk
+              </label>
+            </div>
+            <div class="row compare-period" ng-class="{inactive: !csc.comparing}">
+              <div>
+                <label class="hidden">Compare</label>
+                <input ng-disabled="!csc.comparing" date-range-picker name="daterange-compare" class="form-control date-picker" type="text"
+                       ng-model="csc.compareDateRange" required options="csc.datePickerOpts"/>
+              </div>
+            </div>
+          </div>
+          <div class="grid__12">
+            <a class="btn btn-primary" ng-click="csc.updateDates($event)" type="reset">Bevestigen</a>
+            <a class="btn btn-link" ng-click="csc.resetDates($event)" type="reset">Annuleren</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="counter-statistics-wrapper">
+
+    <div class="counter-statistics-wrapper">
+      <div class="row">
+        <div class="col-xs-12">
+          <h5 class="element-title">{{csc.titleStr}}</h5>
+          <div class="counter-statistics-graph" ng-if="!csc.loadingStatistics">
+          </div>
+        </div>
+
+        <div ng-include src="csc.typeTemplate" ng-if="!csc.loadingStatistics"></div>
+
+      </div>
+    </div>
+
+  </div>
+
+</section>
