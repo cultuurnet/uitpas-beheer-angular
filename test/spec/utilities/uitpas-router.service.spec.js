@@ -34,6 +34,19 @@ describe('Service: UiTPAS router', function () {
     $state.current = {
       redirectOnScan: true
     };
+    router.redirectOnScanEnabled(true);
+    var number = '123456789';
+    spyOn(router, 'go');
+    rootScope.$emit('nfcNumberReceived', number);
+
+    rootScope.$digest();
+    expect(router.go).toHaveBeenCalledWith(number);
+  });
+
+  it('should keep listening when redirectOnScan is called 2nd time', function () {
+    $state.current = {
+      redirectOnScan: true
+    };
     var number = '123456789';
     spyOn(router, 'go');
     rootScope.$emit('nfcNumberReceived', number);
