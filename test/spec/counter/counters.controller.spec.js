@@ -5,18 +5,37 @@ describe('Controller: CountersController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var CountersController, $scope, $location, counterService, $q, $state;
+  function Tracker(name) {
+    this.name = name;
+    this.get = function(key) {
+      if (key === 'name') {
+        return this.name;
+      }
+    };
+  }
+
+  var CountersController, GoogleAnalyticsService, $scope, $location, counterService, $q, $state;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope, _$q_, _counterService_, _$state_) {
     counterService = _counterService_;
     $location = jasmine.createSpyObj('$location', ['path']);
+    GoogleAnalyticsService = jasmine.createSpyObj('GoogleAnalyticsService', ['isEnabled', 'getTrackers', 'setVariable', 'sendEvent']);
+
+    GoogleAnalyticsService.isEnabled.and.returnValue(true);
+    GoogleAnalyticsService.getTrackers.and.returnValue([
+      new Tracker('trackerA'),
+      new Tracker('trackerB')
+    ]);
+
     $scope = $rootScope.$new();
     $state = _$state_;
     $q = _$q_;
+
     CountersController = $controller('CountersController', {
       $location: $location,
       counterService: counterService,
+      GoogleAnalyticsService: GoogleAnalyticsService,
       list:
         {
           '1149': {
@@ -68,12 +87,23 @@ describe('Controller: CountersController', function () {
   });
 
   it('Can activate a counter', function (done) {
-    var counterToActivate = {},
-        deferredActivation = $q.defer(),
-        activeCounterPromise = deferredActivation.promise;
+    var counterToActivate = {
+        id: 1,
+        name: 'counter'
+      },
+      deferredActivation = $q.defer(),
+      activeCounterPromise = deferredActivation.promise;
 
     var counterActivated = function () {
       expect($state.go).toHaveBeenCalledWith('counter.main');
+      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('trackerA', 'dimension1', 1);
+      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('trackerA', 'dimension2', 'counter');
+      expect(GoogleAnalyticsService.sendEvent).toHaveBeenCalledWith('trackerA', 'pageview');
+
+      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('trackerB', 'dimension1', 1);
+      expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('trackerB', 'dimension2', 'counter');
+      expect(GoogleAnalyticsService.sendEvent).toHaveBeenCalledWith('trackerB', 'pageview');
+
       done();
     };
 
