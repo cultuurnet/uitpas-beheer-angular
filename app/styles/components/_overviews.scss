@@ -160,8 +160,9 @@
       }
     }
   }
-  // Passholder activities
-  &-activities {
+  // Passholder activities and advantages
+  &-activities,
+  &-advantages {
     .date {
       color: $gray-50;
       margin-bottom: 5px;
