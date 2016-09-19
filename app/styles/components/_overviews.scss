@@ -78,6 +78,11 @@
     .checkboxes {
       float: left;
       width: 25px;
+
+      input[type="checkbox"] {
+        margin-top: 6px;
+      }
+
     }
 
     .display-table {
@@ -134,7 +139,7 @@
     .grid__2.first {
       float: right;
       @include breakpoint(map-get($breakpoints, med)) {
-        float: left;
+        float: none;
       }
     }
     .grid__12 {
@@ -380,6 +385,15 @@
     min-height: 35px;
     > div {
       min-height: 35px;
+    }
+  }
+}
+
+.passholder-list .display-table {
+  @include breakpoint(map-get($breakpoints, med)) {
+    min-height: 64px;
+    > div {
+      min-height: 64px;
     }
   }
 }
