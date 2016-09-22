@@ -33,10 +33,14 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
     /*jshint camelcase: false */
     var requestParameters = {
       query: searchParameters.query,
-      date_type: searchParameters.dateRange.value,
       page: searchParameters.page,
       limit: searchParameters.limit
     };
+
+    // Only add daterange value if it's meaningful.
+    if (searchParameters.dateRange.value !== 'all') {
+      requestParameters['date_type'] = searchParameters.dateRange.value;
+    }
 
     var searchRequest = $http.get(
         apiUrl + 'passholders/' + passholder.passNumber + '/activities',
