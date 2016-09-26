@@ -15,6 +15,9 @@ describe('Service: activity', function (){
 
   var $scope, $q, $rootScope, $httpBackend, activityService, DateRange, Activity;
 
+  var hourMs = 60 * 60 * 1000;
+  var now = new Date();
+
   var pagedActivityData = {
     '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
     '@type': 'PagedCollection',
@@ -30,8 +33,8 @@ describe('Service: activity', function (){
         'points': 182,
         'checkinConstraint': {
           'allowed': true,
-          'startDate': '2015-09-01T00:00:00+00:00',
-          'endDate': '2015-09-01T23:59:59+00:00',
+          'startDate': now.toISOString(),
+          'endDate': (new Date(now.getTime() + hourMs)).toISOString(),
           'reason': ''
         },
         'free': false
@@ -45,8 +48,8 @@ describe('Service: activity', function (){
         'points': 182,
         'checkinConstraint': {
           'allowed': true,
-          'startDate': '2015-09-01T00:00:00+00:00',
-          'endDate': '2015-09-01T23:59:59+00:00',
+          'startDate': now.toISOString(),
+          'endDate': (new Date(now.getTime() + hourMs)).toISOString(),
           'reason': ''
         },
         'free': true
@@ -66,8 +69,8 @@ describe('Service: activity', function (){
       'points': 182,
       'checkinConstraint': {
         'allowed': true,
-        'startDate': '2015-09-01T00:00:00+00:00',
-        'endDate': '2015-09-01T23:59:59+00:00',
+          'startDate': now.toISOString(),
+          'endDate': (new Date(now.getTime() + hourMs)).toISOString(),
         'reason': ''
       },
       free: true,
@@ -131,8 +134,8 @@ describe('Service: activity', function (){
           'points': 182,
           'checkinConstraint': {
             'allowed': true,
-            'startDate': new Date('2015-09-01T00:00:00+00:00'),
-            'endDate': new Date('2015-09-01T23:59:59+00:00'),
+            'startDate': now,
+            'endDate': new Date(now.getTime() + hourMs),
             'reason': ''
           },
           'free': false
@@ -146,8 +149,8 @@ describe('Service: activity', function (){
           'points': 182,
           'checkinConstraint': {
             'allowed': true,
-            'startDate': new Date('2015-09-01T00:00:00+00:00'),
-            'endDate': new Date('2015-09-01T23:59:59+00:00'),
+            'startDate': now,
+            'endDate': new Date(now.getTime() + hourMs),
             'reason': ''
           },
           'free': true
@@ -210,8 +213,8 @@ describe('Service: activity', function (){
       'points': 182,
       'checkinConstraint': {
         'allowed': true,
-        'startDate': new Date('2015-09-01T00:00:00+00:00'),
-        'endDate': new Date('2015-09-01T23:59:59+00:00'),
+        'startDate': now,
+        'endDate': new Date(now.getTime() + hourMs),
         'reason': ''
       }
     };
@@ -272,8 +275,8 @@ describe('Service: activity', function (){
       'points': 182,
       'checkinConstraint': {
         'allowed': true,
-        'startDate': '2015-09-01T00:00:00+00:00',
-        'endDate': '2015-09-01T23:59:59+00:00',
+        'startDate': now.toISOString(),
+        'endDate': (new Date(now.getTime() + hourMs)).toISOString(),
         'reason': ''
       },
       free: true,
