@@ -201,7 +201,6 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         locale: { format: 'DD/MM/YYYY'},
         opens: 'left',
         ranges: {
-          'Today': [moment(), moment()],
           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
           'Last week': [moment().subtract(6, 'days'), moment()],
           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
