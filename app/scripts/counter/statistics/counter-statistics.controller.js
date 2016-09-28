@@ -201,11 +201,12 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         locale: { format: 'DD/MM/YYYY'},
         opens: 'left',
         ranges: {
-          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          'Last week': [moment().subtract(6, 'days'), moment()],
-          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-          'This Month': [moment().startOf('month'), moment().endOf('month')],
-          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          'Gisteren': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Afgelopen week': [moment().startOf('week'), moment().endOf('week')],
+          'Lopende maand': [moment().startOf('month'), moment().endOf('month')],
+          'Afgelopen complete maand': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+          'Afgelopen 7 dagen': [moment().subtract(8, 'days'), moment().subtract(1, 'day')],
+          'Afgelopen 30 dagen': [moment().subtract(31, 'days'), moment().subtract(1, 'day')]
         }
       };
       // If we have a second range, use that as default.
