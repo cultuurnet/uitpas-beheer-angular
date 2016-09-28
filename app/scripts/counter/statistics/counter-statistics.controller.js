@@ -121,14 +121,14 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         $rows = $wrap.children('.row'),
         $row = $rows.eq(0),
         $inputs = $row.find('input'),
-        $row2, $inputs2;
-    $inputs.eq(0).val(controller.dateRanges[0].from.format('DD/MM/YYYY'));
-    $inputs.eq(1).val(controller.dateRanges[0].to.format('DD/MM/YYYY'));
+        $row2, $inputs2, val1, val2;
+    val1 = controller.dateRanges[0].from.format('DD/MM/YYYY') + ' - ' + controller.dateRanges[0].to.format('DD/MM/YYYY');
+    $inputs.eq(0).val(val1);
     if (controller.isComparing()) {
+      val2 = controller.dateRanges[1].from.format('DD/MM/YYYY') + ' - ' + controller.dateRanges[1].to.format('DD/MM/YYYY')
       $row2 = $rows.eq(1);
       $inputs2 = $row2.find('input[type="text"]');
-      $inputs2.eq(0).val(controller.dateRanges[1].from.format('DD/MM/YYYY'));
-      $inputs2.eq(1).val(controller.dateRanges[1].to.format('DD/MM/YYYY'));
+      $inputs2.eq(0).val(val2);
     }
     this.updateDates($event);
   };
@@ -219,10 +219,11 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         }
       }
       // Attach daterangepickers
-      $inputs.eq(0).daterangepicker(jQuery.extend(defOpts, {defaultDate: controller.dateRanges[0].from._d}));
-      $inputs.eq(1).daterangepicker(jQuery.extend(defOpts, {defaultDate: controller.dateRanges[0].to._d}));
-      $inputs2.eq(0).daterangepicker(jQuery.extend(defOpts, {defaultDate: def3}));
-      $inputs2.eq(1).daterangepicker(jQuery.extend(defOpts, {defaultDate: def4}));
+      $inputs.eq(0).daterangepicker(jQuery.extend(defOpts, {
+        fromDate: controller.dateRanges[0].from._d,
+        toDate: controller.dateRanges[0].to._d
+      }));
+      $inputs2.eq(0).daterangepicker(jQuery.extend(defOpts, {fromDate: def3, toDate: def4}));
     }, 0);
   };
 

@@ -508,17 +508,10 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * return {Object<FromToDates>} An object with formatted from/to values.
    */
   service.getDefaultDateRange = function () {
-    var moment = window.moment;
-    var now = moment();
-    // 2 weeks ago.
-    var then = moment().subtract(2, 'weeks');
-
-    var dateRange = {
-      from: then,
-      to: now,
+    return {
+      from: window.moment().startOf('month'),
+      to: window.moment().endOf('month'),
     };
-
-    return dateRange;
   };
 
   /**
