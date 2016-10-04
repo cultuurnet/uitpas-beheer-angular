@@ -25,7 +25,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           type: {
             buyers: {
               'label': 'Kopers',
-              'help': 'Help tekst bij kopers'
+              'help': 'Aantal personen dat voor het eerst een UiTPAS verkreeg bij jou.'
             }
           },
           profile: 'Profiel van de koper',
@@ -40,15 +40,15 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           type: {
             saved: {
               'label': 'Gespaarde punten',
-              'help': 'Help tekst bij gespaarde punten'
+              'help': 'Aantal gespaarde punten op je activiteiten.'
             },
             active: {
               'label': 'Actieve spaarders',
-              'help': 'Help tekst bij actieve spaarders'
+              'help': 'Aantal spaarders op je activiteiten.'
             },
             new: {
               'label': 'Nieuwe spaarders',
-              'help': 'Help tekst bij nieuwe spaarders'
+              'help': 'Aantal personen dat voor de eerste keer bij jou spaarde.'
             }
           },
           profile: 'Profiel van de actieve spaarder',
@@ -63,15 +63,15 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           type: {
             active: {
               label: 'Actieve ruilers',
-              help: 'help tekst bij actieve ruilers'
+              help: 'Aantal personen dat bij jou punten omruilde.'
             },
             new: {
               label: 'Nieuwe ruilers',
-              help: 'help tekst bij nieuwe ruilers'
+              help: 'Aantal personen dat voor de eerste keer bij jou punten omruilde.'
             },
             transactions: {
               label: 'Omgeruilde voordelen',
-              help: 'help tekst bij omgeruilde voordelen'
+              help: 'Aantal omgeruilde voordelen bij jou.'
             }
           },
           profile: 'Profiel van de actieve ruiler',
@@ -91,15 +91,15 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           type: {
             active: {
               label: 'Actieve MIA\'s',
-              help: 'help tekst bij active mias'
+              help: 'Aantal mensen in armoede dat je bereikte.'
             },
             saving: {
               label: 'Sparende MIA\'s',
-              help: 'help tekst bij sparende mias'
+              help: 'Aantal mensen in armoede dat bij je spaarde.'
             },
             exchanging: {
               label: 'Ruilende MIA\'s',
-              help: 'help tekst bij ruilende mias'
+              help: 'Aantal mensen in armoede dat bij je ruilde.'
             }
           },
           profile: 'Profiel van MIA\'s',
@@ -114,8 +114,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         },
       },
       helpTexts = {
-        average: 'Help tekst bij het gemiddelde',
-        yourBallie: 'Help tekst bij jouw balie'
+          average: '% berekend op jouw activiteiten.',
+          yourBallie: 'Gemiddelde % in je UiTPAS-regio.'
       };
 
   controller.loadingStatistics = true;
