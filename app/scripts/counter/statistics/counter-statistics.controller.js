@@ -14,8 +14,8 @@ angular
 /* @ngInject */
 function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   /*jshint validthis: true */
-  var controller = this,
-      info = {
+  var controller = this;
+  controller.info = {
         'counter.statistics': {
           pageTitle: 'Verkoop',
           path: 'cardsales',
@@ -25,7 +25,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           type: {
             buyers: {
               'label': 'Kopers',
-              'help': 'Help tekst bij kopers'
+              'help': 'Aantal personen dat voor het eerst een UiTPAS verkreeg bij jou.'
             }
           },
           profile: 'Profiel van de koper',
@@ -40,15 +40,15 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           type: {
             saved: {
               'label': 'Gespaarde punten',
-              'help': 'Help tekst bij gespaarde punten'
+              'help': 'Aantal gespaarde punten op je activiteiten.'
             },
             active: {
               'label': 'Actieve spaarders',
-              'help': 'Help tekst bij actieve spaarders'
+              'help': 'Aantal spaarders op je activiteiten.'
             },
             new: {
               'label': 'Nieuwe spaarders',
-              'help': 'Help tekst bij nieuwe spaarders'
+              'help': 'Aantal personen dat voor de eerste keer bij jou spaarde.'
             }
           },
           profile: 'Profiel van de actieve spaarder',
@@ -63,15 +63,15 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           type: {
             active: {
               label: 'Actieve ruilers',
-              help: 'help tekst bij actieve ruilers'
+              help: 'Aantal personen dat bij jou punten omruilde.'
             },
             new: {
               label: 'Nieuwe ruilers',
-              help: 'help tekst bij nieuwe ruilers'
+              help: 'Aantal personen dat voor de eerste keer bij jou punten omruilde.'
             },
             transactions: {
               label: 'Omgeruilde voordelen',
-              help: 'help tekst bij omgeruilde voordelen'
+              help: 'Aantal omgeruilde voordelen bij jou.'
             }
           },
           profile: 'Profiel van de actieve ruiler',
@@ -91,15 +91,15 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           type: {
             active: {
               label: 'Actieve MIA\'s',
-              help: 'help tekst bij active mias'
+              help: 'Aantal mensen in armoede dat je bereikte.'
             },
             saving: {
               label: 'Sparende MIA\'s',
-              help: 'help tekst bij sparende mias'
+              help: 'Aantal mensen in armoede dat bij je spaarde.'
             },
             exchanging: {
               label: 'Ruilende MIA\'s',
-              help: 'help tekst bij ruilende mias'
+              help: 'Aantal mensen in armoede dat bij je ruilde.'
             }
           },
           profile: 'Profiel van MIA\'s',
@@ -111,12 +111,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
             secondTableTitleRight: 'Aantal spaarders'
           },
           template: 'views/counter-statistics/statistics-mias.html',
-        },
-      },
-      helpTexts = {
-        average: 'Help tekst bij het gemiddelde',
-        yourBallie: 'Help tekst bij jouw balie'
-      };
+        }
+   };
+
+  controller.helpTexts = {
+      average: '% berekend op jouw activiteiten.',
+      yourBallie: 'Gemiddelde % in je UiTPAS-regio.'
+  };
 
   controller.loadingStatistics = true;
   controller.statistics = {};
@@ -172,14 +173,14 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       controller.statistics = statistics;
       controller.loadingStatistics = false;
       controller.noStatisticsError = false;
-      controller.titleStr = info[$state.current.name].title;
-      controller.profileStr = info[$state.current.name].profile;
-      controller.typeStr = info[$state.current.name].type;
-      controller.pageTitle = info[$state.current.name].pageTitle;
-      controller.typeTemplate = info[$state.current.name].template;
+      controller.titleStr = controller.info[$state.current.name].title;
+      controller.profileStr = controller.info[$state.current.name].profile;
+      controller.typeStr = controller.info[$state.current.name].type;
+      controller.pageTitle = controller.info[$state.current.name].pageTitle;
+      controller.typeTemplate = controller.info[$state.current.name].template;
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
-      controller.extraTable = info[$state.current.name].extraTable;
+      controller.extraTable = controller.info[$state.current.name].extraTable;
 
       // Using settimeout to avoid waiting an extra cycle.
       setTimeout(function(){
@@ -201,7 +202,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     controller.loadingStatistics = true;
     counterStatisticsService
-      .getStatistics(currentRanges, info[$state.current.name].path)
+      .getStatistics(currentRanges, controller.info[$state.current.name].path)
       .then(showStatistics, noStatisticsFound);
   };
 
@@ -354,7 +355,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
    * Show a tooltip for a point in the graph.
    */
   controller.showGraphTooltip = function(event, total, date) {
-    var label = (total == 1 ? info[$state.current.name].singleLabel : info[$state.current.name].pluralLabel),
+    var label = (total == 1 ? controller.info[$state.current.name].singleLabel : controller.info[$state.current.name].pluralLabel),
       content = "<strong>" + date + "</strong><br/>" + " " + total + " " + label;
 
     controller.showTooltip(event, content);
@@ -364,8 +365,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
    * Show a help tooltip.
    */
   controller.showHelpTooltip = function(event, key) {
-    if (helpTexts[key]) {
-      controller.showTooltip(event, helpTexts[key]);
+    if (controller.helpTexts[key]) {
+      controller.showTooltip(event, controller.helpTexts[key]);
     }
   }
 
