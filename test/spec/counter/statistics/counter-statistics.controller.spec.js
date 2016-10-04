@@ -485,13 +485,13 @@ describe('Controller: CounterStatisticsController', function () {
       "periods": [
 
         {
-          "date": "01-07-2016",
+          "date": "01/07/2016",
           "count": 0,
           "date2": null,
           "count2": 0
         },
         {
-          "date": "02-07-2016",
+          "date": "02/07/2016",
           "count": 0,
           "date2": null,
           "count2": 0

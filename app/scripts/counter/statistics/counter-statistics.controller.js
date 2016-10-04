@@ -220,7 +220,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     var stats = controller.statistics,
         // Global d3 reference.
         d3 = window.d3,
-        format = d3.time.format('%d-%m-%Y'),
+        format = d3.time.format('%d/%m/%Y'),
         // Hardcoded margin.
         margin = 40,
         // Grab width - margins.
