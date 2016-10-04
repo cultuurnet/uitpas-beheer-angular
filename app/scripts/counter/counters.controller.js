@@ -39,13 +39,8 @@ function countersController($state, counterService, list, lastActiveId, appConfi
 
       // If analytics is enabled, set the selected counter as dimension.
       if (GoogleAnalyticsService.isEnabled()) {
-        var trackers = GoogleAnalyticsService.getTrackers();
-        for (var i = 0; i < trackers.length; i++) {
-          var trackerName = trackers[i].get('name');
-          GoogleAnalyticsService.setVariable(trackerName, 'dimension1', activeCounter.id);
-          GoogleAnalyticsService.setVariable(trackerName, 'dimension2', activeCounter.name);
-          GoogleAnalyticsService.sendEvent(trackerName, 'pageview');
-        }
+        GoogleAnalyticsService.setVariable('dimension1', activeCounter.id);
+        GoogleAnalyticsService.setVariable('dimension2', activeCounter.name);
       }
 
       $state.go('counter.main');
