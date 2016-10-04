@@ -424,7 +424,7 @@ describe('Controller: CounterStatisticsController', function () {
     expect(CounterStatisticsController.tooltip.style('opacity')).toEqual('1');
 
     CounterStatisticsController.showHelpTooltip(event, 'average');
-    expect(CounterStatisticsController.tooltip.html()).toEqual('Help tekst bij het gemiddelde');
+    expect(CounterStatisticsController.tooltip.html()).toEqual('% berekend op jouw activiteiten');
 
   });
 
