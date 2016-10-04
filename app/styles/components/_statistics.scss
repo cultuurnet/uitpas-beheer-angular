@@ -76,6 +76,9 @@ $graph-link-color: #337ab7;
   }
   .period-1,
   .period-2 {
+
+    padding-right: 6px;
+
     &:after {
       color: $graph1-fg;
       content: "\f111";

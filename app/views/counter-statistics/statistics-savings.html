@@ -1,6 +1,6 @@
 <div class="counter-statistics-table">
   <div>
-    <p><span class="period-1">Periode 1</span></p>
+    <p><span class="period-1">Periode 1</span>{{csc.dateRange.startDate.format('DD/MM/YYYY')}} - {{csc.dateRange.endDate.format('DD/MM/YYYY')}}</p>
     <div class="serie-1 grid">
       <div class="grid__12 grid--bp-med__6">
         <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.saved.help)" ng-mouseleave="csc.hideTooltip()">
@@ -36,7 +36,7 @@
     </div>
   </div>
   <div>
-    <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span></p>
+    <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span>{{csc.compareDateRange.startDate.format('DD/MM/YYYY')}} - {{csc.compareDateRange.endDate.format('DD/MM/YYYY')}}</p>
     <div class="serie-2 grid" ng-if="csc.hasCompareData()">
       <div class="grid__12 grid--bp-med__6">
         <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.saved.help)" ng-mouseleave="csc.hideTooltip()">
