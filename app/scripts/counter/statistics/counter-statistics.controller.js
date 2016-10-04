@@ -14,8 +14,8 @@ angular
 /* @ngInject */
 function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   /*jshint validthis: true */
-  var controller = this,
-      info = {
+  var controller = this;
+  controller.info = {
         'counter.statistics': {
           pageTitle: 'Verkoop',
           path: 'cardsales',
@@ -111,12 +111,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
             secondTableTitleRight: 'Aantal spaarders'
           },
           template: 'views/counter-statistics/statistics-mias.html',
-        },
-      },
-      helpTexts = {
-          average: '% berekend op jouw activiteiten.',
-          yourBallie: 'Gemiddelde % in je UiTPAS-regio.'
-      };
+        }
+   };
+
+  controller.helpTexts = {
+      average: '% berekend op jouw activiteiten.',
+      yourBallie: 'Gemiddelde % in je UiTPAS-regio.'
+  };
 
   controller.loadingStatistics = true;
   controller.statistics = {};
@@ -172,14 +173,14 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       controller.statistics = statistics;
       controller.loadingStatistics = false;
       controller.noStatisticsError = false;
-      controller.titleStr = info[$state.current.name].title;
-      controller.profileStr = info[$state.current.name].profile;
-      controller.typeStr = info[$state.current.name].type;
-      controller.pageTitle = info[$state.current.name].pageTitle;
-      controller.typeTemplate = info[$state.current.name].template;
+      controller.titleStr = controller.info[$state.current.name].title;
+      controller.profileStr = controller.info[$state.current.name].profile;
+      controller.typeStr = controller.info[$state.current.name].type;
+      controller.pageTitle = controller.info[$state.current.name].pageTitle;
+      controller.typeTemplate = controller.info[$state.current.name].template;
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
-      controller.extraTable = info[$state.current.name].extraTable;
+      controller.extraTable = controller.info[$state.current.name].extraTable;
 
       // Using settimeout to avoid waiting an extra cycle.
       setTimeout(function(){
@@ -201,7 +202,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     controller.loadingStatistics = true;
     counterStatisticsService
-      .getStatistics(currentRanges, info[$state.current.name].path)
+      .getStatistics(currentRanges, controller.info[$state.current.name].path)
       .then(showStatistics, noStatisticsFound);
   };
 
@@ -354,7 +355,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
    * Show a tooltip for a point in the graph.
    */
   controller.showGraphTooltip = function(event, total, date) {
-    var label = (total == 1 ? info[$state.current.name].singleLabel : info[$state.current.name].pluralLabel),
+    var label = (total == 1 ? controller.info[$state.current.name].singleLabel : controller.info[$state.current.name].pluralLabel),
       content = "<strong>" + date + "</strong><br/>" + " " + total + " " + label;
 
     controller.showTooltip(event, content);
@@ -364,8 +365,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
    * Show a help tooltip.
    */
   controller.showHelpTooltip = function(event, key) {
-    if (helpTexts[key]) {
-      controller.showTooltip(event, helpTexts[key]);
+    if (controller.helpTexts[key]) {
+      controller.showTooltip(event, controller.helpTexts[key]);
     }
   }
 
