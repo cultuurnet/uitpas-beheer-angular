@@ -14,6 +14,7 @@ describe('Controller: AppController', function () {
     uitid = $injector.get('uitid');
     $q = $injector.get('$q');
     counterService = $injector.get('counterService');
+    GoogleAnalyticsService = jasmine.createSpyObj('GoogleAnalyticsService', ['isEnabled', 'getTrackers', 'setVariable', 'sendEvent']);
     $state = jasmine.createSpyObj('$state', ['go']);
   }));
 
@@ -24,9 +25,10 @@ describe('Controller: AppController', function () {
       'AppController', {
         $scope: $scope,
         $location: $location,
+        $state: $state,
         uitid: uitid,
         counterService: counterService,
-        $state: $state
+        GoogleAnalyticsService: GoogleAnalyticsService
       }
     );
   });
@@ -167,5 +169,18 @@ describe('Controller: AppController', function () {
     $scope.$digest();
     expect($state.go).toHaveBeenCalledWith(toState, {});
     expect(appController.counter).toEqual({some: 'counter'});
+  });
+
+  it('should send a pageview to google analytics after state change', function () {
+    GoogleAnalyticsService.isEnabled.and.returnValue(true);
+    GoogleAnalyticsService.getTrackers.and.returnValue([]);
+
+    $scope.$broadcast('$stateChangeSuccess');
+    expect(GoogleAnalyticsService.setVariable).not.toHaveBeenCalled();
+    expect(GoogleAnalyticsService.sendEvent).not.toHaveBeenCalled();
+
+    $scope.$broadcast('$stateChangeSuccess');
+    expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('page', '/');
+    expect(GoogleAnalyticsService.sendEvent).toHaveBeenCalledWith('pageview');
   });
 });
