@@ -347,13 +347,13 @@ describe('Controller: CounterStatisticsController', function () {
         {
           "date": "01-07-2016",
           "count": 0,
-          "date2": null,
+          "date2": "01-07-2016",
           "count2": 0
         },
         {
           "date": "02-07-2016",
           "count": 0,
-          "date2": null,
+          "date2": "02-07-2016",
           "count2": 0
         }
       ],

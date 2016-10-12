@@ -221,7 +221,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     var stats = controller.statistics,
         // Global d3 reference.
         d3 = window.d3,
-        format = d3.time.format('%d-%m-%Y'),
+        parseDate = d3.time.format('%d-%m-%Y').parse,
+        formatDate = d3.time.format('%d/%m/%Y'),
         // Hardcoded margin.
         margin = 40,
         // Grab width - margins.
@@ -241,7 +242,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     if (compare) {
       line2 = d3.svg.line()
-              .x(function (d) { return xScale(format.parse(d.date)); })
+              .x(function (d) { return xScale(formatDate(parseDate(d.date))); })
               .y(function (d) { return yScale(parseInt(d.count2, 10)); });
     }
 
@@ -250,11 +251,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     // Line handler.
     line = d3.svg.line()
-          .x(function(d) { return xScale(format.parse(d.date)); })
+          .x(function(d) { return xScale(parseDate(d.date)); })
           .y(function(d) { return yScale(parseInt(d.count, 10)); });
     // Area handler.
     area = d3.svg.area()
-          .x(function(d) { return xScale(format.parse(d.date)); })
+          .x(function(d) { return xScale(parseDate(d.date)); })
           .y0(height)
           .y1(function(d) { return yScale(d.count); });
     // Group to add the margins.
@@ -264,7 +265,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       .append('g')
       .attr('transform', 'translate(' + margin + ', ' + margin + ')');
     // Set total size.
-    xScale.domain(d3.extent(stats.periods, function (d) { return format.parse(d.date); }));
+    xScale.domain(d3.extent(stats.periods, function (d) { return parseDate(d.date); }));
     // Same for Y dimension.
     yScale.domain([0, d3.max(stats.periods, function (d) {
         var max;
@@ -306,13 +307,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         .attr('class', 'dot dot-1')
         .attr('r', 5)
         .attr('cx', function(d) {
-          return xScale(format.parse(d.date));
+          return xScale(parseDate(d.date));
         })
         .attr('cy', function(d) {
           return yScale(parseInt(d.count, 10));
         })
         .on("mouseover", function(d) {
-          controller.showGraphTooltip(d3.event, d.count, d.date)
+          controller.showGraphTooltip(d3.event, d.count, formatDate(parseDate(d.date)))
         })
         .on("mouseout", function() {
           controller.hideTooltip();
@@ -333,13 +334,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           .attr('class', 'dot dot-2')
           .attr('r', 5)
           .attr('cx', function(d) {
-            return xScale(format.parse(d.date));
+            return xScale(parseDate(d.date));
           })
           .attr('cy', function(d) {
             return yScale(parseInt(d.count2, 10));
           })
           .on("mouseover", function(d) {
-            controller.showGraphTooltip(d3.event, d.count2, d.date2)
+            controller.showGraphTooltip(d3.event, d.count2, formatDate(parseDate(d.date2)))
           })
           .on("mouseout", function() {
             controller.hideTooltip();
@@ -390,6 +391,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
    */
   controller.hideTooltip = function() {
     controller.tooltip.transition().duration(200).style("opacity", 0);
+    controller.tooltip.style("top", 0);
+    controller.tooltip.style("left", 0);
   };
 
   $scope.$on('$stateChangeSuccess', function() {
