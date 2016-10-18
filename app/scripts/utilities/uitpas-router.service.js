@@ -125,7 +125,7 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
     } else {
       if (flag && typeof scanListener === 'undefined') {
         scanListener = $rootScope.$on('nfcNumberReceived', redirectOnScan);
-      } else if (scanListener instanceof Function){
+      } else if (!flag && scanListener instanceof Function){
         // call the scanListener to disable it then remove the callback to not trip the check above
         scanListener();
         scanListener = undefined;
