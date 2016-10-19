@@ -250,9 +250,7 @@ $graph-link-color: #337ab7;
   }
   .period-chooser {
     float: right;
-    padding: 6px 12px;
     background-color: $graph-page-bg;
-    border: 1px solid $axis-border-color;
     position: relative;
     p {
       margin-bottom: 0;
@@ -281,16 +279,6 @@ $graph-link-color: #337ab7;
     }
     .period-2:after {
       color: $graph2-fg;
-    }
-    .popover {
-      display: block;
-      padding: 10px;
-      min-width: 276px;
-      left: auto;
-      right: 0;
-      &.hidden {
-        display: none;
-      }
     }
     .compare-period {
       &.inactive {

@@ -13,36 +13,25 @@
   <div class="page-header">
     <h1>{{csc.pageTitle}}</h1>
     <div ng-show="csc.dateRanges" class="period-chooser">
-       <a href="#" class="ppu" ng-click="csc.pickingDate = !csc.pickingDate">
-            <p class="selected-date">
-                <span class="period-1">{{csc.dateRanges[0].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[0].to.format('DD/MM/YYYY')}}</span>
-            </p>
-            <p ng-show="csc.isComparing()" class="text-muted"><span class="period-2">Vergeleken met {{csc.dateRanges[1].from.format('DD/MM/YYYY')}} - {{csc.dateRanges[1].to.format('DD/MM/YYYY')}}</span></p>
-        </a>
-
-        <div ng-init="csc.addDatePicker()" class="popover" ng-class="{hidden: !csc.pickingDate}">
+        <div ng-init="csc.addDatePicker()">
             <div class="row clearfix">
-              <div class="grid__12">
+              <div class="grid__6">
                   <label>Period</label><br/>
-                  <input ng-value="csc.dateRanges[0].from.format('DD/MM/YYYY') + ' - ' + csc.dateRanges[0].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                  <input type="text" class="form-control" placeholder="dd/mm/jjjj - dd/mm/jjjj" data-provide="datepicker" ng-model="csc.formattedDates[0]" ng-change="csc.updateFirstRange()">
               </div>
-              <div class="grid__12">
+              <div class="grid__6">
                   <div class="checkbox no-margin">
                       <label>
-                          <input type="checkbox" class="comparecheck" ng-model="csc.comparing">
+                          <input type="checkbox" class="comparecheck" ng-model="csc.comparing" ng-change="csc.compareChange()">
                           Vergelijk
                       </label>
                   </div>
                   <div class="row compare-period" ng-class="{inactive: !csc.comparing}">
                       <div>
                           <label class="hidden">Compare</label>
-                          <input ng-disabled="!csc.comparing" ng-value="csc.dateRanges[1].from.format('DD/MM/YYYY') + ' - ' + csc.dateRanges[1].to.format('DD/MM/YYYY')" type="text" class="form-control" placeholder="dd/mm/jjjj" data-provide="datepicker">
+                          <input ng-disabled="!csc.comparing" type="text" class="form-control" placeholder="dd/mm/jjjj - dd/mm/jjjj" data-provide="datepicker" ng-model="csc.formattedDates[1]" ng-change="csc.updateSecondRange()">
                       </div>
                   </div>
-              </div>
-              <div class="grid__12">
-                <a class="btn btn-primary" ng-click="csc.updateDates($event)" type="reset">Bevestigen</a>
-                <a class="btn btn-link" ng-click="csc.resetDates($event)" type="reset">Annuleren</a>
               </div>
             </div>
         </div>

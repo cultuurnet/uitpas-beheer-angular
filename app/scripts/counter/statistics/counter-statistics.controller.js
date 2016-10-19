@@ -76,61 +76,88 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   controller.titleStr = '';
   controller.profileStr = '';
 
+  function debounce(func, wait) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(function() {
+        timeout = null;
+        func.apply(context, args);
+      }, wait);
+    };
+  }
+
   controller.loadDefaultDateRange = function() {
     var dateRange = counterService.getDefaultDateRange(),
         dateRange2 = counterService.getDefaultDateRange();
     controller.dateRanges.push(dateRange, dateRange2);
+    controller.formatDates();
   };
 
-  controller.makeDate = function (dateStr) {
-    return new Date(dateStr);
-  };
+  // Update handler for the first range field.
+  controller.updateFirstRange = function () {
+    var val = controller.formattedDates[0].split(' - ');
 
-  /* istanbul ignore next */
-  controller.updateDates = function ($event) {
-    var $el = angular.element($event.target),
-        $wrap = $el.closest('.popover'),
-        $rows = $wrap.children('.row').eq(0).children(),
-        $row = $rows.eq(0),
-        $inputs = $row.find('input[type="text"]'),
-        val = $inputs.eq(0).val().split(' - '),
-        $row2, $inputs2;
     controller.dateRanges[0].from = moment(val[0], 'DD/MM/YYYY');
     controller.dateRanges[0].to = moment(val[1], 'DD/MM/YYYY');
-    controller.dateRanges[1] = controller.dateRanges[1] || {};
-    if (controller.isComparing()) {
-      $row2 = $rows.eq(1);
-      $inputs2 = $row2.find('input[type="text"]');
-      val = $inputs2.eq(0).val().split(' - ');
-      if (val && val.length) {
-        controller.dateRanges[1].from = moment(val[0], 'DD/MM/YYYY');
-        controller.dateRanges[1].to = moment(val[1], 'DD/MM/YYYY');
-      }
-      else {
-        controller.comparing = false;
-      }
+
+    controller.pickingDate = false;
+    controller.loadStatistics();
+    controller.updateCompareWithRange();
+  };
+
+  // Update handler for the second field.
+  controller.updateSecondRange = function () {
+    var val = controller.formattedDates[1].split(' - ');
+    if (val && val.length) {
+      controller.dateRanges[1].from = moment(val[0], 'DD/MM/YYYY');
+      controller.dateRanges[1].to = moment(val[1], 'DD/MM/YYYY');
     }
+    else {
+      controller.comparing = false;
+    }
+
     controller.pickingDate = false;
     controller.loadStatistics();
   };
 
+  // Updates the ranges and value on the second field.
   /* istanbul ignore next */
-  controller.resetDates = function ($event) {
-    var $el = angular.element($event.target),
-        $wrap = $el.closest('.popover'),
-        $rows = $wrap.children('.row'),
-        $row = $rows.eq(0),
-        $inputs = $row.find('input'),
-        $row2, $inputs2, val1, val2;
-    val1 = controller.dateRanges[0].from.format('DD/MM/YYYY') + ' - ' + controller.dateRanges[0].to.format('DD/MM/YYYY');
-    $inputs.eq(0).val(val1);
-    if (controller.isComparing()) {
-      val2 = controller.dateRanges[1].from.format('DD/MM/YYYY') + ' - ' + controller.dateRanges[1].to.format('DD/MM/YYYY')
-      $row2 = $rows.eq(1);
-      $inputs2 = $row2.find('input[type="text"]');
-      $inputs2.eq(0).val(val2);
-    }
-    this.updateDates($event);
+  controller.updateCompareWithRange = function () {
+    var range = controller.dateRanges[0],
+        from = range.from,
+        to = range.to,
+        diff = moment.duration(to.diff(from)).asDays() || 1,
+        opts = window.jQuery.extend(controller.defOpts, {}),
+        prev = [moment(from).subtract(diff, 'days'), moment(to).subtract(diff, 'days')];
+    opts.ranges = {
+      'Vorige periode': prev,
+      'Vorig jaar': [moment(from).subtract(1, 'year'), moment(to).subtract(1, 'year')]
+    };
+    opts.startDate = prev[0];
+    opts.endDate = prev[1];
+    controller.dateRanges[1].from = prev[0];
+    controller.dateRanges[1].to = prev[1];
+    controller.$input2.daterangepicker(opts, controller.secondRangeChangeHandler);
+    controller.formatDates();
+  };
+
+  // Handler fox fixing custom date range in second field.
+  controller.secondRangeChangeHandler = function (start) {
+    var range = controller.dateRanges[0],
+        from = range.from,
+        to = range.to,
+        diff = moment.duration(to.diff(from)).asDays() || 1;
+    this.endDate = moment(start).add(diff, 'days');
+  };
+
+  // Store formatted date ranges.
+  controller.formatDates = function() {
+    controller.formattedDates = [
+      controller.dateRanges[0].from.format('DD/MM/YYYY') + ' - ' + controller.dateRanges[0].to.format('DD/MM/YYYY'),
+      controller.dateRanges[1].from.format('DD/MM/YYYY') + ' - ' + controller.dateRanges[1].to.format('DD/MM/YYYY')
+    ];
   };
 
   // Is the user comparing.
@@ -146,7 +173,8 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     return !!(controller.statistics && controller.statistics.profiles2);
   };
 
-  controller.loadStatistics = function () {
+  // Load statistics, debounced cause both inputs trigger this onload.
+  controller.loadStatistics = debounce(function () {
     var currentRanges = [];
     var showStatistics = function (statistics) {
       controller.statistics = statistics;
@@ -180,7 +208,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     counterService
       .getStatistics(currentRanges, info[$state.current.name].path)
       .then(showStatistics, noStatisticsFound);
-  };
+  }, 500);
 
   /* istanbul ignore next */
   controller.addDatePicker = function () {
@@ -188,26 +216,26 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     setTimeout(function() {
       // Coupled to DOM :(
       var $wrap = angular.element(document.querySelectorAll('.period-chooser')),
-          $rows = $wrap.find('.row'),
-          $row1 = $rows.eq(0),
-          $row2 = $rows.eq(1),
-          $inputs = $row1.find('input[type="text"]'),
-          $inputs2 = $row2.find('input[type="text"]'),
+          $row = $wrap.find('.row'),
+          $inputs = $row.find('input[type="text"]'),
+          $input1 = $inputs.eq(0),
+          $input2 = $inputs.eq(1),
           jQuery = window.jQuery,
           def3 = new Date(),
           def4 = new Date(),
           defOpts;
+      controller.ranges = {
+        'Gisteren': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Afgelopen week': [moment().startOf('week'), moment().endOf('week')],
+        'Lopende maand': [moment().startOf('month'), moment().endOf('month')],
+        'Afgelopen complete maand': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+        'Afgelopen 7 dagen': [moment().subtract(8, 'days'), moment().subtract(1, 'day')],
+        'Afgelopen 30 dagen': [moment().subtract(31, 'days'), moment().subtract(1, 'day')]
+      };
       defOpts = {
         locale: { format: 'DD/MM/YYYY'},
         opens: 'left',
-        ranges: {
-          'Gisteren': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          'Afgelopen week': [moment().startOf('week'), moment().endOf('week')],
-          'Lopende maand': [moment().startOf('month'), moment().endOf('month')],
-          'Afgelopen complete maand': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-          'Afgelopen 7 dagen': [moment().subtract(8, 'days'), moment().subtract(1, 'day')],
-          'Afgelopen 30 dagen': [moment().subtract(31, 'days'), moment().subtract(1, 'day')]
-        }
+        ranges: controller.ranges
       };
       // If we have a second range, use that as default.
       if (controller.dateRanges[1]) {
@@ -218,12 +246,18 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
           def4 = controller.dateRanges[1].to._d;
         }
       }
+      controller.$input1 = $input1;
+      controller.$input2 = $input2;
+      controller.defOpts = defOpts;
       // Attach daterangepickers
-      $inputs.eq(0).daterangepicker(jQuery.extend(defOpts, {
+      $input1.daterangepicker(jQuery.extend(defOpts, {
         fromDate: controller.dateRanges[0].from._d,
         toDate: controller.dateRanges[0].to._d
       }));
-      $inputs2.eq(0).daterangepicker(jQuery.extend(defOpts, {fromDate: def3, toDate: def4}));
+      $input2.daterangepicker(jQuery.extend(defOpts, {
+        fromDate: def3,
+        toDate: def4
+      }));
     }, 0);
   };
 
@@ -332,7 +366,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
           return yScale(parseInt(d.count, 10));
         })
         .on('mouseover', function(d) {
-          controller.showTooltip(d3.event, tooltip, d.count, d.date)
+          controller.showTooltip(d3.event, tooltip, d.count, d.date);
         })
         .on('mouseout', function() {
           controller.hideTooltip(d3.event, tooltip);
@@ -361,6 +395,12 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
 
     }
 
+  };
+
+  controller.compareChange = function() {
+    if (controller.comparing) {
+      controller.updateCompareWithRange();
+    }
   };
 
 
