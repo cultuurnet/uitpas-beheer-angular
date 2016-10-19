@@ -12,14 +12,26 @@ angular
   .controller('AppController', appController);
 
 /* @ngInject */
-function appController($rootScope, $location, appConfig, uitid, counterService, $state) {
+function appController($rootScope, $location, $state, appConfig, uitid, counterService, GoogleAnalyticsService) {
   $rootScope.appBusy = true;
+  var firstPage = true;
 
   $rootScope.$on('$stateChangeStart', function () {
     $rootScope.appBusy = true;
   });
   $rootScope.$on('$stateChangeSuccess', function () {
     $rootScope.appBusy = false;
+
+    // If analytics is enabled, set the selected counter as dimension.
+    if (!firstPage && GoogleAnalyticsService.isEnabled()) {
+      GoogleAnalyticsService.setVariable('page', $location.url());
+      GoogleAnalyticsService.sendEvent('pageview');
+    }
+
+    // Don't send pageview at first page. Tag manager already does this for us.
+    if (firstPage) {
+      firstPage = false;
+    }
   });
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
     if (error && error.code && error.title && error.message) {

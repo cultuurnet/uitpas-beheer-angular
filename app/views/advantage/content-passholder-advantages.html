@@ -1,37 +1,48 @@
 <section class="overview overview-advantages">
   <h2 class="overview__title">Voordelen</h2>
-  <div class="grid flex-container">
-    <div ng-repeat="advantage in pac.advantages"
-       ng-class="{unavailable: (!advantage.exchangeable), insufficient: (advantage.insufficientPoints)}" class="overview__item overview__item-panel grid__12 grid--bp-xsm__6 grid--bp-sml__12 grid--bp-med__6 grid--bp-lrg__4">
-      <div class="box">
-        <a ui-sref="counter.main.passholder.advantageDetail({advantage: advantage.serialize()})"><h3 ng-bind="::advantage.title"></h3></a>
-        <div ng-show="advantage.points > 0" class="points">
-          -<span ng-bind="::advantage.points"></span>
+  <div class="grid">
+    <ul class="list-unstyled">
+      <li ng-repeat="advantage in pac.advantages"
+          ng-class="{unavailable: (!advantage.exchangeable), insufficient: (advantage.insufficientPoints)}" class="overview__item overview__item-list">
+
+        <div class="grid display-table">
+          <div class="grid__12 grid--bp-med__9 first">
+            <a ui-sref="counter.main.passholder.advantageDetail({advantage: advantage.serialize()})"><h3 ng-bind="::advantage.title"></h3></a>
+          </div>
+
+          <div class="grid__12 grid--bp-med__3 last">
+            <div ng-show="advantage.points > 0" class="points">
+              -<span ng-bind="::advantage.points"></span>
+            </div>
+            <div ng-show="advantage.points == 0" class="points">gratis</div>
+            <div ng-show="advantage.exchangeable && !advantage.confirmingExchange && !advantage.insufficientPoints" class="actions actions actions-do">
+              <button class="btn btn-default btn-sm" ng-click="pac.initiateExchange(advantage)">Omruilen</button>
+            </div>
+
+            <div ng-show="advantage.confirmingExchange && !advantage.exchanging" class="actions actions-confirm">
+              <button class="btn btn-default btn-sm" ng-click="pac.exchangeAdvantage(advantage)" ng-disabled="advantage.locked">Bevestigen</button>
+              <a class="small" ng-click="pac.cancelExchange(advantage)">Annuleren</a>
+            </div>
+
+            <p class="alert alert-info small" ng-show="advantage.exchanging">
+              <span class="fa fa-refresh loading"></span> Even geduld...
+            </p>
+
+            <p class="alert alert-success small" ng-show="!advantage.exchangeable">
+              Voordeel omgeruild
+            </p>
+
+            <p class="alert alert-danger small" ng-show="advantage.exchangeable && advantage.insufficientPoints">
+              Onvoldoende punten
+            </p>
+          </div>
+
         </div>
-        <div ng-show="advantage.points == 0" class="points">gratis</div>
-        <div ng-show="advantage.exchangeable && !advantage.confirmingExchange && !advantage.insufficientPoints" class="actions actions actions-do">
-          <button class="btn btn-default btn-sm" ng-click="pac.initiateExchange(advantage)">Omruilen</button>
-        </div>
 
-        <div ng-show="advantage.confirmingExchange && !advantage.exchanging" class="actions actions-confirm">
-          <button class="btn btn-default btn-sm" ng-click="pac.exchangeAdvantage(advantage)" ng-disabled="advantage.locked">Bevestigen</button>
-          <a class="small" ng-click="pac.cancelExchange(advantage)">Annuleren</a>
-        </div>
+      </li>
+    </ul>
 
-        <p class="alert alert-info small" ng-show="advantage.exchanging">
-          <span class="fa fa-refresh loading"></span> Even geduld...
-        </p>
 
-        <p class="alert alert-success small" ng-show="!advantage.exchangeable">
-          Voordeel omgeruild
-        </p>
-
-        <p class="alert alert-danger small" ng-show="advantage.exchangeable && advantage.insufficientPoints">
-          Onvoldoende punten
-        </p>
-      </div>
-
-    </div>
   </div>
 </section>
 

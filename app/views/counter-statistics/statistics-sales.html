@@ -1,0 +1,30 @@
+<div class="counter-statistics-table">
+  <div ng-class="{'col-xs-12': !csc.hasCompareData(), 'col-xs-6': csc.hasCompareData()}">
+    <p><span class="period-1">Periode 1</span>{{csc.dateRange.startDate.format('DD/MM/YYYY')}} - {{csc.dateRange.endDate.format('DD/MM/YYYY')}}</p>
+    <div class="serie-1">
+      <div class="grid">
+        <div class="grid__12" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">
+          <section class="stat">
+            <h2 class="stat__number">{{csc.statistics.totalusers}}</h2>
+            <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-class="{'col-xs-12': !csc.hasCompareData(), 'col-xs-6': csc.hasCompareData()}">
+    <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span>{{csc.compareDateRange.startDate.format('DD/MM/YYYY')}} - {{csc.compareDateRange.endDate.format('DD/MM/YYYY')}}</p>
+    <div class="serie-2" ng-if="csc.hasCompareData()">
+      <div class="grid">
+        <div class="grid__12" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">
+          <section class="stat">
+            <h2 class="stat__number">{{csc.statistics.totalusers2}}</h2>
+            <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid__12" ng-include src="'views/counter-statistics/statistics-general-table.html'"></div>

@@ -51,17 +51,18 @@ $graph-link-color: #337ab7;
       fill: $axis-text-color;
     }
   }
-  .graph-tooltip {
-    position: absolute;
-    text-align: center;
-    min-width: 40px;
-    padding: 2px 4px;
-    background: $statistics-tooltip-bg-color;
-    color: $statistics-tooltip-text-color;
-    border: 0px;
-    border-radius: 1px;
-    z-index: 1;
-  }
+}
+
+.graph-tooltip {
+  position: absolute;
+  text-align: center;
+  min-width: 40px;
+  padding: 2px 4px;
+  background: $statistics-tooltip-bg-color;
+  color: $statistics-tooltip-text-color;
+  border: 0px;
+  border-radius: 1px;
+  z-index: 1;
 }
 
 .counter-statistics-wrapper {
@@ -75,6 +76,9 @@ $graph-link-color: #337ab7;
   }
   .period-1,
   .period-2 {
+
+    padding-right: 6px;
+
     &:after {
       color: $graph1-fg;
       content: "\f111";
