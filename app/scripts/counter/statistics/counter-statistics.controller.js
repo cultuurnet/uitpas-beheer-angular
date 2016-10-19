@@ -233,7 +233,14 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
         'Afgelopen 30 dagen': [moment().subtract(31, 'days'), moment().subtract(1, 'day')]
       };
       defOpts = {
-        locale: { format: 'DD/MM/YYYY'},
+        locale: {
+          format: 'DD/MM/YYYY',
+          customRangeLabel: 'Aangepast',
+          applyLabel: 'OK',
+          cancelLabel: 'Annuleren',
+          fromLabel: 'Van',
+          toLabel: 'Tot'
+        },
         opens: 'left',
         ranges: controller.ranges
       };
