@@ -365,6 +365,24 @@ describe('Controller: ActivityController', function () {
     expect(activityController.activitiesLoading).toEqual(0);
   });
 
+  it('should exit the loading state when no valid passholders are found', function () {
+    activityController = $controller('ActivityController', {
+      passholder: null,
+      passholders: null,
+      bulkSelection: bulkSelection,
+      activityService: activityService,
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope,
+      activityMode: 'passholders',
+      $state: $state,
+      activeCounter: activeCounter
+    });
+
+    activityController.search();
+    expect(activityController.activitiesLoading).toEqual(0);
+  });
+
   it('should check in a passholder to an activity', function () {
     deferredActivities.resolve(pagedActivities);
     $scope.$digest();

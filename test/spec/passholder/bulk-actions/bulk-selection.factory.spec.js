@@ -327,11 +327,13 @@ describe('Factory: BulkSelection', function () {
 
   it('should try to find passholders by numbers when selectAll is not selected', function () {
     bulkSelection.uitpasNumberSelection = ['0934000004515'];
-    spyOn(passholderService, 'findPassholder').and.returnValue($q.when(jsonSearchResultsWithPassen));;
+    spyOn(passholderService, 'findPassholders').and.returnValue($q.when(jsonSearchResultsWithPassen));;
 
     bulkSelection.getPassholderNumbers();
+    bulkSelection.searchParameters.limit = 1;
+    bulkSelection.searchParameters.uitpasNumbers = ['0934000004515'];
 
-    expect(passholderService.findPassholder.calls.count()).toBe(1);
+    expect(passholderService.findPassholders).toHaveBeenCalledWith(bulkSelection.searchParameters);
   });
 
   it('throws an error when selection is not an array', function () {
