@@ -272,16 +272,23 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   // Helper function for drawing the actual graph.
   controller.renderGraph = function () {
     // Grab placeholder.
-    var $graphWrap = angular.element(document.querySelectorAll('.counter-statistics-graph')),
-        // The data to be used.
-        stats = controller.statistics,
+    var $graphWrap = angular.element(document.querySelectorAll('.counter-statistics-graph'));
+
+    var maxWidth = $graphWrap.width();
+
+    if (maxWidth < 600) {
+      maxWidth = 600;
+    }
+
+    // The data to be used.
+    var stats = controller.statistics,
         // Global d3 reference.
         d3 = window.d3,
         format = d3.time.format('%d-%m-%Y'),
         // Hardcoded margin.
         margin = 40,
         // Grab width - margins.
-        width = $graphWrap.width() - (margin * 2),
+        width = maxWidth - (margin * 2),
         height = 250,
         // Scaling functions.
         xScale = d3.time.scale().range([0, width]),
@@ -403,6 +410,10 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     }
 
+    d3.select(window).on('resize', function() {
+      controller.renderGraph();
+    });
+
   };
 
   controller.compareChange = function() {
@@ -416,7 +427,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
    * Show the tooltip for a point on the graph.
    */
   controller.showTooltip = function(event, tooltip, total, date) {
-
     var label = (total == 1 ? info[$state.current.name].single_label : info[$state.current.name].plural_label);
 
     tooltip.html("<strong>" + date + "</strong><br/>" + " " + total + " " + label);
@@ -428,7 +438,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     tooltip.style("top", (event.pageY - elementInfo.height) + "px");
 
     tooltip.transition().duration(100).style("opacity", 1);
-
   };
 
   /**

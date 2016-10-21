@@ -37,14 +37,14 @@ describe('Service: counterStatisticsService', function () {
 
 
     var moment = window.moment;
-    var now = moment();
-    var then = moment().subtract(2, 'weeks');
+    var now = moment().startOf('month');
+    var then = moment().endOf('month');
 
     var dateRange = counterStatisticsService.getDefaultDateRange();
     expect(dateRange).toEqual({
-      startDate: then,
-      endDate: now
-    })
+      from: now,
+      to: then
+    });
   });
 
   it('formats a statistics date', function () {

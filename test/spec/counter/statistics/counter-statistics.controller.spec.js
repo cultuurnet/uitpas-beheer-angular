@@ -190,23 +190,6 @@ describe('Controller: CounterStatisticsController', function () {
 
   });
 
-  it('correctly resets the dates', function () {
-
-    CounterStatisticsController.selectedDateRange = 'old date range';
-    CounterStatisticsController.selectedCompareDateRange = 'old compare date range';
-
-    CounterStatisticsController.dateRange = 'new date range';
-    CounterStatisticsController.compareDateRange = 'new compare date range';
-
-    spyOn(CounterStatisticsController, 'loadStatistics').and.returnValue(true);
-
-    CounterStatisticsController.resetDates();
-
-    expect(CounterStatisticsController.selectedDateRange).toEqual(CounterStatisticsController.dateRange);
-    expect(CounterStatisticsController.selectedCompareDateRange).toEqual(CounterStatisticsController.compareDateRange);
-
-  });
-
   it('renders graph in correct size', function () {
     CounterStatisticsController.statistics = {
       "periods": [
@@ -437,26 +420,29 @@ describe('Controller: CounterStatisticsController', function () {
     var event = {
       'pageX': 10,
       'pageY': 10,
-    }
+    };
+    $state.current = {
+      'name' : 'counter.statistics'
+    };
 
     CounterStatisticsController.tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 0);
-    CounterStatisticsController.showTooltip(event, 'my tekst');
+    CounterStatisticsController.showTooltip(event, CounterStatisticsController.tooltip, 2, '1/1/2016');
 
-    expect(CounterStatisticsController.tooltip.html()).toEqual('my tekst');
+    expect(CounterStatisticsController.tooltip.html()).toEqual('<strong>1/1/2016</strong><br> 2 verkochte kaarten');
 
     flushTransitions();
 
     expect(CounterStatisticsController.tooltip.style('opacity')).toEqual('1');
 
-    CounterStatisticsController.helpTexts.average = 'test tekst';
-    CounterStatisticsController.showHelpTooltip(event, 'average');
-    expect(CounterStatisticsController.tooltip.html()).toEqual('test tekst');
-
   });
 
   it('correctly hides the tooltip', function () {
+    var event = {
+      'pageX': 10,
+      'pageY': 10,
+    };
     CounterStatisticsController.tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 1);
-    CounterStatisticsController.hideTooltip();
+    CounterStatisticsController.hideTooltip(event, CounterStatisticsController.tooltip);
 
     flushTransitions();
 
