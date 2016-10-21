@@ -28,10 +28,13 @@ angular
           }],
           action: ['$stateParams', function($stateParams) {
             return $stateParams.action;
-          }]
+          }],
+          passholders: function ($stateParams) {
+            return $stateParams.bulkSelection.getPassholderNumbers();
+          }
         },
         /* @ngInject */
-        onEnter: function(bulkSelection, action, $state, $uibModal) {
+        onEnter: function(bulkSelection, passholders, action, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
@@ -43,6 +46,9 @@ angular
                 },
                 action: function() {
                   return action;
+                },
+                passholders: function () {
+                  return passholders;
                 }
               },
               controller: 'BulkActionsController',
@@ -67,10 +73,13 @@ angular
           }],
           action: ['$stateParams', function($stateParams) {
             return $stateParams.action;
-          }]
+          }],
+          passholders: function ($stateParams) {
+            return $stateParams.bulkSelection.getPassholderNumbers();
+          }
         },
         /* @ngInject */
-        onEnter: function(bulkSelection, action, $state, $uibModal) {
+        onEnter: function(bulkSelection, passholders, action, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
@@ -82,6 +91,9 @@ angular
                 },
                 action: function() {
                   return action;
+                },
+                passholders: function () {
+                  return passholders;
                 }
               },
               controller: 'BulkActionsController',

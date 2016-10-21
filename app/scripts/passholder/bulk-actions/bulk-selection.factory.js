@@ -139,15 +139,19 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
         );
       }
       else {
-        angular.forEach(this.uitpasNumberSelection, function(selection) {
-          passholderService.findPassholder(selection)
-            .then(
-              function(passholder) {
-                passholders.push(passholder);
-              }
-            );
-        });
-        deferred.resolve(passholders);
+        this.searchParameters.limit = this.uitpasNumberSelection.length;
+        this.searchParameters.uitpasNumbers = this.uitpasNumberSelection;
+
+        passholderService
+          .findPassholders(this.searchParameters)
+          .then(
+            function(PassholderSearchResults) {
+              angular.forEach(PassholderSearchResults.passen, function(passholder){
+                passholders.push(passholder.passholder);
+              });
+              deferred.resolve(passholders);
+            }
+          );
       }
 
       return deferred.promise;

@@ -157,9 +157,15 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       controller.passholder = passholder;
     }
 
-    activityService
-      .search(controller.passholder, searchParameters)
-      .then(showSearchResults, searchingFailed);
+    if (controller.passholder) {
+      activityService
+        .search(controller.passholder, searchParameters)
+        .then(showSearchResults, searchingFailed);
+    }
+    else {
+      --controller.activitiesLoading;
+    }
+
   };
 
   // Do an initial search to populate the activity list.
