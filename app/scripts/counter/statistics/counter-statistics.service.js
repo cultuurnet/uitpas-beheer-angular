@@ -27,13 +27,12 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    */
   service.getDefaultDateRange = function () {
     var moment = window.moment;
-    var now = moment();
-    // 2 weeks ago.
-    var then = moment().subtract(2, 'weeks');
+    var start = moment().startOf('month');
+    var end = moment().endOf('month');
 
     var dateRange = {
-      startDate: then,
-      endDate: now,
+      from: start,
+      to: end,
     };
 
     return dateRange;

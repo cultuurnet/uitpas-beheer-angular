@@ -12,7 +12,7 @@ angular
   .controller('CounterStatisticsController', CounterStatisticsController);
 
 /* @ngInject */
-function CounterStatisticsController(counterService, $element, $state, $scope) {
+function CounterStatisticsController(counterService, $state, $scope) {
   /*jshint validthis: true */
   var controller = this,
       info = {
@@ -174,7 +174,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
   };
 
   // Load statistics, debounced cause both inputs trigger this onload.
-  controller.loadStatistics = debounce(function () {
+  controller.loadStatistics = function () {
     var currentRanges = [];
     var showStatistics = function (statistics) {
       controller.statistics = statistics;
@@ -208,7 +208,7 @@ function CounterStatisticsController(counterService, $element, $state, $scope) {
     counterService
       .getStatistics(currentRanges, info[$state.current.name].path)
       .then(showStatistics, noStatisticsFound);
-  }, 500);
+  };
 
   /* istanbul ignore next */
   controller.addDatePicker = function () {

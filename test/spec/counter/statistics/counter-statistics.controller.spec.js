@@ -4,21 +4,27 @@ describe('Controller: CounterStatisticsController', function () {
 
   beforeEach(module('uitpasbeheerApp'));
 
-  var CounterStatisticsController, $state, counterStatisticsService, $scope, rootScope, $q;
+  var CounterStatisticsController, $httpBackend, $state, counterStatisticsService, $scope, rootScope, $q;
+  var start = moment().startOf('month');
+  var end = moment().endOf('month');
+
   var dateRange = {
-    from: '2016-09-09',
-    to: '2016-09-10'
-  }
+    from: start,
+    to: end,
+  };
+  var dateRanges = [dateRange, dateRange];
 
-  beforeEach(inject(function ($controller, _$state_, $rootScope, _$q_) {
-
+  beforeEach(inject(function ($controller, _$httpBackend_, _$state_, $rootScope, _$q_) {
     $q = _$q_;
     $state = _$state_;
     rootScope = $rootScope;
     $scope = $rootScope.$new();
+    $httpBackend = _$httpBackend_;
 
     counterStatisticsService = jasmine.createSpyObj('counterStatisticsService', ['getDefaultDateRange', 'getStatistics']);
     counterStatisticsService.getDefaultDateRange.and.returnValue(dateRange);
+
+    $httpBackend.expectGET('http://vagrant.local/silex/web/counters/active').respond(200, {});
 
     CounterStatisticsController = $controller('CounterStatisticsController', {
       counterStatisticsService: counterStatisticsService,
@@ -30,7 +36,7 @@ describe('Controller: CounterStatisticsController', function () {
   beforeEach(function() {
     $(document.body).append('<div class="counter-statistics-graph" style="width: 800px;"></div>');
     jasmine.clock().install();
-  })
+  });
 
   afterEach(function() {
     d3.selectAll('svg').remove();
@@ -48,7 +54,19 @@ describe('Controller: CounterStatisticsController', function () {
   }
 
   it('loads the default date range', function () {
-    expect(CounterStatisticsController.dateRange).toEqual(dateRange);
+    // Compare all dates as timestamps;
+    var cFrom1 = '' + CounterStatisticsController.dateRanges[0].from;
+    var cTo1 = '' + CounterStatisticsController.dateRanges[0].to;
+    var cFrom2 = '' + CounterStatisticsController.dateRanges[1].from;
+    var cTo2 = '' + CounterStatisticsController.dateRanges[1].to;
+    var from1 = '' + dateRanges[0].from;
+    var to1 = '' + dateRanges[0].to;
+    var from2 = '' + dateRanges[1].from;
+    var to2 = '' + dateRanges[1].to;
+    expect(cFrom1).toEqual(from1);
+    expect(cTo1).toEqual(to1);
+    expect(cFrom2).toEqual(from2);
+    expect(cTo2).toEqual(to2);
   });
 
   it('loads the statistics', function() {
@@ -61,19 +79,17 @@ describe('Controller: CounterStatisticsController', function () {
 
     $state.current = {
       'name' : 'counter.statistics'
-    }
+    };
 
     var renderGraphCalled = false;
     CounterStatisticsController.renderGraph = function() {
       renderGraphCalled = true;
-    }
+    };
 
     counterStatisticsService.getStatistics.and.returnValue(getStatisticsPromise);
     CounterStatisticsController.loadStatistics();
     deferredLoad.resolve(statistics);
-
     getStatisticsPromise.finally(function () {
-
       expect(CounterStatisticsController.titleStr).toEqual('Verkochte kaarten');
       expect(CounterStatisticsController.profileStr).toEqual('Profiel van de koper');
       expect(CounterStatisticsController.typeStr.buyers.label).toEqual('Kopers');
@@ -96,7 +112,7 @@ describe('Controller: CounterStatisticsController', function () {
 
     $state.current = {
       'name' : 'counter.statistics'
-    }
+    };
 
     var deferredLoad = $q.defer(),
       getStatisticsPromise = deferredLoad.promise;
@@ -111,6 +127,7 @@ describe('Controller: CounterStatisticsController', function () {
     CounterStatisticsController.loadStatistics();
 
     expect(counterStatisticsService.getStatistics).toHaveBeenCalledWith(dateRanges, 'cardsales');
+    $scope.$digest();
   });
 
   it('shows error when failed to load the statistics', function() {
