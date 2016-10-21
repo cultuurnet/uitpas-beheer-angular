@@ -14,17 +14,14 @@ describe('Controller: CounterStatisticsController', function () {
   };
   var dateRanges = [dateRange, dateRange];
 
-  beforeEach(inject(function ($controller, _$httpBackend_, _$state_, $rootScope, _$q_) {
+  beforeEach(inject(function ($controller, _$state_, $rootScope, _$q_) {
     $q = _$q_;
     $state = _$state_;
     rootScope = $rootScope;
     $scope = $rootScope.$new();
-    $httpBackend = _$httpBackend_;
 
     counterStatisticsService = jasmine.createSpyObj('counterStatisticsService', ['getDefaultDateRange', 'getStatistics']);
     counterStatisticsService.getDefaultDateRange.and.returnValue(dateRange);
-
-    $httpBackend.expectGET('http://vagrant.local/silex/web/counters/active').respond(200, {});
 
     CounterStatisticsController = $controller('CounterStatisticsController', {
       counterStatisticsService: counterStatisticsService,

@@ -12,7 +12,7 @@ angular
   .controller('CounterStatisticsController', CounterStatisticsController);
 
 /* @ngInject */
-function CounterStatisticsController(counterService, $state, $scope) {
+function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   /*jshint validthis: true */
   var controller = this,
       info = {
@@ -89,8 +89,8 @@ function CounterStatisticsController(counterService, $state, $scope) {
   }
 
   controller.loadDefaultDateRange = function() {
-    var dateRange = counterService.getDefaultDateRange(),
-        dateRange2 = counterService.getDefaultDateRange();
+    var dateRange = counterStatisticsService.getDefaultDateRange(),
+        dateRange2 = counterStatisticsService.getDefaultDateRange();
     controller.dateRanges.push(dateRange, dateRange2);
     controller.formatDates();
   };
@@ -186,7 +186,6 @@ function CounterStatisticsController(counterService, $state, $scope) {
       controller.pageTitle = info[$state.current.name].pageTitle;
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
-
       // Using settimeout to avoid waiting an extra cycle.
       setTimeout(function(){
         controller.renderGraph(controller.statistics);
@@ -205,7 +204,7 @@ function CounterStatisticsController(counterService, $state, $scope) {
     }
 
     controller.loadingStatistics = true;
-    counterService
+    counterStatisticsService
       .getStatistics(currentRanges, info[$state.current.name].path)
       .then(showStatistics, noStatisticsFound);
   };
