@@ -420,15 +420,12 @@ describe('Controller: CounterStatisticsController', function () {
     var event = {
       'pageX': 10,
       'pageY': 10,
-    };
-    $state.current = {
-      'name' : 'counter.statistics'
-    };
+    }
 
     CounterStatisticsController.tooltip = d3.select(".counter-statistics-graph").append("div").attr("class", "graph-tooltip").style("opacity", 0);
-    CounterStatisticsController.showTooltip(event, CounterStatisticsController.tooltip, 2, '1/1/2016');
+    CounterStatisticsController.showTooltip(event, 'my tekst');
 
-    expect(CounterStatisticsController.tooltip.html()).toEqual('<strong>1/1/2016</strong><br> 2 verkochte kaarten');
+    expect(CounterStatisticsController.tooltip.html()).toEqual('my tekst');
 
     flushTransitions();
 

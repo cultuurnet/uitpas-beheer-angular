@@ -14,15 +14,20 @@ angular
 /* @ngInject */
 function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   /*jshint validthis: true */
-  var controller = this,
-      info = {
+  var controller = this;
+  controller.info = {
     'counter.statistics': {
       pageTitle: 'Verkoop',
       path: 'cardsales',
       title: 'Verkochte kaarten',
-      plural_label: 'verkochte kaarten',
-      single_label: 'verkochte kaart',
-      type: 'Kopers',
+      pluralLabel: 'verkochte kaarten',
+      singleLabel: 'verkochte kaart',
+      type: {
+        buyers: {
+          'label': 'Kopers',
+          'help': 'Aantal personen dat voor het eerst een UiTPAS verkreeg bij jou.'
+        }
+      },
       profile: 'Profiel van de koper',
       template: 'views/counter-statistics/statistics-sales.html'
     },
@@ -30,12 +35,21 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       pageTitle: 'Sparen',
       path: 'checkins',
       title: 'Gespaarde punten',
-      plural_label: 'gespaarde punten',
-      single_label: 'gespaard punt',
+      pluralLabel: 'gespaarde punten',
+      singleLabel: 'gespaard punt',
       type: {
-        saved: 'Gespaarde punten',
-        active: 'Actieve spaarders',
-        new: 'Nieuwe spaarders'
+        saved: {
+          'label': 'Gespaarde punten',
+          'help': 'Aantal gespaarde punten op je activiteiten.'
+        },
+        active: {
+          'label': 'Actieve spaarders',
+          'help': 'Aantal spaarders op je activiteiten.'
+        },
+        new: {
+          'label': 'Nieuwe spaarders',
+          'help': 'Aantal personen dat voor de eerste keer bij jou spaarde.'
+        }
       },
       profile: 'Profiel van de actieve spaarder',
       template: 'views/counter-statistics/statistics-savings.html'
@@ -44,12 +58,21 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       pageTitle: 'Ruilen',
       path: 'exchanges',
       title: 'Omgeruilde voordelen',
-      plural_label: 'omgeruilde voordelen',
-      single_label: 'omgeruild voordeel',
+      pluralLabel: 'omgeruilde voordelen',
+      singleLabel: 'omgeruild voordeel',
       type: {
-        active: 'Actieve ruilers',
-        new: 'Nieuwe ruilers',
-        transactions: 'Omgeruilde voordelen'
+        active: {
+          label: 'Actieve ruilers',
+          help: 'Aantal personen dat bij jou punten omruilde.'
+        },
+        new: {
+          label: 'Nieuwe ruilers',
+          help: 'Aantal personen dat voor de eerste keer bij jou punten omruilde.'
+        },
+        transactions: {
+          label: 'Omgeruilde voordelen',
+          help: 'Aantal omgeruilde voordelen bij jou.'
+        }
       },
       profile: 'Profiel van de actieve ruiler',
       template: 'views/counter-statistics/statistics-exchanges.html'
@@ -58,12 +81,21 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       pageTitle: 'MIA\'s',
       path: 'mias',
       title: 'Actieve MIA\'s',
-      plural_label: 'actieve MIA\'s',
-      single_label: 'actieve MIA',
+      pluralLabel: 'actieve MIA\'s',
+      singleLabel: 'actieve MIA',
       type: {
-        active: 'Actieve MIA\'s',
-        saving: 'Sparende MIA\'s',
-        exchanging: 'Ruilende MIA\'s'
+        active: {
+          label: 'Actieve MIA\'s',
+          help: 'Aantal mensen in armoede dat je bereikte.'
+        },
+        saving: {
+          label: 'Sparende MIA\'s',
+          help: 'Aantal mensen in armoede dat bij je spaarde.'
+        },
+        exchanging: {
+          label: 'Ruilende MIA\'s',
+          help: 'Aantal mensen in armoede dat bij je ruilde.'
+        }
       },
       profile: 'Profiel van MIA\'s',
       template: 'views/counter-statistics/statistics-mias.html'
@@ -79,6 +111,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   controller.comparing = false;
   controller.titleStr = '';
   controller.profileStr = '';
+  controller.tooltip = d3.select('body').append('div').attr('class', 'graph-tooltip').style('opacity', 0);
   controller.typeTemplate = '';
 
   function debounce(func, wait) {
@@ -187,11 +220,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       controller.statistics = statistics;
       controller.loadingStatistics = false;
       controller.noStatisticsError = false;
-      controller.titleStr = info[$state.current.name].title;
-      controller.profileStr = info[$state.current.name].profile;
-      controller.typeStr = info[$state.current.name].type;
-      controller.pageTitle = info[$state.current.name].pageTitle;
-      controller.typeTemplate = info[$state.current.name].template
+      controller.titleStr = controller.info[$state.current.name].title;
+      controller.profileStr = controller.info[$state.current.name].profile;
+      controller.typeStr = controller.info[$state.current.name].type;
+      controller.pageTitle = controller.info[$state.current.name].pageTitle;
+      controller.typeTemplate = controller.info[$state.current.name].template
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
       // Using settimeout to avoid waiting an extra cycle.
@@ -213,7 +246,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     controller.loadingStatistics = true;
     counterStatisticsService
-      .getStatistics(currentRanges, info[$state.current.name].path)
+      .getStatistics(currentRanges, controller.info[$state.current.name].path)
       .then(showStatistics, noStatisticsFound);
   };
 
@@ -290,6 +323,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     var stats = controller.statistics,
         // Global d3 reference.
         d3 = window.d3,
+        parseDate = d3.time.format('%d-%m-%Y').parse,
+        formatDate = d3.time.format('%d/%m/%Y'),
         format = d3.time.format('%d-%m-%Y'),
         // Hardcoded margin.
         margin = 40,
@@ -316,7 +351,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     // Make sure it's cleared.
     $graphWrap.empty();
-    var tooltip = d3.select('.counter-statistics-graph').append('div').attr('class', 'graph-tooltip').style('opacity', 0);
+
     // Line handler.
     line = d3.svg.line()
           .x(function(d) { return xScale(format.parse(d.date)); })
@@ -381,16 +416,16 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         .attr('class', 'dot')
         .attr('r', 5)
         .attr('cx', function(d) {
-          return xScale(format.parse(d.date));
+          return xScale(parseDate(d.date));
         })
         .attr('cy', function(d) {
           return yScale(parseInt(d.count, 10));
         })
-        .on('mouseover', function(d) {
-          controller.showTooltip(d3.event, tooltip, d.count, d.date);
+        .on("mouseover", function(d) {
+          controller.showGraphTooltip(d3.event, d.count, formatDate(parseDate(d.date)))
         })
-        .on('mouseout', function() {
-          controller.hideTooltip(d3.event, tooltip);
+        .on("mouseout", function() {
+          controller.hideTooltip();
         });
 
     if (compare) {
@@ -407,11 +442,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           .attr('cy', function(d) {
             return yScale(parseInt(d.count2, 10));
           })
-          .on('mouseover', function(d) {
-            controller.showTooltip(d3.event, tooltip, d.count2, d.date2);
+          .on("mouseover", function(d) {
+            controller.showGraphTooltip(d3.event, d.count2, formatDate(parseDate(d.date2)))
           })
-          .on('mouseout', function() {
-            controller.hideTooltip(d3.event, tooltip);
+          .on("mouseout", function() {
+            controller.hideTooltip();
           });
 
     }
@@ -428,29 +463,47 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     }
   };
 
+  /**
+   * Show a tooltip for a point in the graph.
+   */
+  controller.showGraphTooltip = function(event, total, date) {
+    var label = (total == 1 ? controller.info[$state.current.name].singleLabel : controller.info[$state.current.name].pluralLabel),
+      content = "<strong>" + date + "</strong><br/>" + " " + total + " " + label;
+
+    controller.showTooltip(event, content);
+  }
 
   /**
-   * Show the tooltip for a point on the graph.
+   * Show a help tooltip.
    */
-  controller.showTooltip = function(event, tooltip, total, date) {
-    var label = (total == 1 ? info[$state.current.name].single_label : info[$state.current.name].plural_label);
+  controller.showHelpTooltip = function(event, key) {
+    if (controller.helpTexts[key]) {
+      controller.showTooltip(event, controller.helpTexts[key]);
+    }
+  }
 
-    tooltip.html("<strong>" + date + "</strong><br/>" + " " + total + " " + label);
+  /**
+   * Show a tooltip.
+   */
+  controller.showTooltip = function(event, content) {
+    controller.tooltip.html(content);
 
     // Tooltip needs to move first, if not getBoundingClientRect returns old info.
-    tooltip.style("left", (event.pageX + 5) + "px");
+    controller.tooltip.style("left", (event.pageX + 5) + "px");
 
-    var elementInfo = tooltip.node().getBoundingClientRect();
-    tooltip.style("top", (event.pageY - elementInfo.height) + "px");
+    var elementInfo = controller.tooltip.node().getBoundingClientRect();
+    controller.tooltip.style("top", (event.pageY - elementInfo.height) + "px");
 
-    tooltip.transition().duration(100).style("opacity", 1);
+    controller.tooltip.transition().duration(100).style("opacity", 1);
   };
 
   /**
    * Hide the tooltip.
    */
-  controller.hideTooltip = function(event, tooltip) {
-    tooltip.transition().duration(200).style("opacity", 0);
+  controller.hideTooltip = function() {
+    controller.tooltip.transition().duration(200).style("opacity", 0);
+    controller.tooltip.style("top", 0);
+    controller.tooltip.style("left", 0);
   };
 
   controller.loadDefaultDateRange();

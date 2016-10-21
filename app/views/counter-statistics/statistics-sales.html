@@ -5,8 +5,8 @@
       <div class="grid">
         <div class="grid__12">
           <section class="stat">
-            <h2 class="stat__number">{{csc.statistics.totalusers}}</h2>
-            <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
+            <h2 class="stat__number" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">{{csc.statistics.totalusers}}</h2>
+            <p class="stat__caption" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">{{csc.typeStr.buyers.label}}</p>
           </section>
         </div>
       </div>
@@ -18,8 +18,8 @@
       <div class="grid">
         <div class="grid__12">
           <section class="stat">
-            <h2 class="stat__number">{{csc.statistics.totalusers2}}</h2>
-            <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
+            <h2 class="stat__number" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">{{csc.statistics.totalusers2}}</h2>
+            <p class="stat__caption" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">{{csc.typeStr.buyers.label}}</p>
           </section>
         </div>
       </div>

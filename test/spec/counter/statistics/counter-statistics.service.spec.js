@@ -56,12 +56,12 @@ describe('Service: counterStatisticsService', function () {
     var path = 'path',
       params = [
         {
-          startDate: new Date('2016-01-01'),
-          endDate: new Date('2016-01-10')
+          from: new Date('2016-01-01'),
+          to: new Date('2016-01-10')
         },
         {
-          startDate: new Date('2016-02-01'),
-          endDate: new Date('2016-02-10')
+          from: new Date('2016-02-01'),
+          to: new Date('2016-02-10')
         }
       ];
 
