@@ -156,7 +156,7 @@ describe('Controller: CounterStatisticsController', function () {
   it('correctly indicates that comparing data is available', function () {
     CounterStatisticsController.statistics = {
       profiles2 : true
-    }
+    };
 
     expect(CounterStatisticsController.hasCompareData()).toBeTruthy();
   });
@@ -166,15 +166,26 @@ describe('Controller: CounterStatisticsController', function () {
   });
 
   it('correctly updates the dates', function () {
+    var from1 = window.moment('01/04/2016', 'DD/MM/YYYY'),
+        to1 = window.moment('30/04/2016', 'DD/MM/YYYY'),
+        from2 = window.moment('01/03/2016', 'DD/MM/YYYY'),
+        to2 = window.moment('31/03/2016', 'DD/MM/YYYY'),
+        diff = moment.duration(to1.diff(from1)).asDays() || 1,
+        prev = [moment(from1).subtract(diff, 'days'), moment(to1).subtract(diff, 'days')];
 
-    CounterStatisticsController.dateRange = 'new date range';
-    CounterStatisticsController.compareDateRange = 'new compare date range';
+    CounterStatisticsController.formattedDates = [
+      from1.format('DD/MM/YYYY') + ' - ' + to1.format('DD/MM/YYYY'),
+      from2.format('DD/MM/YYYY') + ' - ' + to2.format('DD/MM/YYYY')
+    ];
 
     spyOn(CounterStatisticsController, 'loadStatistics').and.returnValue(true);
 
-    CounterStatisticsController.updateDates();
+    CounterStatisticsController.updateFirstRange();
 
-    expect(CounterStatisticsController.selectedDateRange).toEqual(CounterStatisticsController.dateRange);
+    expect(CounterStatisticsController.dateRanges[0].from.format('DD/MM/YYYY')).toEqual(from1.format('DD/MM/YYYY'));
+    expect(CounterStatisticsController.dateRanges[0].to.format('DD/MM/YYYY')).toEqual(to1.format('DD/MM/YYYY'));
+    expect(CounterStatisticsController.dateRanges[1].from.format('DD/MM/YYYY')).toEqual(prev[0].format('DD/MM/YYYY'));
+    expect(CounterStatisticsController.dateRanges[1].to.format('DD/MM/YYYY')).toEqual(prev[1].format('DD/MM/YYYY'));
     expect(CounterStatisticsController.selectedCompareDateRange).toEqual(CounterStatisticsController.compareDateRange);
 
   });

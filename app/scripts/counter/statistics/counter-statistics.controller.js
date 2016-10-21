@@ -90,8 +90,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   controller.loadDefaultDateRange = function() {
     var dateRange = counterStatisticsService.getDefaultDateRange(),
-        dateRange2 = counterStatisticsService.getDefaultDateRange();
-    controller.dateRanges.push(dateRange, dateRange2);
+        dateRange2 = counterStatisticsService.getDefaultDateRange(),
+        rangeObj = {from: moment(dateRange.from), to: moment(dateRange.to)};
+    controller.dateRanges.push(rangeObj, dateRange2);
     controller.formatDates();
   };
 
@@ -101,7 +102,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     controller.dateRanges[0].from = moment(val[0], 'DD/MM/YYYY');
     controller.dateRanges[0].to = moment(val[1], 'DD/MM/YYYY');
-
     controller.pickingDate = false;
     controller.loadStatistics();
     controller.updateCompareWithRange();
@@ -139,7 +139,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     opts.endDate = prev[1];
     controller.dateRanges[1].from = prev[0];
     controller.dateRanges[1].to = prev[1];
-    controller.$input2.daterangepicker(opts, controller.secondRangeChangeHandler);
+    if (controller.$input2) {
+      controller.$input2.daterangepicker(opts, controller.secondRangeChangeHandler);
+    }
     controller.formatDates();
   };
 
