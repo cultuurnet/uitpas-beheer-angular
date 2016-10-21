@@ -70,8 +70,8 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
     }
     // Prepare querystring
     for (var i = 0, max = params.length; i < max; i++) {
-      fromStr = this.formatStatisticsDate(params[i].startDate);
-      toStr = this.formatStatisticsDate(params[i].endDate);
+      fromStr = this.formatStatisticsDate(params[i].from);
+      toStr = this.formatStatisticsDate(params[i].to);
       // Add number, starting with '', then 2, 3, ...
       num = i ? i+1 : '';
       query['from' + num] = fromStr;
