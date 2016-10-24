@@ -102,6 +102,28 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     }
   };
 
+  controller.ranges = {
+    'Gisteren': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    'Afgelopen week': [moment().startOf('week'), moment().endOf('week')],
+    'Lopende maand': [moment().startOf('month'), moment().endOf('month')],
+    'Afgelopen complete maand': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+    'Afgelopen 7 dagen': [moment().subtract(8, 'days'), moment().subtract(1, 'day')],
+    'Afgelopen 30 dagen': [moment().subtract(31, 'days'), moment().subtract(1, 'day')]
+  };
+
+  controller.defOpts = {
+    locale: {
+      format: 'DD/MM/YYYY',
+      customRangeLabel: 'Aangepast',
+      applyLabel: 'OK',
+      cancelLabel: 'Annuleren',
+      fromLabel: 'Van',
+      toLabel: 'Tot'
+    },
+    opens: 'left',
+    ranges: controller.ranges
+  };
+
   controller.loadingStatistics = true;
   controller.statistics = {};
   controller.noStatisticsError = false;
@@ -262,28 +284,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           $input2 = $inputs.eq(1),
           jQuery = window.jQuery,
           def3 = new Date(),
-          def4 = new Date(),
-          defOpts;
-      controller.ranges = {
-        'Gisteren': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Afgelopen week': [moment().startOf('week'), moment().endOf('week')],
-        'Lopende maand': [moment().startOf('month'), moment().endOf('month')],
-        'Afgelopen complete maand': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-        'Afgelopen 7 dagen': [moment().subtract(8, 'days'), moment().subtract(1, 'day')],
-        'Afgelopen 30 dagen': [moment().subtract(31, 'days'), moment().subtract(1, 'day')]
-      };
-      defOpts = {
-        locale: {
-          format: 'DD/MM/YYYY',
-          customRangeLabel: 'Aangepast',
-          applyLabel: 'OK',
-          cancelLabel: 'Annuleren',
-          fromLabel: 'Van',
-          toLabel: 'Tot'
-        },
-        opens: 'left',
-        ranges: controller.ranges
-      };
+          def4 = new Date();
       // If we have a second range, use that as default.
       if (controller.dateRanges[1]) {
         if (controller.dateRanges[1].from) {
@@ -295,13 +296,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       }
       controller.$input1 = $input1;
       controller.$input2 = $input2;
-      controller.defOpts = defOpts;
       // Attach daterangepickers
-      $input1.daterangepicker(jQuery.extend(defOpts, {
+      $input1.daterangepicker(jQuery.extend(controller.defOpts, {
         fromDate: controller.dateRanges[0].from._d,
         toDate: controller.dateRanges[0].to._d
       }));
-      $input2.daterangepicker(jQuery.extend(defOpts, {
+      $input2.daterangepicker(jQuery.extend(controller.defOpts, {
         fromDate: def3,
         toDate: def4
       }));
