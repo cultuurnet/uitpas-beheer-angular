@@ -291,3 +291,10 @@ $graph-link-color: #337ab7;
     }
   }
 }
+
+.stat-wrapper {
+  text-align: center;
+  > .stat {
+    display: inline-block;
+  }
+}
