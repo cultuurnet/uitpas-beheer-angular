@@ -104,9 +104,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   controller.ranges = {
     'Gisteren': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-    'Afgelopen week': [moment().startOf('week'), moment().endOf('week')],
-    'Lopende maand': [moment().startOf('month'), moment().endOf('month')],
-    'Afgelopen complete maand': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+    'Afgelopen week': [moment().startOf('week').subtract(1, 'days').startOf('week'), moment().startOf('week').subtract(1, 'days').endOf('week')],
+    'Deze maand': [moment().startOf('month'), moment().endOf('month')],
+    'Vorige maand': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
     'Afgelopen 7 dagen': [moment().subtract(8, 'days'), moment().subtract(1, 'day')],
     'Afgelopen 30 dagen': [moment().subtract(31, 'days'), moment().subtract(1, 'day')]
   };
@@ -115,7 +115,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     locale: {
       format: 'DD/MM/YYYY',
       customRangeLabel: 'Aangepast',
-      applyLabel: 'OK',
+      applyLabel: 'Bevestigen',
       cancelLabel: 'Annuleren',
       fromLabel: 'Van',
       toLabel: 'Tot'
