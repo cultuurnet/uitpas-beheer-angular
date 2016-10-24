@@ -461,6 +461,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     if (controller.comparing) {
       controller.updateCompareWithRange();
     }
+    controller.loadStatistics();
   };
 
   /**
