@@ -1,0 +1,39 @@
+.daterangepicker {
+  .ranges {
+    li {
+      color: $blue-50;
+      background-color: $gray-0;
+      border-color: $gray-0;
+      &.active,
+      &:hover {
+        background-color: $drp-range-active;
+        border-color: $drp-range-active;
+        color: #fff;
+      }
+    }
+  }
+  .range_inputs {
+    .applyBtn {
+      &,
+      &[disabled] {
+        background-color: $drp-btn-success;
+        border-color: $drp-btn-success;
+        color: #fff;
+        &:hover {
+          background-color: $drp-btn-success-hover;
+          border-color: $drp-btn-success-hover;
+          color: #fff;
+        }
+      }
+    }
+    .cancelBtn {
+      color: $blue-50;
+      border-color: #fff;
+      background-color: #fff;
+      text-decoration: underline;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
