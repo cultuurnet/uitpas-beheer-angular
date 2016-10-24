@@ -344,12 +344,17 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         line,
         line2,
         area,
+        area2,
         graph;
 
     if (compare) {
       line2 = d3.svg.line()
               .x(function (d) { return xScale(format.parse(d.date)); })
               .y(function (d) { return yScale(parseInt(d.count2, 10)); });
+      area2 = d3.svg.area()
+              .x(function(d) { return xScale(format.parse(d.date)); })
+              .y0(height)
+              .y1(function(d) { return yScale(d.count2); });
     }
 
     // Make sure it's cleared.
@@ -401,6 +406,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           .datum(stats.periods)
           .attr('class', 'line line-2')
           .attr('d', line2);
+      // Make an area path per period.
+      graph.append('path')
+          .datum(stats.periods)
+          .attr('class', 'area area-2')
+          .attr('d', area2);
     }
     // Add the X Axis.
     graph.append('g')
