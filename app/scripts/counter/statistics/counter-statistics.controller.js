@@ -188,9 +188,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     var range = controller.dateRanges[0],
         from = range.from,
         to = range.to,
-        diff = moment.duration(to.diff(from)).asDays() || 1,
+        diff = moment.duration(to.diff(from)).asDays() || 0,
         opts = window.jQuery.extend(controller.defOpts, {}),
-        prev = [moment(from).subtract(diff, 'days'), moment(to).subtract(diff, 'days')];
+        prev;
+
+    diff++;
+    prev = [moment(from).subtract(diff, 'days'), moment(from).subtract(1, 'days')];
     opts.ranges = {
       'Vorige periode': prev,
       'Vorig jaar': [moment(from).subtract(1, 'year'), moment(to).subtract(1, 'year')]
