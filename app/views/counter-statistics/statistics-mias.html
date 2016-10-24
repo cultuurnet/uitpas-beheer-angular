@@ -4,19 +4,19 @@
     <p><span class="period-1">Periode 1</span>{{csc.formattedDates[0]}}</p>
     <div class="serie-1 grid">
       <div class="grid__12 grid--bp-med__8 serie-wrapper">
-        <div class="grid__12 grid--bp-med__4">
+        <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
           <section class="stat">
             <h2 class="stat__number">{{csc.statistics['active_mias']}}</h2>
             <p class="stat__caption">{{csc.typeStr.active.label}}</p>
           </section>
         </div>
-        <div class="grid__12 grid--bp-med__4">
+        <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.saving.help)" ng-mouseleave="csc.hideTooltip()">
           <section class="stat">
             <h2 class="stat__number">{{csc.statistics['saving_mias']}}</h2>
             <p class="stat__caption">{{csc.typeStr.saving.label}}</p>
           </section>
         </div>
-        <div class="grid__12 grid--bp-med__4">
+        <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.exchanging.help)" ng-mouseleave="csc.hideTooltip()">
           <section class="stat">
             <h2 class="stat__number">{{csc.statistics['exchanging_mias']}}</h2>
             <p class="stat__caption">{{csc.typeStr.exchanging.label}}</p>
@@ -29,19 +29,19 @@
     <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span>{{csc.formattedDates[1]}}</p>
     <div class="serie-2 grid" ng-if="csc.hasCompareData()">
       <div class="grid__12 grid--bp-med__8 serie-wrapper">
-        <div class="grid__12 grid--bp-med__4">
+        <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
           <section class="stat">
             <h2 class="stat__number">{{csc.statistics['active_mias2']}}</h2>
             <p class="stat__caption">{{csc.typeStr.active.label}}</p>
           </section>
         </div>
-        <div class="grid__12 grid--bp-med__4">
+        <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.saving.help)" ng-mouseleave="csc.hideTooltip()">
           <section class="stat">
             <h2 class="stat__number">{{csc.statistics['saving_mias2']}}</h2>
             <p class="stat__caption">{{csc.typeStr.saving.label}}</p>
           </section>
         </div>
-        <div class="grid__12 grid--bp-med__4">
+        <div class="grid__12 grid--bp-med__4" ng-mouseover="csc.showTooltip($event, csc.typeStr.exchanging.help)" ng-mouseleave="csc.hideTooltip()">
           <section class="stat">
             <h2 class="stat__number">{{csc.statistics['exchanging_mias2']}}</h2>
             <p class="stat__caption">{{csc.typeStr.exchanging.label}}</p>

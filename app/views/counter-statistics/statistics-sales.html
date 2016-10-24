@@ -3,10 +3,10 @@
     <p><span class="period-1">Periode 1</span>{{csc.formattedDates[0]}}</p>
     <div class="serie-1">
       <div class="grid">
-        <div class="grid__12">
+        <div class="grid__12" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">
           <section class="stat">
-            <h2 class="stat__number" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">{{csc.statistics.totalusers}}</h2>
-            <p class="stat__caption" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">{{csc.typeStr.buyers.label}}</p>
+            <h2 class="stat__number">{{csc.statistics.totalusers}}</h2>
+            <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
           </section>
         </div>
       </div>
@@ -16,10 +16,10 @@
     <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span>{{csc.formattedDates[1]}}</p>
     <div class="serie-2" ng-if="csc.hasCompareData()">
       <div class="grid">
-        <div class="grid__12">
+        <div class="grid__12" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">
           <section class="stat">
-            <h2 class="stat__number" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">{{csc.statistics.totalusers2}}</h2>
-            <p class="stat__caption" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">{{csc.typeStr.buyers.label}}</p>
+            <h2 class="stat__number">{{csc.statistics.totalusers2}}</h2>
+            <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
           </section>
         </div>
       </div>
