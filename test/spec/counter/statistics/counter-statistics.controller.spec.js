@@ -256,13 +256,13 @@ describe('Controller: CounterStatisticsController', function () {
         {
           "date": "01-07-2016",
           "count": 0,
-          "date2": null,
+          "date2": "01-06-2016",
           "count2": 0
         },
         {
           "date": "02-07-2016",
           "count": 0,
-          "date2": null,
+          "date2": "02-06-2016",
           "count2": 0
         }
       ],
@@ -272,7 +272,7 @@ describe('Controller: CounterStatisticsController', function () {
     CounterStatisticsController.renderGraph();
 
     expect(d3.selectAll('circle').size()).toEqual(4);
-    expect(d3.selectAll('path').size()).toEqual(5);
+    expect(d3.selectAll('path').size()).toEqual(6);
   });
 
   it('correctly hides tooltips on mouseout', function () {
