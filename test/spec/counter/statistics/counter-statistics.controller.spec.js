@@ -170,8 +170,11 @@ describe('Controller: CounterStatisticsController', function () {
         to1 = window.moment('30/04/2016', 'DD/MM/YYYY'),
         from2 = window.moment('01/03/2016', 'DD/MM/YYYY'),
         to2 = window.moment('31/03/2016', 'DD/MM/YYYY'),
-        diff = moment.duration(to1.diff(from1)).asDays() || 1,
-        prev = [moment(from1).subtract(diff, 'days'), moment(to1).subtract(diff, 'days')];
+        diff = moment.duration(to1.diff(from1)).asDays() || 0,
+        prev;
+
+    diff++;
+    prev = [moment(from1).subtract(diff, 'days'), moment(from1).subtract(1, 'days')];
 
     CounterStatisticsController.formattedDates = [
       from1.format('DD/MM/YYYY') + ' - ' + to1.format('DD/MM/YYYY'),
