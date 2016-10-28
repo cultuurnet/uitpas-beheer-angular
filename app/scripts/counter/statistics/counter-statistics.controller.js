@@ -395,23 +395,18 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         .datum(stats.periods)
         .attr('class', 'area')
         .attr('d', area);
-    // Make a line path per period.
-    graph.append('path')
-        .datum(stats.periods)
-        .attr('class', 'line')
-        .attr('d', line);
     if (compare) {
-      // Make a line path per period.
-      graph.append('path')
-          .datum(stats.periods)
-          .attr('class', 'line line-2')
-          .attr('d', line2);
       // Make an area path per period.
       graph.append('path')
           .datum(stats.periods)
           .attr('class', 'area area-2')
           .attr('d', area2);
     }
+    // Make a line path per period.
+    graph.append('path')
+        .datum(stats.periods)
+        .attr('class', 'line')
+        .attr('d', line);
     // Add the X Axis.
     graph.append('g')
         .attr('class', 'x axis')
@@ -442,6 +437,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         });
 
     if (compare) {
+      // Make a line path per period.
+      graph.append('path')
+          .datum(stats.periods)
+          .attr('class', 'line line-2')
+          .attr('d', line2);
       // Add a circle per data point.
       graph.selectAll('dot-2')
           .data(stats.periods)
