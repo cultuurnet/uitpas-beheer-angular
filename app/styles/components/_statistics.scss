@@ -70,7 +70,7 @@ $graph-link-color: #337ab7;
     text-align: left;
     font-weight: normal;
     &.number {
-      text-align: right;
+      text-align: center;
       width: 115px;
     }
   }
@@ -233,10 +233,6 @@ $graph-link-color: #337ab7;
 
   }
 
-}
-
-.counter-statistics-table {
-  margin: 0 40px;
 }
 
 .serie-1 .frequence-meter span {
