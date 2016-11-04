@@ -72,12 +72,15 @@ $graph-link-color: #337ab7;
     &.number {
       text-align: center;
       width: 115px;
+      > span {
+        display: inline-block;
+      }
     }
   }
   .period-1,
   .period-2 {
 
-    padding-right: 6px;
+    padding-right: 20px;
 
     &:after {
       color: $graph1-fg;
@@ -87,6 +90,7 @@ $graph-link-color: #337ab7;
       font-family: "FontAwesome";
       font-size: 9px;
       vertical-align: middle;
+      margin-right: -15px;
     }
   }
   .period-2 {
@@ -233,6 +237,10 @@ $graph-link-color: #337ab7;
 
   }
 
+}
+
+.counter-statistics-set {
+  padding: 0 40px;
 }
 
 .serie-1 .frequence-meter span {

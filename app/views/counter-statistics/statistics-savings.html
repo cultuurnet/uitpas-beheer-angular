@@ -1,5 +1,5 @@
 <div class="counter-statistics-table">
-  <div>
+  <div class="counter-statistics-set">
     <p><span class="period-1">Periode 1</span>{{csc.formattedDates[0]}}</p>
     <div class="serie-1 grid">
       <div class="grid__12 grid--bp-med__6">
@@ -35,7 +35,7 @@
 
     </div>
   </div>
-  <div>
+  <div class="counter-statistics-set">
     <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span>{{csc.formattedDates[1]}}</p>
     <div class="serie-2 grid" ng-if="csc.hasCompareData()">
       <div class="grid__12 grid--bp-med__6">
