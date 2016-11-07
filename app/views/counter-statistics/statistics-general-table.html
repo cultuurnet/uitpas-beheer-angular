@@ -5,8 +5,8 @@
       <thead>
       <tr ng-if="!csc.hasCompareData()">
         <th></th>
-        <th class="number" ng-mouseover="csc.showTooltip($event, 'yourBalie')" ng-mouseleave="csc.hideTooltip()">Aan je balie</th>
-        <th class="number" ng-mouseover="csc.showTooltip($event, 'average')" ng-mouseleave="csc.hideTooltip()">Gemiddelde</th>
+        <th class="number" ng-mouseover="csc.showTooltip($event, csc.helpTexts.yourBalie)" ng-mouseleave="csc.hideTooltip()">Aan je balie</th>
+        <th class="number" ng-mouseover="csc.showTooltip($event, csc.helpTexts.average)" ng-mouseleave="csc.hideTooltip()">Gemiddelde</th>
       </tr>
       <tr ng-if="csc.hasCompareData()">
         <th></th>
