@@ -73,4 +73,46 @@
   </div>
 </div>
 
-<div class="grid__12" ng-include src="'views/counter-statistics/statistics-general-table.html'"></div>
+<div ng-class="{'grid__12': csc.hasCompareData(), 'grid__12 grid--bp-med__6': !csc.hasCompareData()}" ng-include src="'views/counter-statistics/statistics-general-table.html'"></div>
+
+<div class="counter-statistics-table">
+  <div ng-class="{'grid__12': csc.hasCompareData(), 'grid__12 grid--bp-med__6': !csc.hasCompareData()}">
+    <div class="panel">
+      <div class="panel-heading">Aanbod</div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="grid__12">
+              <div class="serie-1">
+                <section class="stat">
+                  <h2 class="stat__number"><span>{{csc.statistics.total_events}}</span></h2>
+                  <p class="stat__caption">Evenementen</p>
+                </section>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" ng-if="csc.statistics['top_events'] && csc.statistics['top_events'].length">
+            <div class="grid__12">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Top-10<br/>Populairste evenementen</th>
+                    <th class="number"><span ng-class="{'period-1': csc.hasCompareData()}">Gespaarde punten</span></th>
+                    <th class="number" ng-if="csc.hasCompareData()"><span class="period-2">Gespaarde punten</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="top in csc.statistics['top_events']">
+                    <td>{{top.title}}</td>
+                    <td class="number">{{top.count}}</td>
+                    <td class="number" ng-if="csc.hasCompareData()">{{csc.statistics['top_events2'][$index].count}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+</div>
