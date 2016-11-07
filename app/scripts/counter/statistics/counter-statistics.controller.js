@@ -102,6 +102,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     }
   };
 
+  controller.helpTexts = {
+    average: '% berekend op jouw activiteiten.',
+    yourBalie: 'Gemiddelde % in je UiTPAS-regio.'
+  };
+
   controller.ranges = {
     'Gisteren': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
     'Afgelopen week': [moment().startOf('week').subtract(1, 'days').startOf('week'), moment().startOf('week').subtract(1, 'days').endOf('week')],
