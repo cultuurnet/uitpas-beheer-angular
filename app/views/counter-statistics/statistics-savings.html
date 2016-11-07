@@ -73,4 +73,4 @@
   </div>
 </div>
 
-<div class="grid__12" ng-include src="'views/counter-statistics/statistics-general-table.html'"></div>
+<div ng-class="{'grid__12': csc.hasCompareData(), 'grid__12 grid--bp-med__6': !csc.hasCompareData()}" ng-include src="'views/counter-statistics/statistics-general-table.html'"></div>
