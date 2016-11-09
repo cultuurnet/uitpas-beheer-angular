@@ -103,8 +103,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   };
 
   controller.helpTexts = {
-    average: '% berekend op jouw activiteiten.',
-    yourBalie: 'Gemiddelde % in je UiTPAS-regio.'
+    average: 'Gemiddelde % in je UiTPAS-regio.',
+    yourBalie: '% berekend op jouw activiteiten.',
   };
 
   controller.ranges = {
