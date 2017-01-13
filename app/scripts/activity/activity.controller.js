@@ -112,7 +112,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       var passholderNoKansenstatuut = [];
 
       angular.forEach(controller.passholders, function(passholder) {
-        if(keepGoing) {
+        if(keepGoing && activeCounter.cardSystems && activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]]) {
           kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id);
           if(kansenstatuut !== null) {
             if (kansenstatuut.status !== 'EXPIRED') {
@@ -130,27 +130,31 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       // Check if there is already a passholder in the controller property
       if (!controller.hasOwnProperty('passholder') && passholderNoKansenstatuut.length > 0) {
         var keepGoing2 = true;
-        angular.forEach(passholderNoKansenstatuut, function(passholder) {
-          if(keepGoing2) {
-            if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id) === 'ACTIVE') {
-              controller.passholder = passholder;
-              keepGoing2 = false;
+        if (activeCounter.cardSystems && activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]]) {
+          angular.forEach(passholderNoKansenstatuut, function(passholder) {
+            if(keepGoing2) {
+              if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id) === 'ACTIVE') {
+                controller.passholder = passholder;
+                keepGoing2 = false;
+              }
             }
-          }
-        });
+          });
+        }
       }
 
       // If still no passholder is in the controller property, pick the first with an active UiTPAS.
       if (!controller.hasOwnProperty('passholder')) {
         var keepGoing3 = true;
-        angular.forEach(controller.passholders, function(passholder) {
-          if(keepGoing3) {
-            if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id) === 'ACTIVE') {
-              controller.passholder = passholder;
-              keepGoing3 = false;
+        if (activeCounter.cardSystems && activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]]) {
+          angular.forEach(controller.passholders, function(passholder) {
+            if(keepGoing3) {
+              if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id) === 'ACTIVE') {
+                controller.passholder = passholder;
+                keepGoing3 = false;
+              }
             }
-          }
-        });
+          });
+        }
       }
     }
     else {
