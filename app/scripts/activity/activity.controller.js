@@ -111,47 +111,50 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       var kansenstatuut;
       var passholderNoKansenstatuut = [];
 
-      angular.forEach(controller.passholders, function(passholder) {
-        if(keepGoing) {
-          kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[1].id);
-          if(kansenstatuut !== null) {
-            if (kansenstatuut.status !== 'EXPIRED') {
-              controller.passholder = passholder;
-              keepGoing = false;
-            }
-          }
-          // if passholder has no kansenstatuut push them into a seperate array for the next condition.
-          else {
-            passholderNoKansenstatuut.push(passholder);
-          }
-        }
-      });
-
-      // Check if there is already a passholder in the controller property
-      if (!controller.hasOwnProperty('passholder') && passholderNoKansenstatuut.length > 0) {
-        var keepGoing2 = true;
-        angular.forEach(passholderNoKansenstatuut, function(passholder) {
-          if(keepGoing2) {
-            if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[1].id) === 'ACTIVE') {
-              controller.passholder = passholder;
-              keepGoing2 = false;
-            }
-          }
-        });
-      }
-
-      // If still no passholder is in the controller property, pick the first with an active UiTPAS.
-      if (!controller.hasOwnProperty('passholder')) {
-        var keepGoing3 = true;
+      if (activeCounter.cardSystems && activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]]) {
         angular.forEach(controller.passholders, function(passholder) {
-          if(keepGoing3) {
-            if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[1].id) === 'ACTIVE') {
-              controller.passholder = passholder;
-              keepGoing3 = false;
+          if(keepGoing) {
+            kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id);
+            if(kansenstatuut !== null) {
+              if (kansenstatuut.status !== 'EXPIRED') {
+                controller.passholder = passholder;
+                keepGoing = false;
+              }
+            }
+            // if passholder has no kansenstatuut push them into a seperate array for the next condition.
+            else {
+              passholderNoKansenstatuut.push(passholder);
             }
           }
         });
+
+        // Check if there is already a passholder in the controller property
+        if (!controller.hasOwnProperty('passholder') && passholderNoKansenstatuut.length > 0) {
+          var keepGoing2 = true;
+          angular.forEach(passholderNoKansenstatuut, function(passholder) {
+            if(keepGoing2) {
+              if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id) === 'ACTIVE') {
+                controller.passholder = passholder;
+                keepGoing2 = false;
+              }
+            }
+          });
+        }
+
+        // If still no passholder is in the controller property, pick the first with an active UiTPAS.
+        if (!controller.hasOwnProperty('passholder')) {
+          var keepGoing3 = true;
+          angular.forEach(controller.passholders, function(passholder) {
+            if(keepGoing3) {
+              if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id) === 'ACTIVE') {
+                controller.passholder = passholder;
+                keepGoing3 = false;
+              }
+            }
+          });
+        }
       }
+
     }
     else {
       controller.passholder = passholder;
