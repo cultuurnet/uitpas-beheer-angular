@@ -245,6 +245,7 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
 
   var locationChangeSuccess = function() {
     controller.searchFields = getSearchParametersFromState();
+
     var emptySearchParams = new SearchParameters();
     if (controller.searchFields.yieldsSameResultSetAs(emptySearchParams) && !controller.searchFields.page) {
       angular.forEach($state.params, function (value, key) {
@@ -253,14 +254,6 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
         }
       });
       $rootScope.$emit('resetSearch');
-    }
-    else {
-      if (controller.searchFields.mode.name === 'DETAIL') {
-        controller.findPassholdersByDetails();
-      }
-      else {
-        controller.findPassholdersByNumbers();
-      }
     }
   };
 
