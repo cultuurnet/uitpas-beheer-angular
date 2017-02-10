@@ -170,4 +170,10 @@ describe('Controller: PassholderDetailController', function () {
     detailController.showModalForCardSystem(cardSystem);
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard', { cardSystem: { id: 5 } });
   });
+
+  it('should set the show all coupons variable', function () {
+    expect(detailController.showAllCoupons).toEqual(false);
+    detailController.collapseCoupons();
+    expect(detailController.showAllCoupons).toEqual(true);
+  });
 });
