@@ -68,7 +68,7 @@ function PassholderDetailController (
     }
 
     passholderService
-      .getCoupons(pass.number)
+      .getCoupons(pass.number, 0)
       .then(displayCoupons)
       .finally(removeLoadingState);
   };
