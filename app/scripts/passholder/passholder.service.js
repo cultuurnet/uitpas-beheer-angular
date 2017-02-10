@@ -507,7 +507,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    */
   service.getCoupons = function(uitpasNumber, maxCoupons) {
     if (typeof(maxCoupons)==='undefined') {
-      maxCoupons = 20;
+      maxCoupons = 0;
     }
 
     var deferredCoupons = $q.defer();

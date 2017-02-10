@@ -5,7 +5,7 @@ describe('Controller: AppController', function () {
   // load the controller's module
   beforeEach(module('uitpasbeheerApp'));
 
-  var $controller, appController, $scope, $location, uitid, $q, counterService, $state;
+  var $controller, appController, $scope, $location, uitid, $q, counterService, $state, googleAnalyticsService;
 
   beforeEach(inject(function($injector, $rootScope) {
     $controller = $injector.get('$controller');
@@ -14,7 +14,7 @@ describe('Controller: AppController', function () {
     uitid = $injector.get('uitid');
     $q = $injector.get('$q');
     counterService = $injector.get('counterService');
-    GoogleAnalyticsService = jasmine.createSpyObj('GoogleAnalyticsService', ['isEnabled', 'getTrackers', 'setVariable', 'sendEvent']);
+    googleAnalyticsService = jasmine.createSpyObj('GoogleAnalyticsService', ['isEnabled', 'getTrackers', 'setVariable', 'sendEvent']);
     $state = jasmine.createSpyObj('$state', ['go']);
   }));
 
@@ -28,7 +28,7 @@ describe('Controller: AppController', function () {
         $state: $state,
         uitid: uitid,
         counterService: counterService,
-        GoogleAnalyticsService: GoogleAnalyticsService
+        GoogleAnalyticsService: googleAnalyticsService
       }
     );
   });
@@ -172,15 +172,15 @@ describe('Controller: AppController', function () {
   });
 
   it('should send a pageview to google analytics after state change', function () {
-    GoogleAnalyticsService.isEnabled.and.returnValue(true);
-    GoogleAnalyticsService.getTrackers.and.returnValue([]);
+    googleAnalyticsService.isEnabled.and.returnValue(true);
+    googleAnalyticsService.getTrackers.and.returnValue([]);
 
     $scope.$broadcast('$stateChangeSuccess');
-    expect(GoogleAnalyticsService.setVariable).not.toHaveBeenCalled();
-    expect(GoogleAnalyticsService.sendEvent).not.toHaveBeenCalled();
+    expect(googleAnalyticsService.setVariable).not.toHaveBeenCalled();
+    expect(googleAnalyticsService.sendEvent).not.toHaveBeenCalled();
 
     $scope.$broadcast('$stateChangeSuccess');
-    expect(GoogleAnalyticsService.setVariable).toHaveBeenCalledWith('page', '/');
-    expect(GoogleAnalyticsService.sendEvent).toHaveBeenCalledWith('pageview');
+    expect(googleAnalyticsService.setVariable).toHaveBeenCalledWith('page', '/');
+    expect(googleAnalyticsService.sendEvent).toHaveBeenCalledWith('pageview');
   });
 });
