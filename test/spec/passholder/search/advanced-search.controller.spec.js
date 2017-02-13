@@ -489,4 +489,9 @@ describe('Controller: PassholderAdvancedSearchController', function () {
     expect(controller.searchFields).toEqual(expectedSearchFields);
     expect($state.params).toEqual(expectedStateParams);
   });
+
+  it('can check if the form is empty', function () {
+    expect(controller.formIsEmpty({})).toBeTruthy();
+    expect(controller.formIsEmpty({field: {$modelValue: 'value'}})).toBeFalsy();
+  });
 });
