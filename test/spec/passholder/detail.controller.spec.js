@@ -146,7 +146,7 @@ describe('Controller: PassholderDetailController', function () {
     var controller = getController();
     $scope.$digest();
 
-    expect(passholderService.getCoupons).toHaveBeenCalledWith('01234567891234', 30);
+    expect(passholderService.getCoupons).toHaveBeenCalledWith('01234567891234', 0);
     expect(controller.coupons).toEqual(expectedCoupons);
     expect(controller.couponsLoading).toEqual(false);
   });
@@ -169,5 +169,11 @@ describe('Controller: PassholderDetailController', function () {
     var cardSystem = { id: 5 };
     detailController.showModalForCardSystem(cardSystem);
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard', { cardSystem: { id: 5 } });
+  });
+
+  it('should set the show all coupons variable', function () {
+    expect(detailController.showAllCoupons).toEqual(false);
+    detailController.collapseCoupons();
+    expect(detailController.showAllCoupons).toEqual(true);
   });
 });

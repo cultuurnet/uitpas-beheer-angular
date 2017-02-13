@@ -32,6 +32,7 @@ function PassholderDetailController (
 
   controller.membershipsLoading = false;
   controller.couponsLoading = false;
+  controller.showAllCoupons = false;
 
   var listRetrieved = function(data) {
     controller.memberships = data.passholder.memberships;
@@ -67,7 +68,7 @@ function PassholderDetailController (
     }
 
     passholderService
-      .getCoupons(pass.number, 30)
+      .getCoupons(pass.number, 0)
       .then(displayCoupons)
       .finally(removeLoadingState);
   };
@@ -86,6 +87,13 @@ function PassholderDetailController (
     else {
       $state.go('counter.main.passholder.upgrade.newCard', {cardSystem: cardSystem});
     }
+  };
+
+  /**
+   * Show all coupons.
+   */
+  controller.collapseCoupons = function() {
+    controller.showAllCoupons = true;
   };
 
   function subtractAdvantagePoints(event, exchangedAdvantage) {
