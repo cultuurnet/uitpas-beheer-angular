@@ -235,6 +235,22 @@ function AdvancedSearchController (SearchParameters, advancedSearchService, acti
   };
 
   /**
+   * Check if the search form is empty.
+   */
+  controller.formIsEmpty = function (form) {
+    var data = {};
+    angular.forEach(form, function(value, key) {
+        if (typeof value === 'object' && value.hasOwnProperty('$modelValue')) {
+            if (value.$modelValue) {
+              data[key] = value.$modelValue;
+            }
+        }
+    });
+
+    return angular.equals(data, {});
+  };
+
+  /**
    * Clear the async error set on the controller
    */
   controller.clearAsyncError = function () {

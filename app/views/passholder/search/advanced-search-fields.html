@@ -70,7 +70,7 @@
     </div>
     <div class="grid__12 field-group">
       <button type="reset" class="btn btn-default pull-left" ng-click="pasc.resetSearchFields()" ng-disabled="pasc.formSubmitBusy">Leegmaken</button>
-      <button type="button" class="btn btn-primary pull-right" ng-disabled="pasc.formSubmitBusy || advancedSearchFields.$invalid"
+      <button type="button" class="btn btn-primary pull-right" ng-disabled="pasc.formSubmitBusy || advancedSearchFields.$invalid || pasc.formIsEmpty(advancedSearchFields)"
               ng-click="pasc.findPassholdersByDetails()">
         <span ng-hide="pasc.formSubmitBusy">Zoeken</span>
         <span ng-show="pasc.formSubmitBusy">
