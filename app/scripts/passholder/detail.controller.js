@@ -90,10 +90,10 @@ function PassholderDetailController (
   };
 
   /**
-   * Show all coupons.
+   * Toggle all coupons.
    */
-  controller.collapseCoupons = function() {
-    controller.showAllCoupons = true;
+  controller.toggleCoupons = function() {
+    controller.showAllCoupons = !controller.showAllCoupons;
   };
 
   function subtractAdvantagePoints(event, exchangedAdvantage) {

@@ -173,7 +173,7 @@ describe('Controller: PassholderDetailController', function () {
 
   it('should set the show all coupons variable', function () {
     expect(detailController.showAllCoupons).toEqual(false);
-    detailController.collapseCoupons();
+    detailController.toggleCoupons();
     expect(detailController.showAllCoupons).toEqual(true);
   });
 });
