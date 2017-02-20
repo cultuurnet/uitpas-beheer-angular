@@ -8,16 +8,32 @@
       "email": "aalst@uitpas.be"
     },
     {
-      "name": "Paspartoe",
-      "email": "paspartoe@vgc.be"
-    },
-    {
       "name": "Gent",
       "email": "uitpas@gent.be"
     },
     {
+      "name": "Kempen",
+      "email": "info@uitpaskempen.be"
+    },
+    {
+      "name": "Leuven",
+      "email": "uitpas@leuven.be"
+    },
+    {
+      "name": "Mechelen",
+      "email": "uitpas@mechelen.be"
+    },
+    {
+      "name": "Maasmechelen",
+      "email": "uitpas@maasmechelen.be"
+    },
+    {
       "name": "Oostende",
       "email": "uitpas@oostende.be"
+    },
+     {
+      "name": "Paspartoe",
+      "email": "paspartoe@vgc.be"
     },
     {
       "name": "Zuidwest",
