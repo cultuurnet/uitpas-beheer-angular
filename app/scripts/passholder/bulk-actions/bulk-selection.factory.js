@@ -13,6 +13,16 @@ angular
 
 /* @ngInject */
 function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
+    /**
+     * Search mode enum.
+     * @readonly
+     * @enum {object}
+     */
+    var SearchModes = {
+        DETAIL: { title:'Zoeken', name:'DETAIL' },
+        NUMBER: { title:'Via kaartnummer', name:'NUMBER' }
+    };
+
   /**
    * @class BulkSelection
    * @constructor
@@ -141,6 +151,7 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
       else {
         this.searchParameters.limit = this.uitpasNumberSelection.length;
         this.searchParameters.uitpasNumbers = this.uitpasNumberSelection;
+        this.searchParameters.mode = SearchModes.NUMBER;
 
         passholderService
           .findPassholders(this.searchParameters)
