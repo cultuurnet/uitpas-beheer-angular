@@ -146,7 +146,7 @@ describe('Controller: PassholderDetailController', function () {
     var controller = getController();
     $scope.$digest();
 
-    expect(passholderService.getCoupons).toHaveBeenCalledWith('01234567891234', 0);
+    expect(passholderService.getCoupons).toHaveBeenCalledWith('01234567891234', -1);
     expect(controller.coupons).toEqual(expectedCoupons);
     expect(controller.couponsLoading).toEqual(false);
   });

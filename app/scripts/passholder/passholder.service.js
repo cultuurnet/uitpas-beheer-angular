@@ -506,7 +506,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
    * @return {Coupon[]}
    */
   service.getCoupons = function(uitpasNumber, maxCoupons) {
-    if (typeof(maxCoupons)==='undefined') {
+    if (typeof(maxCoupons) === 'undefined') {
       maxCoupons = 20;
     }
 
