@@ -64,7 +64,6 @@ function UpgradeModalController (
     }
     else {
       controller.modalFlow = 'UNAUTHORIZED_COUNTER';
-      controller.upgradeData.withNewCard = 'NEW_CARD';
     }
   };
 

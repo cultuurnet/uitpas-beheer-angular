@@ -170,7 +170,7 @@ describe('Controller: Card Upgrade Modal', function () {
 
     controller.showModalFlowForCardSystem(100);
     expect(controller.modalFlow).toBe('UNAUTHORIZED_COUNTER');
-    expect(controller.upgradeData.withNewCard).toBe('NEW_CARD');
+    expect(controller.upgradeData.withNewCard).toBe('NO_NEW_CARD');
   });
 
   it('can dismiss the modal', function () {
