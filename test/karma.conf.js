@@ -45,7 +45,6 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/moment/moment.js',
       'bower_components/moment/locale/nl.js',
-      'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
       'bower_components/ngTouchSpin/src/js/ngTouchSpin.js',
       'bower_components/phoneformat/dist/phone-format-global.js',
       'bower_components/showdown/dist/showdown.js',
@@ -57,6 +56,7 @@ module.exports = function(config) {
       'bower_components/cultuurnet-google-tagmanager/src/cultuurnet-google-tagmanager.module.js',
       'bower_components/bootstrap/dist/js/bootstrap.js',
       'bower_components/angular-daterangepicker/js/angular-daterangepicker.js',
+      'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/app.js",
