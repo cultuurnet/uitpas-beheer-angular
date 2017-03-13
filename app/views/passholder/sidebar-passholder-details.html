@@ -83,7 +83,7 @@
   </div>
 
   <ul class="list-group" ng-hide="pdc.couponsLoading">
-    <li class="list-group-item" ng-repeat="coupon in pdc.coupons" ng-show="$index < 5 || pdc.showAllCoupons"><a ui-sref="counter.main.passholder.coupon({ coupon: coupon })">{{coupon.name}}{{$index}}</a></li>
+    <li class="list-group-item" ng-repeat="coupon in pdc.coupons" ng-show="$index < 5 || pdc.showAllCoupons"><a ui-sref="counter.main.passholder.coupon({ coupon: coupon })">{{coupon.name}}</a></li>
   </ul>
 
   <a class="toggle-down" ng-show="pdc.coupons.length > 5 && !pdc.showAllCoupons" ng-click="pdc.toggleCoupons()">Alle bonnen<i></i></a>
