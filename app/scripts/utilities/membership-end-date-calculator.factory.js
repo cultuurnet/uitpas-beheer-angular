@@ -29,7 +29,7 @@ function membershipEndDateCalculatorFactory(moment) {
       switch (this.association.enddateCalculation) {
         case 'BASED_ON_DATE_OF_BIRTH':
           date = moment.unix(passholder.dateOfBirth)
-            .add(this.association.enddateCalculationValidityTime, 'years')
+            .add(this.association.enddateCalculationValidityTime, 'months')
             .toDate();
 
           return {
@@ -39,7 +39,7 @@ function membershipEndDateCalculatorFactory(moment) {
 
         case 'BASED_ON_REGISTRATION_DATE':
           date = moment()
-            .add(this.association.enddateCalculationValidityTime, 'years')
+            .add(this.association.enddateCalculationValidityTime, 'months')
             .toDate();
 
           return {
