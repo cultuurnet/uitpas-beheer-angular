@@ -12,9 +12,8 @@ angular
   .service('activityService', activityService);
 
 /* @ngInject */
-function activityService($q, $http, $rootScope, appConfig, Activity, DateRange) {
+function activityService($q, $http, $rootScope, appConfig, Activity) {
   var apiUrl = appConfig.apiUrl;
-  var dateRanges = angular.copy(DateRange);
 
   /*jshint validthis: true */
   var service = this;
@@ -34,14 +33,10 @@ function activityService($q, $http, $rootScope, appConfig, Activity, DateRange) 
     /*jshint camelcase: false */
     var requestParameters = {
       query: searchParameters.query,
+      date_type: searchParameters.dateRange.value,
       page: searchParameters.page,
       limit: searchParameters.limit
     };
-
-    // Only add daterange value if it's meaningful.
-    if (searchParameters.dateRange.value !== dateRanges.ALL.value) {
-      requestParameters['date_type'] = searchParameters.dateRange.value;
-    }
 
     var searchRequest = $http.get(
         apiUrl + 'passholders/' + passholder.passNumber + '/activities',
