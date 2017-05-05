@@ -170,26 +170,7 @@ describe('Service: activity', function (){
 
     $httpBackend.flush();
   });
-
-  it('should not use a date_type query argument when searching "all"', function (done) {
-    var passholder = { passNumber: '01234567891234', points: 123 };
-    var searchParameters = {
-      query: '',
-      dateRange: DateRange.ALL,
-      page: 1,
-      limit: 5
-    };
-    $httpBackend
-      .expectGET(apiUrl + 'passholders/' + passholder.passNumber + '/activities?limit=5&page=1&query=')
-      .respond(200, JSON.stringify(pagedActivityData));
-
-    activityService
-      .search(passholder, searchParameters)
-      .then(done);
-
-    $httpBackend.flush();
-  });
-
+    
   it ('throws an error when it can\'t get a list of activities', function (done) {
     var passholder = { passNumber: '01234567891234', points: 123 };
     var searchParameters = {

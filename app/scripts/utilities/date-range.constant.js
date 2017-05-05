@@ -34,10 +34,6 @@ angular
       label: 'Volgende 12 maanden',
       value: 'next_12_months'
     },
-    'ALL': {
-      label: 'Alle activiteiten',
-      value: 'all'
-    },
     'PAST': {
       label: 'Afgelopen activiteiten ',
       value: 'past'
