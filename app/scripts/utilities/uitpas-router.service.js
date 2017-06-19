@@ -36,10 +36,16 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
    * @param {string} identification
    */
   service.go = function(identification) {
+
     $rootScope.appBusy = true;
     lastIdentification = identification;
 
     function redirectAccordingPassData(pass) {
+
+        pass.status = 'new';
+        pass.passholder = false;
+        pass.group = false;
+
       if (pass.passholder) {
         displayPassholderDetails(pass);
       }

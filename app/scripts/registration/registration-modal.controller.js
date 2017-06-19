@@ -48,11 +48,15 @@ function RegistrationModalController (
   controller.furthestStep = 0;
 
   controller.passholder = new Passholder();
+  controller.existingPassholder = undefined;
+  controller.isMemberOfCurrentBalie = false;
+  controller.activeBalie = 0;
   controller.excludeEmail = false;
   controller.eIDData = {};
   controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
   controller.activeCounter = activeCounter;
+
 
   controller.showFieldError = function (form, field) {
     var hasErrors = false;
@@ -73,9 +77,19 @@ function RegistrationModalController (
     function validatePersonalData() {
       controller.updateFurthestStep();
       if (personalDataForm.$valid) {
-        var setInszNumberError = function () {
+        var setInszNumberError = function (passholder) {
           personalDataForm.inszNumber.$setValidity('inUse', false);
-          controller.formSubmitBusy = false;
+            controller.existingPassholder = passholder;
+            controller.isMemberOfCurrentBalie = false;
+console.log(passholder);
+
+            angular.forEach(passholder.uitPassen, function(value, key) {
+                if(controller.isRegisteredInCardSystem(value.cardSystem)) {
+                    controller.isMemberOfCurrentBalie = true;
+                }
+            });
+
+            controller.formSubmitBusy = false;
         };
 
         var continueRegisterProcess = function () {
@@ -93,6 +107,8 @@ function RegistrationModalController (
         passholderService
           .findPassholder(personalDataForm.inszNumber.$viewValue)
           .then(setInszNumberError, continueRegisterProcess);
+
+
       } else {
         controller.formSubmitBusy = false;
       }
@@ -234,17 +250,58 @@ function RegistrationModalController (
     controller.clearAsyncError('PARSE_INVALID_POSTAL_CODE');
   };
 
-  controller.close = function () {
-    $uibModalInstance.dismiss('registration modal closed');
-  };
-
   controller.getDataFromEID = function() {
     eIDService.getDataFromEID();
   };
 
+  /**
+   * Cancel the current registration.
+   */
+  controller.cancelRegistration = function () {
+      $uibModalInstance.dismiss('registration modal cancelled');
+      $state.go('counter.main.register');
+  };
+
+  /**
+   * View the profile of given uitpasnumber.
+   */
+  controller.viewProfile = function ($uitpasNumber) {
+      $uibModalInstance.dismiss('registration modal closed');
+      $state.go('counter.main.passholder', {identification: $uitpasNumber});
+  }
+
+  /**
+   * Start the upgrade for given uitpasnumber.
+   */
+  controller.upgradeCard = function ($uitpasNumber, $cardSystem) {
+    $uibModalInstance.dismiss('registration modal closed');
+    $state.go('counter.main.passholder.upgrade.newCard', {
+      'pass': controller.pass,
+      'identification' : $uitpasNumber,
+      'cardSystem': $cardSystem }
+    );
+  }
+
+  controller.isRegisteredInCardSystem = function ($cardSystem) {
+      var matchingCardSystem = false;
+
+      angular.forEach(this.cardSystems, function (passHolderCardSystem) {
+          if (passHolderCardSystem.id === $cardSystem.id) {
+              matchingCardSystem = true;
+
+          }
+      });
+
+      return matchingCardSystem;
+  }
+
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
   var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
+
+
+    // @todo Validate if a card is alreayd connected with insz number.
+
     angular.merge(controller.eIDData, eIDData);
     angular.merge(controller.passholder, eIDData);
     controller.eIDError = false;
@@ -261,6 +318,20 @@ function RegistrationModalController (
     controller.eIDError = 'De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.';
     $scope.$apply();
   });
+
+    $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
+        console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
+    });
+
+    $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
+        console.log('$stateChangeError - fired when an error occurs during transition.');
+        console.log(arguments);
+    });
+
+    $rootScope.$on('$stateNotFound',function(event, unfoundState, fromState, fromParams){
+        console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
+        console.log(unfoundState, fromState, fromParams);
+    });
 
   $scope.$on('$destroy', cleanupEIDDataReceivedListener);
   $scope.$on('$destroy', cleanupEIDPhotoReceivedListener);

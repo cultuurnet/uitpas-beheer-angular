@@ -1,3 +1,41 @@
+<!--<button ng-click="prc.upgradeCard('0930000571008')">&lt;!&ndash; @Todo Place correct link here &ndash;&gt; registratie bekijken</button>-->
+<!--<div><button ng-click="prc.viewProfile('0930000571008')">&lt;!&ndash; @Todo Place correct link here &ndash;&gt; Profiel bekijken</button></div>-->
+
+
+<div ng-if="personalDataForm.inszNumber.$error.inUse">
+  <div>Er is al een UiTPAS-houder met dit rijksregisternummer gerigistreerd.</div>
+  <div>
+    <div>
+      <div ng-bind="prc.existingPassholder.inszNumber"></div>
+      <div>
+        <div ng-bind="prc.existingPassholder.name.first"></div>
+        <div ng-bind="prc.existingPassholder.name.last"></div>
+      </div>
+      <div>
+        <div ng-bind="prc.existingPassholder.address.street"></div>
+      </div>
+      <div></div>
+        <div ng-bind="prc.existingPassholder.address.postalCode"></div>
+        <div ng-bind="prc.existingPassholder.address.city"></div>
+      <div ng-bind="prc.existingPassholder.birth.date"></div>
+    </div>
+    <div><img ng-bind="prc.existingPassholder.image"/><!-- @Todo Place profile image here --></div>
+  </div>
+
+  <div>Lid van:
+    <div ng-repeat="cardSystem in prc.activeCounter.cardSystems">
+      <div ng-show="prc.passholder.isRegisteredInCardSystem(cardSystem)">{{cardSystem.name}}</div>
+    </div>
+  </div>
+
+  <div ng-repeat="cardSystem in prc.activeCounter.cardSystems">
+    <button ng-show="!prc.passholder.isRegisteredInCardSystem(cardSystem)"
+       ng-click="prc.upgradeCard(prc.existingPassholder.inszNumber, cardSystem)">Lid maken van {{cardSystem.name}}</button>
+  </div>
+
+  <div ng-show="prc.isMemberOfCurrentBalie"><button ng-click="prc.viewProfile(prc.existingPassholder.inszNumber)"><!-- @Todo Place correct link here --> Profiel bekijken</button></div>
+</div>
+
 <form name="personalDataForm" ng-submit="prc.submitPersonalDataForm(personalDataForm)"
       novalidate ubr-insz-number-validation ng-disabled="prc.formSubmitBusy">
   <div class="modal-body">
@@ -21,7 +59,6 @@
               <div ng-if="personalDataForm.inszNumber.$error.gender">Dit rijksregisternummer is niet geldig voor het opgegeven geslacht.</div>
               <div ng-if="personalDataForm.inszNumber.$error.dateOfBirth">Dit rijksregisternummer is niet geldig voor de opgegeven geboortedatum.</div>
               <div ng-if="personalDataForm.inszNumber.$error.checkDigit">Het controle getal van dit rijksregisternummer is foutief.</div>
-              <div ng-if="personalDataForm.inszNumber.$error.inUse">Dit rijksregisternummer is reeds in gebruik.</div>
               <div ng-if="personalDataForm.inszNumber.$error.required">Het rijksregisternummer is verplicht.</div>
               <div ng-if="personalDataForm.inszNumber.$error.inszNumber">Dit is geen geldig rijksregisternummer.</div>
             </div>
@@ -156,7 +193,7 @@
     </div>
   </div><!-- end modal-body -->
   <div class="modal-footer">
-    <a class="btn btn-link pull-left" ng-click="prc.close()">Annuleren</a>
+    <a class="btn btn-link pull-left" ng-click="prc.cancelRegistration()">Annuleren</a>
     <input type="button" class="btn btn-default modal-next" ng-disabled="prc.formSubmitBusy"
             ng-click="prc.submitPersonalDataForm(personalDataForm)" value="Volgende">
   </div>
