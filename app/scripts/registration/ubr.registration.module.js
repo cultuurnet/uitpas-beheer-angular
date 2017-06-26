@@ -89,10 +89,6 @@ angular
             controllerAs: 'prc'
           });
 
-          function registrationCanceled() {
-            $state.go('counter.main.register');
-          }
-
           function passholderRegistered() {
             $state.go('counter.main.passholder', {
               identification: pass.number
@@ -101,7 +97,7 @@ angular
 
           registrationModalInstance
             .result
-            .then(passholderRegistered ,registrationCanceled);
+            .then(passholderRegistered);
         }]
       })
       .state('counter.main.register.form.personalData', {

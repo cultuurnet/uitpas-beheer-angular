@@ -48,6 +48,7 @@ function RegistrationModalController (
   controller.furthestStep = 0;
 
   controller.passholder = new Passholder();
+  controller.isMemberOfCurrentBalie = false;
   controller.excludeEmail = false;
   controller.eIDData = {};
   controller.eIDError = false;
@@ -68,38 +69,35 @@ function RegistrationModalController (
     return hasErrors;
   };
 
-  controller.submitPersonalDataForm = function(personalDataForm) {
+  controller.submitPersonalDataForm = function() {
 
     function validatePersonalData() {
       controller.updateFurthestStep();
-      if (personalDataForm.$valid) {
-        var setInszNumberError = function () {
-          personalDataForm.inszNumber.$setValidity('inUse', false);
-          controller.formSubmitBusy = false;
-        };
+      if (controller.personalDataForm.$valid) {
 
         var continueRegisterProcess = function () {
           controller
-            .refreshUnreducedPriceInfo()
-            .then(function () {
-              controller.formSubmitBusy = false;
+              .refreshUnreducedPriceInfo()
+              .then(function () {
+                controller.formSubmitBusy = false;
 
-              if (!controller.asyncError) {
-                $state.go('counter.main.register.form.contactData');
-              }
-            });
+                if (!controller.asyncError) {
+                  $state.go('counter.main.register.form.contactData');
+                }
+              });
         };
 
         passholderService
-          .findPassholder(personalDataForm.inszNumber.$viewValue)
-          .then(setInszNumberError, continueRegisterProcess);
+            .findPassholder(controller.personalDataForm.inszNumber.$viewValue)
+            .then(controller.setExistingInszNumberError, continueRegisterProcess);
+
       } else {
         controller.formSubmitBusy = false;
       }
     }
 
     controller
-      .startSubmit(personalDataForm)
+      .startSubmit(controller.personalDataForm)
       .then(validatePersonalData);
   };
 
@@ -234,21 +232,69 @@ function RegistrationModalController (
     controller.clearAsyncError('PARSE_INVALID_POSTAL_CODE');
   };
 
-  controller.close = function () {
-    $uibModalInstance.dismiss('registration modal closed');
-  };
-
   controller.getDataFromEID = function() {
     eIDService.getDataFromEID();
   };
 
+  /**
+   * Cancel the current registration.
+   */
+  controller.cancelRegistration = function () {
+      $uibModalInstance.dismiss('registration modal cancelled');
+      $state.go('counter.main.register');
+  };
+
+  /**
+   * View the profile of given uitpasnumber.
+   */
+  controller.viewProfile = function ($uitpasNumber) {
+      $uibModalInstance.dismiss('registration modal closed');
+      $state.go('counter.main.passholder', {identification: $uitpasNumber});
+  };
+
+  /**
+   * Start the upgrade for given uitpasnumber.
+   */
+  controller.upgradeCard = function ($uitpasNumber, $cardSystem) {
+    $uibModalInstance.dismiss('registration modal closed');
+    $state.go('counter.main.passholder.upgrade.newCard', {
+      'pass': controller.pass,
+      'identification' : $uitpasNumber,
+      'cardSystem': $cardSystem }
+    );
+  };
+
+  /**
+   * Mark the current insz number as in use.
+   * @param passholder
+   */
+  controller.setExistingInszNumberError = function (passholder) {
+    controller.personalDataForm.inszNumber.$setValidity('inUse', false);
+    controller.passholder = passholder;
+    controller.isMemberOfCurrentBalie = false;
+
+    angular.forEach(controller.activeCounter.cardSystems, function (cardSystem) {
+      if (passholder.isRegisteredInCardSystem(cardSystem)) {
+        controller.isMemberOfCurrentBalie = true;
+      }
+    });
+
+    controller.formSubmitBusy = false;
+  };
+
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
+  /**
+   * Listener on the EID scanned event: Copy all data on the passholder.
+   */
   var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
     angular.merge(controller.eIDData, eIDData);
     angular.merge(controller.passholder, eIDData);
     controller.eIDError = false;
     $scope.$apply();
+    passholderService
+        .findPassholder(eIDData.inszNumber)
+        .then(controller.setExistingInszNumberError);
   });
 
   var cleanupEIDPhotoReceivedListener = $rootScope.$on('eIDPhotoReceived', function(event, base64Picture) {

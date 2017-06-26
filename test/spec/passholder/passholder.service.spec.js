@@ -1046,8 +1046,8 @@ describe('Service: passholderService', function () {
     passholderService
       .addCardSystem(uitpasNumber, cardSystemId, voucherNumber, kansenstatuutEndDate, extraCardNumber)
       .catch(checkError);
-
-      $scope.$apply();
+    
+    $scope.$apply();
   });
 
   it('rejects when it can not add a passholder to a card system', function (done) {
