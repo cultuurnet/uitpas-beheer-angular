@@ -49,13 +49,11 @@ function RegistrationModalController (
 
   controller.passholder = new Passholder();
   controller.isMemberOfCurrentBalie = false;
-  controller.activeBalie = 0;
   controller.excludeEmail = false;
   controller.eIDData = {};
   controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
   controller.activeCounter = activeCounter;
-
 
   controller.showFieldError = function (form, field) {
     var hasErrors = false;

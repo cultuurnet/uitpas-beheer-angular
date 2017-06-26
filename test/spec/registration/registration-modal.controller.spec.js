@@ -364,6 +364,16 @@ describe('Controller: RegistrationModalController', function () {
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder', {identification: 'test'});
   });
 
+  it('can start an upgrade', function() {
+    controller.upgradeCard('testnumber', 'testsystem');
+    expect(modalInstance.dismiss).toHaveBeenCalled();
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard', {
+      pass: unregisteredPassData.uitPas,
+      identification: 'testnumber',
+      cardSystem: 'testsystem'
+    });
+  });
+
   it('should reset the right async error when a relevant field changes', function () {
     spyOn(controller, 'clearAsyncError');
 
