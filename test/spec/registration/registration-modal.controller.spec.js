@@ -99,7 +99,7 @@ describe('Controller: RegistrationModalController', function () {
   });
 
   it('should submit the personal data form', function () {
-    var formStub = {
+    controller.personalDataForm = {
       '$valid': true,
       inszNumber: {
         $invalid: false,
@@ -117,7 +117,7 @@ describe('Controller: RegistrationModalController', function () {
     // when submitting personal data the base price should be updated
     spyOn(controller, 'refreshUnreducedPriceInfo').and.returnValue($q.when('priceRefreshed'));
 
-    controller.submitPersonalDataForm(formStub);
+    controller.submitPersonalDataForm();
 
     deferredPassholder.reject();
     $scope.$digest();
@@ -129,13 +129,13 @@ describe('Controller: RegistrationModalController', function () {
   });
 
   it('should not submit the personal data form when there are errors', function () {
-    var formStub= {
+    controller.personalDataForm = {
       $valid: false,
       '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
     spyOn(passholderService, 'findPassholder');
 
-    controller.submitPersonalDataForm(formStub);
+    controller.submitPersonalDataForm();
 
     $scope.$digest();
 
@@ -165,6 +165,7 @@ describe('Controller: RegistrationModalController', function () {
 
     spyOn(passholderService, 'findPassholder').and.returnValue(passholderPromise);
 
+    controller.personalDataForm = formStub;
     controller.submitPersonalDataForm(formStub);
 
     deferredPassholder.resolve(new Passholder());
@@ -351,9 +352,16 @@ describe('Controller: RegistrationModalController', function () {
     expect(controller.asyncError).toEqual(expectedAsyncError);
   });
 
-  it('can dismiss the modal', function () {
-    controller.close();
+  it('can cancel the registration', function () {
+    controller.cancelRegistration();
     expect(modalInstance.dismiss).toHaveBeenCalled();
+    expect($state.go).toHaveBeenCalledWith('counter.main.register');
+  });
+
+  it('can go to a profile', function () {
+    controller.viewProfile('test');
+    expect(modalInstance.dismiss).toHaveBeenCalled();
+    expect($state.go).toHaveBeenCalledWith('counter.main.passholder', {identification: 'test'});
   });
 
   it('should reset the right async error when a relevant field changes', function () {
@@ -432,6 +440,10 @@ describe('Controller: RegistrationModalController', function () {
           last: 'Dirkly'
         }
       };
+
+      var deferredPassholder = $q.defer();
+      var passholderPromise = deferredPassholder.promise;
+      spyOn(passholderService, 'findPassholder').and.returnValue(passholderPromise);
 
       $rootScope.$emit('eIDDataReceived', eIDData);
       expect(controller.eIDError).toBeFalsy();

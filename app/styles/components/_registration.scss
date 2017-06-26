@@ -2,3 +2,14 @@
   max-width: 500px;
   margin: 0 auto;
 }
+
+.alert-passholder-exists {
+  > p {
+    margin-bottom: 15px;
+  }
+}
+
+.existing-passholder-info,
+.existing-passholder-actions {
+  margin-bottom: 15px;
+}

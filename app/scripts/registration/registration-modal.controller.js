@@ -48,7 +48,6 @@ function RegistrationModalController (
   controller.furthestStep = 0;
 
   controller.passholder = new Passholder();
-  controller.existingPassholder = undefined;
   controller.isMemberOfCurrentBalie = false;
   controller.activeBalie = 0;
   controller.excludeEmail = false;
@@ -72,42 +71,27 @@ function RegistrationModalController (
     return hasErrors;
   };
 
-  controller.submitPersonalDataForm = function(personalDataForm) {
+  controller.submitPersonalDataForm = function() {
 
     function validatePersonalData() {
       controller.updateFurthestStep();
-      if (personalDataForm.$valid) {
-        var setInszNumberError = function (passholder) {
-          personalDataForm.inszNumber.$setValidity('inUse', false);
-            controller.existingPassholder = passholder;
-            controller.isMemberOfCurrentBalie = false;
-console.log(passholder);
-
-            angular.forEach(passholder.uitPassen, function(value, key) {
-                if(controller.isRegisteredInCardSystem(value.cardSystem)) {
-                    controller.isMemberOfCurrentBalie = true;
-                }
-            });
-
-            controller.formSubmitBusy = false;
-        };
+      if (controller.personalDataForm.$valid) {
 
         var continueRegisterProcess = function () {
           controller
-            .refreshUnreducedPriceInfo()
-            .then(function () {
-              controller.formSubmitBusy = false;
+              .refreshUnreducedPriceInfo()
+              .then(function () {
+                controller.formSubmitBusy = false;
 
-              if (!controller.asyncError) {
-                $state.go('counter.main.register.form.contactData');
-              }
-            });
+                if (!controller.asyncError) {
+                  $state.go('counter.main.register.form.contactData');
+                }
+              });
         };
 
         passholderService
-          .findPassholder(personalDataForm.inszNumber.$viewValue)
-          .then(setInszNumberError, continueRegisterProcess);
-
+            .findPassholder(controller.personalDataForm.inszNumber.$viewValue)
+            .then(controller.setExistingInszNumberError, continueRegisterProcess);
 
       } else {
         controller.formSubmitBusy = false;
@@ -115,7 +99,7 @@ console.log(passholder);
     }
 
     controller
-      .startSubmit(personalDataForm)
+      .startSubmit(controller.personalDataForm)
       .then(validatePersonalData);
   };
 
@@ -268,7 +252,7 @@ console.log(passholder);
   controller.viewProfile = function ($uitpasNumber) {
       $uibModalInstance.dismiss('registration modal closed');
       $state.go('counter.main.passholder', {identification: $uitpasNumber});
-  }
+  };
 
   /**
    * Start the upgrade for given uitpasnumber.
@@ -280,32 +264,39 @@ console.log(passholder);
       'identification' : $uitpasNumber,
       'cardSystem': $cardSystem }
     );
-  }
+  };
 
-  controller.isRegisteredInCardSystem = function ($cardSystem) {
-      var matchingCardSystem = false;
+  /**
+   * Mark the current insz number as in use.
+   * @param passholder
+   */
+  controller.setExistingInszNumberError = function (passholder) {
+    controller.personalDataForm.inszNumber.$setValidity('inUse', false);
+    controller.passholder = passholder;
+    controller.isMemberOfCurrentBalie = false;
 
-      angular.forEach(this.cardSystems, function (passHolderCardSystem) {
-          if (passHolderCardSystem.id === $cardSystem.id) {
-              matchingCardSystem = true;
+    angular.forEach(controller.activeCounter.cardSystems, function (cardSystem) {
+      if (passholder.isRegisteredInCardSystem(cardSystem)) {
+        controller.isMemberOfCurrentBalie = true;
+      }
+    });
 
-          }
-      });
-
-      return matchingCardSystem;
-  }
+    controller.formSubmitBusy = false;
+  };
 
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
+  /**
+   * Listener on the EID scanned event: Copy all data on the passholder.
+   */
   var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
-
-
-    // @todo Validate if a card is alreayd connected with insz number.
-
     angular.merge(controller.eIDData, eIDData);
     angular.merge(controller.passholder, eIDData);
     controller.eIDError = false;
     $scope.$apply();
+    passholderService
+        .findPassholder(eIDData.inszNumber)
+        .then(controller.setExistingInszNumberError);
   });
 
   var cleanupEIDPhotoReceivedListener = $rootScope.$on('eIDPhotoReceived', function(event, base64Picture) {
@@ -318,20 +309,6 @@ console.log(passholder);
     controller.eIDError = 'De e-id kon niet gelezen worden. Controleer of de kaart goed in de lezer zit, of de lezer correct aangesloten is aan de pc.';
     $scope.$apply();
   });
-
-    $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
-        console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
-    });
-
-    $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
-        console.log('$stateChangeError - fired when an error occurs during transition.');
-        console.log(arguments);
-    });
-
-    $rootScope.$on('$stateNotFound',function(event, unfoundState, fromState, fromParams){
-        console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
-        console.log(unfoundState, fromState, fromParams);
-    });
 
   $scope.$on('$destroy', cleanupEIDDataReceivedListener);
   $scope.$on('$destroy', cleanupEIDPhotoReceivedListener);

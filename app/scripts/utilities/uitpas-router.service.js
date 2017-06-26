@@ -42,10 +42,6 @@ function UiTPASRouterService($rootScope, $state, passholderService) {
 
     function redirectAccordingPassData(pass) {
 
-        pass.status = 'new';
-        pass.passholder = false;
-        pass.group = false;
-
       if (pass.passholder) {
         displayPassholderDetails(pass);
       }
