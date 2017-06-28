@@ -33,6 +33,7 @@ function RegistrationModalController (
   var kansenstatuutInfo = $stateParams.kansenstatuut;
 
   controller.pass = pass;
+  controller.existingPass = undefined;
   controller.formSubmitBusy = false;
   // Price is set to minus one to indicate it has not yet been initialized
   controller.price = -1;
@@ -88,7 +89,7 @@ function RegistrationModalController (
         };
 
         passholderService
-            .findPassholder(controller.personalDataForm.inszNumber.$viewValue)
+            .findPass(controller.personalDataForm.inszNumber.$viewValue)
             .then(controller.setExistingInszNumberError, continueRegisterProcess);
 
       } else {
@@ -257,8 +258,9 @@ function RegistrationModalController (
    */
   controller.upgradeCard = function ($uitpasNumber, $cardSystem) {
     $uibModalInstance.dismiss('registration modal closed');
+
     $state.go('counter.main.passholder.upgrade.newCard', {
-      'pass': controller.pass,
+      'pass': controller.existingPass,
       'identification' : $uitpasNumber,
       'cardSystem': $cardSystem }
     );
@@ -266,20 +268,32 @@ function RegistrationModalController (
 
   /**
    * Mark the current insz number as in use.
-   * @param passholder
+   * @param pass
    */
-  controller.setExistingInszNumberError = function (passholder) {
+  controller.setExistingInszNumberError = function (pass) {
     controller.personalDataForm.inszNumber.$setValidity('inUse', false);
-    controller.passholder = passholder;
+    controller.existingPass = pass;
     controller.isMemberOfCurrentBalie = false;
 
     angular.forEach(controller.activeCounter.cardSystems, function (cardSystem) {
-      if (passholder.isRegisteredInCardSystem(cardSystem)) {
+      if (pass.passholder.isRegisteredInCardSystem(cardSystem)) {
         controller.isMemberOfCurrentBalie = true;
       }
     });
 
     controller.formSubmitBusy = false;
+  };
+
+  /**
+   * Get the passholders picture, or return the default one.
+   */
+  controller.getPassholderPicture = function() {
+
+    if (controller.existingPass.passholder.picture) {
+      return controller.existingPass.passholder.getPictureSrc();
+    }
+
+    return 'images/png/default-picture.png';
   };
 
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
@@ -293,7 +307,7 @@ function RegistrationModalController (
     controller.eIDError = false;
     $scope.$apply();
     passholderService
-        .findPassholder(eIDData.inszNumber)
+        .findPass(eIDData.inszNumber)
         .then(controller.setExistingInszNumberError);
   });
 
