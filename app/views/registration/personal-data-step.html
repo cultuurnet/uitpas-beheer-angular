@@ -3,32 +3,32 @@
     <p>Er is al een UiTPAS-houder met dit rijksregisternummer geregistreerd.</p>
     <div class="grid existing-passholder-info">
       <div class="grid__1">
-        <img ng-if="prc.passholder.picture" style="height: 95px"
-             ng-src="{{::prc.passholder.getPictureSrc()}}" />
+        <img style="width: 65px"
+             ng-src="{{::prc.getPassholderPicture()}}" />
       </div>
       <div class="grid__10 grid--bp-med__4">
         <div ng-bind="prc.passholder.inszNumber"></div>
-        <div class="name">{{prc.passholder.name.first}} {{prc.passholder.name.middle}} {{prc.passholder.name.last}}</div>
+        <div class="name">{{ prc.existingPass.passholder.name.first }} {{ prc.existingPass.passholder.name.middle }} {{prc.existingPass.passholder.name.last}}</div>
         <div class="address">
-          {{prc.passholder.address.street}}<br />
-          {{prc.passholder.address.postalCode}} {{prc.passholder.address.city}}
+          {{ prc.existingPass.passholder.address.street }}<br />
+          {{ prc.existingPass.passholder.postalCode }} {{ prc.passholder.address.city }}
         </div>
         <div>{{pdc.passholder.birth.date | date : 'dd/MM/yyyy'}}</div>
       </div>
     </div>
 
     <p>
-      <span ng-repeat="cardSystem in prc.passholder.cardSystems">
+      <span ng-repeat="cardSystem in prc.existingPass.passholder.cardSystems">
         Lid van: {{cardSystem.name}}
       </span>
     </p>
 
     <div ng-repeat="cardSystem in prc.activeCounter.cardSystems" class="existing-passholder-actions">
-      <button ng-show="!prc.passholder.isRegisteredInCardSystem(cardSystem)"
-         ng-click="prc.upgradeCard(prc.passholder.inszNumber, cardSystem)">Lid maken van {{cardSystem.name}}</button>
+      <button class="btn btn-default" ng-show="!prc.existingPass.passholder.isRegisteredInCardSystem(cardSystem)"
+         ng-click="prc.upgradeCard(prc.existingPass.passholder.inszNumber, cardSystem)">Lid maken van {{cardSystem.name}}</button>
     </div>
 
-    <div ng-show="prc.isMemberOfCurrentBalie"><button ng-click="prc.viewProfile(prc.passholder.inszNumber)">Profiel bekijken</button></div>
+    <div ng-show="prc.isMemberOfCurrentBalie"><a ng-click="prc.viewProfile(prc.existingPass.passholder.inszNumber)">Profiel bekijken</a></div>
   </div>
 
 </div>

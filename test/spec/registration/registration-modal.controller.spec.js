@@ -110,20 +110,20 @@ describe('Controller: RegistrationModalController', function () {
       '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
 
-    var deferredPassholder = $q.defer();
-    var passholderPromise = deferredPassholder.promise;
+    var deferredPass = $q.defer();
+    var passPromise = deferredPass.promise;
 
-    spyOn(passholderService, 'findPassholder').and.returnValue(passholderPromise);
+    spyOn(passholderService, 'findPass').and.returnValue(passPromise);
     // when submitting personal data the base price should be updated
     spyOn(controller, 'refreshUnreducedPriceInfo').and.returnValue($q.when('priceRefreshed'));
 
     controller.submitPersonalDataForm();
 
-    deferredPassholder.reject();
+    deferredPass.reject();
     $scope.$digest();
 
     expect(controller.formSubmitBusy).toBeFalsy();
-    expect(passholderService.findPassholder).toHaveBeenCalled();
+    expect(passholderService.findPass).toHaveBeenCalled();
     expect($state.go).toHaveBeenCalledWith('counter.main.register.form.contactData');
     expect(controller.refreshUnreducedPriceInfo).toHaveBeenCalled();
   });
@@ -160,20 +160,29 @@ describe('Controller: RegistrationModalController', function () {
       '$setSubmitted': jasmine.createSpy('$setSubmitted')
     };
 
-    var deferredPassholder = $q.defer();
-    var passholderPromise = deferredPassholder.promise;
+    var deferredPass = $q.defer();
+    var passPromise = deferredPass.promise;
 
-    spyOn(passholderService, 'findPassholder').and.returnValue(passholderPromise);
+    spyOn(passholderService, 'findPass').and.returnValue(passPromise);
 
     controller.personalDataForm = formStub;
     controller.submitPersonalDataForm(formStub);
 
-    deferredPassholder.resolve(new Passholder());
+    var testPass = {
+      passholder: {
+        data: "test",
+        isRegisteredInCardSystem: function() {
+          return true;
+        }
+      },
+    };
+    deferredPass.resolve(testPass);
     $scope.$digest();
 
     expect(controller.formSubmitBusy).toBeFalsy();
-    expect(passholderService.findPassholder).toHaveBeenCalled();
-    expect($state.go).not.toHaveBeenCalled();
+    expect(passholderService.findPass).toHaveBeenCalled();
+    expect(controller.existingPass).toEqual(testPass);
+    expect(controller.isMemberOfCurrentBalie).toEqual(true);
     expect(formStub.inszNumber.$error.inUse).toBeTruthy();
     expect(formStub.inszNumber.$invalid).toBeTruthy();
   });
@@ -365,10 +374,12 @@ describe('Controller: RegistrationModalController', function () {
   });
 
   it('can start an upgrade', function() {
+    controller.existingPass = 'existing';
     controller.upgradeCard('testnumber', 'testsystem');
+
     expect(modalInstance.dismiss).toHaveBeenCalled();
     expect($state.go).toHaveBeenCalledWith('counter.main.passholder.upgrade.newCard', {
-      pass: unregisteredPassData.uitPas,
+      pass: 'existing',
       identification: 'testnumber',
       cardSystem: 'testsystem'
     });
@@ -451,9 +462,9 @@ describe('Controller: RegistrationModalController', function () {
         }
       };
 
-      var deferredPassholder = $q.defer();
-      var passholderPromise = deferredPassholder.promise;
-      spyOn(passholderService, 'findPassholder').and.returnValue(passholderPromise);
+      var deferredPass = $q.defer();
+      var passPromise = deferredPass.promise;
+      spyOn(passholderService, 'findPass').and.returnValue(passPromise);
 
       $rootScope.$emit('eIDDataReceived', eIDData);
       expect(controller.eIDError).toBeFalsy();
