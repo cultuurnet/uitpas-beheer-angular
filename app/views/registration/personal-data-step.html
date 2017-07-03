@@ -2,16 +2,16 @@
   <div class="alert alert-danger alert-passholder-exists">
     <p>Er is al een UiTPAS-houder met dit rijksregisternummer geregistreerd.</p>
     <div class="grid existing-passholder-info">
-      <div class="grid__1">
+      <div class="grid__3 grid--bp-xsm__2 grid--bp-xlr__1">
         <img style="width: 65px"
              ng-src="{{::prc.getPassholderPicture()}}" />
       </div>
-      <div class="grid__10 grid--bp-med__4">
+      <div class="grid__9 grid--xsm__10 grid--bp-xlr__11">
         <div ng-bind="prc.passholder.inszNumber"></div>
         <div class="name">{{ prc.existingPass.passholder.name.first }} {{ prc.existingPass.passholder.name.middle }} {{prc.existingPass.passholder.name.last}}</div>
         <div class="address">
           {{ prc.existingPass.passholder.address.street }}<br />
-          {{ prc.existingPass.passholder.postalCode }} {{ prc.passholder.address.city }}
+          {{ prc.existingPass.passholder.address.postalCode }} {{ prc.existingPass.passholder.address.city }}
         </div>
         <div>{{pdc.passholder.birth.date | date : 'dd/MM/yyyy'}}</div>
       </div>

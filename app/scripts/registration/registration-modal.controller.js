@@ -293,7 +293,7 @@ function RegistrationModalController (
       return controller.existingPass.passholder.getPictureSrc();
     }
 
-    return 'images/png/default-picture.png';
+    return 'images/default-picture.png';
   };
 
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
