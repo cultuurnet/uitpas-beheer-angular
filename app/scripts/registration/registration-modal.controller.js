@@ -296,6 +296,21 @@ function RegistrationModalController (
     return 'images/default-picture.png';
   };
 
+  /**
+   * Get the list of balies where current user is connected with.
+   */
+  controller.currentMembershipList = function() {
+
+    var names = [];
+    for (var id in controller.existingPass.passholder.cardSystems) {
+      names.push(controller.existingPass.passholder.cardSystems[id].name);
+    }
+
+    console.log(names);
+    return names.join(', ');
+
+  }
+
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
   /**

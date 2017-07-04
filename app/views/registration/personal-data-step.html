@@ -17,10 +17,7 @@
       </div>
     </div>
 
-    <p>
-      <span ng-repeat="cardSystem in prc.existingPass.passholder.cardSystems">
-        Lid van: {{cardSystem.name}}
-      </span>
+    <p>Lid van: {{ prc.currentMembershipList() }}
     </p>
 
     <div ng-repeat="cardSystem in prc.activeCounter.cardSystems" class="existing-passholder-actions">
