@@ -306,10 +306,8 @@ function RegistrationModalController (
       names.push(controller.existingPass.passholder.cardSystems[id].name);
     }
 
-    console.log(names);
     return names.join(', ');
-
-  }
+  };
 
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
