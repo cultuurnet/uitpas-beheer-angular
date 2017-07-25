@@ -14,7 +14,7 @@ angular
 function ubrVoucherNumber(counterService) {
   return {
     restrict: 'A',
-    require: ['?^^RegistrationModalController', 'ngModel'],
+    require: 'ngModel',
     scope: {
       pass: '=passToCheck',
       parentController: '=currentController',
@@ -23,8 +23,7 @@ function ubrVoucherNumber(counterService) {
     link: link
   };
 
-  function link(scope, element, attrs, controllers) {
-    var modelController = controllers[1];
+  function link(scope, element, attrs, modelController) {
     // can't seem to access the registration controller using require so this is a workaround
     var reason = 'FIRST_CARD';
     var passToCheck = scope.parentController.pass;
@@ -41,7 +40,6 @@ function ubrVoucherNumber(counterService) {
 
       var updatePriceInfo = function (priceInfo) {
         modelController.$setValidity('voucher', true);
-
         scope.parentController.price = priceInfo.price;
 
         if (!voucherNumber) {
@@ -76,6 +74,11 @@ function ubrVoucherNumber(counterService) {
           .then(updatePriceInfo, showError);
       }
     };
+
+    // Listen to the model changes and refresh the price info
+    modelController.$viewChangeListeners.push(function(){
+      scope.refreshPriceInfo();
+    });
 
     scope.refreshPriceInfo();
   }

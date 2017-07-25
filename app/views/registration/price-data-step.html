@@ -8,7 +8,7 @@
           Voucher-nummer
         </label>
         <input name="voucherNumber" type="text" ng-model="prc.voucherNumber" ng-model-options="prc.priceModelOptions"
-               ng-change="refreshPriceInfo()" id="voucherNumber" ubr-voucher-number current-controller="prc" class="form-control">
+               id="voucherNumber" ubr-voucher-number current-controller="prc" class="form-control">
         <div ng-show="prc.showFieldError(priceForm, 'voucherNumber')">
           <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.voucher === true">Het voucher-nummer is ongeldig.</div>
           <div class="text-danger small" ng-show="priceForm.voucherNumber.$error.redeemable === true">Dit voucher-nummer is niet inruilbaar.</div>
