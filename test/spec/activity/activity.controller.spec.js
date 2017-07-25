@@ -481,7 +481,11 @@ describe('Controller: ActivityController', function () {
   it('should refresh the list of activities when a tariff is claimed', function () {
     // when triggered by an external event, eg: when picking a tariff using a modal
     spyOn(activityController, 'search');
-    activityController.updateClaimedTariffActivity();
+
+    var event = {};
+    var activity = angular.copy(pagedActivities.activities[0]);
+
+    activityController.updateClaimedTariffActivity(event, activity);
     expect(activityController.search).toHaveBeenCalled();
 
     // when claiming a tariff instantly
@@ -491,6 +495,17 @@ describe('Controller: ActivityController', function () {
 
     $scope.$digest();
     expect(activityController.search).toHaveBeenCalled();
+  });
+
+  it('should correctly see if an activity was already claimed on current page', function () {
+
+    var activity = angular.copy(pagedActivities.activities[0]);
+    expect(activityController.isActivityClaimed(activity)).toBeFalsy();
+
+    activityController.updateClaimedTariffActivity(event, activity);
+
+    expect(activityController.isActivityClaimed(activity)).toBeTruthy();
+
   });
 
   it('should reset the search query and date range field when asked', function () {
