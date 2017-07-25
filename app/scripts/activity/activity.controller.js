@@ -21,6 +21,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.page = 1;
   controller.limit = 5;
   controller.activities = [];
+  controller.currentClaimedActivities = [];
   controller.dateRanges = angular.copy(DateRange);
   controller.dateRange = controller.dateRanges.TODAY;
   controller.totalActivities = 0;
@@ -191,6 +192,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
     var priceInfo = tariff.prices[0];
 
     var tariffClaimedSuccessfully = function () {
+      controller.currentClaimedActivities.push(activity.id);
       controller.search();
     };
 
@@ -247,8 +249,21 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
     });
   };
 
-  controller.updateClaimedTariffActivity = function () {
+  /**
+   * Handle the update of a claimed activity.
+   * @param event
+   * @param activity
+   */
+  controller.updateClaimedTariffActivity = function (event, activity) {
+    controller.currentClaimedActivities.push(activity.id);
     controller.search();
+  };
+
+  /**
+   * Check if the activity has been claimed in current session.
+   */
+  controller.isActivityClaimed = function (activity) {
+    return controller.currentClaimedActivities.indexOf(activity.id) !== -1;
   };
 
   var activityTariffClaimedListener = $rootScope.$on('activityTariffClaimed', controller.updateClaimedTariffActivity);

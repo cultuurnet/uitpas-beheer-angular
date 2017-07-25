@@ -67,26 +67,32 @@
             <i class="error">{{activity.tariffClaimError.message}}</i>
           </div>
           <!--status start-->
-          <div class="content-holder" ng-switch="activity.getTariff()" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
-            <i class="free-event" ng-switch-when="free">Gratis</i>
-            <i class="tariff-applied" ng-switch-when="maximumReached">Tarief toegekend<!--<br><a class="history-modal small">Historiek</a>--></i>
-            <div class="price-differentiation" ng-switch-when="priceDifferentiation">
-              <small>vanaf</small><br><strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong>
-              <a class="btn btn-default btn-sm tariff-modal" ui-sref="counter.main.group.activityTariffs({ activity: activity, activityMode: ac.activityMode })">Tarief kiezen</a>
+          <div class="content-holder" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
+            <div ng-show="ac.isActivityClaimed()">
+              <i class="tariff-applied">Tarief toegekend<br><a class="history-modal small">Historiek</a></i>
             </div>
-            <div class="kansen-tariff" ng-switch-when="kansenTariff" ng-hide="activity.tariffClaimInProgress">
-              <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br><small>aan kansentarief</small>
-              <a class="btn btn-default btn-sm assign-tariff" ui-sref="counter.main.group.activityTariffs({ activity: activity, activityMode: ac.activityMode })" >Tarief toekennen</a>
+            <div ng-show="!ac.isActivityClaimed()">
+              <i class="free-event" ng-switch-when="free">Gratis</i>
+              <i class="tariff-applied" ng-switch-when="maximumReached">Maximum toegelaten aantal tickets bereikt<!--<br><a class="history-modal small">Historiek</a>--></i>
+              <div class="price-differentiation" ng-switch-when="priceDifferentiation">
+                <small>vanaf</small><br><strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong>
+                <a class="btn btn-default btn-sm tariff-modal" ui-sref="counter.main.group.activityTariffs({ activity: activity, activityMode: ac.activityMode })">Tarief kiezen</a>
+              </div>
+              <div class="kansen-tariff" ng-switch-when="kansenTariff" ng-hide="activity.tariffClaimInProgress">
+                <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br><small>aan kansentarief</small>
+                <a class="btn btn-default btn-sm assign-tariff" ui-sref="counter.main.group.activityTariffs({ activity: activity, activityMode: ac.activityMode })" >Tarief toekennen</a>
+              </div>
+              <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = activity.getRedeemableCoupons()[0]">
+                <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br>
+                <small ng-bind="::tariffCoupon.name"></small>
+                <a class="btn btn-default btn-sm assign-tariff" ui-sref="counter.main.group.activityTariffs({ activity: activity, activityMode: ac.activityMode })" >Tarief toekennen</a>
+              </div>
+              <div class="base-tariff" ng-switch-default>
+                <strong>&euro; {{::activity.sales.base.Basisprijs}}</strong><br>
+                <small>Voor deze activiteit is er geen kortingstarief</small>
+              </div>
             </div>
-            <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = activity.getRedeemableCoupons()[0]">
-              <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br>
-              <small ng-bind="::tariffCoupon.name"></small>
-              <a class="btn btn-default btn-sm assign-tariff" ui-sref="counter.main.group.activityTariffs({ activity: activity, activityMode: ac.activityMode })" >Tarief toekennen</a>
-            </div>
-            <div class="base-tariff" ng-switch-default>
-              <strong>&euro; {{::activity.sales.base.Basisprijs}}</strong><br>
-              <small>Voor deze activiteit is er geen kortingstarief</small>
-            </div>
+
           </div>
         </div> <!--/ end .grid-last -->
 
