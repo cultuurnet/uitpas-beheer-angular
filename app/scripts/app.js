@@ -126,6 +126,11 @@ angular
 
     $locationProvider.html5Mode(true);
     $httpProvider.defaults.withCredentials = true;
+
+    // IE11 caches all requests. Disable it, as this breaks the switching of balies.
+    $httpProvider.defaults.headers.get = {};
+    $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+    $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
   })
   .run(function(nfcService, eIDService) {
     nfcService.init();
