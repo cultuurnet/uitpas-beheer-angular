@@ -12,8 +12,10 @@ angular
   .service('dataValidation', dataValidationService);
 
 /* @ngInject */
-function dataValidationService($q, $window, $http, appConfig) {
+function dataValidationService($q, $window, $http, appConfig, $cacheFactory) {
   var apiUrl = appConfig.apiUrl + 'datavalidation';
+
+  var emailValidationCache = $cacheFactory('emailValidationCache');
 
   /*jshint validthis: true */
   var dataValidation = this;
@@ -24,18 +26,31 @@ function dataValidationService($q, $window, $http, appConfig) {
    */
   dataValidation.validateEmail = function(email) {
     var deferredValidation = $q.defer();
+    var validationResult = emailValidationCache.get(email);
 
-    $http
-        .get(apiUrl + '/email', {
-            params: { email: email }
-        }).then(function success(response) {
-          deferredValidation.resolve(response.data);
-        }, function error(response){
-          deferredValidation.reject({
-              status: response.status,
-              message: response.data.message
-          });
-        });
+    if (validationResult) {
+      deferredValidation.resolve(validationResult);
+    } else {
+      var validationRequest = $http.get(apiUrl + '/email', {
+          params: {email: email}
+      });
+
+      var cacheAndResolveEmailValidation = function (response) {
+        var validationResult = response.data;
+        emailValidationCache.put(email, validationResult);
+        deferredValidation.resolve(response.data);
+      };
+
+      var rejectValidation = function () {
+        var error = {
+          status: response.status,
+          message: response.data.message
+        };
+        deferredValidation.reject(error);
+      };
+
+      validationRequest.then(cacheAndResolveEmailValidation, rejectValidation);
+    }
 
     return deferredValidation.promise;
   };
