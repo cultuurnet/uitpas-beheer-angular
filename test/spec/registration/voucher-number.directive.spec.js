@@ -18,7 +18,7 @@ describe('Directive: Voucher number', function () {
   };
 
   function compileElement () {
-    voucherInputElement = angular.element('<input name="voucherNumber" ng-change="refreshPriceInfo()" ubr-card-system="cardSystemId" current-controller="parentController" pass-to-check="pass" type="text" ng-model="voucherNumber" ubr-voucher-number>');
+    voucherInputElement = angular.element('<input name="voucherNumber" ubr-card-system="cardSystemId" current-controller="parentController" pass-to-check="pass" type="text" ng-model="voucherNumber" ubr-voucher-number>');
     compile(voucherInputElement)(scope);
 
     scope.$digest();
