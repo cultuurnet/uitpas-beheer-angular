@@ -21,17 +21,19 @@
               E-mailadres
             </label>
             <input type="email" class="form-control" id="email" name="email" ng-model="prc.passholder.contact.email"
-             ng-required="!prc.excludeEmail" ng-change="prc.emailChanged()" ubr-ignore-field="prc.excludeEmail"
-             ng-disabled="prc.excludeEmail" ng-pattern = '/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i'>
+             ng-required="!prc.excludeEmail" ng-change="prc.emailChanged(contactDataForm)" ubr-ignore-field="prc.excludeEmail"
+             ng-disabled="prc.excludeEmail" ng-pattern ='/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i'>
             <div ng-if="prc.showFieldError(contactDataForm, 'email')" class="text-danger small">
               <div ng-if="contactDataForm.email.$error.pattern || contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
               <div ng-if="contactDataForm.email.$error.inUse">Het e-mailadres is reeds in gebruik.</div>
               <div ng-if="contactDataForm.email.$error.required">Een geldig e-mailadres is verplicht.</div>
+              <div ng-if="contactDataForm.email.$error.failedValidation">Dit e-mailadres is ongeldig. Geef een geldig e-mailadres op om verder te gaan.</div>
             </div>
+            <div ng-if="prc.emailValidated" class="text-danger small">Controleer het e-mailadres voor je naar de volgende stap gaat. Er staat misschien een fout in.</div>
           </div>
           <div class="grid__12 grid--bp-med__4">
             <div class="checkbox exclude-email-group">
-              <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-change="prc.emailChanged()"
+              <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-change="prc.emailChanged(contactDataForm)"
                  ng-model="prc.excludeEmail"> Geen e-mail</label>
             </div>
           </div>
@@ -43,6 +45,6 @@
 <div class="modal-footer">
   <a class="btn btn-link pull-left" ng-click="prc.cancelRegistration()">Annuleren</a>
   <a class="btn btn-default modal-prev" ui-sref="counter.main.register.form.personalData" role="button">Vorige</a>
-  <input type="button" class="btn btn-default modal-next" ng-click="prc.submitContactDataForm(contactDataForm)" value="Volgende">
+  <input type="button" class="btn btn-default modal-next" ng-click="prc.submitContactDataForm(contactDataForm)" value="Volgende" ng-disabled="contactDataForm.$invalid">
 </div>
 </form>

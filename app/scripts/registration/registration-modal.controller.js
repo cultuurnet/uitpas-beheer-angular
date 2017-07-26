@@ -26,7 +26,8 @@ function RegistrationModalController (
   $q,
   eIDService,
   isJavaFXBrowser,
-  activeCounter
+  activeCounter,
+  dataValidation
 ) {
   /*jshint validthis: true */
   var controller = this;
@@ -55,6 +56,9 @@ function RegistrationModalController (
   controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
   controller.activeCounter = activeCounter;
+
+  // Indicates if the current email address has already been validated
+  controller.emailValidated = false;
 
   controller.showFieldError = function (form, field) {
     var hasErrors = false;
@@ -138,13 +142,56 @@ function RegistrationModalController (
       .startSubmit(contactDataForm)
       .then(function () {
         if (contactDataForm.$valid) {
-          controller.updateFurthestStep(3);
-          $state.go('counter.main.register.form.price');
-          controller.formSubmitBusy = false;
+          // Email already validated, go to the price form
+          if (controller.emailValidated) {
+            controller.goToPriceForm();
+          } else {
+            // Validate email against the real-time email validation service
+            dataValidation.validateEmail(contactDataForm.email.$viewValue).then(function(validationResult) {
+              switch (validationResult.grade) {
+                case 'A+':
+                case 'A':
+                case 'B':
+                  // Email grade is fine, continue to the next step
+                  controller.goToPriceForm();
+                  break;
+                case 'D':
+                  // Email has a bad grade, show the warning
+                  // and set the flag that the address has already been validated
+                  controller.emailValidated = true;
+                  break;
+                default:
+                  // Stop and show error, block continue
+                  contactDataForm.email.$setValidity('failedValidation', false);
+                  contactDataForm.email.$error.failedValidation = true;
+                  break;
+              }
+
+              controller.formSubmitBusy = false;
+            }, function(reason) {
+              if (reason.status === 400) {
+                // 400 response means the email parameter was not present
+                // or the email address was malformed
+                contactDataForm.email.$setValidity('failedValidation', false);
+                contactDataForm.email.$error.failedValidation = true;
+              } else {
+                // Server error -> continue to next step
+                controller.goToPriceForm();
+              }
+
+              controller.formSubmitBusy = false;
+            });
+          }
         } else {
           controller.formSubmitBusy = false;
         }
       });
+  };
+
+  controller.goToPriceForm = function() {
+      controller.updateFurthestStep(3);
+      $state.go('counter.main.register.form.price');
+      controller.formSubmitBusy = false;
   };
 
   controller.submitPriceForm = function(priceDataForm) {
@@ -224,9 +271,16 @@ function RegistrationModalController (
     }
   };
 
-  controller.emailChanged = function () {
+  controller.emailChanged = function (contactDataForm) {
     controller.clearAsyncError('EMAIL_ALREADY_USED');
     controller.clearAsyncError('EMAIL_ADDRESS_INVALID');
+
+    // Reset the email validation
+    contactDataForm.email.$setValidity('failedValidation', true);
+    contactDataForm.email.$error.failedValidation = false;
+
+    // Reset the email validation flag
+    controller.emailValidated = false;
   };
 
   controller.postalCodeChanged = function () {
