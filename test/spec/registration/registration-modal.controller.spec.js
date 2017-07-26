@@ -170,7 +170,7 @@ describe('Controller: RegistrationModalController', function () {
 
     var testPass = {
       passholder: {
-        data: "test",
+        data: 'test',
         isRegisteredInCardSystem: function() {
           return true;
         }
