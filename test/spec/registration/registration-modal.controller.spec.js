@@ -6,7 +6,7 @@ describe('Controller: RegistrationModalController', function () {
   beforeEach(module('uitpasbeheerAppViews'));
 
   var controller, Pass, unregisteredPass, $state, Passholder, passholderService, $scope, $controller, modalInstance,
-      counterService, $q, RegistrationAPIError, $rootScope, eIDService, Counter, activeCounter;
+      counterService, $q, RegistrationAPIError, $rootScope, eIDService, Counter, activeCounter, dataValidationService;
 
   var unregisteredPassData = {
     'uitPas': {
@@ -190,8 +190,23 @@ describe('Controller: RegistrationModalController', function () {
   it('should submit the contact data form', function () {
     var formStub= {
       $valid: true,
-      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+      '$setSubmitted': jasmine.createSpy('$setSubmitted'),
+      email: {
+        $invalid: false,
+        $error: {
+          inUse: false
+        },
+        $setValidity: function() {
+          this.$invalid = true;
+          this.$error.inUse = true;
+        },
+        $viewValue: ''
+      }
     };
+
+    var deferredPass = $q.defer();
+    var validationPromise = deferredPass.promise;
+    spyOn(dataValidationService, 'validateEmail').and.returnValue(validationPromise);
 
     controller.submitContactDataForm(formStub);
     $scope.$digest();
@@ -388,10 +403,24 @@ describe('Controller: RegistrationModalController', function () {
   it('should reset the right async error when a relevant field changes', function () {
     spyOn(controller, 'clearAsyncError');
 
-    controller.emailChanged();
+    var formStub= {
+      $valid: true,
+      email: {
+        $invalid: false,
+        $error: {
+          inUse: false
+        },
+        $setValidity: function() {
+          this.$invalid = true;
+          this.$error.inUse = true;
+        },
+        $viewValue: ''
+      }
+    };
+
+    controller.emailChanged(formStub);
     expect(controller.clearAsyncError.calls.first().args[0]).toEqual('EMAIL_ALREADY_USED');
     expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('EMAIL_ADDRESS_INVALID');
-
 
     controller.postalCodeChanged();
     expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('PARSE_INVALID_POSTAL_CODE');
