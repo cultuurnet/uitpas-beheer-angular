@@ -41,7 +41,7 @@ function dataValidationService($q, $window, $http, appConfig, $cacheFactory) {
         deferredValidation.resolve(response.data);
       };
 
-      var rejectValidation = function () {
+      var rejectValidation = function (response) {
         var error = {
           status: response.status,
           message: response.data.message
