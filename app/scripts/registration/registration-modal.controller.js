@@ -142,8 +142,8 @@ function RegistrationModalController (
       .startSubmit(contactDataForm)
       .then(function () {
         if (contactDataForm.$valid) {
-          // Email already validated, go to the price form
-          if (controller.emailValidated) {
+          // Email already validated or not required, go to the price form
+          if (controller.emailValidated || controller.excludeEmail) {
             controller.goToPriceForm();
           } else {
             // Validate email against the real-time email validation service
@@ -274,6 +274,11 @@ function RegistrationModalController (
   controller.emailChanged = function (contactDataForm) {
     controller.clearAsyncError('EMAIL_ALREADY_USED');
     controller.clearAsyncError('EMAIL_ADDRESS_INVALID');
+
+    // Empty the email field if it's excluded
+    if (controller.excludeEmail) {
+      controller.passholder.contact.email = '';
+    }
 
     // Reset the email validation
     contactDataForm.email.$setValidity('failedValidation', true);
