@@ -188,7 +188,7 @@
   </div><!-- end modal-body -->
   <div class="modal-footer">
     <a class="btn btn-link pull-left" ng-click="prc.cancelRegistration()">Annuleren</a>
-    <input type="button" class="btn btn-default modal-next" ng-disabled="prc.formSubmitBusy"
+    <input type="button" class="btn btn-default modal-next" ng-disabled="prc.formSubmitBusy || prc.personalDataForm.$invalid"
             ng-click="prc.submitPersonalDataForm()" value="Volgende">
   </div>
 </form>

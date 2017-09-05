@@ -6,7 +6,7 @@ describe('Controller: RegistrationModalController', function () {
   beforeEach(module('uitpasbeheerAppViews'));
 
   var controller, Pass, unregisteredPass, $state, Passholder, passholderService, $scope, $controller, modalInstance,
-      counterService, $q, RegistrationAPIError, $rootScope, eIDService, Counter, activeCounter;
+      counterService, $q, RegistrationAPIError, $rootScope, eIDService, Counter, activeCounter, dataValidationService;
 
   var unregisteredPassData = {
     'uitPas': {
@@ -72,6 +72,7 @@ describe('Controller: RegistrationModalController', function () {
     };
 
     eIDService = jasmine.createSpyObj('eIDService', ['getDataFromEID']);
+    dataValidationService = $injector.get('dataValidation');
 
     controller = $controller('RegistrationModalController', {
       pass: unregisteredPass,
@@ -86,7 +87,8 @@ describe('Controller: RegistrationModalController', function () {
       $q: $q,
       eIDService: eIDService,
       isJavaFXBrowser: true,
-      activeCounter: activeCounter
+      activeCounter: activeCounter,
+      dataValidation: dataValidationService
     });
 
     spyOn(controller, 'getStepNumber').and.callThrough();
@@ -190,13 +192,98 @@ describe('Controller: RegistrationModalController', function () {
   it('should submit the contact data form', function () {
     var formStub= {
       $valid: true,
-      '$setSubmitted': jasmine.createSpy('$setSubmitted')
+      '$setSubmitted': jasmine.createSpy('$setSubmitted'),
+      email: {
+        $invalid: false,
+        $error: {
+          inUse: false
+        },
+        $setValidity: function() {
+          this.$invalid = true;
+          this.$error.inUse = true;
+        },
+        $viewValue: ''
+      }
     };
 
+    var validationDeferred = $q.defer();
+    var validationPromise = validationDeferred.promise;
+    spyOn(dataValidationService, 'validateEmail').and.returnValue(validationPromise);
+
+    var validationResult = {
+      grade: 'A'
+    };
     controller.submitContactDataForm(formStub);
+    validationDeferred.resolve(validationResult);
+
     $scope.$digest();
 
     expect($state.go).toHaveBeenCalledWith('counter.main.register.form.price');
+    expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
+  it('should block submitting the contact data form on email validation error', function () {
+    var formStub = {
+      $valid: true,
+      '$setSubmitted': jasmine.createSpy('$setSubmitted'),
+      email: {
+        $invalid: false,
+        $error: {
+          inUse: false
+        },
+        '$setValidity': jasmine.createSpy('$setValidity'),
+        $viewValue: ''
+      }
+    };
+
+    var validationDeferred = $q.defer();
+    var validationPromise = validationDeferred.promise;
+    spyOn(dataValidationService, 'validateEmail').and.returnValue(validationPromise);
+
+    var validationResult = {
+      grade: 'F'
+    };
+    controller.submitContactDataForm(formStub);
+    validationDeferred.resolve(validationResult);
+
+    $scope.$digest();
+    expect(formStub.email.$setValidity).toHaveBeenCalledWith('failedValidation', false);
+    expect(formStub.email.$error.failedValidation).toBeTruthy();
+    expect(controller.formSubmitBusy).toBeFalsy();
+  });
+
+  it('should show an email warning for grade D', function () {
+
+    expect(controller.emailValidated).toBeFalsy();
+
+    var formStub = {
+      $valid: true,
+     '$setSubmitted': jasmine.createSpy('$setSubmitted'),
+      email: {
+        $invalid: false,
+        $error: {
+          inUse: false
+        },
+        $setValidity: function() {
+          this.$invalid = true;
+          this.$error.inUse = true;
+        },
+        $viewValue: ''
+      }
+    };
+
+    var validationDeferred = $q.defer();
+    var validationPromise = validationDeferred.promise;
+    spyOn(dataValidationService, 'validateEmail').and.returnValue(validationPromise);
+
+    var validationResult = {
+        grade: 'D'
+    };
+    controller.submitContactDataForm(formStub);
+    validationDeferred.resolve(validationResult);
+
+    $scope.$digest();
+    expect(controller.emailValidated).toBeTruthy();
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 
@@ -388,10 +475,24 @@ describe('Controller: RegistrationModalController', function () {
   it('should reset the right async error when a relevant field changes', function () {
     spyOn(controller, 'clearAsyncError');
 
-    controller.emailChanged();
+    var formStub= {
+      $valid: true,
+      email: {
+        $invalid: false,
+        $error: {
+          inUse: false
+        },
+        $setValidity: function() {
+          this.$invalid = true;
+          this.$error.inUse = true;
+        },
+        $viewValue: ''
+      }
+    };
+
+    controller.emailChanged(formStub);
     expect(controller.clearAsyncError.calls.first().args[0]).toEqual('EMAIL_ALREADY_USED');
     expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('EMAIL_ADDRESS_INVALID');
-
 
     controller.postalCodeChanged();
     expect(controller.clearAsyncError.calls.mostRecent().args[0]).toEqual('PARSE_INVALID_POSTAL_CODE');
