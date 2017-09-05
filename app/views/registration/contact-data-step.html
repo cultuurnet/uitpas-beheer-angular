@@ -24,12 +24,12 @@
              ng-required="!prc.excludeEmail" ng-change="prc.emailChanged(contactDataForm)" ubr-ignore-field="prc.excludeEmail"
              ng-disabled="prc.excludeEmail" ng-pattern ='/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i'>
             <div ng-if="prc.showFieldError(contactDataForm, 'email')" class="text-danger small">
-              <div ng-if="contactDataForm.email.$error.pattern || contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
-              <div ng-if="contactDataForm.email.$error.inUse">Het e-mailadres is reeds in gebruik.</div>
-              <div ng-if="contactDataForm.email.$error.required">Een geldig e-mailadres is verplicht.</div>
-              <div ng-if="contactDataForm.email.$error.failedValidation">Dit e-mailadres is ongeldig. Geef een geldig e-mailadres op om verder te gaan.</div>
+              <div ng-show="contactDataForm.email.$error.pattern || contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
+              <div ng-show="contactDataForm.email.$error.inUse">Het e-mailadres is reeds in gebruik.</div>
+              <div ng-show="contactDataForm.email.$error.required">Een geldig e-mailadres is verplicht.</div>
+              <div ng-show="contactDataForm.email.$error.failedValidation">Dit e-mailadres is ongeldig. Geef een geldig e-mailadres op om verder te gaan.</div>
             </div>
-            <div ng-if="prc.emailValidated" class="text-danger small">Controleer het e-mailadres voor je naar de volgende stap gaat. Er staat misschien een fout in.</div>
+            <div ng-show="prc.emailValidated" class="text-danger small">Controleer het e-mailadres voor je naar de volgende stap gaat. Er staat misschien een fout in.</div>
           </div>
           <div class="grid__12 grid--bp-med__4">
             <div class="checkbox exclude-email-group">
