@@ -38,6 +38,18 @@
     {
       "name": "Zuidwest",
       "email": "uitpas@zuidwest.be"
+    },
+    {
+      "name": "Westhoek",
+      "email": "info@uitinwesthoek.be"
+    },
+     {
+      "name": "Meetjesland",
+      "email": "uitpasmeetjesland@comeet.be"
+    },
+     {
+      "name": "Lier",
+      "email": "uitpas@lier.be"
     }
   ],
   "gaTagManager": {
