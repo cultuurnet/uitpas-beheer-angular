@@ -20,12 +20,20 @@
       "email": "uitpas@leuven.be"
     },
     {
+      "name": "Lier",
+      "email": "uitpas@lier.be"
+    },
+    {
       "name": "Mechelen",
       "email": "uitpas@mechelen.be"
     },
     {
       "name": "Maasmechelen",
       "email": "uitpas@maasmechelen.be"
+    },
+    {
+      "name": "Meetjesland",
+      "email": "uitpasmeetjesland@comeet.be"
     },
     {
       "name": "Oostende",
@@ -42,14 +50,6 @@
     {
       "name": "Westhoek",
       "email": "info@uitinwesthoek.be"
-    },
-     {
-      "name": "Meetjesland",
-      "email": "uitpasmeetjesland@comeet.be"
-    },
-     {
-      "name": "Lier",
-      "email": "uitpas@lier.be"
     }
   ],
   "gaTagManager": {
