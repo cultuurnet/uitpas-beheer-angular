@@ -59,6 +59,8 @@ function RegistrationModalController (
 
   // Indicates if the current email address has already been validated
   controller.emailValidated = false;
+  // Keep track of the (email) validation status (for spinner and "next" button).
+  $scope.validating = false;
 
   controller.showFieldError = function (form, field) {
     var hasErrors = false;
@@ -147,7 +149,9 @@ function RegistrationModalController (
             controller.goToPriceForm();
           } else {
             // Validate email against the real-time email validation service
+            $scope.validating = true;
             dataValidation.validateEmail(contactDataForm.email.$viewValue).then(function(validationResult) {
+              $scope.validating = false;
               switch (validationResult.grade) {
                 case 'A+':
                 case 'A':
