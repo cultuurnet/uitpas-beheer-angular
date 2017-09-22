@@ -45,7 +45,6 @@
 <div class="modal-footer">
   <a class="btn btn-link pull-left" ng-click="prc.cancelRegistration()">Annuleren</a>
   <a class="btn btn-default modal-prev" ui-sref="counter.main.register.form.personalData" role="button">Vorige</a>
-  <img src="images/spinner.gif" alt="loading..." ng-show="validating">
-  <input type="button" class="btn btn-default modal-next" ng-click="prc.submitContactDataForm(contactDataForm)" value="Volgende" ng-disabled="contactDataForm.$invalid || validating">
+  <button type="button" class="btn btn-default modal-next" ng-click="prc.submitContactDataForm(contactDataForm)" ng-disabled="contactDataForm.$invalid || validating"><i ng-show="validating" class="fa fa-spinner fa-spin"></i> Volgende</button>
 </div>
 </form>
