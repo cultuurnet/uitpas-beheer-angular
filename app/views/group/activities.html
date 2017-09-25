@@ -68,10 +68,10 @@
           </div>
           <!--status start-->
           <div class="content-holder" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
-            <div ng-show="ac.isActivityClaimed()">
+            <div ng-show="ac.isActivityClaimed(activity)">
               <i class="tariff-applied">Tarief toegekend<br><a class="history-modal small">Historiek</a></i>
             </div>
-            <div ng-show="!ac.isActivityClaimed()">
+            <div ng-show="!ac.isActivityClaimed(activity)" ng-switch="activity.getTariff()">
               <i class="free-event" ng-switch-when="free">Gratis</i>
               <i class="tariff-applied" ng-switch-when="maximumReached">Maximum toegelaten aantal tickets bereikt<!--<br><a class="history-modal small">Historiek</a>--></i>
               <div class="price-differentiation" ng-switch-when="priceDifferentiation">
