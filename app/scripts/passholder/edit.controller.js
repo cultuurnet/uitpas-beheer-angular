@@ -25,6 +25,9 @@ function PassholderEditController (passholder, identification, $uibModalInstance
   controller.isJavaFXBrowser = isJavaFXBrowser;
   controller.excludeEmail = passholder.contact.email ? false : true;
 
+  // Create a masked InszNumber to show in form instead of the existing value.
+  controller.maskedInsz = (passholder.inszNumber) ? passholder.inszNumber.substring(0, 2) + ' ... ' + passholder.inszNumber.substring(passholder.inszNumber.length - 2) : '';
+
   controller.submitForm = function(editForm) {
     if (!controller.formSubmitBusy) {
       controller.formSubmitBusy = true;
