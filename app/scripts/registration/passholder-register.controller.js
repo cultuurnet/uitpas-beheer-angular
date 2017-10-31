@@ -24,6 +24,7 @@ function PassholderRegisterController (pass, $state, activeCounter, moment, coun
   .then(
     function (schools) {
       controller.schools = schools;
+      controller.school = schools[0];
       controller.schoolsLoaded = true;
     }
   );
