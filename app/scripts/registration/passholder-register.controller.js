@@ -12,11 +12,21 @@ angular
   .controller('PassholderRegisterController', PassholderRegisterController);
 
 /* @ngInject */
-function PassholderRegisterController (pass, $state, activeCounter, moment) {
+function PassholderRegisterController (pass, $state, activeCounter, moment, counterService) {
   /*jshint validthis: true */
   var controller = this;
-
   controller.pass = pass;
+
+  // Load schools for dropdown.
+  controller.schools = [];
+  controller.schoolsLoaded = false;
+  counterService.getSchools()
+  .then(
+    function (schools) {
+      controller.schools = schools;
+      controller.schoolsLoaded = true;
+    }
+  );
 
   controller.isCounterEligible = function () {
     // Check if the card system is allowed to register at the active counter.
