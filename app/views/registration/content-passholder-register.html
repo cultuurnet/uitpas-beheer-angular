@@ -39,11 +39,11 @@
       </div>
       <div class="checkbox">
         <label for="is-student-check">
-          <input type="checkbox" class="is-student-check" id="is-student-check" name="is-student" ng-model="prc.kansenstatuut.isStudent">
+          <input type="checkbox" class="is-student-check" id="is-student-check" name="is-student" ng-model="prc.isStudent">
           Pashouder is leerling
         </label>
       </div>
-      <div class="form-group school" ng-show="prc.kansenstatuut.isStudent">
+      <div class="form-group school" ng-show="prc.isStudent">
           <div ng-if="!prc.schoolsLoaded" class="alert alert-info text-center">
             <p>De lijst met scholen wordt opgehaald.
               <span class="spinner spinner-xsmall spinner-inline">

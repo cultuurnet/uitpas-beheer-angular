@@ -32,6 +32,7 @@ function RegistrationModalController (
   /*jshint validthis: true */
   var controller = this;
   var kansenstatuutInfo = $stateParams.kansenstatuut;
+  var schoolInfo = $stateParams.school;
 
   controller.pass = pass;
   controller.existingPass = undefined;
@@ -264,7 +265,7 @@ function RegistrationModalController (
 
     controller.formSubmitBusy = true;
     passholderService
-      .register(pass, passholderData, controller.voucherNumber, kansenstatuutInfo)
+      .register(pass, passholderData, controller.voucherNumber, kansenstatuutInfo, schoolInfo)
       .then(showRegisteredPassholder, controller.handleAsyncError)
       .finally(controller.unlockForm);
   };

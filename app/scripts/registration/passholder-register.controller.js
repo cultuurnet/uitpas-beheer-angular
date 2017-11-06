@@ -17,6 +17,7 @@ function PassholderRegisterController (pass, $state, activeCounter, moment, coun
   var controller = this;
   controller.pass = pass;
 
+  controller.isStudent = false;
   // Load schools for dropdown.
   controller.schools = [];
   controller.schoolsLoaded = false;
@@ -59,6 +60,10 @@ function PassholderRegisterController (pass, $state, activeCounter, moment, coun
 
     if (pass.isKansenstatuut()) {
       registrationParameters.kansenstatuut = controller.kansenstatuut;
+    }
+
+    if (controller.isStudent) {
+      registrationParameters.school = controller.school;
     }
 
     $state.go('counter.main.register.form.personalData', registrationParameters);
