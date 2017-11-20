@@ -21,7 +21,8 @@
             <label class="control-label" for="insz-number">
               Rijksregisternummer
             </label>
-            <input type="text" class="form-control" id="insz-number" ng-disabled="pec.disableInszNumber" name="inszNumber" ng-model="pec.passholder.inszNumber">
+            <input ng-if="pec.disableInszNumber" type="text" class="form-control" id="insz-number-hidden" disabled name="inszNumberHidden" value="{{pec.maskedInsz}}">
+            <input ng-hide="pec.disableInszNumber" type="text" class="form-control" id="insz-number" ng-disabled="pec.disableInszNumber" name="inszNumber" ng-model="pec.passholder.inszNumber">
             <div ng-if="(passholderEdit.$submitted || passholderEdit.inszNumber.$touched || passholderEdit.inszNumber.$dirty) && passholderEdit.inszNumber.$invalid" class="text-danger small">
               <div ng-if="passholderEdit.inszNumber.$error.gender">Dit rijksregisternummer is niet geldig voor het opgegeven geslacht.</div>
               <div ng-if="passholderEdit.inszNumber.$error.dateOfBirth">Dit rijksregisternummer is niet geldig voor de opgegeven geboortedatum.</div>
