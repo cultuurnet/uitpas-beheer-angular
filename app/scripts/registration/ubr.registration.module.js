@@ -109,7 +109,8 @@ angular
         },
         params: {
           'pass': null,
-          'kansenstatuut': null
+          'kansenstatuut': null,
+          'school': null
         },
         stepNumber: 1
       })

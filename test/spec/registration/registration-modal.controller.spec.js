@@ -297,7 +297,7 @@ describe('Controller: RegistrationModalController', function () {
     controller.excludeEmail = true;
     controller.submitRegistration();
 
-    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined);
+    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined, undefined);
   });
 
   it('should include the email address when not marked as excluded', function () {
@@ -310,7 +310,7 @@ describe('Controller: RegistrationModalController', function () {
     controller.excludeEmail = false;
     controller.submitRegistration();
 
-    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined);
+    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined, undefined);
   });
 
   it('should not submit the contact data form when there are errors', function () {
