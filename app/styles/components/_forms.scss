@@ -139,3 +139,25 @@ input[type=text].input-small {
 .input-group-btn  .btn {
   height: 37px;
 }
+
+// Chosen
+.chosen-container {
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+.chosen-container-single .chosen-single {
+  height: 35px;
+  line-height: 35px;
+  background: none;
+  border: 1px solid #cccccc;
+  border-radius: 0;
+}
+
+.chosen-container-single .chosen-single div b {
+  margin-top: 4px;
+}
+
+.chosen-container-single .chosen-drop {
+  border-radius: 0;
+}
