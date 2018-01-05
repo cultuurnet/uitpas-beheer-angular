@@ -2,7 +2,10 @@
   "name": "uitpasbeheer",
   "version": "0.0.0",
   "license": "Apache-2.0",
-  "dependencies": {},
+  "dependencies": {
+    "handlebars": "^4.0.11",
+    "uglify-js": "^3.2.0"
+  },
   "repository": {},
   "devDependencies": {
     "autoprefixer-core": "^5.2.0",
