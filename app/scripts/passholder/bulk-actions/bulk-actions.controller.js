@@ -23,7 +23,7 @@ function BulkActionsController (bulkSelection, passholders, action, $uibModalIns
     kansenstatuutEndDate: moment().endOf('year').toDate()
   };
   controller.passholders = passholders;
-  if(action == 'address' || action == 'kansenstatuut') {
+  if(action === 'address' || action === 'kansenstatuut' || action === 'block') {
     controller.passholders = bulkSelection.getPassholderNumbers();
   }
 

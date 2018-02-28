@@ -189,6 +189,10 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
         controller.bulk.submitBusy = false;
         $state.go('counter.main.advancedSearch.bulkKansenstatuut', { bulkSelection: controller.bulk.selection, passholders: null, action: 'kansenstatuut' });
         break;
+      case 'block':
+        controller.bulk.submitBusy = false;
+        $state.go('counter.main.advancedSearch.bulkBlock', { bulkSelection: controller.bulk.selection, passholders: null, action: 'block' });
+        break;
     }
   };
 
