@@ -13,7 +13,7 @@ angular
 
 /* @ngInject */
 function ResultsViewerController (advancedSearchService, $rootScope, $scope, $state, SearchParameters, UiTPASRouter,
-                                  BulkSelection, PassholderSearchResults, bulkActionsService, activeCounter) {
+                                  BulkSelection, PassholderSearchResults, activeCounter) {
   function getSearchParametersFromState() {
     var params = new SearchParameters();
     params.fromParams($state.params);
@@ -178,9 +178,6 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
         }
         $state.go('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
         break;
-      case 'export':
-        controller.doBulkExport();
-        break;
       case 'address':
         controller.bulk.submitBusy = false;
         $state.go('counter.main.advancedSearch.bulkAddress', { bulkSelection: controller.bulk.selection, passholders: null, action: 'address' });
@@ -190,17 +187,6 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
         $state.go('counter.main.advancedSearch.bulkKansenstatuut', { bulkSelection: controller.bulk.selection, passholders: null, action: 'kansenstatuut' });
         break;
     }
-  };
-
-  /**
-   * Request an export and report to the user.
-   */
-  controller.doBulkExport = function () {
-    controller.bulk.export.requestingExport = true;
-
-    bulkActionsService.exportPassholders(controller.bulk.selection);
-    controller.bulk.export.requestingExport = false;
-    controller.bulk.submitBusy = false;
   };
 
   /**
