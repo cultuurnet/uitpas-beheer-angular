@@ -2,7 +2,7 @@
 
 describe('Controller: Results Viewer', function () {
 
-  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter, bulkActionsService,
+  var $controller, controller, $scope, $rootScope, advancedSearchService, $state, UiTPASRouter,
     $q, BulkSelection, Counter, activeCounter;
 
   var activeCounterJson = {
@@ -33,13 +33,6 @@ describe('Controller: Results Viewer', function () {
         return UiTPASRouter;
       }
     });
-
-    bulkActionsService = jasmine.createSpyObj('bulkActionsService', ['exportPassholders']);
-    $provide.provider('bulkActionsService', {
-      $get: function () {
-        return bulkActionsService;
-      }
-    });
   }));
 
   beforeEach(inject(function (_$controller_, _$rootScope_, _$q_, $injector) {
@@ -66,7 +59,6 @@ describe('Controller: Results Viewer', function () {
       $state: $state,
       advancedSearchService: advancedSearchService,
       UiTPASRouter: UiTPASRouter,
-      bulkActionsService: bulkActionsService,
       activeCounter: activeCounter
     });
   }
@@ -212,14 +204,6 @@ describe('Controller: Results Viewer', function () {
     expect(controller.bulk.selection.addUitpasNumberToSelection).toHaveBeenCalledWith(pass.number);
   });
 
-  it('can start a bulk action of type export and delegate the work', function () {
-    controller.bulk.action = 'export';
-    spyOn(controller, 'doBulkExport');
-    controller.doBulkAction();
-
-    expect(controller.doBulkExport).toHaveBeenCalled();
-  });
-
   it('can start a bulk action of type address and delegate the work', function () {
     var bulkSelection = new BulkSelection(controller.results, controller.searchParameters);
     controller.bulk.action = 'address';
@@ -265,14 +249,5 @@ describe('Controller: Results Viewer', function () {
     controller.doBulkAction();
 
     expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
-  });
-
-  it('can request a bulk export and report success to the user', function () {
-    controller.bulk.selection.uitpasNumberSelection = ['0123456789012'];
-
-    controller.doBulkExport();
-
-    expect(bulkActionsService.exportPassholders).toHaveBeenCalled();
-    expect(controller.bulk.export.requestingExport).toBeFalsy();
   });
 });
