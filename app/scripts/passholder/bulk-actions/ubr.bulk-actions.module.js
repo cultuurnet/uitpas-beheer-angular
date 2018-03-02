@@ -107,6 +107,51 @@ angular
             });
         }
       })
+      .state('counter.main.advancedSearch.bulkBlock', {
+        params: {
+          bulkSelection: null,
+          action: null
+        },
+        resolve: {
+          bulkSelection: ['$stateParams', function($stateParams) {
+            return $stateParams.bulkSelection;
+          }],
+          action: ['$stateParams', function($stateParams) {
+            return $stateParams.action;
+          }],
+          passholders: function ($stateParams) {
+            return $stateParams.bulkSelection.getPassholderNumbers();
+          }
+        },
+        /* @ngInject */
+        onEnter: function(bulkSelection, passholders, action, $state, $uibModal) {
+          $uibModal
+              .open({
+                animation: true,
+                templateUrl: 'views/passholder/bulk-actions/modal-bulk-block.html',
+                size: 'sm',
+                resolve: {
+                  bulkSelection: function() {
+                    return bulkSelection;
+                  },
+                  action: function() {
+                    return action;
+                  },
+                  passholders: function () {
+                    return passholders;
+                  }
+                },
+                controller: 'BulkActionsController',
+                controllerAs: 'bac'
+              })
+              .result
+              .catch(function (message) {
+                if (message !== 'bulkResultsClosed') {
+                  $state.go('^');
+                }
+              });
+        }
+      })
       .state('counter.main.advancedSearch.showBulkResults', {
         params: {
           passholders: null,

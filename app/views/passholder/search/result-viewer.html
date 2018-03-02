@@ -49,6 +49,7 @@
               <span ng-show="rvc.bulk.selection.selectAll"><ng-pluralize count="rvc.bulk.selection.searchResults.totalItems" when="{'one': '{} geselecteerde pashouder', 'other': '{} geselecteerde pashouders'}"></ng-pluralize></span>
               <select class="form-control" ng-model="rvc.bulk.action">
                 <option value="address">Adres wijzigen</option>
+                <option value="block">Blokkeren</option>
                 <option ng-show="rvc.counterHasKansenstatuutPermission" value="kansenstatuut">Kansenstatuut verlengen</option>
                 <option value="points">Punt sparen of tarief registreren</option>
               </select>

@@ -64,6 +64,11 @@ function ShowBulkResultsController(
     return activityService.claimTariff(passholder, activity, tariff, ticketCount);
   };
 
+  controller.passholderBlock = function(passholder) {
+    passholder.isChecked = true;
+    return passholderService.blockPass(passholder.passNumber);
+  };
+
   controller.getTotalAmount = function() {
     return controller.totalAmount;
   };
@@ -273,6 +278,12 @@ function ShowBulkResultsController(
           passholder.beingProcessed = true;
           controller.passholderClaimTariff(passholder, activity, tariff, ticketCount)
             .then(callbackSuccess, callbackFail);
+          break;
+        case 'block':
+          passholder.beingProcessed = true;
+          controller.passholderBlock(passholder)
+              .then(callbackSuccess, callbackFail);
+          break;
       }
       return deferred.promise;
     };
