@@ -85,6 +85,9 @@ function counterFactory() {
     },
     isAllowedToLeaveInszNumberEmpty: function (cardSystemId) {
       return this.isAuthorisedRegistrationCounter(cardSystemId);
+    },
+    getFirstCardSystem: function () {
+      return this.cardSystems[Object.keys(this.cardSystems)[0]];
     }
   };
 

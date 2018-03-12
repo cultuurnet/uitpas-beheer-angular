@@ -115,7 +115,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       if (activeCounter.cardSystems && activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]]) {
         angular.forEach(controller.passholders, function(passholder) {
           if(keepGoing) {
-            kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id);
+            kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.getFirstCardSystem().id);
             if(kansenstatuut !== null) {
               if (kansenstatuut.status !== 'EXPIRED') {
                 controller.passholder = passholder;

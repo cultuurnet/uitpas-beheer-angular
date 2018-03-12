@@ -218,8 +218,7 @@ function ShowBulkResultsController(
     var passholdersWithKansenStatuut = Array();
 
     angular.forEach(controller.passholders, function(passholder, key) {
-
-      var kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id);
+      var kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.getFirstCardSystem().id);
 
       if (kansenstatuut) {
         passholder.kansenstatuut = kansenstatuut;
