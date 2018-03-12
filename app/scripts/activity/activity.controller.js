@@ -112,7 +112,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       var kansenstatuut;
       var passholderNoKansenstatuut = [];
 
-      if (activeCounter.cardSystems && activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]]) {
+      if (activeCounter.cardSystems && activeCounter.getFirstCardSystem()) {
         angular.forEach(controller.passholders, function(passholder) {
           if(keepGoing) {
             kansenstatuut = passholder.getKansenstatuutByCardSystemID(activeCounter.getFirstCardSystem().id);
@@ -134,7 +134,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
           var keepGoing2 = true;
           angular.forEach(passholderNoKansenstatuut, function(passholder) {
             if(keepGoing2) {
-              if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id) === 'ACTIVE') {
+              if(passholder.getUitpasStatusInCardSystemID(activeCounter.getFirstCardSystem().id) === 'ACTIVE') {
                 controller.passholder = passholder;
                 keepGoing2 = false;
               }
@@ -147,7 +147,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
           var keepGoing3 = true;
           angular.forEach(controller.passholders, function(passholder) {
             if(keepGoing3) {
-              if(passholder.getUitpasStatusInCardSystemID(activeCounter.cardSystems[Object.keys(activeCounter.cardSystems)[0]].id) === 'ACTIVE') {
+              if(passholder.getUitpasStatusInCardSystemID(activeCounter.getFirstCardSystem().id) === 'ACTIVE') {
                 controller.passholder = passholder;
                 keepGoing3 = false;
               }
