@@ -249,7 +249,10 @@ describe('Controller: ActivityController', function () {
       }
     },
     'permissions': [],
-    'groups': ['Checkin and Ticket balies']
+    'groups': ['Checkin and Ticket balies'],
+    'getFirstCardSystem': function () {
+      return this.cardSystems[1];
+    }
   };
 
   beforeEach(inject(function ($injector) {
