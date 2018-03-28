@@ -74,9 +74,19 @@ function ShowBulkResultsController(
   };
 
   controller.updateOK = function (passholder) {
-    if (action == 'tariffs') {
-      controller.totalAmount = controller.totalAmount + tariff.price;
+    var defaultSuccessMessage = 'OK';
+
+    // Set message and do extra logic, depending on bulk action.
+    switch (action) {
+      case 'tariffs':
+        controller.totalAmount = controller.totalAmount + tariff.price;
+        passholder.successMessage = 'Tarief registreren gelukt';
+        break;
+      default:
+        passholder.successMessage = defaultSuccessMessage;
+        break;
     }
+
     return function() {
       passholder.updated = true;
       passholder.beingProcessed = false;
