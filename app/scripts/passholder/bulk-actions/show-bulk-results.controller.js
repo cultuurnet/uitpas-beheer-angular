@@ -78,9 +78,21 @@ function ShowBulkResultsController(
 
     // Set message and do extra logic, depending on bulk action.
     switch (action) {
+      case 'address':
+        passholder.successMessage = 'Adreswijziging gelukt';
+        break;
+      case 'kansenstatuut':
+        passholder.successMessage = 'Verlenging kansenstatuut gelukt';
+        break;
+      case 'points':
+        passholder.successMessage = 'Punten sparen gelukt';
+        break;
       case 'tariffs':
         controller.totalAmount = controller.totalAmount + tariff.price;
         passholder.successMessage = 'Tarief registreren gelukt';
+        break;
+      case 'block':
+        passholder.successMessage = 'Blokkeren gelukt';
         break;
       default:
         passholder.successMessage = defaultSuccessMessage;
