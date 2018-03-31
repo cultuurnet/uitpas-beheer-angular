@@ -100,7 +100,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
     var searchParameters = getSearchParameters();
 
     // Add specific sorting for past date ranges.
-    if (controller.dateRange.value == 'past') {
+    if (controller.dateRange.value === 'past') {
       searchParameters.sort = 'permanent desc,availableto desc';
     }
 
