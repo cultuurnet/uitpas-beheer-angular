@@ -13,17 +13,20 @@
             <a href ng-click="ac.updateDateRange(ac.dateRanges.TODAY)">Vandaag</a>
           </li>
           <li role="menuitem">
-            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_7_DAYS)">Volgende 7 dagen</a>
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_7_DAYS)">{{ac.dateRanges.NEXT_7_DAYS.label}}</a>
           </li>
           <li role="menuitem">
-            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_30_DAYS)">Volgende 30 dagen</a>
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_30_DAYS)">{{ac.dateRanges.NEXT_30_DAYS.label}}</a>
           </li>
           <li role="menuitem">
-            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_12_MONTHS)">Volgende 12 maanden</a>
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_12_MONTHS)">{{ac.dateRanges.NEXT_12_MONTHS.label}}</a>
           </li>
           <li class="divider"></li>
           <li role="menuitem">
-            <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">Afgelopen activiteiten</a>
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">{{ac.dateRanges.PAST.label}}</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.PICK_DATE)">{{ac.dateRanges.PICK_DATE.label}}</a>
           </li>
         </ul>
       </div>

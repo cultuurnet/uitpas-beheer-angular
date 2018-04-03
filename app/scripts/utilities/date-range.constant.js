@@ -35,7 +35,11 @@ angular
       value: 'next_12_months'
     },
     'PAST': {
-      label: 'Afgelopen activiteiten ',
+      label: 'Afgelopen activiteiten',
       value: 'past'
+    },
+    'PICK_DATE': {
+      label: 'Kies datum',
+      value: 'pick_date'
     }
   });

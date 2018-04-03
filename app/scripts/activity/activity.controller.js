@@ -49,6 +49,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
    * @param {DateRange} dateRange
    */
   controller.updateDateRange = function (dateRange) {
+    console.log(dateRange);
     if (!angular.equals(controller.dateRange, dateRange)) {
       controller.dateRange = dateRange;
       controller.searchParametersChanged();
