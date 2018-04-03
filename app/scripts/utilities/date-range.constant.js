@@ -38,8 +38,8 @@ angular
       label: 'Afgelopen activiteiten',
       value: 'past'
     },
-    'PICK_DATE': {
+    'CHOOSE_DATE': {
       label: 'Kies datum',
-      value: 'pick_date'
+      value: 'choose_date'
     }
   });

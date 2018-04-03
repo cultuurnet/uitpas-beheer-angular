@@ -1,8 +1,8 @@
 <section class="overview overview-activities">
   <h2 class="overview__title">Activiteiten</h2>
   <div class="grid overview__search">
-    <div class="grid__12 grid--bp-med__6">
-      <div class="btn-group" uib-dropdown ng-hide="ac.hideDateRange && !ac.activitiesLoading">
+    <div class="grid__12 grid--bp-med__7 grid">
+      <div class="btn-group grid__4" uib-dropdown ng-hide="ac.hideDateRange && !ac.activitiesLoading">
         <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
         <button type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="!!ac.activitiesLoading">
           <span class="caret"></span>
@@ -26,7 +26,7 @@
             <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">{{ac.dateRanges.PAST.label}}</a>
           </li>
           <li role="menuitem">
-            <a href ng-click="ac.updateDateRange(ac.dateRanges.PICK_DATE)">{{ac.dateRanges.PICK_DATE.label}}</a>
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.CHOOSE_DATE)">{{ac.dateRanges.CHOOSE_DATE.label}}</a>
           </li>
         </ul>
       </div>
@@ -35,8 +35,16 @@
                       when="{'one': '1 resultaat gevonden', 'other': '{} resultaten gevonden'}">
         </ng-pluralize> </strong> <a ng-click="ac.resetSearchQuery()">Annuleren</a>
       </div>
+      <div ng-hide="ac.dateRange !== ac.dateRanges.CHOOSE_DATE || ac.hideDateRange">
+        <div class="grid__4">
+          <ubr-datepicker ng-model="ac.chooseDateStart" ng-change="ac.searchParametersChanged()" ubr-label="Startdatum" ubr-id="" ubr-name="startDate"></ubr-datepicker>
+        </div>
+        <div class="grid__4">
+          <ubr-datepicker ng-model="ac.chooseDateEnd" ng-change="ac.searchParametersChanged()" ubr-label="Einddatum" ubr-id="" ubr-name="endDate"></ubr-datepicker>
+        </div>
+      </div>
     </div>
-    <div class="grid__12 grid--bp-med__6 text-right">
+    <div class="grid__12 grid--bp-med__5 text-right">
       <div class="search">
         <form ng-submit="ac.searchParametersChanged()">
             <input class="form-control" type="text" ng-model="ac.query" />

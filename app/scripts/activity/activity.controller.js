@@ -24,6 +24,8 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.currentClaimedActivities = [];
   controller.dateRanges = angular.copy(DateRange);
   controller.dateRange = controller.dateRanges.TODAY;
+  controller.chooseDateStart = null;
+  controller.chooseDateEnd = null;
   controller.totalActivities = 0;
   controller.activitiesLoading = 0;
   controller.hideDateRange = false;
@@ -49,10 +51,13 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
    * @param {DateRange} dateRange
    */
   controller.updateDateRange = function (dateRange) {
-    console.log(dateRange);
     if (!angular.equals(controller.dateRange, dateRange)) {
       controller.dateRange = dateRange;
-      controller.searchParametersChanged();
+
+      // Do not refresh search results when "choose date" option is selected.
+      if (!angular.equals(controller.dateRanges.CHOOSE_DATE, dateRange)) {
+        controller.searchParametersChanged();
+      }
     }
   };
 

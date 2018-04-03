@@ -110,11 +110,11 @@
     select {
       max-width: 200px;
     }
-    input[type=text] {
-      padding-right: 114px;
-    }
     .search {
       position: relative;
+      input[type=text] {
+        padding-right: 114px;
+      }
     }
     .btn-ghost-dark {
       width: 100px;
