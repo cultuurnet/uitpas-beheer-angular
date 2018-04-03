@@ -2,7 +2,7 @@
   <h2 class="overview__title">Activiteiten</h2>
   <div class="grid overview__search">
     <div class="grid__12 grid--bp-med__7 grid">
-      <div class="btn-group grid__4" uib-dropdown ng-hide="ac.hideDateRange && !ac.activitiesLoading">
+      <div class="btn-group" ng-class="ac.hideDateRange || ac.dateRange === ac.dateRanges.CHOOSE_DATE ? 'grid__4' : 'grid__12'" uib-dropdown ng-hide="ac.hideDateRange && !ac.activitiesLoading">
         <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
         <button type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="!!ac.activitiesLoading">
           <span class="caret"></span>
