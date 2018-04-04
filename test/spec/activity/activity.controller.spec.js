@@ -337,8 +337,9 @@ describe('Controller: ActivityController', function () {
       query: '',
       dateRange: DateRange.TODAY,
       page: 1,
-      limit: 5
-
+      limit: 5,
+      startDate: '',
+      endDate: ''
     };
     // reset the calls to not include the initial search
     activityService.search.calls.reset();
