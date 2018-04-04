@@ -250,4 +250,12 @@ describe('Controller: Results Viewer', function () {
 
     expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkPoints', params, { inherit: false });
   });
+
+  it('can start a bulk action of type block and delegate the work', function () {
+    var bulkSelection = new BulkSelection(controller.results, controller.searchParameters);
+    controller.bulk.action = 'block';
+    controller.doBulkAction();
+
+    expect($state.go).toHaveBeenCalledWith('counter.main.advancedSearch.bulkBlock', { bulkSelection: bulkSelection, passholders: null, action: 'block' });
+  });
 });
