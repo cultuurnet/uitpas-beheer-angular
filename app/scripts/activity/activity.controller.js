@@ -34,12 +34,19 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.passholders = passholders;
 
   function getSearchParameters () {
-    return {
+    var searchParameters = {
       query: controller.query,
       dateRange: controller.dateRange,
       page: controller.page,
       limit: controller.limit
     };
+
+    if (controller.dateRange === controller.dateRanges.CHOOSE_DATE) {
+      searchParameters.startDate = controller.chooseDateStart !== null ? controller.chooseDateStart.getTime() : '';
+      searchParameters.endDate = controller.chooseDateEnd !== null ? controller.chooseDateEnd.getTime() : '';
+    }
+
+    return searchParameters;
   }
 
   // Keep track of the last used search parameters to check if the active page should be reset.
