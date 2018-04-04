@@ -38,10 +38,10 @@
       </div>
       <div ng-hide="ac.dateRange !== ac.dateRanges.CHOOSE_DATE || ac.hideDateRange">
         <div class="grid__4">
-          <ubr-datepicker ng-model="ac.chooseDateStart" ng-change="ac.searchParametersChanged()" ubr-label="Startdatum" ubr-name="startDate" ubr-past="true"></ubr-datepicker>
+          <ubr-datepicker ng-model="ac.chooseDateStart" ng-change="ac.searchParametersChanged()" ubr-label="Startdatum" ubr-name="startDate" ubr-full-range="true"></ubr-datepicker>
         </div>
         <div class="grid__4">
-          <ubr-datepicker ng-model="ac.chooseDateEnd" ng-change="ac.searchParametersChanged()" ubr-label="Einddatum" ubr-name="endDate" ubr-past="true"></ubr-datepicker>
+          <ubr-datepicker ng-model="ac.chooseDateEnd" ng-change="ac.searchParametersChanged()" ubr-label="Einddatum" ubr-name="endDate" ubr-full-range="true"></ubr-datepicker>
         </div>
       </div>
     </div>
