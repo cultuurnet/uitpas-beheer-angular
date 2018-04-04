@@ -149,7 +149,15 @@
       }
     }
   }
-  // Passholder aadvantages
+  // Passholder activities
+  &-activities {
+    .overview__search {
+      .btn-group .control-label {
+        width: 100%;
+      }
+    }
+  }
+  // Passholder advantages
   &-advantages {
     .actions {
       padding-bottom: $rh-xsm;
