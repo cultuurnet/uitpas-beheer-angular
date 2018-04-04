@@ -38,12 +38,25 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       query: controller.query,
       dateRange: controller.dateRange,
       page: controller.page,
-      limit: controller.limit
+      limit: controller.limit,
+      startDate: '',
+      endDate: ''
     };
 
     if (controller.dateRange === controller.dateRanges.CHOOSE_DATE) {
-      searchParameters.startDate = controller.chooseDateStart !== null ? controller.chooseDateStart.getTime() : '';
-      searchParameters.endDate = controller.chooseDateEnd !== null ? controller.chooseDateEnd.getTime() : '';
+      if (controller.chooseDateStart !== null) {
+        searchParameters.startDate = controller.chooseDateStart.setHours(0);
+        searchParameters.startDate = controller.chooseDateStart.setMinutes(0);
+        searchParameters.startDate = controller.chooseDateStart.setSeconds(0);
+        searchParameters.startDate = Math.floor(controller.chooseDateStart.getTime() / 1000);
+      }
+
+      if (controller.chooseDateEnd !== null) {
+        searchParameters.endDate = controller.chooseDateEnd.setHours(23);
+        searchParameters.endDate = controller.chooseDateEnd.setMinutes(59);
+        searchParameters.endDate = controller.chooseDateEnd.setSeconds(59);
+        searchParameters.endDate = Math.floor(controller.chooseDateEnd.getTime() / 1000);
+      }
     }
 
     return searchParameters;
