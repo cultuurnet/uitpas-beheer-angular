@@ -24,6 +24,8 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.currentClaimedActivities = [];
   controller.dateRanges = angular.copy(DateRange);
   controller.dateRange = controller.dateRanges.TODAY;
+  controller.chooseDateStart = null;
+  controller.chooseDateEnd = null;
   controller.totalActivities = 0;
   controller.activitiesLoading = 0;
   controller.hideDateRange = false;
@@ -32,12 +34,26 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.passholders = passholders;
 
   function getSearchParameters () {
-    return {
+    var searchParameters = {
       query: controller.query,
       dateRange: controller.dateRange,
       page: controller.page,
-      limit: controller.limit
+      limit: controller.limit,
+      startDate: '',
+      endDate: ''
     };
+
+    if (controller.dateRange === controller.dateRanges.CHOOSE_DATE) {
+      if (controller.chooseDateStart !== null) {
+        searchParameters.startDate = Math.floor(controller.chooseDateStart.getTime() / 1000);
+      }
+
+      if (controller.chooseDateEnd !== null) {
+        searchParameters.endDate = Math.floor(controller.chooseDateEnd.getTime() / 1000);
+      }
+    }
+
+    return searchParameters;
   }
 
   // Keep track of the last used search parameters to check if the active page should be reset.
@@ -51,7 +67,11 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.updateDateRange = function (dateRange) {
     if (!angular.equals(controller.dateRange, dateRange)) {
       controller.dateRange = dateRange;
-      controller.searchParametersChanged();
+
+      // Do not refresh search results when "choose date" option is selected.
+      if (!angular.equals(controller.dateRanges.CHOOSE_DATE, dateRange)) {
+        controller.searchParametersChanged();
+      }
     }
   };
 

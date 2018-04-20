@@ -20,7 +20,8 @@ function ubrDatepicker() {
       name: '@ubrName',
       label: '@ubrLabel',
       id: '@ubrId',
-      past: '@?ubrPast'
+      past: '@?ubrPast',
+      fullRange: '@?ubrFullRange'
     },
     link: function postLink(scope, element, attrs, ngModel) {
 
@@ -71,9 +72,11 @@ function ubrDatepicker() {
         }
       };
 
-      if (scope.past) {
+      if (scope.past && !scope.fullRange) {
         datetimePickerConfig.maxDate = new Date();
-      } else {
+      }
+
+      if (!scope.fullRange) {
         datetimePickerConfig.minDate = new Date();
       }
 
