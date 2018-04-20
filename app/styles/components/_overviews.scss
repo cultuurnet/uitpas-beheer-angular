@@ -156,7 +156,17 @@
       .btn-group .control-label {
         width: 100%;
       }
+
+      .control-label {
+        margin-bottom: 5px;
+      }
+
+      .search {
+        margin-top: 24px;
+      }
+
     }
+
   }
   // Passholder advantages
   &-advantages {
