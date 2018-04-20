@@ -20,6 +20,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.query = '';
   controller.page = 1;
   controller.limit = 5;
+  controller.sort = '';
   controller.activities = [];
   controller.currentClaimedActivities = [];
   controller.dateRanges = angular.copy(DateRange);
@@ -39,6 +40,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       dateRange: controller.dateRange,
       page: controller.page,
       limit: controller.limit,
+      sort: controller.sort,
       startDate: '',
       endDate: ''
     };
@@ -116,6 +118,11 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
 
   controller.search = function () {
     var searchParameters = getSearchParameters();
+
+    // Add specific sorting for past date ranges.
+    if (controller.dateRange.value === 'past') {
+      searchParameters.sort = 'permanent desc,availableto desc';
+    }
 
     var showSearchResults = function (pagedActivities) {
       controller.activities = pagedActivities.activities;

@@ -338,6 +338,7 @@ describe('Controller: ActivityController', function () {
       dateRange: DateRange.TODAY,
       page: 1,
       limit: 5,
+      sort: '',
       startDate: '',
       endDate: ''
     };
