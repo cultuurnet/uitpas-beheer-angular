@@ -130,6 +130,10 @@ function ShowBulkResultsController(
         errorCode = errorResponse.code;
         defaultMessage = 'Tarief registreren niet gelukt.'
       }
+      else if (action == 'block') {
+        errorCode = errorResponse;
+        defaultMessage = 'Kaart blokkeren niet gelukt.'
+      }
 
       switch (errorCode) {
         case 'ACTION_NOT_ALLOWED':
@@ -178,6 +182,12 @@ function ShowBulkResultsController(
           else if (action == 'tariffs') {
             passholder.asyncError = {
               message: 'Tarief registreren mislukt, kaart geblokkeerd.',
+              type: 'danger'
+            };
+          }
+          else if (action == 'block') {
+            passholder.asyncError = {
+              message: 'Kaart is reeds geblokkeerd.',
               type: 'danger'
             };
           }
