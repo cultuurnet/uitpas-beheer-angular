@@ -110,11 +110,12 @@
     select {
       max-width: 200px;
     }
-    input[type=text] {
-      padding-right: 114px;
-    }
     .search {
       position: relative;
+      margin-top: 19px;
+      input[type=text] {
+        padding-right: 114px;
+      }
     }
     .btn-ghost-dark {
       width: 100px;
@@ -149,7 +150,25 @@
       }
     }
   }
-  // Passholder aadvantages
+  // Passholder activities
+  &-activities {
+    .overview__search {
+      .btn-group .control-label {
+        width: 100%;
+      }
+
+      .control-label {
+        margin-bottom: 5px;
+      }
+
+      .search {
+        margin-top: 24px;
+      }
+
+    }
+
+  }
+  // Passholder advantages
   &-advantages {
     .actions {
       padding-bottom: $rh-xsm;

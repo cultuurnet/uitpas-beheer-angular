@@ -36,7 +36,9 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
       date_type: searchParameters.dateRange.value,
       page: searchParameters.page,
       limit: searchParameters.limit,
-      sort: searchParameters.sort
+      sort: searchParameters.sort,
+      startDate: searchParameters.startDate,
+      endDate: searchParameters.endDate
     };
 
     var searchRequest = $http.get(

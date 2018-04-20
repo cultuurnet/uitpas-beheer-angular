@@ -74,9 +74,31 @@ function ShowBulkResultsController(
   };
 
   controller.updateOK = function (passholder) {
-    if (action == 'tariffs') {
-      controller.totalAmount = controller.totalAmount + tariff.price;
+    var defaultSuccessMessage = 'OK';
+
+    // Set message and do extra logic, depending on bulk action.
+    switch (action) {
+      case 'address':
+        passholder.successMessage = 'Adreswijziging gelukt';
+        break;
+      case 'kansenstatuut':
+        passholder.successMessage = 'Verlenging kansenstatuut gelukt';
+        break;
+      case 'points':
+        passholder.successMessage = 'Punten sparen gelukt';
+        break;
+      case 'tariffs':
+        controller.totalAmount = controller.totalAmount + tariff.price;
+        passholder.successMessage = 'Tarief registreren gelukt';
+        break;
+      case 'block':
+        passholder.successMessage = 'Blokkeren gelukt';
+        break;
+      default:
+        passholder.successMessage = defaultSuccessMessage;
+        break;
     }
+
     return function() {
       passholder.updated = true;
       passholder.beingProcessed = false;
@@ -107,6 +129,10 @@ function ShowBulkResultsController(
       else if (action == 'tariffs') {
         errorCode = errorResponse.code;
         defaultMessage = 'Tarief registreren niet gelukt.'
+      }
+      else if (action == 'block') {
+        errorCode = errorResponse;
+        defaultMessage = 'Kaart blokkeren niet gelukt.'
       }
 
       switch (errorCode) {
@@ -156,6 +182,12 @@ function ShowBulkResultsController(
           else if (action == 'tariffs') {
             passholder.asyncError = {
               message: 'Tarief registreren mislukt, kaart geblokkeerd.',
+              type: 'danger'
+            };
+          }
+          else if (action == 'block') {
+            passholder.asyncError = {
+              message: 'Kaart is reeds geblokkeerd.',
               type: 'danger'
             };
           }

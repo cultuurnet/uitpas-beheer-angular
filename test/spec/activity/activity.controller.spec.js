@@ -339,6 +339,8 @@ describe('Controller: ActivityController', function () {
       page: 1,
       limit: 5,
       sort: '',
+      startDate: '',
+      endDate: ''
     };
     // reset the calls to not include the initial search
     activityService.search.calls.reset();

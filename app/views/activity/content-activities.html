@@ -1,8 +1,9 @@
 <section class="overview overview-activities">
   <h2 class="overview__title">Activiteiten</h2>
   <div class="grid overview__search">
-    <div class="grid__12 grid--bp-med__6">
-      <div class="btn-group" uib-dropdown ng-hide="ac.hideDateRange && !ac.activitiesLoading">
+    <div class="grid__12 grid--bp-med__6 grid">
+      <div class="btn-group" ng-class="ac.hideDateRange || ac.dateRange === ac.dateRanges.CHOOSE_DATE ? 'grid__4' : 'grid__12'" uib-dropdown ng-hide="ac.hideDateRange && !ac.activitiesLoading">
+        <label class="control-label">Datumbereik</label>
         <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
         <button type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="!!ac.activitiesLoading">
           <span class="caret"></span>
@@ -13,17 +14,20 @@
             <a href ng-click="ac.updateDateRange(ac.dateRanges.TODAY)">Vandaag</a>
           </li>
           <li role="menuitem">
-            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_7_DAYS)">Volgende 7 dagen</a>
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_7_DAYS)">{{ac.dateRanges.NEXT_7_DAYS.label}}</a>
           </li>
           <li role="menuitem">
-            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_30_DAYS)">Volgende 30 dagen</a>
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_30_DAYS)">{{ac.dateRanges.NEXT_30_DAYS.label}}</a>
           </li>
           <li role="menuitem">
-            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_12_MONTHS)">Volgende 12 maanden</a>
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_12_MONTHS)">{{ac.dateRanges.NEXT_12_MONTHS.label}}</a>
           </li>
           <li class="divider"></li>
           <li role="menuitem">
-            <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">Afgelopen activiteiten</a>
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">{{ac.dateRanges.PAST.label}}</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.CHOOSE_DATE)">{{ac.dateRanges.CHOOSE_DATE.label}}</a>
           </li>
         </ul>
       </div>
@@ -31,6 +35,14 @@
         <strong><ng-pluralize count="ac.totalActivities"
                       when="{'one': '1 resultaat gevonden', 'other': '{} resultaten gevonden'}">
         </ng-pluralize> </strong> <a ng-click="ac.resetSearchQuery()">Annuleren</a>
+      </div>
+      <div ng-hide="ac.dateRange !== ac.dateRanges.CHOOSE_DATE || ac.hideDateRange">
+        <div class="grid__4">
+          <ubr-datepicker ng-model="ac.chooseDateStart" ng-change="ac.searchParametersChanged()" ubr-label="Startdatum" ubr-name="startDate" ubr-full-range="true"></ubr-datepicker>
+        </div>
+        <div class="grid__4">
+          <ubr-datepicker ng-model="ac.chooseDateEnd" ng-change="ac.searchParametersChanged()" ubr-label="Einddatum" ubr-name="endDate" ubr-full-range="true"></ubr-datepicker>
+        </div>
       </div>
     </div>
     <div class="grid__12 grid--bp-med__6 text-right">
