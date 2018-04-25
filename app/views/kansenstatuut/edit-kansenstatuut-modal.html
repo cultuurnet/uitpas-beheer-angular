@@ -16,7 +16,7 @@
           <div class="grid__12 grid--bp-lrg__6 field-group"
                ng-class="{ 'has-error': (editForm.$submitted || editForm.endDate.$dirty) && editForm.endDate.$invalid }">
             <ubr-datepicker ng-model="ekmc.kansenstatuut.endDate" ubr-label="Geldig tot" ubr-id="geldig-tot"
-                            ubr-name="endDate"></ubr-datepicker>
+                            ubr-name="endDate" ubr-full-range="true"></ubr-datepicker>
             <div ng-if="(editForm.$submitted || editForm.endDate.$touched || editForm.endDate.$dirty) && editForm.endDate.$invalid" class="text-danger small">
               De opgegeven eind-datum is ongeldig.
             </div>
