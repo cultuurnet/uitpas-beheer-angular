@@ -1,50 +1,56 @@
-<form name="contactDataForm" ng-submit="prc.submitContactDataForm(contactDataForm)" novalidate ng-disabled="prc.formSubmitBusy">
+<form name="optInDataForm" ng-submit="prc.submitOptInDataForm(optInDataForm)" novalidate ng-disabled="prc.formSubmitBusy">
 <div class="modal-body">
   <div class="container-fluid">
     <fieldset ng-disabled="prc.formSubmitBusy">
-      <div class="field-group">
-        <label class="control-label" for="telephone">
-          Telefoon
-        </label>
-        <input type="text" class="form-control" id="telephone" name="telephone" ng-model="prc.passholder.contact.telephoneNumber">
-      </div>
-      <div class="field-group">
-        <label class="control-label" for="gsm">
-          GSM
-        </label>
-        <input type="text" class="form-control" id="gsm" name="gsm" ng-model="prc.passholder.contact.mobileNumber">
-      </div>
-      <div class="field-group" >
-        <div class="grid">
-          <div class="grid__12 grid--bp-med__8" ng-class="{ 'has-error': prc.showFieldError(contactDataForm, 'email') }">
-            <label class="control-label" for="email">
-              E-mailadres
-            </label>
-            <input type="email" class="form-control" id="email" name="email" ng-model="prc.passholder.contact.email"
-             ng-required="!prc.excludeEmail" ng-change="prc.emailChanged(contactDataForm)" ubr-ignore-field="prc.excludeEmail"
-             ng-disabled="prc.excludeEmail" ng-pattern ='/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i'>
-            <div ng-if="prc.showFieldError(contactDataForm, 'email')" class="text-danger small">
-              <div ng-show="contactDataForm.email.$error.pattern || contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
-              <div ng-show="contactDataForm.email.$error.inUse">Het e-mailadres is reeds in gebruik.</div>
-              <div ng-show="contactDataForm.email.$error.required">Een geldig e-mailadres is verplicht.</div>
-              <div ng-show="contactDataForm.email.$error.failedValidation">Dit e-mailadres is ongeldig. Geef een geldig e-mailadres op om verder te gaan.</div>
-            </div>
-            <div ng-show="prc.emailValidated" class="text-danger small">Controleer het e-mailadres voor je naar de volgende stap gaat. Er staat misschien een fout in.</div>
-          </div>
-          <div class="grid__12 grid--bp-med__4">
-            <div class="checkbox exclude-email-group">
-              <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-change="prc.emailChanged(contactDataForm)"
-                 ng-model="prc.excludeEmail"> Geen e-mail</label>
+      <div class="grid">
+          <div class="grid__4 grid--bp-med__4">
+            <div class="field-group">
+              <label class="control-label">
+                Privacy-en gebruiksvoorwaarden
+              </label>
+              <div class="checkbox">
+                <label for="legal-terms-digital"><input name="LegalTermsDigital" id="legal-terms-digital" type="checkbox" ng-model="prc.legalTermsDigital" ng-disabled="prc.passholder.contact.email || prc.excludeEmail" ng-checked="prc.passholder.contact.email"> Informatie wordt bezorgd via e-mail</label>
+              </div>
+              <div class="checkbox">
+                <label for="legal-terms-paper"><input name="LegalTermsPaper" id="legal-terms-paper" type="checkbox" ng-model="prc.legalTermsPaper"> Folder over voorwaarden is overhandigd</label>
+              </div>
             </div>
           </div>
-        </div>
+          <div class="grid__4 grid--bp-med__4">
+              <div class="field-group">
+                <label class="control-label">
+                  Communicatie voorkeuren
+                </label>
+                <p class="field-group-description">Pashouder wil informatie ontvangen via:</p>
+                <div class="checkbox">
+                  <label for="optin-email"><input name="optInEmail" id="optin-email" type="checkbox" ng-model="prc.optinEmail" ng-disabled="prc.underAge || prc.excludeEmail"> E-mail</label>
+                </div>
+                <div class="checkbox">
+                  <label for="optin-sms"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="prc.passholder.optIn.sms" ng-disabled="prc.underAge || !prc.passholder.contact.mobileNumber"> SMS</label>
+                </div>
+                <div class="checkbox">
+                  <label for="optin-post"><input name="optInPost" id="optin-post" type="checkbox" ng-model="prc.passholder.optIn.post"> Post</label>
+                </div>
+            </div>
+          </div>
+          <div class="grid__4 grid--bp-med__4">
+            <div class="field-group">
+              <label class="control-label">
+                Pashouder is minderjarig
+              </label>
+              <div class="checkbox">
+                <label for="parental-consent"><input name="parentalConsent" id="parental-consent" type="checkbox" ng-model="prc.parentalConsent" ng-required="prc.underAge" ng-disabled="!prc.underAge"> Expliciete toestemming van ouder of voogd</label>
+                <div ng-show="optInDataForm.parentalConsent.$error.required">Dit veld is verplicht.</div>
+              </div>
+            </div>
+          </div>
       </div>
     </fieldset>
   </div>
 </div><!-- end modal-body -->
 <div class="modal-footer">
   <a class="btn btn-link pull-left" ng-click="prc.cancelRegistration()">Annuleren</a>
-  <a class="btn btn-default modal-prev" ui-sref="counter.main.register.form.personalData" role="button">Vorige</a>
-  <button type="button" class="btn btn-default modal-next" ng-click="prc.submitContactDataForm(contactDataForm)" ng-disabled="contactDataForm.$invalid || validating"><i ng-show="validating" class="fa fa-spinner fa-spin"></i> Volgende</button>
+  <a class="btn btn-default modal-prev" ui-sref="counter.main.register.form.contactData" role="button">Vorige</a>
+  <button type="button" class="btn btn-default modal-next" ng-click="prc.submitOptInDataForm(optInDataForm)" ng-disabled="contactDataForm.$invalid || validating"><i ng-show="validating" class="fa fa-spinner fa-spin"></i> Volgende</button>
 </div>
 </form>

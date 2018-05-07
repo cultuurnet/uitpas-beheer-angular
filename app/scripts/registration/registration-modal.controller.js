@@ -58,6 +58,12 @@ function RegistrationModalController (
   controller.isJavaFXBrowser = isJavaFXBrowser;
   controller.activeCounter = activeCounter;
 
+  controller.legalTermsDigital = false;
+  controller.legalTermsPaper = false;
+  controller.optinEmail = false;
+  controller.underAge = false;
+  controller.parentalConsent = false;
+
   // Indicates if the current email address has already been validated
   controller.emailValidated = false;
   // Keep track of the (email) validation status (for spinner and "next" button).

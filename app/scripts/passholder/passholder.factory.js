@@ -99,6 +99,13 @@ function passholderFactory(moment, day) {
       telephoneNumber: '',
       mobileNumber: ''
     };
+    this.optIn = {
+      serviceMails: false,
+      milestoneMails: false,
+      infoMails: false,
+      sms: false,
+      post: false
+    };
     this.points = 0;
     this.kansenStatuten = [];
     this.uitPassen = [];
