@@ -209,7 +209,7 @@ function RegistrationModalController (
 
     function validateOptInData() {
       if (optInDataForm.$valid) {
-        if (!controller.legalTermsDigital && controller.legalTermsPaper) {
+        if (!controller.legalTermsPaper && !controller.legalTermsDigital) {
           controller.noTermsSelected = true;
           controller.formSubmitBusy = false;
         } else {
