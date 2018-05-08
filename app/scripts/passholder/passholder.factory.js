@@ -221,6 +221,13 @@ function passholderFactory(moment, day) {
     },
     getPictureSrc: function () {
       return 'data:image/jpeg;base64, ' + this.picture;
+    },
+    isUnderAge: function () {
+      var birthDate = this.birth.date;
+      var curDate = new Date();
+      var dateDiff = curDate-birthDate;
+      var age = Math.floor(dateDiff/31536000000);
+      return age < 16 ? true : false;
     }
   };
 
