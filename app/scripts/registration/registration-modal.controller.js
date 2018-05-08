@@ -151,6 +151,9 @@ function RegistrationModalController (
       .startSubmit(contactDataForm)
       .then(function () {
         if (contactDataForm.$valid) {
+          
+          controller.legalTermsDigital = controller.passholder.contact.email ? true : false;
+
           // Email already validated or not required, go to the opt-in form
           if (controller.emailValidated || controller.excludeEmail) {
             controller.goToOptInForm();

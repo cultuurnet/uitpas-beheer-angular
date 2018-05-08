@@ -247,7 +247,7 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
   $rootScope.$on('advantageExchanged', service.updatePoints);
 
-  service.register = function(pass, passholder, voucherNumber, kansenstatuutInfo, schoolInfo){
+  service.register = function(pass, passholder, voucherNumber, kansenstatuutInfo, schoolInfo, termsInfo){
     var registration = {
           passHolder: passholder.serialize()
         },
@@ -275,6 +275,12 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
 
     if (schoolInfo) {
       registration.schoolConsumerKey = schoolInfo.id;
+    }
+
+    if (termsInfo) {
+      registration.legalTermsPaper = termsInfo.termsPaper;
+      registration.legalTermsDigital = termsInfo.termsDigital;
+      registration.parentalConsent = termsInfo.parentalConsent;
     }
 
     var requestOptions = {
