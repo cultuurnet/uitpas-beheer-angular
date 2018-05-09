@@ -100,6 +100,16 @@ function PassholderEditController (passholder, identification, $uibModalInstance
     $uibModalInstance.dismiss();
   };
 
+  /**
+   * Uncheck mail opt-in's when "exclude email" is checked.
+   */
+  controller.excludeMailToggle = function() {
+    if (controller.excludeEmail) {
+      controller.passholder.optInPreferences.serviceMails = false;
+      controller.passholder.optInPreferences.milestoneMails = false;
+      controller.passholder.optInPreferences.infoMails = false;
+    }
+  }
 
   var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
     angular.merge(controller.eIDData, eIDData);

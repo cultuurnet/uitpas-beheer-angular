@@ -1,7 +1,7 @@
 <form name="passholderEdit" ng-submit="pec.submitForm(passholderEdit)" novalidate ng-class="{'form-submiting': pec.formSubmitBusy}">
   <div class="modal-header">
     <button type="button" class="close" ng-click="pec.cancelModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">Contactinformatie aanpassen</h4>
+    <h4 class="modal-title">Contactinformatie en communicatievoorkeuren aanpassen</h4>
   </div>
   <div class="modal-body">
     <div class="container-fluid">
@@ -41,9 +41,30 @@
             </div>
             <div class="grid__12 grid--bp-med__4">
               <div class="checkbox exclude-email-group">
-                <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-model="pec.excludeEmail"> Geen e-mail</label>
+                <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-model="pec.excludeEmail" ng-model="pec.excludeMailToggle()"> Geen e-mail</label>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="control-label">
+            Communicatievoorkeuren
+          </label>
+          <p class="field-group-description">Pashouder wil informatie ontvangen via:</p>
+          <div class="checkbox">
+            <label for="optin-service-email"><input name="optInServiceEmail" id="optin-service-email" type="checkbox" ng-model="pec.passholder.optInPreferences.serviceMails" ng-disabled="pec.passholder.isUnderAge() || pec.excludeEmail"> Service mails</label>
+          </div>
+          <div class="checkbox">
+            <label for="optin-milestone-email"><input name="optInMilestoneEmail" id="optin-milestone-email" type="checkbox" ng-model="pec.passholder.optInPreferences.milestoneMails" ng-disabled="pec.passholder.isUnderAge() || pec.excludeEmail"> Milestone mails</label>
+          </div>
+          <div class="checkbox">
+            <label for="optin-info-email"><input name="optInInfoEmail" id="optin-info-email" type="checkbox" ng-model="pec.passholder.optInPreferences.infoMails" ng-disabled="pec.passholder.isUnderAge() || pec.excludeEmail"> Informatieve mails</label>
+          </div>
+          <div class="checkbox">
+            <label for="optin-sms"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="pec.passholder.optInPreferences.sms" ng-disabled="pec.passholder.isUnderAge() || !pec.passholder.contact.mobileNumber"> SMS</label>
+          </div>
+          <div class="checkbox">
+            <label for="optin-post"><input name="optInPost" id="optin-post" type="checkbox" ng-model="pec.passholder.optInPreferences.post"> Post</label>
           </div>
         </div>
       </fieldset>
