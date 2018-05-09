@@ -99,7 +99,7 @@ function passholderFactory(moment, day) {
       telephoneNumber: '',
       mobileNumber: ''
     };
-    this.optIn = {
+    this.optInPreferences = {
       serviceMails: false,
       milestoneMails: false,
       infoMails: false,
@@ -144,6 +144,15 @@ function passholderFactory(moment, day) {
       this.school = jsonPassholder.school || null;
       this.uitPassen = parseJsonUitPassen(jsonPassholder.uitpassen);
       this.cardSystems = (jsonPassholder.cardSystems ? jsonPassholder.cardSystems : []);
+      if (jsonPassholder.optInPreferences) {
+        this.optInPreferences = {
+          serviceMails: jsonPassholder.optInPreferences.optInServiceMails,
+          milestoneMails: jsonPassholder.optInPreferences.optInMilestoneMails,
+          infoMails: jsonPassholder.optInPreferences.optInInfoMails,
+          sms: jsonPassholder.optInPreferences.optInSms,
+          post: jsonPassholder.optInPreferences.optInPost,
+        };
+      }
     },
     getKansenstatuutByCardSystemID: function (cardSystemID) {
       var passholder = this,
