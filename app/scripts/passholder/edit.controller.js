@@ -109,7 +109,7 @@ function PassholderEditController (passholder, identification, $uibModalInstance
       controller.passholder.optInPreferences.milestoneMails = false;
       controller.passholder.optInPreferences.infoMails = false;
     }
-  }
+  };
 
   var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
     angular.merge(controller.eIDData, eIDData);

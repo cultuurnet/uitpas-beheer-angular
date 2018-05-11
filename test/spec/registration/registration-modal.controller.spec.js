@@ -218,7 +218,7 @@ describe('Controller: RegistrationModalController', function () {
 
     $scope.$digest();
 
-    expect($state.go).toHaveBeenCalledWith('counter.main.register.form.price');
+    expect($state.go).toHaveBeenCalledWith('counter.main.register.form.optIns');
     expect(controller.formSubmitBusy).toBeFalsy();
   });
 
@@ -297,7 +297,13 @@ describe('Controller: RegistrationModalController', function () {
     controller.excludeEmail = true;
     controller.submitRegistration();
 
-    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined, undefined);
+    var termsData = {
+      'termsDigital': false,
+      'termsPaper': false,
+      'parentalConsent': false
+    };
+
+    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined, undefined, termsData);
   });
 
   it('should include the email address when not marked as excluded', function () {
@@ -310,7 +316,13 @@ describe('Controller: RegistrationModalController', function () {
     controller.excludeEmail = false;
     controller.submitRegistration();
 
-    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined, undefined);
+    var termsData = {
+      'termsDigital': false,
+      'termsPaper': false,
+      'parentalConsent': false
+    };
+
+    expect(passholderService.register).toHaveBeenCalledWith(unregisteredPass, expectedPassholderData, '', undefined, undefined, termsData);
   });
 
   it('should not submit the contact data form when there are errors', function () {

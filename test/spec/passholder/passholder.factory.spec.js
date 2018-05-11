@@ -109,7 +109,14 @@ describe('Factory: Passholder', function () {
       school: null,
       uid: 'e1e2b335-e756-4e72-bb0f-3d163a583b35',
       uitPassen: [],
-      cardSystems: []
+      cardSystems: [],
+      optInPreferences: {
+        'serviceMails': false,
+        'milestoneMails': false,
+        'infoMails': false,
+        'sms': false,
+        'post': false
+      }
     };
 
     var passholder = new Passholder(jsonPassholder);
@@ -261,7 +268,14 @@ describe('Factory: Passholder', function () {
           name: 'UiTPAS Regio Gent',
           id: '2'
         }
-      ]
+      ],
+      optInPreferences: {
+        'serviceMails': false,
+        'milestoneMails': false,
+        'infoMails': false,
+        'sms': false,
+        'post': false
+      }
     };
 
     var passholder = new Passholder(jsonPassholder);
@@ -342,7 +356,14 @@ describe('Factory: Passholder', function () {
           name: 'UiTPAS Regio Gent',
           id: '2'
         }
-      ]
+      ],
+      optInPreferences: {
+        'serviceMails': false,
+        'milestoneMails': false,
+        'infoMails': false,
+        'sms': false,
+        'post': false
+      }
     };
     var passholder = new Passholder(getJsonPassholder());
 

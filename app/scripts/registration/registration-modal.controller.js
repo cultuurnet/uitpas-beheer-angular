@@ -310,7 +310,7 @@ function RegistrationModalController (
       termsDigital: controller.legalTermsDigital,
       termsPaper: controller.legalTermsPaper,
       parentalConsent: controller.parentalConsent,
-    }
+    };
 
     controller.formSubmitBusy = true;
     passholderService
