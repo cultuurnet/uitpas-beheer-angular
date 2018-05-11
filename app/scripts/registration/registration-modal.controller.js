@@ -51,6 +51,7 @@ function RegistrationModalController (
   controller.furthestStep = 0;
 
   controller.passholder = new Passholder();
+  controller.passholder.optIn = {};
   controller.isMemberOfCurrentBalie = false;
   controller.excludeEmail = false;
   controller.eIDData = {};
