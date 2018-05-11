@@ -123,6 +123,15 @@ angular
         },
         stepNumber: 2
       })
+      .state('counter.main.register.form.optIns', {
+        url: '/opt-ins',
+        views: {
+          'registrationStep@': {
+            templateUrl: 'views/registration/opt-ins-data-step.html'
+          }
+        },
+        stepNumber: 3
+      })
       .state('counter.main.register.form.price', {
         url: '/price',
         views: {
@@ -130,6 +139,6 @@ angular
             templateUrl: 'views/registration/price-data-step.html'
           }
         },
-        stepNumber: 3
+        stepNumber: 4
       });
   });

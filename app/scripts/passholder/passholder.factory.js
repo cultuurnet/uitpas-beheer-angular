@@ -99,6 +99,13 @@ function passholderFactory(moment, day) {
       telephoneNumber: '',
       mobileNumber: ''
     };
+    this.optInPreferences = {
+      serviceMails: false,
+      milestoneMails: false,
+      infoMails: false,
+      sms: false,
+      post: false
+    };
     this.points = 0;
     this.kansenStatuten = [];
     this.uitPassen = [];
@@ -137,6 +144,15 @@ function passholderFactory(moment, day) {
       this.school = jsonPassholder.school || null;
       this.uitPassen = parseJsonUitPassen(jsonPassholder.uitpassen);
       this.cardSystems = (jsonPassholder.cardSystems ? jsonPassholder.cardSystems : []);
+      if (jsonPassholder.optInPreferences) {
+        this.optInPreferences = {
+          serviceMails: jsonPassholder.optInPreferences.optInServiceMails,
+          milestoneMails: jsonPassholder.optInPreferences.optInMilestoneMails,
+          infoMails: jsonPassholder.optInPreferences.optInInfoMails,
+          sms: jsonPassholder.optInPreferences.optInSms,
+          post: jsonPassholder.optInPreferences.optInPost,
+        };
+      }
     },
     getKansenstatuutByCardSystemID: function (cardSystemID) {
       var passholder = this,
@@ -214,6 +230,13 @@ function passholderFactory(moment, day) {
     },
     getPictureSrc: function () {
       return 'data:image/jpeg;base64, ' + this.picture;
+    },
+    isUnderAge: function () {
+      var birthDate = this.birth.date;
+      var curDate = new Date();
+      var dateDiff = curDate-birthDate;
+      var age = Math.floor(dateDiff/31536000000);
+      return age < 16 ? true : false;
     }
   };
 

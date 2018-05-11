@@ -51,12 +51,19 @@ function RegistrationModalController (
   controller.furthestStep = 0;
 
   controller.passholder = new Passholder();
+  controller.passholder.optIn = {};
   controller.isMemberOfCurrentBalie = false;
   controller.excludeEmail = false;
   controller.eIDData = {};
   controller.eIDError = false;
   controller.isJavaFXBrowser = isJavaFXBrowser;
   controller.activeCounter = activeCounter;
+
+  controller.noTermsSelected = false;
+  controller.legalTermsDigital = false;
+  controller.legalTermsPaper = false;
+  controller.optInEmail = false;
+  controller.parentalConsent = false;
 
   // Indicates if the current email address has already been validated
   controller.emailValidated = false;
@@ -145,9 +152,12 @@ function RegistrationModalController (
       .startSubmit(contactDataForm)
       .then(function () {
         if (contactDataForm.$valid) {
-          // Email already validated or not required, go to the price form
+          
+          controller.legalTermsDigital = controller.passholder.contact.email ? true : false;
+
+          // Email already validated or not required, go to the opt-in form
           if (controller.emailValidated || controller.excludeEmail) {
-            controller.goToPriceForm();
+            controller.goToOptInForm();
           } else {
             // Validate email against the real-time email validation service
             $scope.validating = true;
@@ -158,7 +168,7 @@ function RegistrationModalController (
                 case 'A':
                 case 'B':
                   // Email grade is fine, continue to the next step
-                  controller.goToPriceForm();
+                  controller.goToOptInForm();
                   break;
                 case 'D':
                   // Email has a bad grade, show the warning
@@ -181,7 +191,7 @@ function RegistrationModalController (
                 contactDataForm.email.$error.failedValidation = true;
               } else {
                 // Server error -> continue to next step
-                controller.goToPriceForm();
+                controller.goToOptInForm();
               }
 
               controller.formSubmitBusy = false;
@@ -193,8 +203,41 @@ function RegistrationModalController (
       });
   };
 
+  controller.goToOptInForm = function() {
+    controller.updateFurthestStep(3);
+    $state.go('counter.main.register.form.optIns');
+    controller.formSubmitBusy = false;
+  };
+
+  controller.submitOptInDataForm = function(optInDataForm) {
+
+    function validateOptInData() {
+      if (optInDataForm.$valid) {
+        if (!controller.legalTermsPaper && !controller.legalTermsDigital) {
+          controller.noTermsSelected = true;
+          controller.formSubmitBusy = false;
+        } else {
+          // Convert the optInEmail field value to 3 separate opt-in email passholder properties.
+          if (controller.optInEmail) {
+            controller.passholder.optIn.serviceMails = true;
+            controller.passholder.optIn.milestoneMails = true;
+            controller.passholder.optIn.infoMails = true;
+          }
+
+          controller.goToPriceForm();
+        }
+      } else {
+        controller.formSubmitBusy = false;
+      }
+    }
+
+    controller
+      .startSubmit(optInDataForm)
+      .then(validateOptInData);
+  };
+
   controller.goToPriceForm = function() {
-      controller.updateFurthestStep(3);
+      controller.updateFurthestStep(4);
       $state.go('counter.main.register.form.price');
       controller.formSubmitBusy = false;
   };
@@ -263,9 +306,15 @@ function RegistrationModalController (
       passholderData.contact.email = '';
     }
 
+    var termsInfo = {
+      termsDigital: controller.legalTermsDigital,
+      termsPaper: controller.legalTermsPaper,
+      parentalConsent: controller.parentalConsent,
+    };
+
     controller.formSubmitBusy = true;
     passholderService
-      .register(pass, passholderData, controller.voucherNumber, kansenstatuutInfo, schoolInfo)
+      .register(pass, passholderData, controller.voucherNumber, kansenstatuutInfo, schoolInfo, termsInfo)
       .then(showRegisteredPassholder, controller.handleAsyncError)
       .finally(controller.unlockForm);
   };

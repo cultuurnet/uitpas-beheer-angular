@@ -2,7 +2,7 @@
   <button type="button"  ng-click="prc.cancelRegistration()" class="close" aria-label="Close">&times;</button>
   <h4 class="modal-title">Pashouder toevoegen: Stap <span ng-bind="prc.getStepNumber()"></span></h4>
 </div>
-<ul class="three steps step">
+<ul class="four steps step">
   <li ui-sref-active="active" class="step">
     <a ui-sref="counter.main.register.form.personalData">Persoonsgegevens</a>
   </li>
@@ -16,10 +16,18 @@
   </li>
   <li ui-sref-active="active" class="step" ng-switch="prc.getStepNumber() < 3">
     <span ng-switch-when="true">
+      Opt-ins en voorwaarden
+    </span>
+    <span ng-switch-default>
+      <a ui-sref="counter.main.register.form.optIns" ng-hide="prc.getStepNumber() < 3">Opt-ins en voorwaarden</a>
+    </span>
+  </li>
+  <li ui-sref-active="active" class="step" ng-switch="prc.getStepNumber() < 4">
+    <span ng-switch-when="true">
       Prijs
     </span>
     <span ng-switch-default>
-      <a ui-sref="counter.main.register.form.price" ng-hide="prc.getStepNumber() < 3">Prijs</a>
+      <a ui-sref="counter.main.register.form.price" ng-hide="prc.getStepNumber() < 4">Prijs</a>
     </span>
   </li>
 </ul>
