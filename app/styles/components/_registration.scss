@@ -17,3 +17,9 @@
 p.field-group-description {
   margin-bottom: 15px;
 }
+
+.registration-optin-data .optin-section {
+  @include breakpoint(map-get($breakpoints, med), 'max-width') {
+    margin-top: 0;
+  }
+}
