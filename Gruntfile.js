@@ -493,7 +493,7 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>',
           dest: '<%= yeoman.dist %>',
           src: [
-            '*.{ico,png,txt}',
+            '*.{ico,png,txt,disable,enable}',
             '.htaccess',
             '*.html',
             'views/**/*.html',
@@ -516,6 +516,12 @@ module.exports = function (grunt) {
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]
+      },
+      maintenance: {
+        expand: true,
+        cwd: '<%= yeoman.app %>/maintenance',
+        dest: '<%= yeoman.dist %>',
+        src: ['*']
       },
       styles: {
         expand: true,
@@ -657,7 +663,8 @@ module.exports = function (grunt) {
     'uglify',
     'filerev',
     'usemin',
-    'htmlmin'
+    'htmlmin',
+    'copy:maintenance'
   ]);
 
   grunt.registerTask('default', [

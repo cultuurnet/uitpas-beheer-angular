@@ -547,9 +547,6 @@ FileETag None
 # ------------------------------------------------------------------------------
 
 <IfModule mod_rewrite.c>
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.html [QSA,L]
-
     # Add maintenance page
     RewriteCond %{REMOTE_ADDR} !AAA.BBB.CCC.DDD
     RewriteCond %{QUERY_STRING} !(^|&)maintenance=true($|&)
@@ -559,4 +556,7 @@ FileETag None
     RewriteRule ^.*$ /maintenance.html [R=503,L]
     ErrorDocument 503 /maintenance.html
     # End of adding maintenance page
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.html [QSA,L]
 </IfModule>
