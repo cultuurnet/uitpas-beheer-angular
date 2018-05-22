@@ -31,7 +31,7 @@
               </label>
               <input type="email" class="form-control" id="email" name="email" ng-model="pec.passholder.contact.email"
                      ubr-ignore-field="pec.excludeEmail" ng-required="!pec.excludeEmail" ng-disabled="pec.excludeEmail"
-                     ng-change="pec.removeAsyncError(passholderEdit, 'email')">
+                     ng-change="pec.removeAsyncError(passholderEdit, 'email'); pec.mailChange()">
               <div ng-if="(passholderEdit.$submitted || passholderEdit.email.$touched) && passholderEdit.email.$invalid" class="text-danger small">
                 <div ng-if="passholderEdit.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
                 <div ng-if="passholderEdit.email.$error.inUse">Het email adres is reeds in gebruik.</div>
@@ -41,7 +41,7 @@
             </div>
             <div class="grid__12 grid--bp-med__4">
               <div class="checkbox exclude-email-group">
-                <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-model="pec.excludeEmail" ng-model="pec.excludeMailToggle()"> Geen e-mail</label>
+                <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-model="pec.excludeEmail" ng-change="pec.excludeMailToggle()"> Geen e-mail</label>
               </div>
             </div>
           </div>
@@ -52,16 +52,16 @@
           </label>
           <p class="field-group-description">Pashouder wil informatie ontvangen via:</p>
           <div class="checkbox">
-            <label for="optin-service-email"><input name="optInServiceEmail" id="optin-service-email" type="checkbox" ng-model="pec.passholder.optInPreferences.serviceMails" ng-disabled="pec.passholder.isUnderAge() || pec.excludeEmail"> Systeem mails</label>
+            <label for="optin-service-email" ng-class="{'disabled': pec.passholder.isUnderAge() || !pec.passholder.contact.email || pec.excludeEmail}"><input name="optInServiceEmail" id="optin-service-email" type="checkbox" ng-model="pec.passholder.optInPreferences.serviceMails" ng-disabled="pec.passholder.isUnderAge() || !pec.passholder.contact.email || pec.excludeEmail"> Systeem mails</label>
           </div>
           <div class="checkbox">
-            <label for="optin-milestone-email"><input name="optInMilestoneEmail" id="optin-milestone-email" type="checkbox" ng-model="pec.passholder.optInPreferences.milestoneMails" ng-disabled="pec.passholder.isUnderAge() || pec.excludeEmail"> Mails over je UiTPASgebruik</label>
+            <label for="optin-milestone-email" ng-class="{'disabled': pec.passholder.isUnderAge() || !pec.passholder.contact.email || pec.excludeEmail}"><input name="optInMilestoneEmail" id="optin-milestone-email" type="checkbox" ng-model="pec.passholder.optInPreferences.milestoneMails" ng-disabled="pec.passholder.isUnderAge() || !pec.passholder.contact.email || pec.excludeEmail"> Mails over je UiTPASgebruik</label>
           </div>
           <div class="checkbox">
-            <label for="optin-info-email"><input name="optInInfoEmail" id="optin-info-email" type="checkbox" ng-model="pec.passholder.optInPreferences.infoMails" ng-disabled="pec.passholder.isUnderAge() || pec.excludeEmail"> Informatieve mails</label>
+            <label for="optin-info-email" ng-class="{'disabled': pec.passholder.isUnderAge() || !pec.passholder.contact.email || pec.excludeEmail}"><input name="optInInfoEmail" id="optin-info-email" type="checkbox" ng-model="pec.passholder.optInPreferences.infoMails" ng-disabled="pec.passholder.isUnderAge() || !pec.passholder.contact.email || pec.excludeEmail"> Informatieve mails</label>
           </div>
           <div class="checkbox">
-            <label for="optin-sms"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="pec.passholder.optInPreferences.sms" ng-disabled="pec.passholder.isUnderAge() || !pec.passholder.contact.mobileNumber"> SMS</label>
+            <label for="optin-sms" ng-class="{'disabled': pec.passholder.isUnderAge() || !pec.passholder.contact.mobileNumber}"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="pec.passholder.optInPreferences.sms" ng-disabled="pec.passholder.isUnderAge() || !pec.passholder.contact.mobileNumber"> SMS</label>
           </div>
           <div class="checkbox">
             <label for="optin-post"><input name="optInPost" id="optin-post" type="checkbox" ng-model="pec.passholder.optInPreferences.post"> Post</label>
