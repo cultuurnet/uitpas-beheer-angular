@@ -1,8 +1,3 @@
-<div ng-if="prc.noTermsSelected" class="container--fluid">
-  <div class="alert alert-error">
-    <p>Gelieve minstens één optie te kiezen onder "Privacy-en gebruiksvoorwaarden".</p>
-  </div>
-</div>
 
 <form name="optInDataForm" class="registration-optin-data" ng-submit="prc.submitOptInDataForm(optInDataForm)" novalidate ng-disabled="prc.formSubmitBusy">
 <div class="modal-body">
@@ -15,11 +10,12 @@
                 Privacy-en gebruiksvoorwaarden
               </label>
               <div class="checkbox">
-                <label for="legal-terms-digital"><input name="LegalTermsDigital" id="legal-terms-digital" type="checkbox" ng-model="prc.legalTermsDigital" ng-disabled="prc.passholder.contact.email || prc.excludeEmail"> Informatie wordt bezorgd via e-mail</label>
+                <label for="legal-terms-digital" ng-class="{'disabled': prc.passholder.contact.email || prc.excludeEmail}"><input name="LegalTermsDigital" id="legal-terms-digital" type="checkbox" ng-model="prc.legalTermsDigital" ng-disabled="prc.passholder.contact.email || prc.excludeEmail"> Informatie wordt bezorgd via e-mail</label>
               </div>
               <div class="checkbox">
                 <label for="legal-terms-paper"><input name="LegalTermsPaper" id="legal-terms-paper" type="checkbox" ng-model="prc.legalTermsPaper"> Folder over voorwaarden is overhandigd</label>
               </div>
+              <div ng-show="prc.noTermsSelected" class="text-danger small">Gelieve minstens één optie te kiezen.</div>
             </div>
           </div>
           <div class="grid__12 grid--bp-med__4 optin-section">
@@ -29,10 +25,10 @@
                 </label>
                 <p class="field-group-description">Pashouder wil informatie ontvangen via:</p>
                 <div class="checkbox">
-                  <label for="optin-email"><input name="optInEmail" id="optin-email" type="checkbox" ng-model="prc.optInEmail" ng-disabled="prc.passholder.isUnderAge() || prc.excludeEmail"> E-mail</label>
+                  <label for="optin-email" ng-class="{'disabled': prc.passholder.isUnderAge() || prc.excludeEmail}"><input name="optInEmail" id="optin-email" type="checkbox" ng-model="prc.optInEmail" ng-disabled="prc.passholder.isUnderAge() || prc.excludeEmail"> E-mail</label>
                 </div>
                 <div class="checkbox">
-                  <label for="optin-sms"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="prc.passholder.optIn.sms" ng-disabled="prc.passholder.isUnderAge() || !prc.passholder.contact.mobileNumber"> SMS</label>
+                  <label for="optin-sms" ng-class="{'disabled': prc.passholder.isUnderAge() || !prc.passholder.contact.mobileNumber}"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="prc.passholder.optIn.sms" ng-disabled="prc.passholder.isUnderAge() || !prc.passholder.contact.mobileNumber"> SMS</label>
                 </div>
                 <div class="checkbox">
                   <label for="optin-post"><input name="optInPost" id="optin-post" type="checkbox" ng-model="prc.passholder.optIn.post"> Post</label>
@@ -45,9 +41,9 @@
                 Pashouder is minderjarig
               </label>
               <div class="checkbox">
-                <label for="parental-consent"><input name="parentalConsent" id="parental-consent" type="checkbox" ng-model="prc.parentalConsent" ng-required="prc.passholder.isUnderAge()" ng-disabled="!prc.passholder.isUnderAge()"> Expliciete toestemming van ouder of voogd</label>
+                <label for="parental-consent" ng-class="{'disabled': !prc.passholder.isUnderAge()}"><input name="parentalConsent" id="parental-consent" type="checkbox" ng-model="prc.parentalConsent" ng-required="prc.passholder.isUnderAge()" ng-disabled="!prc.passholder.isUnderAge()"> Expliciete toestemming van ouder of voogd</label>
                 <div ng-if="prc.showFieldError(optInDataForm, 'parentalConsent')" class="text-danger small">
-                  <div ng-show="optInDataForm.parentalConsent.$error.required">Dit veld is verplicht.</div>
+                  <div ng-show="optInDataForm.parentalConsent.$error.required">Toestemming ouder of voogd is verplicht.</div>
                 </div>
               </div>
             </div>

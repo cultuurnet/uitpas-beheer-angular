@@ -153,7 +153,13 @@ function RegistrationModalController (
       .then(function () {
         if (contactDataForm.$valid) {
           
+          // Set certain opt-in options according to info received in contact step.
           controller.legalTermsDigital = controller.passholder.contact.email ? true : false;
+          controller.passholder.optIn.sms = controller.passholder.contact.sms ? true : false;
+
+          if (!controller.passholder.contact.email) {
+            controller.optInEmail = false;
+          }
 
           // Email already validated or not required, go to the opt-in form
           if (controller.emailValidated || controller.excludeEmail) {
