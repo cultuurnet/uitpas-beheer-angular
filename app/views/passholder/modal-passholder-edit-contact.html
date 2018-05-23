@@ -21,7 +21,8 @@
           <label class="control-label" for="gsm">
             GSM
           </label>
-          <input type="text" class="form-control" id="gsm" name="gsm" ng-model="pec.passholder.contact.mobileNumber">
+          <input type="text" class="form-control" id="gsm" name="gsm" ng-model="pec.passholder.contact.mobileNumber"
+          ng-change="pec.mobileNumberChange()">
         </div>
         <div class="field-group">
           <div class="grid">
