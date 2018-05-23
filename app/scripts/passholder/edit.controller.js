@@ -123,6 +123,15 @@ function PassholderEditController (passholder, identification, $uibModalInstance
     }
   };
 
+  /**
+   * Uncheck sms opt-in when there is no mobile number.
+   */
+  controller.mobileNumberChange = function() {
+    if (!controller.passholder.contact.mobileNumber) {
+      controller.passholder.optInPreferences.sms = false;
+    }
+  };
+
   var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
     angular.merge(controller.eIDData, eIDData);
 
