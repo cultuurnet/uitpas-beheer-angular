@@ -550,11 +550,11 @@ FileETag None
     # Add maintenance page
     RewriteCond %{REMOTE_ADDR} !AAA.BBB.CCC.DDD
     RewriteCond %{QUERY_STRING} !(^|&)maintenance=true($|&)
-    RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
-    RewriteCond %{DOCUMENT_ROOT}/maintenance.enable -f
+    RewriteCond %{DOCUMENT_ROOT}/app/maintenance.html -f
+    RewriteCond %{DOCUMENT_ROOT}/app/maintenance.enable -f
     RewriteCond %{SCRIPT_FILENAME} !maintenance.html
-    RewriteRule ^.*$ /maintenance.html [R=503,L]
-    ErrorDocument 503 /maintenance.html
+    RewriteRule ^.*$ /app/maintenance.html [R=503,L]
+    ErrorDocument 503 /app/maintenance.html
     # End of adding maintenance page
 
     RewriteCond %{REQUEST_FILENAME} !-f
