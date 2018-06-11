@@ -137,11 +137,9 @@ function bulkSelectionFactory($q, passholderService, PassholderSearchResults) {
 
       // When retrieving passholders for a bulk selection, the page parameter should always be 1.
       this.searchParameters.page = 1;
-
+      
       if (this.selectAll) {
         this.searchParameters.limit = this.searchResults.totalItems;
-        this.uitpasNumberSelection = [];
-        this.searchParameters.uitpasNumbers = [];
 
         passholderService
           .findPassholders(this.searchParameters)
