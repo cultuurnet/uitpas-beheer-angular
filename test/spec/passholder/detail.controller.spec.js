@@ -79,7 +79,8 @@ describe('Controller: PassholderDetailController', function () {
       passholderService: passholderService,
       activeCounter: activeCounter,
       $window: $window,
-      $state: $state
+      $state: $state,
+      destination: null
     });
   }
 

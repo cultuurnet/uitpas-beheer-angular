@@ -91,7 +91,11 @@ angular
 
           function passholderRegistered() {
             $state.go('counter.main.passholder', {
-              identification: pass.number
+              identification: pass.number,
+              destination: {
+                route: 'counter.main',
+                params: {}
+              },
             });
           }
 
