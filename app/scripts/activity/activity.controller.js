@@ -237,6 +237,18 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       .finally(clearPendingState);
   };
 
+  controller.bulkClaimTariff = function(tariff, activity) {
+    var priceInfo = tariff.prices[0];
+
+    $state.go('counter.main.advancedSearch.showBulkResults', {
+      passholders: controller.passholders,
+      activity: activity,
+      tariff: priceInfo,
+      ticketCount: null,
+      action: 'tariffs'
+    });
+  };
+
   controller.checkin = function (activity) {
     activity.checkinBusy = true;
 
