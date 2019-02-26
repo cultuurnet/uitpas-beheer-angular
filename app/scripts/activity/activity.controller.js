@@ -238,10 +238,12 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   };
 
   controller.bulkClaimTariff = function(tariff, activity) {
+    activity.tariffClaimInProgress = true;
     var priceInfo = tariff.prices[0];
 
     $state.go('counter.main.advancedSearch.showBulkResults', {
       passholders: controller.passholders,
+      bulkSelection: controller.bulkSelection,
       activity: activity,
       tariff: priceInfo,
       ticketCount: null,
