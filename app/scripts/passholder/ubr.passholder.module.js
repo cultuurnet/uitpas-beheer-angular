@@ -68,6 +68,7 @@ angular
         },
         params: {
           'identification': null,
+          'destination': null,
           'pass': null,
           'passholder': null,
           'advantages': null,
@@ -93,6 +94,10 @@ angular
           },
           bulkSelection: function() {
             return null;
+          },
+          /* @ngInject */
+          destination: function($stateParams) {
+            return $stateParams.destination || null;
           }
         }
       })

@@ -20,6 +20,7 @@ function PassholderDetailController (
   $scope,
   passholderService,
   activeCounter,
+  destination,
   $window,
   $state
 ) {
@@ -29,6 +30,7 @@ function PassholderDetailController (
   controller.passholder = angular.copy(pass.passholder);
   controller.pass = pass;
   controller.activeCounter = activeCounter;
+  controller.destination = destination;
 
   controller.membershipsLoading = false;
   controller.couponsLoading = false;
@@ -76,7 +78,11 @@ function PassholderDetailController (
   loadCoupons();
 
   controller.goBack = function () {
-    $window.history.back();
+    if (controller.destination) {
+      $state.go(controller.destination.route, controller.destination.params || {});
+    } else {
+      $window.history.back();
+    }
   };
 
   controller.showModalForCardSystem = function(cardSystem) {
