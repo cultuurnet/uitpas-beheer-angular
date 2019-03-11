@@ -167,8 +167,8 @@ function RegistrationModalController (
           } else {
             // Validate email against the real-time email validation service
             $scope.validating = true;
+
             dataValidation.validateEmail(contactDataForm.email.$viewValue).then(function(validationResult) {
-              $scope.validating = false;
               switch (validationResult.grade) {
                 case 'A+':
                 case 'A':
@@ -188,6 +188,7 @@ function RegistrationModalController (
                   break;
               }
 
+              $scope.validating = false;
               controller.formSubmitBusy = false;
             }, function(reason) {
               if (reason.status === 400) {
@@ -200,6 +201,7 @@ function RegistrationModalController (
                 controller.goToOptInForm();
               }
 
+              $scope.validating = false;
               controller.formSubmitBusy = false;
             });
           }
@@ -211,8 +213,11 @@ function RegistrationModalController (
 
   controller.goToOptInForm = function() {
     controller.updateFurthestStep(3);
-    $state.go('counter.main.register.form.optIns');
+
+    $scope.validating = false;
     controller.formSubmitBusy = false;
+
+    $state.go('counter.main.register.form.optIns');
   };
 
   controller.submitOptInDataForm = function(optInDataForm) {
