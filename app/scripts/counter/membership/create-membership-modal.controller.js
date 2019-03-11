@@ -38,6 +38,10 @@ function CreateMembershipModalController(counterService, $uibModalInstance) {
         controller.asyncError = {
           message: 'De gebruiker met email <em>' + controller.email + '</em> kan niet gevonden worden in het systeem.'
         };
+      } else if (response.code === 'ACTION_NOT_ALLOWED' && response.hasOwnProperty('user_friendly_message')) {
+        controller.asyncError = {
+          message: response.user_friendly_message
+        }
       }
       else {
         controller.asyncError = {
