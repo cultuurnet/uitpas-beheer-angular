@@ -42,9 +42,15 @@ function dataValidationService($q, $window, $http, appConfig, $cacheFactory) {
       };
 
       var rejectValidation = function (response) {
+
+        var message = '';
+        if (response.data && response.data.hasOwnProperty('message')) {
+          message = response.data.message;
+        }
+
         var error = {
           status: response.status,
-          message: response.data.message
+          message: message
         };
         deferredValidation.reject(error);
       };
