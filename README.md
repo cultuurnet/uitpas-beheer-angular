@@ -5,8 +5,8 @@
 # UiTPAS beheer
  The absolute minimum to read before starting development are
  
- * [Development](development/development.md)
- * [Configuration](development/configuration.md)
- * [Unit tests](development/unit_tests.md)
+ * [Development](docs/development/development.md)
+ * [Configuration](docs/development/configuration.md)
+ * [Unit tests](docs/development/unit_tests.md)
 
 But please, take the time read the whole documentation, it will save everyone a lot of time.
