@@ -58,6 +58,13 @@ function PassholderDetailController (
     return moment().isAfter(endDate);
   }
 
+  controller.membershipWillExpire = membershipWillExpire;
+
+  function membershipWillExpire(membership) {
+    var endDate = moment.unix(membership.endDate);
+    return moment().add(1, 'M').isAfter(endDate) && !moment().isAfter(endDate);
+  }
+
   var displayCoupons = function(coupons) {
     controller.coupons = coupons;
   };
