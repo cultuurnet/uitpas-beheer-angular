@@ -69,7 +69,7 @@
           <!--status start-->
           <div class="content-holder" ng-show="!activity.tariffClaimInProgress && !activity.tariffClaimError">
             <div ng-show="ac.isActivityClaimed(activity)">
-              <i class="tariff-applied">Tarief toegekend<br><a class="history-modal small">Historiek</a></i>
+              <i class="tariff-applied">Tarief toegekend<br><!--<a class="history-modal small" ui-sref="counter.main.passholder.ticketSales()">Historiek</a>--></i>
             </div>
             <div ng-show="!ac.isActivityClaimed(activity)" ng-switch="activity.getTariff()">
               <i class="free-event" ng-switch-when="free">Gratis</i>
