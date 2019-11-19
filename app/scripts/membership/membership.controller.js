@@ -40,7 +40,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
   $scope.canStop = function (membership) {
     var association = getAssociation(membership.association.id);
 
-    return !$scope.expired(membership) && association.permissionRegister;
+    return association.permissionRegister;
   };
 
   $scope.canApplyFor = function(partialAssociation) {

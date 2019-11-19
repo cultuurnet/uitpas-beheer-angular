@@ -240,13 +240,9 @@ describe('Controller: MembershipController', function () {
     expect($scope.canRenew({ renewable: false, association: { id: 0, permissionRegister: null}})).toBe(false);
   });
 
-  it('should allow us to stop memberships if they are not expired and we have permission', function () {
-    $scope.expired = function() { return false; };
+  it('should allow us to stop memberships if we have permission', function () {
     expect($scope.canStop({ association: { id: 1, permissionRegister: null}})).toBe(true);
 
-    expect($scope.canStop({ association: { id: 0, permissionRegister: null}})).toBe(false);
-    $scope.expired = function() { return true; };
-    expect($scope.canStop({ association: { id: 1, permissionRegister: null}})).toBe(false);
     expect($scope.canStop({ association: { id: 0, permissionRegister: null}})).toBe(false);
   });
 

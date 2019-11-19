@@ -26,6 +26,7 @@
                 Verlengen
               </button>
               <button class="btn btn-link btn-danger" ng-show="canStop(membership)"
+                      ng-disabled="atLeastOneKansenstatuutExpired"
                       ng-click="openMembershipStopModal(membership)">
                 Stoppen
               </button>
