@@ -47,7 +47,9 @@ function UpgradeModalController (
   controller.upgradeData = {
     passToCheck: angular.copy(pass),
     withKansenstatuut: 'NO_KANSENSTATUUT',
-    kansenstatuutEndDate: moment().endOf('year').toDate(),
+    kansenstatuutEndDate: moment().month() < 5 ? 
+        moment('30/04/' + moment().year(), 'DD/MM/YYYY') : 
+        moment('30/04/' + (moment().year() + 1), 'DD/MM/YYYY'),
     withNewCard: 'NO_NEW_CARD',
     uitpasNewNumber: '',
     upgradeReason: 'CARD_UPGRADE',
