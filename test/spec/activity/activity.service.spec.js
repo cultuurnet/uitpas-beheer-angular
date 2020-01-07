@@ -120,7 +120,7 @@ describe('Service: activity', function (){
       limit: 5
     };
     $httpBackend
-      .expectGET(apiUrl + 'passholders/' + passholder.passNumber + '/activities?date_type=today&limit=5&page=1&query=something+awesome')
+      .expectGET(apiUrl + 'passholders/' + passholder.passNumber + '/activities?limit=5&page=1&query=something+awesome')
       .respond(200, JSON.stringify(pagedActivityData));
 
     var expectedPagedActivities = {
@@ -187,7 +187,7 @@ describe('Service: activity', function (){
     };
 
     $httpBackend
-      .expectGET(apiUrl + 'passholders/' + passholder.passNumber + '/activities?date_type=today&limit=5&page=1&query=something+awesome')
+      .expectGET(apiUrl + 'passholders/' + passholder.passNumber + '/activities?limit=5&page=1&query=something+awesome')
       .respond(403, expectedError);
 
     function assertError(error) {
