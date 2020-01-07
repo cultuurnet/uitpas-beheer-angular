@@ -67,6 +67,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
    * @param {DateRange} dateRange
    */
   controller.updateDateRange = function (dateRange) {
+    controller.query = '';
     if (!angular.equals(controller.dateRange, dateRange)) {
       controller.dateRange = dateRange;
 
@@ -97,8 +98,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       resetActivePage();
     }
 
-    if (queryChanged() && newSearchParameters.query !== '') {
-      newSearchParameters.dateRange = DateRange.NEXT_12_MONTHS;
+    if (newSearchParameters.query !== '') {
       controller.hideDateRange = true;
     }
     else {
@@ -111,8 +111,6 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
 
   controller.resetSearchQuery = function () {
     controller.query = '';
-    controller.dateRange = DateRange.TODAY;
-
     controller.searchParametersChanged();
   };
 

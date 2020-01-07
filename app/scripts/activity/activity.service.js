@@ -32,14 +32,18 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
 
     /*jshint camelcase: false */
     var requestParameters = {
-      query: searchParameters.query,
-      date_type: searchParameters.dateRange.value,
       page: searchParameters.page,
       limit: searchParameters.limit,
-      sort: searchParameters.sort,
-      startDate: searchParameters.startDate,
-      endDate: searchParameters.endDate
+      sort: searchParameters.sort
     };
+
+    if (searchParameters.query !== '' ){//&& searchParameters.query !== prevSearch){
+      requestParameters.query = searchParameters.query;
+    } else {
+      requestParameters.date_type = searchParameters.dateRange.value;
+      requestParameters.startDate = searchParameters.startDate;
+      requestParameters.endDate = searchParameters.endDate;
+    }
 
     var searchRequest = $http.get(
         apiUrl + 'passholders/' + passholder.passNumber + '/activities',
