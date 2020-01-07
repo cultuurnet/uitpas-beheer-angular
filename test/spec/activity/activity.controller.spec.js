@@ -520,7 +520,7 @@ describe('Controller: ActivityController', function () {
     activityController.resetSearchQuery();
 
     expect(activityController.query).toBe('');
-    expect(activityController.dateRange).toBe(DateRange.TODAY);
+    expect(activityController.dateRange).toBe(DateRange.NEXT_12_MONTHS);
   });
 
   it('should fetch an initial list of activities when multiple passholders were given', function () {
