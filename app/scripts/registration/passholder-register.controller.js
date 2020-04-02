@@ -45,7 +45,7 @@ function PassholderRegisterController (pass, $state, activeCounter, moment, coun
   // TODO: get from permissions instead of groups
   controller.canRegisterForeign = function () {
     var hasPermission = activeCounter.groups.find(function(group){ return group === 'Mag pashouders uit buitenland registreren	'});
-    return !!hasPermission;
+    return hasPermission !== undefined;
   };
 
   controller.kansenstatuut = {
