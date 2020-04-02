@@ -70,7 +70,7 @@ function ubrVoucherNumber(counterService) {
       }
       else {
         counterService
-          .getRegistrationPriceInfo(passToCheck, scope.parentController.passholder, voucherNumber, reason)
+          .getRegistrationPriceInfo(passToCheck, scope.parentController.passholder, voucherNumber, reason, scope.parentController.registerForeign)
           .then(updatePriceInfo, showError);
       }
     };

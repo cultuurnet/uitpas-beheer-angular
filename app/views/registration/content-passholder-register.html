@@ -56,15 +56,20 @@
             data-placeholder="Kies een school">
           </select>
       </div>
-      <button type="button" class="btn btn-primary" ng-click="prc.startRegistration()" ng-disabled="!prc.isCounterEligible()">
+      <button type="button" class="btn btn-primary" ng-click="prc.startRegistration(false)" ng-disabled="!prc.isCounterEligible()">
         Pashouder registreren
       </button>
     </div>
   </div> <!--/ end .panel-->
-
+  
   <p ng-hide="prc.pass.kansenStatuut">
-    <button type="button" class="btn btn-primary" ng-click="prc.startRegistration()" ng-disabled="!prc.isCounterEligible()">
+    <button type="button" class="btn btn-primary" ng-click="prc.startRegistration(false)" ng-disabled="!prc.isCounterEligible()">
       Pashouder registreren
+    </button>
+  </p>
+  <p ng-hide="!prc.canRegisterForeign()">
+    <button type="button" class="btn btn-primary" ng-click="prc.startRegistration(true)">
+      Pashouder woont buiten België
     </button>
   </p>
 </div>
