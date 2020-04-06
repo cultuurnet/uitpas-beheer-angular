@@ -74,6 +74,8 @@ angular
               var templatePath = 'views/group/activities.html';
               if (pass.isBlocked()) {
                 templatePath = 'views/passholder/content-passholder-blocked.html';
+              } else if (pass.isExpired()) {
+                templatePath = 'views/passholder/content-passholder-group-expired.html'
               }
               return $templateFactory.fromUrl(templatePath);
             },
