@@ -33,9 +33,12 @@
 </ul>
 
 <div class="modal-body">
-<div class="alert alert-danger" ng-show="prc.asyncError">
-  <span ng-bind="prc.asyncError.cleanMessage"></span>
-</div>
+  <div class="alert alert-danger" ng-show="prc.registerForeign">
+    <span>LET OP, je registreert nu een pashouder met een woonplaats buiten België. <a class="btn-link" ng-click="prc.cancelRegistration()">Annuleren</a></span>
+  </div>
+  <div class="alert alert-danger" ng-show="prc.asyncError">
+    <span ng-bind="prc.asyncError.cleanMessage"></span>
+  </div>
 </div>
 
 <div ui-view="registrationStep"></div>

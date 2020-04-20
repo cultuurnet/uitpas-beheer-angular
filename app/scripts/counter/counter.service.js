@@ -249,7 +249,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
    * @returns {Promise}
    *   A promise with the price information to add a passholder to a card system.
    */
-  service.getRegistrationPriceInfo = function (pass, passholder, voucherNumber, reason) {
+  service.getRegistrationPriceInfo = function (pass, passholder, voucherNumber, reason, registerForeign) {
     var url = appConfig.apiUrl + 'uitpas/' + pass.number + '/price',
       parameters = {
         'reason': reason || 'FIRST_CARD'
@@ -268,7 +268,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
       parameters['date_of_birth'] = moment(passholder.birth.date).format('YYYY-MM-DD');
     }
 
-    if (passholder && passholder.address.postalCode) {
+    if (!registerForeign && passholder && passholder.address.postalCode) {
       parameters['postal_code'] = passholder.address.postalCode;
     }
 

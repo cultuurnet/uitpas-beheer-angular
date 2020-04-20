@@ -36,7 +36,7 @@
     <div class="container-fluid">
       <fieldset ng-disabled="prc.formSubmitBusy">
         <div class="grid">
-          <div class="grid__12 grid--bp-lrg__12">
+          <div class="grid__12 grid--bp-lrg__12" ng-hide="prc.registerForeign">
             <div class="alert alert-info" ng-show="prc.isJavaFXBrowser">
               Plaats de eID van de pashouder in de lezer en deze gegevens worden snel voor jou ingevuld. <a ng-click="prc.getDataFromEID()">Gegevens inlezen</a>
             </div>
@@ -44,11 +44,11 @@
             <div class="alert alert-danger" type="{{prc.formAlert.type}}" ng-show="prc.formAlert" ng-bind="prc.formAlert.message"></div>
           </div>
           <div class="grid__12 grid--bp-lrg__3 field-group"
-               ng-class="{ 'has-error': prc.showFieldError(prc.personalDataForm, 'inszNumber') }">
+               ng-class="{ 'has-error': prc.showFieldError(prc.personalDataForm, 'inszNumber') }" ng-hide="prc.registerForeign">
             <label class="control-label" for="insz-number">
               Rijksregisternummer
             </label>
-            <input type="text" class="form-control" id="insz-number" ng-required="!prc.activeCounter.isAllowedToLeaveInszNumberEmpty(prc.pass.cardSystem.id)" name="inszNumber" ng-model="prc.passholder.inszNumber">
+            <input type="text" class="form-control" id="insz-number" ng-required="!prc.registerForeign && !prc.activeCounter.isAllowedToLeaveInszNumberEmpty(prc.pass.cardSystem.id)" name="inszNumber" ng-model="prc.passholder.inszNumber">
             <div ng-if="prc.showFieldError(prc.personalDataForm, 'inszNumber')" class="text-danger small">
               <div ng-if="prc.personalDataForm.inszNumber.$error.gender">Dit rijksregisternummer is niet geldig voor het opgegeven geslacht.</div>
               <div ng-if="prc.personalDataForm.inszNumber.$error.dateOfBirth">Dit rijksregisternummer is niet geldig voor de opgegeven geboortedatum.</div>
@@ -97,7 +97,7 @@
                  class="text-danger small">
               <div ng-if="prc.personalDataForm.dateOfBirth.$error.required">De geboortedatum is verplicht.</div>
               <div ng-if="prc.personalDataForm.dateOfBirth.$error.parse">De geboortedatum heeft een foutief formaat. <strong>dd/mm/jjjj</strong> wordt verwacht.</div>
-              <div ng-if="prc.personalDataForm.dateOfBirth.$error.inszNumber">De geboortedatum komt niet overeen met het rijksregisternummer.</div>
+              <div ng-if="!prc.registerForeign && prc.personalDataForm.dateOfBirth.$error.inszNumber">De geboortedatum komt niet overeen met het rijksregisternummer.</div>
             </div>
           </div>
           <div class="grid__12 grid--bp-xsm__6 grid--bp-xlr__3 field-group required"
@@ -165,22 +165,28 @@
             <label class="control-label" for="postal-code">
               Postcode
             </label>
-            <input type="text" class="form-control" id="postal-code" name="postalCode" ng-required="true"
-                   ng-model="prc.passholder.address.postalCode" ng-pattern="/^\d{4}$/" ng-change="prc.postalCodeChanged()">
+            <input type="text" class="form-control" id="postal-code" name="postalCode" ng-required="!prc.registerForeign"
+                   ng-model="prc.passholder.address.postalCode" ng-pattern="prc.postalCodePattern" ng-change="prc.postalCodeChanged()">
             <div ng-if="prc.showFieldError(prc.personalDataForm, 'postalCode')" class="text-danger small">
               <div ng-if="prc.personalDataForm.postalCode.$error.required">De postcode is verplicht.</div>
               <div ng-if="prc.personalDataForm.postalCode.$error.pattern">Dit is geen geldige postcode.</div>
             </div>
           </div>
           <div class="grid__12 grid--bp-xsm__6 grid--bp-med__3 field-group required"
-               ng-class="{ 'has-error': prc.showFieldError(prc.personalDataForm, 'city') }">
+               ng-class="{ 'has-error': prc.showFieldError(prc.personalDataForm, 'city') }" ng-hide="prc.registerForeign">
             <label class="control-label" for="city">
               Gemeente
             </label>
-            <input type="text" class="form-control" id="city" name="city" ng-required="true" ng-model="prc.passholder.address.city">
+            <input type="text" class="form-control" id="city" name="city" ng-required="!prc.registerForeign" ng-model="prc.passholder.address.city">
             <div ng-if="prc.showFieldError(prc.personalDataForm, 'city')" class="text-danger small">
               <div ng-if="prc.personalDataForm.city.$error.required">De gemeente is verplicht.</div>
             </div>
+          </div>
+          <div class="grid__12 grid--bp-xsm__6 grid--bp-med__3 field-group required" ng-hide="!prc.registerForeign">
+            <label class="control-label" for="foreignCity">
+              Woonplaats
+            </label>
+            <input type="text" class="form-control" id="foreignCity" name="foreignCity" ng-model="prc.passholder.address.foreignCity">
           </div>
         </div>
       </fieldset>

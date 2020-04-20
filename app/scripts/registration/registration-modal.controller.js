@@ -33,7 +33,9 @@ function RegistrationModalController (
   var controller = this;
   var kansenstatuutInfo = $stateParams.kansenstatuut;
   var schoolInfo = $stateParams.school;
+  var registerForeign = $stateParams.registerForeign;
 
+  controller.registerForeign = registerForeign;
   controller.pass = pass;
   controller.existingPass = undefined;
   controller.formSubmitBusy = false;
@@ -85,7 +87,9 @@ function RegistrationModalController (
   };
 
   controller.submitPersonalDataForm = function() {
-
+    if (controller.registerForeign) {
+      controller.personalDataForm.city.$setViewValue('buitenland');
+    }
     function validatePersonalData() {
       controller.updateFurthestStep();
       if (controller.personalDataForm.$valid) {
@@ -221,7 +225,6 @@ function RegistrationModalController (
   };
 
   controller.submitOptInDataForm = function(optInDataForm) {
-
     function validateOptInData() {
       if (optInDataForm.$valid) {
         if (!controller.legalTermsPaper && !controller.legalTermsDigital) {
@@ -280,7 +283,7 @@ function RegistrationModalController (
     };
 
     counterService
-      .getRegistrationPriceInfo(pass, controller.passholder)
+      .getRegistrationPriceInfo(pass, controller.passholder, undefined, undefined, controller.registerForeign)
       .then(updateUnreducedPriceInfo, controller.handleAsyncError)
       .finally(deferredRefresh.resolve);
 
@@ -356,6 +359,8 @@ function RegistrationModalController (
   controller.postalCodeChanged = function () {
     controller.clearAsyncError('PARSE_INVALID_POSTAL_CODE');
   };
+
+  controller.postalCodePattern = controller.registerForeign ? '' : '/^\d{4}$/';
 
   controller.getDataFromEID = function() {
     eIDService.getDataFromEID();

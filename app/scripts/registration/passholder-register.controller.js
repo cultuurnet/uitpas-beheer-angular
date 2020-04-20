@@ -42,6 +42,11 @@ function PassholderRegisterController (pass, $state, activeCounter, moment, coun
     return isEligible;
   };
 
+  controller.canRegisterForeign = function () {
+    var hasPermission = activeCounter.groups.find(function(group){ return group === 'Mag pashouders uit buitenland registreren	';});
+    return hasPermission !== undefined;
+  };
+
   controller.kansenstatuut = {
     endDate: moment().month() < 5 ? 
         moment('30/04/' + moment().year(), 'DD/MM/YYYY') : 
@@ -50,14 +55,15 @@ function PassholderRegisterController (pass, $state, activeCounter, moment, coun
     includeRemarks: false
   };
 
-  controller.startRegistration = function () {
+  controller.startRegistration = function (registerForeign) {
 
     if (!controller.isCounterEligible()) {
       throw new Error('The active counter does not have the required permissions to register this UiTPAS.');
     }
 
     var registrationParameters = {
-      kansenstatuut: false
+      kansenstatuut: false,
+      registerForeign: registerForeign
     };
 
     if (pass.isKansenstatuut()) {

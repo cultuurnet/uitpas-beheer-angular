@@ -114,7 +114,8 @@ angular
         params: {
           'pass': null,
           'kansenstatuut': null,
-          'school': null
+          'school': null,
+          'registerForeign': null
         },
         stepNumber: 1
       })
