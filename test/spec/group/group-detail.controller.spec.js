@@ -32,8 +32,11 @@ describe('Controller: GroupDetailController', function () {
   });
 
   it('should initialise all the variables in the scope', function () {
+    var pass = {
+    };
     var group = {
-      passNumber: '0930000809812'
+      passNumber: '0930000809812',
+      endDate: '2021-01-01 12:00:00'
     };
     var expectedCoupons = [
       {
@@ -61,6 +64,7 @@ describe('Controller: GroupDetailController', function () {
     passholderServiceMock.getCoupons = jasmine.createSpy('getCoupons').and.returnValue($q.resolve(expectedCoupons));
 
     var controller = $controller('GroupDetailController', {
+      pass: pass,
       group: group,
       couponsLoading: false,
       $rootScope: $rootScope,

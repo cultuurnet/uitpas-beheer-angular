@@ -75,7 +75,8 @@ describe('Factory: Pass', function () {
 
   var jsonGroupBase = {
     name: 'Wij hebben een groupje',
-    availableTickets: 25
+    availableTickets: 25,
+    endDate: '2021-01-01 12:00:00'
   };
 
   function getJsonPassWithPassholder() {
@@ -185,7 +186,8 @@ describe('Factory: Pass', function () {
       group: {
         passNumber: '0930000422202',
         name: 'Wij hebben een groupje',
-        availableTickets: 25
+        availableTickets: 25,
+        endDate: '2021-01-01 12:00:00'
       },
       cardSystem: {
         id: '1',

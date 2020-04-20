@@ -12,7 +12,7 @@ angular
   .factory('Pass', passFactory);
 
 /* @ngInject */
-function passFactory(Passholder) {
+function passFactory(Passholder, moment) {
   /**
    * @class Pass
    * @constructor
@@ -57,7 +57,8 @@ function passFactory(Passholder) {
         this.group = {
           passNumber: this.number,
           name: jsonPass.group.name,
-          availableTickets: jsonPass.group.availableTickets
+          availableTickets: jsonPass.group.availableTickets,
+          endDate: jsonPass.group.endDate,
         };
       }
 
@@ -74,6 +75,12 @@ function passFactory(Passholder) {
     kansenstatuutExpired: kansenstatuutExpired,
     isBlocked: function() {
       return this.status === 'BLOCKED';
+    },
+    isExpired: function() {
+      if (this.group) {
+        return moment(this.group.endDate * 1000).isBefore(moment());
+      }
+      return true;
     },
     isLocalStock: function() {
       return this.status === 'LOCAL_STOCK';

@@ -21,6 +21,15 @@
   <span class="label label-points" ng-bind="gdc.group.availableTickets"></span>
 </div>
 
+<div class="passholder passholder-kansenstatuten" ng-show="gdc.pass.kansenStatuut">
+  <h3><i class="fa fa-heart"></i> Kansenstatuut</h3>
+  <div class="kansenstatuut list-group">
+    <span class="list-group-item" ng-class="'status-' + gdc.kansenStatuutStatus">{{gdc.pass.cardSystem.name}}
+      <small class="label label-danger" ng-show="gdc.kansenStatuutStatus === 'EXPIRED'">Vervallen</small>
+    </span>
+  </div>
+</div>
+
 <div class="passholder passholder-coupons">
   <h3><i class="fa fa-ticket"></i> Bonnen</h3>
   <div class="overview__loading" ng-show="gdc.couponsLoading">

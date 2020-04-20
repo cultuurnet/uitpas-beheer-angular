@@ -12,13 +12,18 @@ angular
   .controller('GroupDetailController', GroupDetailController);
 
 /* @ngInject */
-function GroupDetailController (group, passholderService, $rootScope, $scope) {
+function GroupDetailController (pass, group, passholderService, $rootScope, $scope, moment) {
   /*jshint validthis: true */
   var controller = this;
 
+  controller.pass = pass;
   controller.group = group;
 
   controller.couponsLoading = false;
+
+  if (group.endDate && moment(group.endDate).isBefore(moment())) {
+    controller.kansenStatuutStatus = 'EXPIRED';
+  }
 
   var displayCoupons = function(coupons) {
     controller.coupons = coupons;
