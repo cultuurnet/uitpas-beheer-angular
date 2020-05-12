@@ -88,7 +88,7 @@ function RegistrationModalController (
 
   controller.submitPersonalDataForm = function() {
     if (controller.registerForeign) {
-      controller.personalDataForm.city.$setViewValue('buitenland');
+      controller.personalDataForm.city.$setViewValue('Buitenland');
     }
     function validatePersonalData() {
       controller.updateFurthestStep();
@@ -360,7 +360,7 @@ function RegistrationModalController (
     controller.clearAsyncError('PARSE_INVALID_POSTAL_CODE');
   };
 
-  controller.postalCodePattern = controller.registerForeign ? '' : '/^\d{4}$/';
+  controller.postalCodePattern = controller.registerForeign ? '' : /^\d{4}$/;
 
   controller.getDataFromEID = function() {
     eIDService.getDataFromEID();

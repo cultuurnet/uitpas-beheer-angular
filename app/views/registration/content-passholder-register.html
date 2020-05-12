@@ -67,7 +67,7 @@
       Pashouder registreren
     </button>
   </p>
-  <p ng-hide="!prc.canRegisterForeign()">
+  <p ng-show="prc.canRegisterForeign()">
     <button type="button" class="btn btn-primary" ng-click="prc.startRegistration(true)">
       Pashouder woont buiten België
     </button>
