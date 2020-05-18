@@ -11,13 +11,14 @@ angular.module('ubr.passholder')
   .controller('PassholderBlockPassController', PassholderBlockPassController);
 
 /* @ngInject */
-function PassholderBlockPassController(pass, passholder, passholderService, $uibModalInstance, $q, $state) {
+function PassholderBlockPassController(pass, passholder, selectedUitpas, passholderService, $uibModalInstance, $q, $state) {
   /* jshint validthis: true */
   var controller = this;
 
   // Set default parameters.
   controller.pass = angular.copy(pass);
   controller.passholder = angular.copy(passholder);
+  controller.selectedUitpas = selectedUitpas;
   controller.busyBlocking = false;
   controller.asyncError = false;
 
@@ -47,7 +48,7 @@ function PassholderBlockPassController(pass, passholder, passholderService, $uib
     if (!controller.busyBlocking) {
       controller.busyBlocking = true;
       passholderService
-        .blockPass(pass.number)
+        .blockPass(selectedUitpas.number || pass.number)
         .then(resolveBlockedPass, showBlockingError);
     } else {
       deferred.reject('Busy blocking!');
@@ -60,7 +61,7 @@ function PassholderBlockPassController(pass, passholder, passholderService, $uib
     var showBlockedPass = function (pass) {
       $state.go(
         'counter.main.passholder',
-        {identification: pass.number},
+        {identification: selectedUitpas.number || pass.number},
         {reload: true}
       );
     };
@@ -73,7 +74,7 @@ function PassholderBlockPassController(pass, passholder, passholderService, $uib
       $state.go(
         'counter.main.passholder.replacePass',
         {
-          identification: pass.number,
+          identification: selectedUitpas.number || pass.number,
           justBlocked: true
         }
       );

@@ -238,14 +238,18 @@ angular
       .state('counter.main.passholder.blockPass', {
         params: {
           pass: null,
-          passholder: null
+          passholder: null,
+          selectedUitpas: null,
         },
         resolve: {
           pass: getPassFromStateParams,
-          passholder: getPassholderFromStateParams
+          passholder: getPassholderFromStateParams,
+          selectedUitpas: ['$stateParams', function($stateParams) {
+            return $stateParams.selectedUitpas;
+          }],
         },
         /* @ngInject */
-        onEnter: function(pass, passholder, $state, $uibModal) {
+        onEnter: function(pass, passholder, selectedUitpas, $state, $uibModal) {
           $uibModal
             .open({
               animation: true,
@@ -257,6 +261,9 @@ angular
                 },
                 passholder: function() {
                   return passholder;
+                },
+                selectedUitpas: function() {
+                  return selectedUitpas;
                 }
               },
               controller: 'PassholderBlockPassController',
