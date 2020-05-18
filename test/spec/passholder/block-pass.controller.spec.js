@@ -21,7 +21,8 @@ describe('Controller: PassholderBlockPassController', function () {
       passholderService: passholderService,
       $uibModalInstance: $uibModalInstance,
       $q: $q,
-      $state: $state
+      $state: $state,
+      selectedUitpas: { number: undefined },
     });
   }));
 

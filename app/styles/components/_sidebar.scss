@@ -116,6 +116,11 @@ a.toggle-down {
   .vcard > div {
     margin-bottom: 5px;
   }
+  select {
+    width: 150px;
+    padding: 2px;
+    display: inline-block;
+  }
   // icons
   .tel,
   .email {
