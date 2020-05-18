@@ -31,7 +31,8 @@ function PassholderDetailController (
   controller.pass = pass;
   controller.activeCounter = activeCounter;
   controller.destination = destination;
-  if (pass.passholder && pass.passholder.uitPassen && pass.passholder.uitPassen.length > 1) {
+  controller.hasMultiplePasses = !!(pass.passholder && pass.passholder.uitPassen && pass.passholder.uitPassen.length > 1);
+  if (controller.hasMultiplePasses) {
     $scope.selectedPass = angular.copy(pass.passholder.uitPassen[0]);
   }
 
