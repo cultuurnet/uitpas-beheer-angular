@@ -31,7 +31,9 @@ function PassholderDetailController (
   controller.pass = pass;
   controller.activeCounter = activeCounter;
   controller.destination = destination;
-  $scope.selectedPass = angular.copy(pass.passholder.uitPassen[0]);
+  if (pass.passholder && pass.passholder.uitPassen && pass.passholder.uitPassen.length > 1) {
+    $scope.selectedPass = angular.copy(pass.passholder.uitPassen[0]);
+  }
 
   controller.membershipsLoading = false;
   controller.couponsLoading = false;
