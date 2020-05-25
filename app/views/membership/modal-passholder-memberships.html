@@ -21,17 +21,17 @@
             </div>
             <div class="grid__12 grid--bp-sml__4 last membership-actions">
               <button class="btn btn-default" ng-show="canRenew(membership)"
-                      ng-disabled="disableMembershipButton(membership)"
+                      ng-disabled="isMembershipButtonDisabled()"
                       ng-click="openMembershipRenewalModal(membership)">
                 Verlengen
               </button>
               <button class="btn btn-link btn-danger" ng-show="canStop(membership)"
-                      ng-disabled="disableMembershipButton(membership)"
+                      ng-disabled="isMembershipButtonDisabled()"
                       ng-click="openMembershipStopModal(membership)">
                 Stoppen
               </button>
               <button class="btn btn-default" ng-show="expired(membership)"
-                      ng-disabled="!canApplyFor(membership.association) || disableMembershipButton(membership)"
+                      ng-disabled="!canApplyFor(membership.association) || isMembershipButtonDisabled()"
                       ng-click="openMembershipRegistrationModal(membership.association, true)"
                       ng-attr-title="{{registerTitle(membership.association)}}">
                 Opnieuw aanvragen
@@ -50,7 +50,7 @@
             </div>
             <div class="grid__12 grid--bp-sml__4 last membership-actions">
               <button class="btn btn-default"
-                      ng-disabled="!canApplyFor(association) || disableMembershipButton(membership)"
+                      ng-disabled="!canApplyFor(association) || isMembershipButtonDisabled()"
                       ng-click="openMembershipRegistrationModal(association)"
                       ng-attr-title="{{registerTitle(association)}}">
                 Lidmaatschap aanvragen

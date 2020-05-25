@@ -134,12 +134,14 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     });
   };
 
-  $scope.disableMembershipButton = function (membership) {
+  $scope.isMembershipButtonDisabled = function () {
     if (legacyPassholder && legacyPassholder.cardSystemSpecific) {
-      const cardSystemKeys = Object.keys(legacyPassholder.cardSystemSpecific);
-      const currentCardKey = cardSystemKeys.find(key => legacyPassholder.cardSystemSpecific[key].currentCard.uitpasNumber === legacyPassholder.passNumber);
+      var cardSystemKeys = Object.keys(legacyPassholder.cardSystemSpecific);
+      var currentCardKey = cardSystemKeys.find(function (key) {
+        return legacyPassholder.cardSystemSpecific[key].currentCard.uitpasNumber === legacyPassholder.passNumber;
+      });
       if (currentCardKey) {
-        const cardSystemInfo = legacyPassholder.cardSystemSpecific[currentCardKey];
+        var cardSystemInfo = legacyPassholder.cardSystemSpecific[currentCardKey];
         if (
           cardSystemInfo.status ==='ACTIVE' || 
           cardSystemInfo.kansenStatuut === false ||
@@ -152,7 +154,7 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     }
     
     return true;
-  }
+  };
 
   $scope.openMembershipRenewalModal = function (membership) {
     var modalInstance = $uibModal.open({
