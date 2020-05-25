@@ -134,6 +134,28 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
     });
   };
 
+  $scope.isMembershipButtonDisabled = function () {
+    if (legacyPassholder && legacyPassholder.cardSystemSpecific) {
+      var cardSystemKeys = Object.keys(legacyPassholder.cardSystemSpecific);
+      var currentCardKey = cardSystemKeys.find(function (key) {
+        return legacyPassholder.cardSystemSpecific[key].currentCard.uitpasNumber === legacyPassholder.passNumber;
+      });
+      if (currentCardKey) {
+        var cardSystemInfo = legacyPassholder.cardSystemSpecific[currentCardKey];
+        if (
+          cardSystemInfo.status ==='ACTIVE' || 
+          cardSystemInfo.kansenStatuut === false ||
+          cardSystemInfo.kansenStatuutExpired === false ||
+          cardSystemInfo.kansenStatuutInGracePeriod  
+          ) {
+            return false;
+          }
+        }
+    }
+    
+    return true;
+  };
+
   $scope.openMembershipRenewalModal = function (membership) {
     var modalInstance = $uibModal.open({
       templateUrl: 'views/membership/modal-passholder-membership-renew.html',
