@@ -72,7 +72,7 @@ angular
           'pass': null,
           'passholder': null,
           'advantages': null,
-          'activityMode': null,
+          'activityMode': 'passholders',
           'bulkSelection': null
         },
         resolve: {

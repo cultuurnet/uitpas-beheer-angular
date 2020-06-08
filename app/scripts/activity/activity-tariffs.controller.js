@@ -38,7 +38,7 @@ function PassholderActivityTariffsController (
   controller.asyncError = false;
 
   function getGroupSale() {
-    controller.groupSale = controller.passholder.hasOwnProperty('availableTickets') ? {
+    controller.groupSale = controller.passholder?.hasOwnProperty('availableTickets') ? {
       tickets: 1,
       maxTickets: passholder.availableTickets,
       getTotalPrice: function () {
