@@ -44,7 +44,7 @@ angular
           pass: null,
           passholders: null,
           identification: null,
-          activityMode: null,
+          activityMode: 'group',
           bulkSelection: null,
           activeCounter: null
         },

@@ -240,7 +240,7 @@ angular
           $uibModalInstance: null,
           passholder: null,
           passholders: null,
-          activityMode: null,
+          activityMode: 'counter',
           activeCounter: null
         },
         resolve: {
