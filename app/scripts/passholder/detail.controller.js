@@ -33,7 +33,7 @@ function PassholderDetailController (
   controller.destination = destination;
   controller.hasMultiplePasses = !!(pass.passholder && pass.passholder.uitPassen && pass.passholder.uitPassen.length > 1);
   if (controller.hasMultiplePasses) {
-    const selectedPass = pass.passholder.uitPassen.find(
+    var selectedPass = pass.passholder.uitPassen.find(
       function(p) {
         return p.number === $state.params.identification;
       }

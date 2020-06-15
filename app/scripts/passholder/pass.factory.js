@@ -75,7 +75,7 @@ function passFactory(Passholder, moment) {
     kansenstatuutExpired: kansenstatuutExpired,
     isBlocked: function(identification) {
       if (identification && this.passholder && this.passholder.uitPassen && this.passholder.uitPassen.length > 1) {
-        const selectedPass = this.passholder.uitPassen.find(
+        var selectedPass = this.passholder.uitPassen.find(
           function (p) {
             return p.number === identification;
           }
