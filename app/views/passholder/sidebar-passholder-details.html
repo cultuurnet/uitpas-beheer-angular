@@ -4,7 +4,7 @@
 <div class="passholder passholder-number">
   <label>NR.</label>
   <span ng-bind="pdc.passholder.passNumber | passNumber" ng-hide="pdc.hasMultiplePasses"></span>
-  <select ng-show="pdc.hasMultiplePasses" ng-model="selectedPass" ng-options="uitPass as uitPass.number for uitPass in pdc.passholder.uitPassen track by uitPass.number" data-placeholder="kies een kaartnummer">
+  <select ng-show="pdc.hasMultiplePasses" ng-model="selectedPass" ng-options="uitPass as uitPass.number for uitPass in pdc.passholder.uitPassen track by uitPass.number" data-placeholder="kies een kaartnummer" ng-change="pdc.selectPass()">
   </select>
   <a ng-hide="selectedPass.isBlocked()" ui-sref="counter.main.passholder.blockPass({selectedUitpas: selectedPass})" class="pull-right">Blokkeren</a>
   <span class="label label-danger pull-right" ng-show="selectedPass.isBlocked()">Kaart geblokkeerd</span>
