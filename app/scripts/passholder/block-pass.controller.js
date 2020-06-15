@@ -26,6 +26,7 @@ function PassholderBlockPassController(pass, passholder, selectedUitpas, passhol
     UNKNOWN_UITPASNUMBER: 'Dit uitpas nummer is onbekend.',
     PARSE_INVALID_UITPASNUMBER: 'Dit uitpas nummer is ongeldig.',
     INVALID_CARD_STATUS: 'Deze uitpas heeft een ongeldige status.',
+    ACCESS_DENIED: 'Deze balie heeft niet voldoende rechten om dit uitpas nummer te blokkeren. Neem contact op met een verantwoordelijke.',
     UNKNOWN: 'Er is een onbekende fout opgetreden.'
   };
 
