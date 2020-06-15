@@ -21,7 +21,7 @@ function GroupDetailController (pass, group, passholderService, $rootScope, $sco
 
   controller.couponsLoading = false;
 
-  if (group.endDate && moment(group.endDate).isBefore(moment())) {
+  if (group.endDate && moment(group.endDate * 1000).isBefore(moment())) {
     controller.kansenStatuutStatus = 'EXPIRED';
   }
 
