@@ -37,9 +37,9 @@ angular
         redirectOnScan: true,
         views: {
           'content@counter': {
-            templateProvider: function ($templateFactory, pass) {
+            templateProvider: function ($templateFactory, pass, $stateParams) {
               var templatePath = 'views/split-content.html';
-              if (pass.isBlocked()) {
+              if (pass.isBlocked($stateParams.identification)) {
                 templatePath = 'views/passholder/content-passholder-blocked.html';
               }
               else if (pass.kansenstatuutExpired(pass.passholder)) {

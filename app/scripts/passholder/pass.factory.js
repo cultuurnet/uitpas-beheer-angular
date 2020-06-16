@@ -73,7 +73,17 @@ function passFactory(Passholder, moment) {
       return this.kansenStatuut ? true : false;
     },
     kansenstatuutExpired: kansenstatuutExpired,
-    isBlocked: function() {
+    isBlocked: function(identification) {
+      if (identification && this.passholder && this.passholder.uitPassen && this.passholder.uitPassen.length > 1) {
+        var selectedPass = this.passholder.uitPassen.find(
+          function (p) {
+            return p.number === identification;
+          }
+        );
+        if (selectedPass) {
+          return selectedPass.status === 'BLOCKED';
+        }
+      }
       return this.status === 'BLOCKED';
     },
     isExpired: function() {

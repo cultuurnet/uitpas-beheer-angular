@@ -33,7 +33,12 @@ function PassholderDetailController (
   controller.destination = destination;
   controller.hasMultiplePasses = !!(pass.passholder && pass.passholder.uitPassen && pass.passholder.uitPassen.length > 1);
   if (controller.hasMultiplePasses) {
-    $scope.selectedPass = angular.copy(pass.passholder.uitPassen[0]);
+    var selectedPass = pass.passholder.uitPassen.find(
+      function(p) {
+        return p.number === $state.params.identification;
+      }
+    );
+    $scope.selectedPass = angular.copy(selectedPass || pass.passholder.uitPassen[0]);
   }
 
   controller.membershipsLoading = false;
@@ -104,6 +109,10 @@ function PassholderDetailController (
     else {
       $state.go('counter.main.passholder.upgrade.newCard', {cardSystem: cardSystem});
     }
+  };
+
+  controller.selectPass = function() {
+    $state.go('counter.main.passholder', {identification: $scope.selectedPass.number});
   };
 
   /**
