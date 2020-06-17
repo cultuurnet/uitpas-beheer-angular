@@ -28,10 +28,10 @@
                   <label for="optin-email" ng-class="{'disabled': prc.passholder.isUnderAge() || prc.excludeEmail}"><input name="optInEmail" id="optin-email" type="checkbox" ng-model="prc.optInEmail" ng-disabled="prc.passholder.isUnderAge() || prc.excludeEmail"> E-mail</label>
                 </div>
                 <div class="checkbox">
-                  <label for="optin-sms" ng-class="{'disabled': prc.passholder.isUnderAge() || !prc.passholder.contact.mobileNumber}"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="prc.passholder.optIn.sms" ng-disabled="prc.passholder.isUnderAge() || !prc.passholder.contact.mobileNumber"> SMS</label>
+                  <label for="optin-sms" ng-class="{'disabled': prc.passholder.isUnderAge() || !prc.passholder.contact.mobileNumber}"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="prc.passholder.optInPreferences.sms" ng-disabled="prc.passholder.isUnderAge() || !prc.passholder.contact.mobileNumber"> SMS</label>
                 </div>
                 <div class="checkbox">
-                  <label for="optin-post"><input name="optInPost" id="optin-post" type="checkbox" ng-model="prc.passholder.optIn.post"> Post</label>
+                  <label for="optin-post"><input name="optInPost" id="optin-post" type="checkbox" ng-model="prc.passholder.optInPreferences.post"> Post</label>
                 </div>
             </div>
           </div>
