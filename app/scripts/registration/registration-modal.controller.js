@@ -53,7 +53,6 @@ function RegistrationModalController (
   controller.furthestStep = 0;
 
   controller.passholder = new Passholder();
-  controller.passholder.optIn = {};
   controller.isMemberOfCurrentBalie = false;
   controller.excludeEmail = false;
   controller.eIDData = {};
@@ -159,7 +158,7 @@ function RegistrationModalController (
           
           // Set certain opt-in options according to info received in contact step.
           controller.legalTermsDigital = controller.passholder.contact.email && !controller.passholder.isUnderAge() ? true : false;
-          controller.passholder.optIn.sms = controller.passholder.contact.sms ? true : false;
+          controller.passholder.optInPreferences.sms = controller.passholder.contact.sms ? true : false;
 
           if (!controller.passholder.contact.email) {
             controller.optInEmail = false;
@@ -233,9 +232,9 @@ function RegistrationModalController (
         } else {
           // Convert the optInEmail field value to 3 separate opt-in email passholder properties.
           if (controller.optInEmail) {
-            controller.passholder.optIn.serviceMails = true;
-            controller.passholder.optIn.milestoneMails = true;
-            controller.passholder.optIn.infoMails = true;
+            controller.passholder.optInPreferences.serviceMails = true;
+            controller.passholder.optInPreferences.milestoneMails = true;
+            controller.passholder.optInPreferences.infoMails = true;
           }
 
           controller.goToPriceForm();
