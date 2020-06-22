@@ -93,7 +93,7 @@ function RegistrationModalController (
     function validatePersonalData() {
       controller.updateFurthestStep();
       if (controller.personalDataForm.$valid) {
-
+        controller.asyncError = undefined;
         var continueRegisterProcess = function () {
           controller
               .refreshUnreducedPriceInfo()
