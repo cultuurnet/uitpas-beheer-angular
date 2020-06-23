@@ -70,7 +70,7 @@ describe('Controller: PassholderReplacePassController', function () {
     expect(controller.card.id).toEqual('1234567891234');
   });
 
-  it('should allow "loss" or "delete" as a reason for replacing an UiTPAS when kansenstatuut remains the same', function () {
+  it('should allow "loss" or "defect" as a reason for replacing an UiTPAS when kansenstatuut remains the same', function () {
     var expectedReasons = [
       {
         description: 'Kaart verloren of gestolen',
@@ -78,7 +78,7 @@ describe('Controller: PassholderReplacePassController', function () {
       },
       {
         description: 'Defecte kaart',
-        code: 'DELETE'
+        code: 'DEFECT'
       }
     ];
     controller.newPass = {
