@@ -43,9 +43,9 @@ function PassholderReplacePassController (
   };
   // reasons
   var reasons = {
-    'REMOVAL': {
-      description: 'Verhuis',
-      code: 'REMOVAL'
+    'DEFECT': {
+      description: 'Defecte kaart',
+      code: 'DEFECT'
     },
     'LOSS_THEFT': {
       description: 'Kaart verloren of gestolen',
@@ -94,7 +94,7 @@ function PassholderReplacePassController (
     }
     else {
       newOptions.push(reasons.LOSS_THEFT);
-      newOptions.push(reasons.REMOVAL);
+      newOptions.push(reasons.DEFECT);
     }
 
     controller.reasons = newOptions;
