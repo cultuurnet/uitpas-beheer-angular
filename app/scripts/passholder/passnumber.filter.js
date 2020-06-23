@@ -13,6 +13,9 @@ angular
 
 function passNumberFilter() {
   return function(input) {
+    if (!input) {
+      return input;
+    }
     return [input.slice(0, 5), ' ',
       input.slice(5, 10), ' ',
       input.slice(10)].join('');
