@@ -49,7 +49,7 @@ function PassholderBlockPassController(pass, passholder, selectedUitpas, passhol
     if (!controller.busyBlocking) {
       controller.busyBlocking = true;
       passholderService
-        .blockPass(selectedUitpas.number || pass.number)
+        .blockPass((selectedUitpas && selectedUitpas.number) || pass.number)
         .then(resolveBlockedPass, showBlockingError);
     } else {
       deferred.reject('Busy blocking!');
@@ -62,7 +62,7 @@ function PassholderBlockPassController(pass, passholder, selectedUitpas, passhol
     var showBlockedPass = function (pass) {
       $state.go(
         'counter.main.passholder',
-        {identification: selectedUitpas.number || pass.number},
+        {identification: (selectedUitpas && selectedUitpas.number) || pass.number},
         {reload: true}
       );
     };
@@ -75,7 +75,7 @@ function PassholderBlockPassController(pass, passholder, selectedUitpas, passhol
       $state.go(
         'counter.main.passholder.replacePass',
         {
-          identification: selectedUitpas.number || pass.number,
+          identification: (selectedUitpas && selectedUitpas.number) || pass.number,
           justBlocked: true
         }
       );
