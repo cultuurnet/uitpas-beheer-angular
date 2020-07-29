@@ -146,11 +146,11 @@ function passholderFactory(moment, day) {
       this.cardSystems = (jsonPassholder.cardSystems ? jsonPassholder.cardSystems : []);
       if (jsonPassholder.optInPreferences) {
         this.optInPreferences = {
-          serviceMails: jsonPassholder.optInPreferences.optInServiceMails,
-          milestoneMails: jsonPassholder.optInPreferences.optInMilestoneMails,
-          infoMails: jsonPassholder.optInPreferences.optInInfoMails,
-          sms: jsonPassholder.optInPreferences.optInSms,
-          post: jsonPassholder.optInPreferences.optInPost,
+          serviceMails: jsonPassholder.optInPreferences.serviceMails,
+          milestoneMails: jsonPassholder.optInPreferences.milestoneMails,
+          infoMails: jsonPassholder.optInPreferences.infoMails,
+          sms: jsonPassholder.optInPreferences.sms,
+          post: jsonPassholder.optInPreferences.post,
         };
       }
     },
