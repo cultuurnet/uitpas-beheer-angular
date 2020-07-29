@@ -158,7 +158,7 @@ function RegistrationModalController (
           
           // Set certain opt-in options according to info received in contact step.
           controller.legalTermsDigital = controller.passholder.contact.email && !controller.passholder.isUnderAge() ? true : false;
-          controller.passholder.optInPreferences.sms = controller.passholder.contact.sms ? true : false;
+          controller.passholder.optInPreferences.sms = controller.passholder.contact.mobileNumber ? true : false;
 
           if (!controller.passholder.contact.email) {
             controller.optInEmail = false;
