@@ -29,6 +29,15 @@ function PassholderMembershipRegisterController ($scope, $uibModalInstance, asso
     $uibModalInstance.dismiss('canceled');
   };
 
+  function getErrorMessage(error) {
+    switch (error.code) {
+      case 'PASSHOLDER_NOT_MEMBER_OF_CARD_SYSTEM':
+        return 'Deze passhouder is geen lid van een kaartsysteem van deze vereniging';
+      default:
+        return error.message;
+    }
+  }
+
   $scope.register = function (endDate) {
     $scope.waiting = true;
 
@@ -45,9 +54,9 @@ function PassholderMembershipRegisterController ($scope, $uibModalInstance, asso
         },
         function (data) {
           $scope.errors = [];
-          angular.forEach(data.errors, function (error) {
-            $scope.errors.push(error.message);
-          });
+          Array.isArray(data) ? angular.forEach(data.errors, function (error) {
+            $scope.errors.push(getErrorMessage(error));
+          }) : $scope.errors.push(getErrorMessage(data));
         }
       )
       .finally(function () {
