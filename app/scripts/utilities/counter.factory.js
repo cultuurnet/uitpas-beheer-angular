@@ -61,26 +61,31 @@ function counterFactory() {
      * @param {string} [cardSystemId]
      * @return {boolean}
      */
-    isRegistrationCounter: function (cardSystemId) {
+    isRegistrationCounter: function (cardSystemIds) {
       var canRegister = false;
       var counter = this;
 
       // If no system is specified, check if the active counter has the registration permission for any of it's card-systems.
       // Else check registration permission by system ID.
-      if (typeof cardSystemId === 'undefined') {
+      if (typeof cardSystemIds === 'undefined') {
         angular.forEach(counter.cardSystems, function (cardSystem, id) {
-          if (counter.isRegistrationCounter(id)) {
+          if (counter.isRegistrationCounter([id])) {
             canRegister = true;
           }
         });
       } else {
-        canRegister = this.isAllowed('registratie', cardSystemId);
+        var idList = Array.isArray(cardSystemIds) ? cardSystemIds : [cardSystemIds];
+        angular.forEach(idList, function(id){
+          if (counter.isAllowed('registratie', id)) {
+            canRegister = true;
+          }
+        });
       }
 
       return canRegister;
     },
     isAuthorisedRegistrationCounter: function (cardSystemId) {
-      return this.isRegistrationCounter(cardSystemId) &&
+      return this.isRegistrationCounter([cardSystemId]) &&
         this.isAllowed('kansenstatuut toekennen', cardSystemId);
     },
     isAllowedToLeaveInszNumberEmpty: function (cardSystemId) {

@@ -40,6 +40,7 @@ function PassholderDetailController (
     );
     $scope.selectedPass = angular.copy(selectedPass || pass.passholder.uitPassen[0]);
   }
+  controller.cardSystemIds = pass.passholder.cardSystems ? pass.passholder.cardSystems.map(function(cardSystem) {return cardSystem.id;}) : [];
 
   controller.membershipsLoading = false;
   controller.couponsLoading = false;

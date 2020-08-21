@@ -35,7 +35,7 @@ function PassholderRegisterController (pass, $state, activeCounter, moment, coun
     var isEligible = activeCounter.isRegistrationCounter(pass.cardSystem.id);
 
     // Check if active counter and card system is allowed to assign kansenstatuut passes
-    if (pass.isKansenstatuut() && !activeCounter.isAuthorisedRegistrationCounter(pass.cardSystem.id)) {
+    if (pass.isKansenstatuut() && !activeCounter.isAuthorisedRegistrationCounter([pass.cardSystem.id])) {
       isEligible = false;
     }
 

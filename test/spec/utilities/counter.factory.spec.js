@@ -64,21 +64,21 @@ describe('Factory: Counter', function () {
 
   it('should tell if a counter can register a passholder', function () {
     var counter = new Counter(getJsonCounter());
-    var passCardSystemId = 1;
+    var passCardSystemIds = [1];
 
-    expect(counter.isRegistrationCounter(passCardSystemId)).toBeTruthy();
-    expect(counter.isAuthorisedRegistrationCounter(passCardSystemId)).toBeTruthy();
-    expect(counter.isAllowedToLeaveInszNumberEmpty(passCardSystemId)).toBeTruthy();
+    expect(counter.isRegistrationCounter(passCardSystemIds)).toBeTruthy();
+    expect(counter.isAuthorisedRegistrationCounter(passCardSystemIds)).toBeTruthy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(passCardSystemIds)).toBeTruthy();
 
     counter.cardSystems[1].permissions = ['registratie'];
-    expect(counter.isAuthorisedRegistrationCounter(passCardSystemId)).toBeFalsy();
-    expect(counter.isAllowedToLeaveInszNumberEmpty(passCardSystemId)).toBeFalsy();
+    expect(counter.isAuthorisedRegistrationCounter(passCardSystemIds)).toBeFalsy();
+    expect(counter.isAllowedToLeaveInszNumberEmpty(passCardSystemIds)).toBeFalsy();
 
     counter.cardSystems[1].permissions = [];
-    expect(counter.isRegistrationCounter(passCardSystemId)).toBeFalsy();
+    expect(counter.isRegistrationCounter(passCardSystemIds)).toBeFalsy();
 
-    passCardSystemId = 2;
-    expect(counter.isRegistrationCounter(passCardSystemId)).toBeFalsy();
+    passCardSystemIds = [2];
+    expect(counter.isRegistrationCounter(passCardSystemIds)).toBeFalsy();
   });
 
   it('should return unauthorised if an invalid string is given for a counter check', function () {
