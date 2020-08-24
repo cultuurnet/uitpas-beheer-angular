@@ -54,9 +54,13 @@ function PassholderMembershipRegisterController ($scope, $uibModalInstance, asso
         },
         function (data) {
           $scope.errors = [];
-          Array.isArray(data) ? angular.forEach(data.errors, function (error) {
-            $scope.errors.push(getErrorMessage(error));
-          }) : $scope.errors.push(getErrorMessage(data));
+          if (Array.isArray(data.errors)) {
+            angular.forEach(data.errors, function (error) {
+              $scope.errors.push(getErrorMessage(error));
+            });
+          } else {
+            $scope.errors.push(getErrorMessage(data.errors));
+          }
         }
       )
       .finally(function () {

@@ -18,7 +18,7 @@ function PassholderBlockPassController(pass, passholder, selectedUitpas, passhol
   // Set default parameters.
   controller.pass = angular.copy(pass);
   controller.passholder = angular.copy(passholder);
-  controller.selectedUitpas = selectedUitpas;
+  controller.selectedUitpas = angular.copy(selectedUitpas);
   controller.busyBlocking = false;
   controller.asyncError = false;
 
