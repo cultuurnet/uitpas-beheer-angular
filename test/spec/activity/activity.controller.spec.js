@@ -318,7 +318,6 @@ describe('Controller: ActivityController', function () {
     activityController.query = 'some new query';
     activityController.searchParametersChanged();
     expect(activityController.page).toEqual(1);
-    expect(activityController.hideDateRange).toBeTruthy();
 
     // Reset when date range changes.
     activityController.page = 4;
@@ -338,7 +337,7 @@ describe('Controller: ActivityController', function () {
       dateRange: DateRange.TODAY,
       page: 1,
       limit: 5,
-      sort: '',
+      sort: 'permanent desc',
       startDate: '',
       endDate: ''
     };
