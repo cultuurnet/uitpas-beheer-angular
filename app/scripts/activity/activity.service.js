@@ -34,13 +34,12 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
     var requestParameters = {
       page: searchParameters.page,
       limit: searchParameters.limit,
-      sort: searchParameters.sort
+      sort: searchParameters.sort,
+      query: searchParameters.query,
+      date_type: searchParameters.dateRange.value,
     };
 
-    if (searchParameters.query !== '' ){//&& searchParameters.query !== prevSearch){
-      requestParameters.query = searchParameters.query;
-    } else {
-      requestParameters.date_type = searchParameters.dateRange.value;
+    if (searchParameters.date_type !== 'today' ){//&& searchParameters.query !== prevSearch){
       requestParameters.startDate = searchParameters.startDate;
       requestParameters.endDate = searchParameters.endDate;
     }

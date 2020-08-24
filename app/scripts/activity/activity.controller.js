@@ -20,7 +20,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.query = '';
   controller.page = 1;
   controller.limit = 5;
-  controller.sort = '';
+  controller.sort = 'permanent desc';
   controller.activities = [];
   controller.currentClaimedActivities = [];
   controller.dateRanges = angular.copy(DateRange);
@@ -67,7 +67,6 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
    * @param {DateRange} dateRange
    */
   controller.updateDateRange = function (dateRange) {
-    controller.query = '';
     if (!angular.equals(controller.dateRange, dateRange)) {
       controller.dateRange = dateRange;
 
@@ -96,13 +95,6 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
 
     if (queryChanged() || dateRangeChanged()) {
       resetActivePage();
-    }
-
-    if (newSearchParameters.query !== '') {
-      controller.hideDateRange = true;
-    }
-    else {
-      controller.hideDateRange = false;
     }
 
     lastSearchParameters = newSearchParameters;
