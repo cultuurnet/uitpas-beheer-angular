@@ -41,5 +41,9 @@ angular
     'CHOOSE_DATE': {
       label: 'Kies datum',
       value: 'choose_date'
+    },
+    'ALL': {
+      label: 'Onbeperkt',
+      value: '',
     }
   });
