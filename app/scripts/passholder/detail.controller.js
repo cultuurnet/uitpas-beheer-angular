@@ -78,10 +78,10 @@ function PassholderDetailController (
   controller.canEditKansenstatuut = canEditKansenstatuut;
 
   function canEditKansenstatuut() {
-    if (selectedPass?.kansenStatuut === false) {
+    if (selectedPass && selectedPass.kansenStatuut === false) {
       return false;
     }
-    const selectedCardSystemId = selectedPass ? selectedPass.cardSystem.id : controller.pass.cardSystem.id;
+    var selectedCardSystemId = selectedPass ? selectedPass.cardSystem.id : controller.pass.cardSystem.id;
     return controller.activeCounter.isAuthorisedRegistrationCounter(selectedCardSystemId);
   }
 
