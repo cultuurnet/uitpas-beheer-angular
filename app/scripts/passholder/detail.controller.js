@@ -75,6 +75,16 @@ function PassholderDetailController (
     return moment().add(1, 'M').isAfter(endDate) && !moment().isAfter(endDate);
   }
 
+  controller.canEditKansenstatuut = canEditKansenstatuut;
+
+  function canEditKansenstatuut() {
+    if (selectedPass && selectedPass.kansenStatuut === false) {
+      return false;
+    }
+    var selectedCardSystemId = selectedPass ? selectedPass.cardSystem.id : controller.pass.cardSystem.id;
+    return controller.activeCounter.isAuthorisedRegistrationCounter(selectedCardSystemId);
+  }
+
   var displayCoupons = function(coupons) {
     controller.coupons = coupons;
   };
