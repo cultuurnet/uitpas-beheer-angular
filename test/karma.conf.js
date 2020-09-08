@@ -57,6 +57,7 @@ module.exports = function(config) {
       'bower_components/bootstrap/dist/js/bootstrap.js',
       'bower_components/angular-daterangepicker/js/angular-daterangepicker.js',
       'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+      'bower_components/raven-js/dist/raven.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/app.js",

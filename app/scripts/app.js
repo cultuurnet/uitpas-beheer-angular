@@ -9,7 +9,7 @@
  * Main module of the application.
  */
 angular
-  .module('uitpasbeheerApp', [
+  .module('uitpasbeheerApp', (Raven._isRavenInstalled ? ['ngRaven']:[]).concat([
     'angular.chosen',
     'angular-spinkit',
     'config',
@@ -34,8 +34,8 @@ angular
     'ubr.utilities',
     'ui.router',
     'ui.bootstrap',
-    'cultuurnet.ga-tag-manager'
-  ])
+    'cultuurnet.ga-tag-manager',
+  ]))
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
   .config(function ($stateProvider, $locationProvider, $httpProvider, ngTouchSpinProvider, $urlRouterProvider) {

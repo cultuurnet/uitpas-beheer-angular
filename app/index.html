@@ -60,8 +60,17 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-daterangepicker/js/angular-daterangepicker.js"></script>
     <script src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="bower_components/raven-js/dist/raven.js"></script>
     <!-- endbower -->
+    <script src="bower_components/raven-js/dist/plugins/angular.js"></script>
     <!-- endbuild -->
+
+    <script>
+      Raven.config("https://c93b0dc72d814c479d2d533a6bc7c9eb@o439367.ingest.sentry.io/5406126")
+        .setEnvironment('test')
+        .addPlugin(Raven.Plugins.Angular)
+        .install();
+    </script>
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
