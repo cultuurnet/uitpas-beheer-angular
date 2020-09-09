@@ -537,6 +537,17 @@ module.exports = function (grunt) {
       }
     },
 
+    replace: {
+      sentry: {
+        src: ['./dist/index.html'],
+        overwrite: true,
+        replacements: [{
+          from: `.setEnvironment('local')`,
+          to: `.setEnvironment('${loadConfig().appConfig.sentryEnv}')`
+        }]
+      }
+    },
+
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
@@ -658,6 +669,7 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
+    'replace:sentry',
     'cdnify',
     'cssmin',
     'uglify',

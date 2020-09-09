@@ -67,7 +67,7 @@
 
     <script>
       Raven.config("https://c93b0dc72d814c479d2d533a6bc7c9eb@o439367.ingest.sentry.io/5406126")
-        .setEnvironment('test')
+        .setEnvironment('local') // replaced by 'replace:sentry' Grunt task
         .addPlugin(Raven.Plugins.Angular)
         .install();
     </script>
