@@ -258,11 +258,12 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       });
     }
 
-    function checkinError() {
+    function checkinError(error) {
       controller.activities = controller.activities.map(function (existingActivity) {
         if (existingActivity.id === activity.id) {
           existingActivity.checkinBusy = false;
           existingActivity.checkinFailed = true;
+          existingActivity.checkinFailedMessage = error.user_friendly_message; // jshint ignore:line
         }
         return existingActivity;
       });
