@@ -94,7 +94,13 @@
           </div>
           <!--status failed-->
           <div class="content-holder" ng-if="activity.checkinFailed && !activity.checkinBusy">
-            <i class="error">Het sparen van punt(en) voor <span ng-bind="::activity.title"></span> is niet gelukt.</i>
+            <i class="error">Het sparen van punt(en) voor <span ng-bind="::activity.title"></span> is niet gelukt.
+              <a class="small"
+                 popover-is-open="popoverIsOpen"
+                 ng-click="popoverIsOpen = !popoverIsOpen"
+                 uib-popover="{{activity.checkinFailedMessage}}">Meer info
+              </a>
+            </i>
           </div>
           <!--status busy-->
           <div class="content-holder" ng-if="!activity.checkinFailed && activity.checkinBusy">
