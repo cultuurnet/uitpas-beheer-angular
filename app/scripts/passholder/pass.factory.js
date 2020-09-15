@@ -18,8 +18,8 @@ function passFactory(Passholder, moment) {
    * @constructor
    * @param {object}  jsonPass
    */
-  var Pass = function (jsonPass) {
-    this.parseJson(jsonPass);
+  var Pass = function (jsonPass, identification) {
+    this.parseJson(jsonPass, identification);
   };
 
   function parseAdditionalPasses(additionalPasses) {
@@ -39,11 +39,19 @@ function passFactory(Passholder, moment) {
   }
 
   Pass.prototype = {
-    parseJson: function (jsonPass) {
-      this.number = jsonPass.uitPas.number;
-      this.kansenStatuut = jsonPass.uitPas.kansenStatuut;
-      this.status = jsonPass.uitPas.status;
-      this.type = jsonPass.uitPas.type;
+    parseJson: function (jsonPass, identification) {
+      var uitPas =
+        (identification &&
+          jsonPass.passHolder &&
+          jsonPass.passHolder.uitpassen &&
+          jsonPass.passHolder.uitpassen.find(function(up) {
+            return up.number === identification;
+          })) ||
+        jsonPass.uitPas;
+      this.number = uitPas.number;
+      this.kansenStatuut = uitPas.kansenStatuut;
+      this.status = uitPas.status;
+      this.type = uitPas.type;
 
       if (jsonPass.passHolder) {
         this.passholder = new Passholder(jsonPass.passHolder);
@@ -62,10 +70,10 @@ function passFactory(Passholder, moment) {
         };
       }
 
-      if (jsonPass.uitPas.cardSystem) {
+      if (uitPas.cardSystem) {
         this.cardSystem = {
-          id: jsonPass.uitPas.cardSystem.id,
-          name: jsonPass.uitPas.cardSystem.name || 'kaart-systeem'
+          id: uitPas.cardSystem.id,
+          name: uitPas.cardSystem.name || 'kaart-systeem'
         };
       }
     },
