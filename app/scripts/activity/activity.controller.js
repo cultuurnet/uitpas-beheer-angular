@@ -112,6 +112,8 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
     // Add specific sorting for past date ranges.
     if (controller.dateRange.value === 'past') {
       searchParameters.sort = 'permanent desc,availableto desc';
+    } else if (!controller.dateRange.value || controller.dateRange.value === 'choose_date') {
+      searchParameters.sort = 'permanent desc,availableto asc';
     }
 
     var showSearchResults = function (pagedActivities) {
