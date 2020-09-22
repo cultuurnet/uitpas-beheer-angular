@@ -543,7 +543,7 @@ module.exports = function (grunt) {
         overwrite: true,
         replacements: [{
           from: `.setEnvironment('local')`,
-          to: `.setEnvironment('${loadConfig().appConfig.sentryEnv}')`
+          to: `.setEnvironment('${loadConfig().appConfig.sentryEnv || 'test'}')`
         }]
       }
     },
