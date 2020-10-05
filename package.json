@@ -10,6 +10,7 @@
   "repository": {},
   "devDependencies": {
     "autoprefixer-core": "^5.2.0",
+    "bower": "^1.8.8",
     "connect-modrewrite": "^0.8.1",
     "grunt": "^0.4.5",
     "grunt-cli": "^1.2.0",
