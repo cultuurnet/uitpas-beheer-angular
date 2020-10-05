@@ -58,6 +58,8 @@
   "scripts": {
     "test": "grunt test",
     "serve": "grunt serve",
-    "grunt": "grunt"
+    "build": "grunt build",
+    "grunt": "grunt",
+    "bower": "bower"
   }
 }
