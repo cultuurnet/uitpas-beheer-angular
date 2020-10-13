@@ -54,6 +54,10 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "serve": "grunt serve",
+    "build": "grunt build",
+    "grunt": "grunt",
+    "bower": "bower"
   }
 }
