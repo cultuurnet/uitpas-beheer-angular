@@ -39,7 +39,9 @@ function ubrVoucherNumber(counterService) {
       var voucherNumber = modelController.$viewValue;
 
       var updatePriceInfo = function (priceInfo) {
-        modelController.$setValidity('voucher', true);
+        angular.forEach(modelController.$error, function (value, propName) {
+          modelController.$setValidity(propName, true);
+        });
         scope.parentController.price = priceInfo.price;
 
         if (!voucherNumber) {
