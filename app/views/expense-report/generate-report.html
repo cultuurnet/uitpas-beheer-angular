@@ -41,4 +41,19 @@
       </p>
     </div>
   </div>
+
+  <div class="row">
+    <div class="grid__12">
+    <h2>Je klaargezette onkostennota's</h2>
+      <p ng-show="erc.periodFetchError" class="alert alert-danger">Onkostennota's konden niet klaargezet worden.</p>
+      <ul>
+        <li ng-repeat="period in erc.periods">{{period.from}} - {{period.to}}
+          <span ng-show="erc.reportPending()" class="small">
+            Maak en download <span ng-show="erc.periodReportPending(period)" class="fa fa-refresh loading small"></span>
+          </span>
+          <a  ng-hide="erc.reportPending()" class="small" ng-click="erc.setDateAndGenerate(period)">Maak en download</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </section>

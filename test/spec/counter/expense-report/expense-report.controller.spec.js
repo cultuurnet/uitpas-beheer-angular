@@ -2,8 +2,9 @@
 
 describe('Controller: expenseReportController', function () {
 
-  var $controller, $scope, $httpBackend, $interval, controller;
+  var $controller, $scope, $httpBackend, $interval, $q, controller, expenseReportService;
   var apiUrl = 'http://tett.en/';
+  var deferredPeriods;
 
   beforeEach(module('ubr.counter.expense-report', function($provide) {
     $provide.constant('appConfig', {
@@ -11,14 +12,20 @@ describe('Controller: expenseReportController', function () {
     });
   }));
 
-  beforeEach(inject(function (_$controller_, $rootScope, _$httpBackend_, _$interval_) {
+  beforeEach(inject(function ($injector, _$controller_, $rootScope, _$httpBackend_, _$interval_) {
+    $q = $injector.get('$q');
     $controller = _$controller_;
     $scope = $rootScope.$new();
     $httpBackend = _$httpBackend_;
     $interval = _$interval_;
 
+    expenseReportService  = jasmine.createSpyObj('expenseReportService', ['getPeriods']);
+    deferredPeriods = $q.defer();
+    expenseReportService.getPeriods.and.returnValue(deferredPeriods.promise);
+
     controller = $controller('ExpenseReportController', {
-      $scope: $scope
+      $scope: $scope,
+      expenseReportService: expenseReportService
     });
   }));
 
@@ -29,6 +36,9 @@ describe('Controller: expenseReportController', function () {
       from: '2010-09-09',
       to: '2015-09-09'
     };
+
+
+    expect(expenseReportService.getPeriods).toHaveBeenCalled();
 
     $httpBackend
       .expectPOST(apiUrl + 'counters/active/expense-reports', expectedData)
