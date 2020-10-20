@@ -602,6 +602,68 @@ describe('Controller: ActivityController', function () {
     expect(activityController.passholder).toEqual(passholder);
   });
 
+  it('should fill in the passholder property of the controller when mulitple passholders were given, no one has a valid kansenstatuut and the current counter has multiple card systems', function () {
+    delete passholder.kansenStatuten;
+
+    passholder.uitPassen = [
+      {
+        number: '0930000422202',
+        kansenStatuut: true,
+        status: 'ACTIVE',
+        type: 'CARD',
+        cardSystem: {
+          id: '3',
+          name: 'UiTPAS Regio Brussel'
+        }
+      }
+    ];
+
+    var passholdersAlter = [
+      passholder,
+      passholder,
+      passholder
+    ];
+
+    var originalCardSystems = activeCounter.cardSystems;
+
+    activeCounter.cardSystems = {
+      '1': {
+        'permissions': [],
+        'groups': ['Checkin and Ticket balies'],
+        'id': '1',
+        'name': 'UiTPAS Regio Aalst',
+        'distributionKeys': []
+      },
+      '3': {
+        'permissions': [],
+        'groups': ['Checkin and Ticket balies'],
+        'id': '3',
+        'name': 'UiTPAS Regio Brussel',
+        'distributionKeys': []
+      }
+    };
+
+    activityController = $controller('ActivityController', {
+      passholder: null,
+      passholders: passholdersAlter,
+      bulkSelection: bulkSelection,
+      activityService: activityService,
+      DateRange: DateRange,
+      $rootScope: $rootScope,
+      $scope: $scope,
+      activityMode: 'counter',
+      $state: $state,
+      activeCounter: activeCounter
+    });
+
+    $scope.$digest();
+
+    expect(activityController.passholder).toEqual(passholder);
+
+    activeCounter.cardSystems = originalCardSystems;
+  });
+
+
   it('should fill in the passholder property of the controller when all passholders kansenstatuut expired', function () {
     passholder.kansenStatuten = [
       {

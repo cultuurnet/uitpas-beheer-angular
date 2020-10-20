@@ -151,10 +151,14 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
           var keepGoing2 = true;
           angular.forEach(passholderNoKansenstatuut, function(passholder) {
             if(keepGoing2) {
-              if(passholder.getUitpasStatusInCardSystemID(activeCounter.getFirstCardSystem().id) === 'ACTIVE') {
-                controller.passholder = passholder;
-                keepGoing2 = false;
-              }
+              angular.forEach(activeCounter.cardSystems, function (cardSystem) {
+                if (keepGoing2) {
+                  if(passholder.getUitpasStatusInCardSystemID(cardSystem.id) === 'ACTIVE') {
+                    controller.passholder = passholder;
+                    keepGoing2 = false;
+                  }
+                }
+              });
             }
           });
         }
