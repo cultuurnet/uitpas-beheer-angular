@@ -1,5 +1,6 @@
 'use strict';
 
+
 /**
  * @ngdoc function
  * @name ubr.counter.expense-report.controller:ExpenseReportController
@@ -12,17 +13,18 @@ angular
   .controller('ExpenseReportController', ExpenseReportController);
 
 /* @ngInject */
-function ExpenseReportController ($http, $filter, $interval, appConfig, $scope) {
+function ExpenseReportController (expenseReportService, $http, $filter, $interval, appConfig, $scope, $window) {
   var apiUrl = appConfig.apiUrl + 'counters/active/expense-reports';
-
   var erc = this;
   var dateFormat = 'yyyy-MM-dd';
   var reportGenerationMonitor;
+  var forceDownload = false;
   var stopMonitor = function () {
     if (reportGenerationMonitor) {
       $interval.cancel(reportGenerationMonitor);
       reportGenerationMonitor = null;
     }
+    forceDownload = false;
   };
 
   erc.reportFrom = new Date();
@@ -31,6 +33,8 @@ function ExpenseReportController ($http, $filter, $interval, appConfig, $scope) 
   erc.generatingReport = false;
   erc.asyncError = false;
   erc.reportLocation = '';
+  erc.periods = [];
+  erc.periodFetchError = false;
 
   erc.resetReport = function () {
     erc.asyncError = false;
@@ -65,6 +69,10 @@ function ExpenseReportController ($http, $filter, $interval, appConfig, $scope) 
 
     var displayReport = function (generationResponse) {
       if (generationResponse.status === 200 && generationResponse.data.completed === true) {
+        if (forceDownload) {
+          $window.location.href = generationResponse.data.download;
+        }
+        
         stopMonitor();
         erc.generatingReport = false;
         erc.reportLocation = generationResponse.data.download;
@@ -100,6 +108,29 @@ function ExpenseReportController ($http, $filter, $interval, appConfig, $scope) 
 
   erc.reportPending = function () {
     return erc.requestingReport || erc.generatingReport;
+  };
+
+  erc.displayPeriods = function () {
+    function showFetchResults(results) {
+      erc.periodFetchError = false;
+      erc.periods = results;
+    }
+    function fetchFailed() {
+      erc.periodFetchError = true;
+    }
+    expenseReportService.getPeriods().then(showFetchResults, fetchFailed);
+  };
+  erc.displayPeriods();
+
+  erc.setDateAndGenerate = function (period) {
+    erc.reportFrom = new Date(period.from);
+    erc.reportTo = new Date(period.to);
+    forceDownload = true;
+    erc.generateReport();
+  };
+
+  erc.periodReportPending = function (period) {
+    return erc.reportFrom.toString() === new Date(period.from).toString() && erc.reportTo.toString() === new Date(period.to).toString();
   };
 
   $scope.$watch(function () {
