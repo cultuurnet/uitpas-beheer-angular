@@ -1,0 +1,98 @@
+<section class="overview overview-activities">
+  <h2 class="overview__title">Activiteiten</h2>
+  <div class="grid overview__search">
+    <div class="grid__12 grid--bp-med__6 grid">
+      <div class="btn-group" ng-class="ac.hideDateRange || ac.dateRange === ac.dateRanges.CHOOSE_DATE ? 'grid__4' : 'grid__12'" uib-dropdown ng-hide="ac.hideDateRange && !ac.activitiesLoading">
+        <label class="control-label">Datumbereik</label>
+        <button id="split-button" type="button" class="btn btn-default" ng-bind="ac.dateRange.label"></button>
+        <button type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="!!ac.activitiesLoading">
+          <span class="caret"></span>
+          <span class="sr-only">Split button!</span>
+        </button>
+        <ul class="uib-dropdown-menu" role="menu" aria-labelledby="split-button">
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.TODAY)">Vandaag</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_7_DAYS)">{{ac.dateRanges.NEXT_7_DAYS.label}}</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_30_DAYS)">{{ac.dateRanges.NEXT_30_DAYS.label}}</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.NEXT_12_MONTHS)">{{ac.dateRanges.NEXT_12_MONTHS.label}}</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.ALL)">Onbeperkt</a>
+          </li>
+          <li class="divider"></li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.PAST)">{{ac.dateRanges.PAST.label}}</a>
+          </li>
+          <li role="menuitem">
+            <a href ng-click="ac.updateDateRange(ac.dateRanges.CHOOSE_DATE)">{{ac.dateRanges.CHOOSE_DATE.label}}</a>
+          </li>
+        </ul>
+      </div>
+      <div ng-show="ac.hideDateRange && !ac.activitiesLoading">
+        <strong><ng-pluralize count="ac.totalActivities"
+                              when="{'one': '1 resultaat gevonden', 'other': '{} resultaten gevonden'}">
+        </ng-pluralize> </strong> <a ng-click="ac.resetSearchQuery()">Annuleren</a>
+      </div>
+      <div ng-hide="ac.dateRange !== ac.dateRanges.CHOOSE_DATE || ac.hideDateRange">
+        <div class="grid__4">
+          <ubr-datepicker ng-model="ac.chooseDateStart" ng-change="ac.searchParametersChanged()" ubr-label="Startdatum" ubr-name="startDate" ubr-full-range="true"></ubr-datepicker>
+        </div>
+        <div class="grid__4">
+          <ubr-datepicker ng-model="ac.chooseDateEnd" ng-change="ac.searchParametersChanged()" ubr-label="Einddatum" ubr-name="endDate" ubr-full-range="true"></ubr-datepicker>
+        </div>
+      </div>
+    </div>
+    <div class="grid__12 grid--bp-med__6 text-right">
+      <div class="search">
+        <form ng-submit="ac.searchParametersChanged()">
+          <input class="form-control" type="text" ng-model="ac.query" />
+          <button class="btn btn-ghost-dark" ng-click="ac.searchParametersChanged()" ng-disabled="!!ac.activitiesLoading">
+            Zoeken
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="overview__loading" ng-show="ac.activitiesLoading">
+    <div class="spinner spinner-small">
+      <circle-spinner></circle-spinner>
+    </div>
+  </div>
+
+  <div class="text-muted" ng-if="!ac.activitiesLoading && !ac.totalActivities">Geen activiteiten gepland.</div>
+
+  <ul class="list-unstyled" ng-if="!ac.activitiesLoading && ac.totalActivities > 0">
+    <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
+      <div class="grid display-table">
+        <div class="grid__12 grid--bp-med__9 first">
+          <div class="date" ng-bind="::activity.when"></div>
+          <h3 ui-sref="counter.activities.activity({ activity: activity })">{{activity.title}}</h3>
+        </div> <!--/ end .grid-first -->
+        <div class="grid__12 grid--bp-med__3 middle">
+          <div class="content-holder">
+            <button class="btn btn-default btn-sm" ng-click="ac.downloadQRCode(activity)">Download QR-spaarcode</button>
+          </div>
+        </div> <!--/ end .grid-middle -->
+      </div> <!--/ end .grid -->
+    </li>
+  </ul>
+
+  <uib-pagination class="pagination"
+                  total-items="ac.totalActivities"
+                  ng-model="ac.page"
+                  items-per-page="ac.limit"
+                  ng-change="ac.searchParametersChanged()"
+                  max-size="10"
+                  previous-text="&lsaquo; Vorige"
+                  next-text="Volgende &rsaquo;"
+                  ng-show="ac.totalActivities > ac.limit">
+  </uib-pagination>
+
+</section>
