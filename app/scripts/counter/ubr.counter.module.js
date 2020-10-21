@@ -15,6 +15,7 @@ angular
     'ubr.counter.expense-report',
     'ubr.counter.membership',
     'ubr.counter.statistics',
+    'ubr.counter.activities',
     'truncate'
   ])
   /* @ngInject */
