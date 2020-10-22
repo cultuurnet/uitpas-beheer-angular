@@ -27,7 +27,7 @@ function ActivitiesController($http, activitiesService, DateRange) {
   controller.chooseDateStart = null;
   controller.chooseDateEnd = null;
   controller.totalActivities = 0;
-  controller.activitiesLoading = 0;
+  controller.activitiesLoading = false;
   controller.hideDateRange = false;
 
   function getSearchParameters() {
@@ -63,13 +63,13 @@ function ActivitiesController($http, activitiesService, DateRange) {
     var showResult = function (pagedActivities) {
       controller.activities = pagedActivities.activities;
       controller.totalActivities = pagedActivities.totalActivities;
-      --controller.activitiesLoading;
+      controller.activitiesLoading = false;
     };
 
     var fetchFailed = function () {
-      --controller.activitiesLoading;
+      controller.activitiesLoading = false;
     };
-    ++controller.activitiesLoading;
+    controller.activitiesLoading = true;
     activitiesService.getActivities(searchParameters).then(showResult, fetchFailed);
   };
 

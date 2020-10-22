@@ -65,6 +65,7 @@ module.exports = function(config) {
       "app/scripts/activity/ubr.activity.module.js",
       "app/scripts/advantage/ubr.advantage.module.js",
       "app/scripts/counter/ubr.counter.module.js",
+      "app/scripts/counter/activities/ubr.activities.module.js",
       "app/scripts/counter/checkin-devices/ubr.checkin-devices.module.js",
       "app/scripts/counter/expense-report/ubr.expense-report.module.js",
       "app/scripts/counter/membership/ubr.counter-membership.module.js",

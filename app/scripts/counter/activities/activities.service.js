@@ -7,6 +7,7 @@ angular
 /* @ngInject */
 function activitiesService($q, $http, appConfig, Activity) {
   var apiUrl = appConfig.apiUrl;
+  var activitiesUrl = apiUrl + 'counters/active/activities';
 
   /*jshint validthis: true */
   var service = this;
@@ -32,13 +33,13 @@ function activitiesService($q, $http, appConfig, Activity) {
       date_type: searchParameters.dateRange.value,
     };
 
-    if (searchParameters.date_type !== 'today' ){//&& searchParameters.query !== prevSearch){
+    if (searchParameters.date_type !== 'today' ){
       requestParameters.startDate = searchParameters.startDate;
       requestParameters.endDate = searchParameters.endDate;
     }
 
     var request = $http.get(
-      apiUrl + 'counters/active/activities',
+      activitiesUrl,
       {
         withCredentials: true,
         params: requestParameters
