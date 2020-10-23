@@ -14,7 +14,7 @@ angular
   .controller('ActivitiesController', ActivitiesController);
 
 /* @ngInject */
-function ActivitiesController($http, activitiesService, counterService, DateRange) {
+function ActivitiesController(activitiesService, counterService, DateRange) {
   /*jshint validthis: true */
   var controller = this;
 
