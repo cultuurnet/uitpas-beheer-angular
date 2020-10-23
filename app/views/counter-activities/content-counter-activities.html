@@ -80,9 +80,13 @@
             <button class="btn btn-default btn-sm" ng-click="ac.downloadQRCode(activity)">Download QR-spaarcode</button>
           </div>
         </div> <!--/ end .grid-middle -->
+        <!-- qr-code for activity (hidden for viewer) -->
+        <qrcode id="{{activity.id}}" data="{{ac.getQRCodeForActivity(activity)}}" size="400" version="1" style="display: none"></qrcode>
       </div> <!--/ end .grid -->
     </li>
   </ul>
+
+  <!--<qrcode data="vwx2b1db" size="400" version="1"></qrcode>-->
 
   <uib-pagination class="pagination"
                   total-items="ac.totalActivities"
