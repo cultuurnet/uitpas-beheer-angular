@@ -12,7 +12,7 @@ angular
   .controller('ActivitiesController', ActivitiesController);
 
 /* @ngInject */
-function ActivitiesController($http, activitiesService, DateRange) {
+function ActivitiesController($http, activitiesService, counterService, DateRange) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -20,7 +20,7 @@ function ActivitiesController($http, activitiesService, DateRange) {
   controller.query = '';
   controller.page = 1;
   controller.limit = 5;
-  controller.sort = 'permanent asc';
+  controller.sort = 'permanent desc';
   controller.activities = [];
   controller.dateRanges = angular.copy(DateRange);
   controller.dateRange = controller.dateRanges.ALL;
@@ -29,6 +29,12 @@ function ActivitiesController($http, activitiesService, DateRange) {
   controller.totalActivities = 0;
   controller.activitiesLoading = false;
   controller.hideDateRange = false;
+
+  var setActiveCounter = function (counter) {
+    controller.activeCounter = counter;
+  };
+
+  counterService.getActive().then(setActiveCounter);
 
   function getSearchParameters() {
     var searchParameters = {
@@ -60,6 +66,13 @@ function ActivitiesController($http, activitiesService, DateRange) {
   controller.getActivities = function () {
     var searchParameters = getSearchParameters();
 
+    // Add specific sorting for past date ranges.
+    if (controller.dateRange.value === 'past') {
+      searchParameters.sort = 'permanent desc,availableto desc';
+    } else if (!controller.dateRange.value || controller.dateRange.value === 'choose_date') {
+      searchParameters.sort = 'permanent desc,availableto asc';
+    }
+
     var showResult = function (pagedActivities) {
       controller.activities = pagedActivities.activities;
       controller.totalActivities = pagedActivities.totalActivities;
@@ -73,9 +86,96 @@ function ActivitiesController($http, activitiesService, DateRange) {
     activitiesService.getActivities(searchParameters).then(showResult, fetchFailed);
   };
 
+  function truncateString(str, n, useWordBoundary) {
+    if (str.length <= n) {
+      return str;
+    }
+    const subString = str.substr(0, n - 1); // the original check
+    return (useWordBoundary ? subString.substr(0, subString.lastIndexOf(' ')) : subString) + '...';
+  }
+
   controller.downloadQRCode = function (activity) {
-    // TODO: generate QR code here
-    console.log('downloading QR code for activity: \"', activity.title, '\"');
+    fetch('/images/png/logo_black.png')
+      .then(function (response) {
+        return response.blob();
+      })
+      .then(function (blob) {
+        var reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+          /* Remove next 2 lines when adding validity period for qr code */
+          var date = new Date();
+          date.setDate(date.getDate() + 1);
+
+          var docDefinition = {
+            content: [
+              {
+                image: reader.result,
+                width: 350,
+                alignment: 'center'
+              },
+              {
+                fontSize: 42,
+                text: 'Spaar een punt',
+                bold: true,
+                margin: [16, 16],
+                alignment: 'center'
+              },
+              {
+                fontSize: 18,
+                ul: [
+                  {
+                    text: 'Ga naar uitpas.be/sparen',
+                    margin: [0, 8]
+                  },
+                  {
+                    text: 'Log in met je UiTPAS',
+                    margin: [0, 8]
+                  },
+                  {
+                    text: 'Scan deze code',
+                    margin: [0, 8, 0, 24]
+                  }
+                ],
+                margin: [115, 0],
+                width: 300,
+              },
+              {
+                image: document.getElementById(activity.id).firstChild.toDataURL(),
+                width: 300,
+                alignment: 'center'
+              },
+              {
+                fontSize: 12,
+                text: 'code geldig tot: ' + date.toLocaleDateString() /* Replace with actual validity date */,
+                margin: [0, 8, 0, 0],
+                alignment: 'center'
+              },
+              {
+                fontSize: 20,
+                text: truncateString(activity.title, 40, true),
+                bold: true,
+                margin: [0, 32, 0, 28],
+                alignment: 'center'
+              },
+              {
+                fontSize: 20,
+                text: controller.activeCounter.name,
+                alignment: 'center'
+              }
+            ],
+            defaultStyle: {
+              font: 'Roboto'
+            }
+          };
+          pdfMake.createPdf(docDefinition).download(controller.activeCounter.name + '_' + activity.title + '_QRcode.pdf');
+        };
+      });
+  };
+
+  controller.getQRCodeForActivity = function (activity) {
+    // TODO: get code for QR from BE here
+    return 'vwx2b1db';
   };
 
   controller.searchParametersChanged = function () {
