@@ -14,9 +14,10 @@ angular
   .controller('ActivitiesController', ActivitiesController);
 
 /* @ngInject */
-function ActivitiesController(activitiesService, counterService, DateRange) {
+function ActivitiesController(activitiesService, counterService, DateRange, moment) {
   /*jshint validthis: true */
   var controller = this;
+  var yesterday = moment().subtract(1, 'day');
 
   // Set default parameters.
   controller.query = '';
@@ -94,6 +95,10 @@ function ActivitiesController(activitiesService, counterService, DateRange) {
     }
     var subString = str.substr(0, n - 1); // the original check
     return (useWordBoundary ? subString.substr(0, subString.lastIndexOf(' ')) : subString) + '...';
+  }
+
+  controller.showDownloadButton = function (activity) {
+    return moment(activity.when).isAfter(yesterday);
   }
 
   controller.downloadQRCode = function (activity) {
