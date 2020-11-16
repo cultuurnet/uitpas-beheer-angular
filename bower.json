@@ -28,7 +28,8 @@
     "bootstrap-daterangepicker": "^2.1.24",
     "cultuurnet-google-tagmanager": "*",
     "angular-daterangepicker": "^0.2.2",
-    "eonasdan-bootstrap-datetimepicker": "^4.17.47"
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
+    "raven-js": "^3.27.2"
   },
   "overrides": {
     "angular-chosen-js": {
