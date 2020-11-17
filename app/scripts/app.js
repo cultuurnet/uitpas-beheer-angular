@@ -10,6 +10,8 @@
  */
 angular
   .module('uitpasbeheerApp', [
+    'initSentry',
+    'ngRaven',
     'angular.chosen',
     'angular-spinkit',
     'config',

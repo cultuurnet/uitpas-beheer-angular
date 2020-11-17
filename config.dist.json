@@ -2,6 +2,10 @@
   "apiUrl": "http://culpas-silex.dev/",
   "basePath": "/",
   "buildNumber": "001",
+  "sentry": {
+    "env": "development",
+    "dsn": ""
+  },
   "contacts": [
     {
       "name": "Dender",
