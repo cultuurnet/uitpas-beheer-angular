@@ -49,8 +49,6 @@ module.exports = function(config) {
       'bower_components/moment/moment.js',
       'bower_components/moment/locale/nl.js',
       'bower_components/ngTouchSpin/src/js/ngTouchSpin.js',
-      'bower_components/pdfmake/build/pdfmake.js',
-      'bower_components/pdfmake/build/vfs_fonts.js',
       'bower_components/phoneformat/dist/phone-format-global.js',
       'bower_components/showdown/dist/showdown.js',
       'bower_components/angular-chosen-js/angular-chosen.js',

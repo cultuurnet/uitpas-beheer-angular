@@ -79,11 +79,9 @@
         </div>
         <div class="grid__12 grid--bp-med__3 middle" ng-if="ac.showDownloadButton(activity)">
           <div class="content-holder">
-            <button class="btn btn-default btn-sm"  ng-click="ac.downloadQRCode(activity)" >Download QR-spaarcode</button>
+            <a class="btn btn-default btn-sm" ng-href="{{ac.apiUrl + activity.id + '?zipped=true'}}" target="_blank">Download QR-spaarcode</a>
           </div>
         </div> <!--/ end .grid-middle -->
-        <!-- qr-code for activity (hidden for viewer) -->
-        <qrcode id="{{activity.id}}" data="{{ac.getQRCodeForActivity(activity)}}" size="400" version="1" style="display: none"></qrcode>
       </div> <!--/ end .grid -->
     </li>
   </ul>
