@@ -22,7 +22,7 @@ function ActivitiesController(activitiesService, counterService, DateRange, mome
   controller.query = '';
   controller.page = 1;
   controller.limit = 5;
-  controller.sort = 'permanent desc';
+  controller.sort = 'permanent desc,periods desc,availableto asc';
   controller.activities = [];
   controller.dateRanges = angular.copy(DateRange);
   controller.dateRange = controller.dateRanges.ALL;
