@@ -20,7 +20,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.query = '';
   controller.page = 1;
   controller.limit = 5;
-  controller.sort = 'permanent desc';
+  controller.sort = 'permanent desc,periods desc,availableto asc';
   controller.activities = [];
   controller.currentClaimedActivities = [];
   controller.dateRanges = angular.copy(DateRange);

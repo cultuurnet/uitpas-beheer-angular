@@ -337,7 +337,7 @@ describe('Controller: ActivityController', function () {
       dateRange: DateRange.TODAY,
       page: 1,
       limit: 5,
-      sort: 'permanent desc',
+      sort: 'permanent desc,periods desc,availableto asc',
       startDate: '',
       endDate: ''
     };
