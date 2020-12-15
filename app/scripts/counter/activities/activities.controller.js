@@ -25,7 +25,7 @@ function ActivitiesController(activitiesService, counterService, DateRange, mome
   controller.sort = 'permanent desc,periods desc,availableto asc';
   controller.activities = [];
   controller.dateRanges = angular.copy(DateRange);
-  controller.dateRange = controller.dateRanges.ALL;
+  controller.dateRange = controller.dateRanges.NEXT_12_MONTHS;
   controller.chooseDateStart = null;
   controller.chooseDateEnd = null;
   controller.totalActivities = 0;
