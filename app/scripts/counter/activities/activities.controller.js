@@ -92,9 +92,10 @@ function ActivitiesController(activitiesService, counterService, DateRange, mome
     // is date range
     if (activity.when && activity.when.toLowerCase().indexOf('van') !== -1 && activity.when.toLowerCase().indexOf('tot') !== -1) {
       var fromTo = activity.when.split('tot');
-      return moment(fromTo[1]).isAfter(yesterday);
+      return moment(fromTo[1], 'dddd DD MMM YYYY').isAfter(yesterday);
     }
-    return moment(activity.when).isAfter(yesterday);
+
+    return moment(activity.when, 'dddd DD MMM YYYY').isAfter(yesterday);
   };
 
   controller.searchParametersChanged = function () {
