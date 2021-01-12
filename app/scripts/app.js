@@ -40,7 +40,9 @@ angular
   ])
   .constant('moment', moment) // jshint ignore:line
   /* @ngInject */
-  .config(function ($stateProvider, $locationProvider, $httpProvider, ngTouchSpinProvider, $urlRouterProvider) {
+  .config(function ($stateProvider, $locationProvider, $httpProvider, ngTouchSpinProvider, $urlRouterProvider, moment) {
+
+    moment.locale('nl-be');
 
     ngTouchSpinProvider.arrowControlsEnabled(false);
 
