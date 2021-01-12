@@ -17,7 +17,7 @@ function eIDService($window, $rootScope, day) {
   var service = this;
 
   service.init = function () {
-    $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city) {
+    $window.readEid = function(firstName, lastName, inszNumber, dateOfBirth, placeOfBirth, gender, nationality, street, postalCode, city, base64Picture) {
 
       var dateOfBirthAsDate = day(dateOfBirth, 'D/M/YYYY').toDate();
 
@@ -45,7 +45,7 @@ function eIDService($window, $rootScope, day) {
           city: city
         }
       };
-      $rootScope.$emit('eIDDataReceived', eIDData);
+      $rootScope.$emit('eIDDataReceived', eIDData, base64Picture);
     };
 
     $window.readEidPhoto = function(base64Picture) {

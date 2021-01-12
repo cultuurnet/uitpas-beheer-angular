@@ -132,7 +132,7 @@ function PassholderEditController (passholder, identification, $uibModalInstance
     }
   };
 
-  var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
+  var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData, base64Picture) {
     angular.merge(controller.eIDData, eIDData);
 
     if (controller.disableInszNumber && controller.passholder.inszNumber !== eIDData.inszNumber) {
@@ -140,10 +140,16 @@ function PassholderEditController (passholder, identification, $uibModalInstance
     } else {
       angular.merge(controller.passholder, eIDData);
       controller.eIDError = false;
+
+      if (base64Picture) {
+        controller.eIDData.picture = base64Picture;
+        controller.passholder.picture = base64Picture;
+      }
     }
     $scope.$apply();
   });
   var cleanupEIDPhotoReceivedListener = $rootScope.$on('eIDPhotoReceived', function(event, base64Picture) {
+    if (Raven) { Raven.captureMessage('eIDPhotoReceived', {level: 'warning'}); }
     controller.eIDData.picture = base64Picture;
     controller.passholder.picture = base64Picture;
     $scope.$apply();
