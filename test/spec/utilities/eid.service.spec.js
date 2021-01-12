@@ -70,13 +70,14 @@ describe('Service: eIDService', function () {
       eIDRawData.nationality,
       eIDRawData.address.street,
       eIDRawData.address.postalCode,
-      eIDRawData.address.city
+      eIDRawData.address.city,
+      'somePicture'
     );
 
     var expectedData = angular.copy(eIDRawData);
     expectedData.birth.date = day(expectedData.birth.date, 'D/M/YYYY').toDate();
 
-    expect($scope.$emit).toHaveBeenCalledWith('eIDDataReceived', expectedData);
+    expect($scope.$emit).toHaveBeenCalledWith('eIDDataReceived', expectedData, 'somePicture');
   });
 
   it('should emit when the readIdPhoto function is called', function () {
@@ -108,7 +109,8 @@ describe('Service: eIDService', function () {
     expectedData.birth.date = day(expectedData.birth.date, 'D/M/YYYY').toDate();
     var expectedEmitArgs = [
       'eIDDataReceived',
-      expectedData
+      expectedData,
+      undefined
     ];
 
     $window.readEid(

@@ -79,6 +79,11 @@ function appController($rootScope, $location, $state, appConfig, uitid, counterS
   };
 
   app.setActiveCounter = function (event, activeCounter) {
+    if (Raven) {
+      Raven.setTagsContext({
+        counter: activeCounter.name
+      });
+    }
     app.counter = activeCounter;
   };
 
