@@ -89,6 +89,10 @@ function ActivitiesController(activitiesService, counterService, DateRange, mome
   };
 
   controller.showDownloadButton = function (activity) {
+    if (!activity.when) {
+      return true;
+    }
+
     // is date range
     if (activity.when && activity.when.toLowerCase().indexOf('van') !== -1 && activity.when.toLowerCase().indexOf('tot') !== -1) {
       var fromTo = activity.when.split('tot');
