@@ -88,20 +88,6 @@ function ActivitiesController(activitiesService, counterService, DateRange, mome
     activitiesService.getActivities(searchParameters).then(showResult, fetchFailed);
   };
 
-  controller.showDownloadButton = function (activity) {
-    if (!activity.when) {
-      return true;
-    }
-
-    // is date range
-    if (activity.when && activity.when.toLowerCase().indexOf('van') !== -1 && activity.when.toLowerCase().indexOf('tot') !== -1) {
-      var fromTo = activity.when.split('tot');
-      return moment(fromTo[1], 'dddd DD MMM YYYY').isAfter(yesterday);
-    }
-
-    return moment(activity.when, 'dddd DD MMM YYYY').isAfter(yesterday);
-  };
-
   controller.searchParametersChanged = function () {
     var newSearchParameters = getSearchParameters();
 
