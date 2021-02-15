@@ -2,6 +2,7 @@ sudo: false
 language: node_js
 node_js:
   - '8'
+  - '14'
 before_script:
   - 'gem install compass'
   - 'npm install -g bower grunt-cli'
