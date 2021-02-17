@@ -75,9 +75,7 @@
           <div class="date" ng-bind="::activity.when"></div>
           <h3 ui-sref="counter.activities.activity({ activity: activity })">{{activity.title}}</h3>
         </div> <!--/ end .grid-first -->
-        <div class="grid__12 grid--bp-med__3" ng-if="!ac.showDownloadButton(activity)">
-        </div>
-        <div class="grid__12 grid--bp-med__3 middle" ng-if="ac.showDownloadButton(activity)">
+        <div class="grid__12 grid--bp-med__3 middle">
           <div class="content-holder">
             <a class="btn btn-default btn-sm" ng-href="{{ac.apiUrl + activity.id + '/qr-spaarcode.zip'}}">Download QR-spaarcode</a>
           </div>
