@@ -12,7 +12,7 @@ angular
   .controller('AppController', appController);
 
 /* @ngInject */
-function appController($rootScope, $location, $state, appConfig, uitid, counterService, GoogleAnalyticsService) {
+function appController($rootScope, $location, $state, appConfig, uitid, counterService, GoogleAnalyticsService, isJavaFXBrowser) {
   $rootScope.appBusy = true;
   var firstPage = true;
 
@@ -58,6 +58,17 @@ function appController($rootScope, $location, $state, appConfig, uitid, counterS
   app.user = undefined;
   app.counter = undefined;
   app.buildNumber = appConfig.buildNumber;
+
+
+  function browserEngineIsOlderThan(requiredEngineVersion){
+    var matches = navigator.userAgent.match(/(.*)\/(.*)$/);
+    var userAgentVersion = parseInt(matches[2]);
+    return userAgentVersion < requiredEngineVersion;
+  }
+
+  app.showNewVersionWarning = isJavaFXBrowser ? browserEngineIsOlderThan(609) : false;
+  app.userAgent = navigator.userAgent;
+
 
   app.requireActiveCounter = function (event, toState, toParams) {
     if (toState.requiresCounter && !app.counter) {
