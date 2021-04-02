@@ -143,7 +143,7 @@
               <div class="coupon" ng-switch-when="coupon" ng-init="tariffCoupon = activity.getRedeemableCoupons()[0]">
                 <strong>&euro; {{::activity.sales.tariffs.lowestAvailable}}</strong><br>
                 <small ng-bind="::tariffCoupon.name"></small>
-                <a class="btn btn-default btn-sm assign-tariff" ng-click="ac.claimTariff(tariffCoupon, activity)" >Tarief toekennen</a>
+                <a class="btn btn-default btn-sm assign-tariff" ui-sref="counter.main.passholder.activityTariffs({ activity: activity })">Tarief kiezen</a>
               </div>
               <div class="base-tariff" ng-switch-default>
                 <strong>&euro; {{::activity.sales.base.Basisprijs}}</strong><br>

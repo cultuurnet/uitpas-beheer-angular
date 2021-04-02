@@ -145,7 +145,7 @@ function activityFactory(CheckinState) {
       else if (activity.sales && activity.sales.tariffs && activity.sales.tariffs.couponAvailable) {
         tariff = 'coupon';
       }
-
+      console.log({tariff, activity})
       return tariff;
     },
     getRedeemableCoupons: function () {
