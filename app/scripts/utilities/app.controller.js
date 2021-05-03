@@ -12,9 +12,10 @@ angular
   .controller('AppController', appController);
 
 /* @ngInject */
-function appController($rootScope, $location, $state, appConfig, uitid, counterService, GoogleAnalyticsService, isJavaFXBrowser) {
+function appController($rootScope, $location, $state, appConfig, uitid, counterService, GoogleAnalyticsService) {
   $rootScope.appBusy = true;
   var firstPage = true;
+  var isJavaFXBrowser = navigator.userAgent.indexOf('JavaFX') > -1;
 
   $rootScope.$on('$stateChangeStart', function () {
     $rootScope.appBusy = true;
