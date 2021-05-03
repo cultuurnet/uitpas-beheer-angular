@@ -17,8 +17,34 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
   /*jshint validthis: true */
   var service = this;
 
+  var token = null;
+
   service.active = undefined;
   service.list = {};
+
+  service.getToken = function () {
+    $http.get(appConfig.apiUrl + 'culturefeed/oauth/token', {
+        withCredentials: true,
+    }).success(function(response){
+      token = response.token;
+      console.log({counterService: counterService.active})
+      var prevHeaders = $http.defaults.headers.get;
+      // Remove "pragma" header to prevent CORS error
+      $http.defaults.headers.get = {
+        'Cache-Control': 'no-cache'
+      };
+      $http.get('https://balie-insights-proxy-test-auth-s4vvfnqwhq-ew.a.run.app/v1/' + counterService.active.id + '/sale' , {
+        withCredentials: false,
+        headers: {
+          'Authorization': 'Bearer ' + token,
+        }
+      }).finally(function() {
+        $http.defaults.headers.get = prevHeaders;
+      });
+    });
+  };
+
+  // service.getToken();
 
   /**
    * Get default date range
@@ -57,6 +83,7 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    * @return {Promise<CounterSalesStatistics[]|ApiError>} A list of datapoints or an error response.
    */
   service.getStatistics = function (params, path) {
+    console.log({params: params, path: path})
     var dates = this.getDefaultDateRange();
     var query = {};
     var num;

@@ -96,7 +96,7 @@ angular
       })
       .state('login', {
         url: '/login',
-        templateUrl: 'views/login.html'
+        templateUrl: 'views/login.html',
       })
       .state('login.moreInfo', {
         /* @ngInject */

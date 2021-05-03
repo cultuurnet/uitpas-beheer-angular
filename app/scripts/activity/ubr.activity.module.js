@@ -88,6 +88,7 @@ angular
           return $stateParams.identification;
         }],
         activity: ['$stateParams', function($stateParams) {
+          console.log('activity', $stateParams.activity);
           return $stateParams.activity;
         }],
         activityMode: ['$stateParams', function($stateParams) {
