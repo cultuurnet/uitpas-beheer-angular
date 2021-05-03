@@ -72,7 +72,7 @@ function ExpenseReportController (expenseReportService, $http, $filter, $interva
         if (forceDownload) {
           $window.location.href = generationResponse.data.download;
         }
-        
+
         stopMonitor();
         erc.generatingReport = false;
         erc.reportLocation = generationResponse.data.download;
@@ -97,7 +97,7 @@ function ExpenseReportController (expenseReportService, $http, $filter, $interva
         erc.asyncError.message = 'Je hebt een ongeldige periode opgegeven. De start-datum moet vóór of gelijk aan de eind-datum zijn.';
         break;
       case 'ACTION_FAILED':
-        erc.asyncError.message = 'Er is geen financieel rapport beschikbaar voor de opgegeven periode.';
+        erc.asyncError.message = 'In deze periode werden geen kortingen geregistreerd, er is dan ook geen financieel rapport beschikbaar.';
         break;
     }
 
