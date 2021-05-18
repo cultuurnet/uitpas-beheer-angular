@@ -12,39 +12,86 @@ angular.module('ubr.counter.statistics')
 
 /* @ngInject */
 function counterStatisticsService($q, $http, appConfig, counterService) {
+  var tokenUrl = appConfig.apiUrl + 'culturefeed/oauth/token'
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
   var service = this;
 
   var token = null;
+  var pending = false;
 
   service.active = undefined;
   service.list = {};
 
-  service.getToken = function () {
-    $http.get(appConfig.apiUrl + 'culturefeed/oauth/token', {
-        withCredentials: true,
-    }).success(function(response){
-      token = response.token;
-      console.log({counterService: counterService.active})
+  // service.getToken = function () {
+  //   $http.get(appConfig.apiUrl + 'culturefeed/oauth/token', {
+  //       withCredentials: true,
+  //   }).success(function(response){
+  //     token = response.token;
+  //     console.log({counterService: counterService.active})
+  //     var prevHeaders = $http.defaults.headers.get;
+  //     // Remove "pragma" header to prevent CORS error
+  //     $http.defaults.headers.get = {
+  //       'Cache-Control': 'no-cache'
+  //     };
+  //     $http.get(appConfig.insightsApiUrl + counterService.active.id + '/sale' , {
+  //       withCredentials: false,
+  //       headers: {
+  //         'Authorization': 'Bearer ' + token,
+  //       }
+  //     }).finally(function() {
+  //       $http.defaults.headers.get = prevHeaders;
+  //     });
+  //   });
+  // };
+
+  /**
+   *
+   * @param activeCounterId String
+   * @param path String
+   * @param fromTo Object({from: Moment, to: Moment})
+   * @param onSuccess Function
+   * @param onError Function
+   */
+  function getInsightsData(activeCounterId, path, fromTo, onSuccess, onError) {
+    if (pending) {
+      return;
+    }
+    pending = true;
+
+    function getInsightsDataWithToken(_token) {
       var prevHeaders = $http.defaults.headers.get;
       // Remove "pragma" header to prevent CORS error
       $http.defaults.headers.get = {
         'Cache-Control': 'no-cache'
       };
-      $http.get('https://balie-insights-proxy-test-auth-s4vvfnqwhq-ew.a.run.app/v1/' + counterService.active.id + '/sale' , {
+      $http.get(appConfig.insightsApiUrl + activeCounterId + (path || '/sale') + '?start_date=' + fromTo.from + '&end_date=' + fromTo.to , {
         withCredentials: false,
         headers: {
-          'Authorization': 'Bearer ' + token,
+          'Authorization': 'Bearer ' + _token,
         }
-      }).finally(function() {
-        $http.defaults.headers.get = prevHeaders;
-      });
-    });
-  };
+      })
+        .success(onSuccess)
+        .error(onError)
+        .finally(function() {
+          $http.defaults.headers.get = prevHeaders;
+          pending = false;
+        });
+    }
 
-  // service.getToken();
+    if (token) {
+      getInsightsDataWithToken(token);
+      return;
+    }
+
+    $http.get(tokenUrl, {
+      withCredentials: true,
+    }).success(function(response) {
+      token = response.token;
+      getInsightsDataWithToken(token);
+    }).error(onError);
+  }
 
   /**
    * Get default date range
@@ -53,8 +100,10 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    */
   service.getDefaultDateRange = function () {
     var moment = window.moment;
-    var start = moment().startOf('month');
-    var end = moment().endOf('month');
+    var start = moment('2020-07-01').startOf('month');
+    var end = moment('2020-07-01').endOf('month');
+    // var start = moment().startOf('month');
+    // var end = moment().endOf('month');
 
     var dateRange = {
       from: start,
@@ -72,7 +121,7 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    * @return {String} A formatted date like DD/MM/YYY.
    */
   service.formatStatisticsDate = function (date) {
-    return window.moment(date).format('DD/MM/YYYY');
+    return window.moment(date).format('YYYY-MM-DD');
   };
 
   /**
@@ -90,7 +139,7 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
     var fromStr;
     var toStr;
     params = params || [];
-    path = path || 'cardsales';
+
     // If no params were passed, use single default date range.
     if (!params.length) {
       params.push({ from: dates.from, to: dates.to});
@@ -107,16 +156,21 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
 
     var deferredSales = $q.defer();
 
-    counterService.getActive().then(function(data) {
-      query['balieId'] = data.id;
-      $http.get(
-        apiUrl + '/' + path,
-        {
-          withCredentials: true,
-          params: query
-        })
-        .success(handleSalesData)
-        .error(deferredSales.reject);
+    counterService.getActive().then(function(activeCounter) {
+
+      getInsightsData(activeCounter.id, '/' + path, query,function(data) {
+        console.log('SUCCESS', data);
+        handleSalesData(data);
+      }, deferredSales.reject);
+      // query['balieId'] = data.id;
+      // $http.get(
+      //   apiUrl + '/' + path,
+      //   {
+      //     withCredentials: true,
+      //     params: query
+      //   })
+      //   .success(handleSalesData)
+      //   .error(deferredSales.reject);
     });
 
     var handleSalesData = function (salesData) {

@@ -17,8 +17,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   var controller = this;
   controller.info = {
     'counter.statistics': {
-      pageTitle: 'Verkoop',
-      path: 'cardsales',
+      pageTitle: 'UiTPASverkoop',
+      path: 'sale',
       title: 'Verkochte kaarten',
       pluralLabel: 'verkochte kaarten',
       singleLabel: 'verkochte kaart',
@@ -32,8 +32,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       template: 'views/counter-statistics/statistics-sales.html'
     },
     'counter.statistics.savings': {
-      pageTitle: 'Sparen',
-      path: 'checkins',
+      pageTitle: 'Punten sparen',
+      path: 'save',
       title: 'Gespaarde punten',
       pluralLabel: 'gespaarde punten',
       singleLabel: 'gespaard punt',
@@ -55,8 +55,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       template: 'views/counter-statistics/statistics-savings.html'
     },
     'counter.statistics.exchange': {
-      pageTitle: 'Ruilen',
-      path: 'exchanges',
+      pageTitle: 'Voordelen omruilen',
+      path: 'trade',
       title: 'Omgeruilde voordelen',
       pluralLabel: 'omgeruilde voordelen',
       singleLabel: 'omgeruild voordeel',
@@ -78,8 +78,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       template: 'views/counter-statistics/statistics-exchanges.html'
     },
     'counter.statistics.mia': {
-      pageTitle: 'MIA\'s',
-      path: 'mias',
+      pageTitle: 'Ticketverkoop',
+      path: 'ticket',
       title: 'Actieve MIA\'s',
       pluralLabel: 'actieve MIA\'s',
       singleLabel: 'actieve MIA',
@@ -245,9 +245,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   // Load statistics, debounced cause both inputs trigger this onload.
   controller.loadStatistics = function () {
+    console.count('loadStatistics')
     var currentRanges = [];
     var showStatistics = function (statistics) {
       controller.statistics = statistics;
+      controller.statistics.daily = statistics.daily.sort(function(a,b) {
+        return new Date(a.day) - new Date(b.day);
+      });
       controller.loadingStatistics = false;
       controller.noStatisticsError = false;
       controller.titleStr = controller.info[$state.current.name].title;
@@ -331,9 +335,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     var stats = controller.statistics,
         // Global d3 reference.
         d3 = window.d3,
-        parseDate = d3.time.format('%d-%m-%Y').parse,
+        parseDate = d3.time.format('%Y-%m-%d').parse,
         formatDate = d3.time.format('%d/%m/%Y'),
-        format = d3.time.format('%d-%m-%Y'),
+        format = d3.time.format('%Y-%m-%d'),
         // Hardcoded margin.
         margin = 40,
         // Grab width - margins.
@@ -343,7 +347,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         xScale = d3.time.scale().range([0, width]),
         yScale = d3.scale.linear().range([height, 0]),
         // Axis handlers.
-        xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(5).tickFormat(d3.time.format('%d/%m')),
+        xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(5).tickFormat(d3.time.format('%d/%m/%Y')),
         yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(3),
         compare = this.hasCompareData(),
         line,
@@ -354,12 +358,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     if (compare) {
       line2 = d3.svg.line()
-              .x(function (d) { return xScale(format.parse(d.date)); })
-              .y(function (d) { return yScale(parseInt(d.count2, 10)); });
+              .x(function (d) { return xScale(format.parse(d.day)); })
+              .y(function (d) { return yScale(parseInt(d.sale_count2, 10)); });
       area2 = d3.svg.area()
-              .x(function(d) { return xScale(format.parse(d.date)); })
+              .x(function(d) { return xScale(format.parse(d.day)); })
               .y0(height)
-              .y1(function(d) { return yScale(d.count2); });
+              .y1(function(d) { return yScale(d.sale_count2); });
     }
 
     // Make sure it's cleared.
@@ -367,13 +371,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     // Line handler.
     line = d3.svg.line()
-          .x(function(d) { return xScale(format.parse(d.date)); })
-          .y(function(d) { return yScale(parseInt(d.count, 10)); });
+          .x(function(d) { return xScale(format.parse(d.day)); })
+          .y(function(d) { return yScale(parseInt(d.sale_count, 10)); });
     // Area handler.
     area = d3.svg.area()
-          .x(function(d) { return xScale(format.parse(d.date)); })
+          .x(function(d) { return xScale(format.parse(d.day)); })
           .y0(height)
-          .y1(function(d) { return yScale(d.count); });
+          .y1(function(d) { return yScale(d.sale_count); });
     // Group to add the margins.
     graph = d3.select($graphWrap[0]).append('svg')
       .attr('width', width + (margin * 2))
@@ -381,35 +385,35 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       .append('g')
       .attr('transform', 'translate(' + margin + ', ' + margin + ')');
     // Set total size.
-    xScale.domain(d3.extent(stats.periods, function (d) { return format.parse(d.date); }));
+    xScale.domain(d3.extent(stats.daily, function (d) { return format.parse(d.day); }));
     // Same for Y dimension.
-    yScale.domain([0, d3.max(stats.periods, function (d) {
+    yScale.domain([0, d3.max(stats.daily, function (d) {
         var max;
         // TODO: handler comparison graphs.
-        if (compare) {
-          max = Math.max(parseInt(d.count, 10), parseInt(d.count2, 10));
-        }
-        else {
-          max = parseInt(d.count, 10);
-        }
+        // if (compare) {
+        //   max = Math.max(parseInt(d.sale_count, 10), parseInt(d.sale_count2, 10));
+        // }
+        // else {
+          max = parseInt(d.sale_count, 10);
+        // }
         return max;
       })]);
 
     // Make an area path per period.
     graph.append('path')
-        .datum(stats.periods)
+        .datum(stats.daily)
         .attr('class', 'area')
         .attr('d', area);
     if (compare) {
       // Make an area path per period.
       graph.append('path')
-          .datum(stats.periods)
+          .datum(stats.daily)
           .attr('class', 'area area-2')
           .attr('d', area2);
     }
     // Make a line path per period.
     graph.append('path')
-        .datum(stats.periods)
+        .datum(stats.daily)
         .attr('class', 'line')
         .attr('d', line);
     // Add the X Axis.
@@ -423,19 +427,19 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         .call(yAxis);
     // Add a circle per data point.
     graph.selectAll('dot')
-        .data(stats.periods)
+        .data(stats.daily)
         .enter()
         .append('circle')
         .attr('class', 'dot')
         .attr('r', 5)
         .attr('cx', function(d) {
-          return xScale(parseDate(d.date));
+          return xScale(parseDate(d.day));
         })
         .attr('cy', function(d) {
-          return yScale(parseInt(d.count, 10));
+          return yScale(parseInt(d.sale_count, 10));
         })
         .on("mouseover", function(d) {
-          controller.showGraphTooltip(d3.event, d.count, formatDate(parseDate(d.date)))
+          controller.showGraphTooltip(d3.event, d.sale_count, formatDate(parseDate(d.day)))
         })
         .on("mouseout", function() {
           controller.hideTooltip();
@@ -444,24 +448,24 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     if (compare) {
       // Make a line path per period.
       graph.append('path')
-          .datum(stats.periods)
+          .datum(stats.daily)
           .attr('class', 'line line-2')
           .attr('d', line2);
       // Add a circle per data point.
       graph.selectAll('dot-2')
-          .data(stats.periods)
+          .data(stats.daily)
           .enter()
           .append('circle')
           .attr('class', 'dot dot-2')
           .attr('r', 5)
           .attr('cx', function(d) {
-            return xScale(format.parse(d.date));
+            return xScale(format.parse(d.day));
           })
           .attr('cy', function(d) {
-            return yScale(parseInt(d.count2, 10));
+            return yScale(parseInt(d.sale_count2, 10));
           })
           .on("mouseover", function(d) {
-            controller.showGraphTooltip(d3.event, d.count2, formatDate(parseDate(d.date2)))
+            controller.showGraphTooltip(d3.event, d.sale_count2, formatDate(parseDate(d.day2)))
           })
           .on("mouseout", function() {
             controller.hideTooltip();
