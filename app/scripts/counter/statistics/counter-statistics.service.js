@@ -50,15 +50,15 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    *
    * @param activeCounterId String
    * @param path String
-   * @param fromTo Object({from: Moment, to: Moment})
+   * @param query Object({from: Moment, to: Moment, mia: boolean})
    * @param onSuccess Function
    * @param onError Function
    */
-  function getInsightsData(activeCounterId, path, fromTo, onSuccess, onError) {
-    if (pending) {
-      return;
-    }
-    pending = true;
+  function getInsightsData(activeCounterId, path, query, onSuccess, onError) {
+    // if (pending) {
+    //   return;
+    // }
+    // pending = true;
 
     function getInsightsDataWithToken(_token) {
       var prevHeaders = $http.defaults.headers.get;
@@ -66,17 +66,21 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
       $http.defaults.headers.get = {
         'Cache-Control': 'no-cache'
       };
-      $http.get(appConfig.insightsApiUrl + activeCounterId + (path || '/sale') + '?start_date=' + fromTo.from + '&end_date=' + fromTo.to , {
-        withCredentials: false,
-        headers: {
-          'Authorization': 'Bearer ' + _token,
-        }
+      $http.get(appConfig.insightsApiUrl +
+        activeCounterId + (path || '/sale') +
+        '?start_date=' + query.from + '&end_date=' + query.to +
+        (query.mia ? '&mia=' + query.mia : ''),
+        {
+          withCredentials: false,
+          headers: {
+            'Authorization': 'Bearer ' + _token,
+          }
       })
         .success(onSuccess)
         .error(onError)
         .finally(function() {
           $http.defaults.headers.get = prevHeaders;
-          pending = false;
+          // pending = false;
         });
     }
 
@@ -100,8 +104,12 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    */
   service.getDefaultDateRange = function () {
     var moment = window.moment;
+    // var start = moment('2019-07-01').startOf('year');
+    // var end = moment('2020-07-01').endOf('year');
+
     var start = moment('2020-07-01').startOf('month');
     var end = moment('2020-07-01').endOf('month');
+
     // var start = moment().startOf('month');
     // var end = moment().endOf('month');
 
@@ -127,17 +135,18 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
   /**
    * Get sales statistics.
    *
-   * @param {Parameters} object with from/to keys
+   * @param {params} object with from/to keys
+   * @param {path} string
+   * @param {mia} boolean
    *
    * @return {Promise<CounterSalesStatistics[]|ApiError>} A list of datapoints or an error response.
    */
-  service.getStatistics = function (params, path) {
+  service.getStatistics = function (params, path, mia) {
     console.log({params: params, path: path})
     var dates = this.getDefaultDateRange();
-    var query = {};
-    var num;
-    var fromStr;
-    var toStr;
+    var query = [];
+    var data = [];
+    var error = [];
     params = params || [];
 
     // If no params were passed, use single default date range.
@@ -146,22 +155,37 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
     }
     // Prepare querystring
     for (var i = 0, max = params.length; i < max; i++) {
-      fromStr = this.formatStatisticsDate(params[i].from);
-      toStr = this.formatStatisticsDate(params[i].to);
+      var fromStr = this.formatStatisticsDate(params[i].from);
+      var toStr = this.formatStatisticsDate(params[i].to);
       // Add number, starting with '', then 2, 3, ...
-      num = i ? i+1 : '';
-      query['from' + num] = fromStr;
-      query['to' + num] = toStr;
+      var q = {};
+      q.from = fromStr;
+      q.to = toStr;
+      q.mia = mia || false;
+
+      query.push(q);
     }
 
     var deferredSales = $q.defer();
 
     counterService.getActive().then(function(activeCounter) {
+      for (var i = 0; i < query.length; i++) {
+        (function getData(index) {
+          getInsightsData(activeCounter.id, '/' + path, query[i],function(responseData) {
+            // handleSalesData(responseData);
+            data[index] = responseData;
+            if (data.length === query.length) {
+              deferredSales.resolve(data);
+            }
+          }, function(e) {
+            data[index] = null;
+            error[index] = e;
+            // deferredSales.reject(e)
+          });
+        })(i);
+      }
 
-      getInsightsData(activeCounter.id, '/' + path, query,function(data) {
-        console.log('SUCCESS', data);
-        handleSalesData(data);
-      }, deferredSales.reject);
+
       // query['balieId'] = data.id;
       // $http.get(
       //   apiUrl + '/' + path,

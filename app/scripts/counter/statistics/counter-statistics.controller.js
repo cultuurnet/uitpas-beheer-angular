@@ -19,6 +19,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     'counter.statistics': {
       pageTitle: 'UiTPASverkoop',
       path: 'sale',
+      graphProp: 'sale_count',
       title: 'Verkochte kaarten',
       pluralLabel: 'verkochte kaarten',
       singleLabel: 'verkochte kaart',
@@ -34,6 +35,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     'counter.statistics.savings': {
       pageTitle: 'Punten sparen',
       path: 'save',
+      graphProp: 'save_count',
       title: 'Gespaarde punten',
       pluralLabel: 'gespaarde punten',
       singleLabel: 'gespaard punt',
@@ -57,6 +59,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     'counter.statistics.exchange': {
       pageTitle: 'Voordelen omruilen',
       path: 'trade',
+      graphProp: 'trade_count',
       title: 'Omgeruilde voordelen',
       pluralLabel: 'omgeruilde voordelen',
       singleLabel: 'omgeruild voordeel',
@@ -78,11 +81,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       template: 'views/counter-statistics/statistics-exchanges.html'
     },
     'counter.statistics.mia': {
-      pageTitle: 'Ticketverkoop',
+      pageTitle: 'Tickets aan kansentarief',
       path: 'ticket',
+      graphProp: 'ticket_count',
       title: 'Actieve MIA\'s',
       pluralLabel: 'actieve MIA\'s',
       singleLabel: 'actieve MIA',
+      mia: true,
       type: {
         active: {
           label: 'Actieve MIA\'s',
@@ -130,7 +135,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   };
 
   controller.loadingStatistics = true;
-  controller.statistics = {};
+  controller.statistics = [];
   controller.noStatisticsError = false;
   controller.dateRanges = [];
   controller.formattedDates = [];
@@ -240,7 +245,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   // Does the controller has comparing data.
   controller.hasCompareData = function() {
-    return !!(controller.statistics && controller.statistics.profiles2);
+    // console.log('hasCompareData',controller.statistics)
+    return !!(controller.statistics && controller.statistics.length > 1);
   };
 
   // Load statistics, debounced cause both inputs trigger this onload.
@@ -248,17 +254,33 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     console.count('loadStatistics')
     var currentRanges = [];
     var showStatistics = function (statistics) {
+      console.log({statistics})
+      // var graphProp = controller.info[$state.current.name].graphProp;
+
       controller.statistics = statistics;
-      controller.statistics.daily = statistics.daily.sort(function(a,b) {
-        return new Date(a.day) - new Date(b.day);
-      });
+      for (var i = 0; i< statistics.length; i++) {
+        if (statistics.hasOwnProperty(i)) {
+          controller.statistics[i].daily = statistics[i].daily.sort(function(a,b) {
+            return new Date(a.day) - new Date(b.day);
+          });
+        }
+      }
+
+      // if (controller.statistics.length > 1) {
+      //   var otherStats = controller.statistics[1];
+      //   for (var j = 0; j < controller.statistics[0].daily.length; j++) {
+      //     controller.statistics[0].daily[j][graphProp + 'Compare'] = otherStats.daily[j] ? otherStats.daily[j][graphProp] : undefined;
+      //     controller.statistics[0].daily[j].dayCompare = otherStats.daily[j] ? otherStats.daily[j].day : undefined;
+      //   }
+      // }
+
       controller.loadingStatistics = false;
       controller.noStatisticsError = false;
       controller.titleStr = controller.info[$state.current.name].title;
       controller.profileStr = controller.info[$state.current.name].profile;
       controller.typeStr = controller.info[$state.current.name].type;
       controller.pageTitle = controller.info[$state.current.name].pageTitle;
-      controller.typeTemplate = controller.info[$state.current.name].template
+      controller.typeTemplate = controller.info[$state.current.name].template;
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
       // Using settimeout to avoid waiting an extra cycle.
@@ -280,7 +302,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     controller.loadingStatistics = true;
     counterStatisticsService
-      .getStatistics(currentRanges, controller.info[$state.current.name].path)
+      .getStatistics(currentRanges, controller.info[$state.current.name].path, controller.info[$state.current.name].mia)
       .then(showStatistics, noStatisticsFound);
   };
 
@@ -322,6 +344,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   // Helper function for drawing the actual graph.
   controller.renderGraph = function () {
+    var graphProp = controller.info[$state.current.name].graphProp;
     // Grab placeholder.
     var $graphWrap = angular.element(document.querySelectorAll('.counter-statistics-graph'));
 
@@ -332,9 +355,17 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     }
 
     // The data to be used.
-    var stats = controller.statistics,
+    var stats = controller.statistics[0];
+    var statsCompare;
+
+    if (!stats) return;
+
+    if (controller.statistics.length > 1) {
+      statsCompare = controller.statistics[1];
+    }
+
         // Global d3 reference.
-        d3 = window.d3,
+    var d3 = window.d3,
         parseDate = d3.time.format('%Y-%m-%d').parse,
         formatDate = d3.time.format('%d/%m/%Y'),
         format = d3.time.format('%Y-%m-%d'),
@@ -359,11 +390,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     if (compare) {
       line2 = d3.svg.line()
               .x(function (d) { return xScale(format.parse(d.day)); })
-              .y(function (d) { return yScale(parseInt(d.sale_count2, 10)); });
+              .y(function (d) { return yScale(parseInt(d[graphProp], 10)); });
       area2 = d3.svg.area()
               .x(function(d) { return xScale(format.parse(d.day)); })
               .y0(height)
-              .y1(function(d) { return yScale(d.sale_count2); });
+              .y1(function(d) { return yScale(d[graphProp]); });
     }
 
     // Make sure it's cleared.
@@ -372,12 +403,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     // Line handler.
     line = d3.svg.line()
           .x(function(d) { return xScale(format.parse(d.day)); })
-          .y(function(d) { return yScale(parseInt(d.sale_count, 10)); });
+          .y(function(d) { return yScale(parseInt(d[graphProp], 10)); });
     // Area handler.
     area = d3.svg.area()
           .x(function(d) { return xScale(format.parse(d.day)); })
           .y0(height)
-          .y1(function(d) { return yScale(d.sale_count); });
+          .y1(function(d) { return yScale(d[graphProp]); });
     // Group to add the margins.
     graph = d3.select($graphWrap[0]).append('svg')
       .attr('width', width + (margin * 2))
@@ -389,12 +420,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     // Same for Y dimension.
     yScale.domain([0, d3.max(stats.daily, function (d) {
         var max;
-        // TODO: handler comparison graphs.
+        // TODO
         // if (compare) {
-        //   max = Math.max(parseInt(d.sale_count, 10), parseInt(d.sale_count2, 10));
+        //   max = Math.max(parseInt(d[graphProp], 10), parseInt(d[graphProp + 'Compare'], 10));
         // }
         // else {
-          max = parseInt(d.sale_count, 10);
+          max = parseInt(d[graphProp], 10);
         // }
         return max;
       })]);
@@ -407,7 +438,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     if (compare) {
       // Make an area path per period.
       graph.append('path')
-          .datum(stats.daily)
+          .datum(statsCompare.daily)
           .attr('class', 'area area-2')
           .attr('d', area2);
     }
@@ -436,10 +467,10 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           return xScale(parseDate(d.day));
         })
         .attr('cy', function(d) {
-          return yScale(parseInt(d.sale_count, 10));
+          return yScale(parseInt(d[graphProp], 10));
         })
         .on("mouseover", function(d) {
-          controller.showGraphTooltip(d3.event, d.sale_count, formatDate(parseDate(d.day)))
+          controller.showGraphTooltip(d3.event, d[graphProp], formatDate(parseDate(d.day)));
         })
         .on("mouseout", function() {
           controller.hideTooltip();
@@ -448,12 +479,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     if (compare) {
       // Make a line path per period.
       graph.append('path')
-          .datum(stats.daily)
+          .datum(statsCompare.daily)
           .attr('class', 'line line-2')
           .attr('d', line2);
       // Add a circle per data point.
       graph.selectAll('dot-2')
-          .data(stats.daily)
+          .data(statsCompare.daily)
           .enter()
           .append('circle')
           .attr('class', 'dot dot-2')
@@ -462,10 +493,10 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
             return xScale(format.parse(d.day));
           })
           .attr('cy', function(d) {
-            return yScale(parseInt(d.sale_count2, 10));
+            return yScale(parseInt(d[graphProp], 10));
           })
           .on("mouseover", function(d) {
-            controller.showGraphTooltip(d3.event, d.sale_count2, formatDate(parseDate(d.day2)))
+            controller.showGraphTooltip(d3.event, d[graphProp], formatDate(parseDate(d.day)));
           })
           .on("mouseout", function() {
             controller.hideTooltip();
