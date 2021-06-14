@@ -5,7 +5,7 @@
       <div class="grid">
         <div class="grid__12 stat-wrapper">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics.totalusers}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.sale_count}}</h2>
             <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
           </section>
         </div>
@@ -18,7 +18,7 @@
       <div class="grid">
         <div class="grid__12 stat-wrapper">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.buyers.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics.totalusers2}}</h2>
+            <h2 class="stat__number">{{csc.statistics[1].agg.sale_count}}</h2>
             <p class="stat__caption">{{csc.typeStr.buyers.label}}</p>
           </section>
         </div>

@@ -252,9 +252,24 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   // Load statistics, debounced cause both inputs trigger this onload.
   controller.loadStatistics = function () {
     console.count('loadStatistics')
+
+
+    var noStatisticsFound = function () {
+      controller.loadingStatistics = false;
+      controller.noStatisticsError = true;
+      controller.statistics = []
+    };
+
     var currentRanges = [];
-    var showStatistics = function (statistics) {
-      console.log({statistics})
+    var showStatistics = function (response) {
+      const statistics = response[0];
+      const error = response[1];
+
+      if (error && (error[0] || error[1])) {
+        noStatisticsFound();
+        return;
+      }
+      console.log({statistics});
       // var graphProp = controller.info[$state.current.name].graphProp;
 
       controller.statistics = statistics;
@@ -289,10 +304,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       }, 0);
     };
 
-    var noStatisticsFound = function () {
-      controller.loadingStatistics = false;
-      controller.noStatisticsError = true;
-    };
 
     currentRanges.push(controller.dateRanges[0]);
 
@@ -378,7 +389,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         xScale = d3.time.scale().range([0, width]),
         yScale = d3.scale.linear().range([height, 0]),
         // Axis handlers.
-        xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(5).tickFormat(d3.time.format('%d/%m/%Y')),
+        xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(5).tickFormat(d3.time.format('%d/%m')),
         yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(3),
         compare = this.hasCompareData(),
         line,

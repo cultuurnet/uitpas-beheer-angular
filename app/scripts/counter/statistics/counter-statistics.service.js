@@ -169,17 +169,27 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
     var deferredSales = $q.defer();
 
     counterService.getActive().then(function(activeCounter) {
+      var fetchedData = 0;
+
       for (var i = 0; i < query.length; i++) {
         (function getData(index) {
           getInsightsData(activeCounter.id, '/' + path, query[i],function(responseData) {
             // handleSalesData(responseData);
             data[index] = responseData;
-            if (data.length === query.length) {
-              deferredSales.resolve(data);
+            error[index] = null;
+            fetchedData++;
+
+            if (fetchedData === query.length) {
+              deferredSales.resolve([data, error]);
             }
           }, function(e) {
             data[index] = null;
             error[index] = e;
+            fetchedData++;
+
+            if (fetchedData === query.length) {
+              deferredSales.resolve([data, error]);
+            }
             // deferredSales.reject(e)
           });
         })(i);

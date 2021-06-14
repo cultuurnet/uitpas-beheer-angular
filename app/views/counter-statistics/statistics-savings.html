@@ -2,72 +2,72 @@
   <div class="counter-statistics-set">
     <p><span class="period-1">Periode 1</span>{{csc.formattedDates[0]}}</p>
     <div class="serie-1 grid">
-      <div class="grid__12 grid--bp-med__6">
+      <div class="grid__12 grid--bp-med__12">
         <div class="grid__12 grid--bp-med__4">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.saved.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['transactions']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.save_points}}</h2>
             <p class="stat__caption">{{csc.typeStr.saved.label}}</p>
           </section>
         </div>
         <div class="grid__12 grid--bp-med__4">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['active_users']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.savers}}</h2>
             <p class="stat__caption">{{csc.typeStr.active.label}}</p>
           </section>
         </div>
         <div class="grid__12 grid--bp-med__4">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.new.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['new_users']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.new_savers}}</h2>
             <p class="stat__caption">{{csc.typeStr.new.label}}</p>
           </section>
         </div>
       </div>
 
-      <div class="grid__12 grid--bp-med__6">
-        <h5 class="element-title">Frequentie</h5>
-        <ul class="frequences">
-          <li ng-repeat="frequence in csc.statistics.frequence">
-            <div class="total-frequence">{{ frequence.pashoudersNbr }} pashouders spaarden <strong>{{ frequence.range }}<span ng-if="frequence.range.indexOf('-') > -1"> punten</span></strong></div>
-            <span class="frequence-percent">{{ frequence.count }}% <div class="frequence-meter"><span style="width:{{ frequence.count }}%"></span></div></span>
-          </li>
-        </ul>
-      </div>
+<!--      <div class="grid__12 grid&#45;&#45;bp-med__6">-->
+<!--        <h5 class="element-title">Frequentie</h5>-->
+<!--        <ul class="frequences">-->
+<!--          <li ng-repeat="frequence in csc.statistics.frequence">-->
+<!--            <div class="total-frequence">{{ frequence.pashoudersNbr }} pashouders spaarden <strong>{{ frequence.range }}<span ng-if="frequence.range.indexOf('-') > -1"> punten</span></strong></div>-->
+<!--            <span class="frequence-percent">{{ frequence.count }}% <div class="frequence-meter"><span style="width:{{ frequence.count }}%"></span></div></span>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
 
     </div>
   </div>
   <div class="counter-statistics-set">
     <p ng-if="csc.hasCompareData()"><span class="period-2">Periode 2</span>{{csc.formattedDates[1]}}</p>
     <div class="serie-2 grid" ng-if="csc.hasCompareData()">
-      <div class="grid__12 grid--bp-med__6">
+      <div class="grid__12 grid--bp-med__12">
         <div class="grid__12 grid--bp-med__4">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.saved.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['transactions2']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[1].agg.save_points}}</h2>
             <p class="stat__caption">{{csc.typeStr.saved.label}}</p>
           </section>
         </div>
         <div class="grid__12 grid--bp-med__4">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['active_users2']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[1].agg.savers}}</h2>
             <p class="stat__caption">{{csc.typeStr.active.label}}</p>
           </section>
         </div>
         <div class="grid__12 grid--bp-med__4">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.new.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['new_users2']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[1].agg.new_savers}}</h2>
             <p class="stat__caption">{{csc.typeStr.new.label}}</p>
           </section>
         </div>
       </div>
 
-      <div class="grid__12 grid--bp-med__6">
-        <h5 class="element-title">Frequentie</h5>
-        <ul class="frequences">
-          <li ng-repeat="frequence in csc.statistics.frequence2">
-            <div class="total-frequence">{{ frequence.pashoudersNbr }} pashouders spaarden <strong>{{ frequence.range }}<span ng-if="frequence.range.indexOf('-') > -1"> punten</span></strong></div>
-            <span class="frequence-percent">{{ frequence.count }}% <div class="frequence-meter"><span style="width:{{ frequence.count }}%"></span></div></span>
-          </li>
-        </ul>
-      </div>
+<!--      <div class="grid__12 grid&#45;&#45;bp-med__6">-->
+<!--        <h5 class="element-title">Frequentie</h5>-->
+<!--        <ul class="frequences">-->
+<!--          <li ng-repeat="frequence in csc.statistics.frequence2">-->
+<!--            <div class="total-frequence">{{ frequence.pashoudersNbr }} pashouders spaarden <strong>{{ frequence.range }}<span ng-if="frequence.range.indexOf('-') > -1"> punten</span></strong></div>-->
+<!--            <span class="frequence-percent">{{ frequence.count }}% <div class="frequence-meter"><span style="width:{{ frequence.count }}%"></span></div></span>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
 
     </div>
   </div>
