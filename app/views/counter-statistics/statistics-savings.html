@@ -84,28 +84,28 @@
             <div class="grid__12">
               <div class="serie-1">
                 <section class="stat">
-                  <h2 class="stat__number"><span>{{csc.statistics.total_events}}</span></h2>
+                  <h2 class="stat__number"><span>{{csc.statistics[0].agg.events && csc.statistics[0].agg.events.length}}</span></h2>
                   <p class="stat__caption">Evenementen</p>
                 </section>
               </div>
             </div>
           </div>
 
-          <div class="row" ng-if="csc.statistics['top_events'] && csc.statistics['top_events'].length">
+          <div class="row" ng-if="csc.statistics[0].agg.events && csc.statistics[0].agg.events.length">
             <div class="grid__12">
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Top-10<br/>Populairste evenementen</th>
+                    <th>Evenement</th>
                     <th class="number"><span ng-class="{'period-1': csc.hasCompareData()}">Gespaarde punten</span></th>
                     <th class="number" ng-if="csc.hasCompareData()"><span class="period-2">Gespaarde punten</span></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="top in csc.statistics['top_events']">
-                    <td>{{top.title}}</td>
-                    <td class="number">{{top.count}}</td>
-                    <td class="number" ng-if="csc.hasCompareData()">{{csc.statistics['top_events2'][$index].count}}</td>
+                  <tr ng-repeat="ev in csc.statistics[0].agg.events">
+                    <td>{{ev.event_name}}</td>
+                    <td class="number">{{ev.save_points}}</td>
+                    <td class="number" ng-if="csc.hasCompareData()">{{csc.getCompareEventData(ev.event_name, 'save_points')}}</td>
                   </tr>
                 </tbody>
               </table>

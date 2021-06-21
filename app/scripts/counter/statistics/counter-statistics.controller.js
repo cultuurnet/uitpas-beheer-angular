@@ -134,8 +134,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     ranges: controller.ranges
   };
 
-  controller.loadingStatistics = true;
+  controller.loadingStatistics = false;
   controller.statistics = [];
+  controller.mia = false;
   controller.noStatisticsError = false;
   controller.dateRanges = [];
   controller.formattedDates = [];
@@ -245,13 +246,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   // Does the controller has comparing data.
   controller.hasCompareData = function() {
-    // console.log('hasCompareData',controller.statistics)
     return !!(controller.statistics && controller.statistics.length > 1);
   };
 
   // Load statistics, debounced cause both inputs trigger this onload.
   controller.loadStatistics = function () {
-    console.count('loadStatistics')
+    if (controller.loadingStatistics) return;
 
 
     var noStatisticsFound = function () {
@@ -262,14 +262,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     var currentRanges = [];
     var showStatistics = function (response) {
-      const statistics = response[0];
-      const error = response[1];
+      var statistics = response[0];
+      var error = response[1];
 
       if (error && (error[0] || error[1])) {
         noStatisticsFound();
         return;
       }
-      console.log({statistics});
       // var graphProp = controller.info[$state.current.name].graphProp;
 
       controller.statistics = statistics;
@@ -296,6 +295,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       controller.typeStr = controller.info[$state.current.name].type;
       controller.pageTitle = controller.info[$state.current.name].pageTitle;
       controller.typeTemplate = controller.info[$state.current.name].template;
+      controller.showMia = !controller.info[$state.current.name].mia;
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
       // Using settimeout to avoid waiting an extra cycle.
@@ -303,7 +303,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         controller.renderGraph(controller.statistics);
       }, 0);
     };
-
 
     currentRanges.push(controller.dateRanges[0]);
 
@@ -313,7 +312,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     controller.loadingStatistics = true;
     counterStatisticsService
-      .getStatistics(currentRanges, controller.info[$state.current.name].path, controller.info[$state.current.name].mia)
+      .getStatistics(
+        currentRanges,
+        controller.info[$state.current.name].path,
+        controller.info[$state.current.name].mia || controller.mia
+      )
       .then(showStatistics, noStatisticsFound);
   };
 
@@ -399,11 +402,22 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         graph;
 
     if (compare) {
+      var yearMonth = d3.time.format('%Y-%m')(parseDate(stats.start_date));
+
+      for (var i = 0; i < statsCompare.daily.length; i++){
+        var item = statsCompare.daily[i];
+        var day = d3.time.format('%d')(parseDate(item.day));
+        // To show the comparison graph behind the main graph, we need to map the comparison dates to the displayed dates
+        item.mappedDay = yearMonth + '-' + day;
+      }
+    }
+
+    if (compare) {
       line2 = d3.svg.line()
-              .x(function (d) { return xScale(format.parse(d.day)); })
+              .x(function (d) { return xScale(format.parse(d.mappedDay)); })
               .y(function (d) { return yScale(parseInt(d[graphProp], 10)); });
       area2 = d3.svg.area()
-              .x(function(d) { return xScale(format.parse(d.day)); })
+              .x(function(d) { return xScale(format.parse(d.mappedDay)); })
               .y0(height)
               .y1(function(d) { return yScale(d[graphProp]); });
     }
@@ -429,17 +443,10 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     // Set total size.
     xScale.domain(d3.extent(stats.daily, function (d) { return format.parse(d.day); }));
     // Same for Y dimension.
-    yScale.domain([0, d3.max(stats.daily, function (d) {
-        var max;
-        // TODO
-        // if (compare) {
-        //   max = Math.max(parseInt(d[graphProp], 10), parseInt(d[graphProp + 'Compare'], 10));
-        // }
-        // else {
-          max = parseInt(d[graphProp], 10);
-        // }
-        return max;
-      })]);
+    var allStats = [].concat(stats.daily, compare ? statsCompare.daily : []);
+    yScale.domain([0, d3.max(allStats, function (d) {
+      return parseInt(d[graphProp], 10);
+    })]);
 
     // Make an area path per period.
     graph.append('path')
@@ -501,7 +508,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           .attr('class', 'dot dot-2')
           .attr('r', 5)
           .attr('cx', function(d) {
-            return xScale(format.parse(d.day));
+            return xScale(format.parse(d.mappedDay));
           })
           .attr('cy', function(d) {
             return yScale(parseInt(d[graphProp], 10));
@@ -536,7 +543,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       content = "<strong>" + date + "</strong><br/>" + " " + total + " " + label;
 
     controller.showTooltip(event, content);
-  }
+  };
 
   /**
    * Show a help tooltip.
@@ -545,7 +552,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     if (controller.helpTexts[key]) {
       controller.showTooltip(event, controller.helpTexts[key]);
     }
-  }
+  };
 
   /**
    * Show a tooltip.
@@ -566,9 +573,28 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
    * Hide the tooltip.
    */
   controller.hideTooltip = function() {
-    controller.tooltip.transition().duration(200).style("opacity", 0);
-    controller.tooltip.style("top", 0);
-    controller.tooltip.style("left", 0);
+    controller.tooltip.transition().duration(200).style('opacity', 0);
+    controller.tooltip.style('top', 0);
+    controller.tooltip.style('left', 0);
+  };
+
+  controller.getCompareEventData = function(eventName, prop) {
+    if (!controller.hasCompareData()) {
+      return;
+    }
+
+    var found = null;
+
+    for (var i = 0; i < controller.statistics[1].agg.events.length; i++) {
+      var ev = controller.statistics[1].agg.events[i];
+      if (ev.event_name === eventName) {
+        found = ev;
+      }
+    }
+
+    if (found) {
+      return found[prop];
+    }
   };
 
   controller.loadDefaultDateRange();
