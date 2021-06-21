@@ -105,7 +105,7 @@
                   <tr ng-repeat="ev in csc.statistics[0].agg.events">
                     <td>{{ev.event_name}}</td>
                     <td class="number">{{ev.save_points}}</td>
-                    <td class="number" ng-if="csc.hasCompareData()">{{csc.getCompareEventData(ev.event_name, 'save_points')}}</td>
+                    <td class="number" ng-if="csc.hasCompareData()">{{csc.getCompareStatsData(ev.event_name,'events', 'event_name', 'save_points')}}</td>
                   </tr>
                 </tbody>
               </table>

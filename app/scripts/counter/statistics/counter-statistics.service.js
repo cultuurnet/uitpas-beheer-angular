@@ -142,7 +142,6 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    * @return {Promise<CounterSalesStatistics[]|ApiError>} A list of datapoints or an error response.
    */
   service.getStatistics = function (params, path, mia) {
-    console.log({params: params, path: path})
     var dates = this.getDefaultDateRange();
     var query = [];
     var data = [];

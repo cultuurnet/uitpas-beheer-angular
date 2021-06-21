@@ -278,6 +278,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
             return new Date(a.day) - new Date(b.day);
           });
         }
+        console.log(controller.statistics);
       }
 
       // if (controller.statistics.length > 1) {
@@ -409,6 +410,17 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         var day = d3.time.format('%d')(parseDate(item.day));
         // To show the comparison graph behind the main graph, we need to map the comparison dates to the displayed dates
         item.mappedDay = yearMonth + '-' + day;
+      }
+
+      if (statsCompare.daily.length > 1) {
+        // when the period starts on the last day of the month before
+        if (parseInt(d3.time.format('%d')(parseDate(statsCompare.daily[0].day))) > parseInt(d3.time.format('%d')(parseDate(statsCompare.daily[1].day)))){
+          statsCompare.daily = statsCompare.daily.slice(1);
+        }
+        // when the period ends on the first day of the month after
+        else if (parseInt(d3.time.format('%d')(parseDate(statsCompare.daily[statsCompare.daily.length - 1].day))) < parseInt(d3.time.format('%d')(parseDate(statsCompare.daily[statsCompare.daily.length - 2].day)))){
+          statsCompare.daily = statsCompare.daily.slice(1, statsCompare.daily.length - 1);
+        }
       }
     }
 
@@ -578,22 +590,22 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     controller.tooltip.style('left', 0);
   };
 
-  controller.getCompareEventData = function(eventName, prop) {
+  controller.getCompareStatsData = function(name, aggProp, nameProp, valueProp) {
     if (!controller.hasCompareData()) {
       return;
     }
 
     var found = null;
 
-    for (var i = 0; i < controller.statistics[1].agg.events.length; i++) {
-      var ev = controller.statistics[1].agg.events[i];
-      if (ev.event_name === eventName) {
+    for (var i = 0; i < controller.statistics[1].agg[aggProp].length; i++) {
+      var ev = controller.statistics[1].agg[aggProp][i];
+      if (ev[nameProp] === name) {
         found = ev;
       }
     }
 
     if (found) {
-      return found[prop];
+      return found[valueProp];
     }
   };
 
