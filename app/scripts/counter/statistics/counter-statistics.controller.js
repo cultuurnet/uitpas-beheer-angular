@@ -146,6 +146,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   controller.profileStr = '';
   controller.tooltip = d3.select('body').append('div').attr('class', 'graph-tooltip').style('opacity', 0);
   controller.typeTemplate = '';
+  var initialAggregates = {
+    gender: [],
+    municipality: [],
+    ageGroup: []
+  };
+  controller.aggregates = {};
+  angular.copy(initialAggregates, controller.aggregates);
 
   function debounce(func, wait) {
     var timeout;
@@ -257,7 +264,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     var noStatisticsFound = function () {
       controller.loadingStatistics = false;
       controller.noStatisticsError = true;
-      controller.statistics = []
+      controller.statistics = [];
+      angular.copy(initialAggregates, controller.aggregates);
     };
 
     var currentRanges = [];
@@ -277,8 +285,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           controller.statistics[i].daily = statistics[i].daily.sort(function(a,b) {
             return new Date(a.day) - new Date(b.day);
           });
+
+          if (controller.statistics[i].agg.passholder) {
+            controller.aggregates.gender[i] = controller.convertToTableData(controller.statistics[i].agg.passholder.gender);
+            controller.aggregates.municipality[i] = controller.convertToTableData(controller.statistics[i].agg.passholder.municipality, 'municipality');
+            controller.aggregates.ageGroup[i] = controller.convertToTableData(controller.statistics[i].agg.passholder.age_group);
+          }
         }
-        console.log(controller.statistics);
       }
 
       // if (controller.statistics.length > 1) {
@@ -610,6 +623,52 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   };
 
   controller.loadDefaultDateRange();
+
+  var titleMap = {
+    missing: 'Onbekend',
+    male: 'Man',
+    female: 'Vrouw',
+    Kinderen: '0-12',
+    Jongeren: '13-18',
+    Studenten: '19-26',
+    JongeDertigers:'27-34',
+    JongeVeertigers:'35-44',
+    JongeVijftigers: '45-54',
+    JongeZestigers: '55-65',
+    Gepensioneerden: '64-110',
+  };
+
+  controller.convertToTableData = function(data, objectKey) {
+    var finalData = data;
+
+    if (objectKey) {
+      finalData = {};
+      angular.forEach(data, function (item) {
+        var key = item[objectKey];
+        var value = item.count;
+        finalData[key] = value;
+      });
+    }
+
+    var total = 0;
+    var keys = [];
+    angular.forEach(finalData, function (value, key) {
+      total += value;
+      keys.push(key);
+    });
+    var factor = total / 100;
+
+    var result = [];
+
+    angular.forEach(keys, function (title) {
+      result.push({
+        title: titleMap[title] || title,
+        count: Math.round(finalData[title] / factor * 100) / 100,
+      });
+    });
+    return result;
+  };
+
   $scope.$on('$stateChangeSuccess', function() {
     controller.loadStatistics();
   });

@@ -6,7 +6,6 @@
       <tr ng-if="!csc.hasCompareData()">
         <th></th>
         <th class="number" ng-mouseover="csc.showTooltip($event, csc.helpTexts.yourBalie)" ng-mouseleave="csc.hideTooltip()">Aan je balie</th>
-        <th class="number" ng-mouseover="csc.showTooltip($event, csc.helpTexts.average)" ng-mouseleave="csc.hideTooltip()">Gemiddelde</th>
       </tr>
       <tr ng-if="csc.hasCompareData()">
         <th></th>
@@ -18,48 +17,45 @@
       <tr>
         <td class="table-heading" colspan="3">Geslacht</td>
       </tr>
-      <tr ng-repeat="gender in csc.statistics.profiles.gender">
+      <tr ng-repeat="gender in csc.aggregates.gender[0]">
         <td>
                       <span class="columnbar" ng-class="{compare: csc.hasCompareData()}">
                         <span class="bar" style="width: {{gender.count}}%" ></span>
-                        <span ng-if="csc.hasCompareData()" class="bar bar-2" style="width: {{csc.statistics.profiles2.gender[$index].count}}%" ></span>
                         <span class="text">{{gender.title}}</span>
                       </span>
         </td>
         <td class="number">{{gender.count}}%</td>
-        <td class="number non" ng-if="!csc.hasCompareData()">{{csc.statistics.profiles_allBallie.gender[$index].count}}%</td>
-        <td class="number non" ng-if="csc.hasCompareData()">{{csc.statistics.profiles2.gender[$index].count}}%</td>
       </tr>
       <tr>
         <td class="table-heading" colspan="3">Leeftijd</td>
       </tr>
-      <tr ng-repeat="age in csc.statistics['per_age']">
+      <tr ng-repeat="age in csc.aggregates.ageGroup[0]">
         <td>
                       <span class="columnbar" ng-class="{compare: csc.hasCompareData()}">
                         <span class="bar" style="width: {{age.count}}%"></span>
-                        <span ng-if="csc.hasCompareData()" class="bar bar-2" style="width: {{csc.statistics['per_age2'][$index].count}}%" ></span>
-                        <span class="text">{{age.AgeRange | ageStatistics}}</span>
+<!--                        <span ng-if="csc.hasCompareData()" class="bar bar-2" style="width: {{csc.aggregates.ageGroup[1][$index].count}}%" ></span>-->
+                        <span class="text">{{age.title | ageStatistics}}</span>
                       </span>
         </td>
         <td class="number">{{age.count}}%</td>
-        <td class="number non" ng-if="!csc.hasCompareData()">{{csc.statistics['per_age_allBallie'][$index].count}}%</td>
-        <td class="number non" ng-if="csc.hasCompareData()">{{csc.statistics['per_age2'][$index].count}}%</td>
+<!--        <td class="number non" ng-if="!csc.hasCompareData()">{{csc.statistics['per_age_allBallie'][$index].count}}%</td>-->
+<!--        <td class="number non" ng-if="csc.hasCompareData()">{{csc.statistics['per_age2'][$index].count}}%</td>-->
       </tr>
 
       <tr>
         <td colspan="3" class="table-heading">Woonplaats</td>
       </tr>
-      <tr ng-repeat="province in csc.statistics['per_province']">
+      <tr ng-repeat="municipality in csc.aggregates.municipality[0]">
         <td>
                       <span class="columnbar" ng-class="{compare: csc.hasCompareData()}">
-                        <span class="bar" style="width: {{province.count}}%"></span>
-                        <span ng-if="csc.hasCompareData()" class="bar bar-2" style="width: {{csc.statistics['per_province2'][$index].count}}%" ></span>
-                        <span class="text">{{province.Province}}</span>
+                        <span class="bar" style="width: {{municipality.count}}%"></span>
+<!--                        <span ng-if="csc.hasCompareData()" class="bar bar-2" style="width: {{csc.statistics['per_municipality2'][$index].count}}%" ></span>-->
+                        <span class="text">{{municipality.title}}</span>
                       </span>
         </td>
-        <td class="number">{{province.count}}%</td>
-        <td class="number non" ng-if="!csc.hasCompareData()">{{csc.statistics['per_province_allBallie'][$index].count}}%</td>
-        <td class="number non" ng-if="csc.hasCompareData()">{{csc.statistics['per_province2'][$index].count}}%</td>
+        <td class="number">{{municipality.count}}%</td>
+<!--        <td class="number non" ng-if="!csc.hasCompareData()">{{csc.statistics['per_municipality_allBallie'][$index].count}}%</td>-->
+<!--        <td class="number non" ng-if="csc.hasCompareData()">{{csc.statistics['per_municipality2'][$index].count}}%</td>-->
       </tr>
 
       </tbody>

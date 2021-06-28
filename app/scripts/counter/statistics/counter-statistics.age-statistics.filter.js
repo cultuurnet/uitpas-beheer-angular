@@ -12,7 +12,7 @@ angular
 
 function ageStatisticsFilter() {
   return function(input) {
-    if (input === 'unknow') {
+    if (input === 'Onbekend') {
       return 'Onbekend';
     }
     else {

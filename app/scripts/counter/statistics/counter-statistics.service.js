@@ -12,7 +12,7 @@ angular.module('ubr.counter.statistics')
 
 /* @ngInject */
 function counterStatisticsService($q, $http, appConfig, counterService) {
-  var tokenUrl = appConfig.apiUrl + 'culturefeed/oauth/token'
+  var tokenUrl = appConfig.apiUrl + 'culturefeed/oauth/token';
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
