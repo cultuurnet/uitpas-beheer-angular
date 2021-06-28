@@ -94,6 +94,11 @@ function appController($rootScope, $location, $state, appConfig, uitid, counterS
       Raven.setTagsContext({
         counter: activeCounter.name
       });
+      if (app.showNewVersionWarning) {
+        Raven.captureMessage('Counter is using an old version', {
+          level: 'warning'
+        });
+      }
     }
     app.counter = activeCounter;
   };
