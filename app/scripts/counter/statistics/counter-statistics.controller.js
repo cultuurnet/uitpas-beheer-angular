@@ -278,7 +278,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         return;
       }
       // var graphProp = controller.info[$state.current.name].graphProp;
-
+      angular.copy(initialAggregates, controller.aggregates);
       controller.statistics = statistics;
       for (var i = 0; i< statistics.length; i++) {
         if (statistics.hasOwnProperty(i)) {
@@ -293,14 +293,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           }
         }
       }
-
-      // if (controller.statistics.length > 1) {
-      //   var otherStats = controller.statistics[1];
-      //   for (var j = 0; j < controller.statistics[0].daily.length; j++) {
-      //     controller.statistics[0].daily[j][graphProp + 'Compare'] = otherStats.daily[j] ? otherStats.daily[j][graphProp] : undefined;
-      //     controller.statistics[0].daily[j].dayCompare = otherStats.daily[j] ? otherStats.daily[j].day : undefined;
-      //   }
-      // }
 
       controller.loadingStatistics = false;
       controller.noStatisticsError = false;

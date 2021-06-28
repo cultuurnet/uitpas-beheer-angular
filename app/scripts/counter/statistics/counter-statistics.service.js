@@ -24,28 +24,6 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
   service.active = undefined;
   service.list = {};
 
-  // service.getToken = function () {
-  //   $http.get(appConfig.apiUrl + 'culturefeed/oauth/token', {
-  //       withCredentials: true,
-  //   }).success(function(response){
-  //     token = response.token;
-  //     console.log({counterService: counterService.active})
-  //     var prevHeaders = $http.defaults.headers.get;
-  //     // Remove "pragma" header to prevent CORS error
-  //     $http.defaults.headers.get = {
-  //       'Cache-Control': 'no-cache'
-  //     };
-  //     $http.get(appConfig.insightsApiUrl + counterService.active.id + '/sale' , {
-  //       withCredentials: false,
-  //       headers: {
-  //         'Authorization': 'Bearer ' + token,
-  //       }
-  //     }).finally(function() {
-  //       $http.defaults.headers.get = prevHeaders;
-  //     });
-  //   });
-  // };
-
   /**
    *
    * @param activeCounterId String
@@ -55,11 +33,6 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    * @param onError Function
    */
   function getInsightsData(activeCounterId, path, query, onSuccess, onError) {
-    // if (pending) {
-    //   return;
-    // }
-    // pending = true;
-
     function getInsightsDataWithToken(_token) {
       var prevHeaders = $http.defaults.headers.get;
       // Remove "pragma" header to prevent CORS error
@@ -107,11 +80,11 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
     // var start = moment('2019-07-01').startOf('year');
     // var end = moment('2020-07-01').endOf('year');
 
-    var start = moment('2020-07-01').startOf('month');
-    var end = moment('2020-07-01').endOf('month');
+    // var start = moment('2020-07-01').startOf('month');
+    // var end = moment('2020-07-01').endOf('month');
 
-    // var start = moment().startOf('month');
-    // var end = moment().endOf('month');
+    var start = moment().startOf('month');
+    var end = moment().endOf('month');
 
     var dateRange = {
       from: start,
@@ -189,26 +162,10 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
             if (fetchedData === query.length) {
               deferredSales.resolve([data, error]);
             }
-            // deferredSales.reject(e)
           });
         })(i);
       }
-
-
-      // query['balieId'] = data.id;
-      // $http.get(
-      //   apiUrl + '/' + path,
-      //   {
-      //     withCredentials: true,
-      //     params: query
-      //   })
-      //   .success(handleSalesData)
-      //   .error(deferredSales.reject);
     });
-
-    var handleSalesData = function (salesData) {
-      deferredSales.resolve(salesData);
-    };
 
     return deferredSales.promise;
   };
