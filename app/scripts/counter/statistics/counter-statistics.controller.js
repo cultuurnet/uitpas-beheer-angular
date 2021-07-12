@@ -374,14 +374,60 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       maxWidth = 600;
     }
 
+    // When there are for example 0 sales on a day, the API doesn't include this in the response.
+    // To give a realistic view on the actual sales, the frontend will fill in these "empty" days with a sale of 0.
+    var fillInBlankDatesWithZero = function(statistics) {
+      var newDailyStats = [];
+
+      for (var i = 0; i < statistics.daily.length; i++){
+        var dailyStat = statistics.daily[i];
+
+        if (i === 0) {
+          newDailyStats.push(dailyStat);
+        } else {
+          var prevDailyStatDay = moment(statistics.daily[i - 1].day);
+          var diffDay = moment(dailyStat.day).diff(prevDailyStatDay, 'days');
+          if (diffDay > 1) {
+            for (var j = 1; j < diffDay; j++) {
+              newDailyStats.push({
+                [graphProp]: 0,
+                day: prevDailyStatDay.clone().add(j, 'days').format('YYYY-MM-DD')
+              });
+            }
+          }
+          newDailyStats.push(dailyStat);
+        }
+      }
+      statistics.daily = newDailyStats;
+      return statistics;
+    };
+
     // The data to be used.
-    var stats = controller.statistics[0];
+    var stats = fillInBlankDatesWithZero(controller.statistics[0]);
     var statsCompare;
 
     if (!stats) return;
 
     if (controller.statistics.length > 1) {
-      statsCompare = controller.statistics[1];
+      statsCompare = fillInBlankDatesWithZero(controller.statistics[1]);
+      // All daily statsCompare are mapped to the first stats in the next for-loop
+      // When statsCompare has more items than stats, complete daily stats with empty values,
+      // otherwise, the statsCompare values exceed the graph xScale domain.
+      if (statsCompare.daily.length > stats.daily.length) {
+        var lastDay = moment(stats.daily[stats.daily.length - 1].day);
+        for (var i = 1; i <= statsCompare.daily.length - stats.daily.length; i++) {
+          stats.daily.push({
+            [graphProp]: 0,
+            day: lastDay.clone().add(i, 'days').format('YYYY-MM-DD')
+          });
+        }
+      }
+
+      for (var j = 0; j < statsCompare.daily.length; j++){
+        var statsItem = stats.daily.hasOwnProperty(j) ? stats.daily[j] : {};
+        var item = statsCompare.daily[j];
+        item.mappedDay = statsItem.day || item.day;
+      }
     }
 
         // Global d3 reference.
@@ -406,28 +452,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         area,
         area2,
         graph;
-
-    if (compare) {
-      var yearMonth = d3.time.format('%Y-%m')(parseDate(stats.start_date));
-
-      for (var i = 0; i < statsCompare.daily.length; i++){
-        var item = statsCompare.daily[i];
-        var day = d3.time.format('%d')(parseDate(item.day));
-        // To show the comparison graph behind the main graph, we need to map the comparison dates to the displayed dates
-        item.mappedDay = yearMonth + '-' + day;
-      }
-
-      if (statsCompare.daily.length > 1) {
-        // when the period starts on the last day of the month before
-        if (parseInt(d3.time.format('%d')(parseDate(statsCompare.daily[0].day))) > parseInt(d3.time.format('%d')(parseDate(statsCompare.daily[1].day)))){
-          statsCompare.daily = statsCompare.daily.slice(1);
-        }
-        // when the period ends on the first day of the month after
-        else if (parseInt(d3.time.format('%d')(parseDate(statsCompare.daily[statsCompare.daily.length - 1].day))) < parseInt(d3.time.format('%d')(parseDate(statsCompare.daily[statsCompare.daily.length - 2].day)))){
-          statsCompare.daily = statsCompare.daily.slice(1, statsCompare.daily.length - 1);
-        }
-      }
-    }
 
     if (compare) {
       line2 = d3.svg.line()

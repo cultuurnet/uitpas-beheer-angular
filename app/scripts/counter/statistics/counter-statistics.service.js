@@ -75,13 +75,18 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    *
    * return {Object<FromToDates>} An object with formatted from/to values.
    */
-  service.getDefaultDateRange = function () {
+  service.getDefaultDateRange = function (alt) {
     var moment = window.moment;
-    // var start = moment('2019-07-01').startOf('year');
-    // var end = moment('2020-07-01').endOf('year');
+    // var start, end;
 
-    // var start = moment('2020-07-01').startOf('month');
-    // var end = moment('2020-07-01').endOf('month');
+    // if (!alt) {
+    //   start = moment('2019-07-01').startOf('year');
+    //   end = moment('2019-07-01').endOf('year');
+    // }
+    // else {
+    //   start = moment('2018-07-01').startOf('month');
+    //   end = moment('2018-07-01').endOf('month');
+    // }
 
     var start = moment().startOf('month');
     var end = moment().endOf('month');
