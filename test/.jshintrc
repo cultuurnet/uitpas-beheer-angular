@@ -24,7 +24,8 @@
     "browser": false,
     "inject": false,
     "PhoneFormat": false,
-    "Raven": false
+    "Raven": false,
+    "moment": false
   }
 }
 

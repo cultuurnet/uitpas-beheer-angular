@@ -12,21 +12,82 @@ angular.module('ubr.counter.statistics')
 
 /* @ngInject */
 function counterStatisticsService($q, $http, appConfig, counterService) {
+  var tokenUrl = appConfig.apiUrl + 'culturefeed/oauth/token';
   var apiUrl = appConfig.apiUrl + 'counters';
 
   /*jshint validthis: true */
   var service = this;
 
+  var token = null;
+  var pending = false;
+
   service.active = undefined;
   service.list = {};
+
+  /**
+   *
+   * @param activeCounterId String
+   * @param path String
+   * @param query Object({from: Moment, to: Moment, mia: boolean})
+   * @param onSuccess Function
+   * @param onError Function
+   */
+  function getInsightsData(activeCounterId, path, query, onSuccess, onError) {
+    function getInsightsDataWithToken(_token) {
+      var prevHeaders = $http.defaults.headers.get;
+      // Remove "pragma" header to prevent CORS error
+      $http.defaults.headers.get = {
+        'Cache-Control': 'no-cache'
+      };
+      $http.get(appConfig.insightsApiUrl +
+        activeCounterId + (path || '/sale') +
+        '?start_date=' + query.from + '&end_date=' + query.to +
+        (query.mia ? '&mia=' + query.mia : ''),
+        {
+          withCredentials: false,
+          headers: {
+            'Authorization': 'Bearer ' + _token,
+          }
+      })
+        .success(onSuccess)
+        .error(onError)
+        .finally(function() {
+          $http.defaults.headers.get = prevHeaders;
+          // pending = false;
+        });
+    }
+
+    if (token) {
+      getInsightsDataWithToken(token);
+      return;
+    }
+
+    $http.get(tokenUrl, {
+      withCredentials: true,
+    }).success(function(response) {
+      token = response.token;
+      getInsightsDataWithToken(token);
+    }).error(onError);
+  }
 
   /**
    * Get default date range
    *
    * return {Object<FromToDates>} An object with formatted from/to values.
    */
-  service.getDefaultDateRange = function () {
+  service.getDefaultDateRange = function (alt) {
     var moment = window.moment;
+    // var start, end;
+
+    // if (!alt) {
+    //   start = moment('2019-07-01').startOf('year');
+    //   end = moment('2019-07-01').endOf('year');
+    // }
+    // else {
+    //   start = moment('2018-07-01').startOf('month');
+    //   end = moment('2018-07-01').endOf('month');
+    // }
+
     var start = moment().startOf('month');
     var end = moment().endOf('month');
 
@@ -46,55 +107,70 @@ function counterStatisticsService($q, $http, appConfig, counterService) {
    * @return {String} A formatted date like DD/MM/YYY.
    */
   service.formatStatisticsDate = function (date) {
-    return window.moment(date).format('DD/MM/YYYY');
+    return window.moment(date).format('YYYY-MM-DD');
   };
 
   /**
    * Get sales statistics.
    *
-   * @param {Parameters} object with from/to keys
+   * @param {params} object with from/to keys
+   * @param {path} string
+   * @param {mia} boolean
    *
    * @return {Promise<CounterSalesStatistics[]|ApiError>} A list of datapoints or an error response.
    */
-  service.getStatistics = function (params, path) {
+  service.getStatistics = function (params, path, mia) {
     var dates = this.getDefaultDateRange();
-    var query = {};
-    var num;
-    var fromStr;
-    var toStr;
+    var query = [];
+    var data = [];
+    var error = [];
     params = params || [];
-    path = path || 'cardsales';
+
     // If no params were passed, use single default date range.
     if (!params.length) {
       params.push({ from: dates.from, to: dates.to});
     }
     // Prepare querystring
     for (var i = 0, max = params.length; i < max; i++) {
-      fromStr = this.formatStatisticsDate(params[i].from);
-      toStr = this.formatStatisticsDate(params[i].to);
+      var fromStr = this.formatStatisticsDate(params[i].from);
+      var toStr = this.formatStatisticsDate(params[i].to);
       // Add number, starting with '', then 2, 3, ...
-      num = i ? i+1 : '';
-      query['from' + num] = fromStr;
-      query['to' + num] = toStr;
+      var q = {};
+      q.from = fromStr;
+      q.to = toStr;
+      q.mia = mia || false;
+
+      query.push(q);
     }
 
     var deferredSales = $q.defer();
 
-    counterService.getActive().then(function(data) {
-      query['balieId'] = data.id;
-      $http.get(
-        apiUrl + '/' + path,
-        {
-          withCredentials: true,
-          params: query
-        })
-        .success(handleSalesData)
-        .error(deferredSales.reject);
-    });
+    counterService.getActive().then(function(activeCounter) {
+      var fetchedData = 0;
 
-    var handleSalesData = function (salesData) {
-      deferredSales.resolve(salesData);
-    };
+      for (var i = 0; i < query.length; i++) {
+        (function getData(index) {
+          getInsightsData(activeCounter.id, '/' + path, query[i],function(responseData) {
+            // handleSalesData(responseData);
+            data[index] = responseData;
+            error[index] = null;
+            fetchedData++;
+
+            if (fetchedData === query.length) {
+              deferredSales.resolve([data, error]);
+            }
+          }, function(e) {
+            data[index] = null;
+            error[index] = e;
+            fetchedData++;
+
+            if (fetchedData === query.length) {
+              deferredSales.resolve([data, error]);
+            }
+          });
+        })(i);
+      }
+    });
 
     return deferredSales.promise;
   };
