@@ -47,7 +47,7 @@ function PassholderActivityTariffsController (
         var ticketPrice = selectedPrice ? selectedPrice : defaultPrice;
         var totalPrice = ticketPrice * this.tickets;
 
-        return totalPrice;
+        return Math.round(totalPrice * 100) / 100;
       }
     } : null;
   }
