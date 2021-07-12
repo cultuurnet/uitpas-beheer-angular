@@ -48,7 +48,9 @@
             <div class="grid__12 grid--bp-lrg__4">
               <label for="tariff-ticket-count">Aantal personen</label><br>
               <input type="text" value="1" ng-model="pat.groupSale.tickets" min="1" max="{{pat.groupSale.maxTickets}}"
-                     ng-touch-spin id="tariff-ticket-count" name="ticketCount" ng-change="pat.clearAsyncError()">
+                     ng-touch-spin id="tariff-ticket-count" name="ticketCount" ng-change="pat.clearAsyncError()"
+                     step-interval="{{1000}}"
+              >
             </div>
 
             <div class="grid__12 grid--bp-lrg__4">
