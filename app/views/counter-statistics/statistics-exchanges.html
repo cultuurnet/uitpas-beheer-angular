@@ -5,19 +5,19 @@
       <div class="grid__12 grid--bp-med__8 serie-wrapper">
         <div class="grid__12 grid--bp-med__4 stat-wrapper">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.transactions.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics.transactions}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.trade_count}}</h2>
             <p class="stat__caption">{{csc.typeStr.transactions.label}}</p>
           </section>
         </div>
         <div class="grid__12 grid--bp-med__4 stat-wrapper">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['active_users']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.traders}}</h2>
             <p class="stat__caption">{{csc.typeStr.active.label}}</p>
           </section>
         </div>
         <div class="grid__12 grid--bp-med__4 stat-wrapper">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.new.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['new_users']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.new_traders}}</h2>
             <p class="stat__caption">{{csc.typeStr.new.label}}</p>
           </section>
         </div>
@@ -30,19 +30,19 @@
       <div class="grid__12 grid--bp-med__8 serie-wrapper">
         <div class="grid__12 grid--bp-med__4 stat-wrapper">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.transactions.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics.transactions2}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.trade_count}}</h2>
             <p class="stat__caption">{{csc.typeStr.transactions.label}}</p>
           </section>
         </div>
         <div class="grid__12 grid--bp-med__4 stat-wrapper">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.active.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['active_users2']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.traders}}</h2>
             <p class="stat__caption">{{csc.typeStr.active.label}}</p>
           </section>
         </div>
         <div class="grid__12 grid--bp-med__4 stat-wrapper">
           <section class="stat" ng-mouseover="csc.showTooltip($event, csc.typeStr.new.help)" ng-mouseleave="csc.hideTooltip()">
-            <h2 class="stat__number">{{csc.statistics['new_users2']}}</h2>
+            <h2 class="stat__number">{{csc.statistics[0].agg.new_traders}}</h2>
             <p class="stat__caption">{{csc.typeStr.new.label}}</p>
           </section>
         </div>
@@ -63,7 +63,7 @@
           <div class="grid__12">
             <div class="serie-1">
               <section class="stat">
-                <h2 class="stat__number"><span>{{csc.statistics['total_ruilen']}}</span></h2>
+                <h2 class="stat__number"><span>{{csc.statistics[0].agg.trades.length}}</span></h2>
                 <p class="stat__caption">aangeboden voordelen</p>
               </section>
             </div>
@@ -80,10 +80,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="top in csc.statistics['top_exchanges']">
-                  <td>{{top.title}}</td>
-                  <td class="number">{{top.count}}</td>
-                  <td class="number" ng-if="csc.hasCompareData()">{{csc.statistics['top_exchanges2'][$index].count}}</td>
+                <tr ng-repeat="trade in csc.statistics[0].agg.trades">
+                  <td>{{trade.trade_name}}</td>
+                  <td class="number">{{trade.trade_count}}</td>
+                  <td class="number" ng-if="csc.hasCompareData()">
+                    {{csc.getCompareStatsData(trade.trade_name, 'trades', 'trade_name', 'trade_count')}}
+                  </td>
                 </tr>
               </tbody>
             </table>

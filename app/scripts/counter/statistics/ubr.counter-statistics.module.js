@@ -23,10 +23,10 @@ angular
         requiresCounter: true,
         views: {
           content: {
-            templateUrl: 'views/counter-statistics/statistics-under-construction.html',
-            // templateUrl: 'views/counter-statistics/statistics.html',
-            // controller: 'CounterStatisticsController',
-            // controllerAs: 'csc'
+            // templateUrl: 'views/counter-statistics/statistics-under-construction.html',
+            templateUrl: 'views/counter-statistics/statistics.html',
+            controller: 'CounterStatisticsController',
+            controllerAs: 'csc'
           },
           sidebar: {
             templateUrl: 'views/counter-statistics/sidebar-info.html'
@@ -36,55 +36,55 @@ angular
           }
         }
       })
-      // .state('counter.statistics.savings', {
-      //   url: '/savings',
-      //   requiresCounter: true,
-      //   views: {
-      //     content: {
-      //       templateUrl: 'views/counter-statistics/statistics.html',
-      //       controller: 'CounterStatisticsController',
-      //       controllerAs: 'csc'
-      //     },
-      //     sidebar: {
-      //       templateUrl: 'views/counter-statistics/sidebar-info.html'
-      //     },
-      //     header: {
-      //       templateUrl: 'views/header.html'
-      //     }
-      //   }
-      // })
-      // .state('counter.statistics.exchange', {
-      //   url: '/exchange',
-      //   requiresCounter: true,
-      //   views: {
-      //     content: {
-      //       templateUrl: 'views/counter-statistics/statistics.html',
-      //       controller: 'CounterStatisticsController',
-      //       controllerAs: 'csc'
-      //     },
-      //     sidebar: {
-      //       templateUrl: 'views/counter-statistics/sidebar-info.html'
-      //     },
-      //     header: {
-      //       templateUrl: 'views/header.html'
-      //     }
-      //   }
-      // })
-      // .state('counter.statistics.mia', {
-      //   url: '/mia',
-      //   requiresCounter: true,
-      //   views: {
-      //     content: {
-      //       templateUrl: 'views/counter-statistics/statistics.html',
-      //       controller: 'CounterStatisticsController',
-      //       controllerAs: 'csc'
-      //     },
-      //     sidebar: {
-      //       templateUrl: 'views/counter-statistics/sidebar-info.html'
-      //     },
-      //     header: {
-      //       templateUrl: 'views/header.html'
-      //     }
-      //   }
-      // });
+      .state('counter.statistics.savings', {
+        url: '/savings',
+        requiresCounter: true,
+        views: {
+          content: {
+            templateUrl: 'views/counter-statistics/statistics.html',
+            controller: 'CounterStatisticsController',
+            controllerAs: 'csc'
+          },
+          sidebar: {
+            templateUrl: 'views/counter-statistics/sidebar-info.html'
+          },
+          header: {
+            templateUrl: 'views/header.html'
+          }
+        }
+      })
+      .state('counter.statistics.exchange', {
+        url: '/exchange',
+        requiresCounter: true,
+        views: {
+          content: {
+            templateUrl: 'views/counter-statistics/statistics.html',
+            controller: 'CounterStatisticsController',
+            controllerAs: 'csc'
+          },
+          sidebar: {
+            templateUrl: 'views/counter-statistics/sidebar-info.html'
+          },
+          header: {
+            templateUrl: 'views/header.html'
+          }
+        }
+      })
+      .state('counter.statistics.mia', {
+        url: '/mia',
+        requiresCounter: true,
+        views: {
+          content: {
+            templateUrl: 'views/counter-statistics/statistics.html',
+            controller: 'CounterStatisticsController',
+            controllerAs: 'csc'
+          },
+          sidebar: {
+            templateUrl: 'views/counter-statistics/sidebar-info.html'
+          },
+          header: {
+            templateUrl: 'views/header.html'
+          }
+        }
+      });
   });

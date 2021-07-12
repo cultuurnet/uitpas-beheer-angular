@@ -17,8 +17,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   var controller = this;
   controller.info = {
     'counter.statistics': {
-      pageTitle: 'Verkoop',
-      path: 'cardsales',
+      pageTitle: 'UiTPASverkoop',
+      path: 'sale',
+      graphProp: 'sale_count',
       title: 'Verkochte kaarten',
       pluralLabel: 'verkochte kaarten',
       singleLabel: 'verkochte kaart',
@@ -32,8 +33,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       template: 'views/counter-statistics/statistics-sales.html'
     },
     'counter.statistics.savings': {
-      pageTitle: 'Sparen',
-      path: 'checkins',
+      pageTitle: 'Punten sparen',
+      path: 'save',
+      graphProp: 'save_count',
       title: 'Gespaarde punten',
       pluralLabel: 'gespaarde punten',
       singleLabel: 'gespaard punt',
@@ -55,8 +57,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       template: 'views/counter-statistics/statistics-savings.html'
     },
     'counter.statistics.exchange': {
-      pageTitle: 'Ruilen',
-      path: 'exchanges',
+      pageTitle: 'Voordelen omruilen',
+      path: 'trade',
+      graphProp: 'trade_count',
       title: 'Omgeruilde voordelen',
       pluralLabel: 'omgeruilde voordelen',
       singleLabel: 'omgeruild voordeel',
@@ -78,11 +81,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       template: 'views/counter-statistics/statistics-exchanges.html'
     },
     'counter.statistics.mia': {
-      pageTitle: 'MIA\'s',
-      path: 'mias',
+      pageTitle: 'Tickets aan kansentarief',
+      path: 'ticket',
+      graphProp: 'ticket_count',
       title: 'Actieve MIA\'s',
       pluralLabel: 'actieve MIA\'s',
       singleLabel: 'actieve MIA',
+      mia: true,
       type: {
         active: {
           label: 'Actieve MIA\'s',
@@ -129,8 +134,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     ranges: controller.ranges
   };
 
-  controller.loadingStatistics = true;
-  controller.statistics = {};
+  controller.loadingStatistics = false;
+  controller.statistics = [];
+  controller.mia = false;
   controller.noStatisticsError = false;
   controller.dateRanges = [];
   controller.formattedDates = [];
@@ -140,6 +146,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   controller.profileStr = '';
   controller.tooltip = d3.select('body').append('div').attr('class', 'graph-tooltip').style('opacity', 0);
   controller.typeTemplate = '';
+  var initialAggregates = {
+    gender: [],
+    municipality: [],
+    ageGroup: []
+  };
+  controller.aggregates = {};
+  angular.copy(initialAggregates, controller.aggregates);
 
   function debounce(func, wait) {
     var timeout;
@@ -240,32 +253,61 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   // Does the controller has comparing data.
   controller.hasCompareData = function() {
-    return !!(controller.statistics && controller.statistics.profiles2);
+    return !!(controller.statistics && controller.statistics.length > 1);
   };
 
   // Load statistics, debounced cause both inputs trigger this onload.
   controller.loadStatistics = function () {
+    if (controller.loadingStatistics) return;
+
+
+    var noStatisticsFound = function () {
+      controller.loadingStatistics = false;
+      controller.noStatisticsError = true;
+      controller.statistics = [];
+      angular.copy(initialAggregates, controller.aggregates);
+    };
+
     var currentRanges = [];
-    var showStatistics = function (statistics) {
+    var showStatistics = function (response) {
+      var statistics = response[0];
+      var error = response[1];
+
+      if (error && (error[0] || error[1])) {
+        noStatisticsFound();
+        return;
+      }
+      // var graphProp = controller.info[$state.current.name].graphProp;
+      angular.copy(initialAggregates, controller.aggregates);
       controller.statistics = statistics;
+      for (var i = 0; i< statistics.length; i++) {
+        if (statistics.hasOwnProperty(i)) {
+          controller.statistics[i].daily = statistics[i].daily.sort(function(a,b) {
+            return new Date(a.day) - new Date(b.day);
+          });
+
+          if (controller.statistics[i].agg.passholder) {
+            controller.aggregates.gender[i] = controller.convertToTableData(controller.statistics[i].agg.passholder.gender);
+            controller.aggregates.municipality[i] = controller.convertToTableData(controller.statistics[i].agg.passholder.municipality, 'municipality');
+            controller.aggregates.ageGroup[i] = controller.convertToTableData(controller.statistics[i].agg.passholder.age_group);
+          }
+        }
+      }
+
       controller.loadingStatistics = false;
       controller.noStatisticsError = false;
       controller.titleStr = controller.info[$state.current.name].title;
       controller.profileStr = controller.info[$state.current.name].profile;
       controller.typeStr = controller.info[$state.current.name].type;
       controller.pageTitle = controller.info[$state.current.name].pageTitle;
-      controller.typeTemplate = controller.info[$state.current.name].template
+      controller.typeTemplate = controller.info[$state.current.name].template;
+      controller.showMia = !controller.info[$state.current.name].mia;
       controller.which = $state.current.name.split('.');
       controller.which = controller.which[controller.which.length - 1];
       // Using settimeout to avoid waiting an extra cycle.
       setTimeout(function(){
         controller.renderGraph(controller.statistics);
       }, 0);
-    };
-
-    var noStatisticsFound = function () {
-      controller.loadingStatistics = false;
-      controller.noStatisticsError = true;
     };
 
     currentRanges.push(controller.dateRanges[0]);
@@ -276,7 +318,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     controller.loadingStatistics = true;
     counterStatisticsService
-      .getStatistics(currentRanges, controller.info[$state.current.name].path)
+      .getStatistics(
+        currentRanges,
+        controller.info[$state.current.name].path,
+        controller.info[$state.current.name].mia || controller.mia
+      )
       .then(showStatistics, noStatisticsFound);
   };
 
@@ -318,6 +364,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   // Helper function for drawing the actual graph.
   controller.renderGraph = function () {
+    var graphProp = controller.info[$state.current.name].graphProp;
     // Grab placeholder.
     var $graphWrap = angular.element(document.querySelectorAll('.counter-statistics-graph'));
 
@@ -327,13 +374,67 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       maxWidth = 600;
     }
 
+    // When there are for example 0 sales on a day, the API doesn't include this in the response.
+    // To give a realistic view on the actual sales, the frontend will fill in these "empty" days with a sale of 0.
+    var fillInBlankDatesWithZero = function(statistics) {
+      var newDailyStats = [];
+
+      for (var i = 0; i < statistics.daily.length; i++){
+        var dailyStat = statistics.daily[i];
+
+        if (i === 0) {
+          newDailyStats.push(dailyStat);
+        } else {
+          var prevDailyStatDay = moment(statistics.daily[i - 1].day);
+          var diffDay = moment(dailyStat.day).diff(prevDailyStatDay, 'days');
+          if (diffDay > 1) {
+            for (var j = 1; j < diffDay; j++) {
+              newDailyStats.push({
+                [graphProp]: 0,
+                day: prevDailyStatDay.clone().add(j, 'days').format('YYYY-MM-DD')
+              });
+            }
+          }
+          newDailyStats.push(dailyStat);
+        }
+      }
+      statistics.daily = newDailyStats;
+      return statistics;
+    };
+
     // The data to be used.
-    var stats = controller.statistics,
+    var stats = fillInBlankDatesWithZero(controller.statistics[0]);
+    var statsCompare;
+
+    if (!stats) return;
+
+    if (controller.statistics.length > 1) {
+      statsCompare = fillInBlankDatesWithZero(controller.statistics[1]);
+      // All daily statsCompare are mapped to the first stats in the next for-loop
+      // When statsCompare has more items than stats, complete daily stats with empty values,
+      // otherwise, the statsCompare values exceed the graph xScale domain.
+      if (statsCompare.daily.length > stats.daily.length) {
+        var lastDay = moment(stats.daily[stats.daily.length - 1].day);
+        for (var i = 1; i <= statsCompare.daily.length - stats.daily.length; i++) {
+          stats.daily.push({
+            [graphProp]: 0,
+            day: lastDay.clone().add(i, 'days').format('YYYY-MM-DD')
+          });
+        }
+      }
+
+      for (var j = 0; j < statsCompare.daily.length; j++){
+        var statsItem = stats.daily.hasOwnProperty(j) ? stats.daily[j] : {};
+        var item = statsCompare.daily[j];
+        item.mappedDay = statsItem.day || item.day;
+      }
+    }
+
         // Global d3 reference.
-        d3 = window.d3,
-        parseDate = d3.time.format('%d-%m-%Y').parse,
+    var d3 = window.d3,
+        parseDate = d3.time.format('%Y-%m-%d').parse,
         formatDate = d3.time.format('%d/%m/%Y'),
-        format = d3.time.format('%d-%m-%Y'),
+        format = d3.time.format('%Y-%m-%d'),
         // Hardcoded margin.
         margin = 40,
         // Grab width - margins.
@@ -354,12 +455,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     if (compare) {
       line2 = d3.svg.line()
-              .x(function (d) { return xScale(format.parse(d.date)); })
-              .y(function (d) { return yScale(parseInt(d.count2, 10)); });
+              .x(function (d) { return xScale(format.parse(d.mappedDay)); })
+              .y(function (d) { return yScale(parseInt(d[graphProp], 10)); });
       area2 = d3.svg.area()
-              .x(function(d) { return xScale(format.parse(d.date)); })
+              .x(function(d) { return xScale(format.parse(d.mappedDay)); })
               .y0(height)
-              .y1(function(d) { return yScale(d.count2); });
+              .y1(function(d) { return yScale(d[graphProp]); });
     }
 
     // Make sure it's cleared.
@@ -367,13 +468,13 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
     // Line handler.
     line = d3.svg.line()
-          .x(function(d) { return xScale(format.parse(d.date)); })
-          .y(function(d) { return yScale(parseInt(d.count, 10)); });
+          .x(function(d) { return xScale(format.parse(d.day)); })
+          .y(function(d) { return yScale(parseInt(d[graphProp], 10)); });
     // Area handler.
     area = d3.svg.area()
-          .x(function(d) { return xScale(format.parse(d.date)); })
+          .x(function(d) { return xScale(format.parse(d.day)); })
           .y0(height)
-          .y1(function(d) { return yScale(d.count); });
+          .y1(function(d) { return yScale(d[graphProp]); });
     // Group to add the margins.
     graph = d3.select($graphWrap[0]).append('svg')
       .attr('width', width + (margin * 2))
@@ -381,35 +482,28 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       .append('g')
       .attr('transform', 'translate(' + margin + ', ' + margin + ')');
     // Set total size.
-    xScale.domain(d3.extent(stats.periods, function (d) { return format.parse(d.date); }));
+    xScale.domain(d3.extent(stats.daily, function (d) { return format.parse(d.day); }));
     // Same for Y dimension.
-    yScale.domain([0, d3.max(stats.periods, function (d) {
-        var max;
-        // TODO: handler comparison graphs.
-        if (compare) {
-          max = Math.max(parseInt(d.count, 10), parseInt(d.count2, 10));
-        }
-        else {
-          max = parseInt(d.count, 10);
-        }
-        return max;
-      })]);
+    var allStats = [].concat(stats.daily, compare ? statsCompare.daily : []);
+    yScale.domain([0, d3.max(allStats, function (d) {
+      return parseInt(d[graphProp], 10);
+    })]);
 
     // Make an area path per period.
     graph.append('path')
-        .datum(stats.periods)
+        .datum(stats.daily)
         .attr('class', 'area')
         .attr('d', area);
     if (compare) {
       // Make an area path per period.
       graph.append('path')
-          .datum(stats.periods)
+          .datum(statsCompare.daily)
           .attr('class', 'area area-2')
           .attr('d', area2);
     }
     // Make a line path per period.
     graph.append('path')
-        .datum(stats.periods)
+        .datum(stats.daily)
         .attr('class', 'line')
         .attr('d', line);
     // Add the X Axis.
@@ -423,19 +517,19 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         .call(yAxis);
     // Add a circle per data point.
     graph.selectAll('dot')
-        .data(stats.periods)
+        .data(stats.daily)
         .enter()
         .append('circle')
         .attr('class', 'dot')
         .attr('r', 5)
         .attr('cx', function(d) {
-          return xScale(parseDate(d.date));
+          return xScale(parseDate(d.day));
         })
         .attr('cy', function(d) {
-          return yScale(parseInt(d.count, 10));
+          return yScale(parseInt(d[graphProp], 10));
         })
         .on("mouseover", function(d) {
-          controller.showGraphTooltip(d3.event, d.count, formatDate(parseDate(d.date)))
+          controller.showGraphTooltip(d3.event, d[graphProp], formatDate(parseDate(d.day)));
         })
         .on("mouseout", function() {
           controller.hideTooltip();
@@ -444,24 +538,24 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     if (compare) {
       // Make a line path per period.
       graph.append('path')
-          .datum(stats.periods)
+          .datum(statsCompare.daily)
           .attr('class', 'line line-2')
           .attr('d', line2);
       // Add a circle per data point.
       graph.selectAll('dot-2')
-          .data(stats.periods)
+          .data(statsCompare.daily)
           .enter()
           .append('circle')
           .attr('class', 'dot dot-2')
           .attr('r', 5)
           .attr('cx', function(d) {
-            return xScale(format.parse(d.date));
+            return xScale(format.parse(d.mappedDay));
           })
           .attr('cy', function(d) {
-            return yScale(parseInt(d.count2, 10));
+            return yScale(parseInt(d[graphProp], 10));
           })
           .on("mouseover", function(d) {
-            controller.showGraphTooltip(d3.event, d.count2, formatDate(parseDate(d.date2)))
+            controller.showGraphTooltip(d3.event, d[graphProp], formatDate(parseDate(d.day)));
           })
           .on("mouseout", function() {
             controller.hideTooltip();
@@ -490,7 +584,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       content = "<strong>" + date + "</strong><br/>" + " " + total + " " + label;
 
     controller.showTooltip(event, content);
-  }
+  };
 
   /**
    * Show a help tooltip.
@@ -499,7 +593,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     if (controller.helpTexts[key]) {
       controller.showTooltip(event, controller.helpTexts[key]);
     }
-  }
+  };
 
   /**
    * Show a tooltip.
@@ -520,12 +614,77 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
    * Hide the tooltip.
    */
   controller.hideTooltip = function() {
-    controller.tooltip.transition().duration(200).style("opacity", 0);
-    controller.tooltip.style("top", 0);
-    controller.tooltip.style("left", 0);
+    controller.tooltip.transition().duration(200).style('opacity', 0);
+    controller.tooltip.style('top', 0);
+    controller.tooltip.style('left', 0);
+  };
+
+  controller.getCompareStatsData = function(name, aggProp, nameProp, valueProp) {
+    if (!controller.hasCompareData()) {
+      return;
+    }
+
+    var found = null;
+
+    for (var i = 0; i < controller.statistics[1].agg[aggProp].length; i++) {
+      var ev = controller.statistics[1].agg[aggProp][i];
+      if (ev[nameProp] === name) {
+        found = ev;
+      }
+    }
+
+    if (found) {
+      return found[valueProp];
+    }
   };
 
   controller.loadDefaultDateRange();
+
+  var titleMap = {
+    missing: 'Onbekend',
+    male: 'Man',
+    female: 'Vrouw',
+    Kinderen: '0-12',
+    Jongeren: '13-18',
+    Studenten: '19-26',
+    JongeDertigers:'27-34',
+    JongeVeertigers:'35-44',
+    JongeVijftigers: '45-54',
+    JongeZestigers: '55-65',
+    Gepensioneerden: '64-110',
+  };
+
+  controller.convertToTableData = function(data, objectKey) {
+    var finalData = data;
+
+    if (objectKey) {
+      finalData = {};
+      angular.forEach(data, function (item) {
+        var key = item[objectKey];
+        var value = item.count;
+        finalData[key] = value;
+      });
+    }
+
+    var total = 0;
+    var keys = [];
+    angular.forEach(finalData, function (value, key) {
+      total += value;
+      keys.push(key);
+    });
+    var factor = total / 100;
+
+    var result = [];
+
+    angular.forEach(keys, function (title) {
+      result.push({
+        title: titleMap[title] || title,
+        count: Math.round(finalData[title] / factor * 100) / 100,
+      });
+    });
+    return result;
+  };
+
   $scope.$on('$stateChangeSuccess', function() {
     controller.loadStatistics();
   });

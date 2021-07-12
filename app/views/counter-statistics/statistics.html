@@ -12,6 +12,7 @@
 
   <div class="page-header">
     <h1>{{csc.pageTitle}}</h1>
+
     <div ng-show="csc.dateRanges" class="period-chooser">
         <div ng-init="csc.addDatePicker()">
             <div class="row clearfix">
@@ -35,7 +36,15 @@
               </div>
             </div>
         </div>
+    </div>
 
+    <div style="clear:both" ng-show="csc.showMia">
+      <div style="float: right; margin-top: 8px">
+        <label>
+          <input type="checkbox" class="comparecheck" ng-model="csc.mia" ng-change="csc.loadStatistics()">
+          Toon enkel mensen in armoede
+        </label>
+      </div>
     </div>
   </div>
 

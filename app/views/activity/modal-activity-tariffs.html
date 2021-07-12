@@ -15,7 +15,14 @@
           <tbody>
             <tr class="base">
               <th title="Basistarief">Basistarief</th>
-              <td data-title="{{key}}" ng-repeat="(key, value) in ::pat.activity.sales.base"><span class="value">&euro; {{::value}}</span></td>
+              <td data-title="{{key}}" ng-repeat="(key, value) in ::pat.activity.sales.base">
+                <label class="value" for="price-base-{{::key}}" ng-if="!tariff.maximumReached">
+                  <input type="radio" name="tariff" id="price-base-{{::key}}" ng-model="pat.selectedTariff"
+                         required ng-value="{priceClass: key, price: value}" ng-change="pat.clearAsyncError()">
+                  <span class="price">&euro; {{::value}}</span>
+                </label>
+              </td>
+<!--              <td data-title="{{key}}" ng-repeat="(key, value) in ::pat.activity.sales.base"><span class="value">&euro; {{::value}}</span></td>-->
             </tr>
             <tr ng-repeat="(tKey, tariff) in ::pat.activity.sales.tariffs.list"
                 ng-class="{ 'coupon': tariff.type === 'COUPON', 'kansen-tariff': tariff.type !== 'COUPON', 'coupon-unavailable': tariff.maximumReached }">

@@ -103,6 +103,8 @@ function activityService($q, $http, $rootScope, appConfig, Activity) {
       claimParameters.tariffId = priceInfo.couponId;
     }
 
+    // console.log({claimParameters});
+
     var claimRequest = $http.post(
       apiUrl + 'passholders/' + passholder.passNumber + '/activities/ticket-sales',
       claimParameters,
