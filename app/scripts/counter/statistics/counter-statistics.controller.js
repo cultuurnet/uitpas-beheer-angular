@@ -389,10 +389,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
           var diffDay = moment(dailyStat.day).diff(prevDailyStatDay, 'days');
           if (diffDay > 1) {
             for (var j = 1; j < diffDay; j++) {
-              newDailyStats.push({
-                [graphProp]: 0,
+              var data = {
                 day: prevDailyStatDay.clone().add(j, 'days').format('YYYY-MM-DD')
-              });
+              };
+              data[graphProp] = 0;
+              newDailyStats.push(data);
             }
           }
           newDailyStats.push(dailyStat);
@@ -416,10 +417,11 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       if (statsCompare.daily.length > stats.daily.length) {
         var lastDay = moment(stats.daily[stats.daily.length - 1].day);
         for (var i = 1; i <= statsCompare.daily.length - stats.daily.length; i++) {
-          stats.daily.push({
-            [graphProp]: 0,
+          var data = {
             day: lastDay.clone().add(i, 'days').format('YYYY-MM-DD')
-          });
+          };
+          data[graphProp] = 0;
+          stats.daily.push(data);
         }
       }
 
