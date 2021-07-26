@@ -140,18 +140,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   controller.aggregates = {};
   angular.copy(initialAggregates, controller.aggregates);
 
-  function debounce(func, wait) {
-    var timeout;
-    return function() {
-      var context = this, args = arguments;
-      clearTimeout(timeout);
-      timeout = setTimeout(function() {
-        timeout = null;
-        func.apply(context, args);
-      }, wait);
-    };
-  }
-
   controller.loadDefaultDateRange = function() {
     var dateRange = counterStatisticsService.getDefaultDateRange(),
         dateRange2 = counterStatisticsService.getDefaultDateRange(),
@@ -244,7 +232,12 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
   // Load statistics, debounced cause both inputs trigger this onload.
   controller.loadStatistics = function () {
-    if (controller.loadingStatistics) return;
+    controller.statistics = [];
+    angular.copy(initialAggregates, controller.aggregates);
+
+    if (controller.loadingStatistics) {
+      return;
+    }
 
 
     var noStatisticsFound = function () {
