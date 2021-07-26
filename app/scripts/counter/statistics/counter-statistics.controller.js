@@ -30,7 +30,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         }
       },
       profile: 'Profiel van de koper',
-      template: 'views/counter-statistics/statistics-sales.html'
+      template: 'views/counter-statistics/statistics-sales.html',
+      noStatisticsLabel: 'In de periode van {{startDate}} tot {{endDate}} werden geen UiTPASsen verkocht aan deze balie.',
+      noStatisticsLabelSingle: 'Op {{startDate}} werden geen UiTPASsen verkocht aan deze balie.'
     },
     'counter.statistics': {
       pageTitle: 'Punten sparen',
@@ -54,7 +56,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         }
       },
       profile: 'Profiel van de actieve spaarder',
-      template: 'views/counter-statistics/statistics-savings.html'
+      template: 'views/counter-statistics/statistics-savings.html',
+      noStatisticsLabel: 'In de periode van {{startDate}} tot {{endDate}} werden geen punten gespaard aan deze balie.',
+      noStatisticsLabelSingle: 'Op {{startDate}} werden geen punten gespaard aan deze balie.'
     },
     'counter.statistics.exchange': {
       pageTitle: 'Voordelen omruilen',
@@ -78,7 +82,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         }
       },
       profile: 'Profiel van de actieve ruiler',
-      template: 'views/counter-statistics/statistics-exchanges.html'
+      template: 'views/counter-statistics/statistics-exchanges.html',
+      noStatisticsLabel: 'In de periode van {{startDate}} tot {{endDate}} werden geen voordelen omgeruild aan deze balie.',
+      noStatisticsLabelSingle: 'Op {{startDate}} werden geen voordelen omgeruild aan deze balie.'
     },
     'counter.statistics.mia': {
       pageTitle: 'Tickets aan kansentarief',
@@ -89,7 +95,9 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       singleLabel: 'actieve MIA',
       mia: true,
       profile: 'Profiel van MIA\'s',
-      template: 'views/counter-statistics/statistics-mias.html'
+      template: 'views/counter-statistics/statistics-mias.html',
+      noStatisticsLabel: 'In de periode van {{startDate}} tot {{endDate}} werden geen kansentarieven geregistreerd aan deze balie.',
+      noStatisticsLabelSingle: 'Op {{startDate}} werden geen kansentarieven geregistreerd aan deze balie.'
     }
   };
 
@@ -124,6 +132,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   controller.statistics = [];
   controller.mia = false;
   controller.noStatisticsError = false;
+  controller.statisticsErrorMsg = 0;
   controller.dateRanges = [];
   controller.formattedDates = [];
   controller.pickingDate = false;
@@ -240,9 +249,27 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     }
 
 
-    var noStatisticsFound = function () {
+    var noStatisticsFound = function (code = 404, dateRange = {from: moment(), to: moment()}) {
       controller.loadingStatistics = false;
       controller.noStatisticsError = true;
+
+      var dateFrom = dateRange.from;
+      var dateTo = dateRange.to;
+
+      if (code === 400) {
+        controller.statisticsErrorMsg = 'Er kunnen geen resultaten worden ingeladen omdat de start- of einddatum niet geldig is.';
+      } else if (code === 404) {
+        controller.statisticsErrorMsg = dateFrom.isSame(dateTo, 'day') ?
+          controller.info[$state.current.name].noStatisticsLabelSingle
+          : controller.info[$state.current.name].noStatisticsLabel;
+
+        controller.statisticsErrorMsg = controller.statisticsErrorMsg
+          .replace('{{startDate}}', dateFrom.format('DD-MM-YYYY'))
+          .replace('{{endDate}}', dateTo.format('DD-MM-YYYY'));
+      } else {
+        controller.statisticsErrorMsg = 'Er kunnen momenteel geen statistieken worden getoond. Probeer het later opnieuw.';
+      }
+
       controller.statistics = [];
       angular.copy(initialAggregates, controller.aggregates);
     };
@@ -253,7 +280,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       var error = response[1];
 
       if (error && (error[0] || error[1])) {
-        noStatisticsFound();
+        noStatisticsFound(error[0] ? error[0].code : error[1].code, error[0] ? controller.dateRanges[0] : controller.dateRanges[1]);
         return;
       }
       // var graphProp = controller.info[$state.current.name].graphProp;
@@ -364,6 +391,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
         if (i === 0) {
           newDailyStats.push(dailyStat);
         } else {
+          // Compare with previous stat, if there's more than 1 day between data points, fill it with empty data points
           var prevDailyStatDay = moment(statistics.daily[i - 1].day);
           var diffDay = moment(dailyStat.day).diff(prevDailyStatDay, 'days');
           if (diffDay > 1) {
@@ -395,7 +423,8 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       // otherwise, the statsCompare values exceed the graph xScale domain.
       if (statsCompare.daily.length > stats.daily.length) {
         var lastDay = moment(stats.daily[stats.daily.length - 1].day);
-        for (var i = 1; i <= statsCompare.daily.length - stats.daily.length; i++) {
+        var diff = statsCompare.daily.length - stats.daily.length;
+        for (var i = 1; i <= diff; i++) {
           var data = {
             day: lastDay.clone().add(i, 'days').format('YYYY-MM-DD')
           };
