@@ -16,7 +16,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   /*jshint validthis: true */
   var controller = this;
   controller.info = {
-    'counter.statistics': {
+    'counter.statistics.sales': {
       pageTitle: 'Verkoop van UiTPASsen',
       path: 'sale',
       graphProp: 'sale_count',
@@ -32,7 +32,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       profile: 'Profiel van de koper',
       template: 'views/counter-statistics/statistics-sales.html'
     },
-    'counter.statistics.savings': {
+    'counter.statistics': {
       pageTitle: 'Punten sparen',
       path: 'save',
       graphProp: 'save_count',
