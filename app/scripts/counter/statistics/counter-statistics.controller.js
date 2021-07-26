@@ -88,20 +88,6 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       pluralLabel: 'actieve MIA\'s',
       singleLabel: 'actieve MIA',
       mia: true,
-      type: {
-        active: {
-          label: 'Actieve MIA\'s',
-          help: 'Aantal mensen in armoede dat je bereikte.'
-        },
-        saving: {
-          label: 'Sparende MIA\'s',
-          help: 'Aantal mensen in armoede dat bij je spaarde.'
-        },
-        exchanging: {
-          label: 'Ruilende MIA\'s',
-          help: 'Aantal mensen in armoede dat bij je ruilde.'
-        }
-      },
       profile: 'Profiel van MIA\'s',
       template: 'views/counter-statistics/statistics-mias.html'
     }
