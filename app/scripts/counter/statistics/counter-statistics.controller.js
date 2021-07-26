@@ -17,7 +17,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
   var controller = this;
   controller.info = {
     'counter.statistics': {
-      pageTitle: 'UiTPASverkoop',
+      pageTitle: 'Verkoop van UiTPASsen',
       path: 'sale',
       graphProp: 'sale_count',
       title: 'Verkochte kaarten',
