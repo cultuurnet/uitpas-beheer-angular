@@ -249,7 +249,10 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
     }
 
 
-    var noStatisticsFound = function (code = 404, dateRange = {from: moment(), to: moment()}) {
+    var noStatisticsFound = function (code, dateRange) {
+      code = code || 404;
+      dateRange = dateRange || {from: moment(), to: moment()};
+
       controller.loadingStatistics = false;
       controller.noStatisticsError = true;
 
