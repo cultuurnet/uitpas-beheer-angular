@@ -25,7 +25,8 @@
     "inject": false,
     "PhoneFormat": false,
     "Raven": false,
-    "moment": false
+    "moment": false,
+    "d3": false
   }
 }
 

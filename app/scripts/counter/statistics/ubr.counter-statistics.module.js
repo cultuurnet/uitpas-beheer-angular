@@ -23,7 +23,6 @@ angular
         requiresCounter: true,
         views: {
           content: {
-            // templateUrl: 'views/counter-statistics/statistics-under-construction.html',
             templateUrl: 'views/counter-statistics/statistics.html',
             controller: 'CounterStatisticsController',
             controllerAs: 'csc'
@@ -36,11 +35,12 @@ angular
           }
         }
       })
-      .state('counter.statistics.savings', {
-        url: '/savings',
+      .state('counter.statistics.sales', {
+        url: '/sales',
         requiresCounter: true,
         views: {
           content: {
+            // templateUrl: 'views/counter-statistics/statistics-under-construction.html',
             templateUrl: 'views/counter-statistics/statistics.html',
             controller: 'CounterStatisticsController',
             controllerAs: 'csc'

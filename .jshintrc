@@ -23,6 +23,7 @@
     "moment": false,
     "PhoneFormat": false,
     "showdown": false,
-    "Raven": false
+    "Raven": false,
+    "d3": false
   }
 }
