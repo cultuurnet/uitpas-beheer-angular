@@ -155,7 +155,7 @@ function RegistrationModalController (
       .startSubmit(contactDataForm)
       .then(function () {
         if (contactDataForm.$valid) {
-          
+
           // Set certain opt-in options according to info received in contact step.
           controller.legalTermsDigital = controller.passholder.contact.email && !controller.passholder.isUnderAge() ? true : false;
           controller.passholder.optInPreferences.sms = controller.passholder.contact.mobileNumber ? true : false;
@@ -164,50 +164,43 @@ function RegistrationModalController (
             controller.optInEmail = false;
           }
 
+          controller.formSubmitBusy = false;
+          controller.goToOptInForm();
+
           // Email already validated or not required, go to the opt-in form
-          if (controller.emailValidated || controller.excludeEmail) {
-            controller.goToOptInForm();
-          } else {
-            // Validate email against the real-time email validation service
-            $scope.validating = true;
-
-            dataValidation.validateEmail(contactDataForm.email.$viewValue).then(function(validationResult) {
-              switch (validationResult.grade) {
-                case 'A+':
-                case 'A':
-                case 'B':
-                  // Email grade is fine, continue to the next step
-                  controller.goToOptInForm();
-                  break;
-                case 'D':
-                  // Email has a bad grade, show the warning
-                  // and set the flag that the address has already been validated
-                  controller.emailValidated = true;
-                  break;
-                default:
-                  // Stop and show error, block continue
-                  contactDataForm.email.$setValidity('failedValidation', false);
-                  contactDataForm.email.$error.failedValidation = true;
-                  break;
-              }
-
-              $scope.validating = false;
-              controller.formSubmitBusy = false;
-            }, function(reason) {
-              if (reason.status === 400) {
-                // 400 response means the email parameter was not present
-                // or the email address was malformed
-                contactDataForm.email.$setValidity('failedValidation', false);
-                contactDataForm.email.$error.failedValidation = true;
-              } else {
-                // Server error -> continue to next step
-                controller.goToOptInForm();
-              }
-
-              $scope.validating = false;
-              controller.formSubmitBusy = false;
-            });
-          }
+          // if (controller.emailValidated || controller.excludeEmail) {
+          //   controller.goToOptInForm();
+          // } else {
+          //   // Validate email against the real-time email validation service
+          //   $scope.validating = true;
+          //
+          //   dataValidation.validateEmail(contactDataForm.email.$viewValue).then(function(validationResult) {
+          //     switch (validationResult.grade) {
+          //       case 'A+':
+          //       case 'A':
+          //       case 'B':
+          //         // Email grade is fine, continue to the next step
+          //         controller.goToOptInForm();
+          //         break;
+          //       case 'D':
+          //         // Email has a bad grade, show the warning
+          //         // and set the flag that the address has already been validated
+          //         controller.emailValidated = true;
+          //         break;
+          //       default:
+          //         // Stop and show error, block continue
+          //         contactDataForm.email.$setValidity('failedValidation', false);
+          //         contactDataForm.email.$error.failedValidation = true;
+          //         break;
+          //     }
+          //
+          //     $scope.validating = false;
+          //     controller.formSubmitBusy = false;
+          //
+          //     $scope.validating = false;
+          //     controller.formSubmitBusy = false;
+          //   });
+          // }
         } else {
           controller.formSubmitBusy = false;
         }
