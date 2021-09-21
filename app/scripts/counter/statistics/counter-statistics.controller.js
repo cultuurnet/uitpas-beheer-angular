@@ -248,6 +248,14 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
       return;
     }
 
+    controller.titleStr = controller.info[$state.current.name].title;
+    controller.profileStr = controller.info[$state.current.name].profile;
+    controller.typeStr = controller.info[$state.current.name].type;
+    controller.pageTitle = controller.info[$state.current.name].pageTitle;
+    controller.typeTemplate = controller.info[$state.current.name].template;
+    controller.showMia = !controller.info[$state.current.name].mia;
+    controller.which = $state.current.name.split('.');
+    controller.which = controller.which[controller.which.length - 1];
 
     var noStatisticsFound = function (code, dateRange) {
       code = code || 404;
@@ -305,14 +313,7 @@ function CounterStatisticsController(counterStatisticsService, $state, $scope) {
 
       controller.loadingStatistics = false;
       controller.noStatisticsError = false;
-      controller.titleStr = controller.info[$state.current.name].title;
-      controller.profileStr = controller.info[$state.current.name].profile;
-      controller.typeStr = controller.info[$state.current.name].type;
-      controller.pageTitle = controller.info[$state.current.name].pageTitle;
-      controller.typeTemplate = controller.info[$state.current.name].template;
-      controller.showMia = !controller.info[$state.current.name].mia;
-      controller.which = $state.current.name.split('.');
-      controller.which = controller.which[controller.which.length - 1];
+
       // Using settimeout to avoid waiting an extra cycle.
       setTimeout(function(){
         controller.renderGraph(controller.statistics);
