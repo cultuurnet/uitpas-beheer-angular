@@ -45,7 +45,7 @@ function CreateMembershipModalController(counterService, $uibModalInstance) {
       }
       else {
         controller.asyncError = {
-          message: 'Er werd niemand gevonden met het e-mail adres <em>' + controller.email + '</em>.<br>Gelieve de persoon die je wenst toe te voegen te vragen om zich eerst te registeren op UiTinVlaanderen.be.'
+          message: 'Er werd niemand gevonden met het e-mail adres <em>' + controller.email + '</em>.<br>Gelieve de persoon die je wenst toe te voegen te vragen om zich eerst te registeren op UiTdatabank.be.'
         };
       }
       controller.creationPending = false;
