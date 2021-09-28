@@ -71,11 +71,21 @@
   <ul class="list-unstyled" ng-if="!ac.activitiesLoading && ac.totalActivities > 0">
     <li class="overview__item overview__item-list" ng-repeat="activity in ac.activities">
       <div class="grid display-table">
-        <div class="grid__12 grid--bp-med__9 first">
+        <div class="grid__12 grid--bp-med__6 first">
           <div class="date" ng-bind="::activity.when"></div>
           <h3 ui-sref="counter.activities.activity({ activity: activity })">{{activity.title}}</h3>
         </div> <!--/ end .grid-first -->
-        <div class="grid__12 grid--bp-med__3 middle">
+        <div class="grid__12 grid--bp-med__2 middle">
+          <div class="content-holder">
+            <a class="btn btn-default btn-sm" ng-href="{{ac.uivUrl + activity.id}}" target="_blank" ng-click="ac.goTo($event, ac.uivUrl + activity.id)">Bekijk op UiTinVlaanderen</a>
+          </div>
+        </div>
+        <div class="grid__12 grid--bp-med__2 middle">
+          <div class="content-holder">
+            <a class="btn btn-default btn-sm" ng-href="{{ac.udbUrl.replace(':id', activity.id)}}" target="_blank" ng-click="ac.goTo($event, ac.udbUrl.replace(':id', activity.id))">Bekijk in de UiTdatabank </a>
+          </div>
+        </div>
+        <div class="grid__12 grid--bp-med__2 middle">
           <div class="content-holder">
             <a class="btn btn-default btn-sm" ng-href="{{ac.apiUrl + activity.id + '/qr-spaarcode.zip'}}">Download QR-spaarcode</a>
           </div>

@@ -24,6 +24,7 @@
     "PhoneFormat": false,
     "showdown": false,
     "Raven": false,
-    "d3": false
+    "d3": false,
+    "alert": false
   }
 }
