@@ -435,10 +435,16 @@ function RegistrationModalController (
   /**
    * Listener on the EID scanned event: Copy all data on the passholder.
    */
-  var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData) {
+  var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData, base64Picture) {
     angular.merge(controller.eIDData, eIDData);
     angular.merge(controller.passholder, eIDData);
     controller.eIDError = false;
+
+    if (base64Picture) {
+      controller.eIDData.picture = base64Picture;
+      controller.passholder.picture = base64Picture;
+    }
+
     $scope.$apply();
     passholderService
         .findPass(eIDData.inszNumber)
