@@ -12,13 +12,19 @@ angular
   .controller('ActivitiesController', ActivitiesController);
 
 /* @ngInject */
-function ActivitiesController(activitiesService, counterService, DateRange, moment, appConfig) {
+function ActivitiesController(activitiesService, counterService, DateRange, moment, appConfig, isJavaFXBrowser) {
   /*jshint validthis: true */
   var controller = this;
   var yesterday = moment().subtract(1, 'day');
 
+  function removeDoubleSlash(url) {
+    return url.replace(/([^:]\/)\/+/g, "$1");
+  }
+
   // Set default parameters.
-  controller.apiUrl = appConfig.apiUrl + 'checkincodes/';
+  controller.apiUrl = removeDoubleSlash(appConfig.apiUrl + '/checkincodes/');
+  controller.uivUrl = removeDoubleSlash(appConfig.uivUrl + '/agenda/e/e/');
+  controller.udbUrl = removeDoubleSlash(appConfig.udbUrl + '/event/:id/edit');
   controller.query = '';
   controller.page = 1;
   controller.limit = 5;
@@ -130,4 +136,11 @@ function ActivitiesController(activitiesService, counterService, DateRange, mome
 
   // initial fetch
   controller.getActivities();
+
+  controller.goTo = function (e, url) {
+    if (isJavaFXBrowser) {
+      e.preventDefault();
+      alert('EXTERNAL:' + url);
+    }
+  };
 }
