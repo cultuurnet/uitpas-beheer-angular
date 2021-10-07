@@ -24,7 +24,7 @@ function ActivitiesController(activitiesService, counterService, DateRange, mome
   // Set default parameters.
   controller.apiUrl = removeDoubleSlash(appConfig.apiUrl + '/checkincodes/');
   controller.uivUrl = removeDoubleSlash(appConfig.uivUrl + '/agenda/e/e/');
-  controller.udbUrl = removeDoubleSlash(appConfig.udbUrl + '/event/:id/edit');
+  controller.udbUrl = removeDoubleSlash(appConfig.udbUrl + '/event/:id');
   controller.query = '';
   controller.page = 1;
   controller.limit = 5;
