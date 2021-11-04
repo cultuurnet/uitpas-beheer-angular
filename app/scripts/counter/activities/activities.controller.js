@@ -12,7 +12,7 @@ angular
   .controller('ActivitiesController', ActivitiesController);
 
 /* @ngInject */
-function ActivitiesController(activitiesService, counterService, DateRange, moment, appConfig, isJavaFXBrowser) {
+function ActivitiesController(activitiesService, counterService, DateRange, moment, appConfig, isJavaFXBrowser, $http, $uibModal, $window) {
   /*jshint validthis: true */
   var controller = this;
   var yesterday = moment().subtract(1, 'day');
@@ -37,6 +37,7 @@ function ActivitiesController(activitiesService, counterService, DateRange, mome
   controller.totalActivities = 0;
   controller.activitiesLoading = false;
   controller.hideDateRange = false;
+  controller.showError = false;
 
   var setActiveCounter = function (counter) {
     controller.activeCounter = counter;
@@ -142,5 +143,28 @@ function ActivitiesController(activitiesService, counterService, DateRange, mome
       e.preventDefault();
       alert('EXTERNAL:' + url);
     }
+  };
+
+  controller.download = function (e) {
+    e.preventDefault();
+    var url = e.target.getAttribute('href');
+    var request = $http.get(url);
+
+    function onSuccess() {
+      $window.location.href = url;
+    }
+
+    function onError() {
+      $uibModal
+        .open({
+          animation: true,
+          template: '<div class="modal-body">De QR-code voor deze activiteit kan niet meer gedownload worden aangezien de activiteit is afgelopen.</div>' +
+            '<div class="modal-footer"><div class="btn-toolbar"><button class="btn btn-default" ng-click="$close()">Sluiten</button></div></div>',
+          size: 'sm',
+        });
+    }
+
+    request.success(onSuccess);
+    request.error(onError);
   };
 }
