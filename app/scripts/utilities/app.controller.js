@@ -146,14 +146,14 @@ function appController($rootScope, $location, $state, $stateParams, appConfig, u
       var redirectTo = $location.absUrl();
 
       $state.go('login', {
-        redirectTo
+        redirectTo: redirectTo
       });
     }
   };
 
   app.redirectToCounters = function (redirectTo) {
     $state.go('counters', {
-      redirectTo
+      redirectTo: redirectTo
     });
   };
 
