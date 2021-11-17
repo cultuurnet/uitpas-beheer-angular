@@ -96,6 +96,9 @@ angular
       })
       .state('login', {
         url: '/login',
+        params: {
+          redirectTo: null
+        },
         templateUrl: 'views/login.html'
       })
       .state('login.moreInfo', {
