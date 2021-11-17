@@ -12,7 +12,7 @@ angular
   .controller('CountersController', countersController);
 
 /* @ngInject */
-function countersController($state, counterService, list, lastActiveId, appConfig, GoogleAnalyticsService) {
+function countersController($state, $stateParams, $location, counterService, list, lastActiveId, appConfig, GoogleAnalyticsService) {
 
   /*jshint validthis: true */
   var controller = this;
@@ -36,14 +36,17 @@ function countersController($state, counterService, list, lastActiveId, appConfi
 
   controller.setActiveCounter = function(activeCounter) {
     counterService.setActive(activeCounter).then(function() {
-
       // If analytics is enabled, set the selected counter as dimension.
       if (GoogleAnalyticsService.isEnabled()) {
         GoogleAnalyticsService.setVariable('dimension1', activeCounter.id);
         GoogleAnalyticsService.setVariable('dimension2', activeCounter.name);
       }
 
-      $state.go('counter.main');
+      if ($stateParams.redirectTo) {
+         $location.path($stateParams.redirectTo).replace();
+      } else {
+        $state.go('counter.main');
+      }
     });
   };
 

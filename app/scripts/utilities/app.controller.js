@@ -12,7 +12,7 @@ angular
   .controller('AppController', appController);
 
 /* @ngInject */
-function appController($rootScope, $location, $state, appConfig, uitid, counterService, GoogleAnalyticsService, isJavaFXBrowser) {
+function appController($rootScope, $location, $state, $stateParams, appConfig, uitid, counterService, GoogleAnalyticsService, isJavaFXBrowser) {
   $rootScope.appBusy = true;
   var firstPage = true;
 
@@ -78,7 +78,7 @@ function appController($rootScope, $location, $state, appConfig, uitid, counterS
     }
 
     var chooseCounter = function () {
-      app.redirectToCounters();
+      app.redirectToCounters($location.path());
     };
 
     var activateCounter = function (activeCounter) {
@@ -104,10 +104,10 @@ function appController($rootScope, $location, $state, appConfig, uitid, counterS
   };
 
   app.login = function () {
-    var destination = $location.absUrl();
+    var destination = $stateParams.redirectTo || $location.absUrl();
 
     // send the user to somewhere that makes sense when navigating from the login page
-    if ($state.current.name === 'login') {
+    if (!$stateParams.redirectTo && $state.current.name === 'login') {
       destination = $state.href('counter.main', {}, {absolute: true});
     }
 
@@ -142,11 +142,19 @@ function appController($rootScope, $location, $state, appConfig, uitid, counterS
   };
 
   app.redirectToLogin = function () {
-    $state.go('login');
+    if ($state.current.name !== 'login') {
+      var redirectTo = $location.absUrl();
+
+      $state.go('login', {
+        redirectTo
+      });
+    }
   };
 
-  app.redirectToCounters = function () {
-    $state.go('counters');
+  app.redirectToCounters = function (redirectTo) {
+    $state.go('counters', {
+      redirectTo
+    });
   };
 
   // check for any unauthenticated requests and redirect to login

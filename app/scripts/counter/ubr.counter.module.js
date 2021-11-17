@@ -23,6 +23,9 @@ angular
 
     $stateProvider.state('counters', {
       url: '/counters',
+      params: {
+        redirectTo: null
+      },
       templateUrl:'views/counter/counters.html',
       controller: 'CountersController',
       controllerAs: 'counters',
