@@ -4,6 +4,8 @@
 </div>
 <ul class="four steps step">
   <li ui-sref-active="active" class="step">
+    <img style="height: 40px; float: left; margin-top: -10px; margin-bottom: -10px;"
+         ng-src="data:image/jpeg;base64, {{prc.eIDData.picture}}" />
     <a ui-sref="counter.main.register.form.personalData">Persoonsgegevens</a>
   </li>
   <li ui-sref-active="active" class="step" ng-switch="prc.getStepNumber() < 2">
