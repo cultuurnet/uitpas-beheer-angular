@@ -12,7 +12,6 @@ angular
   .module('ubr.counter.activities', [
     'ui.router',
     'ubr.counter',
-    'monospaced.qrcode',
     'truncate'
   ])
   /* @ngInject */
