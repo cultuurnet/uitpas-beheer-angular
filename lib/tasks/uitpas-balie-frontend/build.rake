@@ -2,6 +2,8 @@ namespace 'uitpas-balie-frontend' do
   desc "Build binaries"
   task :build do |task|
 
+    require 'json'
+
     calver_version     = ENV['PIPELINE_VERSION'].nil? ? Time.now.strftime("%Y.%m.%d.%H%M%S") : ENV['PIPELINE_VERSION']
     configuration_hash = { 'basePath' => '/app/', 'buildNumber' => calver_version }
     config             = JSON.load File.new('config.json')
