@@ -28,12 +28,12 @@ pipeline {
                 }
                 stage('Build') {
                     steps {
-                        sh label: 'Build binaries', script: 'bundle exec rake uitpas-beheer-frontend:build'
+                        sh label: 'Build binaries', script: 'bundle exec rake uitpas-balie-frontend:build'
                     }
                 }
                 stage('Build artifact') {
                     steps {
-                        sh label: 'Build artifact', script: "bundle exec rake uitpas-beheer-frontend:build_artifact ARTIFACT_VERSION=${env.ARTIFACT_VERSION}"
+                        sh label: 'Build artifact', script: "bundle exec rake uitpas-balie-frontend:build_artifact ARTIFACT_VERSION=${env.ARTIFACT_VERSION}"
                         archiveArtifacts artifacts: "pkg/*${env.ARTIFACT_VERSION}*.deb", onlyIfSuccessful: true
                     }
                 }
