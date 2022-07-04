@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm -rf /var/www/uitpas-balie-frontend/web/app/scripts/scripts.*.js
+rm -rf /var/www/uitpas-balie-api/web/app/scripts/scripts.*.js
 
