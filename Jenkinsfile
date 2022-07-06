@@ -2,8 +2,9 @@ pipeline {
     agent none
 
     environment {
-        PIPELINE_VERSION            = build.pipelineVersion()
-        REPOSITORY_NAME             = 'uitpas-balie-frontend'
+        PIPELINE_VERSION = build.pipelineVersion()
+        REPOSITORY_NAME  = 'uitpas-balie-frontend'
+        QT_QPA_PLATFORM  = 'offscreen'
     }
 
     stages {
