@@ -151,7 +151,7 @@ angular
                   return passholder;
                 },
                 identification: function() {
-                  return identification;
+                  return passholder.passNumber;
                 }
               },
               controller: 'PassholderEditController',
