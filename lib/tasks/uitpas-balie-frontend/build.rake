@@ -18,7 +18,7 @@ namespace 'uitpas-balie-frontend' do
     config = JSON.load File.new('config.json')
     File.open('config.json', 'w') { |file| file.write(config.merge!(configuration_hash).to_json) }
 
-    puts "=== DEBUG: start grunt build ===")
+    puts "=== DEBUG: start grunt build ==="
     system('grunt build') or exit 1
   end
 end
