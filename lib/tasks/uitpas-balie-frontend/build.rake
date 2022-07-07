@@ -11,7 +11,7 @@ namespace 'uitpas-balie-frontend' do
     system('npm install') or exit 1
 
     puts "=== DEBUG: start bower install ==="
-    system('bower install') or exit 1
+    system('node_modules/bower/bin/bower install') or exit 1
 
     puts "=== DEBUG: start angular_config ==="
     system('angular_config hash -c config.dist.json > config.json')
@@ -19,6 +19,6 @@ namespace 'uitpas-balie-frontend' do
     File.open('config.json', 'w') { |file| file.write(config.merge!(configuration_hash).to_json) }
 
     puts "=== DEBUG: start grunt build ==="
-    system('grunt build') or exit 1
+    system('node_modules/grunt-cli/bin/grunt build') or exit 1
   end
 end
