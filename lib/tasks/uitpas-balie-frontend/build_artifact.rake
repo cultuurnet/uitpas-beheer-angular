@@ -15,7 +15,7 @@ namespace 'uitpas-balie-frontend' do
     FileUtils.mkdir_p('pkg')
 
     system("fpm -s dir -t deb -n #{artifact_name} -v #{version} -a all -p pkg \
-      -C dist -d rubygem-anglular-config \
+      -C dist -d rubygem-angular-config \
       -x '.git*' -x pkg -x vendor -x lib -x Rakefile -x Gemfile -x Gemfile.lock \
       -x .bundle -x 'Jenkinsfile*' \
       --prefix /var/www/uitpas-balie-api/web/app \
