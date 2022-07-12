@@ -8,12 +8,13 @@ namespace 'uitpas-balie-frontend' do
     configuration_hash = { 'basePath' => '/app/', 'buildNumber' => calver_version }
 
     system('npm install') or exit 1
-    system('bower install') or exit 1
 
-    system('angular_config hash -c config.dist.json > config.json') or exit 1
+    system('node_modules/bower/bin/bower install') or exit 1
+
+    system('angular_config hash -c config.dist.json > config.json')
     config = JSON.load File.new('config.json')
-    File.open('config.json', 'w') { |file| file.write(config.merge!(configuration_hash).to_json) } or exit 1
+    File.open('config.json', 'w') { |file| file.write(config.merge!(configuration_hash).to_json) }
 
-    system('grunt build') or exit 1
+    system('node_modules/grunt-cli/bin/grunt build') or exit 1
   end
 end
