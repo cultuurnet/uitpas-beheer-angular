@@ -46,8 +46,11 @@ function PassholderDetailController (
   controller.couponsLoading = false;
   controller.showAllCoupons = false;
 
+  controller.cardSystemSpecific = null;
+
   var listRetrieved = function(data) {
     controller.memberships = data.passholder.memberships;
+    controller.cardSystemSpecific = data.passholder.cardSystemSpecific;
   };
 
   var loadMemberships = function() {
