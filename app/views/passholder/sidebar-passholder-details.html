@@ -103,6 +103,10 @@
       <a ng-show="!pdc.passholder.isRegisteredInCardSystem(cardSystem)"
          ng-click="pdc.showModalForCardSystem(cardSystem)"
          ng-bind-template="Lid maken van {{cardSystem.name}}"></a>
+
+      <a ng-show="pdc.passholder.hasUpgrade(cardSystem, pdc.cardSystemSpecific)"
+         ng-click="pdc.showModalForCardSystem(cardSystem)"
+         ng-bind-template="Kaart toekennen voor {{cardSystem.name}}"></a>
     </li>
   </ul>
 </div>

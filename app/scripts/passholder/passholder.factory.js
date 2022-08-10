@@ -228,6 +228,16 @@ function passholderFactory(moment, day) {
 
       return matchingCardSystem;
     },
+    hasUpgrade: function (cardSystem, cardSystemSpecific) {
+      var cardSystemId = parseInt(cardSystem.id)
+      var hasUpgrade = false;
+      angular.forEach(cardSystemSpecific, function (item) {
+        if (cardSystemId === item.cardSystem.id && !item.currentCard) {
+          hasUpgrade = true;
+        }
+      });
+      return hasUpgrade;
+    },
     getPictureSrc: function () {
       return 'data:image/jpeg;base64, ' + this.picture;
     },
