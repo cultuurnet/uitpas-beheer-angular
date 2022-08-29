@@ -645,6 +645,11 @@ function passholderService($q, $http, $cacheFactory, appConfig, Pass, $rootScope
         passholderIdCache.remove(passholderNumber);
         passholderCache.remove(passholderNumber);
 
+        if (extraCardNumber) {
+          passholderIdCache.remove(extraCardNumber);
+          passholderCache.remove(extraCardNumber);
+        }
+
         deferredRequest.resolve();
       };
 

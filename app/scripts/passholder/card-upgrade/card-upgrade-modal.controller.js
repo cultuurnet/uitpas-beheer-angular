@@ -47,8 +47,8 @@ function UpgradeModalController (
   controller.upgradeData = {
     passToCheck: angular.copy(pass),
     withKansenstatuut: 'NO_KANSENSTATUUT',
-    kansenstatuutEndDate: moment().month() < 4 ? 
-        moment('30/04/' + moment().year(), 'DD/MM/YYYY') : 
+    kansenstatuutEndDate: moment().month() < 4 ?
+        moment('30/04/' + moment().year(), 'DD/MM/YYYY') :
         moment('30/04/' + (moment().year() + 1), 'DD/MM/YYYY'),
     withNewCard: 'NO_NEW_CARD',
     uitpasNewNumber: '',
@@ -252,6 +252,11 @@ function UpgradeModalController (
   controller.submitUpgrade = function () {
     var showUpgradedPassholder = function () {
       $uibModalInstance.close();
+
+      $rootScope.$emit('membershipModified');
+      $rootScope.$emit('selectedPass',
+        controller.upgradeData.withNewCard === 'NEW_CARD' ? controller.upgradeData.uitpasNewNumber : controller.passholder.passNumber
+      );
     };
 
     controller.formSubmitBusy = true;
