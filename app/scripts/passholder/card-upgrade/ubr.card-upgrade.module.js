@@ -69,15 +69,16 @@ angular
           }
 
           function cardUpgraded() {
-            $state.go(
-              'counter.main.passholder',
-              {
-                identification: pass.number
-              },
-              {
-                reload: true
-              }
-            );
+            // This is handled in `submitUpgrade` in card-upgrade-modal.controller.js now
+            // $state.go(
+            //   'counter.main.passholder',
+            //   {
+            //     identification: pass.number
+            //   },
+            //   {
+            //     reload: true
+            //   }
+            // );
           }
 
           upgradeModalInstance

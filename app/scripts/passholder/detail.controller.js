@@ -129,6 +129,10 @@ function PassholderDetailController (
     $state.go('counter.main.passholder', {identification: $scope.selectedPass.number});
   };
 
+  var selectPassByNumber = function (event, number) {
+    $state.go('counter.main.passholder', {identification: number}, { reload: true });
+  };
+
   /**
    * Toggle all coupons.
    */
@@ -171,6 +175,7 @@ function PassholderDetailController (
   var cleanupSchoolUpdatedListener = $rootScope.$on('schoolUpdated', refreshPassholder);
   var cleanupTicketRemovedListener = $rootScope.$on('ticketRemoved', loadCoupons);
   var cleanupActivityTariffClaimedListener = $rootScope.$on('activityTariffClaimed', loadCoupons);
+  var cleanupSelectedPassListener = $rootScope.$on('selectedPass', selectPassByNumber);
 
   $scope.$on('$destroy', cleanupMembershipModifiedListener);
   $scope.$on('$destroy', cleanupAdvantageExchangedListener);
@@ -180,4 +185,5 @@ function PassholderDetailController (
   $scope.$on('$destroy', cleanupSchoolUpdatedListener);
   $scope.$on('$destroy', cleanupTicketRemovedListener);
   $scope.$on('$destroy', cleanupActivityTariffClaimedListener);
+  $scope.$on('$destroy', cleanupSelectedPassListener);
 }

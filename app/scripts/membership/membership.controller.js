@@ -143,16 +143,16 @@ function PassholderMembershipController (passholder, moment, $rootScope, $scope,
       if (currentCardKey) {
         var cardSystemInfo = legacyPassholder.cardSystemSpecific[currentCardKey];
         if (
-          cardSystemInfo.status ==='ACTIVE' || 
+          cardSystemInfo.status ==='ACTIVE' ||
           cardSystemInfo.kansenStatuut === false ||
           cardSystemInfo.kansenStatuutExpired === false ||
-          cardSystemInfo.kansenStatuutInGracePeriod  
+          cardSystemInfo.kansenStatuutInGracePeriod
           ) {
             return false;
           }
         }
     }
-    
+
     return true;
   };
 
