@@ -303,7 +303,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
           text: function () {
             return {
               title: 'Ben je zeker?',
-              body: 'Puntent sparen voor ' + controller.passholders.length + ' pashouders?',
+              body: 'Punten sparen voor ' + controller.passholders.length + ' pashouders?',
               submit: 'Punten sparen'
             };
           }
