@@ -20,14 +20,26 @@ function BulkActionsController (bulkSelection, passholders, action, $uibModalIns
   controller.bulkSelection = bulkSelection;
   controller.action = action;
   controller.kansenstatuutData = {
-    kansenstatuutEndDate: moment().month() < 4 ? 
-      moment('30/04/' + moment().year(), 'DD/MM/YYYY') : 
+    kansenstatuutEndDate: moment().month() < 4 ?
+      moment('30/04/' + moment().year(), 'DD/MM/YYYY') :
       moment('30/04/' + (moment().year() + 1), 'DD/MM/YYYY'),
   };
   controller.passholders = passholders;
+
+  console.log({pass:passholders, bulkSelection})
+
   if(action === 'address' || action === 'kansenstatuut' || action === 'block') {
     controller.passholders = bulkSelection.getPassholderNumbers();
   }
+
+  controller.togglePassBulkSelection = function(passholder) {
+    if (controller.bulkSelection.numberInSelection(passholder.passNumber)) {
+      controller.bulkSelection.removeUitpasNumberFromSelection(passholder.passNumber);
+    }
+    else {
+      controller.bulkSelection.addUitpasNumberToSelection(passholder.passNumber);
+    }
+  };
 
   controller.submitForm = function(passholders, bulkForm) {
     controller.isSubmitted = true;

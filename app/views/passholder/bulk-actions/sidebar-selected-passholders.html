@@ -5,14 +5,14 @@
   </div>
 
   <p class="element-title">
-    <ng-pluralize class="count-pashouders" count="bac.passholders.length" when="{'0': 'geen pashouders geselecteerd', '1': '{} pashouder geselecteerd', 'other': '{} pashouders geselecteerd'}"></ng-pluralize>
+    <ng-pluralize class="count-pashouders" count="bac.bulkSelection.uitpasNumberSelection.length" when="{'0': 'geen pashouders geselecteerd', '1': '{} pashouder geselecteerd', 'other': '{} pashouders geselecteerd'}"></ng-pluralize>
   </p>
 
   <ul class="listreset">
 
     <li class="slats-item" ng-repeat="passholder in bac.passholders">
       <div class="checkbox-on-left">
-        <input type="checkbox" class="pashouder-selectie" checked="">
+        <input type="checkbox" class="pashouder-selectie"  ng-click="bac.togglePassBulkSelection(passholder)" ng-checked="bac.bulkSelection.numberInSelection(passholder.passNumber)">
         {{ passholder.name.first }} {{ passholder.name.last }}
 
         <ul class="listreset statuut">

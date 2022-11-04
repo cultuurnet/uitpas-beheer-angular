@@ -15,6 +15,7 @@ angular
 function PassholderActivityTariffsController (
   passholder,
   passholders,
+  bulkSelection,
   activity,
   activityMode,
   counter,
@@ -28,7 +29,7 @@ function PassholderActivityTariffsController (
   var controller = this;
 
   controller.passholder = passholder;
-  controller.passholders = passholders;
+  controller.passholders = (bulkSelection && bulkSelection.uitpasNumberSelection) ? filterSelectedPassholders(passholders, bulkSelection.uitpasNumberSelection) : passholders;
 
   getGroupSale();
   controller.activityMode = activityMode;
@@ -36,6 +37,18 @@ function PassholderActivityTariffsController (
   controller.selectedTariff = null;
   controller.formSubmitBusy = false;
   controller.asyncError = false;
+
+  function filterSelectedPassholders(passholders, uitpasNumberSelection) {
+    var filteredPassholders = [];
+
+    angular.forEach(passholders, function(passholder) {
+      if (uitpasNumberSelection.indexOf(passholder.passNumber) !== -1) {
+        filteredPassholders.push(passholder);
+      }
+    });
+
+    return filteredPassholders;
+  };
 
   function getGroupSale() {
     controller.groupSale = controller.passholder && controller.passholder.hasOwnProperty('availableTickets') ? {

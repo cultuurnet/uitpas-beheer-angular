@@ -75,6 +75,7 @@ angular
         identification: null,
         passholder: null,
         passholders: null,
+        bulkSelection: null,
         activity: null,
         activityMode: null,
         counter: null
@@ -83,6 +84,9 @@ angular
         passholder: getPassholderFromStateParams,
         passholders: ['$stateParams', function($stateParams) {
           return $stateParams.passholders;
+        }],
+        bulkSelection: ['$stateParams', function($stateParams) {
+          return $stateParams.bulkSelection;
         }],
         identification: ['$stateParams', function($stateParams) {
           return $stateParams.identification;
@@ -97,7 +101,7 @@ angular
           return counterService.getActive();
         }]
       },
-      onEnter: ['passholder', 'passholders', 'identification', 'activity', 'activityMode', 'counter', '$state', '$uibModal', function(passholder, passholders, identification, activity, activityMode, counter, $state, $uibModal) {
+      onEnter: ['passholder', 'passholders', 'bulkSelection', 'identification', 'activity', 'activityMode', 'counter', '$state', '$uibModal', function(passholder, passholders, bulkSelection, identification, activity, activityMode, counter, $state, $uibModal) {
         var modalSize = 'sm';
         if (Object.keys(activity.sales.base).length > 3) {
           modalSize = '';
@@ -113,6 +117,9 @@ angular
               },
               passholders: function () {
                 return passholders;
+              },
+              bulkSelection: function () {
+                return bulkSelection;
               },
               identification: function () {
                 return identification;

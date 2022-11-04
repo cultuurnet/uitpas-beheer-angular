@@ -233,12 +233,24 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       .finally(clearPendingState);
   };
 
+  controller.filterSelectedPassholders = function(passholders) {
+    var filteredPassholders = [];
+
+    angular.forEach(passholders, function(passholder) {
+      if (controller.bulkSelection.uitpasNumberSelection.indexOf(passholder.passNumber) !== -1) {
+        filteredPassholders.push(passholder);
+      }
+    });
+
+    return filteredPassholders;
+  };
+
   controller.bulkClaimTariff = function(tariff, activity) {
     activity.tariffClaimInProgress = true;
     var priceInfo = tariff.prices[0];
 
     $state.go('counter.main.advancedSearch.showBulkResults', {
-      passholders: controller.passholders,
+      passholders: controller.filterSelectedPassholders(controller.passholders),
       bulkSelection: controller.bulkSelection,
       activity: activity,
       tariff: priceInfo,
@@ -279,7 +291,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
   controller.bulkCheckin = function (activity) {
     activity.checkinBusy = true;
     $state.go('counter.main.advancedSearch.showBulkResults', {
-      passholders: controller.passholders,
+      passholders: controller.filterSelectedPassholders(controller.passholders),
       bulkForm: null,
       bulkSelection: controller.bulkSelection,
       action: 'points',
