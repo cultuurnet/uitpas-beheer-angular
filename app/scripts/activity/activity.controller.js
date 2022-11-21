@@ -12,9 +12,10 @@ angular
   .controller('ActivityController', ActivityController);
 
 /* @ngInject */
-function ActivityController (passholder, passholders, bulkSelection, activityService, DateRange, $rootScope, $scope, activityMode, $state, activeCounter) {
+function ActivityController (passholder, passholders, bulkSelection, activityService, DateRange, $rootScope, $scope, activityMode, $state, activeCounter, $uibModal) {
   /*jshint validthis: true */
   var controller = this;
+  var confirmationModal = null;
 
   // Set default parameters.
   controller.query = '';
@@ -285,6 +286,39 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
       action: 'points',
       activity: activity
     });
+  };
+
+  controller.confirmBulkCheckin = function (activity) {
+    if (controller.passholders.length === 1) {
+      controller.bulkCheckin(activity);
+      return;
+    }
+
+    confirmationModal = $uibModal
+      .open({
+        animation: true,
+        templateUrl: 'views/passholder/bulk-actions/modal-confirm.html',
+        size: 'sm',
+        resolve: {
+          text: function () {
+            return {
+              title: 'Ben je zeker?',
+              body: 'Punten sparen voor ' + controller.passholders.length + ' pashouders?',
+              submit: 'Punten sparen'
+            };
+          }
+        },
+        controller: function (text) {
+          var $ctrl = this;
+          $ctrl.text = text;
+          $ctrl.close = confirmationModal.close;
+          $ctrl.submit = function() {
+            controller.bulkCheckin(activity);
+            confirmationModal.close();
+          };
+        },
+        controllerAs: '$ctrl'
+      });
   };
 
   /**

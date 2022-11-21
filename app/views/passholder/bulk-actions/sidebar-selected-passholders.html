@@ -1,7 +1,7 @@
 <div class="sidebar__inner">
 
   <div class="back-nav">
-    <a ui-sref="counter.main.advancedSearch">Terug</a>
+    <a ui-sref="counter.main.advancedSearch({uitpasNumbers: bac.bulkSelection.uitpasNumberSelection})">Terug</a>
   </div>
 
   <p class="element-title">
@@ -12,7 +12,6 @@
 
     <li class="slats-item" ng-repeat="passholder in bac.passholders">
       <div class="checkbox-on-left">
-        <input type="checkbox" class="pashouder-selectie" checked="">
         {{ passholder.name.first }} {{ passholder.name.last }}
 
         <ul class="listreset statuut">

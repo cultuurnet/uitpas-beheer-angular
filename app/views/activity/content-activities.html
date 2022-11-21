@@ -89,7 +89,7 @@
             <div ng-switch-when="available">
               <div class="points">+<span ng-bind="::activity.points"></span></div>
               <button ng-if="ac.activityMode == 'passholders'" class="btn btn-default btn-sm" ng-click="ac.checkin(activity)">Punten sparen</button>
-              <button ng-if="ac.activityMode == 'counter'" ng-click="ac.bulkCheckin(activity)" class="btn btn-default btn-sm" >Punten sparen</button>
+              <button ng-if="ac.activityMode == 'counter'" ng-click="ac.confirmBulkCheckin(activity)" class="btn btn-default btn-sm" >Punten sparen</button>
             </div>
           </div>
           <!--status failed-->
