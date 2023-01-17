@@ -48,9 +48,7 @@ function PassholderRegisterController (pass, $state, activeCounter, moment, coun
   };
 
   controller.kansenstatuut = {
-    endDate: moment().month() < 4 ? 
-        moment('30/04/' + moment().year(), 'DD/MM/YYYY') : 
-        moment('30/04/' + (moment().year() + 1), 'DD/MM/YYYY'),
+    endDate: moment('30/04/' + (moment().year() + 1), 'DD/MM/YYYY'),
     remarks: '',
     includeRemarks: false
   };
