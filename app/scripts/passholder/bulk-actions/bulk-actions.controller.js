@@ -20,9 +20,7 @@ function BulkActionsController (bulkSelection, passholders, action, $uibModalIns
   controller.bulkSelection = bulkSelection;
   controller.action = action;
   controller.kansenstatuutData = {
-    kansenstatuutEndDate: moment().month() < 4 ? 
-      moment('30/04/' + moment().year(), 'DD/MM/YYYY') : 
-      moment('30/04/' + (moment().year() + 1), 'DD/MM/YYYY'),
+    kansenstatuutEndDate: moment('30/04/' + (moment().year() + 1), 'DD/MM/YYYY'),
   };
   controller.passholders = passholders;
   if(action === 'address' || action === 'kansenstatuut' || action === 'block') {
