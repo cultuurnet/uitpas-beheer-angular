@@ -22,9 +22,7 @@ function EditKansenstatuutModalController (passholder, cardSystemId, $uibModalIn
   controller.kansenstatuut = angular.copy(passholder.getKansenstatuutByCardSystemID(cardSystemId));
   controller.asyncError = null;
   if (controller.kansenstatuut.status === 'EXPIRED') {
-    controller.kansenstatuut.endDate = moment().month() < 4 ? 
-      moment('30/04/' + moment().year(), 'DD/MM/YYYY') : 
-      moment('30/04/' + (moment().year() + 1), 'DD/MM/YYYY');
+    controller.kansenstatuut.endDate = moment('30/04/' + (moment().year() + 1), 'DD/MM/YYYY');
   }
 
   controller.cancelModal = function () {
