@@ -165,7 +165,7 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
           });
         }
 
-        // If still no passholder is in the controller property, pick the first with an active UiTPAS.
+        // If still no passholder is in the controller property, pick the first with an active UiTPAS and within the active counter card systems.
         if (!controller.hasOwnProperty('passholder')) {
           var keepGoing3 = true;
           angular.forEach(controller.passholders, function(passholder) {
@@ -174,6 +174,21 @@ function ActivityController (passholder, passholders, bulkSelection, activitySer
                 controller.passholder = passholder;
                 keepGoing3 = false;
               }
+            }
+          });
+        }
+
+        // If still no passholder is in the controller property, pick the first with an active UiTPAS
+        if (!controller.hasOwnProperty('passholder')) {
+          var keepGoing4 = true;
+          angular.forEach(controller.passholders, function(passholder) {
+            if (keepGoing4) {
+              angular.forEach(passholder.uitPassen, function(uitPas) {
+                if (uitPas.status === 'ACTIVE') {
+                  controller.passholder = passholder;
+                  keepGoing4 = false;
+                }
+              });
             }
           });
         }
