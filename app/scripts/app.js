@@ -139,7 +139,7 @@ angular
     $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
     $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
   })
-  .run(function($rootScope, $state, $window, $location, nfcService, eIDService) {
+  .run(function($rootScope, $state, $window, $location, nfcService, eIDService, appConfig) {
     nfcService.init();
     eIDService.init();
 
@@ -148,6 +148,7 @@ angular
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       // Don't block any state changes if not running inside an iframe
       if (!runningInIframe) {
+        window.location.href = appConfig.nextUrl + toState.url;
         return;
       }
 
