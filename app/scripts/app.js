@@ -139,7 +139,7 @@ angular
     $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
     $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
   })
-  .run(function($rootScope, $state, $window, $location, nfcService, eIDService, appConfig) {
+  .run(function($rootScope, $state, $window, $location, nfcService, eIDService, counterService, appConfig) {
     nfcService.init();
     eIDService.init();
 
@@ -147,8 +147,8 @@ angular
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       // Don't block any state changes if not running inside an iframe
-      if (!runningInIframe) {
-        window.location.href = appConfig.nextUrl + toState.url;
+      if (!runningInIframe && appConfig.features && appConfig.features.balieV2) {
+        window.location.href = appConfig.features.balieV2 + toState.url;
         return;
       }
 
@@ -178,5 +178,22 @@ angular
       }, '*');
     });
 
+    function activeCounterListener() {
+      window.addEventListener('message', function(event) {
+        if (event.data.source === 'BALIE' && event.data.type === 'SET_COUNTER') {
+           var counterId = event.data.payload.counter.id;
+           counterService.setActiveByActorId(counterId);
+        }
+      });
+
+      window.parent.postMessage({
+        source: 'BALIE',
+        type: 'GET_COUNTER'
+      }, '*');
+    }
+
+    if (runningInIframe) {
+      activeCounterListener();
+    }
   })
   .constant('isJavaFXBrowser', navigator.userAgent.indexOf('JavaFX') > -1);
