@@ -62,6 +62,7 @@ angular
         url: '/',
         requiresCounter: true,
         redirectOnScan: true,
+        force: true,
         views: {
           content: {
             templateUrl: 'views/passholder/search/content-search.html',
@@ -167,22 +168,26 @@ angular
         return;
       }
 
-      // Block the state change and emit the new path to the parent window for further handling.
-      event.preventDefault();
-      window.parent.postMessage({
-        source: 'BALIE',
-        type: 'URL_CHANGED',
-        payload: {
-          path: to
-        }
-      }, '*');
+      if (runningInIframe && !toState.force) {
+        // Block the state change and emit the new path to the parent window for further handling.
+        event.preventDefault();
+        window.parent.postMessage({
+          source: 'BALIE',
+          type: 'URL_CHANGED',
+          payload: {
+            path: to
+          }
+        }, '*');
+      }
     });
 
     function activeCounterListener() {
       window.addEventListener('message', function(event) {
         if (event.data.source === 'BALIE' && event.data.type === 'SET_COUNTER') {
-           var counterId = event.data.payload.counter.id;
-           counterService.setActiveByActorId(counterId);
+          var counterId = event.data.payload.counter.id;
+          counterService.setActiveByActorId(counterId).then(function() {
+            $state.go('counter.main');
+          });
         }
       });
 
