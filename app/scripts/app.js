@@ -62,7 +62,6 @@ angular
         url: '/',
         requiresCounter: true,
         redirectOnScan: true,
-        force: true,
         views: {
           content: {
             templateUrl: 'views/passholder/search/content-search.html',
@@ -77,7 +76,10 @@ angular
           header: {
             templateUrl: 'views/header.html'
           }
-        }
+        },
+        params: {
+          forceAngularNavigation: false
+        },
       })
       .state('counter.main.error', {
         redirectOnScan: true,
@@ -168,7 +170,7 @@ angular
         return;
       }
 
-      if (runningInIframe && !toState.force) {
+      if (runningInIframe && !toParams.forceAngularNavigation) {
         // Block the state change and emit the new path to the parent window for further handling.
         event.preventDefault();
         window.parent.postMessage({
@@ -185,8 +187,17 @@ angular
       window.addEventListener('message', function(event) {
         if (event.data.source === 'BALIE' && event.data.type === 'SET_COUNTER') {
           var counterId = event.data.payload.counter.id;
-          counterService.setActiveByActorId(counterId).then(function() {
-            $state.go('counter.main');
+
+          counterService.getActive().then(function (activeCounter){
+            if (!activeCounter || activeCounter.actorId !== counterId) {
+              throw new Error('No counter selected');
+            }
+          }).catch(function () {
+            counterService.setActiveByActorId(counterId).then(function() {
+              $state.go('counter.main', {
+                forceAngularNavigation: true
+              });
+            });
           });
         }
       });
