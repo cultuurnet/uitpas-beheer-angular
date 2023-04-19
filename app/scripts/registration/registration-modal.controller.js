@@ -34,6 +34,11 @@ function RegistrationModalController (
   var kansenstatuutInfo = $stateParams.kansenstatuut;
   var schoolInfo = $stateParams.school;
   var registerForeign = $stateParams.registerForeign;
+  var emailFieldStatus = {
+    initial: 'initial',
+    needsConfirmation: 'needsConfirmation',
+    notConfirmed: 'notConfirmed'
+  };
 
   controller.registerForeign = registerForeign;
   controller.pass = pass;
@@ -65,6 +70,9 @@ function RegistrationModalController (
   controller.legalTermsPaper = false;
   controller.optInEmail = false;
   controller.parentalConsent = false;
+
+  // When the email field is left blank, and the user clicks next, enable the "no email" checkbox
+  controller.hasEmailOrEmailConfirmedState = emailFieldStatus.initial;
 
   // Indicates if the current email address has already been validated
   controller.emailValidated = false;
@@ -146,6 +154,20 @@ function RegistrationModalController (
   };
 
   controller.submitContactDataForm = function(contactDataForm) {
+    if (controller.passholder.isUnderAge()) {
+      controller.excludeEmail = true;
+    }
+
+    if (controller.hasEmailOrEmailConfirmedState === emailFieldStatus.initial && !controller.passholder.contact.email && !controller.excludeEmail) {
+      controller.hasEmailOrEmailConfirmedState = emailFieldStatus.needsConfirmation;
+      return;
+    }
+
+    if (controller.hasEmailOrEmailConfirmedState === emailFieldStatus.needsConfirmation && !controller.passholder.contact.email && !controller.excludeEmail) {
+      controller.hasEmailOrEmailConfirmedState = emailFieldStatus.notConfirmed;
+      return;
+    }
+
     // Remove the email value if the no email checkbox is checked.
     if (controller.excludeEmail) {
       contactDataForm.email.$setViewValue('');

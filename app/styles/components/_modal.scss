@@ -51,6 +51,24 @@
 
 // modal edit contact
 .modal {
+  .checklist {
+    list-style-type: none;
+    //list-style-image: url('../images/png/check.png');
+
+    li:before {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background-image: url('../images/png/check.png');
+      background-size: contain;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    li {
+      margin-bottom: 12px;
+    }
+  }
   .checkbox {
     label {
       font-weight: 400;
