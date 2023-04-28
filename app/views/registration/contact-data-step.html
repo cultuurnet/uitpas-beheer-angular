@@ -1,6 +1,9 @@
 <form name="contactDataForm" ng-submit="prc.submitContactDataForm(contactDataForm)" novalidate ng-disabled="prc.formSubmitBusy">
 <div class="modal-body">
   <div class="container-fluid">
+    <p style="text-align: center; color: #777777" ng-show="prc.passholder.isUnderAge()">
+      <strong>Voor -16 jarigen kan je geen contactgegevens invullen<br/> n.a.v. privacywetgeving minderjarigen.</strong>
+    </p>
     <fieldset ng-disabled="prc.formSubmitBusy">
       <div class="field-group">
         <label class="control-label" for="telephone">
@@ -28,26 +31,27 @@
           <div ng-show="contactDataForm.email.$error.failedValidation">Dit e-mailadres is ongeldig. Geef een geldig e-mailadres op om verder te gaan.</div>
         </div>
         <div ng-show="prc.emailValidated" class="text-danger small">Controleer het e-mailadres voor je naar de volgende stap gaat. Er staat misschien een fout in.</div>
+
+        <div ng-hide="prc.passholder.isUnderAge()" style="margin-top: 8px">
+          <p>
+            <strong>Vul het e-mailadres in zodat de pashouder alles uit z’n UiTPAS kan halen.</strong><br />
+            Zo kan de pashouder gebruikmaken van uitpas.be en de app om:
+          </p>
+          <ul class="checklist">
+            <li>Online het puntensaldo steeds terug te vinden en punten te sparen zonder kaart;</li>
+            <li>Online leuke voordelen te vinden en meteen om te ruilen;</li>
+            <li>De UiTPAS altijd en overal makkelijk bij te hebben op smartphone.</li>
+          </ul>
+        </div>
+
+        <div class="checkbox exclude-email-group" ng-hide="prc.hasEmailOrEmailConfirmedState === 'initial'" ng-class="{ 'has-error': prc.hasEmailOrEmailConfirmedState === 'notConfirmed' && !prc.passholder.contact.email && !prc.excludeEmail }">
+
+          <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-change="prc.emailChanged(contactDataForm)"
+                                            ng-model="prc.excludeEmail"><strong> Ik bevestig dat deze pashouder geen e-mailadres heeft.</strong><small ng-show="prc.hasEmailOrEmailConfirmedState === 'notConfirmed'"><br />Duid het selectievakje aan of vul e-mail in.</small></label>
+
+        </div>
       </div>
 
-      <div ng-hide="prc.passholder.isUnderAge()">
-      <p>
-        <strong>Vul het e-mailadres in zodat de pashouder alles uit z’n UiTPAS kan halen.</strong><br />
-        Zo kan de pashouder gebruikmaken van uitpas.be en de app om:
-      </p>
-      <ul class="checklist">
-        <li>Online het puntensaldo steeds terug te vinden en punten te sparen zonder kaart;</li>
-        <li>Online leuke voordelen te vinden en meteen om te ruilen;</li>
-        <li>De UiTPAS altijd en overal makkelijk bij te hebben op smartphone.</li>
-      </ul>
-      </div>
-
-      <div class="checkbox exclude-email-group" ng-hide="prc.hasEmailOrEmailConfirmedState === 'initial'" ng-class="{ 'has-error': prc.hasEmailOrEmailConfirmedState === 'notConfirmed' && !prc.passholder.contact.email && !prc.excludeEmail }">
-
-        <label for="exclude-email"><input name="excludeEmail" id="exclude-email" type="checkbox" ng-change="prc.emailChanged(contactDataForm)"
-                                          ng-model="prc.excludeEmail"><strong> Ik bevestig dat deze pashouder geen e-mailadres heeft.</strong><small ng-show="prc.hasEmailOrEmailConfirmedState === 'notConfirmed'"><br />Duid het selectievakje aan of vul e-mail in.</small></label>
-
-      </div>
     </fieldset>
   </div>
 </div><!-- end modal-body -->
