@@ -18,7 +18,7 @@ namespace 'uitpas-balie-frontend' do
       -C dist -d rubygem-angular-config \
       -x '.git*' -x pkg -x vendor -x lib -x Rakefile -x Gemfile -x Gemfile.lock \
       -x .bundle -x 'Jenkinsfile*' \
-      --prefix /var/www/uitpas-balie-api/web/app \
+      --prefix /var/www/uitpas-balie-api/web/app_v1 \
       --before-remove lib/tasks/uitpas-balie-frontend/prerm \
       --deb-user www-data --deb-group www-data \
       --description '#{description}' --url '#{source}' --vendor '#{vendor}' \
