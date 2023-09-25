@@ -150,7 +150,7 @@ angular
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       // Don't block any state changes if not running inside an iframe
-      if (!runningInIframe && appConfig.features && appConfig.features.balieV2) {
+      if (!runningInIframe && appConfig.features && appConfig.features.balieV2 && appConfig.features.redirectToV2) {
         window.location.href = appConfig.features.balieV2 + toState.url;
         return;
       }
