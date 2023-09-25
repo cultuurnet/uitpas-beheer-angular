@@ -9,6 +9,9 @@
   "insightsApiUrl": "https://balie-insights-proxy-test-auth-s4vvfnqwhq-ew.a.run.app/v1/",
   "uivUrl": "https://test.uitinvlaanderen.be/",
   "udbUrl": "https://test.uitdatabank.be/",
+  "features": {
+    "balieV2": ""
+  },
   "contacts": [
     {
       "name": "Dender",

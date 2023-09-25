@@ -26,6 +26,7 @@ function uitidService($q, $window, $http, appConfig) {
    */
   uitId.getUser = function() {
     var deferredUser = $q.defer();
+    var runningInIframe = window !== window.parent;
 
     if (uitId.user) {
       deferredUser.resolve(uitId.user);
@@ -37,9 +38,23 @@ function uitidService($q, $window, $http, appConfig) {
           uitId.user.displayName = uitId.user.givenName || uitId.user.nick;
 
           deferredUser.resolve(userData);
+
+          if (runningInIframe) {
+            window.parent.postMessage({
+              source: 'BALIE',
+              type: 'LOGIN',
+            }, '*');
+          }
         }))
         .error(function () {
           deferredUser.reject();
+
+          if (runningInIframe) {
+            window.parent.postMessage({
+              source: 'BALIE',
+              type: 'LOGOUT',
+            }, '*');
+          }
         });
     }
 

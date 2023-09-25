@@ -76,7 +76,10 @@ angular
           header: {
             templateUrl: 'views/header.html'
           }
-        }
+        },
+        params: {
+          forceAngularNavigation: false
+        },
       })
       .state('counter.main.error', {
         redirectOnScan: true,
@@ -139,8 +142,74 @@ angular
     $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
     $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
   })
-  .run(function(nfcService, eIDService) {
+  .run(function($rootScope, $state, $window, $location, nfcService, eIDService, counterService, appConfig) {
     nfcService.init();
     eIDService.init();
+
+    var runningInIframe = window !== window.parent;
+
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      // Don't block any state changes if not running inside an iframe
+      if (!runningInIframe && appConfig.features && appConfig.features.balieV2) {
+        window.location.href = appConfig.features.balieV2 + toState.url;
+        return;
+      }
+
+      // Allow the first state change, because the initial page rendering is also a "state change".
+      if (fromState.name === '') {
+        return;
+      }
+
+      // Generate to and from paths with actual param values
+      var to = $state.href(toState.name, toParams, {absolute: false});
+      var from = $state.href(fromState.name, fromState, {absolute: false});
+
+      // Don't block any reloading of the same state.
+      // For example, after deleting an organizer from the overview list of organizers and the list reloads.
+      if (to === from) {
+        return;
+      }
+
+      if (runningInIframe && !toParams.forceAngularNavigation) {
+        // Block the state change and emit the new path to the parent window for further handling.
+        event.preventDefault();
+        window.parent.postMessage({
+          source: 'BALIE',
+          type: 'URL_CHANGED',
+          payload: {
+            path: to
+          }
+        }, '*');
+      }
+    });
+
+    function activeCounterListener() {
+      window.addEventListener('message', function(event) {
+        if (event.data.source === 'BALIE' && event.data.type === 'SET_COUNTER') {
+          var counterId = event.data.payload.counter.id;
+
+          counterService.getActive().then(function (activeCounter){
+            if (!activeCounter || activeCounter.actorId !== counterId) {
+              throw new Error('No counter selected');
+            }
+          }).catch(function () {
+            counterService.setActiveByActorId(counterId).then(function() {
+              $state.go('counter.main', {
+                forceAngularNavigation: true
+              });
+            });
+          });
+        }
+      });
+
+      window.parent.postMessage({
+        source: 'BALIE',
+        type: 'GET_COUNTER'
+      }, '*');
+    }
+
+    if (runningInIframe) {
+      activeCounterListener();
+    }
   })
   .constant('isJavaFXBrowser', navigator.userAgent.indexOf('JavaFX') > -1);

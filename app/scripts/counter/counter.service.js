@@ -120,6 +120,21 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
     return deferred.promise;
   };
 
+  service.setActiveByActorId = function (actorId) {
+    return service.getList().then(() => {
+      var counterFound = null;
+      angular.forEach(service.list, function(counter) {
+        if (counter.actorId === actorId) {
+          counterFound = counter;
+        }
+      });
+
+      if (counterFound) {
+        return service.setActive(counterFound);
+      }
+    });
+  };
+
   /**
    * @param {object} activeCounter
    *

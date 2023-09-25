@@ -58,7 +58,7 @@ function appController($rootScope, $location, $state, $stateParams, appConfig, u
   app.user = undefined;
   app.counter = undefined;
   app.buildNumber = appConfig.buildNumber;
-
+  app.runningInIframe = window !== window.parent;
 
   function browserEngineIsOlderThan(requiredEngineVersion){
     var matches = navigator.userAgent.match(/(.*)\/(.*)$/);
