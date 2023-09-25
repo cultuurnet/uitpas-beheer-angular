@@ -121,7 +121,7 @@ function counterService($q, $http, $rootScope, $cookies, uitid, appConfig, momen
   };
 
   service.setActiveByActorId = function (actorId) {
-    return service.getList().then(() => {
+    return service.getList().then(function() {
       var counterFound = null;
       angular.forEach(service.list, function(counter) {
         if (counter.actorId === actorId) {
