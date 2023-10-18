@@ -16,6 +16,7 @@ angular
   ])
   /* @ngInject */
   .config(function ($stateProvider) {
+    const isRunningInIframe = window !== window.parent;
 
     $stateProvider
       .state('counter.statistics', {
@@ -31,7 +32,7 @@ angular
             templateUrl: 'views/counter-statistics/sidebar-info.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: isRunningInIframe ? '' : 'views/header.html'
           }
         }
       })
@@ -49,7 +50,7 @@ angular
             templateUrl: 'views/counter-statistics/sidebar-info.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: isRunningInIframe ? '' : 'views/header.html'
           }
         }
       })
@@ -66,7 +67,7 @@ angular
             templateUrl: 'views/counter-statistics/sidebar-info.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: isRunningInIframe ? '' : 'views/header.html'
           }
         }
       })
@@ -83,7 +84,7 @@ angular
             templateUrl: 'views/counter-statistics/sidebar-info.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: isRunningInIframe ? '' : 'views/header.html'
           }
         }
       });

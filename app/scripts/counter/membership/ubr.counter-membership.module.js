@@ -15,7 +15,6 @@ angular
   ])
   /* @ngInject */
   .config(function ($stateProvider) {
-
     /* @ngInject */
     function showCreateMembershipModal($uibModal, $state) {
       $uibModal
@@ -49,7 +48,7 @@ angular
             templateUrl: 'views/counter-membership/sidebar-info.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: window !== window.parent ? '' : 'views/header.html'
           }
         },
         params: {

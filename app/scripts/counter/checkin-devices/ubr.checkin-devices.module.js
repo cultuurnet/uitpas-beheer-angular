@@ -32,7 +32,7 @@ angular
             templateUrl: 'views/checkindevices/sidebar-checkindevices.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: window !== window.parent ? '' : 'views/header.html'
           }
         }
       }

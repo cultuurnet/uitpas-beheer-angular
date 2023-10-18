@@ -74,7 +74,7 @@ angular
             controllerAs: 'psc'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: window !== window.parent ? '' : 'views/header.html'
           }
         },
         params: {

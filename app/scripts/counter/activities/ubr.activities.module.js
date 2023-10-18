@@ -64,7 +64,7 @@ angular
             templateUrl: 'views/counter-activities/sidebar-counter-activities.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: window !== window.parent ? '' : 'views/header.html'
           }
         }
       }
