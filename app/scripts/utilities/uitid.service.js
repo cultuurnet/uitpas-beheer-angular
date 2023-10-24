@@ -26,7 +26,7 @@ function uitidService($q, $window, $http, appConfig) {
    */
   uitId.getUser = function() {
     var deferredUser = $q.defer();
-    var runningInIframe = window !== window.parent;
+    var runningInIframe = isRunningInIframe();
 
     if (uitId.user) {
       deferredUser.resolve(uitId.user);

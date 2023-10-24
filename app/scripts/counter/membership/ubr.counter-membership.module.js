@@ -48,7 +48,7 @@ angular
             templateUrl: 'views/counter-membership/sidebar-info.html'
           },
           header: {
-            templateUrl: window !== window.parent ? '' : 'views/header.html'
+            templateUrl: isRunningInIframe() ? '' : 'views/header.html'
           }
         },
         params: {

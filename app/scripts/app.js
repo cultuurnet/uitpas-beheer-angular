@@ -74,7 +74,7 @@ angular
             controllerAs: 'psc'
           },
           header: {
-            templateUrl: window !== window.parent ? '' : 'views/header.html'
+            templateUrl: isRunningInIframe() ? '' : 'views/header.html'
           }
         },
         params: {
@@ -146,7 +146,7 @@ angular
     nfcService.init();
     eIDService.init();
 
-    var runningInIframe = window !== window.parent;
+    var runningInIframe = isRunningInIframe();
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       // Don't block any state changes if not running inside an iframe

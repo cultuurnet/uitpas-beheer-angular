@@ -14,9 +14,9 @@ angular
     'ubr.counter',
     'daterangepicker'
   ])
+  .constant('isRunningInIframe', isRunningInIframe())
   /* @ngInject */
-  .config(function ($stateProvider) {
-    const isRunningInIframe = window !== window.parent;
+  .config(function ($stateProvider, isRunningInIframe) {
 
     $stateProvider
       .state('counter.statistics', {
