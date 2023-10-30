@@ -14,8 +14,9 @@ angular
     'ubr.counter',
     'daterangepicker'
   ])
+  .constant('isRunningInIframe', isRunningInIframe())
   /* @ngInject */
-  .config(function ($stateProvider) {
+  .config(function ($stateProvider, isRunningInIframe) {
 
     $stateProvider
       .state('counter.statistics', {
@@ -31,7 +32,7 @@ angular
             templateUrl: 'views/counter-statistics/sidebar-info.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: isRunningInIframe ? '' : 'views/header.html'
           }
         }
       })
@@ -49,7 +50,7 @@ angular
             templateUrl: 'views/counter-statistics/sidebar-info.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: isRunningInIframe ? '' : 'views/header.html'
           }
         }
       })
@@ -66,7 +67,7 @@ angular
             templateUrl: 'views/counter-statistics/sidebar-info.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: isRunningInIframe ? '' : 'views/header.html'
           }
         }
       })
@@ -83,7 +84,7 @@ angular
             templateUrl: 'views/counter-statistics/sidebar-info.html'
           },
           header: {
-            templateUrl: 'views/header.html'
+            templateUrl: isRunningInIframe ? '' : 'views/header.html'
           }
         }
       });

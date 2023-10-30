@@ -8,15 +8,10 @@ body {
   background-color: $white;
 }
 
-.main-content {
+.main-content--iframe {
   min-height: 100%;
   position: relative;
-  @include breakpoint(map-get($breakpoints, sml)) {
-    padding-top: 50px;
-  }
-  @include breakpoint(map-get($breakpoints, med)) {
-    padding-top: 60px;
-  }
+
   @include breakpoint(map-get($breakpoints, sml)) {
     > .main,
     > .footer {
@@ -28,7 +23,6 @@ body {
       position: fixed;
       height: 100%;
       top: 0;
-      padding-top: 50px;
       left: 0;
       z-index: 700;
     }
@@ -49,6 +43,16 @@ body {
       padding-right: 15px;
     }
   }
+}
+
+.main-content {
+  @extend .main-content--iframe;
+  @include breakpoint(map-get($breakpoints, sml)) {
+    padding-top: 50px;
+  }
+  @include breakpoint(map-get($breakpoints, med)) {
+    padding-top: 60px;
+  }
   @include breakpoint(768px) {
     > .sidebar {
       padding-top: 60px;
@@ -65,8 +69,8 @@ body {
     padding-top: 60px;
   } */
 }
-.navbar { 
-  @include breakpoint(660px) { 
+.navbar {
+  @include breakpoint(660px) {
     position: fixed;
     left: 0;
     top: 0;
