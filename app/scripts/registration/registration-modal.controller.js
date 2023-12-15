@@ -154,10 +154,6 @@ function RegistrationModalController (
   };
 
   controller.submitContactDataForm = function(contactDataForm) {
-    if (controller.passholder.isUnderAge()) {
-      controller.excludeEmail = true;
-    }
-
     if (controller.hasEmailOrEmailConfirmedState === emailFieldStatus.initial && !controller.passholder.contact.email && !controller.excludeEmail) {
       controller.hasEmailOrEmailConfirmedState = emailFieldStatus.needsConfirmation;
       return;
