@@ -10,7 +10,7 @@
                 Privacy-en gebruiksvoorwaarden
               </label>
               <div class="checkbox">
-                <label for="legal-terms-digital" ng-class="{'disabled': prc.passholder.contact.email || prc.excludeEmail}"><input name="LegalTermsDigital" id="legal-terms-digital" type="checkbox" ng-model="prc.legalTermsDigital" ng-disabled="prc.passholder.contact.email || prc.excludeEmail"> Informatie wordt bezorgd via e-mail</label>
+                <label for="legal-terms-digital" ng-class="{'disabled': prc.excludeEmail}"><input name="LegalTermsDigital" id="legal-terms-digital" type="checkbox" ng-model="prc.legalTermsDigital" ng-disabled="prc.excludeEmail"> Informatie wordt bezorgd via e-mail</label>
               </div>
               <div class="checkbox">
                 <label for="legal-terms-paper"><input name="LegalTermsPaper" id="legal-terms-paper" type="checkbox" ng-model="prc.legalTermsPaper"> Folder over voorwaarden is overhandigd</label>
@@ -25,15 +25,15 @@
                 </label>
                 <p class="field-group-description">Pashouder wil informatie ontvangen via:</p>
                 <div class="checkbox">
-                  <label for="optin-email" ng-class="{'disabled': prc.passholder.isUnderAge() || prc.excludeEmail}"><input name="optInEmail" id="optin-email" type="checkbox" ng-model="prc.optInEmail" ng-disabled="prc.passholder.isUnderAge() || prc.excludeEmail"> <strong ng-hide="prc.passholder.isUnderAge() || prc.excludeEmail">E-mail</strong><span ng-show="prc.passholder.isUnderAge() || prc.excludeEmail">E-mail</span>
-                  <small ng-hide="prc.passholder.isUnderAge() || prc.excludeEmail">
+                  <label for="optin-email" ng-class="{'disabled': prc.excludeEmail}"><input name="optInEmail" id="optin-email" type="checkbox" ng-model="prc.optInEmail" ng-disabled="prc.excludeEmail"> <strong ng-hide="prc.excludeEmail">E-mail</strong><span ng-show="prc.excludeEmail">E-mail</span>
+                  <small ng-hide="prc.excludeEmail">
                     <br />
                     Hierdoor blijft de pashouder op de hoogte van leuke UiTPAS voordelen en activiteiten.
                   </small>
                   </label>
                 </div>
                 <div class="checkbox">
-                  <label for="optin-sms" ng-class="{'disabled': prc.passholder.isUnderAge() || !prc.passholder.contact.mobileNumber}"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="prc.passholder.optInPreferences.sms" ng-disabled="prc.passholder.isUnderAge() || !prc.passholder.contact.mobileNumber"> SMS</label>
+                  <label for="optin-sms" ng-class="{'disabled': !prc.passholder.contact.mobileNumber}"><input name="optInSms" id="optin-sms" type="checkbox" ng-model="prc.passholder.optInPreferences.sms" ng-disabled="!prc.passholder.contact.mobileNumber"> SMS</label>
                 </div>
                 <div class="checkbox">
                   <label for="optin-post"><input name="optInPost" id="optin-post" type="checkbox" ng-model="prc.passholder.optInPreferences.post"> Post</label>

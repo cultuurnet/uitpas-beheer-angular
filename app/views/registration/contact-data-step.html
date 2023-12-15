@@ -1,29 +1,26 @@
 <form name="contactDataForm" ng-submit="prc.submitContactDataForm(contactDataForm)" novalidate ng-disabled="prc.formSubmitBusy">
 <div class="modal-body">
   <div class="container-fluid">
-    <p style="text-align: center; color: #777777" ng-show="prc.passholder.isUnderAge()">
-      <strong>Voor -16 jarigen kan je geen contactgegevens invullen<br/> n.a.v. privacywetgeving minderjarigen.</strong>
-    </p>
     <fieldset ng-disabled="prc.formSubmitBusy">
       <div class="field-group">
         <label class="control-label" for="telephone">
-          Telefoon
+          Telefoon <span ng-show="prc.passholder.isUnderAge()">van ouder</span>
         </label>
-        <input type="text" class="form-control" id="telephone" name="telephone" ng-model="prc.passholder.contact.telephoneNumber" ng-disabled="prc.passholder.isUnderAge()">
+        <input type="text" class="form-control" id="telephone" name="telephone" ng-model="prc.passholder.contact.telephoneNumber">
       </div>
       <div class="field-group">
         <label class="control-label" for="gsm">
-          GSM
+          GSM <span ng-show="prc.passholder.isUnderAge()">van ouder</span>
         </label>
-        <input type="text" class="form-control" id="gsm" name="gsm" ng-model="prc.passholder.contact.mobileNumber" ng-disabled="prc.passholder.isUnderAge()">
+        <input type="text" class="form-control" id="gsm" name="gsm" ng-model="prc.passholder.contact.mobileNumber">
       </div>
       <div class="field-group"  ng-class="{ 'has-error': prc.showFieldError(contactDataForm, 'email') || (prc.hasEmailOrEmailConfirmedState === 'notConfirmed' && !prc.passholder.contact.email && !prc.excludeEmail) }">
         <label class="control-label" for="email">
-          E-mailadres
+          E-mailadres <span ng-show="prc.passholder.isUnderAge()">van ouder</span>
         </label>
         <input type="email" class="form-control" id="email" name="email" ng-model="prc.passholder.contact.email"
          ng-required="prc.hasEmailOrEmailConfirmedState === 'notConfirmed' && !prc.excludeEmail" ng-change="prc.emailChanged(contactDataForm)" ubr-ignore-field="prc.excludeEmail"
-         ng-disabled="prc.excludeEmail || prc.passholder.isUnderAge()" ng-pattern ='/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i'>
+         ng-disabled="prc.excludeEmail" ng-pattern ='/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i'>
         <div ng-if="prc.showFieldError(contactDataForm, 'email')" class="text-danger small">
           <div ng-show="contactDataForm.email.$error.pattern || contactDataForm.email.$error.email">Het e-mailadres heeft een verkeerd formaat.</div>
           <div ng-show="contactDataForm.email.$error.inUse">Het e-mailadres is reeds in gebruik.</div>
@@ -32,7 +29,7 @@
         </div>
         <div ng-show="prc.emailValidated" class="text-danger small">Controleer het e-mailadres voor je naar de volgende stap gaat. Er staat misschien een fout in.</div>
 
-        <div ng-hide="prc.passholder.isUnderAge()" style="margin-top: 8px">
+        <div style="margin-top: 8px">
           <p>
             <strong>Vul het e-mailadres in zodat de pashouder alles uit z’n UiTPAS kan halen.</strong><br />
             Zo kan de pashouder gebruikmaken van uitpas.be en de app om:
