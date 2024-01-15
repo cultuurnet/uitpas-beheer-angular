@@ -69,13 +69,16 @@ function ExpenseReportController (expenseReportService, $http, $filter, $interva
 
     var displayReport = function (generationResponse) {
       if (generationResponse.status === 200 && generationResponse.data.completed === true) {
+
+        var downloadUrl = generationResponse.data.download.replace(/^http:/, $window.location.protocol);
+
         if (forceDownload) {
-          $window.location.href = generationResponse.data.download;
+          $window.location.href = downloadUrl;
         }
 
         stopMonitor();
         erc.generatingReport = false;
-        erc.reportLocation = generationResponse.data.download;
+        erc.reportLocation = downloadUrl;
       }
     };
 
