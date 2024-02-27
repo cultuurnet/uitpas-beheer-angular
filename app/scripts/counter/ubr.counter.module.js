@@ -26,7 +26,7 @@ angular
       params: {
         redirectTo: null
       },
-      templateUrl:'views/counter/counters.html',
+      templateUrl: isRunningInIframe() ? 'views/loading.html' : 'views/counter/counters.html',
       controller: 'CountersController',
       controllerAs: 'counters',
       resolve: {
