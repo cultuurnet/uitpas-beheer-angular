@@ -88,6 +88,12 @@ function PassholderDetailController (
     return controller.activeCounter.isAuthorisedRegistrationCounter(selectedCardSystemId);
   }
 
+  controller.getKansenStatuutSuspended = getKansenStatuutSuspended;
+  
+  function getKansenStatuutSuspended(cardSystemID) {
+    return this.cardSystemSpecific && this.cardSystemSpecific[cardSystemID] && this.cardSystemSpecific[cardSystemID].kansenStatuutSuspendedUntil;
+  }
+
   var displayCoupons = function(coupons) {
     controller.coupons = coupons;
   };
