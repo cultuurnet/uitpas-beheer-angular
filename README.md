@@ -9,13 +9,14 @@
  * Ruby installation version 2.5.x
  * Grunt installation with gem (v1.2.x)
  * Compass installation with gem
- * Node installation version 10.15.x
+ * Node installation version 10.24.x (with nvm: `nvm use`)
  * Npm installation version 6.4.x
  * Bower installation with npm
 
  Commands to run the project:
 
  * npm install
+ * bower install
  * grunt serve
  
  The absolute minimum to read before starting development are
