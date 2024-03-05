@@ -89,9 +89,10 @@ function PassholderDetailController (
   }
 
   controller.getKansenStatuutSuspended = getKansenStatuutSuspended;
-  
+
   function getKansenStatuutSuspended(cardSystemID) {
-    return this.cardSystemSpecific && this.cardSystemSpecific[cardSystemID] && this.cardSystemSpecific[cardSystemID].kansenStatuutSuspendedUntil;
+    var suspendedUntil = controller.cardSystemSpecific && controller.cardSystemSpecific[cardSystemID] && controller.cardSystemSpecific[cardSystemID].kansenStatuutSuspendedUntil;
+    return suspendedUntil ? suspendedUntil * 1000 : suspendedUntil;
   }
 
   var displayCoupons = function(coupons) {
