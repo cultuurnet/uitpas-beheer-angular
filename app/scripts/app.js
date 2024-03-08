@@ -147,6 +147,7 @@ angular
     eIDService.init();
 
     var runningInIframe = isRunningInIframe();
+    var MAX_URL_DEPTH = 4;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       // Don't block any state changes if not running inside an iframe
@@ -167,6 +168,13 @@ angular
       // Don't block any reloading of the same state.
       // For example, after deleting an organizer from the overview list of organizers and the list reloads.
       if (to === from) {
+        return;
+      }
+
+      // Don't redirect deeply nested routes. This gives weird behaviour in wizards because data is not kept between iframe loads.
+      var isDeeplyNested = to.split('/').length > MAX_URL_DEPTH;
+
+      if (isDeeplyNested) {
         return;
       }
 
