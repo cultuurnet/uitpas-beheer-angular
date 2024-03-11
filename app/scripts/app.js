@@ -147,7 +147,6 @@ angular
     eIDService.init();
 
     var runningInIframe = isRunningInIframe();
-    var MAX_URL_DEPTH = 4;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       // Don't block any state changes if not running inside an iframe
@@ -171,16 +170,10 @@ angular
         return;
       }
 
-      // Don't redirect deeply nested routes. This gives weird behaviour in wizards because data is not kept between iframe loads.
-      var isDeeplyNested = to.split('/').length > MAX_URL_DEPTH;
-
-      if (isDeeplyNested) {
-        return;
-      }
-
       if (runningInIframe && !toParams.forceAngularNavigation) {
+        // ! Don't disable Angular routing for now, NextJS will reload the iframe if necessary. This will make sure all routes keep working.
         // Block the state change and emit the new path to the parent window for further handling.
-        event.preventDefault();
+        // event.preventDefault();
         window.parent.postMessage({
           source: 'BALIE',
           type: 'URL_CHANGED',
