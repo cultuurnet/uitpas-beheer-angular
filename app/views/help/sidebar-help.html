@@ -5,7 +5,7 @@
   <h1>Help</h1>
   <h3>Snel naar</h3>
   <div ubr-showdown-markdown-to-html="hc.helpMarkdown" md-filters="getOnlyTitles"></div>
-  <h3><a href="https://helpdesk.uitpas.be/hc/nl?b2b" target="_blank">Gids baliemedewerker</a></h3>
+  <h3><a href="https://helpdesk.uitpas.be/hc/nl?b2b" onclick="window.open(this.href, 'newwindow', 'width=800,height=600'); return false;">Gids baliemedewerker</a></h3>
   <h3>Helpdesk</h3>
   <ul class="helpdesk-list">
     <li class="vcard" ng-repeat="contact in ::hc.contacts">
