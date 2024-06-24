@@ -450,12 +450,25 @@ function RegistrationModalController (
 
   var stateChangeStartListener = $rootScope.$on('$stateChangeStart', controller.updateFurthestStep);
 
+  var splitName = function(nameObj) {
+    var names = nameObj.first.split(' ');
+    var firstName = names[0];
+    var middleName = names.slice(1).join(' ');
+
+    return {
+      first: firstName,
+      middle: middleName,
+      last: nameObj.last
+    };
+  };
+
   /**
    * Listener on the EID scanned event: Copy all data on the passholder.
    */
   var cleanupEIDDataReceivedListener = $rootScope.$on('eIDDataReceived', function(event, eIDData, base64Picture) {
     angular.merge(controller.eIDData, eIDData);
     angular.merge(controller.passholder, eIDData);
+    angular.merge(controller.passholder, {name: splitName(controller.passholder.name)});
     controller.eIDError = false;
 
     if (base64Picture) {
