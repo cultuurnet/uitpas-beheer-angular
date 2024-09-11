@@ -40,6 +40,26 @@ function ResultsViewerController (advancedSearchService, $rootScope, $scope, $st
     }
   };
 
+/**
+ * Helper function to check if the Kansenstatuut is active for the card system.
+ * This checks whether the cardSystem.id of the pass is in the passholder's kansenStatuten list
+ * and that the kansenstatuut is still active.
+ * 
+ * @param {Object} pass - The pass object which includes the passholder's information.
+ * @param {Object} otherPass - The other pass to compare against the kansenStatuten.
+ * @returns {boolean} - Returns true if the card system has an active kansenstatuut, otherwise false.
+ */
+  controller.isKansenstatuutActiveForCardSystem = function(pass, otherPass) {
+    if (!pass.passholder.kansenStatuten) {
+      return false;
+    }
+
+    return pass.passholder.kansenStatuten.some(function(kansenStatuut) {
+      return kansenStatuut.status === 'ACTIVE' && kansenStatuut.cardSystem.id === otherPass.cardSystem.id;
+    });
+  };
+
+
   /**
    * Helper function that checks if the active counter has the permission for kansenstatuut
    *
