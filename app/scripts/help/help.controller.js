@@ -12,7 +12,7 @@ angular
   .controller('HelpController', HelpController);
 
 /* @ngInject */
-function HelpController (helpService, $q, $state, appConfig) {
+function HelpController (helpService, $q, $state, appConfig, isJavaFXBrowser) {
   /*jshint validthis: true */
   var controller = this;
 
@@ -63,4 +63,12 @@ function HelpController (helpService, $q, $state, appConfig) {
   };
 
   controller.contacts = appConfig.contacts || [];
+
+  controller.goTo = function (e, url) {
+    if (isJavaFXBrowser) {
+      e.preventDefault();
+      alert('EXTERNAL:' + url);
+    }
+  };
+  
 }
