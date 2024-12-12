@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     angular_config (0.3.0)
     arr-pm (0.0.11)
       cabin (> 0)
@@ -32,7 +34,8 @@ GEM
       pleaserun (~> 0.0.29)
       rexml
       stud
-    git (1.11.0)
+    git (1.13.1)
+      addressable (~> 2.8)
       rchardet (~> 1.8)
     insist (1.0.0)
     json (2.6.1)
@@ -45,6 +48,7 @@ GEM
       insist
       mustache (= 0.99.8)
       stud
+    public_suffix (5.0.1)
     rake (13.0.6)
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
