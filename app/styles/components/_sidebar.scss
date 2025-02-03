@@ -1,5 +1,8 @@
 // Sidebar
 .sidebar {
+  @media (min-width: 1024px) {
+    margin-top: 0 !important;
+  }
   background-color: $gray-0;
   padding-left: 0;
   padding-right: 0;
@@ -27,7 +30,7 @@
   }
   h1 {
     font-size: 1.6em; //24px
-    margin: 0 0 .6em; 
+    margin: 0 0 0.6em;
   }
   h3 {
     color: $gray-50;
@@ -75,10 +78,10 @@
 
   // build number
   .buildnumber {
-      position: relative;
-      bottom: 1.4em;
-      left: .1em;
-      font-size: .7em;
+    position: relative;
+    bottom: 1.4em;
+    left: 0.1em;
+    font-size: 0.7em;
   }
 }
 
@@ -87,7 +90,7 @@
   a:before {
     @extend .fa;
     @extend .fa-arrow-left;
-    font-size: .8em;
+    font-size: 0.8em;
     margin-right: 5px;
   }
 }
@@ -98,10 +101,10 @@ a.toggle-down {
   i {
     @extend .fa;
     @extend .fa-chevron-down;
-    font-size: .8em;
+    font-size: 0.8em;
     margin-left: 5px;
   }
-  &[aria-expanded='true'] i {
+  &[aria-expanded="true"] i {
     @extend .fa-chevron-up;
   }
 }
@@ -148,7 +151,7 @@ a.toggle-down {
     text-overflow: ellipsis;
     &:before {
       @extend .fa-envelope;
-      font-size: .8em;
+      font-size: 0.8em;
     }
   }
   .edit {
@@ -169,7 +172,7 @@ a.toggle-down {
     float: left;
 
     h3 {
-      margin-bottom: .5em;
+      margin-bottom: 0.5em;
     }
   }
 
@@ -203,7 +206,6 @@ a.toggle-down {
       @include label-variant($yellow-50);
     }
   }
-
 }
 
 // Sidebar: kansenstatuurt
