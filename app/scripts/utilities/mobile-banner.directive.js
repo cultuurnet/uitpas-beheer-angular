@@ -1,13 +1,22 @@
 "use strict";
 
-angular.module("ubr.utilities").directive("mobileBanner", function () {
+angular
+  .module("ubr.utilities")
+  .directive("mobileBanner", mobileBannerDirective);
+
+/* @ngInject */
+function mobileBannerDirective(appConfig) {
   return {
     restrict: "E",
     template:
       '<div class="mobile-banner" ng-show="isMobile">' +
-      '<a href="https://balie.uitpas.be/app/mobile">Open de nieuwe mobiele balie ></a>' +
+      '<a ng-href="{{redirectUrl}}">Open de nieuwe mobiele balie ></a>' +
       "</div>",
     link: function (scope) {
+      var apiUrl = appConfig.apiUrl;
+      scope.redirectUrl = apiUrl.includes("test")
+        ? "https://balie-test.uitpas.be/app/mobile"
+        : "https://balie.uitpas.be/app/mobile";
       scope.isMobile = window.innerWidth <= 1024;
 
       angular.element(window).on("resize", function () {
@@ -20,4 +29,4 @@ angular.module("ubr.utilities").directive("mobileBanner", function () {
       });
     },
   };
-});
+}
