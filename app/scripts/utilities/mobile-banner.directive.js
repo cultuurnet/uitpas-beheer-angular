@@ -13,7 +13,7 @@ function mobileBannerDirective(appConfig) {
       '<a ng-href="{{redirectUrl}}">Open de nieuwe mobiele balie ></a>' +
       '</div>',
     link: function (scope) {
-      scope.redirectUrl = appConfig.features.balieV2;
+      scope.redirectUrl = appConfig.features.balieV2 ? appConfig.features.balieV2 + '/mobile' : '';
       scope.isMobile = window.innerWidth <= 1024;
 
       angular.element(window).on('resize', function () {
