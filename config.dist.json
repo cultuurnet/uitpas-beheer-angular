@@ -1,6 +1,7 @@
 {
   "apiUrl": "http://culpas-silex.dev/",
   "basePath": "/",
+  "dist": "dist",
   "buildNumber": "001",
   "sentry": {
     "env": "development",
