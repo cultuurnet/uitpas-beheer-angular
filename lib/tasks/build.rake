@@ -3,7 +3,7 @@ task :build do |task|
   require 'json'
 
   calver_version     = ENV['PIPELINE_VERSION'].nil? ? Time.now.strftime("%Y.%m.%d.%H%M%S") : ENV['PIPELINE_VERSION']
-  configuration_hash = { 'basePath' => '/app_v1/', 'buildNumber' => calver_version }
+  configuration_hash = { 'basePath' => '/app_v1/', 'dist' => 'dist', 'buildNumber' => calver_version }
 
   system('npm install') or exit 1
   system('node_modules/bower/bin/bower install') or exit 1
