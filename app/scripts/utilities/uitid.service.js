@@ -91,15 +91,6 @@ function uitidService($q, $window, $http, appConfig) {
    *   A promise with no additional data.
    */
   uitId.logout = function() {
-    var deferredLogout = $q.defer();
-
-    $http
-      .get(apiUrl + '/logout')
-      .then(angular.bind(uitId, function() {
-        uitId.user = undefined;
-        deferredLogout.resolve();
-      }));
-
-    return deferredLogout.promise;
+    window.location = apiUrl + '/logout';
   };
 }
