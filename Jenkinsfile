@@ -39,11 +39,11 @@ pipeline {
                     }
                 }
             }
-            //post {
-            //    cleanup {
-            //        cleanWs()
-            //    }
-            //}
+            post {
+                cleanup {
+                    cleanWs()
+                }
+            }
         }
 
         stage('Upload artifact') {
