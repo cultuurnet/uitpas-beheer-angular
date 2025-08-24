@@ -2,8 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     angular_config (0.3.0)
-    arr-pm (0.0.11)
-      cabin (> 0)
+    arr-pm (0.0.12)
     backports (3.23.0)
     cabin (0.9.0)
     chunky_png (1.4.0)
