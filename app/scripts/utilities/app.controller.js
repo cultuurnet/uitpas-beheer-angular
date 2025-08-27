@@ -115,7 +115,10 @@ function appController($rootScope, $location, $state, $stateParams, appConfig, u
   };
 
   app.logout = function () {
-    uitid.logout();
+    uitid.logout().finally(function () {
+      app.user = undefined;
+      app.redirectToLogin();
+    });
   };
 
   app.authenticateStateChange = function (event, toState) {
