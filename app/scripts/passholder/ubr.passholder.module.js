@@ -118,6 +118,8 @@ angular
               animation: true,
               templateUrl: "views/passholder/modal-passholder-edit.html",
               size: "lg",
+              backdrop: "static",
+              keyboard: false,
               resolve: {
                 passholder: function () {
                   return passholder;

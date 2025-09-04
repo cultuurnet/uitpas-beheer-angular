@@ -86,6 +86,8 @@ angular
               animation: true,
               templateUrl: "views/registration/multi-step-form.html",
               size: "lg",
+              backdrop: "static",
+              keyboard: false,
               resolve: {
                 pass: function () {
                   return pass;
