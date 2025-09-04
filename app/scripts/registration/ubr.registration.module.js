@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @ngdoc overview
@@ -9,141 +9,149 @@
  * registration module UiTPAS Beheer
  */
 angular
-  .module('ubr.registration', [
-    'ui.router',
-    'uitpasbeheerApp'
-  ])
+  .module("ubr.registration", ["ui.router", "uitpasbeheerApp"])
   /* @ngInject */
   .config(function ($stateProvider) {
-
-    var getPassFromStateParams = function(passholderService, $stateParams) {
+    var getPassFromStateParams = function (passholderService, $stateParams) {
       if ($stateParams.pass) {
         return $stateParams.pass;
-      }
-      else {
+      } else {
         return passholderService.findPass($stateParams.identification);
       }
     };
 
     var registrationModalInstance;
 
-    redirectOnScan.$inject = ['UiTPASRouter'];
+    redirectOnScan.$inject = ["UiTPASRouter"];
     function redirectOnScan(UiTPASRouter) {
       UiTPASRouter.redirectOnScanEnabled();
     }
 
     $stateProvider
-      .state('counter.main.register', {
-        url: 'passholder/:identification/register',
+      .state("counter.main.register", {
+        url: "passholder/:identification/register",
         requiresCounter: true,
         redirectOnScan: true,
         onEnter: redirectOnScan,
         params: {
           pass: null,
-          identification: null
+          identification: null,
         },
         resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams],
-          identification: ['$stateParams', function($stateParams) {
-            return $stateParams.identification;
-          }],
-          activeCounter: ['counterService', function (counterService) {
-            return counterService.getActive();
-          }]
+          pass: ["passholderService", "$stateParams", getPassFromStateParams],
+          identification: [
+            "$stateParams",
+            function ($stateParams) {
+              return $stateParams.identification;
+            },
+          ],
+          activeCounter: [
+            "counterService",
+            function (counterService) {
+              return counterService.getActive();
+            },
+          ],
         },
         views: {
-          'content@counter': {
-            templateUrl: 'views/registration/content-passholder-register.html',
-            controller: 'PassholderRegisterController',
-            controllerAs: 'prc'
+          "content@counter": {
+            templateUrl: "views/registration/content-passholder-register.html",
+            controller: "PassholderRegisterController",
+            controllerAs: "prc",
           },
-          'sidebar@counter': {
-            templateUrl: 'views/registration/sidebar-passholder-register.html',
-            controller: 'PassholderRegisterController',
-            controllerAs: 'prc'
-          }
-        }
+          "sidebar@counter": {
+            templateUrl: "views/registration/sidebar-passholder-register.html",
+            controller: "PassholderRegisterController",
+            controllerAs: "prc",
+          },
+        },
       })
-      .state('counter.main.register.form', {
+      .state("counter.main.register.form", {
         abstract: true,
         resolve: {
-          pass: ['passholderService', '$stateParams', getPassFromStateParams],
-          activeCounter: ['counterService', function (counterService) {
-            return counterService.getActive();
-          }]
-        },
-        onEnter : ['pass', 'activeCounter', '$state', '$uibModal', function(pass, activeCounter, $state, $uibModal) {
-          registrationModalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'views/registration/multi-step-form.html',
-            size: 'lg',
-            resolve: {
-              pass: function() {
-                return pass;
-              },
-              activeCounter: function() {
-                return activeCounter;
-              }
+          pass: ["passholderService", "$stateParams", getPassFromStateParams],
+          activeCounter: [
+            "counterService",
+            function (counterService) {
+              return counterService.getActive();
             },
-            controller: 'RegistrationModalController',
-            controllerAs: 'prc'
-          });
-
-          function passholderRegistered() {
-            $state.go('counter.main.passholder', {
-              identification: pass.number,
-              destination: {
-                route: 'counter.main',
-                params: {}
+          ],
+        },
+        onEnter: [
+          "pass",
+          "activeCounter",
+          "$state",
+          "$uibModal",
+          function (pass, activeCounter, $state, $uibModal) {
+            registrationModalInstance = $uibModal.open({
+              animation: true,
+              templateUrl: "views/registration/multi-step-form.html",
+              size: "lg",
+              resolve: {
+                pass: function () {
+                  return pass;
+                },
+                activeCounter: function () {
+                  return activeCounter;
+                },
               },
+              controller: "RegistrationModalController",
+              controllerAs: "prc",
             });
-          }
 
-          registrationModalInstance
-            .result
-            .then(passholderRegistered);
-        }]
+            function passholderRegistered() {
+              $state.go("counter.main.passholder", {
+                identification: pass.number,
+                destination: {
+                  route: "counter.main",
+                  params: {},
+                },
+              });
+            }
+
+            registrationModalInstance.result.then(passholderRegistered);
+          },
+        ],
       })
-      .state('counter.main.register.form.personalData', {
-        url: '/personal-info',
+      .state("counter.main.register.form.personalData", {
+        url: "/personal-info",
         views: {
-          'registrationStep@': {
-            templateUrl: 'views/registration/personal-data-step.html'
-          }
+          "registrationStep@": {
+            templateUrl: "views/registration/personal-data-step.html",
+          },
         },
         params: {
-          'pass': null,
-          'kansenstatuut': null,
-          'school': null,
-          'registerForeign': null
+          pass: null,
+          kansenstatuut: null,
+          school: null,
+          registerForeign: null,
         },
-        stepNumber: 1
+        stepNumber: 1,
       })
-      .state('counter.main.register.form.contactData', {
-        url: '/contact-info',
+      .state("counter.main.register.form.contactData", {
+        url: "/contact-info",
         views: {
-          'registrationStep@': {
-            templateUrl: 'views/registration/contact-data-step.html'
-          }
+          "registrationStep@": {
+            templateUrl: "views/registration/contact-data-step.html",
+          },
         },
-        stepNumber: 2
+        stepNumber: 2,
       })
-      .state('counter.main.register.form.optIns', {
-        url: '/opt-ins',
+      .state("counter.main.register.form.optIns", {
+        url: "/opt-ins",
         views: {
-          'registrationStep@': {
-            templateUrl: 'views/registration/opt-ins-data-step.html'
-          }
+          "registrationStep@": {
+            templateUrl: "views/registration/opt-ins-data-step.html",
+          },
         },
-        stepNumber: 3
+        stepNumber: 3,
       })
-      .state('counter.main.register.form.price', {
-        url: '/price',
+      .state("counter.main.register.form.price", {
+        url: "/price",
         views: {
-          'registrationStep@': {
-            templateUrl: 'views/registration/price-data-step.html'
-          }
+          "registrationStep@": {
+            templateUrl: "views/registration/price-data-step.html",
+          },
         },
-        stepNumber: 4
+        stepNumber: 4,
       });
   });
